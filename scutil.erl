@@ -28,7 +28,6 @@
 
 type_of(X) when is_integer(X)   -> integer;
 type_of(X) when is_float(X)     -> float;
-type_of(X) when is_number(X)    -> number;
 type_of(X) when is_list(X)      -> list;
 type_of(X) when is_tuple(X)     -> tuple;
 %type_of(X) when is_bitstring(X) -> bitstring;  % will fail before e12
