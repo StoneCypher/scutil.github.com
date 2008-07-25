@@ -62,9 +62,19 @@ test_get_module_attribute() ->
 
 
 
+%test_byte_to_hex() ->
+%
+%    [   testerl:must_equal("
+
+
+
+
+
 run(_Hooks, _Options) ->
 
-    [
-        testerl:assemble("type_of()", test_type_of()),
+    [   testerl:assemble("type_of()",              test_type_of()),
         testerl:assemble("get_module_attribute()", test_get_module_attribute())
+%       testerl:assemble("byte_to_hex()",          test_byte_to_hex()),
+%       testerl:assemble("nybble_to_hex()",        test_nybble_to_hex()),
+%       testerl:assemble("io_list_to_hex()",       test_io_list_to_hex())
     ].
