@@ -18,7 +18,8 @@
 -testerl_export( { [], scutil_testsuite } ).
 
 -export( [
-    type_of/1
+    type_of/1,
+    get_module_attribute/2
 ] ).
 
 
@@ -45,3 +46,21 @@ type_of(_X)                     -> unknown.
 
 
 
+get_module_attribute(Module,Attribute) ->
+
+    % Found at http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html
+    % Reformatted for clarity, removed unnessecary framing list
+    % Added error handling behavior
+
+    case beam_lib:chunks(Module, [attributes]) of
+
+        { ok, { _, [ {attributes,Attributes} ] } } ->
+            case lists:keysearch(Attribute, 1, Attributes) of
+                { value, {Attribute,[Value]} } -> Value;
+                false                          -> { error, no_such_attribute }
+            end;
+
+        { error, beam_lib, { file_error, _, enoent} } ->
+            { error, no_such_module }
+
+    end.
