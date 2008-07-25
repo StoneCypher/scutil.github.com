@@ -50,9 +50,21 @@ test_type_of() ->
 
 
 
+test_get_module_attribute() ->
+
+    [   testerl:must_equal("existing attribute", fun scutil:get_module_attribute/2, [scutil_testsuite, testerl_export],  this_is_a_testsuite),
+        testerl:must_equal("missing attribute",  fun scutil:get_module_attribute/2, [scutil_testsuite, testerl_seaport], {error, no_such_attribute}),
+        testerl:must_equal("nonexistant module", fun scutil:get_module_attribute/2, [scutil_roflsuite, testerl_export],  {error, no_such_module})
+%       testerl:must_crash("bunk data",          fun scutil:get_module_attribute/2, [{la,te,[da]},     <<"rofl">>])
+    ].
+
+
+
+
+
 run(_Hooks, _Options) ->
 
     [
-        testerl:assemble("type_of()", test_type_of())
-%        testerl:assemble("get_module_attribute()", test_get_module_attribute())
+        testerl:assemble("type_of()", test_type_of()),
+        testerl:assemble("get_module_attribute()", test_get_module_attribute())
     ].
