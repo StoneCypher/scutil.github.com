@@ -3,5 +3,3 @@ Documentation, examples, forums and bugtracker at
 
 A product of Crunchy Development
   http://crunchyd.com/
-  
-  agaeg
