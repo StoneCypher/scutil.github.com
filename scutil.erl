@@ -19,7 +19,8 @@
 
 -export( [
     type_of/1,
-    get_module_attribute/2
+    get_module_attribute/2,
+    byte_to_hex/1, nybble_to_hex/1, io_list_to_hex/1
 ] ).
 
 
@@ -63,3 +64,27 @@ get_module_attribute(Module,Attribute) ->
             { error, no_such_module }
 
     end.
+
+
+
+
+byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 -> { nybble_to_hex(TheByte bsr 4), nybble_to_hex(TheByte band 15) };
+byte_to_hex(NotAByte)                                                       -> { error, { not_a_byte, NotAByte }}.
+
+
+
+
+
+nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 0,  Nyb < 10 -> $0 + Nyb;
+nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 10, Nyb < 16 -> $a + Nyb - 10;
+nybble_to_hex(_)                                                           -> { error, not_a_nybble }.
+
+
+
+
+
+io_list_to_hex(Input) when is_list(Input)                                            -> io_list_to_hex(Input, []).
+
+io_list_to_hex([],               Work)                                               -> lists:reverse(Work);
+io_list_to_hex([Item|Remainder], Work) when is_integer(Item), Item >= 0, Item =< 255 -> {A,B} = byte_to_hex(Item), io_list_to_hex(Remainder, [B,A]++Work);
+io_list_to_hex(_,                _)                                                  -> {error, not_an_io_list}.
