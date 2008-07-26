@@ -20,11 +20,12 @@
 -export( [
     type_of/1,
     get_module_attribute/2,
-    byte_to_hex/1, nybble_to_hex/1, io_list_to_hex/1,
-    regex_read_matches/2, regex_read_matches/3,
-    multi_do/3, multi_do/4,
-    grid_scatter/2,
-    random_generator/3, srand/0, rand/1, random_from/1, random_from/2, random_from/3, random_from_weighted/1
+    byte_to_hex/1, nybble_to_hex/1, io_list_to_hex/1, % need tests
+    regex_read_matches/2, regex_read_matches/3, % need tests
+    multi_do/3, multi_do/4, % need tests
+    grid_scatter/2, % need tests
+    elements/2, elements/3, elements/4, % needs tests
+    random_generator/3, srand/0, rand/1, random_from/1, random_from/2, random_from/3, random_from_weighted/1 % need tests
 ] ).
 
 
@@ -238,4 +239,42 @@ random_from_weighted_worker(InputList, Limit) when is_list(InputList) andalso is
     case Weight =< Limit of                                             % if the weight is less than or equal to the limit,
         true  -> random_from_weighted_worker(Remainder, Limit-Weight);  % recurse the next item with a decremented weight
         false -> Item                                                   % if not, this item is the one we want
+    end.
+
+
+
+
+
+% todo implement catching tuple { key, reqtype } from list, to auto-convert before return
+
+% interface
+
+elements(Config, Requested)                when is_list(Config) andalso is_list(Requested)                            -> elements_worker([], Config, Requested, 1).
+elements(Config, Requested, KeyIdx)        when is_list(Config) andalso is_list(Requested) andalso is_integer(KeyIdx) -> elements_worker([], Config, Requested, KeyIdx);
+
+elements(Config, Requested, strip)         when is_list(Config) andalso is_list(Requested)                            -> elements_worker([], Config, Requested, 1,      strip).
+elements(Config, Requested, KeyIdx, strip) when is_list(Config) andalso is_list(Requested) andalso is_integer(KeyIdx) -> elements_worker([], Config, Requested, KeyIdx, strip).
+
+% implementation
+
+elements_worker(Retlist, _,      [],        _)      -> Retlist;
+elements_worker(Retlist, Config, Requested, KeyIdx) ->
+
+    [ ThisRequest | RemainingRequests ] = Requested,
+
+    case lists:keysearch(ThisRequest, KeyIdx, Config) of
+        false            -> elements_worker(Retlist ++ [undefined], Config, RemainingRequests, KeyIdx);
+        { value, Tuple } -> elements_worker(Retlist ++ [Tuple],     Config, RemainingRequests, KeyIdx);
+        AnythingElse     -> { error, response_not_understood, { for, lists, keysearch, { ThisRequest, Config } }, { got, AnythingElse } }
+    end.
+
+elements_worker(Retlist, _,      [],        _,      strip) -> Retlist;
+elements_worker(Retlist, Config, Requested, KeyIdx, strip) ->
+
+    [ ThisRequest | RemainingRequests ] = Requested,
+
+    case lists:keysearch(ThisRequest, KeyIdx, Config) of
+        false                -> elements_worker(Retlist ++ [undefined], Config, RemainingRequests, KeyIdx, strip);
+        { value, {_,Tuple} } -> elements_worker(Retlist ++ [Tuple],     Config, RemainingRequests, KeyIdx, strip);
+        AnythingElse         -> { error, response_not_understood, { for, lists, keysearch, { ThisRequest, Config } }, { got, AnythingElse } }
     end.
