@@ -21,8 +21,10 @@
     type_of/1,
     get_module_attribute/2,
     byte_to_hex/1, nybble_to_hex/1, io_list_to_hex/1,
-    regexp_read_matches/2, regexp_read_matches/3,
-    multi_do/3, multi_do/4
+    regex_read_matches/2, regex_read_matches/3,
+    multi_do/3, multi_do/4,
+    grid_scatter/2,
+    random_generator/3, srand/0, rand/1, random_from/1, random_from/2, random_from/3, random_from_weighted/1
 ] ).
 
 
@@ -107,11 +109,133 @@ multi_do(I, Module, Func, Args, Work) -> multi_do(I-1, Module, Func, Args, Work 
 
 % was regexp_read_matches in pre-svn
 
-regex_read_matches(String, Reg)                          -> regexp_read_matches(String, Reg, {0,0}).
+regex_read_matches(String, Reg)                          -> regex_read_matches(String, Reg, {0,0}).
 regex_read_matches(String, Reg, {TrimFront, TrimLength}) ->
 
     case regexp:matches(String, Reg) of
         { match, [] }      -> no_match;
         { match, Matches } -> [ string:substr(String, Start+TrimFront, End-TrimLength) || {Start,End} <- Matches ];
         { error, E }       -> { error, E }
+    end.
+
+
+
+
+
+grid_scatter(Count, {SizeX, SizeY}) -> scutil:random_from(Count, [ {X,Y} || X <- scutil:int_range(SizeX), Y <- scutil:int_range(SizeY) ]);
+grid_scatter(Count, Size)           -> grid_scatter(Count, {Size, Size}).
+
+
+
+
+
+srand() ->
+
+    Now = erlang:now(),
+    RandomGeneratorPid = spawn(?MODULE, random_generator, [element(1, Now), element(2, Now), element(3, Now)]),
+
+    SCR = whereis(scutil_rand_source),
+
+    if SCR == undefined -> 0; true -> unregister(scutil_rand_source) end,
+    register(scutil_rand_source, RandomGeneratorPid),
+    { ok, { seeded, Now } }.
+
+
+
+
+
+random_generator(SeedA, SeedB, SeedC) ->
+
+    random:seed(SeedA, SeedB, SeedC),
+    random_generator().
+
+
+
+
+
+random_generator() ->
+
+    receive
+
+        terminate ->
+            { ok, terminated };
+
+        [Return, Range] ->
+            Val = random:uniform(Range),
+            Return ! Val,
+            random_generator();
+
+        _  ->
+            random_generator()
+
+    end.
+
+
+
+
+
+rand(Range) ->
+
+    case whereis(scutil_rand_source) of
+
+        undefined ->
+            srand(),
+            rand(Range);
+
+        _ ->
+
+            scutil_rand_source ! [ self(), Range ],
+            receive RandVal -> RandVal - 1 end
+
+    end.
+
+
+
+
+
+random_from([])                                                             -> [];
+random_from(List)                     when                    is_list(List) -> random_from(List, noremainder).
+
+random_from(_,     [])                                                      -> [];
+random_from(0,     List)              when                    is_list(List) -> [];
+random_from(1,     List)              when                    is_list(List) -> Pick = random_from(List), [Pick];
+random_from(Count, List)              when is_integer(Count), is_list(List) -> Pick = random_from(List), [Pick] ++ random_from(Count-1, List -- [Pick]);
+
+random_from([],   remainder)                                                -> { undefined, [] };
+random_from(List, remainder)          when                    is_list(List) -> Item = lists:nth(scutil:rand(length(List)) + 1, List), {Item, List--[Item]};
+random_from(List, noremainder)        when                    is_list(List) -> lists:nth(scutil:rand(length(List)) + 1, List).
+
+random_from(_,     [],   noremainder)                                       -> [];
+random_from(0,     List, noremainder) when                    is_list(List) -> [];
+random_from(1,     List, noremainder) when                    is_list(List) -> random_from(List);
+random_from(Count, List, noremainder) when is_integer(Count), is_list(List) -> Pick = random_from(List), [Pick] ++ random_from(Count-1, List -- [Pick]);
+
+random_from(_,     [],   remainder)                                         -> { undefined, [] };
+random_from(0,     List, remainder)   when                    is_list(List) -> {[], List};
+random_from(1,     List, remainder)   when                    is_list(List) -> { Item, RList } = random_from(List, remainder), { [Item], RList };
+
+random_from(Count, List, remainder)   when is_integer(Count), is_list(List) ->
+
+    { Pick,  Rem  } = random_from(List, remainder),
+    { NPick, NRem } = random_from(Count-1, Rem, remainder),
+    { [Pick] ++ NPick, NRem }.
+
+
+
+
+
+% InputList is [ {Item,Weight}, {Item,Weight}, ... ]
+random_from_weighted(InputList) when is_list(InputList) ->
+    RandomLimit = rand(lists:sum([ Weight || {_,Weight} <- InputList ])),  % the random cap is equal to the sum of all the weights
+    random_from_weighted_worker(InputList, RandomLimit).                   % call the worker with the original list and the cap
+
+% if the list is empty, the cap for randomness was calculated wrongly, and as such the random point is too high
+random_from_weighted_worker([], _) -> { error, limit_miscalculation };
+
+% but if the list has reasonable contents and the limit is a pos-or-0 integer
+random_from_weighted_worker(InputList, Limit) when is_list(InputList) andalso is_integer(Limit) andalso Limit >= 0 ->
+    [ {Item,Weight} | Remainder ] = InputList,   % break off the input list's head as {I,W} and keep the rest as Remainder
+    case Weight =< Limit of                                             % if the weight is less than or equal to the limit,
+        true  -> random_from_weighted_worker(Remainder, Limit-Weight);  % recurse the next item with a decremented weight
+        false -> Item                                                   % if not, this item is the one we want
     end.
