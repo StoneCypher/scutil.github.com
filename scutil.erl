@@ -25,6 +25,7 @@
     multi_do/3, multi_do/4, % need tests
     grid_scatter/2, % need tests
     elements/2, elements/3, elements/4, % needs tests
+    sanitize/2, % needs tests
     random_generator/3, srand/0, rand/1, random_from/1, random_from/2, random_from/3, random_from_weighted/1 % need tests
 ] ).
 
@@ -194,6 +195,10 @@ rand(Range) ->
 
 
 
+% come to think of it, this is stupidly implemented
+% this should shuffle the input list then take the nth prefix, or for remainder, split
+% todo replace this implementation
+
 random_from([])                                                             -> [];
 random_from(List)                     when                    is_list(List) -> random_from(List, noremainder).
 
@@ -246,6 +251,7 @@ random_from_weighted_worker(InputList, Limit) when is_list(InputList) andalso is
 
 
 % todo implement catching tuple { key, reqtype } from list, to auto-convert before return
+% todo There may be a crashing bug here for repeated attributes, which are apparently legal, see http://fullof.bs/reading-module-attributes-in-erlang#comment-466
 
 % interface
 
@@ -278,3 +284,52 @@ elements_worker(Retlist, Config, Requested, KeyIdx, strip) ->
         { value, {_,Tuple} } -> elements_worker(Retlist ++ [Tuple],     Config, RemainingRequests, KeyIdx, strip);
         AnythingElse         -> { error, response_not_understood, { for, lists, keysearch, { ThisRequest, Config } }, { got, AnythingElse } }
     end.
+
+
+
+
+
+sanitize_charset(List, Allowed) when is_list(List), is_list(Allowed) -> sanitize(List, Allowed, []).
+
+sanitize_charset([],   _Allowed, Work) -> lists:reverse(Work);
+sanitize_charset([H|T], Allowed, Work) ->
+    case lists:member(H,Allowed) of
+        true  -> sanitize(T, Allowed, [H]++Work);
+        false -> sanitize(T, Allowed, Work)
+    end.
+
+
+
+
+
+% sanitize_filename(Filename) -> sanitize_charset(Filename,
+
+
+
+
+
+% annote(Group, Key, Value) ->
+% sc_config, make annote -> config, forget -> delete, recall -> get_config
+
+
+
+
+
+% batch_reduce(Workload, Function) ->
+%
+%     [ spawn(Function, LoadItem) || LoadItem <- Workload ],
+%     reduce_receive(length(Workload, [])).
+%
+% reduce_receive(0,           Work) -> Work;
+% reduce_receive(AnswerCount, Work) -> receive X -> reduce_receive(AnswerCount-1, [X]++Work).
+
+
+
+
+
+% distributed_batch_reduce(Workload, Function, Nodes) -> distributed_batch_reduce_handout(Workload, Function, Nodes, [], 0).
+
+% distributed_batch_reduce_handout([],            _Function, _Nodes,              Work, 0)        -> Work;                                                                                                                                   % nothing left in the work queue, count of output outstanding is 0, work's done
+% distributed_batch_reduce_handout([],             Function, _Nodes,              Work, CountOut) -> {_Source, Result } = scutil:receive_one(), distributed_batch_reduce_handout([],       Function,  [],       [Result]++Work, CountOut-1); % there's no work left in the queue, but stuff outstanding from child nodes
+% distributed_batch_reduce_handout(Workload,       Function,  [],                 Work, CountOut) -> { Source, Result } = scutil:receive_one(), distributed_batch_reduce_handout(Workload, Function,  [Source], [Result]++Work, CountOut-1); % no nodes available, wait for a receive, queue the result and add the node back to the available list
+% distributed_batch_reduce_handout([Item|WorkRem], {Mod,Fun}, [ThisNode|NodeRem], Work, CountOut) -> spawn(ThisNode, Mod, Fun, Item),           distributed_batch_reduce_handout(WorkRem,  {Mod,Fun}, NodeRem,  Work,           CountOut+1). % work and nodes available; dispatch some work, increment the work out counter and recurse
