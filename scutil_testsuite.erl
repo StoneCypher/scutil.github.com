@@ -71,10 +71,23 @@ test_get_module_attribute() ->
 
 
 
+test_sanitize_tokens() ->
+
+    [   testerl:must_equal("strings",     fun scutil:sanitize_tokens/2, ["abcdedcbabcde",       "ace"],                   "acecace"),
+        testerl:must_equal("atom lists",  fun scutil:sanitize_tokens/2, [[north,south,up,down], [north,south,east,west]], [north,south]),
+        testerl:must_equal("mixed types", fun scutil:sanitize_tokens/2, [[north,2,"de",{t}],    [north,{t}]],             [north,{t}]),
+        testerl:must_equal("predicate",   fun scutil:sanitize_tokens/2, [[a,1,b,2,c,3,d,4,e,5], fun erlang:is_integer/1], [1,2,3,4,5])
+    ].
+
+
+
+
+
 run(_Hooks, _Options) ->
 
     [   testerl:assemble("type_of()",              test_type_of()),
-        testerl:assemble("get_module_attribute()", test_get_module_attribute())
+        testerl:assemble("get_module_attribute()", test_get_module_attribute()),
+        testerl:assemble("sanitize_tokens()",      test_sanitize_tokens())
 %       testerl:assemble("byte_to_hex()",          test_byte_to_hex()),
 %       testerl:assemble("nybble_to_hex()",        test_nybble_to_hex()),
 %       testerl:assemble("io_list_to_hex()",       test_io_list_to_hex())
