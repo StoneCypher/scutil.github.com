@@ -25,7 +25,7 @@
     multi_do/3, multi_do/4, % need tests
     grid_scatter/2, % need tests
     elements/2, elements/3, elements/4, % needs tests
-    sanitize/2, % needs tests
+    sanitize_charset/2, % needs tests
     random_generator/3, srand/0, rand/1, random_from/1, random_from/2, random_from/3, random_from_weighted/1 % need tests
 ] ).
 
@@ -289,13 +289,13 @@ elements_worker(Retlist, Config, Requested, KeyIdx, strip) ->
 
 
 
-sanitize_charset(List, Allowed) when is_list(List), is_list(Allowed) -> sanitize(List, Allowed, []).
+sanitize_charset(List, Allowed) when is_list(List), is_list(Allowed) -> sanitize_charset(List, Allowed, []).
 
 sanitize_charset([],   _Allowed, Work) -> lists:reverse(Work);
 sanitize_charset([H|T], Allowed, Work) ->
     case lists:member(H,Allowed) of
-        true  -> sanitize(T, Allowed, [H]++Work);
-        false -> sanitize(T, Allowed, Work)
+        true  -> sanitize_charset(T, Allowed, [H]++Work);
+        false -> sanitize_charset(T, Allowed, Work)
     end.
 
 
