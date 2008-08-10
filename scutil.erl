@@ -13,7 +13,7 @@
 -svn_head("$HeadURL$").
 -svn_revision("$Revision$").
 
--description("StoneCypher's utility library.  There's a lot of chaff in here.").
+-description("StoneCypher's utility library.").
 
 -testerl_export( { [], scutil_testsuite } ).
 
@@ -23,11 +23,24 @@
     byte_to_hex/1, nybble_to_hex/1, io_list_to_hex/1, % need tests
     regex_read_matches/2, regex_read_matches/3, % need tests
     multi_do/3, multi_do/4, % need tests
-    grid_scatter/2, % need tests
     elements/2, elements/3, elements/4, % needs tests
-    sanitize_tokens/2, 
+    sanitize_tokens/2,
     sanitize_filename/1, % needs tests
-    random_generator/3, srand/0, rand/1, random_from/1, random_from/2, random_from/3, random_from_weighted/1 % need tests
+    random_generator/3, srand/0, rand/1, random_from/1, random_from/2, random_from/3, random_from_weighted/1, % need tests
+    grid_scatter/2, % need tests
+    list_product/1, % need tests
+    even_or_odd/1,
+    histograph/1,
+    median/1, % needs tests
+    mode/1, % needs tests
+    arithmetic_mean/1, geometric_mean/1, harmonic_mean/1, weighted_arithmetic_mean/1,  % needs tests
+    absolute_difference/2, % needs tests
+    std_deviation/1,
+%    weighted_geometric_mean/1,
+%    std_deviation/1,
+
+
+    receive_one/0 % needs tests
 ] ).
 
 
@@ -290,14 +303,14 @@ elements_worker(Retlist, Config, Requested, KeyIdx, strip) ->
 
 
 
-sanitize_tokens(List, Allowed) when is_function(Allowed) -> lists:filter(Allowed, List);
-sanitize_tokens(List, Allowed) when is_list(Allowed)     -> lists:filter(fun(X) -> lists:member(X,Allowed) end, List).
+sanitize_tokens(List, Allowed) when is_list(List), is_function(Allowed) -> lists:filter(Allowed, List);
+sanitize_tokens(List, Allowed) when is_list(List), is_list(Allowed)     -> lists:filter(fun(X) -> lists:member(X,Allowed) end, List).
 
 
 
 
 
-sanitize_filename(Filename) -> sanitize_tokens(Filename, lists:seq{$a,$z)++lists:seq{$A,$Z)++lists:seq{$0,$9)++"-_=()[]").
+sanitize_filename(Filename) -> sanitize_tokens(Filename, lists:seq($a,$z)++lists:seq($A,$Z)++lists:seq($0,$9)++"-_=()[]").
 
 
 
@@ -328,3 +341,113 @@ sanitize_filename(Filename) -> sanitize_tokens(Filename, lists:seq{$a,$z)++lists
 % distributed_batch_reduce_handout([],             Function, _Nodes,              Work, CountOut) -> {_Source, Result } = scutil:receive_one(), distributed_batch_reduce_handout([],       Function,  [],       [Result]++Work, CountOut-1); % there's no work left in the queue, but stuff outstanding from child nodes
 % distributed_batch_reduce_handout(Workload,       Function,  [],                 Work, CountOut) -> { Source, Result } = scutil:receive_one(), distributed_batch_reduce_handout(Workload, Function,  [Source], [Result]++Work, CountOut-1); % no nodes available, wait for a receive, queue the result and add the node back to the available list
 % distributed_batch_reduce_handout([Item|WorkRem], {Mod,Fun}, [ThisNode|NodeRem], Work, CountOut) -> spawn(ThisNode, Mod, Fun, Item),           distributed_batch_reduce_handout(WorkRem,  {Mod,Fun}, NodeRem,  Work,           CountOut+1). % work and nodes available; dispatch some work, increment the work out counter and recurse
+
+
+
+
+
+% dissimilar_charset(english, lowercase) -> "abcdefghjklmnopqrstuwxyz";
+% dissimilar_charset(english, mixedcase) -> "abcdefghjklmnopqrstuwxyzABDEFGHRT";
+% dissimilar_charset(english, alphanum)  -> "abcdefghjklmnopqrstuwxyzABDEFGHRT34679".
+
+% similarize_charset   a10OZ2B8 -> aloozzBB
+
+
+
+
+
+receive_one() ->
+
+    receive (X) -> X
+    after 1     -> nothing_there
+    end.
+
+
+
+
+
+arithmetic_mean(List) when is_list(List) -> lists:sum(List) / length(List).
+geometric_mean(List)  when is_list(List) -> math:pow(scutil:list_product(List), 1/length(List)).
+harmonic_mean(List)   when is_list(List) -> length(List) / lists:sum([ 1/X || X<-List ]).
+
+
+
+
+
+weighted_arithmetic_mean(List)   when is_list(List) -> weighted_arithmetic_mean(List, 0, 0).
+
+weighted_arithmetic_mean([],           Num, Denom)  -> Num/Denom;
+weighted_arithmetic_mean([{W,V}|Tail], Num, Denom)  -> weighted_arithmetic_mean(Tail, Num+(W*V), Denom+W).
+
+
+
+
+
+even_or_odd(Num) when is_integer(Num) ->
+    if
+        Num band 1 == 0 -> even;
+        true            -> odd
+    end.
+
+
+
+
+
+median(List) when is_list(List) ->
+
+    SList = lists:sort(List),
+    Length = length(SList),
+    case even_or_odd(Length) of
+        even -> [A,B] = lists:sublist(SList, round(Length/2), 2), (A+B)/2;
+        odd  -> lists:nth( round((Length+1)/2), SList )
+    end.
+
+
+
+
+
+mode([])                      -> [];
+mode(List) when is_list(List) -> mode_front(lists:reverse(lists:keysort(2, scutil:histograph(List)))).
+
+mode_front([{Item,Freq}|Tail])                      -> mode_front(Tail, Freq, [Item]).
+
+mode_front([ {Item, Freq} | Tail], Freq,   Results) -> mode_front(Tail, Freq, [Item]++Results);
+mode_front([{_Item,_Freq} |_Tail],_Better, Results) -> Results;
+mode_front([],                    _Freq,   Results) -> Results.
+
+
+
+
+
+absolute_difference(A,B) -> abs(A-B).
+
+
+
+
+
+list_product(List) when is_list(List) -> list_product(List, 1).
+
+list_product([],          Counter) -> Counter;
+list_product([Head|Tail], Counter) -> list_product(Tail, Counter*Head).
+
+
+
+
+
+histograph(List) when is_list(List) -> 
+
+    [Head|Tail] = lists:sort(List),
+    histo_count(Tail, Head, 1, []).
+
+histo_count([],             Current, Count, Work) -> lists:reverse([{Current,Count}]++Work);
+histo_count([Current|Tail], Current, Count, Work) -> histo_count(Tail, Current, Count+1, Work);
+histo_count([New|Tail],     Current, Count, Work) -> histo_count(Tail, New,     1,       [{Current,Count}]++Work).
+
+
+
+
+
+std_deviation(Values) when is_list(Values) ->
+
+    Mean = arithmetic_mean(Values),
+    math:sqrt(arithmetic_mean([ (Val-Mean)*(Val-Mean) || Val <- Values ])).
