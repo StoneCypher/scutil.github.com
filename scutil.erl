@@ -24,23 +24,21 @@
     regex_read_matches/2, regex_read_matches/3, % need tests
     multi_do/3, multi_do/4, % need tests
     elements/2, elements/3, elements/4, % needs tests
-    sanitize_tokens/2,
+    sanitize_tokens/2, 
     sanitize_filename/1, % needs tests
     random_generator/3, srand/0, rand/1, random_from/1, random_from/2, random_from/3, random_from_weighted/1, % need tests
     grid_scatter/2, % need tests
     list_product/1, % need tests
-    even_or_odd/1,
-    histograph/1,
+    even_or_odd/1, % need tests
+    histograph/1, % need tests
     median/1, % needs tests
     mode/1, % needs tests
     arithmetic_mean/1, geometric_mean/1, harmonic_mean/1, weighted_arithmetic_mean/1,  % needs tests
     absolute_difference/2, % needs tests
-    std_deviation/1,
-    root_mean_square/1,
-    central_moments/1,
+    std_deviation/1, % need tests
+    root_mean_square/1, % need tests
+    central_moments/1, % need tests
 %    weighted_geometric_mean/1,
-%    std_deviation/1,
-
 
     receive_one/0 % needs tests
 ] ).
