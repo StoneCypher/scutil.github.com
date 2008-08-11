@@ -36,6 +36,8 @@
     arithmetic_mean/1, geometric_mean/1, harmonic_mean/1, weighted_arithmetic_mean/1,  % needs tests
     absolute_difference/2, % needs tests
     std_deviation/1,
+    root_mean_square/1,
+    central_moments/1,
 %    weighted_geometric_mean/1,
 %    std_deviation/1,
 
@@ -266,6 +268,7 @@ random_from_weighted_worker(InputList, Limit) when is_list(InputList) andalso is
 
 % todo implement catching tuple { key, reqtype } from list, to auto-convert before return
 % todo There may be a crashing bug here for repeated attributes, which are apparently legal, see http://fullof.bs/reading-module-attributes-in-erlang#comment-466
+% todo It may help to re-implement this using proplists instead of doing it manually, profile
 
 % interface
 
@@ -383,7 +386,10 @@ weighted_arithmetic_mean([{W,V}|Tail], Num, Denom)  -> weighted_arithmetic_mean(
 
 
 
+% todo this should be guards, not an if
+
 even_or_odd(Num) when is_integer(Num) ->
+
     if
         Num band 1 == 0 -> even;
         true            -> odd
@@ -434,7 +440,7 @@ list_product([Head|Tail], Counter) -> list_product(Tail, Counter*Head).
 
 
 
-histograph(List) when is_list(List) -> 
+histograph(List) when is_list(List) ->
 
     [Head|Tail] = lists:sort(List),
     histo_count(Tail, Head, 1, []).
@@ -451,3 +457,24 @@ std_deviation(Values) when is_list(Values) ->
 
     Mean = arithmetic_mean(Values),
     math:sqrt(arithmetic_mean([ (Val-Mean)*(Val-Mean) || Val <- Values ])).
+
+
+
+
+
+root_mean_square(List) when is_list(List) -> math:sqrt(arithmetic_mean([ Val*Val || Val <- List ])).
+
+
+
+
+
+central_moments(Items) ->
+
+    Cnt  = length(Items),
+    Mean = lists:sum(Items) / Cnt,
+    TFun = fun(X) -> Base = X-Mean, B2=Base*Base, B3=B2*Base, B4=B3*Base, {B2,B3,B4} end,
+
+    collapse_central_moments(Cnt, [ TFun(I) || I <- Items ], {0,0,0}).
+
+collapse_central_moments(N, [],               {WM2, WM3, WM4}) -> { WM2/N, WM3/N, WM4/N };
+collapse_central_moments(N, [{I2,I3,I4}|Rem], {WM2, WM3, WM4}) -> collapse_central_moments(N, Rem, {I2+WM2, I3+WM3, I4+WM4}).
