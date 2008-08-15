@@ -20,25 +20,29 @@
 -export( [
     type_of/1,
     get_module_attribute/2,
-    byte_to_hex/1, nybble_to_hex/1, io_list_to_hex/1, % need tests
-    regex_read_matches/2, regex_read_matches/3, % need tests
-    multi_do/3, multi_do/4, % need tests
+    byte_to_hex/1, nybble_to_hex/1, io_list_to_hex/1, % needs tests
+    regex_read_matches/2, regex_read_matches/3, % needs tests
+    multi_do/3, multi_do/4, % needs tests
     elements/2, elements/3, elements/4, % needs tests
     sanitize_tokens/2, 
     sanitize_filename/1, % needs tests
-    random_generator/3, srand/0, rand/1, random_from/1, random_from/2, random_from/3, random_from_weighted/1, % need tests
-    grid_scatter/2, % need tests
-    list_product/1, % need tests
-    even_or_odd/1, % need tests
-    histograph/1, % need tests
+    random_generator/3, srand/0, rand/1, random_from/1, random_from/2, random_from/3, random_from_weighted/1, % needs tests
+    grid_scatter/2, % needs tests
+    list_product/1, % needs tests
+    even_or_odd/1, % needs tests
+    histograph/1, % needs tests
     median/1, % needs tests
     mode/1, % needs tests
     arithmetic_mean/1, geometric_mean/1, harmonic_mean/1, weighted_arithmetic_mean/1,  % needs tests
     absolute_difference/2, % needs tests
-    std_deviation/1, % need tests
-    root_mean_square/1, % need tests
-    central_moments/1, % need tests
+    std_deviation/1, % needs tests
+    root_mean_square/1, % needs tests
+    central_moments/1, % needs tests
 %    weighted_geometric_mean/1,
+
+    ranks_of/1, % needs tests
+    tied_ranks_of/1, % needs tests
+    ordered_ranks_of/1, % needs tests
 
     receive_one/0 % needs tests
 ] ).
@@ -317,13 +321,6 @@ sanitize_filename(Filename) -> sanitize_tokens(Filename, lists:seq($a,$z)++lists
 
 
 
-% annote(Group, Key, Value) ->
-% sc_config, make annote -> config, forget -> delete, recall -> get_config
-
-
-
-
-
 % batch_reduce(Workload, Function) ->
 %
 %     [ spawn(Function, LoadItem) || LoadItem <- Workload ],
@@ -476,3 +473,58 @@ central_moments(Items) ->
 
 collapse_central_moments(N, [],               {WM2, WM3, WM4}) -> { WM2/N, WM3/N, WM4/N };
 collapse_central_moments(N, [{I2,I3,I4}|Rem], {WM2, WM3, WM4}) -> collapse_central_moments(N, Rem, {I2+WM2, I3+WM3, I4+WM4}).
+
+
+
+
+
+% todo comeback make a ranks_of/2 which takes a sorting predicate
+
+ranks_of(List) when is_list(List) -> lists:zip(lists:seq(1,length(List)),lists:reverse(lists:sort(List))).
+
+
+
+
+
+tied_ranks_of(List) -> tied_rank_worker(ranks_of(List), [], no_prev_value).
+
+tied_add_prev(Work, {FoundAt, NewValue}) -> lists:duplicate(length(FoundAt),{lists:sum(FoundAt) / length(FoundAt), NewValue}) ++ Work.
+
+
+tied_rank_worker([],               Work, PrevValue) -> lists:reverse(tied_add_prev(Work, PrevValue));
+tied_rank_worker([Item|Remainder], Work, PrevValue) ->
+    case PrevValue of
+        no_prev_value ->
+            {BaseRank,BaseVal} = Item,
+            tied_rank_worker(Remainder, Work, {[BaseRank],BaseVal});
+        {FoundAt,OldVal} ->
+            case Item of
+                {Id,OldVal} ->
+                    tied_rank_worker(Remainder, Work,                           {[Id]++FoundAt,OldVal});
+                {Id,NewVal} ->
+                    tied_rank_worker(Remainder, tied_add_prev(Work, PrevValue), {[Id],NewVal})
+            end
+    end.
+
+
+
+
+
+% todo comeback make an ordered_ranks_of/2 which takes a sorting predicate
+
+ordered_ranks_of(List) when is_list(List) ->
+    ordered_ranks_of(List, tied_ranks_of(List), []).
+
+ordered_ranks_of([], [], Work) -> lists:reverse(Work);
+
+ordered_ranks_of([Front|Rem], Ranks, Work) ->
+    {value,Item} = lists:keysearch(Front,2,Ranks),
+    {IRank,Front} = Item,
+    ordered_ranks_of(Rem, Ranks--[Item], [{IRank,Front}]++Work).
+
+
+
+
+
+% annote(Group, Key, Value) ->
+% sc_config, make annote -> config, forget -> delete, recall -> get_config
