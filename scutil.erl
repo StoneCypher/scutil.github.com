@@ -24,7 +24,7 @@
     regex_read_matches/2, regex_read_matches/3, % needs tests
     multi_do/3, multi_do/4, % needs tests
     elements/2, elements/3, elements/4, % needs tests
-    sanitize_tokens/2, 
+    sanitize_tokens/2,
     sanitize_filename/1, % needs tests
     random_generator/3, srand/0, rand/1, random_from/1, random_from/2, random_from/3, random_from_weighted/1, % needs tests
     grid_scatter/2, % needs tests
@@ -43,6 +43,8 @@
     ranks_of/1, % needs tests
     tied_ranks_of/1, % needs tests
     ordered_ranks_of/1, % needs tests
+    pearson_correlation/2, % needs tests
+    to_lines/1, % needs tests
 
     receive_one/0 % needs tests
 ] ).
@@ -486,6 +488,9 @@ ranks_of(List) when is_list(List) -> lists:zip(lists:seq(1,length(List)),lists:r
 
 
 
+% todo comeback make a tied_ranks_of/2 which takes a sorting predicate
+% needs significant refactoring; work is being repeated
+
 tied_ranks_of(List) -> tied_rank_worker(ranks_of(List), [], no_prev_value).
 
 tied_add_prev(Work, {FoundAt, NewValue}) -> lists:duplicate(length(FoundAt),{lists:sum(FoundAt) / length(FoundAt), NewValue}) ++ Work.
@@ -528,3 +533,32 @@ ordered_ranks_of([Front|Rem], Ranks, Work) ->
 
 % annote(Group, Key, Value) ->
 % sc_config, make annote -> config, forget -> delete, recall -> get_config
+
+
+
+
+
+to_lines(Text) -> string:tokens(Text, "\r\n"). % yay convenience functions
+
+
+
+
+
+pearson_correlation(List1, List2) when is_list(List1), is_list(List2), length(List1) /= length(List2) -> {error, lists_must_be_same_length};
+
+pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
+
+    SumXY = lists:sum([A*B || {A,B} <- lists:zip(List1,List2) ]),   % the sum of the products of each matched pair
+
+    SumX  = lists:sum(List1),
+    SumY  = lists:sum(List2),
+
+    SumXX = lists:sum([L*L || L<-List1]),                           % the sums of the squared items
+    SumYY = lists:sum([L*L || L<-List2]),
+
+    N     = length(List1),
+
+    Numer = (N*SumXY) - (SumX * SumY),
+    Denom = math:sqrt(   ( (N*SumXX)-(SumX*SumX) )   *   ( (N*SumYY)-(SumY*SumY) )   ),
+
+    {r, (Numer/Denom)}.
