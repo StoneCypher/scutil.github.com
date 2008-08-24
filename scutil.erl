@@ -44,6 +44,7 @@
     tied_ranks_of/1, % needs tests
     ordered_ranks_of/1, % needs tests
     pearson_correlation/2, % needs tests
+    spearman_correlation/2, % needs tests
     to_lines/1, % needs tests
 
     receive_one/0 % needs tests
@@ -544,8 +545,9 @@ to_lines(Text) -> string:tokens(Text, "\r\n"). % yay convenience functions
 
 
 
-pearson_correlation(List1, List2) when is_list(List1), is_list(List2), length(List1) /= length(List2) -> {error, lists_must_be_same_length};
+% test data at http://changingminds.org/explanations/research/analysis/pearson.htm
 
+pearson_correlation(List1, List2) when is_list(List1), is_list(List2), length(List1) /= length(List2) -> {error, lists_must_be_same_length};
 pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
     SumXY = lists:sum([A*B || {A,B} <- lists:zip(List1,List2) ]),   % the sum of the products of each matched pair
@@ -562,3 +564,20 @@ pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
     Denom = math:sqrt(   ( (N*SumXX)-(SumX*SumX) )   *   ( (N*SumYY)-(SumY*SumY) )   ),
 
     {r, (Numer/Denom)}.
+
+
+
+
+
+% test data at  http://geographyfieldwork.com/SpearmansRank.htm
+
+spearman_correlation(List1, List2) when is_list(List1), is_list(List2), length(List1) /= length(List2) -> {error, lists_must_be_same_length};
+spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
+
+    {TR1,_} = lists:unzip(ordered_ranks_of(List1)),
+    {TR2,_} = lists:unzip(ordered_ranks_of(List2)),
+
+    Numerator   = 6 * lists:sum([ (D1-D2)*(D1-D2) || {D1,D2} <- lists:zip(TR1,TR2) ]),
+    Denominator = math:pow(length(List1),3)-length(List1),
+
+    {rsquared,1-(Numerator/Denominator)}.
