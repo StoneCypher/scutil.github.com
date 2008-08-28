@@ -37,7 +37,8 @@
     absolute_difference/2, % needs tests
     std_deviation/1, % needs tests
     root_mean_square/1, % needs tests
-    central_moments/1, % needs tests
+    moment/2, moments/1, moments/2, % needs tests
+    central_moment/2, central_moments/1, central_moments/2, % needs tests
 %    weighted_geometric_mean/1,
 
     ranks_of/1, % needs tests
@@ -466,23 +467,6 @@ root_mean_square(List) when is_list(List) -> math:sqrt(arithmetic_mean([ Val*Val
 
 
 
-central_moments(Items) ->
-
-    Cnt  = length(Items),
-    Mean = lists:sum(Items) / Cnt,
-    TFun = fun(X) -> Base = X-Mean, B2=Base*Base, B3=B2*Base, B4=B3*Base, {B2,B3,B4} end,
-
-    collapse_central_moments(Cnt, [ TFun(I) || I <- Items ], {0,0,0}).
-
-collapse_central_moments(N, [],               {WM2, WM3, WM4}) -> { WM2/N, WM3/N, WM4/N };
-collapse_central_moments(N, [{I2,I3,I4}|Rem], {WM2, WM3, WM4}) -> collapse_central_moments(N, Rem, {I2+WM2, I3+WM3, I4+WM4}).
-
-
-
-
-
-% todo comeback make a ranks_of/2 which takes a sorting predicate
-
 ranks_of(List) when is_list(List) -> lists:zip(lists:seq(1,length(List)),lists:reverse(lists:sort(List))).
 
 
@@ -581,3 +565,31 @@ spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
     Denominator = math:pow(length(List1),3)-length(List1),
 
     {rsquared,1-(Numerator/Denominator)}.
+
+
+
+
+
+moment(List, N) when is_list(List), is_number(N) ->
+    scutil:arithmetic_mean( [ pow(Item, N) || Item <- List ] ).
+
+moments(List)                                -> moments(List, [2,3,4]).
+moments(List, Moments) when is_list(Moments) -> [ moment(List, M) || M <- Moments ].
+
+
+
+
+
+central_moment(List, N) when is_list(List), is_number(N) ->
+    ListAMean = scutil:arithmetic_mean(List),
+    scutil:arithmetic_mean( [ pow(Item-ListAMean, N) || Item <- List ] ).
+
+central_moments(List)                                -> central_moments(List, [2,3,4]).
+central_moments(List, Moments) when is_list(Moments) -> [ central_moment(List, M) || M <- Moments ].
+
+
+
+
+
+skewness(List) -> central_moment(List, 3).
+kurtosis(List) -> central_moment(List, 4).
