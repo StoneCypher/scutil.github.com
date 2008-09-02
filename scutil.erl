@@ -46,9 +46,13 @@
     ordered_ranks_of/1, % needs tests
     pearson_correlation/2, % needs tests
     spearman_correlation/2, % needs tests
+    skewness/1, % needs tests
+    kurtosis/1, % needs tests
     to_lines/1, % needs tests
 
-    receive_one/0 % needs tests
+    receive_one/0, % needs tests
+
+    hex_to_int/1 % needs tests
 ] ).
 
 
@@ -92,6 +96,20 @@ get_module_attribute(Module,Attribute) ->
             { error, no_such_module }
 
     end.
+
+
+
+
+
+hex_to_int(Hex) when is_integer(Hex), Hex >= $0, Hex =< $9 -> Hex - $0;
+hex_to_int(Hex) when is_integer(Hex), Hex >= $a, Hex =< $f -> Hex - $a + 10;
+hex_to_int(Hex) when is_integer(Hex), Hex >= $A, Hex =< $F -> Hex - $A + 10;
+
+hex_to_int(Hex) when is_list(Hex) -> hex_to_int(Hex, 0).
+
+hex_to_int([],          Acc) -> Acc;
+hex_to_int([Digit|Rem], Acc) -> hex_to_int(Rem, (Acc bsl 4) + hex_to_int(Digit)).
+
 
 
 
@@ -571,7 +589,7 @@ spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
 
 moment(List, N) when is_list(List), is_number(N) ->
-    scutil:arithmetic_mean( [ pow(Item, N) || Item <- List ] ).
+    scutil:arithmetic_mean( [ math:pow(Item, N) || Item <- List ] ).
 
 moments(List)                                -> moments(List, [2,3,4]).
 moments(List, Moments) when is_list(Moments) -> [ moment(List, M) || M <- Moments ].
@@ -582,7 +600,7 @@ moments(List, Moments) when is_list(Moments) -> [ moment(List, M) || M <- Moment
 
 central_moment(List, N) when is_list(List), is_number(N) ->
     ListAMean = scutil:arithmetic_mean(List),
-    scutil:arithmetic_mean( [ pow(Item-ListAMean, N) || Item <- List ] ).
+    scutil:arithmetic_mean( [ math:pow(Item-ListAMean, N) || Item <- List ] ).
 
 central_moments(List)                                -> central_moments(List, [2,3,4]).
 central_moments(List, Moments) when is_list(Moments) -> [ central_moment(List, M) || M <- Moments ].
