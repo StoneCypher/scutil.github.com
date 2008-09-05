@@ -17,7 +17,12 @@
 
 -testerl_export( { [], scutil_testsuite } ).
 
+
+
+
+
 -export( [
+
     type_of/1,
     get_module_attribute/2,
     byte_to_hex/1, nybble_to_hex/1, io_list_to_hex/1, % needs tests
@@ -41,6 +46,10 @@
     central_moment/2, central_moments/1, central_moments/2, % needs tests
 %    weighted_geometric_mean/1,
 
+    dot_product/2, % needs tests
+    vector_magnitude/1, % needs tests
+    qsp_average/2, % needs tests
+
     ranks_of/1, % needs tests
     tied_ranks_of/1, % needs tests
     ordered_ranks_of/1, % needs tests
@@ -53,6 +62,7 @@
     receive_one/0, % needs tests
 
     hex_to_int/1 % needs tests
+
 ] ).
 
 
@@ -176,9 +186,11 @@ srand() ->
     Now = erlang:now(),
     RandomGeneratorPid = spawn(?MODULE, random_generator, [element(1, Now), element(2, Now), element(3, Now)]),
 
-    SCR = whereis(scutil_rand_source),
+    case whereis(scutil_rand_source) of
+        undefined -> ok;
+        _Defined  -> unregister(scutil_rand_source)
+    end,
 
-    if SCR == undefined -> 0; true -> unregister(scutil_rand_source) end,
     register(scutil_rand_source, RandomGeneratorPid),
     { ok, { seeded, Now } }.
 
@@ -611,3 +623,41 @@ central_moments(List, Moments) when is_list(Moments) -> [ central_moment(List, M
 
 skewness(List) -> central_moment(List, 3).
 kurtosis(List) -> central_moment(List, 4).
+
+
+
+
+
+% quadratic scalar product average
+% see http://www.inf.fu-berlin.de/inst/ag-ki/rojas_home/documents/1996/NeuralNetworks/K5.pdf pdf-page 15
+
+qsp_average(W, InputVecs) ->
+
+    GetSqVnDp = fun(Xi) ->
+        VnDp = vector_magnitude(dot_product(W, Xi)),
+        VnDp * VnDp
+        end,
+
+    arithmetic_mean([ GetSqVnDp(Xi) || Xi <- InputVecs ]).
+
+
+
+
+
+dot_product(VX, VY) when length(VX) == length(VY) -> 
+    lists:sum( [ X*Y || {X,Y} <- lists:zip(VX,VY) ] ).
+
+
+
+
+
+vector_magnitude(VX) ->
+    math:sqrt(lists:sum([ X*X || X <- VX ])).
+
+
+
+
+
+normalize_vector(VX) ->
+    VM = vector_magnitude(VX),
+    [ X / VM || X <- VX ].
