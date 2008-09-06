@@ -630,6 +630,7 @@ kurtosis(List) -> central_moment(List, 4).
 
 % quadratic scalar product average
 % see http://www.inf.fu-berlin.de/inst/ag-ki/rojas_home/documents/1996/NeuralNetworks/K5.pdf pdf-page 15
+% Thanks to John Chakerian / Chile, Raleigh, Asterick, PfhorSlayer and John Sensebe for help with the following 4 functions
 
 qsp_average(W, InputVecs) ->
 
@@ -644,7 +645,7 @@ qsp_average(W, InputVecs) ->
 
 
 
-dot_product(VX, VY) when length(VX) == length(VY) -> 
+dot_product(VX, VY) when length(VX) == length(VY) ->
     lists:sum( [ X*Y || {X,Y} <- lists:zip(VX,VY) ] ).
 
 
