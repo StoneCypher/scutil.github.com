@@ -55,8 +55,9 @@
     ranks_of/1, % needs tests
     tied_ranks_of/1, % needs tests
     ordered_ranks_of/1, % needs tests
-    pearson_correlation/2, % needs tests
-    spearman_correlation/2, % needs tests
+    pearson_correlation/1,  pearson_correlation/2, % needs tests
+    spearman_correlation/1, spearman_correlation/2, % needs tests
+    kendall_correlation/1,  kendall_correlation/2, % needs tests
     skewness/1, % needs tests
     kurtosis/1, % needs tests
     to_lines/1, % needs tests
@@ -65,6 +66,7 @@
 
     in_both_lists/2, % needs tests
     all_unique_pairings/1, % needs tests
+    walk_unique_pairings/2, % needs tests
 
     hex_to_int/1 % needs tests
 
@@ -568,6 +570,10 @@ to_lines(Text) -> string:tokens(Text, "\r\n"). % yay convenience functions
 
 % test data at http://changingminds.org/explanations/research/analysis/pearson.htm
 
+pearson_correlation(TupleList) when is_list(TupleList) ->
+    {A,B} = lists:unzip(TupleList),
+    pearson_correlation(A,B).
+
 pearson_correlation(List1, List2) when is_list(List1), is_list(List2), length(List1) /= length(List2) -> {error, lists_must_be_same_length};
 pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
@@ -592,6 +598,10 @@ pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
 % test data at  http://geographyfieldwork.com/SpearmansRank.htm
 
+spearman_correlation(TupleList) when is_list(TupleList) ->
+    {A,B} = lists:unzip(TupleList),
+    spearman_correlation(A,B).
+
 spearman_correlation(List1, List2) when is_list(List1), is_list(List2), length(List1) /= length(List2) -> {error, lists_must_be_same_length};
 spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
@@ -602,6 +612,38 @@ spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
     Denominator = math:pow(length(List1),3)-length(List1),
 
     {rsquared,1-(Numerator/Denominator)}.
+
+
+
+
+
+% http://changingminds.org/explanations/research/analysis/kendall.htm
+
+kendall_correlation(TupleList) when is_list(TupleList) ->
+    {A,B} = lists:unzip(TupleList),
+    kendall_correlation(A,B).
+
+kendall_correlation(List1, List2) when is_list(List1) andalso is_list(List2) andalso length(List1) /= length(List2) -> {error, lists_must_be_same_length};
+kendall_correlation(List1, List2) when is_list(List1) andalso is_list(List2) ->
+
+    {RA,_} = lists:unzip(ordered_ranks_of(List1)),
+    {RB,_} = lists:unzip(ordered_ranks_of(List2)),
+
+    Ordering = lists:keysort(1,lists:zip(RA,RB)),
+    {_,OrdB} = lists:unzip(Ordering),
+
+    N = length(List1),
+    P = lists:sum(kendall_right_of(OrdB, [])),
+
+    {tau, (( (4*P) / (N * (N - 1))) - 1) }.
+
+
+
+kendall_right_of([],    Work) -> lists:reverse(Work);
+kendall_right_of([F|R], Work) -> kendall_right_of(R, [kendall_right_of_item(F,R)]++Work).
+
+kendall_right_of_item(B, Rem) -> length([R || R <- Rem, R < B]).
+
 
 
 
@@ -685,7 +727,7 @@ hmean_vector_normal(VX) ->   harmonic_mean(normalize_vector(VX)).
 
 % Create reverse sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples where key K appears in both A and B
 
-in_both_lists(A,B) when is_list(A), is_list(B) -> 
+in_both_lists(A,B) when is_list(A), is_list(B) ->
     both_lists_next_item(A,B,[]).
 
 both_lists_next_item([],             _,              Work) -> Work;
@@ -704,10 +746,28 @@ both_lists_next_item(IA,             IB,             Work) ->
 
 
 
+% collects results; do not use for huge lists
+
 all_unique_pairings(A) when is_list(A) -> all_unique_pairings(A,[]).
 
 all_unique_pairings([],      Work) -> Work;
 all_unique_pairings([Ai|Ar], Work) -> all_unique_pairings(Ar, [{Ai,Ari}||Ari<-Ar] ++ Work).
+
+
+
+
+
+% used for side effects, doesn't gather results; appropriate for enormous lists
+
+walk_unique_pairings([],    _) -> ok;
+walk_unique_pairings([A|R], F) when is_function(F) ->
+    walk_unique_pairings(A, R, F),
+    walk_unique_pairings(R, F).
+
+walk_unique_pairings(_A, [],     _F) -> ok;
+walk_unique_pairings( A, [Rh|Rr], F) ->
+    F(A,Rh),
+    walk_unique_pairings(A, Rr, F).
 
 
 
