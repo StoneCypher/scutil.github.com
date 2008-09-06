@@ -159,8 +159,6 @@ multi_do(I, Module, Func, Args, Work) -> multi_do(I-1, Module, Func, Args, Work 
 
 
 
-% was regexp_read_matches in pre-svn
-
 regex_read_matches(String, Reg)                          -> regex_read_matches(String, Reg, {0,0}).
 regex_read_matches(String, Reg, {TrimFront, TrimLength}) ->
 
@@ -599,6 +597,7 @@ spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
 
 
+% thanks to Chile and Kraln for straightening me out on moments and central moments
 
 moment(List, N) when is_list(List), is_number(N) ->
     scutil:arithmetic_mean( [ math:pow(Item, N) || Item <- List ] ).
@@ -630,7 +629,7 @@ kurtosis(List) -> central_moment(List, 4).
 
 % quadratic scalar product average
 % see http://www.inf.fu-berlin.de/inst/ag-ki/rojas_home/documents/1996/NeuralNetworks/K5.pdf pdf-page 15
-% Thanks to John Chakerian / Chile, Raleigh, Asterick, PfhorSlayer and John Sensebe for help with the following 4 functions
+% Thanks to the following for help with qsp_average and dependencies: Asterick, Chile, John Sensebe, PfhorSlayer, Raleigh
 
 qsp_average(W, InputVecs) ->
 
@@ -662,3 +661,22 @@ vector_magnitude(VX) ->
 normalize_vector(VX) ->
     VM = vector_magnitude(VX),
     [ X / VM || X <- VX ].
+
+
+
+
+
+%  Thanks Table:
+%
+%    Alain O'Dea                   http://concise-software.blogspot.com/
+%    Ayrnieu
+%    Bryon Vandiver / Asterick     http://sublab.net/
+%    Chile
+%    DizzyD
+%    Dylan Barrie / PfhorSlayer
+%    Etnt
+%    GrizzlyAdams
+%    Jeff Katz / Kraln             http://kraln.com/
+%    John Sensebe
+%    Raleigh
+%    Toby Opferman                 http://www.opferman.com/
