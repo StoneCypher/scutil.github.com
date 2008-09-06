@@ -49,6 +49,8 @@
     dot_product/2, % needs tests
     vector_magnitude/1, % needs tests
     qsp_average/2, % needs tests
+    normalize_vector/1, % needs tests
+    amean_vector_normal/1, gmean_vector_normal/1, hmean_vector_normal/1, % needs tests
 
     ranks_of/1, % needs tests
     tied_ranks_of/1, % needs tests
@@ -397,8 +399,12 @@ receive_one() ->
 
 
 arithmetic_mean(List) when is_list(List) -> lists:sum(List) / length(List).
-geometric_mean(List)  when is_list(List) -> math:pow(scutil:list_product(List), 1/length(List)).
+geometric_mean(List)  when is_list(List) -> math:exp(scutil:arithmetic_mean([math:log(X)||X<-List])).
 harmonic_mean(List)   when is_list(List) -> length(List) / lists:sum([ 1/X || X<-List ]).
+
+
+
+% geometric_mean(List)  when is_list(List) -> math:pow(scutil:list_product(List), 1/length(List)). % replaced because this fails on huge lists due to c std lib precision issues
 
 
 
@@ -666,6 +672,14 @@ normalize_vector(VX) ->
 
 
 
+amean_vector_normal(VX) -> arithmetic_mean(normalize_vector(VX)).
+gmean_vector_normal(VX) ->  geometric_mean(normalize_vector(VX)).
+hmean_vector_normal(VX) ->   harmonic_mean(normalize_vector(VX)).
+
+
+
+
+
 %  Thanks Table:
 %
 %    Alain O'Dea                   http://concise-software.blogspot.com/
@@ -675,7 +689,7 @@ normalize_vector(VX) ->
 %    DizzyD
 %    Dylan Barrie / PfhorSlayer
 %    Etnt
-%    GrizzlyAdams
+%    GrizzlyAdams                  http://grizzly.thewaffleiron.net/
 %    Jeff Katz / Kraln             http://kraln.com/
 %    John Sensebe
 %    Raleigh
