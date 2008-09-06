@@ -64,9 +64,11 @@
 
     receive_one/0, % needs tests
 
-    in_both_lists/2, % needs tests
+    in_both_lists/1, in_both_lists/2, % needs tests
     all_unique_pairings/1, % needs tests
     walk_unique_pairings/2, % needs tests
+
+    list_to_num/1, % needs tests
 
     hex_to_int/1 % needs tests
 
@@ -574,6 +576,8 @@ pearson_correlation(TupleList) when is_list(TupleList) ->
     {A,B} = lists:unzip(TupleList),
     pearson_correlation(A,B).
 
+pearson_correlation(List1, _)     when length(List1) < 2 -> {r,0.0};
+
 pearson_correlation(List1, List2) when is_list(List1), is_list(List2), length(List1) /= length(List2) -> {error, lists_must_be_same_length};
 pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
@@ -587,10 +591,13 @@ pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
     N     = length(List1),
 
-    Numer = (N*SumXY) - (SumX * SumY),
-    Denom = math:sqrt(   ( (N*SumXX)-(SumX*SumX) )   *   ( (N*SumYY)-(SumY*SumY) )   ),
-
-    {r, (Numer/Denom)}.
+    case math:sqrt(   ( (N*SumXX)-(SumX*SumX) )   *   ( (N*SumYY)-(SumY*SumY) )   ) of
+        0     -> {r,0.0};  % some nasty values otherwise cause divide by zero
+        0.0   -> {r,0.0};  % eg [ [1,1,1,1,1], [1,1,2,1,2] ]
+        Denom ->
+          Numer = (N*SumXY) - (SumX * SumY),
+          {r, (Numer/Denom)}
+    end.
 
 
 
@@ -601,6 +608,8 @@ pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 spearman_correlation(TupleList) when is_list(TupleList) ->
     {A,B} = lists:unzip(TupleList),
     spearman_correlation(A,B).
+
+spearman_correlation(List1, _)     when length(List1) < 2 -> {rsquared,0.0};
 
 spearman_correlation(List1, List2) when is_list(List1), is_list(List2), length(List1) /= length(List2) -> {error, lists_must_be_same_length};
 spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
@@ -623,8 +632,10 @@ kendall_correlation(TupleList) when is_list(TupleList) ->
     {A,B} = lists:unzip(TupleList),
     kendall_correlation(A,B).
 
-kendall_correlation(List1, List2) when is_list(List1) andalso is_list(List2) andalso length(List1) /= length(List2) -> {error, lists_must_be_same_length};
-kendall_correlation(List1, List2) when is_list(List1) andalso is_list(List2) ->
+kendall_correlation(List1, _)     when length(List1) < 2 -> {tau,0.0};
+
+kendall_correlation(List1, List2) when is_list(List1), is_list(List2), length(List1) /= length(List2) -> {error, lists_must_be_same_length};
+kendall_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
     {RA,_} = lists:unzip(ordered_ranks_of(List1)),
     {RB,_} = lists:unzip(ordered_ranks_of(List2)),
@@ -635,7 +646,7 @@ kendall_correlation(List1, List2) when is_list(List1) andalso is_list(List2) ->
     N = length(List1),
     P = lists:sum(kendall_right_of(OrdB, [])),
 
-    {tau, (( (4*P) / (N * (N - 1))) - 1) }.
+    {tau, -(( (4*P) / (N * (N - 1))) - 1) }.
 
 
 
@@ -727,6 +738,10 @@ hmean_vector_normal(VX) ->   harmonic_mean(normalize_vector(VX)).
 
 % Create reverse sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples where key K appears in both A and B
 
+in_both_lists(TupleList) when is_list(TupleList) -> 
+    {A,B} = lists:unzip(TupleList),
+    in_both_lists(A,B).
+
 in_both_lists(A,B) when is_list(A), is_list(B) ->
     both_lists_next_item(A,B,[]).
 
@@ -768,6 +783,16 @@ walk_unique_pairings(_A, [],     _F) -> ok;
 walk_unique_pairings( A, [Rh|Rr], F) ->
     F(A,Rh),
     walk_unique_pairings(A, Rr, F).
+
+
+
+
+
+list_to_num(X) ->
+    case catch list_to_float(X) of
+        {'EXIT',_} -> list_to_integer(X);
+        Y -> Y
+    end.
 
 
 
