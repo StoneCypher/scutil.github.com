@@ -63,6 +63,9 @@
 
     receive_one/0, % needs tests
 
+    in_both_lists/2, % needs tests
+    all_unique_pairings/1, % needs tests
+
     hex_to_int/1 % needs tests
 
 ] ).
@@ -675,6 +678,36 @@ normalize_vector(VX) ->
 amean_vector_normal(VX) -> arithmetic_mean(normalize_vector(VX)).
 gmean_vector_normal(VX) ->  geometric_mean(normalize_vector(VX)).
 hmean_vector_normal(VX) ->   harmonic_mean(normalize_vector(VX)).
+
+
+
+
+
+% Create reverse sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples where key K appears in both A and B
+
+in_both_lists(A,B) when is_list(A), is_list(B) -> 
+    both_lists_next_item(A,B,[]).
+
+both_lists_next_item([],             _,              Work) -> Work;
+both_lists_next_item(_,              [],             Work) -> Work;
+both_lists_next_item([ {K,Ai} | Ar], [ {K,Bi} | Br], Work) -> both_lists_next_item(Ar, Br, [{K,Ai,Bi}]++Work);
+
+both_lists_next_item(IA,             IB,             Work) ->
+    [{Ka,_}|Ar] = IA,
+    [{Kb,_}|Br] = IB,
+    if
+        Ka < Kb -> both_lists_next_item(Ar, IB, Work);
+        true    -> both_lists_next_item(IA, Br, Work)
+    end.
+
+
+
+
+
+all_unique_pairings(A) when is_list(A) -> all_unique_pairings(A,[]).
+
+all_unique_pairings([],      Work) -> Work;
+all_unique_pairings([Ai|Ar], Work) -> all_unique_pairings(Ar, [{Ai,Ari}||Ari<-Ar] ++ Work).
 
 
 
