@@ -74,6 +74,7 @@
     module_has_function/2, % needs tests
     regexp_read_matches/2, regexp_read_matches/3, % needs tests
 
+    call_after/2, call_after/3, call_after/4, call_after_worker/4, % needs tests
     shuffle/1, % needs tests
 
     hex_to_int/1 % needs tests
@@ -922,12 +923,49 @@ regexp_read_matches(String, Reg, {TrimFront, TrimLength}) ->
 
 
 
-
+% Derived from code originally found at http://wiki.trapexit.org/index.php/RandomShuffle
+% they had a bizarre log length repeating behavior; I stripped it because it doesn't increase randomness in any significant way
+% the new list position is not in any way dependant on the previous list position, so each time it's shuffled() it's started over
+% to repeat the behavior is a study in cluelessness
 
 shuffle(List) ->
    WeightedAndShuffled        = lists:map( fun(Item) -> { random:uniform(), Item } end, List ),
    { _, SortedAndDeweighted } = lists:unzip(lists:keysort(1, WeightedAndShuffled)),
    SortedAndDeweighted.
+
+
+
+
+
+% Handler must be no_handler_pid or { handler, PID [, idhandle] }
+
+call_after_worker({milliseconds, MS}, Func, Args, Handler) ->
+
+    receive after MS ->
+
+        case Func of
+            { Module, FuncName } -> Result = apply(Module, FuncName, Args);
+            FuncName             -> Result = apply(FuncName, Args)
+        end,
+
+        case Handler of
+            { handler, PID, Handle } -> PID ! { call_after_result, Result, Handle };
+            { handler, PID }         -> PID ! { call_after_result, Result };
+            no_handler_pid           -> ok
+        end
+
+    end.
+
+
+
+
+
+call_after(Length, Func)                -> call_after(Length, Func, [],   no_handler_pid).
+call_after(Length, Func, Args)          -> call_after(Length, Func, Args, no_handler_pid).
+call_after(Length, Func, Args, Handler) ->
+
+    Worker = spawn(?MODULE, call_after_worker, [to_milliseconds(Length), Func, Args, Handler]),
+    { ok, spawned_worker, Worker }.
 
 
 
