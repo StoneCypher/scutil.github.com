@@ -261,36 +261,11 @@ rand(Range) ->
 
 
 
-% come to think of it, this is stupidly implemented
-% this should shuffle the input list then take the nth prefix, or for remainder, split
-% todo replace this implementation
+random_from(   List) -> [X] = random_from(1, List, no_remainder), X.
+random_from(N, List) -> random_from(N, List, no_remainder).
 
-random_from([])                                                             -> [];
-random_from(List)                     when                    is_list(List) -> random_from(List, noremainder).
-
-random_from(_,     [])                                                      -> [];
-random_from(0,     List)              when                    is_list(List) -> [];
-random_from(1,     List)              when                    is_list(List) -> Pick = random_from(List), [Pick];
-random_from(Count, List)              when is_integer(Count), is_list(List) -> Pick = random_from(List), [Pick] ++ random_from(Count-1, List -- [Pick]);
-
-random_from([],   remainder)                                                -> { undefined, [] };
-random_from(List, remainder)          when                    is_list(List) -> Item = lists:nth(scutil:rand(length(List)) + 1, List), {Item, List--[Item]};
-random_from(List, noremainder)        when                    is_list(List) -> lists:nth(scutil:rand(length(List)) + 1, List).
-
-random_from(_,     [],   noremainder)                                       -> [];
-random_from(0,     List, noremainder) when                    is_list(List) -> [];
-random_from(1,     List, noremainder) when                    is_list(List) -> random_from(List);
-random_from(Count, List, noremainder) when is_integer(Count), is_list(List) -> Pick = random_from(List), [Pick] ++ random_from(Count-1, List -- [Pick]);
-
-random_from(_,     [],   remainder)                                         -> { undefined, [] };
-random_from(0,     List, remainder)   when                    is_list(List) -> {[], List};
-random_from(1,     List, remainder)   when                    is_list(List) -> { Item, RList } = random_from(List, remainder), { [Item], RList };
-
-random_from(Count, List, remainder)   when is_integer(Count), is_list(List) ->
-
-    { Pick,  Rem  } = random_from(List, remainder),
-    { NPick, NRem } = random_from(Count-1, Rem, remainder),
-    { [Pick] ++ NPick, NRem }.
+random_from(N, List, no_remainder) -> {R,_} = random_from(N,List,remainder), R;
+random_from(N, List, remainder)    -> lists:split(N,shuffle(List)).
 
 
 
@@ -939,7 +914,7 @@ shuffle(List) ->
 
 % Handler must be no_handler_pid or { handler, PID [, idhandle] }
 
-call_after_worker({milliseconds, MS}, Func, Args, Handler) ->
+call_after_worker(MS, Func, Args, Handler) ->
 
     receive after MS ->
 
@@ -964,7 +939,7 @@ call_after(Length, Func)                -> call_after(Length, Func, [],   no_han
 call_after(Length, Func, Args)          -> call_after(Length, Func, Args, no_handler_pid).
 call_after(Length, Func, Args, Handler) ->
 
-    Worker = spawn(?MODULE, call_after_worker, [to_milliseconds(Length), Func, Args, Handler]),
+    Worker = spawn(?MODULE, call_after_worker, [Length, Func, Args, Handler]),
     { ok, spawned_worker, Worker }.
 
 
