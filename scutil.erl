@@ -70,6 +70,12 @@
 
     list_to_num/1, % needs tests
 
+    counter/1, inc_counter/1, reset_counter/1, counter_process/0, % needs tests
+
+    start_register_if_not_running/4, % needs tests
+
+    wait_until_terminate/0, wait_until_terminate/1, % needs tests
+
     hex_to_int/1 % needs tests
 
 ] ).
@@ -793,6 +799,107 @@ list_to_num(X) ->
         {'EXIT',_} -> list_to_integer(X);
         Y -> Y
     end.
+
+
+
+
+
+
+start_register_if_not_running(Name, Module, Function, Args) when is_atom(Name), is_atom(Module), is_atom(Function), is_list(Args) ->
+
+    case whereis(Name) of
+        undefined -> register(Name, spawn(Module, Function, Args));
+        _         -> ok
+    end.
+
+
+
+
+
+
+counter(Name) ->
+
+    start_register_if_not_running(scutil_counter_process, scutil, counter_process, []),
+    scutil_counter_process ! {self(), get_counter, Name},
+    receive
+        {counter_at, Name, Val} -> Val
+    after
+        1000 -> {error, timeout}
+    end.
+
+
+
+
+
+inc_counter(Name) ->
+
+    start_register_if_not_running(scutil_counter_process, scutil, counter_process, []),
+    scutil_counter_process ! {self(), inc_counter, Name},
+    receive
+        {counter_at, Name, Val} -> Val
+    after
+        1000 -> {error, timeout}
+    end.
+
+
+
+
+
+reset_counter(Name) ->
+
+    start_register_if_not_running(scutil_counter_process, scutil, counter_process, []),
+    scutil_counter_process ! {self(), reset_counter, Name},
+    receive
+        {counter_at, Name, Val} -> Val
+    after
+        1000 -> {error, timeout}
+    end.
+
+
+
+
+
+counter_process() ->
+    receive
+        shutdown -> ok;
+        {Caller, get_counter, Name} ->
+            case get(Name) of
+                undefined -> Caller ! {counter_at, Name, 0}, put(Name,0), counter_process();
+                Defined   -> Caller ! {counter_at, Name, Defined},        counter_process()
+            end;
+        {Caller, inc_counter, Name} ->
+            case get(Name) of
+                undefined ->                Caller ! {counter_at, Name, 0},   put(Name,0),   counter_process();
+                Defined   -> New=Defined+1, Caller ! {counter_at, Name, New}, put(Name,New), counter_process()
+            end;
+        {Caller, reset_counter, Name} ->
+            Caller ! {counter_at, Name, 0},   
+            put(Name,0),   
+            counter_process()
+    end.
+
+
+
+
+
+% surprisingly useful in debugging
+
+wait_until_terminate() -> wait_until_terminate(quiet).
+
+wait_until_terminate(quiet) ->
+    receive
+        terminate -> ok;
+        _         -> wait_until_terminate(quiet)
+    end;
+
+wait_until_terminate(loud) ->
+    receive
+        terminate -> ok;
+        X         -> io:format("Received ~p~n", [X]), wait_until_terminate(loud)
+    end.
+
+
+
 
 
 
