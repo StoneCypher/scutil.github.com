@@ -951,7 +951,7 @@ call_after(Length, Func, Args, Handler) ->
 permute(List) -> permute(List, length(List)).
 
 permute(List, 1)     when is_list(List)                    -> [ {T}                        || T <- List ];
-permute(List, Depth) when is_list(List), is_integer(Depth) -> [ erlang:append_element(R,T) || T <- List, R <- groupings(List--[T], Depth-1) ].
+permute(List, Depth) when is_list(List), is_integer(Depth) -> [ erlang:append_element(R,T) || T <- List, R <- permute(List--[T], Depth-1) ].
 
 
 
