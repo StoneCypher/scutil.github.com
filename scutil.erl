@@ -77,6 +77,8 @@
     call_after/2, call_after/3, call_after/4, call_after_worker/4, % needs tests
     shuffle/1, % needs tests
 
+    permute/1, permute/2, % needs tests
+
     hex_to_int/1 % needs tests
 
 ] ).
@@ -941,6 +943,15 @@ call_after(Length, Func, Args, Handler) ->
 
     Worker = spawn(?MODULE, call_after_worker, [Length, Func, Args, Handler]),
     { ok, spawned_worker, Worker }.
+
+
+
+
+
+permute(List) -> permute(List, length(List)).
+
+permute(List, 1)     when is_list(List)                    -> [ {T}                        || T <- List ];
+permute(List, Depth) when is_list(List), is_integer(Depth) -> [ erlang:append_element(R,T) || T <- List, R <- groupings(List--[T], Depth-1) ].
 
 
 
