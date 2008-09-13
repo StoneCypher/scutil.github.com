@@ -76,6 +76,10 @@
 
     wait_until_terminate/0, wait_until_terminate/1, % needs tests
 
+    module_has_function/2, % needs tests
+
+    regexp_read_matches/2, regexp_read_matches/3, % needs tests
+
     hex_to_int/1 % needs tests
 
 ] ).
@@ -896,6 +900,28 @@ wait_until_terminate(loud) ->
     receive
         terminate -> ok;
         X         -> io:format("Received ~p~n", [X]), wait_until_terminate(loud)
+    end.
+
+
+
+
+
+module_has_function(Module, Function) ->
+
+    scutil:deprecate("module_has_function() is deprecated in favor of erlang:function_exported/3"),
+    lists:keymember(Function, 1, apply(Module, module_info, [exports])).
+
+
+
+
+
+regexp_read_matches(String, Reg)                          -> regexp_read_matches(String, Reg, {0,0}).
+regexp_read_matches(String, Reg, {TrimFront, TrimLength}) ->
+
+    case regexp:matches(String, Reg) of
+        { match, [] }      -> no_match;
+        { match, Matches } -> [ string:substr(String, Start+TrimFront, End-TrimLength) || {Start,End} <- Matches ];
+        { error, E }       -> { error, E }
     end.
 
 
