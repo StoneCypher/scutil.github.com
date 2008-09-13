@@ -67,18 +67,14 @@
     in_both_lists/1, in_both_lists/2, % needs tests
     all_unique_pairings/1, % needs tests
     walk_unique_pairings/2, % needs tests
-
     list_to_num/1, % needs tests
-
     counter/1, inc_counter/1, reset_counter/1, counter_process/0, % needs tests
-
     start_register_if_not_running/4, % needs tests
-
     wait_until_terminate/0, wait_until_terminate/1, % needs tests
-
     module_has_function/2, % needs tests
-
     regexp_read_matches/2, regexp_read_matches/3, % needs tests
+
+    shuffle/1, % needs tests
 
     hex_to_int/1 % needs tests
 
@@ -926,6 +922,12 @@ regexp_read_matches(String, Reg, {TrimFront, TrimLength}) ->
 
 
 
+
+
+shuffle(List) ->
+   WeightedAndShuffled        = lists:map( fun(Item) -> { random:uniform(), Item } end, List ),
+   { _, SortedAndDeweighted } = lists:unzip(lists:keysort(1, WeightedAndShuffled)),
+   SortedAndDeweighted.
 
 
 
