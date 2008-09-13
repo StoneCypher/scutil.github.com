@@ -79,6 +79,8 @@
 
     permute/1, permute/2, % needs tests
 
+    has_bit/2, count_bits/1, % needs tests
+
     hex_to_int/1 % needs tests
 
 ] ).
@@ -952,6 +954,20 @@ permute(List) -> permute(List, length(List)).
 
 permute(List, 1)     when is_list(List)                    -> [ {T}                        || T <- List ];
 permute(List, Depth) when is_list(List), is_integer(Depth) -> [ erlang:append_element(R,T) || T <- List, R <- permute(List--[T], Depth-1) ].
+
+
+
+
+
+has_bit(Num, Bit) -> (Num band (1 bsl Bit)) > 0.
+
+
+
+
+
+count_bits(Num) ->
+
+    length([S || S <- lists:seq(0,31), has_bit(Num, S) == true]).
 
 
 
