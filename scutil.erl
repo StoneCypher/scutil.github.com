@@ -282,7 +282,7 @@ random_from_weighted(InputList) when is_list(InputList) ->
 random_from_weighted_worker([], _) -> { error, limit_miscalculation };
 
 % but if the list has reasonable contents and the limit is a pos-or-0 integer
-random_from_weighted_worker(InputList, Limit) when is_list(InputList) andalso is_integer(Limit) andalso Limit >= 0 ->
+random_from_weighted_worker(InputList, Limit) when is_list(InputList), is_integer(Limit), Limit >= 0 ->
     [ {Item,Weight} | Remainder ] = InputList,   % break off the input list's head as {I,W} and keep the rest as Remainder
     case Weight =< Limit of                                             % if the weight is less than or equal to the limit,
         true  -> random_from_weighted_worker(Remainder, Limit-Weight);  % recurse the next item with a decremented weight
@@ -299,11 +299,11 @@ random_from_weighted_worker(InputList, Limit) when is_list(InputList) andalso is
 
 % interface
 
-elements(Config, Requested)                when is_list(Config) andalso is_list(Requested)                            -> elements_worker([], Config, Requested, 1).
-elements(Config, Requested, KeyIdx)        when is_list(Config) andalso is_list(Requested) andalso is_integer(KeyIdx) -> elements_worker([], Config, Requested, KeyIdx);
+elements(Config, Requested)                when is_list(Config), is_list(Requested)                     -> elements_worker([], Config, Requested, 1).
+elements(Config, Requested, KeyIdx)        when is_list(Config), is_list(Requested), is_integer(KeyIdx) -> elements_worker([], Config, Requested, KeyIdx);
 
-elements(Config, Requested, strip)         when is_list(Config) andalso is_list(Requested)                            -> elements_worker([], Config, Requested, 1,      strip).
-elements(Config, Requested, KeyIdx, strip) when is_list(Config) andalso is_list(Requested) andalso is_integer(KeyIdx) -> elements_worker([], Config, Requested, KeyIdx, strip).
+elements(Config, Requested, strip)         when is_list(Config), is_list(Requested)                     -> elements_worker([], Config, Requested, 1,      strip).
+elements(Config, Requested, KeyIdx, strip) when is_list(Config), is_list(Requested), is_integer(KeyIdx) -> elements_worker([], Config, Requested, KeyIdx, strip).
 
 % implementation
 
