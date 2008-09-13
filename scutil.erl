@@ -959,15 +959,15 @@ permute(List, Depth) when is_list(List), is_integer(Depth) -> [ erlang:append_el
 
 
 
-has_bit(Num, Bit) -> (Num band (1 bsl Bit)) > 0.
+has_bit(Num, Bit) when is_integer(Num), is_integer(Bit), Num > 0, Bit >= 0, Bit < 64 -> (Num band (1 bsl Bit)) > 0.
 
 
 
 
 
-count_bits(Num) ->
+count_bits(Num) when is_integer(Num), Num > 0 ->
 
-    length([S || S <- lists:seq(0,31), has_bit(Num, S) == true]).
+    length([S || S <- lists:seq(0,63), has_bit(Num, S) == true]).
 
 
 
