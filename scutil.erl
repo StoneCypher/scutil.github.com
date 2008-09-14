@@ -98,7 +98,7 @@ type_of(X) when is_integer(X)   -> integer;
 type_of(X) when is_float(X)     -> float;
 type_of(X) when is_list(X)      -> list;
 type_of(X) when is_tuple(X)     -> tuple;
-%type_of(X) when is_bitstring(X) -> bitstring;  % will fail before e12
+%type_of(X) when is_bitstring(X) -> bitstring;  % will fail before erlang 12
 type_of(X) when is_binary(X)    -> binary;
 type_of(X) when is_boolean(X)   -> boolean;
 type_of(X) when is_function(X)  -> function;
@@ -806,6 +806,7 @@ counter(Name) ->
 
     start_register_if_not_running(scutil_counter_process, scutil, counter_process, []),
     scutil_counter_process ! {self(), get_counter, Name},
+
     receive
         {counter_at, Name, Val} -> Val
     after
@@ -820,6 +821,7 @@ inc_counter(Name) ->
 
     start_register_if_not_running(scutil_counter_process, scutil, counter_process, []),
     scutil_counter_process ! {self(), inc_counter, Name},
+    
     receive
         {counter_at, Name, Val} -> Val
     after
@@ -836,6 +838,7 @@ set_counter(Name, To) when is_integer(To) ->
 
     start_register_if_not_running(scutil_counter_process, scutil, counter_process, []),
     scutil_counter_process ! {self(), set_counter, Name, To},
+
     receive
         {counter_at, Name, Val} -> Val
     after
@@ -1022,3 +1025,4 @@ expand_labels(List)        when is_list(List) -> lists:flatten([ expand_label(X)
 %    John Sensebe
 %    Raleigh
 %    Toby Opferman                 http://www.opferman.com/
+%    Vat Raghavan                  http://www.blueventhorizon.com/   (that missing e is correct)
