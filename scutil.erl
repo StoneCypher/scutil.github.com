@@ -98,8 +98,8 @@ type_of(X) when is_integer(X)   -> integer;
 type_of(X) when is_float(X)     -> float;
 type_of(X) when is_list(X)      -> list;
 type_of(X) when is_tuple(X)     -> tuple;
-%type_of(X) when is_bitstring(X) -> bitstring;  % will fail before erlang 12
 type_of(X) when is_binary(X)    -> binary;
+type_of(X) when is_bitstring(X) -> bitstring;  % will fail before erlang 12
 type_of(X) when is_boolean(X)   -> boolean;
 type_of(X) when is_function(X)  -> function;
 type_of(X) when is_pid(X)       -> pid;
@@ -965,7 +965,8 @@ call_after(Length, Func, Args, Handler) ->
 
 
 
-permute(List) -> permute(List, length(List)).
+permute(List) -> 
+    permute(List, length(List)).
 
 permute(List, 1)     when is_list(List)                    -> [ {T}                        || T <- List ];
 permute(List, Depth) when is_list(List), is_integer(Depth) -> [ erlang:append_element(R,T) || T <- List, R <- permute(List--[T], Depth-1) ].
@@ -998,9 +999,10 @@ diff_timestamp({AM,AS,AU}, {BM, BS, BU}) ->
 
 benchmark(Module, Func, Args) ->
 
-    Start = now(),
+    Start  = now(),
     Result = apply(Module, Func, Args),
-    End = now(),
+    End    = now(),
+
     { diff_timestamp(Start,End), Result }.
 
 
