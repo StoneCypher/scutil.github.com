@@ -1000,8 +1000,7 @@ benchmark(Module, Func, Args) ->
 expand_label({Label,List}) when is_list(List) -> [ {Label,L} || L<-List ];
 expand_label({Label,Item})                    -> {Label, Item}.
 
-expand_labels(List)        when is_list(List) -> [ expand_label(X) || X <- List ].
-
+expand_labels(List)        when is_list(List) -> lists:flatten([ expand_label(X) || X <- List ]).
 
 
 
