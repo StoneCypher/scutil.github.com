@@ -81,7 +81,9 @@
 
     has_bit/2, count_bits/1, % needs tests
     diff_timestamp/2, % needs tests
-    
+
+    expand_label/1, expand_labels/1, % needs tests
+
     benchmark/3, % needs tests
 
     hex_to_int/1 % needs tests
@@ -990,6 +992,16 @@ benchmark(Module, Func, Args) ->
     Result = apply(Module, Func, Args),
     End = now(),
     { diff_timestamp(Start,End), Result }.
+
+
+
+
+
+expand_label({Label,List}) when is_list(List) -> [ {Label,L} || L<-List ];
+expand_label({Label,Item})                    -> {Label, Item}.
+
+expand_labels(List)        when is_list(List) -> [ expand_label(X) || X <- List ].
+
 
 
 
