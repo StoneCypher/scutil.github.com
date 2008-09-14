@@ -68,7 +68,7 @@
     all_unique_pairings/1, % needs tests
     walk_unique_pairings/2, % needs tests
     list_to_num/1, % needs tests
-    counter/1, inc_counter/1, reset_counter/1, counter_process/0, % needs tests
+    counter/1, inc_counter/1, inc_counter/2, dec_counter/1, dec_counter/2, reset_counter/1, counter_process/0, % needs tests
     start_register_if_not_running/4, % needs tests
     wait_until_terminate/0, wait_until_terminate/1, % needs tests
     module_has_function/2, % needs tests
@@ -817,11 +817,16 @@ counter(Name) ->
 
 
 
-inc_counter(Name) ->
+inc_counter(Name)    -> adjust_counter(Name,     1).
+inc_counter(Name,By) -> adjust_counter(Name,    By).
+dec_counter(Name)    -> adjust_counter(Name,    -1).
+dec_counter(Name,By) -> adjust_counter(Name, -1*By).
+
+adjust_counter(Name, By) when is_number(By) ->
 
     start_register_if_not_running(scutil_counter_process, scutil, counter_process, []),
-    scutil_counter_process ! {self(), inc_counter, Name},
-    
+    scutil_counter_process ! {self(), adjust_counter, Name, By},
+
     receive
         {counter_at, Name, Val} -> Val
     after
@@ -834,7 +839,7 @@ inc_counter(Name) ->
 
 reset_counter(Name) -> set_counter(Name, 0).
 
-set_counter(Name, To) when is_integer(To) ->
+set_counter(Name, To) when is_number(To) ->
 
     start_register_if_not_running(scutil_counter_process, scutil, counter_process, []),
     scutil_counter_process ! {self(), set_counter, Name, To},
@@ -857,10 +862,10 @@ counter_process() ->
                 undefined -> Caller ! {counter_at, Name, 0}, put(Name,0), counter_process();
                 Defined   -> Caller ! {counter_at, Name, Defined},        counter_process()
             end;
-        {Caller, inc_counter, Name} ->
+        {Caller, adjust_counter, Name, By} ->
             case get(Name) of
-                undefined ->                Caller ! {counter_at, Name, 0},   put(Name,0),   counter_process();
-                Defined   -> New=Defined+1, Caller ! {counter_at, Name, New}, put(Name,New), counter_process()
+                undefined ->                 Caller ! {counter_at, Name, By},  put(Name,By),  counter_process();
+                Defined   -> New=Defined+By, Caller ! {counter_at, Name, New}, put(Name,New), counter_process()
             end;
         {Caller, set_counter, Name, To} ->
             Caller ! {counter_at, Name, To},
