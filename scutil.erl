@@ -80,6 +80,9 @@
     permute/1, permute/2, % needs tests
 
     has_bit/2, count_bits/1, % needs tests
+    diff_timestamp/2, % needs tests
+    
+    benchmark/3, % needs tests
 
     hex_to_int/1 % needs tests
 
@@ -968,6 +971,25 @@ has_bit(Num, Bit) when is_integer(Num), is_integer(Bit), Num > 0, Bit >= 0, Bit 
 count_bits(Num) when is_integer(Num), Num > 0 ->
 
     length([S || S <- lists:seq(0,63), has_bit(Num, S) == true]).
+
+
+
+
+
+diff_timestamp({AM,AS,AU}, {BM, BS, BU}) ->
+
+    ((BM-AM) * 1000000) + (BS-AS) + ((BU-AU)/1000000).
+
+
+
+
+
+benchmark(Module, Func, Args) ->
+
+    Start = now(),
+    Result = apply(Module, Func, Args),
+    End = now(),
+    { diff_timestamp(Start,End), Result }.
 
 
 
