@@ -830,10 +830,12 @@ inc_counter(Name) ->
 
 
 
-reset_counter(Name) ->
+reset_counter(Name) -> set_counter(Name, 0).
+
+set_counter(Name, To) when is_integer(To) ->
 
     start_register_if_not_running(scutil_counter_process, scutil, counter_process, []),
-    scutil_counter_process ! {self(), reset_counter, Name},
+    scutil_counter_process ! {self(), set_counter, Name, To},
     receive
         {counter_at, Name, Val} -> Val
     after
@@ -857,9 +859,9 @@ counter_process() ->
                 undefined ->                Caller ! {counter_at, Name, 0},   put(Name,0),   counter_process();
                 Defined   -> New=Defined+1, Caller ! {counter_at, Name, New}, put(Name,New), counter_process()
             end;
-        {Caller, reset_counter, Name} ->
-            Caller ! {counter_at, Name, 0},   
-            put(Name,0),   
+        {Caller, set_counter, Name, To} ->
+            Caller ! {counter_at, Name, To},
+            put(Name,To),
             counter_process()
     end.
 
