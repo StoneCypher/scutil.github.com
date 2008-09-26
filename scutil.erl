@@ -1018,12 +1018,37 @@ expand_labels(List)        when is_list(List) -> lists:flatten([ expand_label(X)
 
 
 
+% Thanks for some math help on erl-b, erl-c and engset, Vat and Wintermute
+
+erlang_b_distribution(N,A) ->
+
+   Num = math:pow(A,N) / scutil:factorial(N),
+   Denom = lists:sum([ math:pow(A,I) / scutil:factorial(I) || I <- lists:seq(0,N) ]),
+
+   Num / Denom.
+
+
+
+
+
+erlang_c_distribution(N,A) ->
+
+   Num = (math:pow(A,N) / scutil:factorial(N)) * (N/(N-A)),
+   Denom = lists:sum([ math:pow(A,I) / scutil:factorial(I) || I <- lists:seq(0,N-1) ]) + ((math:pow(A,N)/scutil:factorial(N))*(N/(N-A))),
+
+   {wait_probability, Num / Denom}.
+
+
+
+
+
 %  Thanks Table:
 %
 %    Alain O'Dea                   http://concise-software.blogspot.com/
 %    Ayrnieu
 %    Bryon Vandiver / Asterick     http://sublab.net/
 %    Chile
+%    Dave Murphy / Wintermute      http://devkitpro.org/
 %    DizzyD
 %    Dylan Barrie / PfhorSlayer
 %    Etnt
