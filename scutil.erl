@@ -86,7 +86,10 @@
 
     benchmark/3, % needs tests
 
-    hex_to_int/1 % needs tests
+    hex_to_int/1, % needs tests
+    
+    erlang_b_distribution/2, % needs tests
+    erlang_c_distribution/2  % needs tests
 
 ] ).
 
@@ -196,6 +199,8 @@ regex_read_matches(String, Reg, {TrimFront, TrimLength}) ->
 
 
 
+
+grid_scatter(0, []) -> []; % skips a lot of work
 
 grid_scatter(Count, {SizeX, SizeY}) -> scutil:random_from(Count, [ {X,Y} || X <- scutil:int_range(SizeX), Y <- scutil:int_range(SizeY) ]);
 grid_scatter(Count, Size)           -> grid_scatter(Count, {Size, Size}).
