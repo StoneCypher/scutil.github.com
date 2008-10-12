@@ -89,7 +89,9 @@
     hex_to_int/1, % needs tests
     
     erlang_b_distribution/2, % needs tests
-    erlang_c_distribution/2  % needs tests
+    erlang_c_distribution/2, % needs tests
+    
+    implode/2  % needs tests
 
 ] ).
 
@@ -202,7 +204,7 @@ regex_read_matches(String, Reg, {TrimFront, TrimLength}) ->
 
 grid_scatter(0, []) -> []; % skips a lot of work
 
-grid_scatter(Count, {SizeX, SizeY}) -> scutil:random_from(Count, [ {X,Y} || X <- scutil:int_range(SizeX), Y <- scutil:int_range(SizeY) ]);
+grid_scatter(Count, {SizeX, SizeY}) -> scutil:random_from(Count, [ {X,Y} || X <- lists:seq(1,SizeX), Y <- lists:seq(1,SizeY) ]);
 grid_scatter(Count, Size)           -> grid_scatter(Count, {Size, Size}).
 
 
@@ -1042,6 +1044,13 @@ erlang_c_distribution(N,A) ->
    Denom = lists:sum([ math:pow(A,I) / scutil:factorial(I) || I <- lists:seq(0,N-1) ]) + ((math:pow(A,N)/scutil:factorial(N))*(N/(N-A))),
 
    {wait_probability, Num / Denom}.
+
+
+
+
+
+% thanks for a much better implementation, etnt
+implode(Separator, Data) when is_list(Data) andalso is_list(Separator) -> lists:foldr(fun(Item,[]) -> Item; (Item,Acc) -> Item ++ Separator ++ Acc end, "", Data).
 
 
 
