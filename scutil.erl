@@ -67,7 +67,7 @@
     in_both_lists/1, in_both_lists/2, % needs tests
     all_unique_pairings/1, % needs tests
     walk_unique_pairings/2, % needs tests
-    list_to_num/1, % needs tests
+    list_to_number/1, % needs tests
     counter/1, inc_counter/1, inc_counter/2, dec_counter/1, dec_counter/2, reset_counter/1, counter_process/0, % needs tests
     start_register_if_not_running/4, % needs tests
     wait_until_terminate/0, wait_until_terminate/1, % needs tests
@@ -786,7 +786,7 @@ walk_unique_pairings( A, [Rh|Rr], F) ->
 
 
 
-list_to_num(X) ->
+list_to_number(X) ->
     case catch list_to_float(X) of
         {'EXIT',_} -> list_to_integer(X);
         Y -> Y
