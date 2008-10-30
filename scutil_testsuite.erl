@@ -1,5 +1,6 @@
 
 -module(scutil_testsuite).
+-behaviour(testerl_testsuite_behaviour).
 
 -author("John Haugeland - stonecypher@gmail.com").
 -webpage("http://scutil.com/").
@@ -85,10 +86,10 @@ test_sanitize_tokens() ->
 
 run(_Hooks, _Options) ->
 
-    [   testerl:make_subgroup("type_of()",              test_type_of()),
-        testerl:make_subgroup("get_module_attribute()", test_get_module_attribute()),
-        testerl:make_subgroup("sanitize_tokens()",      test_sanitize_tokens())
-%       testerl:make_subgroup("byte_to_hex()",          test_byte_to_hex()),
-%       testerl:make_subgroup("nybble_to_hex()",        test_nybble_to_hex()),
-%       testerl:make_subgroup("io_list_to_hex()",       test_io_list_to_hex())
+    [   testerl:assemble("type_of()",              test_type_of()),
+        testerl:assemble("get_module_attribute()", test_get_module_attribute()),
+        testerl:assemble("sanitize_tokens()",      test_sanitize_tokens())
+%       testerl:assemble("byte_to_hex()",          test_byte_to_hex()),
+%       testerl:assemble("nybble_to_hex()",        test_nybble_to_hex()),
+%       testerl:assemble("io_list_to_hex()",       test_io_list_to_hex())
     ].
