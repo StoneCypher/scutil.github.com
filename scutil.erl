@@ -91,7 +91,9 @@
     erlang_b_distribution/2, % needs tests
     erlang_c_distribution/2, % needs tests
     
-    implode/2  % needs tests
+    implode/2, % needs tests
+
+    mod/2 % needs tests
 
 ] ).
 
@@ -1051,6 +1053,19 @@ erlang_c_distribution(N,A) ->
 
 % thanks for a much better implementation, etnt
 implode(Separator, Data) when is_list(Data) andalso is_list(Separator) -> lists:foldr(fun(Item,[]) -> Item; (Item,Acc) -> Item ++ Separator ++ Acc end, "", Data).
+
+
+
+
+
+% Thank god they called it rem.  -5 mod 2 is 1, not -1.  Most CPUs implement remainder and call it modulus.
+% This is real modulus.
+mod(Base, Range) when is_integer(Base), is_integer(Range) ->
+
+    case Base rem Range of
+        X when X < 0 -> X + Range;
+        Z            -> Z
+    end.
 
 
 
