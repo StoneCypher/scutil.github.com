@@ -16,7 +16,7 @@
 -description("StoneCypher's utility library.").
 
 -testerl_export( { [], scutil_testsuite } ).
--library_requirements( [ {testerl,14} ] ).
+-library_requirements( [ {testerl,16} ] ).
 
 
 
@@ -133,7 +133,7 @@ get_module_attribute(Module,Attribute) ->
 
         { ok, { _, [ {attributes,Attributes} ] } } ->
             case lists:keysearch(Attribute, 1, Attributes) of
-                { value, {Attribute,Value} }   -> Value;    
+                { value, {Attribute,Value} }   -> Value;
                 false                          -> { error, no_such_attribute }
             end;
 
