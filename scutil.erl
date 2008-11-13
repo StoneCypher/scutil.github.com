@@ -87,13 +87,15 @@
     benchmark/3, % needs tests
 
     hex_to_int/1, % needs tests
-    
+
     erlang_b_distribution/2, % needs tests
     erlang_c_distribution/2, % needs tests
-    
+
     implode/2, % needs tests
 
-    mod/2 % needs tests
+    mod/2, % needs tests
+
+    scan_svn_revision/1 % needs tests
 
 ] ).
 
@@ -131,6 +133,7 @@ get_module_attribute(Module,Attribute) ->
         { ok, { _, [ {attributes,Attributes} ] } } ->
             case lists:keysearch(Attribute, 1, Attributes) of
                 { value, {Attribute,[Value]} } -> Value;
+                { value, {Attribute,Value} }   -> Value;    % comes in this way on strings :(
                 false                          -> { error, no_such_attribute }
             end;
 
@@ -1066,6 +1069,22 @@ mod(Base, Range) when is_integer(Base), is_integer(Range) ->
         X when X < 0 -> X + Range;
         Z            -> Z
     end.
+
+
+
+
+
+% Just:
+%   1) put    -svn_revision("$Revision$").    in your code,
+%   2) set the svn property svn:keywords to include at least Revision (case sensitive), and
+%   3) check in the code.
+% Magic follows.
+
+scan_svn_revision(Module) ->
+
+    "$Revision: " ++ X = get_module_attribute(Module, svn_revision),
+    [ Head | _Rem ]    = string:tokens(X, " "),
+    list_to_integer(Head).
 
 
 
