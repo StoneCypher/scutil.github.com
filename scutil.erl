@@ -189,7 +189,10 @@ get_module_attribute(Module,Attribute) ->
 
 
 
-%% @spec  hex_to_int(HexChar::List | Character) -> integer()
+%% @type  hexchar() = integer.  Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive.
+%% @type  hexstring() = list().  All elements of the list must be of type hexchar() .
+
+%% @spec  hex_to_int(HexChar::hexstring() | hexchar()) -> integer()
 %% @doc   Convert a list string or a single character representing hexadecimal into its numeric value.  Case insensitive.
 %% @since Version 18
 
@@ -206,9 +209,11 @@ hex_to_int([Digit|Rem], Acc) -> hex_to_int(Rem, (Acc bsl 4) + hex_to_int(Digit))
 
 
 
-%% @spec  byte_to_hex(TheByte::Byte) -> string()
+%% @type  byte() = integer.  Integer must be in the range 0-255, inclusive.
+
+%% @spec  byte_to_hex(TheByte::byte()) -> string()
 %% @doc   Convert an integer 0-255 into its lower case hexadecimal list string representation.
-%% @since Version 19
+%% @since Version 20
 
 byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 -> { nybble_to_hex(TheByte bsr 4), nybble_to_hex(TheByte band 15) }.
 
@@ -216,7 +221,9 @@ byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 -> {
 
 
 
-%% @spec  nybble_to_hex(Nyb::Nybble) -> integer()
+%% @type  nybble() = integer.  Integer must be in the range 0-15, inclusive.
+
+%% @spec  nybble_to_hex(Nyb::nybble()) -> integer()
 %% @doc   Convert a nybble (integer 0..15) to its lower case hexadecimal single character (integer) representation.
 %% @since Version 19
 
