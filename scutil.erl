@@ -139,7 +139,13 @@
 %% @type  typelabel() = [ integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown ].  Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
 
 %% @spec  type_of(Argument::Any) -> typelabel()
-%% @doc   Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of <tt>is_bitstring()</tt> .
+
+%% @doc   Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of `is_bitstring()' . ```1> scutil:type_of(1).
+%% integer
+%%
+%% 2> scutil:type_of({hello,world}).
+%% tuple'''
+
 %% @since Version 14
 
 type_of(X) when is_integer(X)   -> integer;
@@ -162,10 +168,17 @@ type_of(_X)                     -> unknown.
 
 
 %% @spec  get_module_attribute(Module::Atom, Attribute::Atom) -> { value, {Attribute, Value} } | { error, no_such_attribute } | { error, no_such_module }
-%% @doc   Look up an Erlang module attribute value by title.
+
+%% @doc   Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  ```1> scutil:get_module_attribute(scutil, author).
+%% "John Haugeland <stonecypher@gmail.com>"
+%%
+%% 2> scutil:get_module_attribute(scutil, license).
+%% [{mit_license,"http://scutil.com/license.html"}]'''
+
 %% @since Version 23
 
 %% @todo  Implement <a href="http://concise-software.blogspot.com/">Alain O'Dea</a>'s improvements from <a href="http://fullof.bs/reading-module-attributes-in-erlang#comment-475">this blog comment</a>
+%% @todo  Add Alain O'Dea to doc attribute
 
 get_module_attribute(Module,Attribute) ->
 
@@ -194,7 +207,15 @@ get_module_attribute(Module,Attribute) ->
 %% @type  hexstring() = list().  All elements of the list must be of type hexchar() .
 
 %% @spec  hex_to_int(HexChar::hexstring() | hexchar()) -> integer()
-%% @doc   Convert a hexstring() or hexchar() into its numeric value.
+%% @doc   Convert a hexstring() or hexchar() into its numeric value. ```1> scutil:hex_to_int("c0ffEE").
+%% 12648430
+%%
+%% 2> scutil:hex_to_int($e).
+%% 14
+%%
+%% 3> scutil:hex_to_int("100").
+%% 256'''
+
 %% @since Version 18
 
 hex_to_int(Hex) when is_integer(Hex), Hex >= $0, Hex =< $9 -> Hex - $0;
@@ -213,10 +234,16 @@ hex_to_int([Digit|Rem], Acc) -> hex_to_int(Rem, (Acc bsl 4) + hex_to_int(Digit))
 %% @type  byte() = integer().  Integer must be in the range 0-255, inclusive.
 
 %% @spec  byte_to_hex(TheByte::byte()) -> hexstring()
-%% @doc   Convert a byte() into a hexstring().  The hexstring() result will always be either one or two characters.
+
+%% @doc   Convert a byte() into a hexstring().  The hexstring() result will always be two characters (left padded with zero if necessary). ```1> scutil:byte_to_hex(7).
+%% "07"
+%%
+%% 2> scutil:byte_to_hex(255).
+%% "ff"
+
 %% @since Version 20
 
-byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 -> { nybble_to_hex(TheByte bsr 4), nybble_to_hex(TheByte band 15) }.
+byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 -> [ nybble_to_hex(TheByte bsr 4), nybble_to_hex(TheByte band 15) ].
 
 
 
@@ -368,7 +395,7 @@ random_generator() ->
 
 
 %% @spec  rand(Range::integer()) -> integer()
-%% @doc   Returns a pseudorandom integer on the range <tt>[0 - Range]</tt> inclusive.
+%% @doc   Returns a pseudorandom integer on the range `[0 - Range]' inclusive.
 %% @since Version 5
 
 rand(Range) ->
