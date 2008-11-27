@@ -13,6 +13,7 @@
 %% @reference Discussion forum at <a href="http://crunchyd.com/forum/scutil-discussion/">CrunchyD Forums</a>
 %% @reference Bugtracker at <a href="http://crunchyd.com/forum/project.php?projectid=7">CrunchyD Forums</a>
 %% @reference Requires <a href="http://testerl.com/">TestErl</a> (version 16 or later) for test sets
+%% @reference This build was released <tt style="text-decoration:underline;background-color:#eee">$Date$</tt> (<tt style="text-decoration:underline;background-color:#eee">$Revision$</tt>)
 
 -module(scutil).
 
