@@ -6,15 +6,15 @@
 
 %% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of various routines.  This file has aggregated dozens of useful miscellaneous routines which I'm releasing to the public in good faith.  There's no particular direction to this library; any time I write a routine that I tend to use in a lot of situations, which isn't already meaningfully classifiable into one of my other libraries, I throw it in here.  This has ended up creating a range of unrelated functionality on which most of my other libraries depend heavily.  Have fun digging around.</p><p>ScUtil is MIT license, because <a href="http://WhyIHateTheGPL.com/">the author feels very strongly against the GPL</a>.</p>
 
-%% @reference <span style="display:inline-block;width:20em">Website is</span><a href="http://scutil.com/">http://scutil.com/</a>
-%% @reference <span style="display:inline-block;width:20em">Most people want the</span><a href="http://crunchyd.com/forum/scutil-documentation-examples/">Usage Examples</a>
-%% @reference <span style="display:inline-block;width:20em">Direct link to zip archive</span><a href="http://crunchyd.com/release/scutil.zip">current version</a>
-%% @reference <span style="display:inline-block;width:20em">This library is released under the</span><a href="http://scutil.com/license.html">MIT License</a>
-%% @reference <span style="display:inline-block;width:20em">Public SVN at</span><a href="svn://crunchyd.com/scutil/">svn://crunchyd.com/scutil/</a>
-%% @reference <span style="display:inline-block;width:20em">Discussion forum at</span><a href="http://crunchyd.com/forum/scutil-discussion/">CrunchyD Forums</a>
-%% @reference <span style="display:inline-block;width:20em">Bugtracker at</span><a href="http://crunchyd.com/forum/project.php?projectid=7">CrunchyD Forums</a>
-%% @reference <span style="display:inline-block;width:20em">Test sets require min. version 16</span><a href="http://testerl.com/">TestErl</a> 
-%% @reference <span style="display:inline-block;width:20em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date$</tt>
+%% @reference <span style="background-color:#eef;display:inline-block;width:48em"><span style="display:inline-block;width:20em">Website is</span><a href="http://scutil.com/">http://scutil.com/</a></span>
+%% @reference <span style="background-color:#efe;display:inline-block;width:48em"><span style="display:inline-block;width:20em">Most people want the</span><a href="http://crunchyd.com/forum/scutil-documentation-examples/">Usage Examples</a></span>
+%% @reference <span style="background-color:#eef;display:inline-block;width:48em"><span style="display:inline-block;width:20em">Direct link to zip archive</span><a href="http://crunchyd.com/release/scutil.zip">Current version</a></span>
+%% @reference <span style="background-color:#efe;display:inline-block;width:48em"><span style="display:inline-block;width:20em">This library is released under the</span><a href="http://scutil.com/license.html">MIT License</a></span>
+%% @reference <span style="background-color:#eef;display:inline-block;width:48em"><span style="display:inline-block;width:20em">Public SVN at</span><a href="svn://crunchyd.com/scutil/">svn://crunchyd.com/scutil/</a></span>
+%% @reference <span style="background-color:#efe;display:inline-block;width:48em"><span style="display:inline-block;width:20em">Discussion forum at</span><a href="http://crunchyd.com/forum/scutil-discussion/">CrunchyD Forums</a></span>
+%% @reference <span style="background-color:#eef;display:inline-block;width:48em"><span style="display:inline-block;width:20em">Bugtracker at</span><a href="http://crunchyd.com/forum/project.php?projectid=7">CrunchyD Forums</a></span>
+%% @reference <span style="background-color:#efe;display:inline-block;width:48em"><span style="display:inline-block;width:20em">Test sets require min. version 16</span><a href="http://testerl.com/">TestErl</a></span>
+%% @reference <span style="background-color:#eef;display:inline-block;width:48em"><span style="display:inline-block;width:20em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date$</tt></span>
 
 -module(scutil).
 
