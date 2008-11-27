@@ -24,6 +24,7 @@
 %% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Bugtracker at</span><a href="http://crunchyd.com/forum/project.php?projectid=7">CrunchyD Forums</a></span>
 %% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Test sets require min. version 16</span><a href="http://testerl.com/">TestErl</a></span>
 %% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date$</tt></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Author's Website</span><a href="http://fullof.bs">Full of BS</a></span>
 
 
 
@@ -389,9 +390,15 @@ rand(Range) ->
 
 
 
+%% @equiv random_from(1, List, no_remainder)
 random_from(   List) -> [X] = random_from(1, List, no_remainder), X.
+
+%% @equiv random_from(N, List, no_remainder)
 random_from(N, List) -> random_from(N, List, no_remainder).
 
+%% @spec  random_from(N::integer(), List::list(), WantRemainder::want_remainder()) -> list()
+%% @doc   Take N non-repeating random elements from a list in undefined order.
+%% @since Version 6
 random_from(N, List, no_remainder) -> {R,_} = random_from(N,List,remainder), R;
 random_from(N, List, remainder)    -> lists:split(N,shuffle(List)).
 
