@@ -1,7 +1,17 @@
 
+%% @author John Haugeland <stonecypher@gmail.com>
+%% @copyright 2008 John Haugeland, All Rights Reserved
+%% @reference Website is <a href="http://scutil.com/">http://scutil.com/</a>
+%% @reference License is <a href="http://scutil.com/license.html">MIT License</a>
+%% @reference Public SVN at <a href="svn://crunchyd.com/scutil/">svn://crunchyd.com/scutil/</a>
+%% @reference Discussion forum at <a href="http://crunchyd.com/forum/scutil-discussion/">CrunchyD Forums</a>
+%% @reference Bugtracker at <a href="http://crunchyd.com/forum/project.php?projectid=7">CrunchyD Forums</a>
+%% @reference Requires <a href="http://testerl.com/">TestErl</a> for test sets
+%% @reference This documentation was built for SVN version $Revision$
+
 -module(scutil).
 
--author("John Haugeland - stonecypher@gmail.com").
+-author("John Haugeland <stonecypher@gmail.com>").
 -webpage("http://scutil.com/").
 -license( {mit_license, "http://crunchyd.com/scutil/license.html"} ).
 
