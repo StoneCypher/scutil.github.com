@@ -1,13 +1,18 @@
 
 %% @author John Haugeland <stonecypher@gmail.com>
 %% @copyright 2008 John Haugeland, All Rights Reserved
+%% @version $Revision$
+
+%% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of various routines.  This file has aggregated dozens of useful miscellaneous routines which I'm releasing to the public in good faith.  There's no particular direction to this library; any time I write a routine that I tend to use in a lot of situations, which isn't already meaningfully classifiable into one of my other libraries, I throw it in here.  This has ended up creating a range of unrelated functionality on which most of my other libraries depend heavily.  Have fun digging around.</p><p>ScUtil is MIT license, because <a href="http://WhyIHateTheGPL.com/">the author feels very strongly against the GPL</a>.</p>
+%% @end
+
 %% @reference Website is <a href="http://scutil.com/">http://scutil.com/</a>
 %% @reference License is <a href="http://scutil.com/license.html">MIT License</a>
 %% @reference Public SVN at <a href="svn://crunchyd.com/scutil/">svn://crunchyd.com/scutil/</a>
 %% @reference Discussion forum at <a href="http://crunchyd.com/forum/scutil-discussion/">CrunchyD Forums</a>
 %% @reference Bugtracker at <a href="http://crunchyd.com/forum/project.php?projectid=7">CrunchyD Forums</a>
 %% @reference Requires <a href="http://testerl.com/">TestErl</a> for test sets
-%% @reference This documentation was built for SVN version $Revision$
+%% @reference This documentation was built for SVN version <tt style="text-decoration:underline">$Revision$</tt>
 
 -module(scutil).
 
