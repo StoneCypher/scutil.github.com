@@ -4,17 +4,14 @@
 %% @version $Revision$
 %% @since September 14, 2007
 
-%% @doc
+%% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of various routines of no particular topic.  This file has aggregated
+%%         dozens of useful miscellaneous routines which I'm releasing to the public in good faith.  There's no particular direction to
+%%         this library; any time I write a routine that I tend to use in a lot of situations, which isn't already meaningfully
+%%         classifiable into one of my other libraries, I throw it in here.  This has ended up creating a range of unrelated
+%%         functionality on which most of my other libraries depend heavily.  Have fun digging around.
+%%      </p>
 %%
-%% <p>
-%%   ScUtil is StoneCypher's Utility Library, a collection of various routines of no particular topic.  This file has aggregated
-%%   dozens of useful miscellaneous routines which I'm releasing to the public in good faith.  There's no particular direction to
-%%   this library; any time I write a routine that I tend to use in a lot of situations, which isn't already meaningfully
-%%   classifiable into one of my other libraries, I throw it in here.  This has ended up creating a range of unrelated
-%%   functionality on which most of my other libraries depend heavily.  Have fun digging around.
-%% </p>
-%%
-%% <p>ScUtil is MIT license, because <a href="http://WhyIHateTheGPL.com/">the author feels very strongly against the GPL</a>.</p>
+%%      <p>ScUtil is MIT license, because <a href="http://WhyIHateTheGPL.com/">the author feels very strongly against the GPL</a>.</p>
 %%
 %% @end
 
@@ -138,9 +135,11 @@
 
 
 
-%% @type typelabel() = [ integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown ].  Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
+%% @type  typelabel() = [ integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown ].  Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
 
-%% @spec type_of(Any) -> typelabel()
+%% @spec  type_of(Argument::Any) -> typelabel()
+%% @doc   Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of <tt>is_bitstring()</tt> .
+%% @since Version 14
 
 type_of(X) when is_integer(X)   -> integer;
 type_of(X) when is_float(X)     -> float;
@@ -160,6 +159,12 @@ type_of(_X)                     -> unknown.
 
 
 
+
+%% @spec  get_module_attribute(Module::Atom, Attribute::Atom) -> { value, {Attribute, Value} } | { error, no_such_attribute } | { error, no_such_module }
+%% @doc   Look up an Erlang module attribute value by title.
+%% @since Version 23
+
+%% @todo  Implement <a href="http://concise-software.blogspot.com/">Alain O'Dea</a>'s improvements from <a href="http://fullof.bs/reading-module-attributes-in-erlang#comment-475">this blog comment</a>
 
 get_module_attribute(Module,Attribute) ->
 
@@ -184,6 +189,10 @@ get_module_attribute(Module,Attribute) ->
 
 
 
+%% @spec  hex_to_int(HexChar::List | Character) -> integer()
+%% @doc   Convert a list string or a single character representing hexadecimal into its numeric value.  Case insensitive.
+%% @since Version 18
+
 hex_to_int(Hex) when is_integer(Hex), Hex >= $0, Hex =< $9 -> Hex - $0;
 hex_to_int(Hex) when is_integer(Hex), Hex >= $a, Hex =< $f -> Hex - $a + 10;
 hex_to_int(Hex) when is_integer(Hex), Hex >= $A, Hex =< $F -> Hex - $A + 10;
@@ -197,16 +206,22 @@ hex_to_int([Digit|Rem], Acc) -> hex_to_int(Rem, (Acc bsl 4) + hex_to_int(Digit))
 
 
 
-byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 -> { nybble_to_hex(TheByte bsr 4), nybble_to_hex(TheByte band 15) };
-byte_to_hex(NotAByte)                                                       -> { error, { not_a_byte, NotAByte }}.
+%% @spec  byte_to_hex(TheByte::Byte) -> string()
+%% @doc   Convert an integer 0-255 into its lower case hexadecimal list string representation.
+%% @since Version 19
+
+byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 -> { nybble_to_hex(TheByte bsr 4), nybble_to_hex(TheByte band 15) }.
 
 
 
 
+
+%% @spec  nybble_to_hex(Nyb::Nybble) -> integer()
+%% @doc   Convert a nybble (integer 0..15) to its lower case hexadecimal single character (integer) representation.
+%% @since Version 19
 
 nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 0,  Nyb < 10 -> $0 + Nyb;
-nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 10, Nyb < 16 -> $a + Nyb - 10;
-nybble_to_hex(_)                                                           -> { error, not_a_nybble }.
+nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 10, Nyb < 16 -> $a + Nyb - 10.
 
 
 
