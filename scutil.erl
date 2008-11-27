@@ -239,7 +239,7 @@ hex_to_int([Digit|Rem], Acc) -> hex_to_int(Rem, (Acc bsl 4) + hex_to_int(Digit))
 %% "07"
 %%
 %% 2> scutil:byte_to_hex(255).
-%% "ff"
+%% "ff"'''
 
 %% @since Version 20
 
@@ -252,7 +252,13 @@ byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 -> [
 %% @type  nybble() = integer().  Integer must be in the range 0-15, inclusive.
 
 %% @spec  nybble_to_hex(Nyb::nybble()) -> integer()
-%% @doc   Convert a nybble() to a hexchar().
+
+%% @doc   Convert a nybble() to a hexchar(). ```1> 217> scutil:nybble_to_hex(7).
+%% 55
+%%
+%% 2> scutil:nybble_to_hex(15).
+%% 102'''
+
 %% @since Version 19
 
 nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 0,  Nyb < 10 -> $0 + Nyb;
@@ -265,13 +271,19 @@ nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 10, Nyb < 16 -> $a + Nyb - 10.
 %% @type  io_list() = list().  Every list member of an io_list must be a byte().
 
 %% @spec  io_list_to_hex(Input::io_list()) -> hexstring()
-%% @doc   Convert an io_list() to a hexstring()
+
+%% @doc   Convert an io_list() to a hexstring() ``` 1> scutil:io_list_to_hex("a").
+%% "61"
+%%
+%% 2> scutil:io_list_to_hex("a08n408nbqa").
+%% "6130386e3430386e627161"'''
+
 %% @since Version 19
 
 io_list_to_hex(Input) when is_list(Input)                                            -> io_list_to_hex(Input, []).
 
 io_list_to_hex([],               Work)                                               -> lists:reverse(Work);
-io_list_to_hex([Item|Remainder], Work) when is_integer(Item), Item >= 0, Item =< 255 -> {A,B} = byte_to_hex(Item), io_list_to_hex(Remainder, [B,A]++Work);
+io_list_to_hex([Item|Remainder], Work) when is_integer(Item), Item >= 0, Item =< 255 -> [A,B] = byte_to_hex(Item), io_list_to_hex(Remainder, [B,A]++Work);
 io_list_to_hex(_,                _)                                                  -> {error, not_an_io_list}.
 
 
