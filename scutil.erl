@@ -33,7 +33,7 @@
 
 -author("John Haugeland <stonecypher@gmail.com>").
 -webpage("http://scutil.com/").
--license( {mit_license, "http://crunchyd.com/scutil/license.html"} ).
+-license( {mit_license, "http://scutil.com/license.html"} ).
 
 -publicsvn("svn://crunchyd.com/scutil/").
 -bugtracker("http://crunchyd.com/forum/project.php?projectid=7").
@@ -63,7 +63,7 @@
     elements/2, elements/3, elements/4, % needs tests
     sanitize_tokens/2,
     sanitize_filename/1, % needs tests
-    random_generator/3, srand/0, rand/1, random_from/1, random_from/2, random_from/3, random_from_weighted/1, % needs tests
+    random_generator/3, srand/0, srand/3, rand/1, random_from/1, random_from/2, random_from/3, random_from_weighted/1, % needs tests
     grid_scatter/2, % needs tests
     list_product/1, % needs tests
     even_or_odd/1, % needs tests
@@ -189,7 +189,7 @@ get_module_attribute(Module,Attribute) ->
 
 
 
-%% @type  hexchar() = integer.  Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.
+%% @type  hexchar() = integer().  Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.
 %% @type  hexstring() = list().  All elements of the list must be of type hexchar() .
 
 %% @spec  hex_to_int(HexChar::hexstring() | hexchar()) -> integer()
@@ -209,7 +209,7 @@ hex_to_int([Digit|Rem], Acc) -> hex_to_int(Rem, (Acc bsl 4) + hex_to_int(Digit))
 
 
 
-%% @type  byte() = integer.  Integer must be in the range 0-255, inclusive.
+%% @type  byte() = integer().  Integer must be in the range 0-255, inclusive.
 
 %% @spec  byte_to_hex(TheByte::byte()) -> hexstring()
 %% @doc   Convert a byte() into a hexstring().  The hexstring() result will always be either one or two characters.
@@ -221,7 +221,7 @@ byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 -> {
 
 
 
-%% @type  nybble() = integer.  Integer must be in the range 0-15, inclusive.
+%% @type  nybble() = integer().  Integer must be in the range 0-15, inclusive.
 
 %% @spec  nybble_to_hex(Nyb::nybble()) -> integer()
 %% @doc   Convert a nybble() to a hexchar().
@@ -234,10 +234,10 @@ nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 10, Nyb < 16 -> $a + Nyb - 10.
 
 
 
-%% @type  iolist() = list().  Every list member of an iolist must be a byte().
+%% @type  io_list() = list().  Every list member of an io_list must be a byte().
 
-%% @spec  io_list_to_hex(Input::iolist()) -> hexstring()
-%% @doc   Convert an iolist() to a hexstring()
+%% @spec  io_list_to_hex(Input::io_list()) -> hexstring()
+%% @doc   Convert an io_list() to a hexstring()
 %% @since Version 19
 
 io_list_to_hex(Input) when is_list(Input)                                            -> io_list_to_hex(Input, []).
@@ -265,11 +265,15 @@ multi_do(I, Module, Func, Args, Work) -> multi_do(I-1, Module, Func, Args, Work 
 
 
 
+%% @equiv regex_read_matches(String, Reg, {0,0})
 regex_read_matches(String, Reg)                          -> regex_read_matches(String, Reg, {0,0}).
+
+%% @spec  regex_read_matches(String::string(), Reg::string(), { TrimFront::integer(), TrimLength::integer() }) -> list() | { error, E }
+%% @doc   Take a string and a regular expression (and optionally an offset and length to trim to in each result), and return a list of all matches.
+%% @since Version 41
 regex_read_matches(String, Reg, {TrimFront, TrimLength}) ->
 
     case regexp:matches(String, Reg) of
-        { match, [] }      -> no_match;
         { match, Matches } -> [ string:substr(String, Start+TrimFront, End-TrimLength) || {Start,End} <- Matches ];
         { error, E }       -> { error, E }
     end.
@@ -277,6 +281,14 @@ regex_read_matches(String, Reg, {TrimFront, TrimLength}) ->
 
 
 
+
+%% @type  gridsize() = coord() | integer().  Coordinates are the width and height of a 0,0 oriented grid; as such, coordinates are of the range [{0,X-1} , {0,Y-1}].  The integer form implies a square grid.
+%% @type  coord() = { number(), number() }.  Represents a coordinate, which may imply a sized rectangle, often measured from 0,0.  Many functions expect integer coordinates; the type does not require them.
+%% @type  coordlist() = list().  All members of a coordlist() must be coord()s.
+
+%% @spec  grid_scatter(Count::integer(), Size::gridsize()) -> coordlist()
+%% @doc   Return a Count-length list of non-repeating coordinates in a grid of specified size; useful for feature generation.
+%% @since Version 42
 
 grid_scatter(0, []) -> []; % skips a lot of work
 
@@ -287,22 +299,40 @@ grid_scatter(Count, Size)           -> grid_scatter(Count, {Size, Size}).
 
 
 
+%% @spec  srand() -> { ok, { seeded, Seed } }
+%% @doc   <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want to know what seed was used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.
+%% @since Version 5
+
 srand() ->
 
-    Now = erlang:now(),
-    RandomGeneratorPid = spawn(?MODULE, random_generator, [element(1, Now), element(2, Now), element(3, Now)]),
+    {A,B,C} = erlang:now(),
+    srand(A,B,C).
+
+
+
+
+
+%% @spec  srand(A::integer(), B::integer(), C::integer()) -> { ok, { seeded, Seed } }
+%% @doc   <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want set what seed is used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.
+%% @since Version 5
+
+srand(A,B,C) ->
+
+    RandomGeneratorPid = spawn(?MODULE, random_generator, [A,B,C]),
 
     case whereis(scutil_rand_source) of
         undefined -> ok;
-        _Defined  -> unregister(scutil_rand_source)
+        _Defined  -> unregister(scutil_rand_source)  % todo fixme leak : this should notify the old rand_source that it is being discarded
     end,
 
     register(scutil_rand_source, RandomGeneratorPid),
-    { ok, { seeded, Now } }.
+    { ok, { seeded, {A,B,C} } }.
 
 
 
 
+
+%% @private
 
 random_generator(SeedA, SeedB, SeedC) ->
 
@@ -312,6 +342,8 @@ random_generator(SeedA, SeedB, SeedC) ->
 
 
 
+
+%% @private
 
 random_generator() ->
 
@@ -333,6 +365,10 @@ random_generator() ->
 
 
 
+
+%% @spec  rand(Range::integer()) -> integer()
+%% @doc   Returns a pseudorandom integer on the range <tt>[0 - Range]</tt> inclusive.
+%% @since Version 5
 
 rand(Range) ->
 
