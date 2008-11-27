@@ -1,20 +1,36 @@
 
 %% @author John Haugeland <stonecypher@gmail.com>
-%% @copyright 2008 John Haugeland, All Rights Reserved
+%% @copyright 2007 - current John Haugeland, All Rights Reserved
 %% @version $Revision$
 %% @since September 14, 2007
 
-%% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of various routines.  This file has aggregated dozens of useful miscellaneous routines which I'm releasing to the public in good faith.  There's no particular direction to this library; any time I write a routine that I tend to use in a lot of situations, which isn't already meaningfully classifiable into one of my other libraries, I throw it in here.  This has ended up creating a range of unrelated functionality on which most of my other libraries depend heavily.  Have fun digging around.</p><p>ScUtil is MIT license, because <a href="http://WhyIHateTheGPL.com/">the author feels very strongly against the GPL</a>.</p>
+%% @doc
+%%
+%% <p>
+%%   ScUtil is StoneCypher's Utility Library, a collection of various routines of no particular topic.  This file has aggregated
+%%   dozens of useful miscellaneous routines which I'm releasing to the public in good faith.  There's no particular direction to
+%%   this library; any time I write a routine that I tend to use in a lot of situations, which isn't already meaningfully
+%%   classifiable into one of my other libraries, I throw it in here.  This has ended up creating a range of unrelated
+%%   functionality on which most of my other libraries depend heavily.  Have fun digging around.
+%% </p>
+%%
+%% <p>ScUtil is MIT license, because <a href="http://WhyIHateTheGPL.com/">the author feels very strongly against the GPL</a>.</p>
+%%
+%% @end
 
-%% @reference <span style="background-color:#eef;display:inline-block;width:48em"><span style="display:inline-block;width:20em">Website is</span><a href="http://scutil.com/">http://scutil.com/</a></span>
-%% @reference <span style="background-color:#efe;display:inline-block;width:48em"><span style="display:inline-block;width:20em">Most people want the</span><a href="http://crunchyd.com/forum/scutil-documentation-examples/">Usage Examples</a></span>
-%% @reference <span style="background-color:#eef;display:inline-block;width:48em"><span style="display:inline-block;width:20em">Direct link to zip archive</span><a href="http://crunchyd.com/release/scutil.zip">Current version</a></span>
-%% @reference <span style="background-color:#efe;display:inline-block;width:48em"><span style="display:inline-block;width:20em">This library is released under the</span><a href="http://scutil.com/license.html">MIT License</a></span>
-%% @reference <span style="background-color:#eef;display:inline-block;width:48em"><span style="display:inline-block;width:20em">Public SVN at</span><a href="svn://crunchyd.com/scutil/">svn://crunchyd.com/scutil/</a></span>
-%% @reference <span style="background-color:#efe;display:inline-block;width:48em"><span style="display:inline-block;width:20em">Discussion forum at</span><a href="http://crunchyd.com/forum/scutil-discussion/">CrunchyD Forums</a></span>
-%% @reference <span style="background-color:#eef;display:inline-block;width:48em"><span style="display:inline-block;width:20em">Bugtracker at</span><a href="http://crunchyd.com/forum/project.php?projectid=7">CrunchyD Forums</a></span>
-%% @reference <span style="background-color:#efe;display:inline-block;width:48em"><span style="display:inline-block;width:20em">Test sets require min. version 16</span><a href="http://testerl.com/">TestErl</a></span>
-%% @reference <span style="background-color:#eef;display:inline-block;width:48em"><span style="display:inline-block;width:20em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date$</tt></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Website is</span><a href="http://scutil.com/">http://scutil.com/</a></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Most people want the</span><a href="http://crunchyd.com/forum/scutil-documentation-examples/">Usage Examples</a></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Direct link to zip archive</span><a href="http://crunchyd.com/release/scutil.zip">Current version</a></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:20em">This library is released under the</span><a href="http://scutil.com/license.html">MIT License</a></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Public SVN at</span><a href="svn://crunchyd.com/scutil/">svn://crunchyd.com/scutil/</a></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Discussion forum at</span><a href="http://crunchyd.com/forum/scutil-discussion/">CrunchyD Forums</a></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Bugtracker at</span><a href="http://crunchyd.com/forum/project.php?projectid=7">CrunchyD Forums</a></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Test sets require min. version 16</span><a href="http://testerl.com/">TestErl</a></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date$</tt></span>
+
+
+
+
 
 -module(scutil).
 
@@ -121,6 +137,10 @@
 
 
 
+
+%% @type typelabel() = [ integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown ].  Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
+
+%% @spec type_of(Any) -> typelabel()
 
 type_of(X) when is_integer(X)   -> integer;
 type_of(X) when is_float(X)     -> float;
