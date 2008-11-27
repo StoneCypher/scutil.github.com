@@ -189,11 +189,11 @@ get_module_attribute(Module,Attribute) ->
 
 
 
-%% @type  hexchar() = integer.  Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive.
+%% @type  hexchar() = integer.  Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.
 %% @type  hexstring() = list().  All elements of the list must be of type hexchar() .
 
 %% @spec  hex_to_int(HexChar::hexstring() | hexchar()) -> integer()
-%% @doc   Convert a list string or a single character representing hexadecimal into its numeric value.  Case insensitive.
+%% @doc   Convert a hexstring() or hexchar() into its numeric value.
 %% @since Version 18
 
 hex_to_int(Hex) when is_integer(Hex), Hex >= $0, Hex =< $9 -> Hex - $0;
@@ -211,8 +211,8 @@ hex_to_int([Digit|Rem], Acc) -> hex_to_int(Rem, (Acc bsl 4) + hex_to_int(Digit))
 
 %% @type  byte() = integer.  Integer must be in the range 0-255, inclusive.
 
-%% @spec  byte_to_hex(TheByte::byte()) -> string()
-%% @doc   Convert an integer 0-255 into its lower case hexadecimal list string representation.
+%% @spec  byte_to_hex(TheByte::byte()) -> hexstring()
+%% @doc   Convert a byte() into a hexstring().  The hexstring() result will always be either one or two characters.
 %% @since Version 20
 
 byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 -> { nybble_to_hex(TheByte bsr 4), nybble_to_hex(TheByte band 15) }.
@@ -224,7 +224,7 @@ byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 -> {
 %% @type  nybble() = integer.  Integer must be in the range 0-15, inclusive.
 
 %% @spec  nybble_to_hex(Nyb::nybble()) -> integer()
-%% @doc   Convert a nybble (integer 0..15) to its lower case hexadecimal single character (integer) representation.
+%% @doc   Convert a nybble() to a hexchar().
 %% @since Version 19
 
 nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 0,  Nyb < 10 -> $0 + Nyb;
@@ -233,6 +233,12 @@ nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 10, Nyb < 16 -> $a + Nyb - 10.
 
 
 
+
+%% @type  iolist() = list().  Every list member of an iolist must be a byte().
+
+%% @spec  io_list_to_hex(Input::iolist()) -> hexstring()
+%% @doc   Convert an iolist() to a hexstring()
+%% @since Version 19
 
 io_list_to_hex(Input) when is_list(Input)                                            -> io_list_to_hex(Input, []).
 
@@ -244,7 +250,12 @@ io_list_to_hex(_,                _)                                             
 
 
 
+%% @equiv multi_do(C,M,F,[])
 multi_do(C, Module, Func)             -> multi_do(C, Module, Func, [],   []).
+
+%% @spec  multi_do(Count::integer(), Module::atom(), Function::atom(), Args::list()) -> list()
+%% @doc   Take an iteration count, a module name, a function name and an argument list, and repeatedly apply the argument list to the module/function, count times.  This is primarily useful with nondeterministic functions whose result might change despite identical arguments, such as functions with random behavior; for example, this function is invoked to implement stochastic testing in <a href="http://testerl.com/">TestErl</a>.
+%% @since Version 38
 multi_do(C, Module, Func, Args)       -> multi_do(C, Module, Func, Args, []).
 
 multi_do(0,_Module,_Func,_Args, Work) -> Work;
