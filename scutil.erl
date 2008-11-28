@@ -671,7 +671,7 @@ sanitize_filename(Filename) -> sanitize_tokens(Filename, lists:seq($a,$z)++lists
 
 %% @spec receive_one() -> { item, any() } | nothing_there
 
-%% @doc Pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block ```1> scutil:receive_one().
+%% @doc Pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block.  ```1> scutil:receive_one().
 %% nothing_there
 %%
 %% 2> self() ! message.
@@ -683,6 +683,8 @@ sanitize_filename(Filename) -> sanitize_tokens(Filename, lists:seq($a,$z)++lists
 %% 4> scutil:receive_one().
 %% nothing_there'''
 
+%% @since Version 2
+
 receive_one() ->
 
     receive (X) -> { item, X }
@@ -693,8 +695,56 @@ receive_one() ->
 
 
 
+%% @type numericlist() = list().  All members of a numeric list must be number()s.
+
+%% @spec arithmetic_mean(InputList::numericlist()) -> float()
+
+%% @doc Take the arithmetic mean (often called the average) of a list of numbers. ```1> scutil:arithmetic_mean([1,2,3,4,5]).
+%% 3.0'''
+
+%% @see geometric_mean/1
+%% @see harmonic_mean/1
+%% @see weighted_arithmetic_mean/1
+
+%% @since Version 33
+
+arithmetic_mean([])                      -> 0.0;
 arithmetic_mean(List) when is_list(List) -> lists:sum(List) / length(List).
+
+
+
+
+
+%% @spec geometric_mean(InputList::numericlist()) -> float()
+
+%% @doc Take the geometric mean of a list of numbers. ```1> scutil:geometric_mean([1,2,3,4,5]).
+%% 2.6051710846973517''' The naive approach ```geometric_mean(List) -> math:pow(scutil:list_product(List), 1/length(List)).''' is not used because it accumulates error very quickly, and is as such unsuited to huge lists.
+
+%% @see arithmetic_mean/1
+%% @see harmonic_mean/1
+%% @see weighted_arithmetic_mean/1
+
+%% @since Version 34
+
+geometric_mean([])                       -> 0.0;
 geometric_mean(List)  when is_list(List) -> math:exp(scutil:arithmetic_mean([math:log(X)||X<-List])).
+
+
+
+
+
+%% @spec harmonic_mean(InputList::numericlist()) -> float()
+
+%% @doc Take the harmonicmean of a list of numbers. ```1> scutil:harmonic_mean([1,2,3,4,5]). 
+%% 2.18978102189781''' 
+
+%% @see arithmetic_mean/1
+%% @see geometric_mean/1
+%% @see weighted_arithmetic_mean/1
+
+%% @since Version 35
+
+harmonic_mean([])                        -> 0.0.
 harmonic_mean(List)   when is_list(List) -> length(List) / lists:sum([ 1/X || X<-List ]).
 
 
