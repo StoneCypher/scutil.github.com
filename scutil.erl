@@ -25,6 +25,8 @@
 %% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:20em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date$</tt></span>
 %% @reference <span style="margin-top:1em;padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Test sets require min. version 16</span><a href="http://testerl.com/">TestErl</a></span>
 
+%% @todo add @see cross-references between related functions
+
 
 
 
@@ -289,6 +291,7 @@ io_list_to_hex(_,                _)                                             
 
 
 %% @equiv multi_do(C,M,F,[])
+%% @since Version 38
 multi_do(C, Module, Func)             -> multi_do(C, Module, Func, [],   []).
 
 %% @spec  multi_do(Count::integer(), Module::atom(), Function::atom(), Args::list()) -> list()
@@ -310,9 +313,11 @@ multi_do(I, Module, Func, Args, Work) -> multi_do(I-1, Module, Func, Args, Work 
 
 
 %% @equiv regex_read_matches(String, Reg, {0,0})
+%% @since Version 41
 regex_read_matches(String, Reg) -> regex_read_matches(String, Reg, {0,0}).
 
 %% @equiv regex_read_matches(String, Reg, {TrimFront,TrimLength})
+%% @since Version 41
 regex_read_matches(String, Reg, TrimFront, TrimLength) -> regex_read_matches(String, Reg, {TrimFront, TrimLength}).
 
 %% @spec  regex_read_matches(String::string(), Reg::string(), { TrimFront::integer(), TrimLength::integer() }) -> list() | { error, E }
@@ -346,7 +351,8 @@ regex_read_matches(String, Reg, {TrimFront, TrimLength}) ->
 
 %% @spec  grid_scatter(Count::integer(), Size::gridsize()) -> coordlist()
 
-%% @doc   Return a Count-length list of non-repeating coordinates in a grid of specified size; useful for feature generation. 
+%% @doc   Return a Count-length list of non-repeating coordinates in a grid of specified size; useful for feature generation.
+%% @todo @comeback give code examples (edoc was failing here?)
 
 %% @since Version 42
 
@@ -361,13 +367,14 @@ grid_scatter(Count, Size)           -> grid_scatter(Count, {Size, Size}).
 
 %% @spec  srand() -> { ok, { seeded, Seed } }
 
-%% @doc   <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want to know what seed was used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own. ```1> scutil:srand().
+%% @doc   <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want to know what seed was used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> scutil:srand().
 %% {ok,{seeded,{1227,902172,685000}}}
 %%
 %% 2> scutil:srand().
 %% {ok,{seeded,{1227,902173,231000}}}'''
 
 %% @since Version 5
+%% @todo migrate to labelled random generators, so that concurrent generators do not necessarily interfere with one another
 
 srand() ->
 
@@ -379,8 +386,17 @@ srand() ->
 
 
 %% @spec  srand(A::integer(), B::integer(), C::integer()) -> { ok, { seeded, Seed } }
-%% @doc   <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want set what seed is used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.
+%% @doc   <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want set what seed is used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> scutil:srand(1,2,3).
+%% {ok,{seeded,{1,2,3}}}
+%%
+%% 2> scutil:srand().
+%% {ok,{seeded,{1227,902568,604600}}}
+%%
+%% 3> scutil:srand(1,2,3).
+%% {ok,{seeded,{1,2,3}}}'''
+
 %% @since Version 5
+%% @todo migrate to labelled random generators, so that concurrent generators do not necessarily interfere with one another
 
 srand(A,B,C) ->
 
@@ -433,7 +449,19 @@ random_generator() ->
 
 
 %% @spec  rand(Range::integer()) -> integer()
-%% @doc   Returns a pseudorandom integer on the range `[0 - Range]' inclusive.
+
+%% @doc   Returns a pseudorandom integer on the range `[0 - (Range-1)]' inclusive. ```1> scutil:rand(100).
+%% 9
+%%
+%% 2> [ scutil:rand(100) || X <- lists:seq(1,10) ].
+%% [12,27,99,86,20,96,28,36,28,15]
+%%
+%% 3> scutil:histograph([ scutil:rand(10) || X <- lists:seq(1,10000) ]).
+%% [{0,992}, {1,990}, {2,992}, {3,1033}, {4,1017}, {5,1003}, {6,996}, {7,1024}, {8,969}, {9,984}]
+%%
+%% 4> scutil:histograph([ scutil:rand(10) || X <- lists:seq(1,10000) ]).
+%% [{0,1028}, {1,979}, {2,934}, {3,970}, {4,1035}, {5,1007}, {6,986}, {7,1012}, {8,1052}, {9,997}]'''
+
 %% @since Version 5
 
 rand(Range) ->
@@ -456,13 +484,39 @@ rand(Range) ->
 
 
 %% @equiv random_from(1, List, no_remainder)
+%% @since Version 6
 random_from(   List) -> [X] = random_from(1, List, no_remainder), X.
 
 %% @equiv random_from(N, List, no_remainder)
+%% @since Version 6
 random_from(N, List) -> random_from(N, List, no_remainder).
 
-%% @spec  random_from(N::integer(), List::list(), WantRemainder::want_remainder()) -> list()
-%% @doc   Take N non-repeating random elements from a list in undefined order.
+%% @spec random_from(N::integer(), List::list(), WantRemainder::want_remainder()) -> list()
+
+%% @doc Take N non-repeating random elements from a list in undefined order.  If the atom `remainder' is passed in as the third argument, the unused portion of the source list will be returned as the second member of a 2ary tuple with the results; the default is no_remainder, which only returns the result set.  Mixed type input lists are perfectly safe, and membership for random selection is shallow (ie, `[ [1,2], [3,4] ]' as an input list would only generate outputs of lists, never integers.)```1> scutil:random_from([monday,tuesday,wednesday,thursday,friday]).
+%% friday
+%%
+%% 2> scutil:random_from(4, lists:seq(1,20)).
+%% [6,3,15,12]
+%%
+%% 3> scutil:random_from(3, [warrior, mage, cleric, thief, paladin, ranger, bard]).
+%% [cleric,warrior,ranger]
+%%
+%% 4> scutil:random_from(6, [mixed, [1,2,3], 4, {five,5}, 3, 67.2, <<"Hello">>, 8]).
+%% [[1,2,3],{five,5},4,mixed,<<"Hello">>,67.2]
+%%
+%% 5> {Team1, Team2} = scutil:random_from(3, [alice,bob,cathy,dave,edward,fawn], remainder).
+%% {[cathy,fawn,dave],[bob,edward,alice]}
+%%
+%% 6> Team1.
+%% [cathy,fawn,dave]
+%%
+%% 7> Where_Food = fun() -> scutil:random_from([deli, fastfood, chinese, mexican, steakhouse, bistro, greek, indian, thai, sushi]) end.
+%% #Fun<erl_eval.20.67289768>
+%%
+%% 8> Where_Food().
+%% thai'''
+
 %% @since Version 6
 random_from(N, List, no_remainder) -> {R,_} = random_from(N,List,remainder), R;
 random_from(N, List, remainder)    -> lists:split(N,shuffle(List)).
@@ -470,6 +524,18 @@ random_from(N, List, remainder)    -> lists:split(N,shuffle(List)).
 
 
 
+
+%% @spec random_from_weighted(InputList::weightlist()) -> any()
+
+%% @doc Take a random single item from a list with weighted probabilities.  Probabilities may be any numeric type, and may be any non-negative value (items with zero probability will be omitted).  Input is a `weightlist()', which is a list in the form `[{Item,Probability}, {I2,P2}, ...]'. There is no requirement to normalize probabilities to any range, though probabilities normalized to ranges will still work as expected. ```1> scutil:random_from([ {quad,4}, {double,2}, {single,1} ]).
+%% quad
+%%
+%% 2> [ scutil:random_from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X <- lists:seq(1,10) ].
+%% [single,quad,quad,double,quad,double,quad,quad,quad,double]
+%%
+%% 3> scutil:histograph([ scutil:random_from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X <- lists:seq(1,777777) ]).
+%% [{double,222200},{quad,444165},{single,111412}]'''
+%% @since Version 10
 
 % InputList is [ {Item,Weight}, {Item,Weight}, ... ]
 random_from_weighted(InputList) when is_list(InputList) ->
@@ -494,6 +560,7 @@ random_from_weighted_worker(InputList, Limit) when is_list(InputList), is_intege
 % todo implement catching tuple { key, reqtype } from list, to auto-convert before return
 % todo There may be a crashing bug here for repeated attributes, which are apparently legal, see http://fullof.bs/reading-module-attributes-in-erlang#comment-466
 % todo It may help to re-implement this using proplists instead of doing it manually, profile
+%% @todo document this
 
 % interface
 
@@ -531,6 +598,22 @@ elements_worker(Retlist, Config, Requested, KeyIdx, strip) ->
 
 
 
+%% @type filterfunction() = function().  Filter functions are 1ary binary predicates - they accept an argument and return either true or false.
+%% @type sanitizer() = list() | filterfunction().  Sanitizers are for input sanitization; they define what parts of an input list are valid, and the remainder are removed.  Sanitizers may either be a list of acceptable elements or a filter function.
+
+%% @spec sanitize_tokens(InputList::list(), Allowed::sanitizer()) -> list()
+
+%% @doc Remove unacceptable elements from an input list, as defined by another list or a filter function.  Common reasons for sanitization include reducing arbitrary or bulk data to key format (such as using an original filename and new size to generate a new filename or database key) and removing malformed items from a list before processing. ```1> scutil:sanitize_tokens("ae0z4nb'wc-04bn ze0e 0;4ci ;e0o5rn;", "ace").
+%% "aeceece"
+%%
+%% 2> Classifier = fun(apple) -> true; (banana) -> true; (cherry) -> true; (date) -> true; (elderberry) -> true; (_) -> false end.
+%% #Fun<erl_eval.6.13229925>
+%%
+%% 3> scutil:sanitize_tokens([apple, boat, cherry, dog, elderberry], Classifier).
+%% [apple,cherry,elderberry]'''
+
+%% @since Version 31
+
 sanitize_tokens(List, Allowed) when is_list(List), is_function(Allowed) -> lists:filter(Allowed, List);
 sanitize_tokens(List, Allowed) when is_list(List), is_list(Allowed)     -> lists:filter(fun(X) -> lists:member(X,Allowed) end, List).
 
@@ -538,11 +621,16 @@ sanitize_tokens(List, Allowed) when is_list(List), is_list(Allowed)     -> lists
 
 
 
+%% @equiv sanitize_tokens(Filename, lists:seq($a,$z)++lists:seq($A,$Z)++lists:seq($0,$9)++"-_=()[]")
+%% @since Version 31
+
 sanitize_filename(Filename) -> sanitize_tokens(Filename, lists:seq($a,$z)++lists:seq($A,$Z)++lists:seq($0,$9)++"-_=()[]").
 
 
 
 
+
+%% @todo finish me
 
 % batch_reduce(Workload, Function) ->
 %
@@ -556,16 +644,20 @@ sanitize_filename(Filename) -> sanitize_tokens(Filename, lists:seq($a,$z)++lists
 
 
 
+%% @todo finish me
+
 % distributed_batch_reduce(Workload, Function, Nodes) -> distributed_batch_reduce_handout(Workload, Function, Nodes, [], 0).
 
 % distributed_batch_reduce_handout([],            _Function, _Nodes,              Work, 0)        -> Work;                                                                                                                                   % nothing left in the work queue, count of output outstanding is 0, work's done
-% distributed_batch_reduce_handout([],             Function, _Nodes,              Work, CountOut) -> {_Source, Result } = scutil:receive_one(), distributed_batch_reduce_handout([],       Function,  [],       [Result]++Work, CountOut-1); % there's no work left in the queue, but stuff outstanding from child nodes
-% distributed_batch_reduce_handout(Workload,       Function,  [],                 Work, CountOut) -> { Source, Result } = scutil:receive_one(), distributed_batch_reduce_handout(Workload, Function,  [Source], [Result]++Work, CountOut-1); % no nodes available, wait for a receive, queue the result and add the node back to the available list
+% distributed_batch_reduce_handout([],             Function, _Nodes,              Work, CountOut) -> { item, {_Source, Result } } = scutil:receive_one(), distributed_batch_reduce_handout([],       Function,  [],       [Result]++Work, CountOut-1); % there's no work left in the queue, but stuff outstanding from child nodes
+% distributed_batch_reduce_handout(Workload,       Function,  [],                 Work, CountOut) -> { item, { Source, Result } } = scutil:receive_one(), distributed_batch_reduce_handout(Workload, Function,  [Source], [Result]++Work, CountOut-1); % no nodes available, wait for a receive, queue the result and add the node back to the available list
 % distributed_batch_reduce_handout([Item|WorkRem], {Mod,Fun}, [ThisNode|NodeRem], Work, CountOut) -> spawn(ThisNode, Mod, Fun, Item),           distributed_batch_reduce_handout(WorkRem,  {Mod,Fun}, NodeRem,  Work,           CountOut+1). % work and nodes available; dispatch some work, increment the work out counter and recurse
 
 
 
 
+
+%% @todo finish me
 
 % dissimilar_charset(english, lowercase) -> "abcdefghjklmnopqrstuwxyz";
 % dissimilar_charset(english, mixedcase) -> "abcdefghjklmnopqrstuwxyzABDEFGHRT";
@@ -577,10 +669,24 @@ sanitize_filename(Filename) -> sanitize_tokens(Filename, lists:seq($a,$z)++lists
 
 
 
+%% @spec receive_one() -> { item, any() } | nothing_there
+
+%% @doc Pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block ```1> scutil:receive_one().
+%% nothing_there
+%%
+%% 2> self() ! message.
+%% message
+%%
+%% 3> scutil:receive_one().
+%% {item,message}
+%%
+%% 4> scutil:receive_one().
+%% nothing_there'''
+
 receive_one() ->
 
-    receive (X) -> X
-    after 1     -> nothing_there
+    receive (X) -> { item, X }
+    after 0     -> nothing_there
     end.
 
 
@@ -920,7 +1026,7 @@ hmean_vector_normal(VX) ->   harmonic_mean(normalize_vector(VX)).
 
 % Create reverse sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples where key K appears in both A and B
 
-in_both_lists(TupleList) when is_list(TupleList) -> 
+in_both_lists(TupleList) when is_list(TupleList) ->
     {A,B} = lists:unzip(TupleList),
     in_both_lists(A,B).
 
@@ -1045,6 +1151,11 @@ set_counter(Name, To) when is_number(To) ->
 
 
 
+%% @todo remove any counter at zero, since a non-existant counter will report zero anyway
+%% @todo add a mechanism to remove counters (already exists as reset after above change, in a sense; synonym for future under the hood changes, or document?)
+
+%% @private
+
 counter_process() ->
     receive
         shutdown -> ok;
@@ -1097,10 +1208,24 @@ module_has_function(Module, Function) ->
 
 
 
-% Derived from code originally found at http://wiki.trapexit.org/index.php/RandomShuffle
-% they had a bizarre log length repeating behavior; I stripped it because it doesn't increase randomness in any significant way
-% the new list position is not in any way dependant on the previous list position, so each time it's shuffled() it's started over
-% to repeat the behavior is a study in cluelessness
+%% @spec shuffle(List::list()) -> list()
+
+%% @doc Return a list with the original list's shallow members in a random order.  Deep lists are not shuffled; `[ [a,b,c], [d,e,f], [g,h,i] ]' will never produce sublist reorderings (`[b,c,a]') or list mixing (`[b,g,e]'), only reordering of the three top level lists.  The output list will always be the same length as the input list.  Repeated items and mixed types in input lists are safe. ```1> scutil:shuffle(lists:seq(1,9)).
+%% [8,4,7,9,5,2,6,1,3]
+%%
+%% 2> {TheFaces, TheSuits} = {  [ace] ++ lists:seq(2,10) ++ [jack,queen,king],  [hearts,spades,clubs,diamonds]  }
+%% {[ace,jack,queen,king,2,3,4,5,6,7,8,9,10],
+%%  [hearts,spades,clubs,diamonds]}
+%%
+%% 3> Deck = scutil:shuffle([ {Face,Suit} || Face <- TheFaces, Suit <- TheSuits ]).
+%% [ {6,spades}, {7,hearts}, {8,clubs}, {queen,spades}, {6,diamonds}, {ace,...}, {...} | ...]
+%% 
+%% 4> scutil:shuffle([ duck,duck,duck,duck, goose ]).
+%% [duck,goose,duck,duck,duck]'''
+%%
+%% <i>Originally found at <a href="http://wiki.trapexit.org/index.php/RandomShuffle">http://wiki.trapexit.org/index.php/RandomShuffle</a>; refactored for clarity, and unnecessary repeat nesting behavior removed.</i>
+
+%% @since Version 8
 
 shuffle(List) ->
    WeightedAndShuffled        = lists:map( fun(Item) -> { random:uniform(), Item } end, List ),
