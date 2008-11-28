@@ -16,15 +16,14 @@
 %% @end
 
 %% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Website is</span><a href="http://scutil.com/">http://scutil.com/</a></span>
-%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Most people want the</span><a href="http://crunchyd.com/forum/scutil-documentation-examples/">Usage Examples</a></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Author's Website</span><a href="http://fullof.bs">Full of BS</a></span>
 %% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Direct link to zip archive</span><a href="http://crunchyd.com/release/scutil.zip">Current version</a></span>
 %% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:20em">This library is released under the</span><a href="http://scutil.com/license.html">MIT License</a></span>
 %% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Public SVN at</span><a href="svn://crunchyd.com/scutil/">svn://crunchyd.com/scutil/</a></span>
 %% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Discussion forum at</span><a href="http://crunchyd.com/forum/scutil-discussion/">CrunchyD Forums</a></span>
 %% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Bugtracker at</span><a href="http://crunchyd.com/forum/project.php?projectid=7">CrunchyD Forums</a></span>
-%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Test sets require min. version 16</span><a href="http://testerl.com/">TestErl</a></span>
-%% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date$</tt></span>
-%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Author's Website</span><a href="http://fullof.bs">Full of BS</a></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:20em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date$</tt></span>
+%% @reference <span style="margin-top:1em;padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Test sets require min. version 16</span><a href="http://testerl.com/">TestErl</a></span>
 
 
 
@@ -59,7 +58,7 @@
     type_of/1,
     get_module_attribute/2,
     byte_to_hex/1, nybble_to_hex/1, io_list_to_hex/1, % needs tests
-    regex_read_matches/2, regex_read_matches/3, % needs tests
+    regex_read_matches/2, regex_read_matches/3, regex_read_matches/4, % needs tests
     multi_do/3, multi_do/4, % needs tests
     elements/2, elements/3, elements/4, % needs tests
     sanitize_tokens/2,
@@ -105,7 +104,6 @@
     start_register_if_not_running/4, % needs tests
     wait_until_terminate/0, wait_until_terminate/1, % needs tests
     module_has_function/2, % needs tests
-    regexp_read_matches/2, regexp_read_matches/3, % needs tests
 
     call_after/2, call_after/3, call_after/4, call_after_worker/4, % needs tests
     shuffle/1, % needs tests
@@ -231,7 +229,7 @@ hex_to_int([Digit|Rem], Acc) -> hex_to_int(Rem, (Acc bsl 4) + hex_to_int(Digit))
 
 
 
-%% @type  byte() = integer().  Integer must be in the range 0-255, inclusive.
+%% @type  byte() = integer().  A byte must be an integer in the range 0-255, inclusive.
 
 %% @spec  byte_to_hex(TheByte::byte()) -> hexstring()
 
@@ -249,11 +247,11 @@ byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 -> [
 
 
 
-%% @type  nybble() = integer().  Integer must be in the range 0-15, inclusive.
+%% @type  nybble() = integer().  A nybble must be an integer in the range 0-15, inclusive.
 
 %% @spec  nybble_to_hex(Nyb::nybble()) -> integer()
 
-%% @doc   Convert a nybble() to a hexchar(). ```1> 217> scutil:nybble_to_hex(7).
+%% @doc   Convert a nybble() to a hexchar(). ```1> scutil:nybble_to_hex(7).
 %% 55
 %%
 %% 2> scutil:nybble_to_hex(15).
@@ -272,7 +270,7 @@ nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 10, Nyb < 16 -> $a + Nyb - 10.
 
 %% @spec  io_list_to_hex(Input::io_list()) -> hexstring()
 
-%% @doc   Convert an io_list() to a hexstring() ``` 1> scutil:io_list_to_hex("a").
+%% @doc   Convert an io_list() to a hexstring().  ```1> scutil:io_list_to_hex("a").
 %% "61"
 %%
 %% 2> scutil:io_list_to_hex("a08n408nbqa").
@@ -294,7 +292,13 @@ io_list_to_hex(_,                _)                                             
 multi_do(C, Module, Func)             -> multi_do(C, Module, Func, [],   []).
 
 %% @spec  multi_do(Count::integer(), Module::atom(), Function::atom(), Args::list()) -> list()
-%% @doc   Take an iteration count, a module name, a function name and an argument list, and repeatedly apply the argument list to the module/function, count times.  This is primarily useful with nondeterministic functions whose result might change despite identical arguments, such as functions with random behavior; for example, this function is invoked to implement stochastic testing in <a href="http://testerl.com/">TestErl</a>.
+
+%% @doc   Take an iteration count, a module name, a function name and an argument list, and repeatedly apply the argument list to the module/function, count times.  This is primarily useful with nondeterministic functions whose result might change despite identical arguments, such as functions with random behavior; for example, this function is invoked to implement stochastic testing in <a href="http://testerl.com/">TestErl</a>. ```1> scutil:multi_do(10, scutil, rand, [100]).
+%% [9,94,4,82,77,44,89,19,45,92]
+%%
+%% 2> scutil:multi_do(10, scutil, rand, [10000]).
+%% [2377,2559,1713,8489,4468,3261,3344,3751,380,2525]'''
+
 %% @since Version 38
 multi_do(C, Module, Func, Args)       -> multi_do(C, Module, Func, Args, []).
 
@@ -306,15 +310,29 @@ multi_do(I, Module, Func, Args, Work) -> multi_do(I-1, Module, Func, Args, Work 
 
 
 %% @equiv regex_read_matches(String, Reg, {0,0})
-regex_read_matches(String, Reg)                          -> regex_read_matches(String, Reg, {0,0}).
+regex_read_matches(String, Reg) -> regex_read_matches(String, Reg, {0,0}).
+
+%% @equiv regex_read_matches(String, Reg, {TrimFront,TrimLength})
+regex_read_matches(String, Reg, TrimFront, TrimLength) -> regex_read_matches(String, Reg, {TrimFront, TrimLength}).
 
 %% @spec  regex_read_matches(String::string(), Reg::string(), { TrimFront::integer(), TrimLength::integer() }) -> list() | { error, E }
-%% @doc   Take a string and a regular expression (and optionally an offset and length to trim to in each result), and return a list of all matches.
+
+%% @doc   Take a string and a regular expression (and optionally an offset and length to trim to in each result), and return a list of all matches.  For a trim length of {A,B}, the first A and last B characters of each result will be removed.```1> scutil:regex_read_matches("0j2  4g5  8t9", "[0-9](.)[0-9]").
+%% ["0j2","4g5","8t9"]
+%%
+%% 2> scutil:regex_read_matches("0j2  4g5  8t9", "[0-9](.)[0-9]", {1,1}).
+%% ["j","g","t"]
+%%
+%% 3> scutil:regex_read_matches("0j2  4g5  8t9", "[0-9](.)[0-9]", 1, 1).
+%% ["j","g","t"]'''
+%%
+%% Why provide the equivalent syntaxes (_, _, {A,B}) and (_, _, A,B) ?  Without the tuple is more natural to many, but with the tuple is far more convenient for database-driven behavior, as well as the internal implementation.  I frequently find myself using both forms, and so every time I simplify I find myself wrapping the non-removed form back into the removed form.  Does it violate the simplest interface principle?  Yeah, but in this case it's a boon, IMO.  As such, keeping both forms.
+
 %% @since Version 41
 regex_read_matches(String, Reg, {TrimFront, TrimLength}) ->
 
     case regexp:matches(String, Reg) of
-        { match, Matches } -> [ string:substr(String, Start+TrimFront, End-TrimLength) || {Start,End} <- Matches ];
+        { match, Matches } -> [ string:substr(String, Start+TrimFront, End-(TrimLength+1)) || {Start,End} <- Matches ];
         { error, E }       -> { error, E }
     end.
 
@@ -322,12 +340,14 @@ regex_read_matches(String, Reg, {TrimFront, TrimLength}) ->
 
 
 
-%% @type  gridsize() = coord() | integer().  Coordinates are the width and height of a 0,0 oriented grid; as such, coordinates are of the range [{0,X-1} , {0,Y-1}].  The integer form implies a square grid.
-%% @type  coord() = { number(), number() }.  Represents a coordinate, which may imply a sized rectangle, often measured from 0,0.  Many functions expect integer coordinates; the type does not require them.
+%% @type  gridsize() = coord() | integer().  Coordinates are the width and height of a (1,1) originated grid; as such, coordinates are of the range [1,X] , [1,Y] inclusive, and returned in the form {A,B}.  The integer form implies a square grid.
+%% @type  coord() = { number(), number() }.  Represents a coordinate, which may imply a sized rectangle.  Many functions expect integer coordinates; the type does not require them.
 %% @type  coordlist() = list().  All members of a coordlist() must be coord()s.
 
 %% @spec  grid_scatter(Count::integer(), Size::gridsize()) -> coordlist()
-%% @doc   Return a Count-length list of non-repeating coordinates in a grid of specified size; useful for feature generation.
+
+%% @doc   Return a Count-length list of non-repeating coordinates in a grid of specified size; useful for feature generation. 
+
 %% @since Version 42
 
 grid_scatter(0, []) -> []; % skips a lot of work
@@ -340,7 +360,13 @@ grid_scatter(Count, Size)           -> grid_scatter(Count, {Size, Size}).
 
 
 %% @spec  srand() -> { ok, { seeded, Seed } }
-%% @doc   <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want to know what seed was used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.
+
+%% @doc   <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want to know what seed was used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own. ```1> scutil:srand().
+%% {ok,{seeded,{1227,902172,685000}}}
+%%
+%% 2> scutil:srand().
+%% {ok,{seeded,{1227,902173,231000}}}'''
+
 %% @since Version 5
 
 srand() ->
@@ -1068,17 +1094,6 @@ module_has_function(Module, Function) ->
     lists:keymember(Function, 1, apply(Module, module_info, [exports])).
 
 
-
-
-
-regexp_read_matches(String, Reg)                          -> regexp_read_matches(String, Reg, {0,0}).
-regexp_read_matches(String, Reg, {TrimFront, TrimLength}) ->
-
-    case regexp:matches(String, Reg) of
-        { match, [] }      -> no_match;
-        { match, Matches } -> [ string:substr(String, Start+TrimFront, End-TrimLength) || {Start,End} <- Matches ];
-        { error, E }       -> { error, E }
-    end.
 
 
 
