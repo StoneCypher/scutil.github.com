@@ -17,7 +17,7 @@
 %%   <dt></dt>
 %%   <dd>{@link hex_to_int/1}, {@link byte_to_hex/1}, {@link nybble_to_hex/1}, {@link io_list_to_hex/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
-%% == Descriptive ==
+%% == Documentary ==
 %% <dl>
 %%   <dt></dt>
 %%   <dd>{@link even_or_odd/1}, {@link absolute_difference/2}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
@@ -780,15 +780,10 @@ receive_one() ->
 %% @doc {@section Statistics} Take the arithmetic mean (often called the average) of a list of numbers. ```1> scutil:arithmetic_mean([1,2,3,4,5]).
 %% 3.0'''
 
-%%
 %% @see geometric_mean/1
 %% @see harmonic_mean/1
 %% @see weighted_arithmetic_mean/1
 %% @see amean_vector_normal/1
-%% @see gmean_vector_normal/1
-%% @see hmean_vector_normal/1
-%% @see median/1
-%% @see mode/1
 
 %% @since Version 33
 
@@ -806,12 +801,7 @@ arithmetic_mean(List) when is_list(List) -> lists:sum(List) / length(List).
 
 %% @see arithmetic_mean/1
 %% @see harmonic_mean/1
-%% @see weighted_arithmetic_mean/1
-%% @see amean_vector_normal/1
 %% @see gmean_vector_normal/1
-%% @see hmean_vector_normal/1
-%% @see median/1
-%% @see mode/1
 
 %% @since Version 34
 
@@ -829,12 +819,7 @@ geometric_mean(List)  when is_list(List) -> math:exp(scutil:arithmetic_mean([mat
 
 %% @see arithmetic_mean/1
 %% @see geometric_mean/1
-%% @see weighted_arithmetic_mean/1
-%% @see amean_vector_normal/1
-%% @see gmean_vector_normal/1
 %% @see hmean_vector_normal/1
-%% @see median/1
-%% @see mode/1
 
 %% @since Version 35
 
@@ -851,13 +836,7 @@ harmonic_mean(List)   when is_list(List) -> length(List) / lists:sum([ 1/X || X<
 %% 6.0'''
 
 %% @see arithmetic_mean/1
-%% @see geometric_mean/1
-%% @see harmonic_mean/1
 %% @see amean_vector_normal/1
-%% @see gmean_vector_normal/1
-%% @see hmean_vector_normal/1
-%% @see median/1
-%% @see mode/1
 
 %% @since Version 44
 
@@ -872,7 +851,7 @@ weighted_arithmetic_mean([{V,W}|Tail], Num, Denom)  -> weighted_arithmetic_mean(
 
 %% @spec even_or_odd(Num::integer()) -> even | odd
 
-%% @doc {@section Utility} Documentary convenience function that returns the atoms `even' or `odd' for any integer. ```1> scutil:even_or_odd(3).
+%% @doc {@section Documentary} Documentary convenience function that returns the atoms `even' or `odd' for any integer. ```1> scutil:even_or_odd(3).
 %% odd'''
 
 %% @since Version 8
@@ -884,7 +863,15 @@ even_or_odd(Num) when is_integer(Num)                  -> odd.
 
 
 
-%% coemback
+%% @spec median(List::numberlist()) -> any()
+
+%% @doc {@section Statistics} Takes the median (central) value of a list.  Sorts the input list, then finds and returns the middle value.  ```scutil:median([1,2,999]).
+%% 2'''
+
+%% @see arithmetic_mean/1
+%% @see mode/1
+
+%% @since Version 8
 
 median(List) when is_list(List) ->
 
@@ -898,6 +885,22 @@ median(List) when is_list(List) ->
 
 
 
+
+%% @spec mode(List::numberlist()) -> any()
+
+%% @doc {@section Statistics} Takes the mode (most common) value(s) of a list, as a list.  If there are more than one value tied for most common, all tied will be returned.  This function is safe for mixed-type lists, and does not perform deep traversal (that is, the mode of `[ [2,2] ]' is `[2,2]', not `2'). ```scutil:mode([1,2,1,3,1,4]).
+%% [1]
+%% 
+%% 2> scutil:mode([ [1,2,3], [2,3,4], [3,4,5], [2,3,4] ]).
+%% [[2,3,4]]
+%%
+%% 3> scutil:mode([ a,b,1,a,b,2,a,b,3 ]).
+%% [a,b]'''
+
+%% @see arithmetic_mean/1
+%% @see median/1
+
+%% @since Version 8
 
 mode([])                      -> [];
 mode(List) when is_list(List) -> mode_front(lists:reverse(lists:keysort(2, scutil:histograph(List)))).
