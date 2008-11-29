@@ -18,7 +18,7 @@
 %% == List ==
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link shuffle/1}, {@link a/1}, {@link a/1}</dd>
+%%   <dd>{@link shuffle/1}, {@link sanitize_tokens/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
 %% == Math ==
 %% <dl>
@@ -28,7 +28,7 @@
 %% == Parallelism ==
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link multi_do/1}, {@link a/1}, {@link a/1}</dd>
+%%   <dd>{@link a/1}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
 %% == Random ==
 %% <dl>
@@ -39,6 +39,11 @@
 %% <dl>
 %%   <dt></dt>
 %%   <dd>{@link a/1}, {@link a/1}, {@link a/1}</dd>
+%% </dl>
+%% == Serialism ==
+%% <dl>
+%%   <dt></dt>
+%%   <dd>{@link multi_do/1}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
 %% == Statistics ==
 %% <dl>
@@ -52,12 +57,12 @@
 %% == String ==
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link a/1}, {@link a/1}, {@link a/1}</dd>
+%%   <dd>{@link sanitize_filename/1}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
 %% == Utility ==
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link type_of/1}, {@link get_module_attribute/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
+%%   <dd>{@link type_of/1}, {@link get_module_attribute/2}, {@link receive_one/0}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
 %% == z ==
 %% <dl>
@@ -350,7 +355,7 @@ multi_do(C, Module, Func)             -> multi_do(C, Module, Func, [],   []).
 
 %% @spec multi_do(Count::integer(), Module::atom(), Function::atom(), Args::list()) -> list()
 
-%% @doc {@section Parallelism} Take an iteration count, a module name, a function name and an argument list, and repeatedly apply the argument list to the module/function, count times.  This is primarily useful with nondeterministic functions whose result might change despite identical arguments, such as functions with random behavior; for example, this function is invoked to implement stochastic testing in <a href="http://testerl.com/">TestErl</a>. ```1> scutil:multi_do(10, scutil, rand, [100]).
+%% @doc {@section Serialism} Take an iteration count, a module name, a function name and an argument list, and repeatedly apply the argument list to the module/function, count times.  This is primarily useful with nondeterministic functions whose result might change despite identical arguments, such as functions with random behavior; for example, this function is invoked to implement stochastic testing in <a href="http://testerl.com/">TestErl</a>. ```1> scutil:multi_do(10, scutil, rand, [100]).
 %% [9,94,4,82,77,44,89,19,45,92]
 %%
 %% 2> scutil:multi_do(10, scutil, rand, [10000]).
@@ -661,7 +666,7 @@ elements_worker(Retlist, Config, Requested, KeyIdx, strip) ->
 
 %% @spec sanitize_tokens(InputList::list(), Allowed::sanitizer()) -> list()
 
-%% @doc {@section Utility} Remove unacceptable elements from an input list, as defined by another list or a filter function.  Common reasons for sanitization include reducing arbitrary or bulk data to key format (such as using an original filename and new size to generate a new filename or database key) and removing malformed items from a list before processing. ```1> scutil:sanitize_tokens("ae0z4nb'wc-04bn ze0e 0;4ci ;e0o5rn;", "ace").
+%% @doc {@section List} Remove unacceptable elements from an input list, as defined by another list or a filter function.  Common reasons for sanitization include reducing arbitrary or bulk data to key format (such as using an original filename and new size to generate a new filename or database key) and removing malformed items from a list before processing. ```1> scutil:sanitize_tokens("ae0z4nb'wc-04bn ze0e 0;4ci ;e0o5rn;", "ace").
 %% "aeceece"
 %%
 %% 2> Classifier = fun(apple) -> true; (banana) -> true; (cherry) -> true; (date) -> true; (elderberry) -> true; (_) -> false end.
@@ -669,6 +674,8 @@ elements_worker(Retlist, Config, Requested, KeyIdx, strip) ->
 %%
 %% 3> scutil:sanitize_tokens([apple, boat, cherry, dog, elderberry], Classifier).
 %% [apple,cherry,elderberry]'''
+
+%% @see sanitize_filename/1
 
 %% @since Version 31
 
@@ -679,10 +686,16 @@ sanitize_tokens(List, Allowed) when is_list(List), is_list(Allowed)     -> lists
 
 
 
-%% @equiv sanitize_tokens(Filename, lists:seq($a,$z)++lists:seq($A,$Z)++lists:seq($0,$9)++"-_=()[]")
+%% @spec sanitize_filename(Filename::string()) -> string()
+
+%% @doc {@section String} Sanitize an arbitrary string to be appropriate for Windows and Unix filesystems, and URLs. ```1> scutil:sanitize_filename("\h/e~l%lo! w^o@r#l*d.").
+%% "helloworld"'''
+
+%% @see sanitize_tokens/2
+
 %% @since Version 31
 
-sanitize_filename(Filename) -> sanitize_tokens(Filename, lists:seq($a,$z)++lists:seq($A,$Z)++lists:seq($0,$9)++"-_=()[]").
+sanitize_filename(Filename) -> sanitize_tokens(Filename, lists:seq($a,$z)++lists:seq($A,$Z)++lists:seq($0,$9)++"-_()[]").
 
 
 
