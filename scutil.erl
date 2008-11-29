@@ -4,7 +4,9 @@
 %% @version $Revision$
 %% @since September 14, 2007
 
-%% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of various routines of a variety of topics: {@section Conversion}, {@section List}, {@section Math}, {@section Random}, {@section Regex}, {@section Statistics}, {@section String} and {@section Utility} routines.  This file has aggregated
+%% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of various routines of a variety of topics: {@section Conversion},
+%%         {@section Descriptive}, {@section List}, {@section Math}, {@section Parallelism}, {@section Random}, {@section Regex},
+%%         {@section Serialism}, {@section Statistics}, {@section String} and {@section Utility} routines.  This file has aggregated
 %%         dozens of useful miscellaneous routines which I'm releasing to the public in good faith.  There's no particular direction to
 %%         this library; any time I write a routine that I tend to use in a lot of situations, which isn't already meaningfully
 %%         classifiable into one of my other libraries, I throw it in here.  This has ended up creating a range of unrelated
@@ -14,6 +16,11 @@
 %% <dl>
 %%   <dt></dt>
 %%   <dd>{@link hex_to_int/1}, {@link byte_to_hex/1}, {@link nybble_to_hex/1}, {@link io_list_to_hex/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
+%% </dl>
+%% == Descriptive ==
+%% <dl>
+%%   <dt></dt>
+%%   <dd>{@link even_or_odd/1}, {@link absolute_difference/2}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
 %% == List ==
 %% <dl>
@@ -33,12 +40,12 @@
 %% == Random ==
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link a/1}, {@link a/1}, {@link a/1}</dd>
+%%   <dd>{@link grid_scatter/1}, {@link srand/0}, {@link srand/3}, {@link rand/1}, {@link random_from/1}, {@link random_from/2}, {@link random_from/3}, {@link random_from_weighted/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
 %% == Regex ==
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link a/1}, {@link a/1}, {@link a/1}</dd>
+%%   <dd>{@link regex_read_matches/2}, {@link regex_read_matches/3}, {@link a/1}</dd>
 %% </dl>
 %% == Serialism ==
 %% <dl>
@@ -139,7 +146,7 @@
     central_moment/2, central_moments/1, central_moments/2, % needs tests
 %    weighted_geometric_mean/1,
 
-    dot_product/2, % needs tests
+    dot_product/2, cross_product/2, % needs tests
     vector_magnitude/1, % needs tests
     qsp_average/2, % needs tests
     normalize_vector/1, % needs tests
@@ -1148,6 +1155,13 @@ qsp_average(W, InputVecs) ->
 
 dot_product(VX, VY) when length(VX) == length(VY) ->
     lists:sum( [ X*Y || {X,Y} <- lists:zip(VX,VY) ] ).
+
+
+
+
+
+cross_product( {X1,Y1,Z1}, {X2,Y2,Z2} ) -> 
+    { (Y1*Z2) - (Z1*Y2) , (Z1*X2) - (X1*Z2), (X1*Y2) - (Y1*X2) }.
 
 
 
