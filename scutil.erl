@@ -4,12 +4,66 @@
 %% @version $Revision$
 %% @since September 14, 2007
 
-%% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of various routines of no particular topic.  This file has aggregated
+%% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of various routines of a variety of topics: {@section Conversion}, {@section List}, {@section Math}, {@section Random}, {@section Regex}, {@section Statistics}, {@section String} and {@section Utility} routines.  This file has aggregated
 %%         dozens of useful miscellaneous routines which I'm releasing to the public in good faith.  There's no particular direction to
 %%         this library; any time I write a routine that I tend to use in a lot of situations, which isn't already meaningfully
 %%         classifiable into one of my other libraries, I throw it in here.  This has ended up creating a range of unrelated
 %%         functionality on which most of my other libraries depend heavily.  Have fun digging around.
 %%      </p>
+%% == Conversion ==
+%% <dl>
+%%   <dt></dt>
+%%   <dd>{@link hex_to_int/1}, {@link byte_to_hex/1}, {@link nybble_to_hex/1}, {@link io_list_to_hex/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
+%% </dl>
+%% == List ==
+%% <dl>
+%%   <dt></dt>
+%%   <dd>{@link shuffle/1}, {@link a/1}, {@link a/1}</dd>
+%% </dl>
+%% == Math ==
+%% <dl>
+%%   <dt></dt>
+%%   <dd>{@link a/1}, {@link a/1}, {@link a/1}</dd>
+%% </dl>
+%% == Parallelism ==
+%% <dl>
+%%   <dt></dt>
+%%   <dd>{@link multi_do/1}, {@link a/1}, {@link a/1}</dd>
+%% </dl>
+%% == Random ==
+%% <dl>
+%%   <dt></dt>
+%%   <dd>{@link a/1}, {@link a/1}, {@link a/1}</dd>
+%% </dl>
+%% == Regex ==
+%% <dl>
+%%   <dt></dt>
+%%   <dd>{@link a/1}, {@link a/1}, {@link a/1}</dd>
+%% </dl>
+%% == Statistics ==
+%% <dl>
+%%   <dt>Means</dt>
+%%   <dd>{@link arithmetic_mean/1}, {@link geometric_mean/1}, {@link harmonic_mean/1}, {@link weighted_arithmetic_mean/1}, {@link arithmetic_mean/1}</dd>
+%%   <dt>Descriptive</dt>
+%%   <dd>{@link median/1}, {@link mode/1}</dd>
+%%   <dt>Normals</dt>
+%%   <dd>{@link amean_vector_normal/1}, {@link gmean_vector_normal/1}, {@link hmean_vector_normal/1}</dd>
+%% </dl>
+%% == String ==
+%% <dl>
+%%   <dt></dt>
+%%   <dd>{@link a/1}, {@link a/1}, {@link a/1}</dd>
+%% </dl>
+%% == Utility ==
+%% <dl>
+%%   <dt></dt>
+%%   <dd>{@link type_of/1}, {@link get_module_attribute/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
+%% </dl>
+%% == z ==
+%% <dl>
+%%   <dt></dt>
+%%   <dd>{@link a/1}, {@link a/1}, {@link a/1}</dd>
+%% </dl>
 %%
 %%      <p>ScUtil is MIT license, because <a href="http://WhyIHateTheGPL.com/">the author feels very strongly against the GPL</a>.</p>
 %%
@@ -136,11 +190,11 @@
 
 
 
-%% @type  typelabel() = [ integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown ].  Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
+%% @type typelabel() = [ integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown ].  Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
 
-%% @spec  type_of(Argument::Any) -> typelabel()
+%% @spec type_of(Argument::any()) -> typelabel()
 
-%% @doc   Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of `is_bitstring()' . ```1> scutil:type_of(1).
+%% @doc {@section Utility} Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of `is_bitstring()' . ```1> scutil:type_of(1).
 %% integer
 %%
 %% 2> scutil:type_of({hello,world}).
@@ -167,9 +221,9 @@ type_of(_X)                     -> unknown.
 
 
 
-%% @spec  get_module_attribute(Module::Atom, Attribute::Atom) -> { value, {Attribute, Value} } | { error, no_such_attribute } | { error, no_such_module }
+%% @spec get_module_attribute(Module::atom(), Attribute::atom()) -> { value, {Attribute, Value} } | { error, no_such_attribute } | { error, no_such_module }
 
-%% @doc   Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  ```1> scutil:get_module_attribute(scutil, author).
+%% @doc {@section Utility} Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  ```1> scutil:get_module_attribute(scutil, author).
 %% "John Haugeland <stonecypher@gmail.com>"
 %%
 %% 2> scutil:get_module_attribute(scutil, license).
@@ -203,11 +257,11 @@ get_module_attribute(Module,Attribute) ->
 
 
 
-%% @type  hexchar() = integer().  Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.
-%% @type  hexstring() = list().  All elements of the list must be of type hexchar() .
+%% @type hexchar() = integer().  Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.
+%% @type hexstring() = list().  All elements of the list must be of type hexchar() .
 
-%% @spec  hex_to_int(HexChar::hexstring() | hexchar()) -> integer()
-%% @doc   Convert a hexstring() or hexchar() into its numeric value. ```1> scutil:hex_to_int("c0ffEE").
+%% @spec hex_to_int(HexChar::hexstring() | hexchar()) -> integer()
+%% @doc {@section Conversion} Convert a hexstring() or hexchar() into its numeric value. ```1> scutil:hex_to_int("c0ffEE").
 %% 12648430
 %%
 %% 2> scutil:hex_to_int($e).
@@ -231,11 +285,11 @@ hex_to_int([Digit|Rem], Acc) -> hex_to_int(Rem, (Acc bsl 4) + hex_to_int(Digit))
 
 
 
-%% @type  byte() = integer().  A byte must be an integer in the range 0-255, inclusive.
+%% @type byte() = integer().  A byte must be an integer in the range 0-255, inclusive.  (Technically this is an octet, not a byte, but the word byte is extensively misused throughout the erlang documentation and standard library, which makes this an important concession, so we're when-in-Rome-ing.)
 
-%% @spec  byte_to_hex(TheByte::byte()) -> hexstring()
+%% @spec byte_to_hex(TheByte::byte()) -> hexstring()
 
-%% @doc   Convert a byte() into a hexstring().  The hexstring() result will always be two characters (left padded with zero if necessary). ```1> scutil:byte_to_hex(7).
+%% @doc {@section Conversion} Convert a byte() into a hexstring().  The hexstring() result will always be two characters (left padded with zero if necessary). ```1> scutil:byte_to_hex(7).
 %% "07"
 %%
 %% 2> scutil:byte_to_hex(255).
@@ -249,11 +303,11 @@ byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 -> [
 
 
 
-%% @type  nybble() = integer().  A nybble must be an integer in the range 0-15, inclusive.
+%% @type nybble() = integer().  A nybble must be an integer in the range 0-15, inclusive.
 
-%% @spec  nybble_to_hex(Nyb::nybble()) -> integer()
+%% @spec nybble_to_hex(Nyb::nybble()) -> integer()
 
-%% @doc   Convert a nybble() to a hexchar(). ```1> scutil:nybble_to_hex(7).
+%% @doc {@section Conversion} Convert a nybble() to a hexchar(). ```1> scutil:nybble_to_hex(7).
 %% 55
 %%
 %% 2> scutil:nybble_to_hex(15).
@@ -268,11 +322,11 @@ nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 10, Nyb < 16 -> $a + Nyb - 10.
 
 
 
-%% @type  io_list() = list().  Every list member of an io_list must be a byte().
+%% @type io_list() = list().  Every list member of an io_list must be a byte().
 
-%% @spec  io_list_to_hex(Input::io_list()) -> hexstring()
+%% @spec io_list_to_hex(Input::io_list()) -> hexstring()
 
-%% @doc   Convert an io_list() to a hexstring().  ```1> scutil:io_list_to_hex("a").
+%% @doc {@section Conversion} Convert an io_list() to a hexstring().  ```1> scutil:io_list_to_hex("a").
 %% "61"
 %%
 %% 2> scutil:io_list_to_hex("a08n408nbqa").
@@ -294,9 +348,9 @@ io_list_to_hex(_,                _)                                             
 %% @since Version 38
 multi_do(C, Module, Func)             -> multi_do(C, Module, Func, [],   []).
 
-%% @spec  multi_do(Count::integer(), Module::atom(), Function::atom(), Args::list()) -> list()
+%% @spec multi_do(Count::integer(), Module::atom(), Function::atom(), Args::list()) -> list()
 
-%% @doc   Take an iteration count, a module name, a function name and an argument list, and repeatedly apply the argument list to the module/function, count times.  This is primarily useful with nondeterministic functions whose result might change despite identical arguments, such as functions with random behavior; for example, this function is invoked to implement stochastic testing in <a href="http://testerl.com/">TestErl</a>. ```1> scutil:multi_do(10, scutil, rand, [100]).
+%% @doc {@section Parallelism} Take an iteration count, a module name, a function name and an argument list, and repeatedly apply the argument list to the module/function, count times.  This is primarily useful with nondeterministic functions whose result might change despite identical arguments, such as functions with random behavior; for example, this function is invoked to implement stochastic testing in <a href="http://testerl.com/">TestErl</a>. ```1> scutil:multi_do(10, scutil, rand, [100]).
 %% [9,94,4,82,77,44,89,19,45,92]
 %%
 %% 2> scutil:multi_do(10, scutil, rand, [10000]).
@@ -320,9 +374,9 @@ regex_read_matches(String, Reg) -> regex_read_matches(String, Reg, {0,0}).
 %% @since Version 41
 regex_read_matches(String, Reg, TrimFront, TrimLength) -> regex_read_matches(String, Reg, {TrimFront, TrimLength}).
 
-%% @spec  regex_read_matches(String::string(), Reg::string(), { TrimFront::integer(), TrimLength::integer() }) -> list() | { error, E }
+%% @spec regex_read_matches(String::string(), Reg::string(), { TrimFront::integer(), TrimLength::integer() }) -> list() | { error, E }
 
-%% @doc   Take a string and a regular expression (and optionally an offset and length to trim to in each result), and return a list of all matches.  For a trim length of {A,B}, the first A and last B characters of each result will be removed.```1> scutil:regex_read_matches("0j2  4g5  8t9", "[0-9](.)[0-9]").
+%% @doc {@section Regex} Take a string and a regular expression (and optionally an offset and length to trim to in each result), and return a list of all matches.  For a trim length of {A,B}, the first A and last B characters of each result will be removed.```1> scutil:regex_read_matches("0j2  4g5  8t9", "[0-9](.)[0-9]").
 %% ["0j2","4g5","8t9"]
 %%
 %% 2> scutil:regex_read_matches("0j2  4g5  8t9", "[0-9](.)[0-9]", {1,1}).
@@ -345,13 +399,14 @@ regex_read_matches(String, Reg, {TrimFront, TrimLength}) ->
 
 
 
-%% @type  gridsize() = coord() | integer().  Coordinates are the width and height of a (1,1) originated grid; as such, coordinates are of the range [1,X] , [1,Y] inclusive, and returned in the form {A,B}.  The integer form implies a square grid.
-%% @type  coord() = { number(), number() }.  Represents a coordinate, which may imply a sized rectangle.  Many functions expect integer coordinates; the type does not require them.
-%% @type  coordlist() = list().  All members of a coordlist() must be coord()s.
+%% @type gridsize() = coord() | integer().  Coordinates are the width and height of a (1,1) originated grid; as such, coordinates are of the range [1,X] , [1,Y] inclusive, and returned in the form {A,B}.  The integer form implies a square grid.
+%% @type coord() = { number(), number() }.  Represents a coordinate, which may imply a sized rectangle.  Many functions expect integer coordinates; the type does not require them.
+%% @type coordlist() = list().  All members of a coordlist() must be coord()s.
 
-%% @spec  grid_scatter(Count::integer(), Size::gridsize()) -> coordlist()
+%% @spec grid_scatter(Count::integer(), Size::gridsize()) -> coordlist()
 
-%% @doc   Return a Count-length list of non-repeating coordinates in a grid of specified size; useful for feature generation.
+%% @doc {@section Random} Return a Count-length list of non-repeating coordinates in a grid of specified size; useful for feature generation.
+
 %% @todo @comeback give code examples (edoc was failing here?)
 
 %% @since Version 42
@@ -365,9 +420,9 @@ grid_scatter(Count, Size)           -> grid_scatter(Count, {Size, Size}).
 
 
 
-%% @spec  srand() -> { ok, { seeded, Seed } }
+%% @spec srand() -> { ok, { seeded, Seed } }
 
-%% @doc   <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want to know what seed was used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> scutil:srand().
+%% @doc {@section Random} <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want to know what seed was used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> scutil:srand().
 %% {ok,{seeded,{1227,902172,685000}}}
 %%
 %% 2> scutil:srand().
@@ -385,8 +440,8 @@ srand() ->
 
 
 
-%% @spec  srand(A::integer(), B::integer(), C::integer()) -> { ok, { seeded, Seed } }
-%% @doc   <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want set what seed is used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> scutil:srand(1,2,3).
+%% @spec srand(A::integer(), B::integer(), C::integer()) -> { ok, { seeded, Seed } }
+%% @doc {@section Random} <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want set what seed is used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> scutil:srand(1,2,3).
 %% {ok,{seeded,{1,2,3}}}
 %%
 %% 2> scutil:srand().
@@ -448,9 +503,9 @@ random_generator() ->
 
 
 
-%% @spec  rand(Range::integer()) -> integer()
+%% @spec rand(Range::integer()) -> integer()
 
-%% @doc   Returns a pseudorandom integer on the range `[0 - (Range-1)]' inclusive. ```1> scutil:rand(100).
+%% @doc {@section Random} Returns a pseudorandom integer on the range `[0 - (Range-1)]' inclusive. ```1> scutil:rand(100).
 %% 9
 %%
 %% 2> [ scutil:rand(100) || X <- lists:seq(1,10) ].
@@ -493,7 +548,7 @@ random_from(N, List) -> random_from(N, List, no_remainder).
 
 %% @spec random_from(N::integer(), List::list(), WantRemainder::want_remainder()) -> list()
 
-%% @doc Take N non-repeating random elements from a list in undefined order.  If the atom `remainder' is passed in as the third argument, the unused portion of the source list will be returned as the second member of a 2ary tuple with the results; the default is no_remainder, which only returns the result set.  Mixed type input lists are perfectly safe, and membership for random selection is shallow (ie, `[ [1,2], [3,4] ]' as an input list would only generate outputs of lists, never integers.)```1> scutil:random_from([monday,tuesday,wednesday,thursday,friday]).
+%% @doc {@section Random} Take N non-repeating random elements from a list in undefined order.  If the atom `remainder' is passed in as the third argument, the unused portion of the source list will be returned as the second member of a 2ary tuple with the results; the default is no_remainder, which only returns the result set.  Mixed type input lists are perfectly safe, and membership for random selection is shallow (ie, `[ [1,2], [3,4] ]' as an input list would only generate outputs of lists, never integers.)```1> scutil:random_from([monday,tuesday,wednesday,thursday,friday]).
 %% friday
 %%
 %% 2> scutil:random_from(4, lists:seq(1,20)).
@@ -525,9 +580,12 @@ random_from(N, List, remainder)    -> lists:split(N,shuffle(List)).
 
 
 
+%% @type weightedvalue() = { Value::any(), Weight::number() }.  Used by functions like weighted_arithmetic_mean/1 and random_from_weighted/1, weightedvalue()s represent a value with an associated importance or "weight".
+%% @type weightlist() = list().  All members of weightlists must be weightedvalue()s.
+
 %% @spec random_from_weighted(InputList::weightlist()) -> any()
 
-%% @doc Take a random single item from a list with weighted probabilities.  Probabilities may be any numeric type, and may be any non-negative value (items with zero probability will be omitted).  Input is a `weightlist()', which is a list in the form `[{Item,Probability}, {I2,P2}, ...]'. There is no requirement to normalize probabilities to any range, though probabilities normalized to ranges will still work as expected. ```1> scutil:random_from([ {quad,4}, {double,2}, {single,1} ]).
+%% @doc {@section Random} Take a random single item from a list with weighted probabilities.  Probabilities may be any numeric type, and may be any non-negative value (items with zero probability will be omitted).  Input is a `weightlist()', which is a list in the form `[{Item,Probability}, {I2,P2}, ...]'. There is no requirement to normalize probabilities to any range, though probabilities normalized to ranges will still work as expected. ```1> scutil:random_from([ {quad,4}, {double,2}, {single,1} ]).
 %% quad
 %%
 %% 2> [ scutil:random_from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X <- lists:seq(1,10) ].
@@ -603,7 +661,7 @@ elements_worker(Retlist, Config, Requested, KeyIdx, strip) ->
 
 %% @spec sanitize_tokens(InputList::list(), Allowed::sanitizer()) -> list()
 
-%% @doc Remove unacceptable elements from an input list, as defined by another list or a filter function.  Common reasons for sanitization include reducing arbitrary or bulk data to key format (such as using an original filename and new size to generate a new filename or database key) and removing malformed items from a list before processing. ```1> scutil:sanitize_tokens("ae0z4nb'wc-04bn ze0e 0;4ci ;e0o5rn;", "ace").
+%% @doc {@section Utility} Remove unacceptable elements from an input list, as defined by another list or a filter function.  Common reasons for sanitization include reducing arbitrary or bulk data to key format (such as using an original filename and new size to generate a new filename or database key) and removing malformed items from a list before processing. ```1> scutil:sanitize_tokens("ae0z4nb'wc-04bn ze0e 0;4ci ;e0o5rn;", "ace").
 %% "aeceece"
 %%
 %% 2> Classifier = fun(apple) -> true; (banana) -> true; (cherry) -> true; (date) -> true; (elderberry) -> true; (_) -> false end.
@@ -671,7 +729,7 @@ sanitize_filename(Filename) -> sanitize_tokens(Filename, lists:seq($a,$z)++lists
 
 %% @spec receive_one() -> { item, any() } | nothing_there
 
-%% @doc Pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block.  ```1> scutil:receive_one().
+%% @doc {@section Utility} Pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block.  ```1> scutil:receive_one().
 %% nothing_there
 %%
 %% 2> self() ! message.
@@ -699,12 +757,18 @@ receive_one() ->
 
 %% @spec arithmetic_mean(InputList::numericlist()) -> float()
 
-%% @doc Take the arithmetic mean (often called the average) of a list of numbers. ```1> scutil:arithmetic_mean([1,2,3,4,5]).
+%% @doc {@section Statistics} Take the arithmetic mean (often called the average) of a list of numbers. ```1> scutil:arithmetic_mean([1,2,3,4,5]).
 %% 3.0'''
 
+%%
 %% @see geometric_mean/1
 %% @see harmonic_mean/1
 %% @see weighted_arithmetic_mean/1
+%% @see amean_vector_normal/1
+%% @see gmean_vector_normal/1
+%% @see hmean_vector_normal/1
+%% @see median/1
+%% @see mode/1
 
 %% @since Version 33
 
@@ -717,12 +781,17 @@ arithmetic_mean(List) when is_list(List) -> lists:sum(List) / length(List).
 
 %% @spec geometric_mean(InputList::numericlist()) -> float()
 
-%% @doc Take the geometric mean of a list of numbers. ```1> scutil:geometric_mean([1,2,3,4,5]).
+%% @doc {@section Statistics} Take the geometric mean of a list of numbers. ```1> scutil:geometric_mean([1,2,3,4,5]).
 %% 2.6051710846973517''' The naive approach ```geometric_mean(List) -> math:pow(scutil:list_product(List), 1/length(List)).''' is not used because it accumulates error very quickly, and is as such unsuited to huge lists.
 
 %% @see arithmetic_mean/1
 %% @see harmonic_mean/1
 %% @see weighted_arithmetic_mean/1
+%% @see amean_vector_normal/1
+%% @see gmean_vector_normal/1
+%% @see hmean_vector_normal/1
+%% @see median/1
+%% @see mode/1
 
 %% @since Version 34
 
@@ -735,47 +804,67 @@ geometric_mean(List)  when is_list(List) -> math:exp(scutil:arithmetic_mean([mat
 
 %% @spec harmonic_mean(InputList::numericlist()) -> float()
 
-%% @doc Take the harmonicmean of a list of numbers. ```1> scutil:harmonic_mean([1,2,3,4,5]). 
-%% 2.18978102189781''' 
+%% @doc {@section Statistics} Take the harmonic mean of a list of numbers. ```1> scutil:harmonic_mean([1,2,3,4,5]).
+%% 2.18978102189781'''
 
 %% @see arithmetic_mean/1
 %% @see geometric_mean/1
 %% @see weighted_arithmetic_mean/1
+%% @see amean_vector_normal/1
+%% @see gmean_vector_normal/1
+%% @see hmean_vector_normal/1
+%% @see median/1
+%% @see mode/1
 
 %% @since Version 35
 
-harmonic_mean([])                        -> 0.0.
+harmonic_mean([])                        -> 0.0;
 harmonic_mean(List)   when is_list(List) -> length(List) / lists:sum([ 1/X || X<-List ]).
 
 
 
-% geometric_mean(List)  when is_list(List) -> math:pow(scutil:list_product(List), 1/length(List)). % replaced because this fails on huge lists due to c std lib precision issues
 
 
+%% @spec weighted_arithmetic_mean(InputList::weightlist()) -> float()
 
+%% @doc {@section Statistics} Take the weighted arithmetic mean of the input values. ```1> scutil:weighted_arithmetic_mean([ {8,1}, {3,4}, {16,1} ]).
+%% 6.0'''
 
+%% @see arithmetic_mean/1
+%% @see geometric_mean/1
+%% @see harmonic_mean/1
+%% @see amean_vector_normal/1
+%% @see gmean_vector_normal/1
+%% @see hmean_vector_normal/1
+%% @see median/1
+%% @see mode/1
+
+%% @since Version 44
 
 weighted_arithmetic_mean(List)   when is_list(List) -> weighted_arithmetic_mean(List, 0, 0).
 
 weighted_arithmetic_mean([],           Num, Denom)  -> Num/Denom;
-weighted_arithmetic_mean([{W,V}|Tail], Num, Denom)  -> weighted_arithmetic_mean(Tail, Num+(W*V), Denom+W).
+weighted_arithmetic_mean([{V,W}|Tail], Num, Denom)  -> weighted_arithmetic_mean(Tail, Num+(W*V), Denom+W).
 
 
 
 
 
-% todo this should be guards, not an if
+%% @spec even_or_odd(Num::integer()) -> even | odd
 
-even_or_odd(Num) when is_integer(Num) ->
+%% @doc {@section Utility} Documentary convenience function that returns the atoms `even' or `odd' for any integer. ```1> scutil:even_or_odd(3).
+%% odd'''
 
-    if
-        Num band 1 == 0 -> even;
-        true            -> odd
-    end.
+%% @since Version 8
+
+even_or_odd(Num) when is_integer(Num), Num band 1 == 0 -> even;
+even_or_odd(Num) when is_integer(Num)                  -> odd.
 
 
 
 
+
+%% coemback
 
 median(List) when is_list(List) ->
 
