@@ -894,7 +894,7 @@ median(List) when is_list(List) ->
 %% 2> scutil:mode([ [1,2,3], [2,3,4], [3,4,5], [2,3,4] ]).
 %% [[2,3,4]]
 %%
-%% 3> scutil:mode([ a,b,1,a,b,2,a,b,3 ]).
+%% 3> scutil:mode([ a,b, 1, a,b, 2, a,b, 3 ]).
 %% [a,b]'''
 
 %% @see arithmetic_mean/1
