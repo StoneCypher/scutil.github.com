@@ -30,7 +30,7 @@
 %% == Math ==
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link a/1}, {@link a/1}, {@link a/1}</dd>
+%%   <dd>{@link list_product/1}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
 %% == Parallelism ==
 %% <dl>
@@ -57,9 +57,11 @@
 %%   <dt>Means</dt>
 %%   <dd>{@link arithmetic_mean/1}, {@link geometric_mean/1}, {@link harmonic_mean/1}, {@link weighted_arithmetic_mean/1}, {@link arithmetic_mean/1}</dd>
 %%   <dt>Descriptive</dt>
-%%   <dd>{@link median/1}, {@link mode/1}</dd>
+%%   <dd>{@link median/1}, {@link mode/1}, {@link histograph/1}, {@link root_mean_square/1}, {@link std_deviation/1}</dd>
 %%   <dt>Normals</dt>
 %%   <dd>{@link amean_vector_normal/1}, {@link gmean_vector_normal/1}, {@link hmean_vector_normal/1}</dd>
+%%   <dt>Ranking</dt>
+%%   <dd>{@link ranks_of/1}, {@link tied_ranks_of/1}, {@link ordered_ranks_of/1}</dd>
 %% </dl>
 %% == String ==
 %% <dl>
@@ -774,7 +776,6 @@ receive_one() ->
 
 
 %% @type numericlist() = list().  All members of a numeric list must be number()s.
-
 %% @spec arithmetic_mean(InputList::numericlist()) -> float()
 
 %% @doc {@section Statistics} Take the arithmetic mean (often called the average) of a list of numbers. ```1> scutil:arithmetic_mean([1,2,3,4,5]).
@@ -863,7 +864,7 @@ even_or_odd(Num) when is_integer(Num)                  -> odd.
 
 
 
-%% @spec median(List::numberlist()) -> any()
+%% @spec median(List::numericlist()) -> any()
 
 %% @doc {@section Statistics} Takes the median (central) value of a list.  Sorts the input list, then finds and returns the middle value.  ```scutil:median([1,2,999]).
 %% 2'''
@@ -886,11 +887,11 @@ median(List) when is_list(List) ->
 
 
 
-%% @spec mode(List::numberlist()) -> any()
+%% @spec mode(List::numericlist()) -> any()
 
 %% @doc {@section Statistics} Takes the mode (most common) value(s) of a list, as a list.  If there are more than one value tied for most common, all tied will be returned.  This function is safe for mixed-type lists, and does not perform deep traversal (that is, the mode of `[ [2,2] ]' is `[2,2]', not `2'). ```scutil:mode([1,2,1,3,1,4]).
 %% [1]
-%% 
+%%
 %% 2> scutil:mode([ [1,2,3], [2,3,4], [3,4,5], [2,3,4] ]).
 %% [[2,3,4]]
 %%
@@ -915,11 +916,25 @@ mode_front([],                    _Freq,   Results) -> Results.
 
 
 
+%% @spec absolute_difference(A::number(), B::number()) -> number()
+
+%% @doc {@section Documentary} Takes the absolute value of the difference between the two arguments.  Offered mostly to make dependant code clearer. ```1> scutil:absolute_difference(1.25, 1).
+%% 0.25'''
+
+%% @since Version 39
+
 absolute_difference(A,B) -> abs(A-B).
 
 
 
 
+
+%% @spec list_product(A::numericlist()) -> number()
+
+%% @doc {@section Math} Takes the product of all numbers in the list.  Offered mostly to make dependant code clearer. ```1> scutil:list_product([1,2,5.4]).
+%% 10.8'''
+
+%% @since Version 39
 
 list_product(List) when is_list(List) -> list_product(List, 1).
 
@@ -929,6 +944,18 @@ list_product([Head|Tail], Counter) -> list_product(Tail, Counter*Head).
 
 
 
+
+%% @spec histograph(List::list()) -> weightlist()
+
+%% @doc {@section Statistics} Takes a histograph count of the items in the list.  Mixed type lists are safe.  Input lists do not need to be sorted.  The histograph is shallow - that is, the histograph of `[ [1,2], [1,2], [2,2] ]' is `[ {[1,2],2}, {[2,2],1} ]', not `[ {1,2}, {2,4} ]'. ```1> scutil:histograph([1,2,a,2,b,1,b,1,b,2,a,2,2,1]).
+%% [{1,4},{2,5},{a,2},{b,3}]
+%%
+%% 2> scutil:histograph([ scutil:rand(10) || X <- lists:seq(1,100000) ]).
+%% [{0,10044}, {1,9892}, {2,10009}, {3,10016}, {4,10050}, {5,10113}, {6,9990}, {7,9994}, {8,10004}, {9,9888}]'''
+
+%% @since Version 19
+
+%% @todo add an argument presort to this and other functions to skip the sorting pass
 
 histograph(List) when is_list(List) ->
 
@@ -943,6 +970,16 @@ histo_count([New|Tail],     Current, Count, Work) -> histo_count(Tail, New,     
 
 
 
+%% @spec std_deviation(Values::numericlist()) -> float()
+
+%% @doc {@section Statistics} Measures the standard deviation of the values in the list.  ```1> scutil:std_deviation([1,2,3,4,5]).
+%% 1.4142135623730951
+%%
+%% 2> scutil:std_deviation([2,2,2,2,2]).
+%% 0.0'''
+
+%% @since Version 39
+
 std_deviation(Values) when is_list(Values) ->
 
     Mean = arithmetic_mean(Values),
@@ -952,11 +989,35 @@ std_deviation(Values) when is_list(Values) ->
 
 
 
+%% @spec root_mean_square(Values::numericlist()) -> float()
+
+%% @doc {@section Statistics} Calculates the root mean square of the values in the list.  ```1> scutil:root_mean_square([1,2,3,4,5]).
+%% 3.3166247903554
+%%
+%% 2> scutil:root_mean_square([2,2,2]).
+%% 2.0'''
+
+%% @since Version 39
+
 root_mean_square(List) when is_list(List) -> math:sqrt(arithmetic_mean([ Val*Val || Val <- List ])).
 
 
 
 
+
+%% @type ranking() = { Ranking::number(), Value::any() }.  Values are usually number()s, but do not have to be with custom ranking predicates.
+%% @type rankinglist() = list().  Members of a rankinglist() must all be ranking()s.
+
+%% @todo comeback make a ranks_of/2 which takes a sorting predicate
+%% @spec ranks_of(Values::numericlist()) -> rankinglist()
+
+%% @doc {@section Statistics} Returns a ranked ordering of the list without tie rankings.  ```1> scutil:ranks_of([10,90,20,80,30,70,40,60,50]).
+%% [{1,90}, {2,80}, {3,70}, {4,60}, {5,50}, {6,40}, {7,30}, {8,20}, {9,10}]
+%%
+%% 2> scutil:ranks_of([10,10,10,10]).
+%% [{1,10},{2,10},{3,10},{4,10}]'''
+
+%% @since Version 42
 
 ranks_of(List) when is_list(List) -> lists:zip(lists:seq(1,length(List)),lists:reverse(lists:sort(List))).
 
@@ -964,8 +1025,18 @@ ranks_of(List) when is_list(List) -> lists:zip(lists:seq(1,length(List)),lists:r
 
 
 
-% todo comeback make a tied_ranks_of/2 which takes a sorting predicate
+%% @todo comeback make a tied_ranks_of/2 which takes a sorting predicate
 % needs significant refactoring; work is being repeated
+
+%% @spec tied_ranks_of(Values::numericlist()) -> rankinglist()
+
+%% @doc {@section Statistics} Returns a ranked ordering of the list with tie rankings.  As such, for uniformity, all rankings are floats.  Ties are represented as the centers of ranges. ```1> scutil:tied_ranks_of([10,90,20,80,30,70,40,60,50]).
+%% [{1.0,90}, {2.0,80}, {3.0,70}, {4.0,60}, {5.0,50}, {6.0,40}, {7.0,30}, {8.0,20}, {9.0,10}]
+%%
+%% 2> scutil:tied_ranks_of([100,200,200,300]).
+%% [{1.0,300},{2.5,200},{2.5,200},{4.0,100}]'''
+
+%% @since Version 42
 
 tied_ranks_of(List) -> tied_rank_worker(ranks_of(List), [], no_prev_value).
 
@@ -991,7 +1062,17 @@ tied_rank_worker([Item|Remainder], Work, PrevValue) ->
 
 
 
-% todo comeback make an ordered_ranks_of/2 which takes a sorting predicate
+%% @todo comeback make a tied_ranks_of/2 which takes a sorting predicate
+
+%% @spec ordered_ranks_of(Values::numericlist()) -> rankinglist()
+
+%% @doc {@section Statistics} Returns a tied ranked ordering of the list, ordered according to the input ordering rather than the sorted ordering.  As with {@link tied_ranks_of/1}, all rankings are floats, and ties are represented as the centers of ranges. ```1> scutil:ordered_ranks_of([10,90,20,80,30,70,40,60,50]).
+%% [{9.0,10}, {1.0,90}, {8.0,20}, {2.0,80}, {7.0,30}, {3.0,70}, {6.0,40}, {4.0,60}, {5.0,50}]
+%%
+%% 2> scutil:ordered_ranks_of([100,200,200,300]).
+%% [{4.0,100},{2.5,200},{2.5,200},{1.0,300}]'''
+
+%% @since Version 42
 
 ordered_ranks_of(List) when is_list(List) ->
     ordered_ranks_of(List, tied_ranks_of(List), []).
