@@ -4,55 +4,71 @@
 %% @version $Revision$
 %% @since September 14, 2007
 
-%% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of various routines of a variety of topics: {@section Conversion},
-%%         {@section Descriptive}, {@section List}, {@section Math}, {@section Parallelism}, {@section Random}, {@section Regex},
-%%         {@section Serialism}, {@section Statistics}, {@section String} and {@section Utility} routines.  This file has aggregated
+%% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of various routines of a variety of topics:<ul>
+%% <li>{@section Conversion}</li>
+%% <li>{@section Documentary}</li>
+%% <li>{@section List}</li>
+%% <li>{@section Math}</li>
+%% <li>{@section Parallelism}</li>
+%% <li>{@section Random}</li>
+%% <li>{@section Regex}</li>
+%% <li>{@section Serialism}</li>
+%% <li>{@section Statistics}</li>
+%% <li>{@section String} and</li>
+%% <li>{@section Utility} routines.</li>
+%% </ul>
+%%         This file has aggregated
 %%         dozens of useful miscellaneous routines which I'm releasing to the public in good faith.  There's no particular direction to
 %%         this library; any time I write a routine that I tend to use in a lot of situations, which isn't already meaningfully
 %%         classifiable into one of my other libraries, I throw it in here.  This has ended up creating a range of unrelated
 %%         functionality on which most of my other libraries depend heavily.  Have fun digging around.
 %%      </p>
-%% == Conversion ==
+%%
+%% == Routines by Category ==
+%%
+%% The most common way for people to find what they need.
+%%
+%% === Conversion ===
 %% <dl>
 %%   <dt></dt>
 %%   <dd>{@link hex_to_int/1}, {@link byte_to_hex/1}, {@link nybble_to_hex/1}, {@link io_list_to_hex/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
-%% == Documentary ==
+%% === Documentary ===
 %% <dl>
 %%   <dt></dt>
 %%   <dd>{@link even_or_odd/1}, {@link absolute_difference/2}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
-%% == List ==
+%% === List ===
 %% <dl>
 %%   <dt></dt>
 %%   <dd>{@link shuffle/1}, {@link sanitize_tokens/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
-%% == Math ==
+%% === Math ===
 %% <dl>
 %%   <dt></dt>
 %%   <dd>{@link list_product/1}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
-%% == Parallelism ==
+%% === Parallelism ===
 %% <dl>
 %%   <dt></dt>
 %%   <dd>{@link a/1}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
-%% == Random ==
+%% === Random ===
 %% <dl>
 %%   <dt></dt>
 %%   <dd>{@link grid_scatter/1}, {@link srand/0}, {@link srand/3}, {@link rand/1}, {@link random_from/1}, {@link random_from/2}, {@link random_from/3}, {@link random_from_weighted/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
-%% == Regex ==
+%% === Regex ===
 %% <dl>
 %%   <dt></dt>
 %%   <dd>{@link regex_read_matches/2}, {@link regex_read_matches/3}, {@link a/1}</dd>
 %% </dl>
-%% == Serialism ==
+%% === Serialism ===
 %% <dl>
 %%   <dt></dt>
 %%   <dd>{@link multi_do/1}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
-%% == Statistics ==
+%% === Statistics ===
 %% <dl>
 %%   <dt>Means</dt>
 %%   <dd>{@link arithmetic_mean/1}, {@link geometric_mean/1}, {@link harmonic_mean/1}, {@link weighted_arithmetic_mean/1}, {@link arithmetic_mean/1}</dd>
@@ -62,24 +78,29 @@
 %%   <dd>{@link amean_vector_normal/1}, {@link gmean_vector_normal/1}, {@link hmean_vector_normal/1}</dd>
 %%   <dt>Ranking</dt>
 %%   <dd>{@link ranks_of/1}, {@link tied_ranks_of/1}, {@link ordered_ranks_of/1}</dd>
+%%   <dt>Correlations</dt>
+%%   <dd>{@link kendall_correlation/1}, {@link kendall_correlation/2}, {@link pearson_correlation/1}, {@link pearson_correlation/2}, {@link spearman_correlation/1}, {@link spearman_correlation/2}</dd>
 %% </dl>
-%% == String ==
+%% === String ===
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link sanitize_filename/1}, {@link a/1}, {@link a/1}</dd>
+%%   <dd>{@link sanitize_filename/1}, {@link to_lines/1}, {@link a/1}</dd>
 %% </dl>
-%% == Utility ==
+%% === Utility ===
 %% <dl>
 %%   <dt></dt>
 %%   <dd>{@link type_of/1}, {@link get_module_attribute/2}, {@link receive_one/0}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
-%% == z ==
+%% === z ===
 %% <dl>
 %%   <dt></dt>
 %%   <dd>{@link a/1}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
 %%
-%%      <p>ScUtil is MIT license, because <a href="http://WhyIHateTheGPL.com/">the author feels very strongly against the GPL</a>.</p>
+%% == License ==
+%% <p>ScUtil is MIT license, because <a href="http://WhyIHateTheGPL.com/">the author feels very strongly against the GPL</a>.</p>
+%%
+%% == Thanks ==
 %%
 %% @end
 
@@ -94,6 +115,12 @@
 %% @reference <span style="margin-top:1em;padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Test sets require min. version 16</span><a href="http://testerl.com/">TestErl</a></span>
 
 %% @todo add @see cross-references between related functions
+%% @todo add thanks tables and cross-references
+%% @todo add dependant libraries table
+%% @todo add untested warnings to beginnings of @doc tags
+%% @todo add defective warnings to beginnings of @doc tags
+%% @todo add links to test data
+%% @todo add warnings re: spearman, pearson, kendall use on lists containing repetitions
 
 
 
@@ -1088,6 +1115,8 @@ ordered_ranks_of([Front|Rem], Ranks, Work) ->
 
 
 
+%% @todo pull over from old_scutil
+
 % annote(Group, Key, Value) ->
 % sc_config, make annote -> config, forget -> delete, recall -> get_config
 
@@ -1095,17 +1124,47 @@ ordered_ranks_of([Front|Rem], Ranks, Work) ->
 
 
 
+%% @type stringlist() = list().  Every member of a stringlist() is a string().
+
+%% @spec to_lines(Text::string()) -> stringlist()
+
+%% @doc {@section String} Cuts a string according to any of the three newline conventions (even mixed), and discards empty strings. ```1> scutil:to_lines("one\rtwo\nthree\r\nfour\r\r\rfive").
+%% ["one","two","three","four","five"]'''
+
+%% @since Version 2
+
 to_lines(Text) -> string:tokens(Text, "\r\n"). % yay convenience functions
 
 
 
 
 
-% test data at http://changingminds.org/explanations/research/analysis/pearson.htm
+%% @todo use test data at http://changingminds.org/explanations/research/analysis/pearson.htm
+
+%% @spec pearson_correlation(TupleList::coordlist()) -> { r, Correlation::number() }
+
+%% @doc {@section Statistics} Compute the Pearson Correlation Coefficient of a list of coordinate tuples. ```1> scutil:pearson_correlation([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
+%% {r,1.0}
+%%
+%% 2> scutil:pearson_correlation([ {1,5}, {2,4}, {3,3}, {4,2}, {5,1} ]).
+%% {r,-1.0}
+%%
+%% 3> scutil:pearson_correlation([ {1,3}, {2,3}, {3,3}, {4,3}, {5,3} ]).
+%% {r,0.0}
+%%
+%% 4> scutil:pearson_correlation([ {1,2}, {2,2.5}, {3,3}, {4,3.5}, {5,4} ]).
+%% {r,1.0}
+%%
+%% 5> scutil:pearson_correlation([ {1,2}, {2,2.4}, {3,3}, {4,3.6}, {5,4} ]).
+%% {r,0.9970544855015818}'''
+%%
+%% @since Version 49
 
 pearson_correlation(TupleList) when is_list(TupleList) ->
     {A,B} = lists:unzip(TupleList),
     pearson_correlation(A,B).
+
+%% @equiv pearson_correlation(lists:zip(List1, List2))
 
 pearson_correlation(List1, _)     when length(List1) < 2 -> {r,0.0};
 
@@ -1123,7 +1182,7 @@ pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
     N     = length(List1),
 
     case math:sqrt(   ( (N*SumXX)-(SumX*SumX) )   *   ( (N*SumYY)-(SumY*SumY) )   ) of
-        0     -> {r,0.0};  % some nasty values otherwise cause divide by zero
+        0     -> {r,0.0};  % some nasty value sets otherwise cause divide by zero
         0.0   -> {r,0.0};  % eg [ [1,1,1,1,1], [1,1,2,1,2] ]
         Denom ->
           Numer = (N*SumXY) - (SumX * SumY),
@@ -1134,11 +1193,32 @@ pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
 
 
-% test data at  http://geographyfieldwork.com/SpearmansRank.htm
+%% @todo use test data at http://geographyfieldwork.com/SpearmansRank.htm
+
+%% @spec spearman_correlation(TupleList::coordlist()) -> { rsquared, Correlation::number() }
+
+%% @doc {@section Statistics} Compute the Spearman's Rank Correlation Coefficient of a list of coordinate tuples. ```1> scutil:spearman_correlation([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
+%% {rsquared,1.0}
+%%
+%% 2> scutil:spearman_correlation([ {1,5}, {2,4}, {3,3}, {4,2}, {5,1} ]).
+%% {rsquared,-1.0}
+%%
+%% 3> scutil:spearman_correlation([ {1,3}, {2,3}, {3,3}, {4,3}, {5,3} ]).
+%% {rsquared,0.5}
+%%
+%% 4> scutil:spearman_correlation([ {1,2}, {2,2.5}, {3,3}, {4,3.5}, {5,4} ]).
+%% {rsquared,1.0}
+%%
+%% 5> scutil:spearman_correlation([ {1,2}, {2,2.4}, {3,3}, {4,3.6}, {5,4} ]).
+%% {rsquared,1.0}'''
+
+%% @since Version 50
 
 spearman_correlation(TupleList) when is_list(TupleList) ->
     {A,B} = lists:unzip(TupleList),
     spearman_correlation(A,B).
+
+%% @equiv spearman_correlation(lists:zip(List1, List2))
 
 spearman_correlation(List1, _)     when length(List1) < 2 -> {rsquared,0.0};
 
@@ -1157,11 +1237,32 @@ spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
 
 
-% http://changingminds.org/explanations/research/analysis/kendall.htm
+%% @todo use test data at http://changingminds.org/explanations/research/analysis/kendall.htm
+
+%% @spec kendall_correlation(TupleList::coordlist()) -> { tau, Correlation::number() }
+
+%% @doc {@section Statistics} Compute the Kendall Tau Rank Correlation Coefficient of a list of coordinate tuples. ```1> scutil:kendall_correlation([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
+%% {tau,1.0}
+%%
+%% 2> scutil:kendall_correlation([ {1,5}, {2,4}, {3,3}, {4,2}, {5,1} ]).
+%% {tau,-1.0}
+%%
+%% 3> scutil:kendall_correlation([ {1,3}, {2,3}, {3,3}, {4,3}, {5,3} ]).
+%% {tau,1.0}
+%%
+%% 4> scutil:kendall_correlation([ {1,2}, {2,2.5}, {3,3}, {4,3.5}, {5,4} ]).
+%% {tau,1.0}
+%%
+%% 5> scutil:kendall_correlation([ {1,2}, {2,2.4}, {3,3}, {4,3.6}, {5,4} ]).
+%% {tau,1.0}'''
+
+%% @since Version 51
 
 kendall_correlation(TupleList) when is_list(TupleList) ->
     {A,B} = lists:unzip(TupleList),
     kendall_correlation(A,B).
+
+%% @equiv kendall_correlation(lists:zip(List1, List2))
 
 kendall_correlation(List1, _)     when length(List1) < 2 -> {tau,0.0};
 
@@ -1179,8 +1280,6 @@ kendall_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
     {tau, -(( (4*P) / (N * (N - 1))) - 1) }.
 
-
-
 kendall_right_of([],    Work) -> lists:reverse(Work);
 kendall_right_of([F|R], Work) -> kendall_right_of(R, [kendall_right_of_item(F,R)]++Work).
 
@@ -1192,21 +1291,72 @@ kendall_right_of_item(B, Rem) -> length([R || R <- Rem, R < B]).
 
 % thanks to Chile and Kraln for straightening me out on moments and central moments
 
+%% @spec moment(List::list(), N::number()) -> number()
+
+%% @doc Takes the Nth moment of a list.  The Nth moment of a list is the arithmetic mean of the list items, each taken to the Nth power.  Fractional Ns are well defined and have obscure uses,
+%% though most will only ever use this with integer values of N; this function is valid for both.  Not to be confused with {@link central_moment/2}.  {@section Thanks} to Kraln and Chile for
+%% straightening me out on moments and central moments.  ```1> scutil:moment([1,1,1], 2).
+%% 1.0
+%%
+%% 2> scutil:moment([2,2,2], 2).
+%% 4.0
+%%
+%% 3> scutil:moment([1,2,3], 2).
+%% 4.666666666666667
+%%
+%% 4> scutil:moment([1,2,3], 3).
+%% 12.0
+%%
+%% 5> scutil:moment([1,2,3], 3.5).
+%% 19.693026767781483'''
+
+%% @since Version 50
+
 moment(List, N) when is_list(List), is_number(N) ->
     scutil:arithmetic_mean( [ math:pow(Item, N) || Item <- List ] ).
 
+%% @equiv [ moment(List, N) || N <- [2,3,4] ]
+
 moments(List)                                -> moments(List, [2,3,4]).
+
+%% @equiv [ moment(List, N) || N <- Moments ]
+
 moments(List, Moments) when is_list(Moments) -> [ moment(List, M) || M <- Moments ].
 
 
 
 
 
-central_moment(List, N) when is_list(List), is_number(N) ->
+% thanks to Chile and Kraln for straightening me out on moments and central moments
+
+%% @spec central_moment(List::list(), N::integer()) -> number()
+
+%% @doc Takes the Nth cetral moment of a list.  The Nth central moment of a list is the arithmetic mean of (the list items each minus the mean of the list, each taken to the Nth power).  In
+%% a sense, this is the "normalized" moment.  Fractional Ns are not defined.  Not to be confused with {@link moment/2}.  {@section Thanks} to Kraln and Chile for straightening me out on
+%% moments and central moments.  ```1> scutil:central_moment([1,1,1], 2).
+%% 0.0
+%%
+%% 2> scutil:central_moment([2,2,2], 2).
+%% 0.0
+%%
+%% 3> scutil:central_moment([1,2,3], 2).
+%% 0.666666666666666
+%%
+%% 4> scutil:central_moment([1,2,3], 3).
+%% 0.0'''
+
+%% @since Version 50
+
+central_moment(List, N) when is_list(List), is_integer(N) ->
     ListAMean = scutil:arithmetic_mean(List),
     scutil:arithmetic_mean( [ math:pow(Item-ListAMean, N) || Item <- List ] ).
 
+%% @equiv [ central_moment(List, N) || N <- [2,3,4] ]
+
 central_moments(List)                                -> central_moments(List, [2,3,4]).
+
+%% @equiv [ central_moment(List, N) || N <- Moments ]
+
 central_moments(List, Moments) when is_list(Moments) -> [ central_moment(List, M) || M <- Moments ].
 
 
