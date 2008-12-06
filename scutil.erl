@@ -73,7 +73,7 @@
 %%   <dt>Means</dt>
 %%   <dd>{@link arithmetic_mean/1}, {@link geometric_mean/1}, {@link harmonic_mean/1}, {@link weighted_arithmetic_mean/1}, {@link arithmetic_mean/1}</dd>
 %%   <dt>Descriptive</dt>
-%%   <dd>{@link median/1}, {@link mode/1}, {@link histograph/1}, {@link root_mean_square/1}, {@link std_deviation/1}</dd>
+%%   <dd>{@link median/1}, {@link mode/1}, {@link histograph/1}, {@link root_mean_square/1}, {@link std_deviation/1}, {@link moment/1}, {@link moment/2}, {@link central_moment/1}, {@link central_moment/2}, {@link skewness/1}, {@link kurtosis/1}</dd>
 %%   <dt>Normals</dt>
 %%   <dd>{@link amean_vector_normal/1}, {@link gmean_vector_normal/1}, {@link hmean_vector_normal/1}</dd>
 %%   <dt>Ranking</dt>
@@ -89,7 +89,7 @@
 %% === Utility ===
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link type_of/1}, {@link get_module_attribute/2}, {@link receive_one/0}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
+%%   <dd>{@link type_of/1}, {@link get_module_attribute/2}, {@link receive_one/0}, {@link call_after/2}, {@link call_after/3}, {@link call_after/4}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
 %% === z ===
 %% <dl>
@@ -223,7 +223,9 @@
 
     mod/2, % needs tests
 
-    scan_svn_revision/1 % needs tests
+    scan_svn_revision/1, % needs tests
+
+    median_absolute_deviation/1 % needs tests
 
 ] ).
 
@@ -1291,11 +1293,11 @@ kendall_right_of_item(B, Rem) -> length([R || R <- Rem, R < B]).
 
 % thanks to Chile and Kraln for straightening me out on moments and central moments
 
-%% @spec moment(List::list(), N::number()) -> number()
+%% @spec moment(List::list(), N::number()) -> float()
 
-%% @doc Takes the Nth moment of a list.  The Nth moment of a list is the arithmetic mean of the list items, each taken to the Nth power.  Fractional Ns are well defined and have obscure uses,
-%% though most will only ever use this with integer values of N; this function is valid for both.  Not to be confused with {@link central_moment/2}.  {@section Thanks} to Kraln and Chile for
-%% straightening me out on moments and central moments.  ```1> scutil:moment([1,1,1], 2).
+%% @doc {@section Statistics} Takes the Nth moment of a list.  The Nth moment of a list is the arithmetic mean of the list items, each taken to the Nth power.  Fractional Ns are well defined
+%% and have obscure uses, though most will only ever use this with integer values of N; this function is valid for both.  Not to be confused with {@link central_moment/2}.  {@section Thanks}
+%% to Kraln and Chile for straightening me out on moments and central moments.  ```1> scutil:moment([1,1,1], 2).
 %% 1.0
 %%
 %% 2> scutil:moment([2,2,2], 2).
@@ -1329,11 +1331,11 @@ moments(List, Moments) when is_list(Moments) -> [ moment(List, M) || M <- Moment
 
 % thanks to Chile and Kraln for straightening me out on moments and central moments
 
-%% @spec central_moment(List::list(), N::integer()) -> number()
+%% @spec central_moment(List::list(), N::integer()) -> float()
 
-%% @doc Takes the Nth cetral moment of a list.  The Nth central moment of a list is the arithmetic mean of (the list items each minus the mean of the list, each taken to the Nth power).  In
-%% a sense, this is the "normalized" moment.  Fractional Ns are not defined.  Not to be confused with {@link moment/2}.  {@section Thanks} to Kraln and Chile for straightening me out on
-%% moments and central moments.  ```1> scutil:central_moment([1,1,1], 2).
+%% @doc {@section Statistics} Takes the Nth cetral moment of a list.  The Nth central moment of a list is the arithmetic mean of (the list items each minus the mean of the list, each 
+%% taken to the Nth power).  In a sense, this is the "normalized" moment.  Fractional Ns are not defined.  Not to be confused with {@link moment/2}.  {@section Thanks} to Kraln and 
+%% Chile for straightening me out on moments and central moments.  ```1> scutil:central_moment([1,1,1], 2).
 %% 0.0
 %%
 %% 2> scutil:central_moment([2,2,2], 2).
@@ -1352,18 +1354,19 @@ central_moment(List, N) when is_list(List), is_integer(N) ->
     scutil:arithmetic_mean( [ math:pow(Item-ListAMean, N) || Item <- List ] ).
 
 %% @equiv [ central_moment(List, N) || N <- [2,3,4] ]
-
 central_moments(List)                                -> central_moments(List, [2,3,4]).
 
 %% @equiv [ central_moment(List, N) || N <- Moments ]
-
 central_moments(List, Moments) when is_list(Moments) -> [ central_moment(List, M) || M <- Moments ].
 
 
 
 
 
+%% @equiv central_moment(List, 3)
 skewness(List) -> central_moment(List, 3).
+
+%% @equiv central_moment(List, 4)
 kurtosis(List) -> central_moment(List, 4).
 
 
@@ -1373,6 +1376,10 @@ kurtosis(List) -> central_moment(List, 4).
 % quadratic scalar product average
 % see http://www.inf.fu-berlin.de/inst/ag-ki/rojas_home/documents/1996/NeuralNetworks/K5.pdf pdf-page 15
 % Thanks to the following for help with qsp_average and dependencies: Asterick, Chile, John Sensebe, PfhorSlayer, Raleigh
+
+%% @spec qsp_average(W, InputVecs) -> float()
+
+%% @todo comeback
 
 qsp_average(W, InputVecs) ->
 
@@ -1619,7 +1626,7 @@ module_has_function(Module, Function) ->
 %%
 %% 3> Deck = scutil:shuffle([ {Face,Suit} || Face <- TheFaces, Suit <- TheSuits ]).
 %% [ {6,spades}, {7,hearts}, {8,clubs}, {queen,spades}, {6,diamonds}, {ace,...}, {...} | ...]
-%% 
+%%
 %% 4> scutil:shuffle([ duck,duck,duck,duck, goose ]).
 %% [duck,goose,duck,duck,duck]'''
 %%
@@ -1635,6 +1642,8 @@ shuffle(List) ->
 
 
 
+
+%% @private
 
 % Handler must be no_handler_pid or { handler, PID [, idhandle] }
 
@@ -1659,8 +1668,38 @@ call_after_worker(MS, Func, Args, Handler) ->
 
 
 
-call_after(Length, Func)                -> call_after(Length, Func, [],   no_handler_pid).
-call_after(Length, Func, Args)          -> call_after(Length, Func, Args, no_handler_pid).
+%% @equiv call_after(Length, Func, [],   {handler,self()})
+call_after(Length, Func)                -> call_after(Length, Func, [],   {handler,self()}).
+
+%% @equiv call_after(Length, Func, Args, {handler,self()})
+call_after(Length, Func, Args)          -> call_after(Length, Func, Args, {handler,self()}).
+
+%% @type handler() = { handler, PID } | { handler, PID, IdHandle } | no_handler_pid.  Use a handler() to provide handling behavior to functions like {@link call_after/1}.  The PID given is the pid to which result messages will be sent.  If an IdHandle is given, that IdHandle is passed back with the result, to pass extra information back to identify which result it is.  The atom no_handler_pid specifies that you would prefer the result to be discarded.
+
+%% @spec call_after(Length::integer(), Func::function(), Args::atom(), Handler::handler()) -> { ok, spawned_worker, Worker::pid() }
+
+%% @doc {@section Utility} Spawns a side process to non-blockingly make a call after a specified delay.  Will send the result as a message `{ call_after_result, Result }' to the handler process, which is the calling process unless otherwise specified (with {handler,OtherPid} or the atom no_handler_pid).  Delayed return value can include an ID, in the format `{ call_after_result, Result, IdHandle }', if the Handler PID is specified {handler,PID,ID}, to help distinguish between returned calls if needed. ```1> Dbl = fun(X) -> X*2 end.
+%% #Fun<erl_eval.6.13229925>
+%%
+%% 2> scutil:call_after(1000, Dbl, [3]).
+%% {ok,spawned_worker,<0.3810.0>}
+%%
+%% 3> scutil:receive_one().
+%% {item,{call_after_result,6}}
+%%
+%% 4> Receiver = fun() -> io:format("Listening.~n"), receive X -> io:format("Got ~p~n", [X]), ok end end.
+%% #Fun<erl_eval.20.67289768>
+%%
+%% 5> R = spawn(Receiver).
+%% Listening.
+%% <0.3817.0>
+%%
+%% 6> scutil:call_after(1000, Dbl, [3], {handler, R}).
+%% {ok,spawned_worker,<0.3829.0>}
+%% Got {call_after_result,6}'''
+
+%% @since Version 26
+
 call_after(Length, Func, Args, Handler) ->
 
     Worker = spawn(?MODULE, call_after_worker, [Length, Func, Args, Handler]),
@@ -1670,8 +1709,21 @@ call_after(Length, Func, Args, Handler) ->
 
 
 
-permute(List) -> 
-    permute(List, length(List)).
+%% @equiv permute(List, length(List))
+
+permute(List) -> permute(List, length(List)).
+
+%% @type positive_integer() = integer().  Positive integer must be greater than zero.
+
+%% @spec permute(List::list(), Depth::positive_integer()) -> list()
+
+%% @doc {@section Utility} Calculate either the full or the depth-limited permutations of a list.  Permutations are all valid orderings of a set of tokens; the permutations of `[a,b]' for example are `[a,b]' and `[b,a]'.  Depth limitation means the permutations of a smaller count of tokens from the main set; the 2-limited permutations of `[a,b,c]' for example are `[a,b]', `[a,c]', `[b,a]', `[b,c]', `[c,a]' and `[c,c]'.  Permutations are not ordered.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> scutil:permute(["dave","kate","pat"]).
+%% [{"pat","kate","dave"}, {"kate","pat","dave"}, {"pat","dave","kate"}, {"dave","pat","kate"}, {"kate","dave","pat"}, {"dave","kate","pat"}]
+%%
+%% 2> scutil:permute([fast, strong, smart, lucky], 2).
+%% [{strong,fast}, {smart,fast}, {lucky,fast}, {fast,strong}, {smart,strong}, {lucky,strong}, {fast,smart}, {strong,smart}, {lucky,smart}, {fast,lucky}, {strong,lucky}, {smart,lucky}]'''
+
+%% @since Version 17
 
 permute(List, 1)     when is_list(List)                    -> [ {T}                        || T <- List ];
 permute(List, Depth) when is_list(List), is_integer(Depth) -> [ erlang:append_element(R,T) || T <- List, R <- permute(List--[T], Depth-1) ].
@@ -1768,7 +1820,7 @@ mod(Base, Range) when is_integer(Base), is_integer(Range) ->
 
 
 % Just:
-%   1) put    -svn_revision("$Revision$").    in your code,
+%   1) put    -svn_revision("$+Revision$").    in your code after removing the plus (without the plus the example gets converted, sorry)
 %   2) set the svn property svn:keywords to include at least Revision (case sensitive), and
 %   3) check in the code.
 % Magic follows.
@@ -1778,6 +1830,28 @@ scan_svn_revision(Module) ->
     "$Revision: " ++ X = get_module_attribute(Module, svn_revision),
     [ Head | _Rem ]    = string:tokens(X, " "),
     list_to_integer(Head).
+
+
+
+
+
+%% @type typelabel() = [ integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown ].  Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
+
+%% @spec median_absolute_deviation(List::numericlist()) -> number()
+
+%% @doc {@section Statistics} Calculate the median absolute deviation of a {@type numericlist()} Valid for any term.  Fails before erlang 12, due to use of `is_bitstring()' . ```1> scutil:type_of(1).
+%% integer
+%%
+%% 2> scutil:type_of({hello,world}).
+%% tuple'''
+
+%% @since Version 14
+
+
+median_absolute_deviation(List) when is_list(List) ->
+
+    ListMedian = scutil:median(List),
+    scutil:median( [ abs(ListItem - ListMedian) || ListItem <- List ] ).
 
 
 
