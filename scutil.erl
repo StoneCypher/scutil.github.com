@@ -41,7 +41,7 @@
 %% === List ===
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link shuffle/1}, {@link sanitize_tokens/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
+%%   <dd>{@link shuffle/1}, {@link sanitize_tokens/1}, {@link a/1}, {@link a/1}, {@link shared_keys/1}, {@link shared_keys/2}, {@link shared_keys/3}, {@link a/1}, {@link a/1}</dd>
 %% </dl>
 %% === Math ===
 %% <dl>
@@ -73,7 +73,7 @@
 %%   <dt>Means</dt>
 %%   <dd>{@link arithmetic_mean/1}, {@link geometric_mean/1}, {@link harmonic_mean/1}, {@link weighted_arithmetic_mean/1}, {@link arithmetic_mean/1}</dd>
 %%   <dt>Descriptive</dt>
-%%   <dd>{@link median/1}, {@link mode/1}, {@link histograph/1}, {@link root_mean_square/1}, {@link std_deviation/1}, {@link moment/1}, {@link moment/2}, {@link central_moment/1}, {@link central_moment/2}, {@link skewness/1}, {@link kurtosis/1}</dd>
+%%   <dd>{@link median/1}, {@link mode/1}, {@link histograph/1}, {@link root_mean_square/1}, {@link std_deviation/1}, {@link median_absolute_deviation/1}, {@link moment/1}, {@link moment/2}, {@link central_moment/1}, {@link central_moment/2}, {@link skewness/1}, {@link kurtosis/1}</dd>
 %%   <dt>Normals</dt>
 %%   <dd>{@link amean_vector_normal/1}, {@link gmean_vector_normal/1}, {@link hmean_vector_normal/1}</dd>
 %%   <dt>Ranking</dt>
@@ -193,7 +193,7 @@
 
     receive_one/0, % needs tests
 
-    in_both_lists/1, in_both_lists/2, % needs tests
+    shared_keys/1, shared_keys/2, shared_keys/3, % needs tests
     all_unique_pairings/1, % needs tests
     walk_unique_pairings/2, % needs tests
     list_to_number/1, % needs tests
@@ -700,7 +700,7 @@ elements_worker(Retlist, Config, Requested, KeyIdx, strip) ->
 
 
 %% @type filterfunction() = function().  Filter functions are 1ary binary predicates - they accept an argument and return either true or false.
-%% @type sanitizer() = list() | filterfunction().  Sanitizers are for input sanitization; they define what parts of an input list are valid, and the remainder are removed.  Sanitizers may either be a list of acceptable elements or a filter function.
+%% @type sanitizer() = list() | filterfunction().  Sanitizers are used by {@link sanitize_tokens/2} for input sanitization; they define what parts of an input list are valid, and the remainder are removed.  Sanitizers may either be a list of acceptable elements or a filter function.
 
 %% @spec sanitize_tokens(InputList::list(), Allowed::sanitizer()) -> list()
 
@@ -895,7 +895,7 @@ even_or_odd(Num) when is_integer(Num)                  -> odd.
 
 %% @spec median(List::numericlist()) -> any()
 
-%% @doc {@section Statistics} Takes the median (central) value of a list.  Sorts the input list, then finds and returns the middle value.  ```scutil:median([1,2,999]).
+%% @doc {@section Statistics} Takes the median (central) value of a list.  Sorts the input list, then finds and returns the middle value.  ```1> scutil:median([1,2,999]).
 %% 2'''
 
 %% @see arithmetic_mean/1
@@ -1377,14 +1377,22 @@ kurtosis(List) -> central_moment(List, 4).
 % see http://www.inf.fu-berlin.de/inst/ag-ki/rojas_home/documents/1996/NeuralNetworks/K5.pdf pdf-page 15
 % Thanks to the following for help with qsp_average and dependencies: Asterick, Chile, John Sensebe, PfhorSlayer, Raleigh
 
-%% @spec qsp_average(W, InputVecs) -> float()
+%% @type vectorlist() = list().  Every member element of a vectorlist() is a vector, which is represented as a {@type numericlist()}.
 
-%% @todo comeback
+%% @spec qsp_average(W::numericlist(), InputVecs::vectorlist()) -> float()
+
+%% @doc {@section Math} Takes the quadratic scalar product average of a vector `W' and a list of vectors `X'.  The QSP Average
+%% is the arithmetic mean of the result set Y, where Y is generated as the square of the magnitude of the dot product
+%% of W and each individual vector in X.```1>'''The linked documentation incorrectly uses the notation ||Foo|| instead of |Foo| to
+%% present the algorithm.  ||Foo|| is the vector magnitude - the root sum square of vector elements - but as the input is the
+%% dot product of two 1d vectors, which will always be a single number, the vector magnitude serves no purpose other than to
+%% normalize the sign slowly and counterintuitively; thus we switch to abs despite the documentation.  {@section Thanks} to Steve
+%% Stair for helping straighten this out.
 
 qsp_average(W, InputVecs) ->
 
     GetSqVnDp = fun(Xi) ->
-        VnDp = vector_magnitude(dot_product(W, Xi)),
+        VnDp = abs(dot_product(W, Xi)),
         VnDp * VnDp
         end,
 
@@ -1394,14 +1402,16 @@ qsp_average(W, InputVecs) ->
 
 
 
-dot_product(VX, VY) when length(VX) == length(VY) ->
+% removed when length(VX) == length(VY) because it's implied by lists:zip
+
+dot_product(VX, VY) ->
     lists:sum( [ X*Y || {X,Y} <- lists:zip(VX,VY) ] ).
 
 
 
 
 
-cross_product( {X1,Y1,Z1}, {X2,Y2,Z2} ) -> 
+cross_product( {X1,Y1,Z1}, {X2,Y2,Z2} ) ->
     { (Y1*Z2) - (Z1*Y2) , (Z1*X2) - (X1*Z2), (X1*Y2) - (Y1*X2) }.
 
 
@@ -1431,17 +1441,37 @@ hmean_vector_normal(VX) ->   harmonic_mean(normalize_vector(VX)).
 
 
 
-% Create reverse sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples where key K appears in both A and B
+% Create sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples, where key K appears in both A and B
 
-in_both_lists(TupleList) when is_list(TupleList) ->
+shared_keys(TupleList) when is_list(TupleList) ->
     {A,B} = lists:unzip(TupleList),
-    in_both_lists(A,B).
+    shared_keys(lists:sort(A),lists:sort(B)).
 
-in_both_lists(A,B) when is_list(A), is_list(B) ->
+%% @type keylist() = keylist().  All members of keylists are tuples of two-or-greater arity, and the first element is considered their key in the list.  List keys are unique; therefore `[{a,1},{b,1}]' is a keylist, but `[{a,1},{a,1}]' is not.
+%% @type sorted_keylist() = keylist().  A sorted keylist is a keylist in the order provided by {@link lists:sort/1}.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.
+
+%% @equiv shared_keys(lists:zip(lists:sort(A), lists:sort(B)))
+%% @spec shared_keys(TupleList::sorted_keylist(), Presorted::presorted) -> sorted_keylist()
+%% @doc Equivalent to {@link shared_keys/1}, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.
+
+shared_keys(TupleList, presorted) when is_list(TupleList) ->
+    {A,B} = lists:unzip(TupleList),
+    shared_keys(A,B);
+
+%% @doc Create sorted list X of 3-ary tuples `{K,Ai,Bi}' from sorted lists A, B of 2ary `{K,Ai}'/`{K,Bi}' tuples, where key `K' appears in both `A' and `B'.
+
+shared_keys(A,B) when is_list(A), is_list(B) ->
+    both_lists_next_item(lists:sort(A),lists:sort(B),[]).
+
+%% @equiv shared_keys(lists:sort(A),lists:sort(B))
+%% @spec shared_keys(A::sorted_keylist(), B::sorted_keylist(), Presorted::presorted) -> sorted_keylist()
+%% @doc Equivalent to {@link shared_keys/2}, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.
+
+shared_keys(A,B,presorted) when is_list(A), is_list(B) ->
     both_lists_next_item(A,B,[]).
 
-both_lists_next_item([],             _,              Work) -> Work;
-both_lists_next_item(_,              [],             Work) -> Work;
+both_lists_next_item([],             _,              Work) -> lists:reverse(Work);
+both_lists_next_item(_,              [],             Work) -> lists:reverse(Work);
 both_lists_next_item([ {K,Ai} | Ar], [ {K,Bi} | Br], Work) -> both_lists_next_item(Ar, Br, [{K,Ai,Bi}]++Work);
 
 both_lists_next_item(IA,             IB,             Work) ->
@@ -1521,9 +1551,9 @@ counter(Name) ->
 
 
 
-inc_counter(Name)    -> adjust_counter(Name,     1).
+inc_counter(Name)    -> adjust_counter(Name,  1   ).
 inc_counter(Name,By) -> adjust_counter(Name,    By).
-dec_counter(Name)    -> adjust_counter(Name,    -1).
+dec_counter(Name)    -> adjust_counter(Name, -1   ).
 dec_counter(Name,By) -> adjust_counter(Name, -1*By).
 
 adjust_counter(Name, By) when is_number(By) ->
@@ -1678,7 +1708,7 @@ call_after(Length, Func, Args)          -> call_after(Length, Func, Args, {handl
 
 %% @spec call_after(Length::integer(), Func::function(), Args::atom(), Handler::handler()) -> { ok, spawned_worker, Worker::pid() }
 
-%% @doc {@section Utility} Spawns a side process to non-blockingly make a call after a specified delay.  Will send the result as a message `{ call_after_result, Result }' to the handler process, which is the calling process unless otherwise specified (with {handler,OtherPid} or the atom no_handler_pid).  Delayed return value can include an ID, in the format `{ call_after_result, Result, IdHandle }', if the Handler PID is specified {handler,PID,ID}, to help distinguish between returned calls if needed. ```1> Dbl = fun(X) -> X*2 end.
+%% @doc {@section Utility} Spawns a side process to non-blockingly make a call after a specified delay.  Will send the result as a message `{ call_after_result, Result }' to the handler process, which is the calling process unless otherwise specified (with {handler,OtherPid} or the atom no_handler_pid).  Delayed return value can include an ID, in the format `{ call_after_result, Result, IdHandle }', if the Handler PID is specified `{handler,PID,ID}', to help distinguish between returned calls if needed. ```1> Dbl = fun(X) -> X*2 end.
 %% #Fun<erl_eval.6.13229925>
 %%
 %% 2> scutil:call_after(1000, Dbl, [3]).
@@ -1835,18 +1865,12 @@ scan_svn_revision(Module) ->
 
 
 
-%% @type typelabel() = [ integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown ].  Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
-
 %% @spec median_absolute_deviation(List::numericlist()) -> number()
 
-%% @doc {@section Statistics} Calculate the median absolute deviation of a {@type numericlist()} Valid for any term.  Fails before erlang 12, due to use of `is_bitstring()' . ```1> scutil:type_of(1).
-%% integer
-%%
-%% 2> scutil:type_of({hello,world}).
-%% tuple'''
+%% @doc {@section Statistics} Calculate the median absolute deviation of a {@type numericlist()}. ```1> scutil:median_absolute_deviation([1,1,2,2,4,6,9]).
+%% 1'''
 
-%% @since Version 14
-
+%% @since Version 81
 
 median_absolute_deviation(List) when is_list(List) ->
 
