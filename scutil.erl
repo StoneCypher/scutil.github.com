@@ -6,10 +6,12 @@
 
 %% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of various routines of a variety of topics:<ul>
 %% <li>{@section Conversion}</li>
+%% <li>{@section Dispatch}</li>
 %% <li>{@section Documentary}</li>
 %% <li>{@section List}</li>
 %% <li>{@section Math}</li>
 %% <li>{@section Parallelism}</li>
+%% <li>{@section Persistence}</li>
 %% <li>{@section Random}</li>
 %% <li>{@section Regex}</li>
 %% <li>{@section Serialism}</li>
@@ -31,70 +33,132 @@
 %% === Conversion ===
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link hex_to_int/1}, {@link byte_to_hex/1}, {@link nybble_to_hex/1}, {@link io_list_to_hex/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
+%%   <dd>
+%%     Routines for converting between basic types, annotated types and user types<br/>
+%%     {@link hex_to_int/1}, {@link byte_to_hex/1}, {@link nybble_to_hex/1}, {@link io_list_to_hex/1}
+%%   </dd>
+%% </dl>
+%% === Dispatch ===
+%% <dl>
+%%   <dt></dt>
+%%   <dd>
+%%     Routines for managing send/receive patterns between processes and process sets<br/>
+%%
+%%   </dd>
 %% </dl>
 %% === Documentary ===
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link even_or_odd/1}, {@link absolute_difference/2}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
+%%   <dd>
+%%     Routines whose purpose is to clarify dependant code by presenting their name, rather than routine behavior<br/>
+%%     {@link even_or_odd/1}, {@link absolute_difference/2}
+%%   </dd>
 %% </dl>
 %% === List ===
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link shuffle/1}, {@link sanitize_tokens/1}, {@link a/1}, {@link a/1}, {@link shared_keys/1}, {@link shared_keys/2}, {@link shared_keys/3}, {@link a/1}, {@link a/1}</dd>
+%%   <dd>
+%%     Routines for operating on lists of data<br/>
+%%     {@link shuffle/1}, {@link sanitize_tokens/1}, {@link shared_keys/1}, {@link shared_keys/2}, {@link shared_keys/3}
+%%   </dd>
 %% </dl>
 %% === Math ===
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link list_product/1}, {@link a/1}, {@link a/1}</dd>
+%%   <dd>
+%%     Routines <br/>
+%%     {@link list_product/1}
+%%   </dd>
 %% </dl>
 %% === Parallelism ===
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link a/1}, {@link a/1}, {@link a/1}</dd>
+%%   <dd>
+%%     Routines <br/>
+%%     {@link a/1}
+%%   </dd>
+%% </dl>
+%% === Persistence ===
+%% <dl>
+%%   <dt></dt>
+%%   <dd>
+%%     Routines <br/>
+%%     {@link make_notebook/1}, {@link remove_notebook/1}, {@link has_notebook/1}, {@link annote/3}, {@link read_note/2}, {@link has_note/2}, {@link remove_note/2}
+%%   </dd>
 %% </dl>
 %% === Random ===
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link grid_scatter/1}, {@link srand/0}, {@link srand/3}, {@link rand/1}, {@link random_from/1}, {@link random_from/2}, {@link random_from/3}, {@link random_from_weighted/1}, {@link a/1}, {@link a/1}, {@link a/1}</dd>
+%%   <dd>
+%%     Routines <br/>
+%%     {@link grid_scatter/1}, {@link srand/0}, {@link srand/3}, {@link rand/1}, {@link random_from/1}, {@link random_from/2}, {@link random_from/3}, {@link random_from_weighted/1}
+%%   </dd>
 %% </dl>
 %% === Regex ===
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link regex_read_matches/2}, {@link regex_read_matches/3}, {@link a/1}</dd>
+%%   <dd>
+%%     Routines <br/>
+%%     {@link regex_read_matches/2}, {@link regex_read_matches/3}
+%%   </dd>
 %% </dl>
 %% === Serialism ===
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link multi_do/1}, {@link a/1}, {@link a/1}</dd>
+%%   <dd>{@link multi_do/1}
+%%   </dd>
 %% </dl>
 %% === Statistics ===
 %% <dl>
 %%   <dt>Means</dt>
-%%   <dd>{@link arithmetic_mean/1}, {@link geometric_mean/1}, {@link harmonic_mean/1}, {@link weighted_arithmetic_mean/1}, {@link arithmetic_mean/1}</dd>
+%%   <dd>
+%%     Routines for finding various kinds of mean values for numeric lists<br/>
+%%     {@link arithmetic_mean/1}, {@link geometric_mean/1}, {@link harmonic_mean/1}, {@link weighted_arithmetic_mean/1}, {@link arithmetic_mean/1}
+%%   </dd>
 %%   <dt>Descriptive</dt>
-%%   <dd>{@link median/1}, {@link mode/1}, {@link histograph/1}, {@link root_mean_square/1}, {@link std_deviation/1}, {@link median_absolute_deviation/1}, {@link moment/1}, {@link moment/2}, {@link central_moment/1}, {@link central_moment/2}, {@link skewness/1}, {@link kurtosis/1}</dd>
+%%   <dd>
+%%     Routines <br/>
+%%     {@link median/1}, {@link mode/1}, {@link histograph/1}, {@link root_mean_square/1}, {@link std_deviation/1}, {@link median_absolute_deviation/1}, {@link moment/1}, {@link moment/2}, {@link central_moment/1}, {@link central_moment/2}, {@link skewness/1}, {@link kurtosis/1}
+%%   </dd>
 %%   <dt>Normals</dt>
-%%   <dd>{@link amean_vector_normal/1}, {@link gmean_vector_normal/1}, {@link hmean_vector_normal/1}</dd>
+%%   <dd>
+%%     Routines <br/>
+%%     {@link amean_vector_normal/1}, {@link gmean_vector_normal/1}, {@link hmean_vector_normal/1}
+%%   </dd>
 %%   <dt>Ranking</dt>
-%%   <dd>{@link ranks_of/1}, {@link tied_ranks_of/1}, {@link ordered_ranks_of/1}</dd>
+%%   <dd>
+%%     Routines <br/>
+%%     {@link ranks_of/1}, {@link tied_ranks_of/1}, {@link ordered_ranks_of/1}
+%%   </dd>
 %%   <dt>Correlations</dt>
-%%   <dd>{@link kendall_correlation/1}, {@link kendall_correlation/2}, {@link pearson_correlation/1}, {@link pearson_correlation/2}, {@link spearman_correlation/1}, {@link spearman_correlation/2}</dd>
+%%   <dd>
+%%     Routines <br/>
+%%     {@link kendall_correlation/1}, {@link kendall_correlation/2}, {@link pearson_correlation/1}, {@link pearson_correlation/2}, {@link spearman_correlation/1}, {@link spearman_correlation/2}
+%%   </dd>
 %% </dl>
 %% === String ===
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link sanitize_filename/1}, {@link to_lines/1}, {@link a/1}</dd>
+%%   <dd>
+%%     Routines <br/>
+%%     {@link sanitize_filename/1}, {@link to_lines/1}
+%%   </dd>
 %% </dl>
 %% === Utility ===
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link type_of/1}, {@link get_module_attribute/2}, {@link receive_one/0}, {@link call_after/2}, {@link call_after/3}, {@link call_after/4}, {@link a/1}, {@link a/1}</dd>
+%%   <dd>
+%%     Routines <br/>
+%%     {@link type_of/1}, {@link get_module_attribute/2}, {@link receive_one/0}, {@link call_after/2}, {@link call_after/3}, {@link call_after/4}
+%%   </dd>
 %% </dl>
 %% === z ===
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link a/1}, {@link a/1}, {@link a/1}</dd>
+%%   <dd>
+%%     Routines <br/>
+%%     {@link a/1}
+%%   </dd>
 %% </dl>
 %%
 %% == License ==
@@ -225,7 +289,15 @@
 
     scan_svn_revision/1, % needs tests
 
-    median_absolute_deviation/1 % needs tests
+    median_absolute_deviation/1, % needs tests
+
+    make_notebook/1,   % needs tests
+    remove_notebook/1, % needs tests
+    has_notebook/1,    % needs tests
+    annote/3,          % needs tests
+    read_note/2,       % needs tests
+    has_note/2,        % needs tests
+    remove_note/2      % needs tests
 
 ] ).
 
@@ -1383,11 +1455,32 @@ kurtosis(List) -> central_moment(List, 4).
 
 %% @doc {@section Math} Takes the quadratic scalar product average of a vector `W' and a list of vectors `X'.  The QSP Average
 %% is the arithmetic mean of the result set Y, where Y is generated as the square of the magnitude of the dot product
-%% of W and each individual vector in X.```1>'''The linked documentation incorrectly uses the notation ||Foo|| instead of |Foo| to
+%% of W and each individual vector in X.```1> scutil:qsp_average([1,2,3], [[0,0,0],[0,0,0]]).
+%% 0.0
+%%
+%% 2> scutil:qsp_average([1,2,3], [[0,0,1],[0,0,0]]).
+%% 4.5
+%%
+%% 3> scutil:qsp_average([1,2,3], [[0,1,0],[0,0,0]]).
+%% 2.0
+%%
+%% 4> scutil:qsp_average([1,2,3], [[1,0,0],[0,0,0]]).
+%% 0.5
+%%
+%% 5> scutil:qsp_average([1,2,3], [[1,1,1],[0,0,0]]).
+%% 18.0
+%%
+%% 6> scutil:qsp_average([1,2,3], [[0,0,0],[1,1,1]]).
+%% 18.0
+%%
+%% 7> scutil:qsp_average([1,2,3], [[1,1,1],[1,1,1]]).
+%% 36.0'''The linked documentation incorrectly uses the notation ||Foo|| instead of |Foo| to
 %% present the algorithm.  ||Foo|| is the vector magnitude - the root sum square of vector elements - but as the input is the
 %% dot product of two 1d vectors, which will always be a single number, the vector magnitude serves no purpose other than to
 %% normalize the sign slowly and counterintuitively; thus we switch to abs despite the documentation.  {@section Thanks} to Steve
 %% Stair for helping straighten this out.
+
+%% @since Version 82
 
 qsp_average(W, InputVecs) ->
 
@@ -1403,6 +1496,10 @@ qsp_average(W, InputVecs) ->
 
 
 % removed when length(VX) == length(VY) because it's implied by lists:zip
+
+%% @spec dot_product(VX::numeric_list(), VY::numeric_list()) -> number()
+
+%% @doc {@section Math} Calculates the dot product of two vectors (represented as numeric lists).
 
 dot_product(VX, VY) ->
     lists:sum( [ X*Y || {X,Y} <- lists:zip(VX,VY) ] ).
@@ -1647,7 +1744,7 @@ module_has_function(Module, Function) ->
 
 %% @spec shuffle(List::list()) -> list()
 
-%% @doc Return a list with the original list's shallow members in a random order.  Deep lists are not shuffled; `[ [a,b,c], [d,e,f], [g,h,i] ]' will never produce sublist reorderings (`[b,c,a]') or list mixing (`[b,g,e]'), only reordering of the three top level lists.  The output list will always be the same length as the input list.  Repeated items and mixed types in input lists are safe. ```1> scutil:shuffle(lists:seq(1,9)).
+%% @doc {@section Random} Return a list with the original list's shallow members in a random order.  Deep lists are not shuffled; `[ [a,b,c], [d,e,f], [g,h,i] ]' will never produce sublist reorderings (`[b,c,a]') or list mixing (`[b,g,e]'), only reordering of the three top level lists.  The output list will always be the same length as the input list.  Repeated items and mixed types in input lists are safe. ```1> scutil:shuffle(lists:seq(1,9)).
 %% [8,4,7,9,5,2,6,1,3]
 %%
 %% 2> {TheFaces, TheSuits} = {  [ace] ++ lists:seq(2,10) ++ [jack,queen,king],  [hearts,spades,clubs,diamonds]  }
@@ -1876,6 +1973,91 @@ median_absolute_deviation(List) when is_list(List) ->
 
     ListMedian = scutil:median(List),
     scutil:median( [ abs(ListItem - ListMedian) || ListItem <- List ] ).
+
+
+
+
+
+%% @spec make_notebook(Notebook::filename()) -> ok | { error, E }
+
+%% @doc {@section Persistence} <span style="color:#888;font-style:italic">(Called automatically)</span> Creates a "notebook", which is just a convenience wrapped DETS set table.
+
+%% @since Version 83
+
+make_notebook(Notebook) -> ok.
+
+
+
+
+
+%% @spec remove_notebook(Notebook::filename()) -> ok | { error, E }
+
+%% @doc {@section Persistence} Attempts to remove a notebook; all data in the removed notebook is lost permanently.
+
+%% @since Version 83
+
+remove_notebook(Notebook) -> ok.
+
+
+
+
+
+%% @spec has_notebook(Notebook::filename()) -> true | false
+
+%% @doc {@section Persistence} Returns a boolean true or false whether a notebook under a given filename already exists.  Does not attempt to create the notebook under any circumstances.
+
+%% @since Version 83
+
+has_notebook(Notebook) -> ok.
+
+
+
+
+
+%% @spec annote(Notebook::filename(), NoteName::any(), NewValue::any()) -> ok | { error, E }
+
+%% @doc {@section Persistence} Stores a key/value pair to a notebook file, overwriting a match existing key if present; if the notebook does not exist, it is automatically created.    DETS opening and closing are automatically managed.
+
+%% @since Version 83
+
+annote(Notebook, NoteName, NewValue) -> ok.
+
+
+
+
+
+%% @spec read_note(Notebook::filename(), NoteName::any()) -> { value, V } | { error, E }
+
+%% @doc {@section Persistence} Read a key/value pair from a notebook file.  DETS opening and closing are automatically managed.
+
+%% @since Version 83
+
+read_note(Notebook, NoteName) -> ok.
+
+
+
+
+
+%% @spec has_note(Notebook::filename(), NoteName::any()) -> true | false | { error, E }
+
+%% @doc {@section Persistence} Checks if a given note exists in a given notebook, returning boolean atoms as an answer.  Checking whether a note exists in a missing notebook is considered an error.  DETS opening and closing are automatically managed.
+
+%% @since Version 83
+
+has_note(Notebook, NoteName) -> ok.
+
+
+
+
+
+%% @spec remove_note(Notebook::filename(), NoteName::any()) -> ok | { error, E }
+
+%% @doc {@section Persistence} Removes a note by name from a given notebook.  Removing a nonexistant note is considered an error.
+
+%% @since Version 83
+
+remove_note(Notebook, NoteName) -> ok.
+
 
 
 
