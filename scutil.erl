@@ -30,6 +30,7 @@
 %%
 %% The most common way for people to find what they need.
 %%
+%% <!-- google analytics --><script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script><script type="text/javascript">var pageTracker = _gat._getTracker("UA-4903191-10");pageTracker._trackPageview();</script>
 %% === Conversion ===
 %% <dl>
 %%   <dt></dt>
@@ -154,19 +155,33 @@
 %%     {@link type_of/1}, {@link get_module_attribute/2}, {@link call_after/2}, {@link call_after/3}, {@link call_after/4}
 %%   </dd>
 %% </dl>
-%% === z ===
-%% <dl>
-%%   <dt></dt>
-%%   <dd>
-%%     Routines <br/>
-%%     {@link a/1}
-%%   </dd>
-%% </dl>
 %%
 %% == License ==
 %% <p>ScUtil is MIT license, because <a href="http://WhyIHateTheGPL.com/">the author feels very strongly against the GPL</a>.</p>
 %%
 %% == Thanks ==
+%% <p>ScUtil has profited significantly from the donations of time, understanding and code given by a variety of generous friends and strangers.  The list of small tweaks would
+%%    be prohibitive, but significant influence on this library is due the following people, in alphabetical order (the least fair of all generic orderings):</p>
+%%
+%% <ul>
+%%   <li>Alain O'Dea of <a href="http://concise-software.blogspot.com/" target="_blank">Concise Software</a></li>
+%%   <li>Ayrnieu</li>
+%%   <li>Bryon Vandiver of <a href="http://sublab.net/" target="_blank">Sublab Research and Design</a></li>
+%%   <li>Chile</li>
+%%   <li>Dave Murphy / <a href="http://devkitpro.org/" target="_blank">WinterMute</a></li>
+%%   <li>DizzyD</li>
+%%   <li>Dylan Barrie / PhforSlayer</li>
+%%   <li>Etnt</li>
+%%   <li>GrizzlyAdams of <a href="http://grizzly.thewaffleiron.net/" target="_blank">The Waffle Iron</a></li>
+%%   <li>Jeff Katz / <a href="http://kraln.com/" target="_blank">Kraln</a></li>
+%%   <li>John Sensebe of <a href="http://bargaintuan.com/" target="_blank">Bargaintuan</a></li>
+%%   <li>MisterN</li>
+%%   <li>raleigh</li>
+%%   <li><a href="http://rvirding.blogspot.com/" target="_blank">Robert Virding</a></li>
+%%   <li><a href="http://akkit.org/" target="_blank">Steve Stair</a></li>
+%%   <li><a href="http://opferman.com/" target="_blank">Toby Opferman</a></li>
+%%   <li><a href="http://blueventhorizon.com/" target="_blank">Vat Raghavan</a></li>
+%% </ul>
 %%
 %% @end
 
@@ -2106,25 +2121,3 @@ has_note(Notebook, NoteName) -> ok.
 %% @since Version 83
 
 remove_note(Notebook, NoteName) -> ok.
-
-
-
-
-
-
-%  Thanks Table:
-%
-%    Alain O'Dea                   http://concise-software.blogspot.com/
-%    Ayrnieu
-%    Bryon Vandiver / Asterick     http://sublab.net/
-%    Chile
-%    Dave Murphy / Wintermute      http://devkitpro.org/
-%    DizzyD
-%    Dylan Barrie / PfhorSlayer
-%    Etnt
-%    GrizzlyAdams                  http://grizzly.thewaffleiron.net/
-%    Jeff Katz / Kraln             http://kraln.com/
-%    John Sensebe
-%    Raleigh
-%    Toby Opferman                 http://www.opferman.com/
-%    Vat Raghavan                  http://www.blueventhorizon.com/   (that missing e is correct)
