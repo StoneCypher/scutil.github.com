@@ -50,31 +50,31 @@
 %% <dl>
 %%   <dt></dt>
 %%   <dd>
-%%     Routines whose purpose is to clarify dependant code by presenting their name, rather than routine behavior<br/>
-%%     {@link even_or_odd/1}, {@link absolute_difference/2}
+%%     Routines whose purpose is to clarify dependant code by presenting their name, rather than routine behavior, as well as to establish standard result messages where appropriate<br/>
+%%     {@link even_or_odd/1}, {@link absolute_difference/2}, {@link receive_one/0}
 %%   </dd>
 %% </dl>
 %% === List ===
 %% <dl>
 %%   <dt></dt>
 %%   <dd>
-%%     Routines for operating on lists of data<br/>
-%%     {@link shuffle/1}, {@link sanitize_tokens/1}, {@link shared_keys/1}, {@link shared_keys/2}, {@link shared_keys/3}
+%%     Routines for operating on lists of data augmenting the standard lists module.<br/>
+%%     {@link shuffle/1}, {@link sanitize_tokens/1}, {@link shared_keys/1}, {@link shared_keys/2}, {@link shared_keys/3} (see also {@link random_from/3}, {@link random_from_weighted/1})
 %%   </dd>
 %% </dl>
 %% === Math ===
 %% <dl>
 %%   <dt></dt>
 %%   <dd>
-%%     Routines <br/>
-%%     {@link list_product/1}
+%%     Routines for higher math computation missing from the standard math module.<br/>
+%%     {@link list_product/1}, {@link dot_product/2}, {@link cross_product/2},
 %%   </dd>
 %% </dl>
 %% === Parallelism ===
 %% <dl>
 %%   <dt></dt>
 %%   <dd>
-%%     Routines <br/>
+%%     Routines for manipulating behavior across sets of parallel processes.<br/>
 %%     {@link a/1}
 %%   </dd>
 %% </dl>
@@ -82,7 +82,7 @@
 %% <dl>
 %%   <dt></dt>
 %%   <dd>
-%%     Routines <br/>
+%%     Routines to simplify and automate the storage of local information.<br/>
 %%     {@link make_notebook/1}, {@link remove_notebook/1}, {@link has_notebook/1}, {@link annote/3}, {@link read_note/2}, {@link has_note/2}, {@link remove_note/2}
 %%   </dd>
 %% </dl>
@@ -90,22 +90,24 @@
 %% <dl>
 %%   <dt></dt>
 %%   <dd>
-%%     Routines <br/>
-%%     {@link grid_scatter/1}, {@link srand/0}, {@link srand/3}, {@link rand/1}, {@link random_from/1}, {@link random_from/2}, {@link random_from/3}, {@link random_from_weighted/1}
+%%     Routines to provide complex pseudorandom services and convenience wrappers to augment the standard random module.<br/>
+%%     {@link grid_scatter/1}, {@link srand/0}, {@link srand/3}, {@link rand/1}, {@link random_from/1}, {@link random_from/2}, {@link random_from/3}, {@link random_from_weighted/1} (see also {@link shuffle/1})
 %%   </dd>
 %% </dl>
 %% === Regex ===
 %% <dl>
 %%   <dt></dt>
 %%   <dd>
-%%     Routines <br/>
+%%     Routines to provide a convenience wrapper for the standard regex module.<br/>
 %%     {@link regex_read_matches/2}, {@link regex_read_matches/3}
 %%   </dd>
 %% </dl>
 %% === Serialism ===
 %% <dl>
 %%   <dt></dt>
-%%   <dd>{@link multi_do/1}
+%%   <dd>
+%%     Routines for manipulating behavior in repeat series within a single process.<br/>
+%%     {@link multi_do/1}
 %%   </dd>
 %% </dl>
 %% === Statistics ===
@@ -117,22 +119,22 @@
 %%   </dd>
 %%   <dt>Descriptive</dt>
 %%   <dd>
-%%     Routines <br/>
+%%     Routines which provide informative measurements of numeric lists<br/>
 %%     {@link median/1}, {@link mode/1}, {@link histograph/1}, {@link root_mean_square/1}, {@link std_deviation/1}, {@link median_absolute_deviation/1}, {@link moment/1}, {@link moment/2}, {@link central_moment/1}, {@link central_moment/2}, {@link skewness/1}, {@link kurtosis/1}
 %%   </dd>
 %%   <dt>Normals</dt>
 %%   <dd>
-%%     Routines <br/>
+%%     Routines to calculate the various normals of vectors<br/>
 %%     {@link amean_vector_normal/1}, {@link gmean_vector_normal/1}, {@link hmean_vector_normal/1}
 %%   </dd>
 %%   <dt>Ranking</dt>
 %%   <dd>
-%%     Routines <br/>
+%%     Routines to provide statistical rankings of lists<br/>
 %%     {@link ranks_of/1}, {@link tied_ranks_of/1}, {@link ordered_ranks_of/1}
 %%   </dd>
 %%   <dt>Correlations</dt>
 %%   <dd>
-%%     Routines <br/>
+%%     Routines to measure the statistical correlations between two numeric lists<br/>
 %%     {@link kendall_correlation/1}, {@link kendall_correlation/2}, {@link pearson_correlation/1}, {@link pearson_correlation/2}, {@link spearman_correlation/1}, {@link spearman_correlation/2}
 %%   </dd>
 %% </dl>
@@ -140,7 +142,7 @@
 %% <dl>
 %%   <dt></dt>
 %%   <dd>
-%%     Routines <br/>
+%%     Routines to augment the existing string module.  All scutil string routines are safe for widechar lists.<br/>
 %%     {@link sanitize_filename/1}, {@link to_lines/1}
 %%   </dd>
 %% </dl>
@@ -148,8 +150,8 @@
 %% <dl>
 %%   <dt></dt>
 %%   <dd>
-%%     Routines <br/>
-%%     {@link type_of/1}, {@link get_module_attribute/2}, {@link receive_one/0}, {@link call_after/2}, {@link call_after/3}, {@link call_after/4}
+%%     Routines which don't classify well into larger categories<br/>
+%%     {@link type_of/1}, {@link get_module_attribute/2}, {@link call_after/2}, {@link call_after/3}, {@link call_after/4}
 %%   </dd>
 %% </dl>
 %% === z ===
@@ -1449,7 +1451,8 @@ kurtosis(List) -> central_moment(List, 4).
 % see http://www.inf.fu-berlin.de/inst/ag-ki/rojas_home/documents/1996/NeuralNetworks/K5.pdf pdf-page 15
 % Thanks to the following for help with qsp_average and dependencies: Asterick, Chile, John Sensebe, PfhorSlayer, Raleigh
 
-%% @type vectorlist() = list().  Every member element of a vectorlist() is a vector, which is represented as a {@type numericlist()}.
+%% @type vector() = list() | tuple().  Every member element of a vector() is a {@type number()}.
+%% @type vectorlist() = list().  Every member element of a vectorlist() is a {@type vector()}.
 
 %% @spec qsp_average(W::numericlist(), InputVecs::vectorlist()) -> float()
 
@@ -1499,7 +1502,24 @@ qsp_average(W, InputVecs) ->
 
 %% @spec dot_product(VX::numeric_list(), VY::numeric_list()) -> number()
 
-%% @doc {@section Math} Calculates the dot product of two vectors (represented as numeric lists).
+%% @doc {@section Math} <span style="color:red">Incomplete</span> Calculates the dot product of two vectors (<span style="color:red">Incomplete</span> represented as numeric lists; tuples not yet supported). ```1> scutil:dot_product([1,1,1],[2,2,2]).
+%% 6
+%%
+%% 2> scutil:dot_product([1,1,1],[3,3,3]).
+%% 9
+%%
+%% 3> scutil:dot_product([-1,0,1],[3,3,3]).
+%% 0
+%%
+%% 4> scutil:dot_product([-1,1,1],[3,3,3]).
+%% 3
+%%
+%% 5> scutil:dot_product([0.5,1,2],[1,1,1]).
+%% 3.5'''<span style="color:red">The tuple variation of vectors has not yet been implemented in this function.</span>
+
+%% @since Version 80
+
+%% @todo implement tuple variation
 
 dot_product(VX, VY) ->
     lists:sum( [ X*Y || {X,Y} <- lists:zip(VX,VY) ] ).
@@ -1508,8 +1528,37 @@ dot_product(VX, VY) ->
 
 
 
+%% @type three_vector() = vector().  A three-vector always has three elements, so this can be expressed as the alternation `{A::number(), B::number(), C::number()} | [A::number(), B::number(), C::number()]'.
+%% @type seven_vector() = vector().  A seven-vector always has seven elements, so this can be expressed as the alternation `{A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()} | [A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()]'.
+%% @type three_or_seven_vector() = three_vector() | seven_vector().
+
+%% @spec cross_product(VX::three_vector(), VY::three_vector()) -> three_vector()
+
+%% @doc {@section Math} <span style="color:red">Incomplete</span> Calculates the cross product of two vectors (<span style="color:red">Incomplete</span> represented as {@type three_vector()}s - no support yet for seven). ```1> scutil:dot_product([1,1,1],[2,2,2]).
+%% 6
+%%
+%% 2> scutil:dot_product([1,1,1],[3,3,3]).
+%% 9
+%%
+%% 3> scutil:dot_product([-1,0,1],[3,3,3]).
+%% 0
+%%
+%% 4> scutil:dot_product([-1,1,1],[3,3,3]).
+%% 3
+%%
+%% 5> scutil:dot_product([0.5,1,2],[1,1,1]).
+%% 3.5'''
+
+%% @since Version 80
+
+%% @todo implement list variation
+%% @todo implement 7-dimensional variation, http://en.wikipedia.org/wiki/Seven-dimensional_cross_product
+
 cross_product( {X1,Y1,Z1}, {X2,Y2,Z2} ) ->
-    { (Y1*Z2) - (Z1*Y2) , (Z1*X2) - (X1*Z2), (X1*Y2) - (Y1*X2) }.
+    { (Y1*Z2) - (Z1*Y2) , (Z1*X2) - (X1*Z2), (X1*Y2) - (Y1*X2) };
+
+cross_product( [X1,Y1,Z1], [X2,Y2,Z2] ) ->
+    [ (Y1*Z2) - (Z1*Y2) , (Z1*X2) - (X1*Z2), (X1*Y2) - (Y1*X2) ].
 
 
 
