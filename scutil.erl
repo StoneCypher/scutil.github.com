@@ -172,6 +172,7 @@
 %%   <li>DizzyD</li>
 %%   <li>Dylan Barrie / PhforSlayer</li>
 %%   <li>Etnt</li>
+%%   <li>Geoff Cant / <a href="http://github.com/archaelus">Archaelus</a></li>
 %%   <li>GrizzlyAdams of <a href="http://grizzly.thewaffleiron.net/" target="_blank">The Waffle Iron</a></li>
 %%   <li>Jeff Katz / <a href="http://kraln.com/" target="_blank">Kraln</a></li>
 %%   <li>John Sensebe of <a href="http://bargaintuan.com/" target="_blank">Bargaintuan</a></li>
