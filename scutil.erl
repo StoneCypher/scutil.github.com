@@ -68,7 +68,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines for higher math computation missing from the standard math module.<br/>
-%%     {@link list_product/1}, {@link dot_product/2}, {@link cross_product/2},
+%%     {@link list_product/1}, {@link dot_product/2}, {@link cross_product/2}, {@link vector_magnitude/1}
 %%   </dd>
 %% </dl>
 %% === Parallelism ===
@@ -309,13 +309,15 @@
 
     median_absolute_deviation/1, % needs tests
 
-    make_notebook/1,   % needs tests
-    remove_notebook/1, % needs tests
-    has_notebook/1,    % needs tests
-    annote/3,          % needs tests
-    read_note/2,       % needs tests
-    has_note/2,        % needs tests
-    remove_note/2      % needs tests
+    make_notebook/1,    % needs tests
+    remove_notebook/1,  % needs tests
+    has_notebook/1,     % needs tests
+    annote/2, annote/3, % needs tests
+    read_note/2,        % needs tests
+    has_note/2,         % needs tests
+    remove_note/2,      % needs tests
+
+    tuple_sum/1 % needs tests
 
 ] ).
 
@@ -356,16 +358,13 @@ type_of(_X)                     -> unknown.
 
 %% @spec get_module_attribute(Module::atom(), Attribute::atom()) -> { value, {Attribute, Value} } | { error, no_such_attribute } | { error, no_such_module }
 
-%% @doc {@section Utility} Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  ```1> scutil:get_module_attribute(scutil, author).
+%% @doc {@section Utility} <span style="color:red">Buggy</span> Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  ```1> scutil:get_module_attribute(scutil, author).
 %% "John Haugeland <stonecypher@gmail.com>"
 %%
 %% 2> scutil:get_module_attribute(scutil, license).
-%% [{mit_license,"http://scutil.com/license.html"}]'''
+%% [{mit_license,"http://scutil.com/license.html"}]'''{@section Thanks} to Alain O'Dea for pointing out defects in this routine regarding repeated module elements, and available improvements to the provided API.  <a href="http://fullof.bs/reading-module-attributes-in-erlang#comment-475" target="_blank">Mr. O'Dea's insightful advice</a> will be implemented, but that time has not yet come.
 
 %% @since Version 23
-
-%% @todo  Implement <a href="http://concise-software.blogspot.com/">Alain O'Dea</a>'s improvements from <a href="http://fullof.bs/reading-module-attributes-in-erlang#comment-475">this blog comment</a>
-%% @todo  Add Alain O'Dea to doc attribute
 
 get_module_attribute(Module,Attribute) ->
 
@@ -1207,15 +1206,6 @@ ordered_ranks_of([Front|Rem], Ranks, Work) ->
 
 
 
-%% @todo pull over from old_scutil
-
-% annote(Group, Key, Value) ->
-% sc_config, make annote -> config, forget -> delete, recall -> get_config
-
-
-
-
-
 %% @type stringlist() = list().  Every member of a stringlist() is a string().
 
 %% @spec to_lines(Text::string()) -> stringlist()
@@ -1531,7 +1521,7 @@ qsp_average(W, InputVecs) ->
 %% 3
 %%
 %% 5> scutil:dot_product([0.5,1,2],[1,1,1]).
-%% 3.5'''<span style="color:red">The tuple variation of vectors has not yet been implemented in this function.</span>
+%% 3.5'''<span style="color:red">TODO: The tuple variation of vectors has not yet been implemented in this function.</span>
 
 %% @since Version 80
 
@@ -1563,11 +1553,10 @@ dot_product(VX, VY) ->
 %% 3
 %%
 %% 5> scutil:dot_product([0.5,1,2],[1,1,1]).
-%% 3.5'''
+%% 3.5'''<span style="color:red">TODO: Implement seven-dimensional cross product</span>
 
 %% @since Version 80
 
-%% @todo implement list variation
 %% @todo implement 7-dimensional variation, http://en.wikipedia.org/wiki/Seven-dimensional_cross_product
 
 cross_product( {X1,Y1,Z1}, {X2,Y2,Z2} ) ->
@@ -1580,8 +1569,42 @@ cross_product( [X1,Y1,Z1], [X2,Y2,Z2] ) ->
 
 
 
-vector_magnitude(VX) ->
-    math:sqrt(lists:sum([ X*X || X <- VX ])).
+%% @type numeric_tuple() = tuple().  Every member of a {@type numeric_tuple()} must be a {@type number()}.
+%% @type relaxed_numeric_tuple() = numeric_tuple().  Relaxed numeric tuples are allowed to contain non-numeric elements, which are treated as zero for purposes of computation.
+
+%% @spec tuple_sum(T::relaxed_numeric_tuple()) -> number()
+
+%% @doc Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero. ```1>'''
+
+%% @since Version 86
+
+tuple_sum(T) when is_tuple(T) -> tuple_sum(T, 1, size(T), 0).
+
+tuple_sum(_T, Which, Max, Work) when Which > Max -> Work;
+tuple_sum( T, Which, Max, Work)                  -> tuple_sum(T, Which+1, Max, Work+element(Which, T)).
+
+
+
+
+
+
+
+%% @spec root_sum_square(VX::vector()) -> number()
+
+%% @doc {@section Math} Calculate the magnitude (also known as the root sum square)
+
+%% @since Version 85
+
+root_sum_square(VX) when is_list(VX) ->
+    math:sqrt(lists:sum([ X*X || X <- VX ]));
+
+root_sum_square(VX) when is_tuple(VX) -> root_sum_square(tuple_to_list(VX)).
+
+%% @equiv root_sum_square(VX)
+
+%% @since Version 85
+
+vector_magnitude(VX) -> root_sum_square(VX).
 
 
 
@@ -2085,8 +2108,14 @@ has_notebook(Notebook) -> ok.
 
 %% @since Version 83
 
-annote(Notebook, NoteName, NewValue) -> ok.
+annote(Notebook, NoteName, NewValue) -> annote(Notebook, [{NoteName, NewValue}]).
 
+annote(Notebook, NameValuePair)  when is_list(Notebook), is_tuple(NameValuePair) -> annote(Notebook, [NameValuePair]);
+annote(Notebook, NameValuePairs) when is_list(Notebook), is_list(NameValuePairs) ->
+
+    get_notebook_table(Notebook),
+    [dets:insert(Notebook, {Term, Value}) || {Term, Value} <- NameValuePairs],
+    close_notebook_table(Notebook).
 
 
 
@@ -2097,7 +2126,18 @@ annote(Notebook, NoteName, NewValue) -> ok.
 
 %% @since Version 83
 
-read_note(Notebook, NoteName) -> ok.
+read_note(Notebook, NoteName) when is_list(Notebook) ->
+
+    get_notebook_table(Notebook),
+
+    CurrentConfig = case dets:match(Notebook, {Field, '$1'}) of
+        []    -> undefined;
+        [[X]] -> { value, X }
+    end,
+
+    close_notebook_table(Notebook),
+    CurrentConfig.
+
 
 
 
@@ -2121,4 +2161,247 @@ has_note(Notebook, NoteName) -> ok.
 
 %% @since Version 83
 
-remove_note(Notebook, NoteName) -> ok.
+remove_note(Notebook, NoteName)  when is_atom(Notebook), is_atom(NoteName)  -> remove_note(Notebook, [NoteName]);
+remove_note(Notebook, NoteNames) when is_atom(Notebook), is_list(NoteNames) ->
+
+    get_notebook_table(Notebook),
+    [dets:delete(Notebook, NoteName) || NoteName <- NoteNames],
+    close_notebook_table(Notebook).
+
+
+
+
+
+%% @private
+get_notebook_table(TableName) when is_list(TableName) -> dets:open_file(TableName, [{type, set}]).
+
+%% @private
+close_notebook_table(TableName) when is_list(TableName) -> dets:close(TableName).
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%
+%%   TODO CODE
+
+
+
+
+
+% memory() ->
+%
+%    receive
+%
+%        terminate -> ok;
+%
+%        { Sender, store, Key, Val } ->
+%            put(Key, Val),
+%            Sender ! { memory_set_to, Key, Val },
+%            memory();
+%
+%        { Sender, fetch, Key } ->
+%            Sender ! { memory_found, get(Key) },
+%            memory();
+%
+%    end.
+%
+%
+%
+%
+% test() ->
+%
+%    register(mem, spawn(?MODULE, memory, [])),
+%
+%     mem ! { self(), store, foo, bar },
+%     io:format("~p", [receive X -> X end]),
+%
+%     mem ! { self(), fetch, foo },
+%     io:format("~p", [receive X -> X end]).
+
+
+
+
+
+% Rename around the "annote" family
+
+%install(ConfigName)                when is_atom(ConfigName)                                                                 -> install(ConfigName, []).
+%install(ConfigName, DefaultConfig) when is_atom(ConfigName) andalso (is_list(DefaultConfig) orelse is_tuple(DefaultConfig)) ->
+%
+%    case is_installed(ConfigName) of
+%
+%        false -> configure(ConfigName, DefaultConfig), { ok, now_installed };
+%        true  -> { error, already_installed, uninstall_first }
+%
+%    end.
+%
+%
+%
+%
+%
+%is_installed(ConfigName) when is_atom(ConfigName) ->
+%
+%    case dets:is_dets_file(sanitize_filename(ConfigName)) of
+%
+%        { error, _ } -> false;
+%        _            -> true
+%
+%    end.
+%
+%
+%
+%
+%
+%uninstall(ConfigName) when is_atom(ConfigName) ->
+%
+%
+%    case is_installed(ConfigName) of
+%
+%        false -> { error, not_installed };
+%        true  ->
+%
+%            file:delete(sanitize_filename(ConfigName)),
+%            { ok, uninstalled }
+%
+%    end.
+%
+%
+%
+%
+%
+%get_config(ConfigName) when is_atom(ConfigName) ->
+%
+%    get_table(ConfigName),
+%    CurrentConfig = dets:match(sanitize_filename(ConfigName), '$1'),
+%    close_table(ConfigName),
+%    CurrentConfig.
+
+
+
+
+
+%map_reduce(Function, Workload)                     -> map_reduce(Function, Workload, 1,           nodes()).
+%map_reduce(Function, Workload, JobsPerNode)        -> map_reduce(Function, Workload, JobsPerNode, nodes()).
+%map_reduce(Function, Workload, JobsPerNode, Nodes) ->
+%
+%    Computers      = lists:flatten(lists:duplicate(Nodes)),
+%    WorkOut        = [],
+%    TaggedWorkload = lists:zip(lists:seq(1,length(Workload)), Workload),
+%    WorkDone       = [],
+%
+%    map_reduce_worker(Function, TaggedWorkload, Computers, WorkOut, WorkDone).
+%
+%
+%
+%
+%
+%map_reduce_worker(_Function, [],             _Computers, [],      WorkDone) -> {_,Out} = lists:unzip(lists:keysort(1,WorkDone)), Out;                    % no work left, no work out?  done.
+%map_reduce_worker( Function, [],              Computers, WorkOut, WorkDone) -> wait_for_work(Function, [],             Computers, WorkOut, WorkDone);    % no work left, work out?  wait.
+%map_reduce_worker( Function, TaggedWorkload, [],         WorkOut, WorkDone) -> wait_for_work(Function, TaggedWorkload, [],        WorkOut, WorkDone);    % work left, no computers left?  wait.
+%map_reduce_worker( Function, TaggedWorkload,  Computers, WorkOut, WorkDone) -> do_work(Function, TaggedWorkload, Computers, WorkOut, WorkDone).          % work left, computers left?  do work.
+%
+%
+%
+%
+%
+%wait_for_work(Function, TaggedWorkload, Computers, WorkOut, WorkDone) ->
+%
+%    receive
+%        { work_done, Computer, Tag, Result } -> map_reduce_worker(Function, TaggedWorkload, Computers++[Computer], WorkOut--[Tag], WorkDone++[{Tag,Result}])
+%    end.
+%
+%
+%
+%
+%
+%do_work(Function, [{Tag,Workload}|RemWorkload], [Computer|RemComputers], WorkOut, WorkDone) ->
+%
+%    spawn(Computer, fun(Who,What,Which,With) -> Who ! {work_done, node(), Which, apply(What,With) end}, [self(),Function,Tag,Workload]),
+%    map_reduce_worker(Function, RemWorkload, RemComputers, WorkOut++[Tag], WorkDone).
+
+
+
+
+
+
+%receive_all_answers(MessageList, ProcessList) when length(MessageList) /= length(ProcessList) -> { error, message_list_and_process_list_must_have_same_length };
+%receive_all_answers(MessageList, ProcessList) when is_list(MessageList), is_list(ProcessList) ->
+%
+%    IDs = lists:seq(1,length(MessageList)),
+%    [ spawn(?MODULE, receive_all_answers_worker, [self(), ID, Message, Process]) || { ID, Message, Process } <- lists:zip3(IDs, MessageList, ProcessList) ],
+%    wait_on_answers(IDs, []).
+%
+%
+%
+%
+%
+%receive_all_answers_worker(Collector, Id, Message, Process) ->
+%
+%    Process ! Message,
+%    receive
+%        X -> Collector ! { an_answer, Id, X }
+%    end.
+%
+%
+%
+%
+%
+%wait_on_answers([],        Work) -> {_, Out} = lists:keysort(1,Work), Out;
+%wait_on_answers(Remaining, Work) ->
+%
+%    receive
+%        { an_answer, AnswerID, Answer } -> wait_on_answers(Remaining -- [AnswerID], Work++{AnswerID,Answer});
+%        Other                           -> { error, { misunderstood_result, Other }, { work_completed, Work }, { work_remaining, Remaining } }
+%    end.
+
+
+
+
+
+
+%start() ->
+%
+%    case gen_tcp:listen(25,[]) of
+%
+%        { ok, ListeningSocket } -> { ok, listening_on_pid, spawn(?MODULE, accept_loop, [ListeningSocket]) };
+%        { error, E }            -> { error, E }
+%
+%    end.
+%
+%
+%
+%
+%
+%accept_loop(ListeningSocket) ->
+%
+%    case gen_tcp:accept(ListeningSocket) of
+%
+%        { ok, ConnectedSocket } ->
+%            spawn(?MODULE, handler_loop, [ConnectedSocket]),
+%            accept_loop(ListeningSocket);
+%
+%        { error, E } ->
+%            accept_loop(ListeningSocket)
+%
+%    end.
+%
+%
+%
+%
+%
+%handler_loop(ConnectedSocket) ->
+%
+%    receive
+%
+%        terminate              -> ok;
+%        { tcp, Socket, Input } -> gen_tcp:send(Socket, "You said " ++ Input ++ "\r\n"), handler_loop(ConnectedSocket);
+%        { error, E }           -> { error, E }
+%
+%    end.
