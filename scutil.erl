@@ -60,7 +60,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines for operating on lists of data augmenting the standard lists module.<br/>
-%%     {@link permute/1}, {@link combinations/1}, {@link shuffle/1}, {@link sanitize_tokens/1}, {@link shared_keys/1}, {@link shared_keys/2}, {@link shared_keys/3} (see also {@link random_from/3}, {@link random_from_weighted/1})
+%%     {@link permute/1}, {@link combinations/1}, {@link shuffle/1}, {@link sanitize_tokens/1}, {@link shared_keys/1}, {@link shared_keys/2}, {@link shared_keys/3}, {@link all_unique_pairings/1}, {@link walk_unique_pairings/2} (see also {@link random_from/3}, {@link random_from_weighted/1})
 %%   </dd>
 %% </dl>
 %% === Math ===
@@ -1677,6 +1677,15 @@ both_lists_next_item(IA,             IB,             Work) ->
 
 % collects results; do not use for huge lists
 
+%% @deprecated Use {@link combinations/2} instead.
+
+%% @spec all_unique_pairings(List::list()) -> tuple_list()
+
+%% @doc Generate every unique pair of elements from a list; deprecated in favor of {@link combinations/2}, which supports more than just two-element combinations and returns a list of lists instead of a list of tuples.  ```1> scutil:all_unique_pairings([a,b,c]).
+%% [{b,c},{a,b},{a,c}]'''
+
+%% @since Version 31
+
 all_unique_pairings(A) when is_list(A) -> all_unique_pairings(A,[]).
 
 all_unique_pairings([],      Work) -> Work;
@@ -2423,8 +2432,14 @@ map_reduce_do_work(Function, [{Tag,Workload}|RemWorkload], [Computer|RemComputer
 
 %% @spec combinations(Items::list(), OutputItemSize::positive_integer()) -> list_of_lists()
 
-%% @doc Provides a list of every unique combination of input terms, order-ignorant; contrast {@link permute/2}.  Permutations are all unique combinations of a set of tokens; the 2-permutations of `[a,b,c]' for example are `[a,b]', `[a,c]' and `[b,c]'.  Note the absence of other orderings, such as `[b,a]', which are provided by {@link permute/2}.  Combinations are taken of a smaller count of tokens than the main set.  Combinations are not ordered, but this implementation happens to provide answers in the same order as the input list.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> scutil:combinations(["dave","kate","pat"],2).
-%% [["dave","kate"],["dave","pat"],["kate","pat"]]''' {@section Thanks} to Alisdair Sullivan for this implementation, which has been slightly but not significantly modified since receipt.
+%% @doc Provides a list of every unique combination of input terms, order-ignorant; contrast {@link permute/2}.  Permutations are all unique combinations of a set of tokens; the 2-permutations of `[a,b,c]' for example are `[a,b]', `[a,c]' and `[b,c]'.  Note the absence of other orderings, such as `[b,a]', which are provided by {@link permute/2}.  Combinations are taken of a smaller count of tokens than the main set.  Combinations are not ordered, but this implementation happens to provide answers in the same order as the input list.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> scutil:combinations([a,b,c,d],2).
+%% [[a,b],[a,c],[a,d],[b,c],[b,d],[c,d]]
+%%
+%% 2> scutil:combinations(["dave","kate","pat"],2).
+%% [["dave","kate"],["dave","pat"],["kate","pat"]]
+%%
+%% 3> scutil:combinations([fast, strong, smart, lucky], 2).
+%% [[fast,strong], [fast,smart], [fast,lucky], [strong,smart], [strong,lucky], [smart,lucky]]''' {@section Thanks} to Alisdair Sullivan for this implementation, which has been slightly but not significantly modified since receipt.
 
 %% @since Version 89
 
