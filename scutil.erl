@@ -60,7 +60,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines for operating on lists of data augmenting the standard lists module.<br/>
-%%     {@link shuffle/1}, {@link sanitize_tokens/1}, {@link shared_keys/1}, {@link shared_keys/2}, {@link shared_keys/3} (see also {@link random_from/3}, {@link random_from_weighted/1})
+%%     {@link permute/1}, {@link combinations/1}, {@link shuffle/1}, {@link sanitize_tokens/1}, {@link shared_keys/1}, {@link shared_keys/2}, {@link shared_keys/3} (see also {@link random_from/3}, {@link random_from_weighted/1})
 %%   </dd>
 %% </dl>
 %% === Math ===
@@ -165,6 +165,7 @@
 %%
 %% <ul>
 %%   <li>Alain O'Dea of <a href="http://concise-software.blogspot.com/" target="_blank">Concise Software</a></li>
+%%   <li>Alisdair Sullivan</li>
 %%   <li>Ayrnieu</li>
 %%   <li>Bryon Vandiver of <a href="http://sublab.net/" target="_blank">Sublab Research and Design</a></li>
 %%   <li>Chile</li>
@@ -317,7 +318,10 @@
     has_note/2,         % needs tests
     remove_note/2,      % needs tests
 
-    tuple_sum/1 % needs tests
+    tuple_sum/1, % needs tests
+
+    map_reduce/2, map_reduce/3, map_reduce/4, % needs tests
+    combinations/2 % needs tests
 
 ] ).
 
@@ -1932,7 +1936,7 @@ permute(List) -> permute(List, length(List)).
 
 %% @spec permute(List::list(), Depth::positive_integer()) -> list()
 
-%% @doc {@section Utility} Calculate either the full or the depth-limited permutations of a list.  Permutations are all valid orderings of a set of tokens; the permutations of `[a,b]' for example are `[a,b]' and `[b,a]'.  Depth limitation means the permutations of a smaller count of tokens from the main set; the 2-limited permutations of `[a,b,c]' for example are `[a,b]', `[a,c]', `[b,a]', `[b,c]', `[c,a]' and `[c,b]'.  Permutations are not ordered.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> scutil:permute(["dave","kate","pat"]).
+%% @doc {@section Utility} Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast {@link combinations/2}.  Permutations are all valid orderings of a set of tokens; the permutations of `[a,b]' for example are `[a,b]' and `[b,a]'.  Depth limitation means the permutations of a smaller count of tokens from the main set; the 2-limited permutations of `[a,b,c]' for example are `[a,b]', `[a,c]', `[b,a]', `[b,c]', `[c,a]' and `[c,b]'.  Permutations are not ordered.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> scutil:permute(["dave","kate","pat"]).
 %% [{"pat","kate","dave"}, {"kate","pat","dave"}, {"pat","dave","kate"}, {"dave","pat","kate"}, {"kate","dave","pat"}, {"dave","kate","pat"}]
 %%
 %% 2> scutil:permute([fast, strong, smart, lucky], 2).
@@ -1940,8 +1944,8 @@ permute(List) -> permute(List, length(List)).
 
 %% @since Version 17
 
-permute(List, 1)     when is_list(List)                    -> [ {T}                        || T <- List ];
-permute(List, Depth) when is_list(List), is_integer(Depth) -> [ erlang:append_element(R,T) || T <- List, R <- permute(List--[T], Depth-1) ].
+permute(List, 1)     when is_list(List)                    -> [ [T]    || T <- List ];
+permute(List, Depth) when is_list(List), is_integer(Depth) -> [ [T]++R || T <- List, R <- permute(List--[T], Depth-1) ].
 
 
 
@@ -2130,7 +2134,7 @@ read_note(Notebook, NoteName) when is_list(Notebook) ->
 
     get_notebook_table(Notebook),
 
-    CurrentConfig = case dets:match(Notebook, {Field, '$1'}) of
+    CurrentConfig = case dets:match(Notebook, {NoteName, '$1'}) of
         []    -> undefined;
         [[X]] -> { value, X }
     end,
@@ -2287,44 +2291,49 @@ close_notebook_table(TableName) when is_list(TableName) -> dets:close(TableName)
 
 
 
-%map_reduce(Function, Workload)                     -> map_reduce(Function, Workload, 1,           nodes()).
-%map_reduce(Function, Workload, JobsPerNode)        -> map_reduce(Function, Workload, JobsPerNode, nodes()).
-%map_reduce(Function, Workload, JobsPerNode, Nodes) ->
-%
-%    Computers      = lists:flatten(lists:duplicate(Nodes)),
-%    WorkOut        = [],
-%    TaggedWorkload = lists:zip(lists:seq(1,length(Workload)), Workload),
-%    WorkDone       = [],
-%
-%    map_reduce_worker(Function, TaggedWorkload, Computers, WorkOut, WorkDone).
-%
-%
-%
-%
-%
-%map_reduce_worker(_Function, [],             _Computers, [],      WorkDone) -> {_,Out} = lists:unzip(lists:keysort(1,WorkDone)), Out;                    % no work left, no work out?  done.
-%map_reduce_worker( Function, [],              Computers, WorkOut, WorkDone) -> wait_for_work(Function, [],             Computers, WorkOut, WorkDone);    % no work left, work out?  wait.
-%map_reduce_worker( Function, TaggedWorkload, [],         WorkOut, WorkDone) -> wait_for_work(Function, TaggedWorkload, [],        WorkOut, WorkDone);    % work left, no computers left?  wait.
-%map_reduce_worker( Function, TaggedWorkload,  Computers, WorkOut, WorkDone) -> do_work(Function, TaggedWorkload, Computers, WorkOut, WorkDone).          % work left, computers left?  do work.
-%
-%
-%
-%
-%
-%wait_for_work(Function, TaggedWorkload, Computers, WorkOut, WorkDone) ->
-%
-%    receive
-%        { work_done, Computer, Tag, Result } -> map_reduce_worker(Function, TaggedWorkload, Computers++[Computer], WorkOut--[Tag], WorkDone++[{Tag,Result}])
-%    end.
-%
-%
-%
-%
-%
-%do_work(Function, [{Tag,Workload}|RemWorkload], [Computer|RemComputers], WorkOut, WorkDone) ->
-%
-%    spawn(Computer, fun(Who,What,Which,With) -> Who ! {work_done, node(), Which, apply(What,With) end}, [self(),Function,Tag,Workload]),
-%    map_reduce_worker(Function, RemWorkload, RemComputers, WorkOut++[Tag], WorkDone).
+%% @equiv map_reduce(Function, Workload, 1, nodes())
+map_reduce(Function, Workload) -> map_reduce(Function, Workload, 1, nodes()).
+
+%% @equiv map_reduce(Function, Workload, JobsPerNode, nodes())
+map_reduce(Function, Workload, JobsPerNode) -> map_reduce(Function, Workload, JobsPerNode, nodes()).
+
+
+map_reduce(Function, Workload, JobsPerNode, Nodes) ->
+
+    Computers      = lists:flatten(lists:duplicate(JobsPerNode, Nodes)),
+    WorkOut        = [],
+    TaggedWorkload = lists:zip(lists:seq(1,length(Workload)), Workload),
+    WorkDone       = [],
+
+    map_reduce_worker(Function, TaggedWorkload, Computers, WorkOut, WorkDone).
+
+
+
+
+
+map_reduce_worker(_Function, [],             _Computers, [],      WorkDone) -> {_,Out} = lists:unzip(lists:keysort(1,WorkDone)), Out;                               % no work left, no work out?  done.
+map_reduce_worker( Function, [],              Computers, WorkOut, WorkDone) -> map_reduce_wait_for_work(Function, [],             Computers, WorkOut, WorkDone);    % no work left, work out?  wait.
+map_reduce_worker( Function, TaggedWorkload, [],         WorkOut, WorkDone) -> map_reduce_wait_for_work(Function, TaggedWorkload, [],        WorkOut, WorkDone);    % work left, no computers left?  wait.
+map_reduce_worker( Function, TaggedWorkload,  Computers, WorkOut, WorkDone) -> map_reduce_do_work(      Function, TaggedWorkload, Computers, WorkOut, WorkDone).    % work left, computers left?  do work.
+
+
+
+
+
+map_reduce_wait_for_work(Function, TaggedWorkload, Computers, WorkOut, WorkDone) ->
+
+    receive
+        { work_done, Computer, Tag, Result } -> map_reduce_worker(Function, TaggedWorkload, Computers++[Computer], WorkOut--[Tag], WorkDone++[{Tag,Result}])
+    end.
+
+
+
+
+
+map_reduce_do_work(Function, [{Tag,Workload}|RemWorkload], [Computer|RemComputers], WorkOut, WorkDone) ->
+
+    spawn(Computer, fun(Who,What,Which,With) -> Who ! {work_done, node(), Which, apply(What,With) } end, [self(),Function,Tag,Workload]),
+    map_reduce_worker(Function, RemWorkload, RemComputers, WorkOut++[Tag], WorkDone).
 
 
 
@@ -2405,3 +2414,22 @@ close_notebook_table(TableName) when is_list(TableName) -> dets:close(TableName)
 %        { error, E }           -> { error, E }
 %
 %    end.
+
+
+
+
+
+%% @type list_of_lists() = list().  Every member of a {@type list_of_lists()} is a {@type list()}.
+
+%% @spec combinations(Items::list(), OutputItemSize::positive_integer()) -> list_of_lists()
+
+%% @doc Provides a list of every unique combination of input terms, order-ignorant; contrast {@link permute/2}.  Permutations are all unique combinations of a set of tokens; the 2-permutations of `[a,b,c]' for example are `[a,b]', `[a,c]' and `[b,c]'.  Note the absence of other orderings, such as `[b,a]', which are provided by {@link permute/2}.  Combinations are taken of a smaller count of tokens than the main set.  Combinations are not ordered, but this implementation happens to provide answers in the same order as the input list.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> scutil:combinations(["dave","kate","pat"],2).
+%% [["dave","kate"],["dave","pat"],["kate","pat"]]''' {@section Thanks} to Alisdair Sullivan for this implementation, which has been slightly but not significantly modified since receipt.
+
+%% @since Version 89
+
+combinations(Items, 1) when is_list(Items) -> Items;
+combinations([],   _N)                     -> [];
+combinations(Items, N) when is_list(Items), is_integer(N), N > 0 -> [ lists:append( [lists:nth(I, Items)], [J] )          ||
+                                                                      I <- lists:seq(1, length(Items)),
+                                                                      J <- combinations( lists:nthtail(I, Items), (N-1) )  ].
