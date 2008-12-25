@@ -36,7 +36,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines for converting between basic types, annotated types and user types<br/>
-%%     {@link hex_to_int/1}, {@link byte_to_hex/1}, {@link nybble_to_hex/1}, {@link io_list_to_hex/1}
+%%     {@link hex_to_int/1}, {@link byte_to_hex/1}, {@link nybble_to_hex/1}, {@link io_list_to_hex/1}, {@link list_to_number/1}
 %%   </dd>
 %% </dl>
 %% === Dispatch ===
@@ -44,7 +44,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines for managing send/receive patterns between processes and process sets<br/>
-%%
+%%      {@link call_after/2}, {@link call_after/3}, {@link call_after/4}
 %%   </dd>
 %% </dl>
 %% === Documentary ===
@@ -52,7 +52,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines whose purpose is to clarify dependant code by presenting their name, rather than routine behavior, as well as to establish standard result messages where appropriate<br/>
-%%     {@link even_or_odd/1}, {@link absolute_difference/2}, {@link receive_one/0}
+%%     {@link even_or_odd/1}, {@link absolute_difference/2}, {@link receive_one/0}, {@link start_register_if_not_running/3}, {@link start_register_if_not_running/4}, {@link start_register_if_not_running/5}
 %%   </dd>
 %% </dl>
 %% === List ===
@@ -68,7 +68,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines for higher math computation missing from the standard math module.<br/>
-%%     {@link list_product/1}, {@link dot_product/2}, {@link cross_product/2}, {@link vector_magnitude/1}, {@link normalize_vector/1}, {@link root_mean_square/1}, {@link root_sum_square/1}
+%%     {@link list_product/1}, {@link dot_product/2}, {@link cross_product/2}, {@link vector_magnitude/1}, {@link normalize_vector/1}, {@link root_mean_square/1}, {@link root_sum_square/1}, {@link tuple_sum/1}
 %%   </dd>
 %% </dl>
 %% === Parallelism ===
@@ -76,7 +76,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines for manipulating behavior across sets of parallel processes.<br/>
-%%     {@link a/1}
+%%     {@link map_reduce/2}, {@link map_reduce/3}, {@link map_reduce/4}
 %%   </dd>
 %% </dl>
 %% === Persistence ===
@@ -152,7 +152,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines which don't classify well into larger categories<br/>
-%%     {@link type_of/1}, {@link get_module_attribute/2}, {@link call_after/2}, {@link call_after/3}, {@link call_after/4}
+%%     {@link type_of/1}, {@link get_module_attribute/2}
 %%   </dd>
 %% </dl>
 %%
@@ -281,7 +281,7 @@
     walk_unique_pairings/2, % needs tests
     list_to_number/1, % needs tests
     counter/1, inc_counter/1, inc_counter/2, dec_counter/1, dec_counter/2, reset_counter/1, counter_process/0, % needs tests
-    start_register_if_not_running/4, % needs tests
+    start_register_if_not_running/3, start_register_if_not_running/4, start_register_if_not_running/5, % needs tests
     wait_until_terminate/0, wait_until_terminate/1, % needs tests
     module_has_function/2, % needs tests
 
@@ -1418,7 +1418,7 @@ moments(List, Moments) when is_list(Moments) -> [ moment(List, M) || M <- Moment
 %% @spec central_moment(List::list(), N::integer()) -> float()
 
 %% @doc {@section Statistics} Takes the Nth cetral moment of a list.  The Nth central moment of a list is the arithmetic mean of (the list items each minus the mean of the list, each 
-%% taken to the Nth power).  In a sense, this is the "normalized" moment.  Fractional Ns are not defined.  Not to be confused with {@link moment/2}.  {@section Thanks} to Kraln and 
+%% taken to the Nth power).  In a sense, this is the "normalized" moment.  Fractional Ns are not defined.  Not to be confused with {@link moment/2}.  {@section Thanks} to Kraln and
 %% Chile for straightening me out on moments and central moments.  ```1> scutil:central_moment([1,1,1], 2).
 %% 0.0
 %%
@@ -1578,7 +1578,7 @@ cross_product( [X1,Y1,Z1], [X2,Y2,Z2] ) ->
 
 %% @spec tuple_sum(T::relaxed_numeric_tuple()) -> number()
 
-%% @doc Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero. ```1>'''
+%% @doc {@section Math} Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero. ```1>'''
 
 %% @since Version 86
 
@@ -1634,7 +1634,7 @@ vector_magnitude(VX) -> root_sum_square(VX).
 %% @spec normalize_vector(Vector::vector()) -> unit_vector()
 
 %% @doc {@section Math} Returns the magnitude of a vector.  A vector's magnitude is the length of its hypoteneuse.  A vector can be seen as the product of its unit vector and its magnitude; as such many people see a vector's magnitude as its scale.  The normal of the zero vector is undefined, in the way that dividing by zero is undefined, and will throw an arithmetic exception. ```1> scutil:normalize_vector([0,3,4]).
-%% [0.0,0.6,0.8]'''TODO: When tuple comprehensions are introduced to the language, convert this to using them.
+%% [0.0,0.6,0.8]'''<span style="color:red">TODO: When tuple comprehensions are introduced to the language, convert this to using them.</span>
 
 %% @since Version 85
 
@@ -1648,8 +1648,36 @@ normalize_vector(VX) when is_tuple(VX) -> list_to_tuple(normalize_vector(tuple_t
 
 
 
+%% @spec amean_vector_normal(VX::numeric_list()) -> number()
+
+%% @doc {@section Statistics} Returns the arithmetic mean of the elements of the unit vector for the vector provided.
+
+%% @since Version 85
+
 amean_vector_normal(VX) -> arithmetic_mean(normalize_vector(VX)).
+
+
+
+
+
+%% @spec gmean_vector_normal(VX::numeric_list()) -> number()
+
+%% @doc {@section Statistics} Returns the geometric mean of the elements of the unit vector for the vector provided.
+
+%% @since Version 85
+
 gmean_vector_normal(VX) ->  geometric_mean(normalize_vector(VX)).
+
+
+
+
+
+%% @spec hmean_vector_normal(VX::numeric_list()) -> number()
+
+%% @doc {@section Statistics} Returns the harmonic mean of the elements of the unit vector for the vector provided.
+
+%% @since Version 85
+
 hmean_vector_normal(VX) ->   harmonic_mean(normalize_vector(VX)).
 
 
@@ -1707,7 +1735,7 @@ both_lists_next_item(IA,             IB,             Work) ->
 
 %% @spec all_unique_pairings(List::list()) -> tuple_list()
 
-%% @doc Generate every unique pair of elements from a list; deprecated in favor of {@link combinations/2}, which supports more than just two-element combinations and returns a list of lists instead of a list of tuples.  ```1> scutil:all_unique_pairings([a,b,c]).
+%% @doc {@section List} Generate every unique pair of elements from a list; deprecated in favor of {@link combinations/2}, which supports more than just two-element combinations and returns a list of lists instead of a list of tuples.  ```1> scutil:all_unique_pairings([a,b,c]).
 %% [{b,c},{a,b},{a,c}]'''
 
 %% @since Version 31
@@ -1723,6 +1751,8 @@ all_unique_pairings([Ai|Ar], Work) -> all_unique_pairings(Ar, [{Ai,Ari}||Ari<-Ar
 
 % used for side effects, doesn't gather results; appropriate for enormous lists
 
+% comeback
+
 walk_unique_pairings([],    _) -> ok;
 walk_unique_pairings([A|R], F) when is_function(F) ->
     walk_unique_pairings(A, R, F),
@@ -1737,6 +1767,19 @@ walk_unique_pairings( A, [Rh|Rr], F) ->
 
 
 
+%% @spec list_to_number(X::list()) -> number()
+
+%% @doc {@section Conversion} Converts a list into a number; integers will be returned if there is no mantissa in the list representation. ```1> scutil:list_to_number("2").
+%% 2
+%%
+%% 2> scutil:list_to_number("2.0").
+%% 2.0
+%%
+%% 3> scutil:list_to_number("2.1").
+%% 2.1'''
+
+%% @since Version 8
+
 list_to_number(X) ->
     case catch list_to_float(X) of
         {'EXIT',_} -> list_to_integer(X);
@@ -1747,14 +1790,49 @@ list_to_number(X) ->
 
 
 
+%% @equiv start_register_if_not_running(node(), Name, Module, Function, [])
+start_register_if_not_running(Name, Module, Function) -> start_register_if_not_running(node(), Name, Module, Function, []).
 
-start_register_if_not_running(Name, Module, Function, Args) when is_atom(Name), is_atom(Module), is_atom(Function), is_list(Args) ->
+%% @equiv start_register_if_not_running(node(), Name, Module, Function, Args)
+start_register_if_not_running(Name, Module, Function, Args) -> start_register_if_not_running(node(), Name, Module, Function, Args).
+
+%% @spec start_register_if_not_running(Node::atom(), Name::atom(), Module::atom(), Function::atom(), Args::list()) -> pid() | ok
+
+%% @doc {@section Documentary} Check whether a process is registered locally, and if not, spawn it with a give function and arguments.  ```1> whereis(test).
+%% undefined
+%%
+%% 2> scutil:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
+%% ok
+%%
+%% 3> whereis(test).
+%% <0.726.0>
+%%
+%% 4> test ! terminate.
+%% terminate
+%%
+%% 5> whereis(test).
+%% undefined
+%%
+%% 6> scutil:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
+%% true
+%%
+%% 7> whereis(test).
+%% <0.731.0>
+%%
+%% 8> scutil:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
+%% ok
+%%
+%% 9> whereis(test).
+%% <0.731.0>'''
+
+%% @since Version 8
+
+start_register_if_not_running(Node, Name, Module, Function, Args) when is_atom(Name), is_atom(Module), is_atom(Function), is_list(Args) ->
 
     case whereis(Name) of
-        undefined -> register(Name, spawn(Module, Function, Args));
+        undefined -> register(Name, spawn(Node, Module, Function, Args)), ok;
         _         -> ok
     end.
-
 
 
 
@@ -2332,7 +2410,10 @@ map_reduce(Function, Workload) -> map_reduce(Function, Workload, 1, nodes()).
 %% @equiv map_reduce(Function, Workload, JobsPerNode, nodes())
 map_reduce(Function, Workload, JobsPerNode) -> map_reduce(Function, Workload, JobsPerNode, nodes()).
 
+%% @spec map_reduce(Function::function(), Workload::list(), JobsPerNode::positive_integer(), Nodes::list()) -> list()
 
+%% @doc {@section Parallelism} Takes a workload, a function, a count of jobs per node and a node list, and distributes work on demand to available nodes according to completion until the master workload is fulfilled.  Results are provided in the order the workload was provided, regardless of in what order they are completed or received. ```
+%% '''<span style="color:red">TODO: add crash handling behavior, progress querying behavior</span>
 map_reduce(Function, Workload, JobsPerNode, Nodes) ->
 
     Computers      = lists:flatten(lists:duplicate(JobsPerNode, Nodes)),
@@ -2458,7 +2539,7 @@ map_reduce_do_work(Function, [{Tag,Workload}|RemWorkload], [Computer|RemComputer
 
 %% @spec combinations(Items::list(), OutputItemSize::positive_integer()) -> list_of_lists()
 
-%% @doc Provides a list of every unique combination of input terms, order-ignorant; contrast {@link permute/2}.  Permutations are all unique combinations of a set of tokens; the 2-permutations of `[a,b,c]' for example are `[a,b]', `[a,c]' and `[b,c]'.  Note the absence of other orderings, such as `[b,a]', which are provided by {@link permute/2}.  Combinations are taken of a smaller count of tokens than the main set.  Combinations are not ordered, but this implementation happens to provide answers in the same order as the input list.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> scutil:combinations([a,b,c,d],2).
+%% @doc {@section List} Provides a list of every unique combination of input terms, order-ignorant; contrast {@link permute/2}.  Permutations are all unique combinations of a set of tokens; the 2-permutations of `[a,b,c]' for example are `[a,b]', `[a,c]' and `[b,c]'.  Note the absence of other orderings, such as `[b,a]', which are provided by {@link permute/2}.  Combinations are taken of a smaller count of tokens than the main set.  Combinations are not ordered, but this implementation happens to provide answers in the same order as the input list.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> scutil:combinations([a,b,c,d],2).
 %% [[a,b],[a,c],[a,d],[b,c],[b,d],[c,d]]
 %%
 %% 2> scutil:combinations(["dave","kate","pat"],2).
