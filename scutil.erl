@@ -1849,7 +1849,7 @@ start_register_if_not_running(Node, Name, Module, Function, Args) when is_atom(N
 
 %% @spec counter(Name::any()) -> number()
 
-%% @doc Checks a counter's value; if the counter was not already defined, it will report zero. ```1> scutil:counter(hello).
+%% @doc {@section Counters} Checks a counter's value; if the counter was not already defined, it will report zero. ```1> scutil:counter(hello).
 %% 0
 %%
 %% 2> scutil:inc_counter(hello).
@@ -1905,26 +1905,14 @@ dec_counter(Name,By) -> adjust_counter(Name, -1*By).
 
 %% @spec adjust_counter(Name::any(), By::number()) -> number()
 
-%% @doc Adds to a counter's value; if the counter was not already defined, it will become the value in the `By' argument. ```1> scutil:counter(hello).
+%% @doc {@section Counters} Adds to a counter's value; if the counter was not already defined, it will become the value in the `By' argument. ```1> scutil:counter(hello).
 %% 0
 %%
 %% 2> scutil:inc_counter(hello).
 %% 1
 %%
-%% 3> scutil:inc_counter(hello).
-%% 2
-%%
-%% 4> scutil:inc_counter(hello).
-%% 3
-%%
-%% 5> scutil:counter(hello).
-%% 3
-%%
-%% 6> scutil:reset_counter(hello).
-%% 0
-%%
-%% 7> scutil:counter(hello).
-%% 0'''
+%% 3> scutil:adjust_counter(hello, 3).
+%% 4'''
 
 %% @since Version 54
 
@@ -1943,7 +1931,34 @@ adjust_counter(Name, By) when is_number(By) ->
 
 
 
+%% @equiv set_counter(Name, 0)
+
+%% @since Version 54
+
 reset_counter(Name) -> set_counter(Name, 0).
+
+
+
+
+
+%% @spec set_counter(Name::any(), To::number()) -> 0
+
+%% @doc {@section Counters} Sets a counter's value to a specific value. ```1> scutil:counter(hello).
+%% 0
+%%
+%% 2> scutil:set_counter(hello,4).
+%% 4
+%%
+%% 3> scutil:counter(hello).
+%% 4
+%%
+%% 4> scutil:reset_counter(hello).
+%% 0
+%%
+%% 5> scutil:counter(hello).
+%% 0'''
+
+%% @since Version 54
 
 set_counter(Name, To) when is_number(To) ->
 
@@ -1959,9 +1974,6 @@ set_counter(Name, To) when is_number(To) ->
 
 
 
-
-%% @todo remove any counter at zero, since a non-existant counter will report zero anyway
-%% @todo add a mechanism to remove counters (already exists as reset after above change, in a sense; synonym for future under the hood changes, or document?)
 
 %% @private
 
@@ -1991,9 +2003,10 @@ counter_process() ->
 
 
 
-% surprisingly useful in debugging
-
+%% @equiv wait_until_terminate(quiet)
 wait_until_terminate() -> wait_until_terminate(quiet).
+
+%% @spec wait_until_terminate(IsQuiet::atom()) -> ok
 
 wait_until_terminate(quiet) ->
     receive
@@ -2299,6 +2312,8 @@ has_notebook(Notebook) -> ok.
 %% @since Version 83
 
 annote(Notebook, NoteName, NewValue) -> annote(Notebook, [{NoteName, NewValue}]).
+
+% @spec annote(Notebook::filename(), List::kv_list()) ->
 
 annote(Notebook, NameValuePair)  when is_list(Notebook), is_tuple(NameValuePair) -> annote(Notebook, [NameValuePair]);
 annote(Notebook, NameValuePairs) when is_list(Notebook), is_list(NameValuePairs) ->
