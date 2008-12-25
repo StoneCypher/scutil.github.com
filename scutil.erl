@@ -68,7 +68,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines for higher math computation missing from the standard math module.<br/>
-%%     {@link list_product/1}, {@link dot_product/2}, {@link cross_product/2}, {@link vector_magnitude/1}
+%%     {@link list_product/1}, {@link dot_product/2}, {@link cross_product/2}, {@link vector_magnitude/1}, {@link normalize_vector/1}, {@link root_mean_square/1}, {@link root_sum_square/1}
 %%   </dd>
 %% </dl>
 %% === Parallelism ===
@@ -121,7 +121,7 @@
 %%   <dt>Descriptive</dt>
 %%   <dd>
 %%     Routines which provide informative measurements of numeric lists<br/>
-%%     {@link median/1}, {@link mode/1}, {@link histograph/1}, {@link root_mean_square/1}, {@link std_deviation/1}, {@link median_absolute_deviation/1}, {@link moment/1}, {@link moment/2}, {@link central_moment/1}, {@link central_moment/2}, {@link skewness/1}, {@link kurtosis/1}
+%%     {@link median/1}, {@link mode/1}, {@link histograph/1}, {@link std_deviation/1}, {@link median_absolute_deviation/1}, {@link moment/1}, {@link moment/2}, {@link central_moment/1}, {@link central_moment/2}, {@link skewness/1}, {@link kurtosis/1} (see also {@link root_mean_square/1})
 %%   </dd>
 %%   <dt>Normals</dt>
 %%   <dd>
@@ -253,7 +253,7 @@
     arithmetic_mean/1, geometric_mean/1, harmonic_mean/1, weighted_arithmetic_mean/1,  % needs tests
     absolute_difference/2, % needs tests
     std_deviation/1, % needs tests
-    root_mean_square/1, % needs tests
+    root_mean_square/1, root_sum_square/1, % needs tests
     moment/2, moments/1, moments/2, % needs tests
     central_moment/2, central_moments/1, central_moments/2, % needs tests
 %    weighted_geometric_mean/1,
@@ -1606,6 +1606,21 @@ root_sum_square(VX) when is_tuple(VX) -> root_sum_square(tuple_to_list(VX)).
 
 %% @equiv root_sum_square(VX)
 
+%% @doc {@section Math} Returns the magnitude of a vector.  A vector's magnitude is the length of its hypoteneuse (and is as such the root sum square of its components).  A vector can be seen as the product of its unit vector and its magnitude; as such many people see a vector's magnitude as its scale. ```1> scutil:vector_magnitude([0,0,0]).
+%% 0.0
+%%
+%% 2> scutil:vector_magnitude([1,0,0]).
+%% 1.0
+%%
+%% 3> scutil:vector_magnitude([1,1,1]).
+%% 1.7320508075688772
+%%
+%% 4> scutil:vector_magnitude([1,2,3]).
+%% 3.7416573867739413
+%%
+%% 5> scutil:vector_magnitude([0,0.4,0.6,0.2,0.4,0.529150262213]).
+%% 1.0000000000000433'''
+
 %% @since Version 85
 
 vector_magnitude(VX) -> root_sum_square(VX).
@@ -1614,9 +1629,20 @@ vector_magnitude(VX) -> root_sum_square(VX).
 
 
 
-normalize_vector(VX) ->
+%% @type unit_vector() = vector().  The hypoteneuse of a unit vector is precisely one unit long.  Unit vectors are also called normalized or magnitude-normalized vectors.
+
+%% @spec normalize_vector(Vector::vector()) -> unit_vector()
+
+%% @doc {@section Math} Returns the magnitude of a vector.  A vector's magnitude is the length of its hypoteneuse.  A vector can be seen as the product of its unit vector and its magnitude; as such many people see a vector's magnitude as its scale.  The normal of the zero vector is undefined, in the way that dividing by zero is undefined, and will throw an arithmetic exception. ```1> scutil:normalize_vector([0,3,4]).
+%% [0.0,0.6,0.8]'''TODO: When tuple comprehensions are introduced to the language, convert this to using them.
+
+%% @since Version 85
+
+normalize_vector(VX) when is_list(VX) ->
     VM = vector_magnitude(VX),
-    [ X / VM || X <- VX ].
+    [ X / VM || X <- VX ];
+
+normalize_vector(VX) when is_tuple(VX) -> list_to_tuple(normalize_vector(tuple_to_list(VX))).
 
 
 
