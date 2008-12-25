@@ -6,6 +6,7 @@
 
 %% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of various routines of a variety of topics:<ul>
 %% <li>{@section Conversion}</li>
+%% <li>{@section Counters}</li>
 %% <li>{@section Dispatch}</li>
 %% <li>{@section Documentary}</li>
 %% <li>{@section List}</li>
@@ -37,6 +38,14 @@
 %%   <dd>
 %%     Routines for converting between basic types, annotated types and user types<br/>
 %%     {@link hex_to_int/1}, {@link byte_to_hex/1}, {@link nybble_to_hex/1}, {@link io_list_to_hex/1}, {@link list_to_number/1}
+%%   </dd>
+%% </dl>
+%% === Counters ===
+%% <dl>
+%%   <dt></dt>
+%%   <dd>
+%%     Routines for tracking counters shared between processes<br/>
+%%     {@link counter/1}, {@link reset_counter/1}, {@link inc_counter/1}, {@link inc_counter/2}, {@link dec_counter/1}, {@link dec_counter/2}, {@link adjust_counter/2}, {@link set_counter/2}
 %%   </dd>
 %% </dl>
 %% === Dispatch ===
@@ -280,7 +289,7 @@
     all_unique_pairings/1, % needs tests
     walk_unique_pairings/2, % needs tests
     list_to_number/1, % needs tests
-    counter/1, inc_counter/1, inc_counter/2, dec_counter/1, dec_counter/2, reset_counter/1, counter_process/0, % needs tests
+    counter/1, inc_counter/1, inc_counter/2, dec_counter/1, dec_counter/2, reset_counter/1, adjust_counter/2, set_counter/2, counter_process/0, % needs tests
     start_register_if_not_running/3, start_register_if_not_running/4, start_register_if_not_running/5, % needs tests
     wait_until_terminate/0, wait_until_terminate/1, % needs tests
     module_has_function/2, % needs tests
@@ -1838,9 +1847,28 @@ start_register_if_not_running(Node, Name, Module, Function, Args) when is_atom(N
 
 
 
-%% @spec counter(Name::any()) -> integer()
+%% @spec counter(Name::any()) -> number()
 
-%% @doc Checks a counter's value; if the counter was not already defined, it will report zero.
+%% @doc Checks a counter's value; if the counter was not already defined, it will report zero. ```1> scutil:counter(hello).
+%% 0
+%%
+%% 2> scutil:inc_counter(hello).
+%% 1
+%%
+%% 3> scutil:inc_counter(hello).
+%% 2
+%%
+%% 4> scutil:inc_counter(hello).
+%% 3
+%%
+%% 5> scutil:counter(hello).
+%% 3
+%%
+%% 6> scutil:reset_counter(hello).
+%% 0
+%%
+%% 7> scutil:counter(hello).
+%% 0'''
 
 %% @since Version 54
 
@@ -1859,10 +1887,46 @@ counter(Name) ->
 
 
 
-inc_counter(Name)    -> adjust_counter(Name,  1   ).
-inc_counter(Name,By) -> adjust_counter(Name,    By).
-dec_counter(Name)    -> adjust_counter(Name, -1   ).
+%% @equiv adjust_counter(Name,1)
+inc_counter(Name)    -> adjust_counter(Name, 1).
+
+%% @equiv adjust_counter(Name,By)
+inc_counter(Name,By) -> adjust_counter(Name, By).
+
+%% @equiv adjust_counter(Name,-1)
+dec_counter(Name)    -> adjust_counter(Name, -1).
+
+%% @equiv adjust_counter(Name,-1*By)
 dec_counter(Name,By) -> adjust_counter(Name, -1*By).
+
+
+
+
+
+%% @spec adjust_counter(Name::any(), By::number()) -> number()
+
+%% @doc Adds to a counter's value; if the counter was not already defined, it will become the value in the `By' argument. ```1> scutil:counter(hello).
+%% 0
+%%
+%% 2> scutil:inc_counter(hello).
+%% 1
+%%
+%% 3> scutil:inc_counter(hello).
+%% 2
+%%
+%% 4> scutil:inc_counter(hello).
+%% 3
+%%
+%% 5> scutil:counter(hello).
+%% 3
+%%
+%% 6> scutil:reset_counter(hello).
+%% 0
+%%
+%% 7> scutil:counter(hello).
+%% 0'''
+
+%% @since Version 54
 
 adjust_counter(Name, By) when is_number(By) ->
 
@@ -1916,7 +1980,10 @@ counter_process() ->
             end;
         {Caller, set_counter, Name, To} ->
             Caller ! {counter_at, Name, To},
-            put(Name,To),
+            case To of
+                0 -> erase(Name);
+                T -> put(Name,T)
+            end,
             counter_process()
     end.
 
