@@ -1838,6 +1838,12 @@ start_register_if_not_running(Node, Name, Module, Function, Args) when is_atom(N
 
 
 
+%% @spec counter(Name::any()) -> integer()
+
+%% @doc Checks a counter's value; if the counter was not already defined, it will report zero.
+
+%% @since Version 54
+
 counter(Name) ->
 
     start_register_if_not_running(scutil_counter_process, scutil, counter_process, []),
