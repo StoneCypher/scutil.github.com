@@ -11,6 +11,7 @@
 %% <li>{@section Documentary}</li>
 %% <li>{@section List}</li>
 %% <li>{@section Math}</li>
+%% <li>{@section Network}</li>
 %% <li>{@section Parallelism}</li>
 %% <li>{@section Persistence}</li>
 %% <li>{@section Random}</li>
@@ -78,6 +79,14 @@
 %%   <dd>
 %%     Routines for higher math computation missing from the standard math module.<br/>
 %%     {@link list_product/1}, {@link dot_product/2}, {@link cross_product/2}, {@link vector_magnitude/1}, {@link normalize_vector/1}, {@link root_mean_square/1}, {@link root_sum_square/1}, {@link tuple_sum/1}
+%%   </dd>
+%% </dl>
+%% === Network ===
+%% <dl>
+%%   <dt></dt>
+%%   <dd>
+%%     Routines for network behaviors and management.<br/>
+%%     {@link standard_listener/3}
 %%   </dd>
 %% </dl>
 %% === Parallelism ===
@@ -330,7 +339,9 @@
     tuple_sum/1, % needs tests
 
     map_reduce/2, map_reduce/3, map_reduce/4, % needs tests
-    combinations/2 % needs tests
+    combinations/2, % needs tests
+
+    standard_listener/3
 
 ] ).
 
@@ -2313,7 +2324,7 @@ has_notebook(Notebook) -> ok.
 
 annote(Notebook, NoteName, NewValue) -> annote(Notebook, [{NoteName, NewValue}]).
 
-% @spec annote(Notebook::filename(), List::kv_list()) ->
+% % @spec annote(Notebook::filename(), List::kv_list()) ->
 
 annote(Notebook, NameValuePair)  when is_list(Notebook), is_tuple(NameValuePair) -> annote(Notebook, [NameValuePair]);
 annote(Notebook, NameValuePairs) when is_list(Notebook), is_list(NameValuePairs) ->
@@ -2640,6 +2651,65 @@ map_reduce_do_work(Function, [{Tag,Workload}|RemWorkload], [Computer|RemComputer
 
 combinations(Items, 1) when is_list(Items) -> Items;
 combinations([],   _N)                     -> [];
-combinations(Items, N) when is_list(Items), is_integer(N), N > 0 -> [ lists:append( [lists:nth(I, Items)], [J] )          ||
-                                                                      I <- lists:seq(1, length(Items)),
-                                                                      J <- combinations( lists:nthtail(I, Items), (N-1) )  ].
+combinations(Items, N) when is_list(Items), is_integer(N), N > 0 ->
+
+    [ lists:append( [lists:nth(I, Items)], [J] )          ||
+      I <- lists:seq(1, length(Items)),
+      J <- combinations( lists:nthtail(I, Items), (N-1) )  ].
+
+
+
+
+
+%% @spec standard_listener(Handler, Port, SocketOptions) -> { ok, WorkerPid } | { error, E }
+
+%% @doc {@section Network} Listens on a socket and manages the fast packet loss problem.  There is a defect in the canonical listener, where under extreme load a packet could be delivered before the socket has been traded off to the handler process.  This would mean that the socket could deliver one (or, theoretically, more) packets to the wrong process.  `{active,false}' is immune to this problem, but very inconvenient and in some ways against the erlang mindset.  The standard listener resolves the default `{active,true}', then if active is not `{active,false}', strips the active status out, handles the socket `{active,false}', then passes to an internal handling function which re-engages the expected active status (erlang sockets when switched to active true or once immediately deliver their backlogs), and passes off to the user specified handler which receives its expected behavior without change.  Also, this takes some of the repeat grunt work out of making listeners. <span style="color:red">TODO: Needs code example</span>
+
+%% @since Version 96
+
+standard_listener(Handler, Port, SocketOptions) ->
+
+    ActiveStatus = proplists:get_value(active, SocketOptions),
+    FixedOptions = proplists:delete(active, SocketOptions) ++ [{active, false}],
+    
+    case gen_tcp:listen(Port, FixedOptions) of
+    
+        { ok, ListeningSocket } ->
+            { ok, spawn(?MODULE, standard_listener_listen_loop, [Handler, Port, FixedOptions, ListeningSocket, ActiveStatus]) };
+
+        { error, E } ->
+            { error, E }
+
+    end.
+
+
+
+
+
+standard_listener_listen_loop(Handler, Port, FixedOptions, ListeningSocket, ActiveStatus) ->
+
+    case gen_tcp:accept(ListeningSocket) of
+
+        { ok, ConnectedSocket } ->
+            spawn(?MODULE, standard_listener_shunt, [Handler, Port, FixedOptions, ConnectedSocket, ActiveStatus]),
+            standard_listener_listen_loop(Handler, Port, FixedOptions, ListeningSocket, ActiveStatus);
+
+        { error, E } ->
+            { error, E }
+
+    end.
+
+
+
+
+
+standard_listener_shunt(Handler, Port, FixedOptions, ConnectedSocket, ActiveStatus) ->
+
+    CollectedOptions = FixedOptions ++ [{active, ActiveStatus}, {from_port, Port}],
+
+    case ActiveStatus of
+        false    -> ok;
+        NotFalse -> inet:setopts(ConnectedSocket, [{active, NotFalse}])
+    end,
+
+    Handler(ConnectedSocket, CollectedOptions).
