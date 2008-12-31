@@ -184,6 +184,7 @@
 %% <ul>
 %%   <li>Alain O'Dea of <a href="http://concise-software.blogspot.com/" target="_blank">Concise Software</a></li>
 %%   <li>Alisdair Sullivan</li>
+%%   <li>Aristid Breitkreuz / [MrN, MisterN]</li>
 %%   <li>Ayrnieu</li>
 %%   <li>Bryon Vandiver of <a href="http://sublab.net/" target="_blank">Sublab Research and Design</a></li>
 %%   <li>Chile</li>
@@ -195,7 +196,6 @@
 %%   <li>GrizzlyAdams of <a href="http://grizzly.thewaffleiron.net/" target="_blank">The Waffle Iron</a></li>
 %%   <li>Jeff Katz / <a href="http://kraln.com/" target="_blank">Kraln</a></li>
 %%   <li>John Sensebe of <a href="http://bargaintuan.com/" target="_blank">Bargaintuan</a></li>
-%%   <li>MisterN</li>
 %%   <li>raleigh</li>
 %%   <li><a href="http://rvirding.blogspot.com/" target="_blank">Robert Virding</a></li>
 %%   <li><a href="http://akkit.org/" target="_blank">Steve Stair</a></li>
@@ -341,7 +341,7 @@
     map_reduce/2, map_reduce/3, map_reduce/4, % needs tests
     combinations/2, % needs tests
 
-    standard_listener/3
+    standard_listener/3, standard_listener_accept_loop/6, standard_listener_shunt/5, standard_listener_controller/6 % needs tests
 
 ] ).
 
@@ -2663,7 +2663,15 @@ combinations(Items, N) when is_list(Items), is_integer(N), N > 0 ->
 
 %% @spec standard_listener(Handler, Port, SocketOptions) -> { ok, WorkerPid } | { error, E }
 
-%% @doc {@section Network} Listens on a socket and manages the fast packet loss problem.  There is a defect in the canonical listener, where under extreme load a packet could be delivered before the socket has been traded off to the handler process.  This would mean that the socket could deliver one (or, theoretically, more) packets to the wrong process.  `{active,false}' is immune to this problem, but very inconvenient and in some ways against the erlang mindset.  The standard listener resolves the default `{active,true}', then if active is not `{active,false}', strips the active status out, handles the socket `{active,false}', then passes to an internal handling function which re-engages the expected active status (erlang sockets when switched to active true or once immediately deliver their backlogs), and passes off to the user specified handler which receives its expected behavior without change.  Also, this takes some of the repeat grunt work out of making listeners. <span style="color:red">TODO: Needs code example</span>
+%% @doc {@section Network} Listens on a socket and manages the fast packet loss problem.  
+%%
+%% There is a defect in the canonical listener, where under extreme load a packet could be delivered before the socket has been traded off to the handler process.  This would mean that the socket could deliver one (or, theoretically, more) packets to the wrong process.  `{active,false}' is immune to this problem, but very inconvenient and in some ways against the erlang mindset.  
+%%
+%% `standard_listener' resolves the default `{active,true}' into the configuration if missing, then if active is not `{active,false}', strips the active status out, handles the socket `{active,false}', then passes to an internal handling function which re-engages the expected active status (erlang sockets when switched to active true or once immediately deliver their backlogs), and passes off to the user specified handler which receives its expected behavior without change.  (Also, this takes some of the repeat grunt work out of making listeners.)
+%%
+%% The function in Handler should be a 2-ary function which accepts a socket and the list of options the socket used, augmented with the tuple `{from_port,Port}', where `Port' is the listening port from which the connection was accepted.<span style="color:red">TODO: Needs code example</span>
+%%
+%% {@section Thanks} to MisterN for counsel, noticing several embarrassing bugs, and challenging me to refine my approach from several directions.
 
 %% @since Version 96
 
@@ -2671,11 +2679,11 @@ standard_listener(Handler, Port, SocketOptions) ->
 
     ActiveStatus = proplists:get_value(active, SocketOptions),
     FixedOptions = proplists:delete(active, SocketOptions) ++ [{active, false}],
-    
+
     case gen_tcp:listen(Port, FixedOptions) of
-    
+
         { ok, ListeningSocket } ->
-            { ok, spawn(?MODULE, standard_listener_listen_loop, [Handler, Port, FixedOptions, ListeningSocket, ActiveStatus]) };
+            { ok, spawn(?MODULE, standard_listener_controller, [Handler, Port, FixedOptions, ListeningSocket, ActiveStatus, 0]) };
 
         { error, E } ->
             { error, E }
@@ -2686,16 +2694,53 @@ standard_listener(Handler, Port, SocketOptions) ->
 
 
 
-standard_listener_listen_loop(Handler, Port, FixedOptions, ListeningSocket, ActiveStatus) ->
+%% @private
+
+standard_listener_controller(Handler, Port, FixedOptions, ListeningSocket, ActiveStatus, AcceptCount) ->
+
+    ListenLoop = spawn_link(?MODULE, standard_listener_accept_loop, [Handler, Port, FixedOptions, ListeningSocket, ActiveStatus, self()]),
+    standard_listener_controller(Handler, Port, FixedOptions, ListeningSocket, ActiveStatus, AcceptCount, ListenLoop).
+
+%% @private
+
+standard_listener_controller(Handler, Port, FixedOptions, ListeningSocket, ActiveStatus, AcceptCount, ListenLoop) ->
+
+    receive
+
+        terminate ->
+            gen_tcp:close(ListeningSocket),
+            { ok, terminating, { serviced, AcceptCount }};
+
+        serviced ->
+            standard_listener_controller(Handler, Port, FixedOptions, ListeningSocket, ActiveStatus, AcceptCount+1, ListenLoop);
+
+        { Requester, count_serviced } ->
+            Requester ! { count_serviced_response, AcceptCount },
+            standard_listener_controller(Handler, Port, FixedOptions, ListeningSocket, ActiveStatus, AcceptCount,   ListenLoop);
+
+        { Requester, setopts, Options } ->
+            Requester ! { setopts_response, inet:setopts(ListeningSocket, Options) },
+            standard_listener_controller(Handler, Port, FixedOptions, ListeningSocket, ActiveStatus, AcceptCount,   ListenLoop)
+
+    end.
+
+
+
+
+
+%% @private
+
+standard_listener_accept_loop(Handler, Port, FixedOptions, ListeningSocket, ActiveStatus, Controller) ->
 
     case gen_tcp:accept(ListeningSocket) of
 
         { ok, ConnectedSocket } ->
+            Controller ! serviced,
             spawn(?MODULE, standard_listener_shunt, [Handler, Port, FixedOptions, ConnectedSocket, ActiveStatus]),
-            standard_listener_listen_loop(Handler, Port, FixedOptions, ListeningSocket, ActiveStatus);
+            standard_listener_accept_loop(Handler, Port, FixedOptions, ListeningSocket, ActiveStatus, Controller);
 
-        { error, E } ->
-            { error, E }
+        { error, _E } ->
+            standard_listener_accept_loop(Handler, Port, FixedOptions, ListeningSocket, ActiveStatus, Controller)
 
     end.
 
@@ -2703,9 +2748,11 @@ standard_listener_listen_loop(Handler, Port, FixedOptions, ListeningSocket, Acti
 
 
 
+%% @private
+
 standard_listener_shunt(Handler, Port, FixedOptions, ConnectedSocket, ActiveStatus) ->
 
-    CollectedOptions = FixedOptions ++ [{active, ActiveStatus}, {from_port, Port}],
+    CollectedOptions = proplists:delete(active, FixedOptions) ++ [{active, ActiveStatus}, {from_port, Port}],
 
     case ActiveStatus of
         false    -> ok;
