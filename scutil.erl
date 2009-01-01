@@ -199,6 +199,7 @@
 %%   <li>raleigh</li>
 %%   <li><a href="http://rvirding.blogspot.com/" target="_blank">Robert Virding</a></li>
 %%   <li><a href="http://akkit.org/" target="_blank">Steve Stair</a></li>
+%%   <li>Steve Vinoski</li>
 %%   <li><a href="http://opferman.com/" target="_blank">Toby Opferman</a></li>
 %%   <li><a href="http://blueventhorizon.com/" target="_blank">Vat Raghavan</a></li>
 %% </ul>
@@ -2671,7 +2672,7 @@ combinations(Items, N) when is_list(Items), is_integer(N), N > 0 ->
 %%
 %% The function in Handler should be a 2-ary function which accepts a socket and the list of options the socket used, augmented with the tuple `{from_port,Port}', where `Port' is the listening port from which the connection was accepted.<span style="color:red">TODO: Needs code example</span>
 %%
-%% {@section Thanks} to MisterN for counsel, noticing several embarrassing bugs, and challenging me to refine my approach from several directions.
+%% {@section Thanks} to MisterN for counsel, noticing several embarrassing bugs, and challenging me to refine my approach from several directions.  Thanks to Steve Vinoski for pointing out that I'd neglected to set the controlling process.
 
 %% @since Version 96
 
@@ -2756,6 +2757,7 @@ standard_listener_accept_loop(Handler, Port, FixedOptions, ListeningSocket, Acti
 
 standard_listener_shunt(Handler, Port, FixedOptions, ConnectedSocket, ActiveStatus) ->
 
+    controlling_process(ConnectedSocket, self()),
     CollectedOptions = proplists:delete(active, FixedOptions) ++ [{active, ActiveStatus}, {from_port, Port}],
 
     case ActiveStatus of
