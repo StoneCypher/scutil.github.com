@@ -2677,7 +2677,11 @@ combinations(Items, N) when is_list(Items), is_integer(N), N > 0 ->
 
 standard_listener(Handler, Port, SocketOptions) ->
 
-    ActiveStatus = proplists:get_value(active, SocketOptions),
+    ActiveStatus = case proplists:get_value(active, SocketOptions) of 
+        undefined -> true;
+        Other     -> Other
+    end,
+
     FixedOptions = proplists:delete(active, SocketOptions) ++ [{active, false}],
 
     case gen_tcp:listen(Port, FixedOptions) of
