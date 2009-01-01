@@ -199,7 +199,7 @@
 %%   <li>raleigh</li>
 %%   <li><a href="http://rvirding.blogspot.com/" target="_blank">Robert Virding</a></li>
 %%   <li><a href="http://akkit.org/" target="_blank">Steve Stair</a></li>
-%%   <li>Steve Vinoski</li>
+%%   <li><a href="http://steve.vinoski.net/">Steve Vinoski</a></li>
 %%   <li><a href="http://opferman.com/" target="_blank">Toby Opferman</a></li>
 %%   <li><a href="http://blueventhorizon.com/" target="_blank">Vat Raghavan</a></li>
 %% </ul>
