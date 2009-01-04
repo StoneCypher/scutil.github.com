@@ -38,7 +38,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines for converting between basic types, annotated types and user types<br/>
-%%     {@link hex_to_int/1}, {@link byte_to_hex/1}, {@link nybble_to_hex/1}, {@link io_list_to_hex/1}, {@link list_to_number/1}
+%%     {@link hex_to_int/1}, {@link byte_to_hex/1}, {@link nybble_to_hex/1}, {@link io_list_to_hex/1}, {@link list_to_number/1}, {@link int_to_u32_iolist/1}, {@link u32_iolist_to_int/1}, {@link u32_iolist_to_int/4}, {@link int_to_u64_iolist/1}, {@link u64_iolist_to_int/1}, {@link u64_iolist_to_int/8}
 %%   </dd>
 %% </dl>
 %% === Counters ===
@@ -345,7 +345,10 @@
     standard_listener/3, standard_listener_accept_loop/6, standard_listener_shunt/5, standard_listener_controller/6, % needs tests
     
     int_to_u32_iolist/1, % needs tests
-    u32_iolist_to_int/1, u32_iolist_to_int/4 % needs tests
+    u32_iolist_to_int/1, u32_iolist_to_int/4, % needs tests
+
+    int_to_u64_iolist/1, % needs tests
+    u64_iolist_to_int/1, u64_iolist_to_int/8 % needs tests
 
 ] ).
 
@@ -2788,5 +2791,14 @@ standard_listener_shunt(Handler, Port, FixedOptions, ConnectedSocket, ActiveStat
 
 int_to_u32_iolist(X) when X>=0, X<4294967296 -> binary_to_list(<<X:32/big>>).
 
-u32_iolist_to_int(A,B,C,D)   -> (A*16777216) + (B*65536) + (C*256) + D.
-u32_iolist_to_int([A,B,C,D]) -> (A*16777216) + (B*65536) + (C*256) + D.
+u32_iolist_to_int(  A,B,C,D  ) -> (A bsl 24) + (B bsl 16) + (C bsl 8) + D.
+u32_iolist_to_int( [A,B,C,D] ) -> (A bsl 24) + (B bsl 16) + (C bsl 8) + D.
+
+
+
+
+
+int_to_u64_iolist(X) when X>=0, X<18446744073709551616 -> binary_to_list(<<X:64/big>>).
+
+u64_iolist_to_int(  A,B,C,D,E,F,G,H  ) -> (A bsl 56) + (B bsl 48) + (C bsl 40) + (D bsl 32) + (E bsl 24) + (F bsl 16) + (G bsl 8) + H.
+u64_iolist_to_int( [A,B,C,D,E,F,G,H] ) -> (A bsl 56) + (B bsl 48) + (C bsl 40) + (D bsl 32) + (E bsl 24) + (F bsl 16) + (G bsl 8) + H.
