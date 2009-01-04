@@ -2810,7 +2810,7 @@ u64_iolist_to_int( [A,B,C,D,E,F,G,H] ) -> <<X:64/big>> = list_to_binary([A,B,C,D
 
 
 
-float_to_f32_iolist(X) -> binary_to_list(<<X:32/float-big>>).
+float_to_f32_iolist(X) -> binary_to_list(<<X:32/float-little>>).
 
 f32_iolist_to_int(  A,B,C,D  ) -> <<X:32/float-big>> = list_to_binary([A,B,C,D]), X.
 f32_iolist_to_int( [A,B,C,D] ) -> <<X:32/float-big>> = list_to_binary([A,B,C,D]), X.
