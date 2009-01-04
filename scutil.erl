@@ -2757,7 +2757,7 @@ standard_listener_accept_loop(Handler, Port, FixedOptions, ListeningSocket, Acti
 
 standard_listener_shunt(Handler, Port, FixedOptions, ConnectedSocket, ActiveStatus) ->
 
-    controlling_process(ConnectedSocket, self()),
+    gen_tcp:controlling_process(ConnectedSocket, self()),
     CollectedOptions = proplists:delete(active, FixedOptions) ++ [{active, ActiveStatus}, {from_port, Port}],
 
     case ActiveStatus of
