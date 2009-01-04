@@ -314,7 +314,7 @@
 
     expand_label/1, expand_labels/1, % needs tests
 
-    benchmark/3, % needs tests
+    benchmark/2, benchmark/3, % needs tests
 
     hex_to_int/1, % needs tests
 
@@ -342,7 +342,10 @@
     map_reduce/2, map_reduce/3, map_reduce/4, % needs tests
     combinations/2, % needs tests
 
-    standard_listener/3, standard_listener_accept_loop/6, standard_listener_shunt/5, standard_listener_controller/6 % needs tests
+    standard_listener/3, standard_listener_accept_loop/6, standard_listener_shunt/5, standard_listener_controller/6, % needs tests
+    
+    int_to_u32_iolist/1, % needs tests
+    u32_iolist_to_int/1, u32_iolist_to_int/4 % needs tests
 
 ] ).
 
@@ -2184,6 +2187,18 @@ diff_timestamp({AM,AS,AU}, {BM, BS, BU}) ->
 
 
 
+benchmark(Fun, Args) ->
+
+    Start  = now(),
+    Result = apply(Fun, Args),
+    End    = now(),
+
+    { diff_timestamp(Start,End), Result }.
+
+
+
+
+
 benchmark(Module, Func, Args) ->
 
     Start  = now(),
@@ -2766,3 +2781,12 @@ standard_listener_shunt(Handler, Port, FixedOptions, ConnectedSocket, ActiveStat
     end,
 
     Handler(ConnectedSocket, CollectedOptions).
+
+
+
+
+
+int_to_u32_iolist(X) when X>=0, X<4294967296 -> binary_to_list(<<X:32/big>>).
+
+u32_iolist_to_int(A,B,C,D)   -> (A*16777216) + (B*65536) + (C*256) + D.
+u32_iolist_to_int([A,B,C,D]) -> (A*16777216) + (B*65536) + (C*256) + D.
