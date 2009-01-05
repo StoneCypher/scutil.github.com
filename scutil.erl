@@ -344,14 +344,14 @@
 
     standard_listener/3, standard_listener_accept_loop/6, standard_listener_shunt/5, standard_listener_controller/6, % needs tests
 
-    int_to_u32_iolist/1, % needs tests
-    u32_iolist_to_int/1, u32_iolist_to_int/4, % needs tests
+    int_to_u32_iolist/1, int_to_u32_iolist/2, % needs tests
+    u32_iolist_to_int/1, u32_iolist_to_int/2, u32_iolist_to_int/4, u32_iolist_to_int/5, % needs tests
 
-    int_to_u64_iolist/1, % needs tests
-    u64_iolist_to_int/1, u64_iolist_to_int/8, % needs tests
+    int_to_u64_iolist/1, int_to_u64_iolist/2, % needs tests
+    u64_iolist_to_int/1, u64_iolist_to_int/2, u64_iolist_to_int/8, u64_iolist_to_int/9, % needs tests
 
-    float_to_f32_iolist/1, % needs tests
-    f32_iolist_to_int/1, f32_iolist_to_int/4 % needs tests
+    float_to_f32_iolist/1, float_to_f32_iolist/2, % needs tests
+    f32_iolist_to_int/1, f32_iolist_to_int/2, f32_iolist_to_int/4, f32_iolist_to_int/5 % needs tests
 
 ] ).
 
@@ -2792,25 +2792,67 @@ standard_listener_shunt(Handler, Port, FixedOptions, ConnectedSocket, ActiveStat
 
 
 
-int_to_u32_iolist(X) when X>=0, X<4294967296 -> binary_to_list(<<X:32/big>>).
+int_to_u32_iolist(X)                                 -> int_to_u32_iolist(X, little).
 
-u32_iolist_to_int(  A,B,C,D  ) -> <<X:32/big>> = list_to_binary([A,B,C,D]), X.
-u32_iolist_to_int( [A,B,C,D] ) -> <<X:32/big>> = list_to_binary([A,B,C,D]), X.
-
-
-
-
-
-int_to_u64_iolist(X) when X>=0, X<18446744073709551616 -> binary_to_list(<<X:64/big>>).
-
-u64_iolist_to_int(  A,B,C,D,E,F,G,H  ) -> <<X:64/big>> = list_to_binary([A,B,C,D,E,F,G,H]), X.
-u64_iolist_to_int( [A,B,C,D,E,F,G,H] ) -> <<X:64/big>> = list_to_binary([A,B,C,D,E,F,G,H]), X.
+int_to_u32_iolist(X, little) when X>=0, X<4294967296 -> binary_to_list(<<X:32/little>>);
+int_to_u32_iolist(X, big)    when X>=0, X<4294967296 -> binary_to_list(<<X:32/big>>).
 
 
 
 
 
-float_to_f32_iolist(X) -> binary_to_list(<<X:32/float-little>>).
+u32_iolist_to_int( [A,B,C,D] )          -> u32_iolist_to_int( [A,B,C,D], little ).
 
-f32_iolist_to_int(  A,B,C,D  ) -> <<X:32/float-big>> = list_to_binary([A,B,C,D]), X.
-f32_iolist_to_int( [A,B,C,D] ) -> <<X:32/float-big>> = list_to_binary([A,B,C,D]), X.
+u32_iolist_to_int( [A,B,C,D], little )  -> <<X:32/little>> = list_to_binary([A,B,C,D]), X;
+u32_iolist_to_int( [A,B,C,D], big )     -> <<X:32/big>>    = list_to_binary([A,B,C,D]), X.
+
+u32_iolist_to_int(  A,B,C,D  )          -> u32_iolist_to_int( A,B,C,D, little ).
+
+u32_iolist_to_int(  A,B,C,D , little  ) -> <<X:32/little>> = list_to_binary([A,B,C,D]), X;
+u32_iolist_to_int(  A,B,C,D , big  )    -> <<X:32/big>>    = list_to_binary([A,B,C,D]), X.
+
+
+
+
+
+int_to_u64_iolist(X)                                           -> int_to_u64_iolist(X, little).
+
+int_to_u64_iolist(X, little) when X>=0, X<18446744073709551616 -> binary_to_list(<<X:64/little>>);
+int_to_u64_iolist(X, big)    when X>=0, X<18446744073709551616 -> binary_to_list(<<X:64/big>>).
+
+
+
+
+
+u64_iolist_to_int( [A,B,C,D,E,F,G,H] )         -> u64_iolist_to_int([A,B,C,D,E,F,G,H], little).
+
+u64_iolist_to_int( [A,B,C,D,E,F,G,H], little ) -> <<X:64/little>> = list_to_binary([A,B,C,D,E,F,G,H]), X;
+u64_iolist_to_int( [A,B,C,D,E,F,G,H], big )    -> <<X:64/big>>    = list_to_binary([A,B,C,D,E,F,G,H]), X.
+
+u64_iolist_to_int(  A,B,C,D,E,F,G,H  )         -> u64_iolist_to_int([A,B,C,D,E,F,G,H], little).
+
+u64_iolist_to_int(  A,B,C,D,E,F,G,H , little ) -> <<X:64/little>> = list_to_binary([A,B,C,D,E,F,G,H]), X;
+u64_iolist_to_int(  A,B,C,D,E,F,G,H , big )    -> <<X:64/big>>    = list_to_binary([A,B,C,D,E,F,G,H]), X.
+
+
+
+
+
+float_to_f32_iolist(X)         -> float_to_f32_iolist(X, little).
+
+float_to_f32_iolist(X, little) -> binary_to_list(<<X:32/float-little>>);
+float_to_f32_iolist(X, big)    -> binary_to_list(<<X:32/float-big>>).
+
+
+
+
+
+f32_iolist_to_int( [A,B,C,D] )         -> f32_iolist_to_int( [A,B,C,D], little ).
+
+f32_iolist_to_int( [A,B,C,D], little ) -> <<X:32/float-little>> = list_to_binary([A,B,C,D]), X;
+f32_iolist_to_int( [A,B,C,D], big    ) -> <<X:32/float-big>>    = list_to_binary([A,B,C,D]), X.
+
+f32_iolist_to_int(  A,B,C,D  )         -> f32_iolist_to_int(  A,B,C,D,  little  ).
+
+f32_iolist_to_int(  A,B,C,D , little ) -> <<X:32/float-little>> = list_to_binary([A,B,C,D]), X;
+f32_iolist_to_int(  A,B,C,D , big    ) -> <<X:32/float-big>>    = list_to_binary([A,B,C,D]), X.
