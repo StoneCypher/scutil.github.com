@@ -864,33 +864,6 @@ sanitize_filename(Filename) -> sanitize_tokens(Filename, lists:seq($a,$z)++lists
 
 %% @todo finish me
 
-% batch_reduce(Workload, Function) ->
-%
-%     [ spawn(Function, LoadItem) || LoadItem <- Workload ],
-%     reduce_receive(length(Workload, [])).
-%
-% reduce_receive(0,           Work) -> Work;
-% reduce_receive(AnswerCount, Work) -> receive X -> reduce_receive(AnswerCount-1, [X]++Work).
-
-
-
-
-
-%% @todo finish me
-
-% distributed_batch_reduce(Workload, Function, Nodes) -> distributed_batch_reduce_handout(Workload, Function, Nodes, [], 0).
-
-% distributed_batch_reduce_handout([],            _Function, _Nodes,              Work, 0)        -> Work;                                                                                                                                   % nothing left in the work queue, count of output outstanding is 0, work's done
-% distributed_batch_reduce_handout([],             Function, _Nodes,              Work, CountOut) -> { item, {_Source, Result } } = scutil:receive_one(), distributed_batch_reduce_handout([],       Function,  [],       [Result]++Work, CountOut-1); % there's no work left in the queue, but stuff outstanding from child nodes
-% distributed_batch_reduce_handout(Workload,       Function,  [],                 Work, CountOut) -> { item, { Source, Result } } = scutil:receive_one(), distributed_batch_reduce_handout(Workload, Function,  [Source], [Result]++Work, CountOut-1); % no nodes available, wait for a receive, queue the result and add the node back to the available list
-% distributed_batch_reduce_handout([Item|WorkRem], {Mod,Fun}, [ThisNode|NodeRem], Work, CountOut) -> spawn(ThisNode, Mod, Fun, Item),           distributed_batch_reduce_handout(WorkRem,  {Mod,Fun}, NodeRem,  Work,           CountOut+1). % work and nodes available; dispatch some work, increment the work out counter and recurse
-
-
-
-
-
-%% @todo finish me
-
 % dissimilar_charset(english, lowercase) -> "abcdefghjklmnopqrstuwxyz";
 % dissimilar_charset(english, mixedcase) -> "abcdefghjklmnopqrstuwxyzABDEFGHRT";
 % dissimilar_charset(english, alphanum)  -> "abcdefghjklmnopqrstuwxyzABDEFGHRT34679".
