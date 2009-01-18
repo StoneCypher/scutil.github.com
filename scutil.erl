@@ -126,7 +126,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines for manipulating behavior in repeat series within a single process.<br/>
-%%     {@link multi_do/1}
+%%     {@link multi_do/3}, {@link multi_do/4}
 %%   </dd>
 %% </dl>
 %% === Statistics ===
@@ -351,7 +351,9 @@
     u64_iolist_to_int/1, u64_iolist_to_int/2, u64_iolist_to_int/8, u64_iolist_to_int/9, % needs tests
 
     float_to_f32_iolist/1, float_to_f32_iolist/2, % needs tests
-    f32_iolist_to_int/1, f32_iolist_to_int/2, f32_iolist_to_int/4, f32_iolist_to_int/5 % needs tests
+    f32_iolist_to_int/1, f32_iolist_to_int/2, f32_iolist_to_int/4, f32_iolist_to_int/5, % needs tests
+
+    zipn/1 % needs tests
 
 ] ).
 
@@ -2829,3 +2831,25 @@ f32_iolist_to_int(  A,B,C,D  )         -> f32_iolist_to_int(  A,B,C,D,  little  
 
 f32_iolist_to_int(  A,B,C,D , little ) -> <<X:32/float-little>> = list_to_binary([A,B,C,D]), X;
 f32_iolist_to_int(  A,B,C,D , big    ) -> <<X:32/float-big>>    = list_to_binary([A,B,C,D]), X.
+
+
+
+
+
+% centroid(CoordList)
+
+
+
+
+
+% found at http://www.erlang.org/ml-archive/erlang-questions/200207/msg00066.html
+
+zipn(Ls) -> [list_to_tuple(L) || L <- zipn_listn(Ls)].
+
+zipn_listn(Ls) -> [lists:reverse(L) || L <- zipn_foldn(fun (A, Acc) -> [A|Acc] end, [], Ls)].
+
+zipn_foldn(_,   _,    []) -> [];
+zipn_foldn(Fun, Acc0, Ls) -> zipn_foldn(Fun, Acc0, Ls, []).
+
+zipn_foldn(_,   _,    [[]|_], Ret) -> lists:reverse(Ret);
+zipn_foldn(Fun, Acc0, Ls,     Ret) -> zipn_foldn(Fun, Acc0, [tl(L) || L <- Ls], [lists:foldl(Fun, Acc0, [hd(L) || L <- Ls])|Ret]).
