@@ -353,7 +353,7 @@
     float_to_f32_iolist/1, float_to_f32_iolist/2, % needs tests
     f32_iolist_to_int/1, f32_iolist_to_int/2, f32_iolist_to_int/4, f32_iolist_to_int/5, % needs tests
 
-    zipn/1 % needs tests
+    zip_n/1, zip_n/2 % needs tests
 
 ] ).
 
@@ -2844,12 +2844,29 @@ f32_iolist_to_int(  A,B,C,D , big    ) -> <<X:32/float-big>>    = list_to_binary
 
 % found at http://www.erlang.org/ml-archive/erlang-questions/200207/msg00066.html
 
-zipn(Ls) -> [list_to_tuple(L) || L <- zipn_listn(Ls)].
+% This is actually more efficient than one might expect at first glance.  I ran a benchmark of 100,000 transformations of a list of lists into a list of tuples
+% using {@link benchmark/3} and {@link multi_do/4} against both zipn and the library function zip3; the library function won at 149 seconds to 174.
+%
+% 1> Testy = [ [1,2,3], [1,2,3], [1,2,3] ].
+% [[1,2,3],[1,2,3],[1,2,3]]
+%
+% 2> scutil:benchmark(scutil, multi_do, [100000, scutil, zipn, [Testy]]).
+% {174.95563, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }
+%
+% 3> scutil:benchmark(scutil, multi_do, [100000, lists, zip3, Testy]).
+% {149.605, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }
 
-zipn_listn(Ls) -> [lists:reverse(L) || L <- zipn_foldn(fun (A, Acc) -> [A|Acc] end, [], Ls)].
 
-zipn_foldn(_,   _,    []) -> [];
-zipn_foldn(Fun, Acc0, Ls) -> zipn_foldn(Fun, Acc0, Ls, []).
 
-zipn_foldn(_,   _,    [[]|_], Ret) -> lists:reverse(Ret);
-zipn_foldn(Fun, Acc0, Ls,     Ret) -> zipn_foldn(Fun, Acc0, [tl(L) || L <- Ls], [lists:foldl(Fun, Acc0, [hd(L) || L <- Ls])|Ret]).
+zip_n(Ls) -> zip_n(Ls, to_tuple).
+
+zip_n(Ls, to_tuple) -> [list_to_tuple(L) || L <- zip_n_listn(Ls)];
+zip_n(Ls, to_list)  -> [L                || L <- zip_n_listn(Ls)].
+
+zip_n_listn(Ls) -> [lists:reverse(L) || L <- zip_n_foldn(fun (A, Acc) -> [A|Acc] end, [], Ls)].
+
+zip_n_foldn(_,   _,    []) -> [];
+zip_n_foldn(Fun, Acc0, Ls) -> zip_n_foldn(Fun, Acc0, Ls, []).
+
+zip_n_foldn(_,   _,    [[]|_], Ret) -> lists:reverse(Ret);
+zip_n_foldn(Fun, Acc0, Ls,     Ret) -> zip_n_foldn(Fun, Acc0, [tl(L) || L <- Ls], [lists:foldl(Fun, Acc0, [hd(L) || L <- Ls])|Ret]).
