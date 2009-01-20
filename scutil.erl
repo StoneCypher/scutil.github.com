@@ -70,7 +70,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines for operating on lists of data augmenting the standard lists module.<br/>
-%%     {@link permute/1}, {@link combinations/1}, {@link shuffle/1}, {@link sanitize_tokens/1}, {@link shared_keys/1}, {@link shared_keys/2}, {@link shared_keys/3}, {@link all_unique_pairings/1}, {@link walk_unique_pairings/2} (see also {@link random_from/3}, {@link random_from_weighted/1})
+%%     {@link permute/1}, {@link combinations/1}, {@link shuffle/1}, {@link sanitize_tokens/1}, {@link shared_keys/1}, {@link shared_keys/2}, {@link shared_keys/3}, {@link all_unique_pairings/1}, {@link walk_unique_pairings/2}, {@link zip_n/1} (see also {@link random_from/3}, {@link random_from_weighted/1})
 %%   </dd>
 %% </dl>
 %% === Math ===
@@ -210,6 +210,7 @@
 %%   <li><a href="http://steve.vinoski.net/">Steve Vinoski</a></li>
 %%   <li><a href="http://opferman.com/" target="_blank">Toby Opferman</a></li>
 %%   <li><a href="http://blueventhorizon.com/" target="_blank">Vat Raghavan</a></li>
+%%   <li>Vladimir Sessikov</li>
 %% </ul>
 %%
 %% @end
@@ -2870,25 +2871,28 @@ euclidean_distance(C1, C2) ->
 
 
 
-% found at http://www.erlang.org/ml-archive/erlang-questions/200207/msg00066.html
-
-% This is actually more efficient than one might expect at first glance.  I ran a benchmark of 100,000 transformations of a list of lists into a list of tuples
-% using {@link benchmark/3} and {@link multi_do/4} against both zip_n and the library function zip3; the library function won at 150 seconds to 175, which is
-% a far smaller difference than I expected.
-%
-% 1> Testy = [ [1,2,3], [1,2,3], [1,2,3] ].
-% [[1,2,3],[1,2,3],[1,2,3]]
-%
-% 2> scutil:benchmark(scutil, multi_do, [100000, scutil, zip_n, [Testy]]).
-% {174.95563, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }
-%
-% 3> scutil:benchmark(scutil, multi_do, [100000, lists, zip3, Testy]).
-% {149.605, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }
-
+%% @spec zip_n(Ls::list()) -> list_of_tuples()
+%% @equiv zip_n(Ls, to_tuple)
 zip_n(Ls) -> zip_n(Ls, to_tuple).
 
+%% @spec zip_n(Ls::list(), ResultType::atom()) -> list_of_tuples()
+
+%% @doc Computes a zip on any sized group of lists, rather than just two or three as offered by the lists module.
+%%
+%% This is actually more efficient than one might expect at first glance.  I ran a benchmark of 100,000 transformations of a list of lists into a list of tuples using {@link benchmark/3} and {@link multi_do/4} against both zip_n and the library function zip3; the library function won at 150 seconds to 175, which is a far smaller difference than I expected.```1> Testy = [ [1,2,3], [1,2,3], [1,2,3] ].
+%% [[1,2,3],[1,2,3],[1,2,3]]
+%%
+%% 2> scutil:benchmark(scutil, multi_do, [100000, scutil, zip_n, [Testy]]).
+%% {174.95563, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }
+%%
+%% 3> scutil:benchmark(scutil, multi_do, [100000, lists, zip3, Testy]).
+%% {149.605, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }'''
+%%
+%% {@section Thanks} Thanks to Vladimir Sessikov for contributing this to and thus allowing conscription from <a href="http://www.erlang.org/ml-archive/erlang-questions/200207/msg00066.html">the mailing list</a>.
+
+%% @since Version 108
 zip_n(Ls, to_tuple) -> [list_to_tuple(L) || L <- zip_n_listn(Ls)];
-zip_n(Ls, to_list)  -> [L                || L <- zip_n_listn(Ls)].
+zip_n(Ls, to_list) -> zip_n_listn(Ls).
 
 zip_n_listn(Ls) -> [lists:reverse(L) || L <- zip_n_foldn(fun (A, Acc) -> [A|Acc] end, [], Ls)].
 
@@ -2907,7 +2911,7 @@ zip_n_foldn(Fun, Acc0, Ls,     Ret) -> zip_n_foldn(Fun, Acc0, [tl(L) || L <- Ls]
 %% @doc {@section Probability} Calculates the probability of a hypothetical event in the context of a dataset and a baseline given item, using Bayesian inference.  Bayesian inference sorts through the dataset looking for baselines, counting them; when a given is found, the hypothetical event is also looked for, counting them only when the baseline given is located first.  Then, the dividend of the hypothetical and given counts is returned as a likelihood estimation on the range `[0.0 .. 1.0]'.  ```1> scutil:bayes_likelihood_of(cancer, positive, [[cancer,positive],[healthy,negative],[cancer,positive],[healthy,positive]]).
 %% 0.6666666666666666
 %%
-%% 2> TestData = lists:duplicate(40,[healthy,nonsmoker])++lists:duplicate(10,[healthy,smoker])++lists:duplicate(7,[cancer,nonsmoker])++lists:duplicate(3,[cancer,smoker]).
+%% 2> TestData = lists:duplicate(40,[healthy,nonsmoker]) ++ lists:duplicate(10,[healthy,smoker]) ++ lists:duplicate(7,[cancer,nonsmoker]) ++ lists:duplicate(3,[cancer,smoker]).
 %% [[healthy,nonsmoker], [healthy,nonsmoker], [healthy|...], [...]|...]
 %%
 %% 3> scutil:bayes_likelihood_of(cancer, smoker, TestData).
@@ -2916,7 +2920,7 @@ zip_n_foldn(Fun, Acc0, Ls,     Ret) -> zip_n_foldn(Fun, Acc0, [tl(L) || L <- Ls]
 %% 4> scutil:bayes_likelihood_of(cancer, nonsmoker, TestData).
 %% 0.14893617021276595'''
 %%
-%% This code and example data was derived from the tutorial at http://www.ibm.com/developerworks/web/library/wa-bayes1/ .
+%% This code and example data was derived from <a href="http://www.ibm.com/developerworks/web/library/wa-bayes1/">this tutorial</a>.
 
 %% @since Version 110
 
