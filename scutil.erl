@@ -62,7 +62,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines whose purpose is to clarify dependant code by presenting their name, rather than routine behavior, as well as to establish standard result messages where appropriate<br/>
-%%     {@link even_or_odd/1}, {@link absolute_difference/2}, {@link receive_one/0}, {@link start_register_if_not_running/3}, {@link start_register_if_not_running/4}, {@link start_register_if_not_running/5}
+%%     {@link even_or_odd/1}, {@link absolute_difference/2}, {@link receive_one/0}, {@link start_register_if_not_running/3}, {@link start_register_if_not_running/4}, {@link start_register_if_not_running/5}, {@link square/1}
 %%   </dd>
 %% </dl>
 %% === List ===
@@ -103,6 +103,14 @@
 %%   <dd>
 %%     Routines to simplify and automate the storage of local information.<br/>
 %%     {@link make_notebook/1}, {@link remove_notebook/1}, {@link has_notebook/1}, {@link annote/3}, {@link read_note/2}, {@link has_note/2}, {@link remove_note/2}
+%%   </dd>
+%% </dl>
+%% === Probability ===
+%% <dl>
+%%   <dt></dt>
+%%   <dd>
+%%     Routines to calculate the likelihoods of things.<br/>
+%%     {@link bayes_likelihood_of/3}
 %%   </dd>
 %% </dl>
 %% === Random ===
@@ -353,7 +361,15 @@
     float_to_f32_iolist/1, float_to_f32_iolist/2, % needs tests
     f32_iolist_to_int/1, f32_iolist_to_int/2, f32_iolist_to_int/4, f32_iolist_to_int/5, % needs tests
 
-    zip_n/1, zip_n/2 % needs tests
+    zip_n/1, zip_n/2, % needs tests
+
+    centroid/1, % needs tests
+
+    square/1, % needs tests
+
+    euclidean_distance/2, % manhattan_distance chebyshev_distance minkowski_distance mahalanobis_distance hamming_distance % needs tests
+
+    bayes_likelihood_of/3 % needs tests
 
 ] ).
 
@@ -2660,7 +2676,7 @@ combinations(Items, N) when is_list(Items), is_integer(N), N > 0 ->
 
 %% @spec standard_listener(Handler, Port, SocketOptions) -> { ok, WorkerPid } | { error, E }
 
-%% @doc {@section Network} Listens on a socket and manages the fast packet loss problem.  
+%% @doc {@section Network} Listens on a socket and manages the fast packet loss problem.
 %%
 %% There is a defect in the canonical listener, where under extreme load a packet could be delivered before the socket has been traded off to the handler process.  This would mean that the socket could deliver one (or, theoretically, more) packets to the wrong process.  `{active,false}' is immune to this problem, but very inconvenient and in some ways against the erlang mindset.  
 %%
@@ -2836,7 +2852,19 @@ f32_iolist_to_int(  A,B,C,D , big    ) -> <<X:32/float-big>>    = list_to_binary
 
 
 
-% centroid(CoordList)
+% convenient in list comprehensions
+
+square(X) -> X*X.
+
+
+
+
+
+centroid(CoordList) -> [ scutil:arithmetic_mean(X) || X <- zip_n(CoordList, to_list) ].
+
+euclidean_distance(C1, C2) ->
+
+    math:sqrt(lists:sum([ square(math:abs(A-B)) || {A,B} <- scutil:zip_n([C1,C2]) ])).
 
 
 
@@ -2845,18 +2873,17 @@ f32_iolist_to_int(  A,B,C,D , big    ) -> <<X:32/float-big>>    = list_to_binary
 % found at http://www.erlang.org/ml-archive/erlang-questions/200207/msg00066.html
 
 % This is actually more efficient than one might expect at first glance.  I ran a benchmark of 100,000 transformations of a list of lists into a list of tuples
-% using {@link benchmark/3} and {@link multi_do/4} against both zipn and the library function zip3; the library function won at 149 seconds to 174.
+% using {@link benchmark/3} and {@link multi_do/4} against both zip_n and the library function zip3; the library function won at 150 seconds to 175, which is
+% a far smaller difference than I expected.
 %
 % 1> Testy = [ [1,2,3], [1,2,3], [1,2,3] ].
 % [[1,2,3],[1,2,3],[1,2,3]]
 %
-% 2> scutil:benchmark(scutil, multi_do, [100000, scutil, zipn, [Testy]]).
+% 2> scutil:benchmark(scutil, multi_do, [100000, scutil, zip_n, [Testy]]).
 % {174.95563, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }
 %
 % 3> scutil:benchmark(scutil, multi_do, [100000, lists, zip3, Testy]).
 % {149.605, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }
-
-
 
 zip_n(Ls) -> zip_n(Ls, to_tuple).
 
@@ -2870,3 +2897,46 @@ zip_n_foldn(Fun, Acc0, Ls) -> zip_n_foldn(Fun, Acc0, Ls, []).
 
 zip_n_foldn(_,   _,    [[]|_], Ret) -> lists:reverse(Ret);
 zip_n_foldn(Fun, Acc0, Ls,     Ret) -> zip_n_foldn(Fun, Acc0, [tl(L) || L <- Ls], [lists:foldl(Fun, Acc0, [hd(L) || L <- Ls])|Ret]).
+
+
+
+
+
+%% @spec bayes_likelihood_of(Event, Given, Data) -> float
+
+%% @doc {@section Probability} Calculates the probability of a hypothetical event in the context of a dataset and a baseline given item, using Bayesian inference.  Bayesian inference sorts through the dataset looking for baselines, counting them; when a given is found, the hypothetical event is also looked for, counting them only when the baseline given is located first.  Then, the dividend of the hypothetical and given counts is returned as a likelihood estimation on the range `[0.0 .. 1.0]'.  ```1> scutil:bayes_likelihood_of(cancer, positive, [[cancer,positive],[healthy,negative],[cancer,positive],[healthy,positive]]).
+%% 0.6666666666666666
+%%
+%% 2> TestData = lists:duplicate(40,[healthy,nonsmoker])++lists:duplicate(10,[healthy,smoker])++lists:duplicate(7,[cancer,nonsmoker])++lists:duplicate(3,[cancer,smoker]).
+%% [[healthy,nonsmoker], [healthy,nonsmoker], [healthy|...], [...]|...]
+%%
+%% 3> scutil:bayes_likelihood_of(cancer, smoker, TestData).
+%% 0.23076923076923078
+%%
+%% 4> scutil:bayes_likelihood_of(cancer, nonsmoker, TestData).
+%% 0.14893617021276595'''
+%%
+%% This code and example data was derived from the tutorial at http://www.ibm.com/developerworks/web/library/wa-bayes1/ .
+
+%% @since Version 110
+
+bayes_likelihood_of(Event, Given, Data) -> bayes_likelihood_worker(Event, Given, 0, 0, Data).
+
+% TODO it seems like this could be rewritten to generate a set of likelihoods in an iteration, rather than a single likelihood then re-iterate
+
+bayes_likelihood_worker(_Event,_Given, EventAndGivenCount, GivenCount, [])         -> EventAndGivenCount / GivenCount;
+bayes_likelihood_worker( Event, Given, EventAndGivenCount, GivenCount, [Data|Rem]) ->
+
+    case lists:member(Given, Data) of
+
+        true  ->
+            case lists:member(Event, Data) of
+                true  -> bayes_likelihood_worker(Event, Given, EventAndGivenCount+1, GivenCount+1, Rem);
+                false -> bayes_likelihood_worker(Event, Given, EventAndGivenCount,   GivenCount+1, Rem)
+            end;
+
+        false ->
+            bayes_likelihood_worker(Event, Given, EventAndGivenCount, GivenCount, Rem)
+
+    end.
+
