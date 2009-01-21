@@ -585,9 +585,13 @@ regex_read_matches(String, Reg, {TrimFront, TrimLength}) ->
 
 
 
-%% @type gridsize() = coord() | integer().  Coordinates are the width and height of a (1,1) originated grid; as such, coordinates are of the range [1,X] , [1,Y] inclusive, and returned in the form {A,B}.  The integer form implies a square grid.
-%% @type coord() = { number(), number() }.  Represents a coordinate, which may imply a sized rectangle.  Many functions expect integer coordinates; the type does not require them.
-%% @type coordlist() = list().  All members of a coordlist() must be coord()s.
+%% @type gridsize() = coord2() | integer().  Coordinates are the width and height of a (1,1) originated grid; as such, coordinates are of the range [1,X] , [1,Y] inclusive, and returned in the form {A,B}.  The integer form implies a square grid.
+%% @type coord() = tuple().  Every member of a coord() is a number().  Represents a coordinate, which may imply a sized cartesian space.  Many functions expect integer coordinates; the type does not require them.  This type does not define member count.  If your function requires a specific count of members, name it, as in a coord2() or coord3().
+%% @type coordlist() = list().  All members of a coordlist() must be coord()s.  All member coordinates must be of the same size, though this type does not define what that size is.  If your function requires a specific count of members, name it, as in a coord2list() or coord3list().
+%% @type coord2() = { number(), number() }.  Represents a coordinate, which may imply a sized rectangle.  Many functions expect integer coordinates; the type does not require them.
+%% @type coord2list() = list().  All members of a coord2list() must be coord2()s.
+%% @type coord3() = { number(), number(), number() }.  Represents a coordinate, which may imply a sized 3d box region.  Many functions expect integer coordinates; the type does not require them.
+%% @type coord3list() = list().  All members of a coord3list() must be coord3()s.
 
 %% @spec grid_scatter(Count::integer(), Size::gridsize()) -> coordlist()
 
@@ -2871,6 +2875,7 @@ square(X) -> X*X.
 
 
 
+centroid(_) -> { error, not_yet_implemented }.
 % centroid(CoordList) -> centroid_init(
 
 % centroid([First|Rem], Counters) when is_list(First) ->
@@ -2878,9 +2883,25 @@ square(X) -> X*X.
 
 
 
+%% @spec euclidean_distance(Coordinate1::coord(), Coordinate2::coord()) -> number()
+
+%% @doc {@section Math} Returns the distance between two coordinates in any N-space.  In two dimensions, this is known as the Pythagorean theorem.  The coordinates may be of any positive integer dimensionality (2d, 3d, but no -1d or 2.5d), but both coordinates must be of the same dimensionality.  The coordinates may have real-valued or negative components, but imaginary math is not implemented.  This function tolerates tuple coordinates by converting them to lists; list coordinates are thus slightly faster. ```1> scutil:euclidean_distance([0,0],[1,1]).
+%% 1.4142135623730951
+%%
+%% 2> scutil:euclidean_distance({0,0},[-1,1.0]).
+%% 1.4142135623730951
+%%
+%% 3> scutil:euclidean_distance([0,0,0,0],[1,-1,1,-1]).
+%% 2.0'''
+
+%% @since Version 108
+
+euclidean_distance(C1, C2) when is_tuple(C1) -> euclidean_distance( tuple_to_list(C1), C2                );
+euclidean_distance(C1, C2) when is_tuple(C2) -> euclidean_distance( C1,                tuple_to_list(C2) );
 euclidean_distance(C1, C2) ->
 
-    math:sqrt(lists:sum([ square(math:abs(A-B)) || {A,B} <- scutil:zip_n([C1,C2]) ])).
+    % squaring makes taking the absolute value to get unsigned magnitude redundant; that's not an omission, it's an optimization
+    math:sqrt(lists:sum([ square(A-B) || {A,B} <- scutil:zip_n([C1,C2]) ])).
 
 
 
