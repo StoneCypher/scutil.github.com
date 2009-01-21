@@ -71,7 +71,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines for operating on lists of data augmenting the standard lists module.<br/>
-%%     {@link permute/1}, {@link combinations/1}, {@link shuffle/1}, {@link sanitize_tokens/1}, {@link shared_keys/1}, {@link shared_keys/2}, {@link shared_keys/3}, {@link all_unique_pairings/1}, {@link walk_unique_pairings/2}, {@link zip_n/1} (see also {@link random_from/3}, {@link random_from_weighted/1})
+%%     {@link permute/1}, {@link combinations/1}, {@link shuffle/1}, {@link sanitize_tokens/1}, {@link shared_keys/1}, {@link shared_keys/2}, {@link shared_keys/3}, {@link all_unique_pairings/1}, {@link walk_unique_pairings/2}, {@link zip_n/1}, {@link count_of/2} (see also {@link random_from/3}, {@link random_from_weighted/1})
 %%   </dd>
 %% </dl>
 %% === Math ===
@@ -111,7 +111,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines to calculate the likelihoods of things.<br/>
-%%     {@link bayes_likelihood_of/3} (see also {@link histograph/1})
+%%     {@link bayes_likelihood_of/3} (see also {@link count_of/2}, {@link histograph/1})
 %%   </dd>
 %% </dl>
 %% === Random ===
@@ -148,7 +148,7 @@
 %%   <dt>Descriptive</dt>
 %%   <dd>
 %%     Routines which provide informative measurements of numeric lists<br/>
-%%     {@link median/1}, {@link mode/1}, {@link histograph/1}, {@link std_deviation/1}, {@link median_absolute_deviation/1}, {@link moment/1}, {@link moment/2}, {@link central_moment/1}, {@link central_moment/2}, {@link skewness/1}, {@link kurtosis/1} (see also {@link root_mean_square/1})
+%%     {@link median/1}, {@link mode/1}, {@link histograph/1}, {@link std_deviation/1}, {@link median_absolute_deviation/1}, {@link moment/1}, {@link moment/2}, {@link central_moment/1}, {@link central_moment/2}, {@link skewness/1}, {@link kurtosis/1} (see also {@link count_of/2}, {@link root_mean_square/1})
 %%   </dd>
 %%   <dt>Normals</dt>
 %%   <dd>
@@ -371,7 +371,9 @@
 
     euclidean_distance/2, % manhattan_distance chebyshev_distance minkowski_distance mahalanobis_distance hamming_distance % needs tests
 
-    bayes_likelihood_of/3 % needs tests
+    bayes_likelihood_of/3, % needs tests
+    
+    count_of/2 % needs tests
 
 ] ).
 
@@ -2987,3 +2989,27 @@ bayes_likelihood_worker( Event, Given, EventAndGivenCount, GivenCount, [Data|Rem
             bayes_likelihood_worker(Event, Given, EventAndGivenCount, GivenCount, Rem)
 
     end.
+
+
+
+
+
+%% @type non_negative_integer() = integer().  A {@type non_negative_integer()} must be equal to or greater than zero.
+
+%% @spec count_of(Item::any(), List::list()) -> non_negative_integer()
+
+%% @doc ```1> TestData = lists:duplicate(40,[healthy,nonsmoker]) ++ lists:duplicate(10,[healthy,smoker]) ++ lists:duplicate(7,[cancer,nonsmoker]) ++ lists:duplicate(3,[cancer,smoker]).
+%% [[healthy,nonsmoker], [healthy,nonsmoker], [healthy|...], [...]|...]
+%%
+%% 2> scutil:count_of([healthy,smoker], TestData).
+%% 10
+%%
+%% 3> scutil:count_of([healthy,nonsmoker], TestData).
+%% 40'''
+
+%% @since Version 117
+
+count_of(Item, List) ->
+
+    lists:foldl(fun(X, Counter) -> case X of Item -> Counter+1; _ -> Counter end end, 0, List).
+
