@@ -444,7 +444,7 @@ get_module_attribute(Module,Attribute) ->
 
 
 %% @type hexchar() = integer().  Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.
-%% @type hexstring() = list().  All elements of the list must be of type hexchar() .
+%% @type hexstring() = list().  All elements of the list must be of type {@type hexchar()}.
 
 %% @spec hex_to_int(HexChar::hexstring() | hexchar()) -> integer()
 %% @doc {@section Conversion} Convert a hexstring() or hexchar() into its numeric value. ```1> scutil:hex_to_int("c0ffEE").
@@ -508,7 +508,7 @@ nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 10, Nyb < 16 -> $a + Nyb - 10.
 
 
 
-%% @type io_list() = list().  Every list member of an io_list must be a byte().
+%% @type io_list() = list().  Every list member of an {@type io_list()} must be a {@type byte()}.
 
 %% @spec io_list_to_hex(Input::io_list()) -> hexstring()
 
@@ -586,12 +586,12 @@ regex_read_matches(String, Reg, {TrimFront, TrimLength}) ->
 
 
 %% @type gridsize() = coord2() | integer().  Coordinates are the width and height of a (1,1) originated grid; as such, coordinates are of the range [1,X] , [1,Y] inclusive, and returned in the form {A,B}.  The integer form implies a square grid.
-%% @type coord() = tuple().  Every member of a coord() is a number().  Represents a coordinate, which may imply a sized cartesian space.  Many functions expect integer coordinates; the type does not require them.  This type does not define member count.  If your function requires a specific count of members, name it, as in a coord2() or coord3().
-%% @type coordlist() = list().  All members of a coordlist() must be coord()s.  All member coordinates must be of the same size, though this type does not define what that size is.  If your function requires a specific count of members, name it, as in a coord2list() or coord3list().
+%% @type coord() = tuple().  Every member of a {@type coord()} is a {@type number()}.  Represents a coordinate, which may imply a sized cartesian space.  Many functions expect integer coordinates; the type does not require them.  This type does not define member count.  If your function requires a specific count of members, name it, as in a {@type coord2()} or {@type coord3()}.
+%% @type coordlist() = list().  All members of a {@type coordlist()} must be {@type coord()}s.  All member coordinates must be of the same size, though this type does not define what that size is.  If your function requires a specific count of members, name it, as in a {@type coord2list()} or {@type coord3list()}.
 %% @type coord2() = { number(), number() }.  Represents a coordinate, which may imply a sized rectangle.  Many functions expect integer coordinates; the type does not require them.
-%% @type coord2list() = list().  All members of a coord2list() must be coord2()s.
+%% @type coord2list() = list().  All members of a {@type coord2list()} must be {@type coord2()}s.
 %% @type coord3() = { number(), number(), number() }.  Represents a coordinate, which may imply a sized 3d box region.  Many functions expect integer coordinates; the type does not require them.
-%% @type coord3list() = list().  All members of a coord3list() must be coord3()s.
+%% @type coord3list() = list().  All members of a {@type coord3list()} must be {@type coord3()}s.
 
 %% @spec grid_scatter(Count::integer(), Size::gridsize()) -> coordlist()
 
@@ -1154,8 +1154,8 @@ root_mean_square(List) when is_list(List) -> math:sqrt(arithmetic_mean([ Val*Val
 
 
 
-%% @type ranking() = { Ranking::number(), Value::any() }.  Values are usually number()s, but do not have to be with custom ranking predicates.
-%% @type rankinglist() = list().  Members of a rankinglist() must all be ranking()s.
+%% @type ranking() = { Ranking::number(), Value::any() }.  Values are usually {@type number()}s, but do not have to be with custom ranking predicates.
+%% @type rankinglist() = list().  Members of a {@type rankinglist()} must be {@type ranking()}s.
 
 %% @todo comeback make a ranks_of/2 which takes a sorting predicate
 %% @spec ranks_of(Values::numericlist()) -> rankinglist()
