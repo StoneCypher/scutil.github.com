@@ -14,6 +14,7 @@
 %% <li>{@section Network}</li>
 %% <li>{@section Parallelism}</li>
 %% <li>{@section Persistence}</li>
+%% <li>{@section Probability}</li>
 %% <li>{@section Random}</li>
 %% <li>{@section Regex}</li>
 %% <li>{@section Serialism}</li>
@@ -62,7 +63,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines whose purpose is to clarify dependant code by presenting their name, rather than routine behavior, as well as to establish standard result messages where appropriate<br/>
-%%     {@link even_or_odd/1}, {@link absolute_difference/2}, {@link receive_one/0}, {@link start_register_if_not_running/3}, {@link start_register_if_not_running/4}, {@link start_register_if_not_running/5}, {@link square/1}
+%%     {@link even_or_odd/1}, {@link absolute_difference/2}, {@link receive_one/0}, {@link start_register_if_not_running/3}, {@link start_register_if_not_running/4}, {@link start_register_if_not_running/5} (see also {@link square/1})
 %%   </dd>
 %% </dl>
 %% === List ===
@@ -78,7 +79,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines for higher math computation missing from the standard math module.<br/>
-%%     {@link list_product/1}, {@link dot_product/2}, {@link cross_product/2}, {@link vector_magnitude/1}, {@link normalize_vector/1}, {@link root_mean_square/1}, {@link root_sum_square/1}, {@link tuple_sum/1}
+%%     {@link list_product/1}, {@link dot_product/2}, {@link cross_product/2}, {@link vector_magnitude/1}, {@link normalize_vector/1}, {@link root_mean_square/1}, {@link root_sum_square/1}, {@link tuple_sum/1}, {@link square/1}
 %%   </dd>
 %% </dl>
 %% === Network ===
@@ -110,7 +111,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines to calculate the likelihoods of things.<br/>
-%%     {@link bayes_likelihood_of/3}
+%%     {@link bayes_likelihood_of/3} (see also {@link histograph/1})
 %%   </dd>
 %% </dl>
 %% === Random ===
@@ -142,7 +143,7 @@
 %%   <dt>Means</dt>
 %%   <dd>
 %%     Routines for finding various kinds of mean values for numeric lists<br/>
-%%     {@link arithmetic_mean/1}, {@link geometric_mean/1}, {@link harmonic_mean/1}, {@link weighted_arithmetic_mean/1}, {@link arithmetic_mean/1}
+%%     {@link arithmetic_mean/1}, {@link geometric_mean/1}, {@link harmonic_mean/1}, {@link weighted_arithmetic_mean/1}, {@link arithmetic_mean/1}, {@link centroid/1}
 %%   </dd>
 %%   <dt>Descriptive</dt>
 %%   <dd>
@@ -2855,13 +2856,27 @@ f32_iolist_to_int(  A,B,C,D , big    ) -> <<X:32/float-big>>    = list_to_binary
 
 % convenient in list comprehensions
 
+%% @spec square(Input::number()) -> number()
+
+%% @doc {@section Math} Squares the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions. ```1> scutil:square(2).
+%% 4
+%%
+%% 2> scutil:square(2.5).
+%% 6.25'''
+
+%% @since Version 108
 square(X) -> X*X.
 
 
 
 
 
-centroid(CoordList) -> [ scutil:arithmetic_mean(X) || X <- zip_n(CoordList, to_list) ].
+% centroid(CoordList) -> centroid_init(
+
+% centroid([First|Rem], Counters) when is_list(First) ->
+
+
+
 
 euclidean_distance(C1, C2) ->
 
@@ -2877,7 +2892,7 @@ zip_n(Ls) -> zip_n(Ls, to_tuple).
 
 %% @spec zip_n(Ls::list(), ResultType::atom()) -> list_of_tuples()
 
-%% @doc Computes a zip on any sized group of lists, rather than just two or three as offered by the lists module.
+%% @doc {@section List} Computes a zip on any sized group of lists, rather than just two or three as offered by the lists module.
 %%
 %% This is actually more efficient than one might expect at first glance.  I ran a benchmark of 100,000 transformations of a list of lists into a list of tuples using {@link benchmark/3} and {@link multi_do/4} against both zip_n and the library function zip3; the library function won at 150 seconds to 175, which is a far smaller difference than I expected.```1> Testy = [ [1,2,3], [1,2,3], [1,2,3] ].
 %% [[1,2,3],[1,2,3],[1,2,3]]
@@ -2943,4 +2958,3 @@ bayes_likelihood_worker( Event, Given, EventAndGivenCount, GivenCount, [Data|Rem
             bayes_likelihood_worker(Event, Given, EventAndGivenCount, GivenCount, Rem)
 
     end.
-
