@@ -1762,7 +1762,7 @@ both_lists_next_item(IA,             IB,             Work) ->
 
 %% @spec all_unique_pairings(List::list()) -> tuple_list()
 
-%% @doc {@section List} Generate every unique pair of elements from a list; deprecated in favor of {@link combinations/2}, which supports more than just two-element combinations and returns a list of lists instead of a list of tuples.  ```1> scutil:all_unique_pairings([a,b,c]).
+%% @doc {@section List} Generate every unique pair of elements from a list; deprecated in favor of {@link combinations/2}.  ```1> scutil:all_unique_pairings([a,b,c]).
 %% [{b,c},{a,b},{a,c}]'''
 
 %% @since Version 31
@@ -2335,17 +2335,17 @@ has_notebook(Notebook) -> ok.
 
 
 
-%% @spec annote(Notebook::filename(), NoteName::any(), NewValue::any()) -> ok | { error, E }
+%% @equiv annote(Notebook, [{NoteName, NewValue}])
+annote(Notebook, NoteName, NewValue) -> annote(Notebook, [{NoteName, NewValue}]).
+
+
+%% @spec annote(Notebook::filename(), List::kv_list()) -> ok | { error, E }
 
 %% @doc {@section Persistence} Stores a key/value pair to a notebook file, overwriting a match existing key if present; if the notebook does not exist, it is automatically created.    DETS opening and closing are automatically managed.
 
 %% @since Version 83
+annote(Notebook, NameValuePair) when is_list(Notebook), is_tuple(NameValuePair) -> annote(Notebook, [NameValuePair]);
 
-annote(Notebook, NoteName, NewValue) -> annote(Notebook, [{NoteName, NewValue}]).
-
-% % @spec annote(Notebook::filename(), List::kv_list()) ->
-
-annote(Notebook, NameValuePair)  when is_list(Notebook), is_tuple(NameValuePair) -> annote(Notebook, [NameValuePair]);
 annote(Notebook, NameValuePairs) when is_list(Notebook), is_list(NameValuePairs) ->
 
     get_notebook_table(Notebook),
