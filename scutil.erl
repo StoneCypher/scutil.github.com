@@ -79,7 +79,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines for higher math computation missing from the standard math module.<br/>
-%%     {@link list_product/1}, {@link dot_product/2}, {@link cross_product/2}, {@link vector_magnitude/1}, {@link normalize_vector/1}, {@link root_mean_square/1}, {@link root_sum_square/1}, {@link tuple_sum/1}, {@link square/1}
+%%     {@link list_product/1}, {@link dot_product/2}, {@link cross_product/2}, {@link vector_magnitude/1}, {@link normalize_vector/1}, {@link root_mean_square/1}, {@link root_sum_square/1}, {@link tuple_sum/1}, {@link square/1}, {@link mod/2}
 %%   </dd>
 %% </dl>
 %% === Network ===
@@ -2254,8 +2254,16 @@ implode(Separator, Data) when is_list(Data) andalso is_list(Separator) -> lists:
 
 
 
-% Thank god they called it rem.  -5 mod 2 is 1, not -1.  Most CPUs implement remainder and call it modulus.
-% This is real modulus.
+%% @spec mod(Base::integer(), Range::integer()) -> integer()
+
+%% @doc {@section Math} Takes the modulus of an integer by another integer.  Luckily, erlang calls what most languages refer to as modulus by its correct name, remainder (c's `%', erlang's `rem').  Modulus is implemented incorrectly in nearly every language, because chip vendors implement remainder and the wrong name stuck.  The difference is in how the operator reacts to a negative `Base': -10 modulo 3 is 2, whereas -10 rem 3 is -1.  Remainder takes the residue of dividing the base by the lowest (nearest negative infinity) integer N adjacent the real valued divisor; modulo returns the highest, which is less CPU efficient but always provides an answer on [0..Range-1]. ```1> scutil:mod(10,3).
+%% 1
+%%
+%% 2> [ scutil:mod(X,4) || X <- lists:seq(-10,10) ].
+%% [2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2]'''
+%%
+%% @since Version 29
+
 mod(Base, Range) when is_integer(Base), is_integer(Range) ->
 
     case Base rem Range of
