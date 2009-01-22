@@ -71,7 +71,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines for operating on lists of data augmenting the standard lists module.<br/>
-%%     {@link permute/1}, {@link combinations/1}, {@link shuffle/1}, {@link sanitize_tokens/1}, {@link shared_keys/1}, {@link shared_keys/2}, {@link shared_keys/3}, {@link all_unique_pairings/1}, {@link walk_unique_pairings/2}, {@link zip_n/1}, {@link count_of/2} (see also {@link random_from/3}, {@link random_from_weighted/1})
+%%     {@link permute/1}, {@link combinations/2}, {@link shuffle/1}, {@link sanitize_tokens/2}, {@link shared_keys/1}, {@link shared_keys/2}, {@link shared_keys/3}, {@link all_unique_pairings/1}, {@link walk_unique_pairings/2}, {@link zip_n/1}, {@link count_of/2} (see also {@link random_from/3}, {@link random_from_weighted/1})
 %%   </dd>
 %% </dl>
 %% === Math ===
@@ -119,7 +119,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines to provide complex pseudorandom services and convenience wrappers to augment the standard random module.<br/>
-%%     {@link grid_scatter/1}, {@link srand/0}, {@link srand/3}, {@link rand/1}, {@link random_from/1}, {@link random_from/2}, {@link random_from/3}, {@link random_from_weighted/1} (see also {@link shuffle/1})
+%%     {@link grid_scatter/2}, {@link srand/0}, {@link srand/3}, {@link rand/1}, {@link random_from/1}, {@link random_from/2}, {@link random_from/3}, {@link random_from_weighted/1} (see also {@link shuffle/1})
 %%   </dd>
 %% </dl>
 %% === Regex ===
@@ -148,7 +148,7 @@
 %%   <dt>Descriptive</dt>
 %%   <dd>
 %%     Routines which provide informative measurements of numeric lists<br/>
-%%     {@link median/1}, {@link mode/1}, {@link histograph/1}, {@link std_deviation/1}, {@link median_absolute_deviation/1}, {@link moment/1}, {@link moment/2}, {@link central_moment/1}, {@link central_moment/2}, {@link skewness/1}, {@link kurtosis/1} (see also {@link count_of/2}, {@link root_mean_square/1})
+%%     {@link median/1}, {@link mode/1}, {@link histograph/1}, {@link std_deviation/1}, {@link median_absolute_deviation/1}, {@link moment/2}, {@link moments/1}, {@link moments/2}, {@link central_moment/2}, {@link central_moments/1}, {@link central_moments/2}, {@link skewness/1}, {@link kurtosis/1} (see also {@link count_of/2}, {@link root_mean_square/1})
 %%   </dd>
 %%   <dt>Normals</dt>
 %%   <dd>
@@ -179,7 +179,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines which don't classify well into larger categories<br/>
-%%     {@link type_of/1}, {@link get_module_attribute/2}, {@link svn_scan_revision/1}
+%%     {@link type_of/1}, {@link get_module_attribute/2}, {@link scan_svn_revision/1}
 %%   </dd>
 %% </dl>
 %%
@@ -2280,7 +2280,7 @@ mod(Base, Range) when is_integer(Base), is_integer(Range) ->
 
 %% @spec scan_svn_revision(ModuleName::atom()) -> integer()
 
-%% @doc {@section Utility} Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.  To use, add a module attribute to your module as follows: `-svn_revision("$+Revision$).', after removing the plus (if the plus wasn't there, the example would get corrupted when I updated the module `;)').  Then set the svn keyword "Revision" on the file, and check it in.  After that, your version is magically updated every time you check in!  `:D'  The sole argument to this function is the name of the module to be scanned, as an atom. ```1> 324> scutil:scan_svn_revision(testerl).
+%% @doc {@section Utility} Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.  To use, add a module attribute to your module as follows: `-svn_revision("$+Revision$).', after removing the plus (if the plus wasn't there, the example would get corrupted when I updated the module `;)').  Then set the svn keyword "Revision" on the file, and check it in.  After that, your version is magically updated every time you check in!  `:D'  The sole argument to this function is the name of the module to be scanned, as an atom. ```1> scutil:scan_svn_revision(testerl).
 %% 16'''
 
 %% @since Version 44
