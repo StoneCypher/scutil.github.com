@@ -179,7 +179,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines which don't classify well into larger categories<br/>
-%%     {@link type_of/1}, {@link get_module_attribute/2}
+%%     {@link type_of/1}, {@link get_module_attribute/2}, {@link svn_scan_revision/1}
 %%   </dd>
 %% </dl>
 %%
@@ -200,15 +200,16 @@
 %%   <li>Dave Murphy / <a href="http://devkitpro.org/" target="_blank">WinterMute</a></li>
 %%   <li>DizzyD</li>
 %%   <li>Dylan Barrie / PhforSlayer</li>
-%%   <li>Etnt</li>
 %%   <li>Geoff Cant / <a href="http://github.com/archaelus">Archaelus</a></li>
 %%   <li>GrizzlyAdams of <a href="http://grizzly.thewaffleiron.net/" target="_blank">The Waffle Iron</a></li>
 %%   <li>Jeff Katz / <a href="http://kraln.com/" target="_blank">Kraln</a></li>
 %%   <li>John Sensebe of <a href="http://bargaintuan.com/" target="_blank">Bargaintuan</a></li>
 %%   <li>raleigh</li>
+%%   <li><a href="http://hem.bredband.net/richardc/">Richard Carlsson</a></li>
 %%   <li><a href="http://rvirding.blogspot.com/" target="_blank">Robert Virding</a></li>
 %%   <li><a href="http://akkit.org/" target="_blank">Steve Stair</a></li>
 %%   <li><a href="http://steve.vinoski.net/">Steve Vinoski</a></li>
+%%   <li>Torbj*rn T*rnkvist (those asterisks are o-umlauts, until I work out a bug in edoc) / <a href="http://github.com/etnt">Etnt</a></li>
 %%   <li><a href="http://opferman.com/" target="_blank">Toby Opferman</a></li>
 %%   <li><a href="http://blueventhorizon.com/" target="_blank">Vat Raghavan</a></li>
 %%   <li>Vladimir Sessikov</li>
@@ -2277,11 +2278,12 @@ mod(Base, Range) when is_integer(Base), is_integer(Range) ->
 
 
 
-% Just:
-%   1) put    -svn_revision("$+Revision$").    in your code after removing the plus (without the plus the example gets converted, sorry)
-%   2) set the svn property svn:keywords to include at least Revision (case sensitive), and
-%   3) check in the code.
-% Magic follows.
+%% @spec scan_svn_revision(ModuleName::atom()) -> integer()
+
+%% @doc {@section Utility} Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.  To use, add a module attribute to your module as follows: `-svn_revision("$+Revision$).', after removing the plus (if the plus wasn't there, the example would get corrupted when I updated the module `;)').  Then set the svn keyword "Revision" on the file, and check it in.  After that, your version is magically updated every time you check in!  `:D'  The sole argument to this function is the name of the module to be scanned, as an atom. ```1> 324> scutil:scan_svn_revision(testerl).
+%% 16'''
+
+%% @since Version 44
 
 scan_svn_revision(Module) ->
 
@@ -2540,7 +2542,7 @@ map_reduce(Function, Workload, JobsPerNode) -> map_reduce(Function, Workload, Jo
 
 %% @spec map_reduce(Function::function(), Workload::list(), JobsPerNode::positive_integer(), Nodes::list()) -> list()
 
-%% @doc {@section Parallelism} Takes a workload, a function, a count of jobs per node and a node list, and distributes work on demand to available nodes according to completion until the master workload is fulfilled.  Results are provided in the order the workload was provided, regardless of in what order they are completed or received. ```
+%% @doc {@section Parallelism} Takes a workload, a function, a count of jobs per node and a node list, and distributes work on demand to available nodes until fulfilled.  Results are provided in the order the workload was provided, regardless of in what order they are completed or received. ```
 %% '''<span style="color:red">TODO: add crash handling behavior, progress querying behavior</span>
 map_reduce(Function, Workload, JobsPerNode, Nodes) ->
 
@@ -2879,16 +2881,33 @@ f32_iolist_to_int(  A,B,C,D , big    ) -> <<X:32/float-big>>    = list_to_binary
 %% 6.25'''
 
 %% @since Version 108
+
 square(X) -> X*X.
 
 
 
 
 
-centroid(_) -> { error, not_yet_implemented }.
-% centroid(CoordList) -> centroid_init(
+% convenient in list comprehensions
 
-% centroid([First|Rem], Counters) when is_list(First) ->
+%% @spec centroid(InputList::coord_list()) -> coord()
+
+%% @doc {@section Statistics} Calculates the coordinate which represents the per-axis arithmetic mean of a set of points.  To calculate the centroid of `[1,1]', `[2,3]', you gather the X coordinates `[1,2]', then use their mean `1.5'; then do the same for the Y, `[1,3]' to `2'.  The centroid would thus be `[1.5,2]'.  You may pass any number of coordinates to this function, of any axis count, but they must all be the same axis count.  The return value will be a coordinate with the same axis count.  Negative and real values are fine; imaginary math is not implemented. ```1> scutil:centroid([[1]]).
+%% [1.0]
+%%
+%% 2> scutil:centroid([[1,1],[2,2]]).
+%% [1.5,1.5]
+%%
+%% 3> scutil:centroid([[1,1,1],[2,2,2],[3,3,3]]).
+%% [2.0,2.0,2.0]
+%%
+%% 4> scutil:centroid([[1,-1,1.0],[-2,-2,-2],[3,3,3],[4,4,4],[5,5,5]]).
+%% [2.2,1.8,2.2]'''
+
+%% @since Version 118
+
+centroid(CoordList) when is_list(CoordList) -> [ arithmetic_mean(X) || X <- zip_n(CoordList, to_list) ].
+
 
 
 
@@ -2998,7 +3017,7 @@ bayes_likelihood_worker( Event, Given, EventAndGivenCount, GivenCount, [Data|Rem
 
 %% @spec count_of(Item::any(), List::list()) -> non_negative_integer()
 
-%% @doc ```1> TestData = lists:duplicate(40,[healthy,nonsmoker]) ++ lists:duplicate(10,[healthy,smoker]) ++ lists:duplicate(7,[cancer,nonsmoker]) ++ lists:duplicate(3,[cancer,smoker]).
+%% @doc Counts the number of instances of Item in List.  ```1> TestData = lists:duplicate(40,[healthy,nonsmoker]) ++ lists:duplicate(10,[healthy,smoker]) ++ lists:duplicate(7,[cancer,nonsmoker]) ++ lists:duplicate(3,[cancer,smoker]).
 %% [[healthy,nonsmoker], [healthy,nonsmoker], [healthy|...], [...]|...]
 %%
 %% 2> scutil:count_of([healthy,smoker], TestData).
@@ -3009,7 +3028,4 @@ bayes_likelihood_worker( Event, Given, EventAndGivenCount, GivenCount, [Data|Rem
 
 %% @since Version 117
 
-count_of(Item, List) ->
-
-    lists:foldl(fun(X, Counter) -> case X of Item -> Counter+1; _ -> Counter end end, 0, List).
-
+count_of(Item, List) -> lists:foldl(fun(X, Counter) -> case X of Item -> Counter+1; _ -> Counter end end, 0, List).
