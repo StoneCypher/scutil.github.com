@@ -4,30 +4,34 @@
 %% @version $Revision$
 %% @since September 14, 2007
 
-%% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of various routines of a variety of topics:<ul>
-%% <li>{@section Conversion}</li>
-%% <li>{@section Counters}</li>
-%% <li>{@section Dispatch}</li>
-%% <li>{@section Documentary}</li>
-%% <li>{@section List}</li>
-%% <li>{@section Math}</li>
-%% <li>{@section Network}</li>
-%% <li>{@section Parallelism}</li>
-%% <li>{@section Persistence}</li>
-%% <li>{@section Probability}</li>
-%% <li>{@section Random}</li>
-%% <li>{@section Regex}</li>
-%% <li>{@section Serialism}</li>
-%% <li>{@section Statistics}</li>
-%% <li>{@section String} and</li>
-%% <li>{@section Utility} routines.</li>
+%% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of various routines of a variety of topics which have aggregated from reuse in other projects.</p>
+%%
+%% <ul>
+%%   <li>{@section Conversion}</li>
+%%   <li>{@section Counters}</li>
+%%   <li>{@section Dispatch}</li>
+%%   <li>{@section Documentary}</li>
+%%   <li>{@section List}</li>
+%%   <li>{@section Math}</li>
+%%   <li>{@section Network}</li>
+%%   <li>{@section Parallelism}</li>
+%%   <li>{@section Persistence}</li>
+%%   <li>{@section Probability}</li>
+%%   <li>{@section Random}</li>
+%%   <li>{@section Regex}</li>
+%%   <li>{@section Serialism}</li>
+%%   <li>{@section Statistics}</li>
+%%   <li>{@section String} and</li>
+%%   <li>{@section Utility} routines.</li>
 %% </ul>
-%%         This file has aggregated
-%%         dozens of useful miscellaneous routines which I'm releasing to the public in good faith.  There's no particular direction to
-%%         this library; any time I write a routine that I tend to use in a lot of situations, which isn't already meaningfully
-%%         classifiable into one of my other libraries, I throw it in here.  This has ended up creating a range of unrelated
-%%         functionality on which most of my other libraries depend heavily.  Have fun digging around.
-%%      </p>
+%%
+%% <p>
+%%   This file has aggregated
+%%   dozens of useful miscellaneous routines which I'm releasing to the public in good faith.  There's no particular direction to
+%%   this library; any time I write a routine that I tend to use in a lot of situations, which isn't already meaningfully
+%%   classifiable into one of my other libraries, I throw it in here.  This has ended up creating a range of unrelated
+%%   functionality on which most of my other libraries depend heavily.  Have fun digging around.
+%% </p>
 %%
 %% == Routines by Category ==
 %%
@@ -217,15 +221,15 @@
 %%
 %% @end
 
-%% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Website is</span><a href="http://scutil.com/">http://scutil.com/</a></span>
-%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Author's Website</span><a href="http://fullof.bs">Full of BS</a></span>
-%% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Direct link to zip archive</span><a href="http://crunchyd.com/release/scutil.zip">Current version</a></span>
-%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:20em">This library is released under the</span><a href="http://scutil.com/license.html">MIT License</a></span>
-%% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Public SVN at</span><a href="svn://crunchyd.com/scutil/">svn://crunchyd.com/scutil/</a></span>
-%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Discussion forum at</span><a href="http://crunchyd.com/forum/scutil-discussion/">CrunchyD Forums</a></span>
-%% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Bugtracker at</span><a href="http://crunchyd.com/forum/project.php?projectid=7">CrunchyD Forums</a></span>
-%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:20em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date$</tt></span>
-%% @reference <span style="margin-top:1em;padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:20em">Test sets require min. version 16</span><a href="http://testerl.com/">TestErl</a></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:37em"><span style="display:inline-block;width:14em">Website is</span><a href="http://scutil.com/">http://scutil.com/</a></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:37em"><span style="display:inline-block;width:14em">Author's Website</span><a href="http://fullof.bs">Full of BS</a></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:37em"><span style="display:inline-block;width:14em">Direct link to zip archive</span><a href="http://crunchyd.com/release/scutil.zip">Current version</a></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:37em"><span style="display:inline-block;width:14em">This library is released under the</span><a href="http://scutil.com/license.html">MIT License</a></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:37em"><span style="display:inline-block;width:14em">Public SVN at</span><a href="svn://crunchyd.com/scutil/">svn://crunchyd.com/scutil/</a></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:37em"><span style="display:inline-block;width:14em">Discussion forum at</span><a href="http://crunchyd.com/forum/scutil-discussion/">CrunchyD Forums</a></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:37em"><span style="display:inline-block;width:14em">Bugtracker at</span><a href="http://crunchyd.com/forum/project.php?projectid=7">CrunchyD Forums</a></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:37em"><span style="display:inline-block;width:14em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date$</tt></span>
+%% @reference <span style="margin-top:1em;padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:37em"><span style="display:inline-block;width:14em">Test sets require min. version 16</span><a href="http://testerl.com/">TestErl</a></span>
 
 %% @todo add @see cross-references between related functions
 %% @todo add thanks tables and cross-references
@@ -374,7 +378,9 @@
 
     bayes_likelihood_of/3, % needs tests
     
-    count_of/2 % needs tests
+    count_of/2, % needs tests
+
+    list_intersection/2, list_intersection/3 % needs tests
 
 ] ).
 
@@ -3029,3 +3035,19 @@ bayes_likelihood_worker( Event, Given, EventAndGivenCount, GivenCount, [Data|Rem
 %% @since Version 117
 
 count_of(Item, List) -> lists:foldl(fun(X, Counter) -> case X of Item -> Counter+1; _ -> Counter end end, 0, List).
+
+
+
+
+
+list_intersection(List1, List2)           -> list_intersection(List1, List2, unsorted).
+
+list_intersection(List1, List2, unsorted) -> list_intersection(lists:sort(List1), lists:sort(List2), sorted);
+list_intersection(List1, List2, sorted)   -> intersect_walk(List1, List2, []).
+
+intersect_walk([],             _L2,            Work) -> Work;
+intersect_walk(_L1,            [],             Work) -> Work;
+
+intersect_walk([L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head == L2Head -> intersect_walk(L1Rem,          L2Rem,          [L1Head]++Work);
+intersect_walk([L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head < L2Head  -> intersect_walk(L1Rem,          [L2Head|L2Rem], Work);
+intersect_walk([L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head < L2Head  -> intersect_walk([L1Head|L1Rem], L2Rem,          Work).
