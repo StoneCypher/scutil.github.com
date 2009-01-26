@@ -2181,11 +2181,28 @@ permute(List, Depth) when is_list(List), is_integer(Depth) -> [ [T]++R || T <- L
 
 
 
+%% @spec has_bit(Number::non_negative_integer(), Bit::non_negative_integer()) -> true | false
+
+%% @doc {@section Utility} Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of `Num'.  ```1> scutil:has_bit(5,0).
+%% true
+%%
+%% 2> scutil:has_bit(5,1).
+%% false'''
+
+%% @since Version 9
+
 has_bit(Num, Bit) when is_integer(Num), is_integer(Bit), Num > 0, Bit >= 0, Bit < 64 -> (Num band (1 bsl Bit)) > 0.
 
 
 
 
+
+%% @spec count_bits(Number::non_negative_integer()) -> non_negative_integer()
+
+%% @doc {@section Utility} Counts the number of bits turned on in a sufficiently sized unsigned two's compliment integer representation of `Num'.  ```1> scutil:count_bits(5).
+%% 2'''
+
+%% @since Version 9
 
 count_bits(Num) when is_integer(Num), Num > 0 ->
 
@@ -2238,6 +2255,9 @@ expand_labels(List)        when is_list(List) -> lists:flatten([ expand_label(X)
 
 % Thanks for some math help on erl-b, erl-c and engset, Vat and Wintermute
 
+%% @private
+% todo incomplete
+
 erlang_b_distribution(N,A) ->
 
    Num = math:pow(A,N) / scutil:factorial(N),
@@ -2248,6 +2268,9 @@ erlang_b_distribution(N,A) ->
 
 
 
+
+%% @private
+% todo incomplete
 
 erlang_c_distribution(N,A) ->
 
@@ -2811,6 +2834,7 @@ standard_listener_shunt(Handler, Port, FixedOptions, ConnectedSocket, ActiveStat
 
 
 
+%% @equiv int_to_u32_iolist(X, little)
 int_to_u32_iolist(X)                                 -> int_to_u32_iolist(X, little).
 
 int_to_u32_iolist(X, little) when X>=0, X<4294967296 -> binary_to_list(<<X:32/little>>);
@@ -2820,12 +2844,15 @@ int_to_u32_iolist(X, big)    when X>=0, X<4294967296 -> binary_to_list(<<X:32/bi
 
 
 
-u32_iolist_to_int( [A,B,C,D] )          -> u32_iolist_to_int( [A,B,C,D], little ).
+%% @equiv u32_iolist_to_int(A,B,C,D, little)
+u32_iolist_to_int( [A,B,C,D] )          -> u32_iolist_to_int(A,B,C,D, little).
 
-u32_iolist_to_int( [A,B,C,D], little )  -> <<X:32/little>> = list_to_binary([A,B,C,D]), X;
-u32_iolist_to_int( [A,B,C,D], big )     -> <<X:32/big>>    = list_to_binary([A,B,C,D]), X.
+%% @equiv u32_iolist_to_int(A,B,C,D, Endianness)
+u32_iolist_to_int( [A,B,C,D], little )  -> u32_iolist_to_int(A,B,C,D, little);
+u32_iolist_to_int( [A,B,C,D], big )     -> u32_iolist_to_int(A,B,C,D, big).
 
-u32_iolist_to_int(  A,B,C,D  )          -> u32_iolist_to_int( A,B,C,D, little ).
+%% @equiv u32_iolist_to_int(A,B,C,D, little)
+u32_iolist_to_int(  A,B,C,D  )          -> u32_iolist_to_int(A,B,C,D, little).
 
 u32_iolist_to_int(  A,B,C,D , little  ) -> <<X:32/little>> = list_to_binary([A,B,C,D]), X;
 u32_iolist_to_int(  A,B,C,D , big  )    -> <<X:32/big>>    = list_to_binary([A,B,C,D]), X.
@@ -2834,21 +2861,25 @@ u32_iolist_to_int(  A,B,C,D , big  )    -> <<X:32/big>>    = list_to_binary([A,B
 
 
 
-int_to_u64_iolist(X)                                           -> int_to_u64_iolist(X, little).
+%% @equiv int_to_u64_iolist(X, little)
+int_to_u64_iolist(X)         -> int_to_u64_iolist(X, little).
 
-int_to_u64_iolist(X, little) when X>=0, X<18446744073709551616 -> binary_to_list(<<X:64/little>>);
-int_to_u64_iolist(X, big)    when X>=0, X<18446744073709551616 -> binary_to_list(<<X:64/big>>).
-
-
-
+int_to_u64_iolist(X, little) -> binary_to_list(<<X:64/little>>);
+int_to_u64_iolist(X, big)    -> binary_to_list(<<X:64/big>>).
 
 
-u64_iolist_to_int( [A,B,C,D,E,F,G,H] )         -> u64_iolist_to_int([A,B,C,D,E,F,G,H], little).
 
-u64_iolist_to_int( [A,B,C,D,E,F,G,H], little ) -> <<X:64/little>> = list_to_binary([A,B,C,D,E,F,G,H]), X;
-u64_iolist_to_int( [A,B,C,D,E,F,G,H], big )    -> <<X:64/big>>    = list_to_binary([A,B,C,D,E,F,G,H]), X.
 
-u64_iolist_to_int(  A,B,C,D,E,F,G,H  )         -> u64_iolist_to_int([A,B,C,D,E,F,G,H], little).
+
+%% @equiv u64_iolist_to_int(A,B,C,D,E,F,G,H, little)
+u64_iolist_to_int( [A,B,C,D,E,F,G,H] )         -> u64_iolist_to_int(A,B,C,D,E,F,G,H, little).
+
+%% @equiv u64_iolist_to_int(A,B,C,D,E,F,G,H, Endianness)
+u64_iolist_to_int( [A,B,C,D,E,F,G,H], little ) -> u64_iolist_to_int(A,B,C,D,E,F,G,H, little);
+u64_iolist_to_int( [A,B,C,D,E,F,G,H], big )    -> u64_iolist_to_int(A,B,C,D,E,F,G,H, big).
+
+%% @equiv u64_iolist_to_int(A,B,C,D,E,F,G,H, little)
+u64_iolist_to_int(  A,B,C,D,E,F,G,H  )         -> u64_iolist_to_int(A,B,C,D,E,F,G,H, little).
 
 u64_iolist_to_int(  A,B,C,D,E,F,G,H , little ) -> <<X:64/little>> = list_to_binary([A,B,C,D,E,F,G,H]), X;
 u64_iolist_to_int(  A,B,C,D,E,F,G,H , big )    -> <<X:64/big>>    = list_to_binary([A,B,C,D,E,F,G,H]), X.
@@ -2866,12 +2897,15 @@ float_to_f32_iolist(X, big)    -> binary_to_list(<<X:32/float-big>>).
 
 
 
-f32_iolist_to_int( [A,B,C,D] )         -> f32_iolist_to_int( [A,B,C,D], little ).
+%% @equiv f32_iolist_to_int(A,B,C,D, little)
+f32_iolist_to_int( [A,B,C,D] )         -> f32_iolist_to_int(A,B,C,D, little).
 
-f32_iolist_to_int( [A,B,C,D], little ) -> <<X:32/float-little>> = list_to_binary([A,B,C,D]), X;
-f32_iolist_to_int( [A,B,C,D], big    ) -> <<X:32/float-big>>    = list_to_binary([A,B,C,D]), X.
+%% @equiv f32_iolist_to_int(A,B,C,D, Endianness)
+f32_iolist_to_int( [A,B,C,D], little ) -> f32_iolist_to_int(A,B,C,D, little);
+f32_iolist_to_int( [A,B,C,D], big    ) -> f32_iolist_to_int(A,B,C,D, big).
 
-f32_iolist_to_int(  A,B,C,D  )         -> f32_iolist_to_int(  A,B,C,D,  little  ).
+%% @equiv f32_iolist_to_int(A,B,C,D, little)
+f32_iolist_to_int(  A,B,C,D  )         -> f32_iolist_to_int(A,B,C,D, little).
 
 f32_iolist_to_int(  A,B,C,D , little ) -> <<X:32/float-little>> = list_to_binary([A,B,C,D]), X;
 f32_iolist_to_int(  A,B,C,D , big    ) -> <<X:32/float-big>>    = list_to_binary([A,B,C,D]), X.
@@ -2879,8 +2913,6 @@ f32_iolist_to_int(  A,B,C,D , big    ) -> <<X:32/float-big>>    = list_to_binary
 
 
 
-
-% convenient in list comprehensions
 
 %% @spec square(Input::number()) -> number()
 
@@ -2935,18 +2967,18 @@ centroid(CoordList) when is_list(CoordList) -> [ arithmetic_mean(X) || X <- zip_
 
 
 
-
+% todo
 
 % group_by_distance(CenterList, [],           Work) -> lists:reverse(Work);
 % group_by_distance(CenterList, [Coord|RemC], Work) ->
 
-
-
-
-
-
-
 %   zip_n([ [ {CoordId,CenterId,euclidean_distance(Coord, Center)} || {CoordId,Coord} <- lists:zip(lists:seq(1,length(CoordList)),CoordList) ] || {CenterId,Center} <- lists:zip(lists:seq(1,length(CenterList)),CenterList) ]).
+
+
+
+
+
+% todo
 
 % k_means(CoordList) when is_list(CoordList) ->
 
@@ -3015,7 +3047,7 @@ zip_n_foldn(Fun, Acc0, Ls,     Ret) -> zip_n_foldn(Fun, Acc0, [tl(L) || L <- Ls]
 
 %% @spec bayes_likelihood_of(Event, Given, Data) -> float
 
-%% @doc {@section Probability} Calculates the probability of a hypothetical event in the context of a dataset and a baseline given item, using Bayesian inference.  Bayesian inference sorts through the dataset looking for baselines, counting them; when a given is found, the hypothetical event is also looked for, counting them only when the baseline given is located first.  Then, the dividend of the hypothetical and given counts is returned as a likelihood estimation on the range `[0.0 .. 1.0]'.  ```1> scutil:bayes_likelihood_of(cancer, positive, [[cancer,positive],[healthy,negative],[cancer,positive],[healthy,positive]]).
+%% @doc {@section Probability} <span style="color:red">TODO</span> Calculates the probability of a hypothetical event in the context of a dataset and a baseline given item, using Bayesian inference.  Bayesian inference sorts through the dataset looking for baselines, counting them; when a given is found, the hypothetical event is also looked for, counting them only when the baseline given is located first.  Then, the dividend of the hypothetical and given counts is returned as a likelihood estimation on the range `[0.0 .. 1.0]'.  ```1> scutil:bayes_likelihood_of(cancer, positive, [[cancer,positive],[healthy,negative],[cancer,positive],[healthy,positive]]).
 %% 0.6666666666666666
 %%
 %% 2> TestData = lists:duplicate(40,[healthy,nonsmoker]) ++ lists:duplicate(10,[healthy,smoker]) ++ lists:duplicate(7,[cancer,nonsmoker]) ++ lists:duplicate(3,[cancer,smoker]).
@@ -3027,13 +3059,11 @@ zip_n_foldn(Fun, Acc0, Ls,     Ret) -> zip_n_foldn(Fun, Acc0, [tl(L) || L <- Ls]
 %% 4> scutil:bayes_likelihood_of(cancer, nonsmoker, TestData).
 %% 0.14893617021276595'''
 %%
-%% This code and example data was derived from <a href="http://www.ibm.com/developerworks/web/library/wa-bayes1/">this tutorial</a>.
+%% This code and example data was derived from <a href="http://www.ibm.com/developerworks/web/library/wa-bayes1/">this tutorial</a>.  <span style="color:red">Todo: it seems like this could be rewritten to generate a set of likelihoods in an iteration, rather than a single likelihood then re-iterate</span>
 
 %% @since Version 110
 
 bayes_likelihood_of(Event, Given, Data) -> bayes_likelihood_worker(Event, Given, 0, 0, Data).
-
-% TODO it seems like this could be rewritten to generate a set of likelihoods in an iteration, rather than a single likelihood then re-iterate
 
 bayes_likelihood_worker(_Event,_Given, EventAndGivenCount, GivenCount, [])         -> EventAndGivenCount / GivenCount;
 bayes_likelihood_worker( Event, Given, EventAndGivenCount, GivenCount, [Data|Rem]) ->
@@ -3104,7 +3134,7 @@ intersect_walk([L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head > L2Head  -> in
 
 
 
-%% @doc tuple_member(E::any(), T::tuple()) -> true | false
+%% @spec tuple_member(E::any(), T::tuple()) -> true | false
 
 %% @doc Checks whether E is a member element of tuple T, analogous to `lists::member(E, L)'. ```1> scutil:tuple_member(b, {a,b,c}).
 %% true
@@ -3126,5 +3156,14 @@ tuple_member( E, T, I, Sz) ->
         false -> tuple_member(E, T, I+1, Sz)
     end.
 
-record_member(E, R) -> tuple_member(E, R, 2, size(R)).  % just skip the 1st elem
 
+
+
+
+%% @spec record_member(E::any(), R::record()) -> true | false
+
+%% @doc <span style="color:red">TODO: Needs Example</span> Checks whether E is a member element of record R, analogous to `lists::member(E, L)'.  This function does not have examples because the shell does not correctly handle records; <span style="color:red">todo: add examples later</span>
+
+%% @since Version 123
+
+record_member(E, R) -> tuple_member(E, R, 2, size(R)).  % just skip the 1st elem
