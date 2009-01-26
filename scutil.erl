@@ -336,6 +336,9 @@
     erlang_b_distribution/2, % needs tests
     erlang_c_distribution/2, % needs tests
 
+    % exponential_distribution, poisson_distribution, gamma_distribution, phase_type_distribution, compound_poisson_distribution
+    % engset_calculation
+
     implode/2, % needs tests
 
     mod/2, % needs tests
@@ -2211,6 +2214,24 @@ count_bits(Num) when is_integer(Num), Num > 0 ->
 
 
 
+
+%% @type timestamp() = {Megaseconds::non_negative_integer(), Seconds::non_negative_integer(), MicroSeconds::non_negative_integer()}.
+
+%% @spec diff_timestamp(A::timestamp(), B::timestamp()) -> float()
+
+%% @doc {@section Utility} Returns the difference, in seconds as a float, between two erlang timestamps as returned by `erlang:now()'.  Negative differences are returned if the latter timestamp `B' is earlier than the former timestamp `A'.  ```1> A = now().
+%% {1232,947675,340000}
+%%
+%% 2> B = now().
+%% {1232,947679,412000}
+%%
+%% 3> scutil:diff_timestamp(A,B).
+%% 4.072
+%%
+%% 4> scutil:diff_timestamp(B,A).
+%% -4.072'''
+
+%% @since Version 9
 
 diff_timestamp({AM,AS,AU}, {BM, BS, BU}) ->
 
