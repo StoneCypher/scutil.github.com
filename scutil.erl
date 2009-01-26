@@ -380,7 +380,11 @@
     
     count_of/2, % needs tests
 
-    list_intersection/2, list_intersection/3 % needs tests
+    list_intersection/2, list_intersection/3, % needs tests
+
+%   group_by_distance/2, % needs tests
+
+    tuple_member/2, record_member/2 % needs tests
 
 ] ).
 
@@ -2700,15 +2704,15 @@ combinations(Items, N) when is_list(Items), is_integer(N), N > 0 ->
 
 %% @spec standard_listener(Handler, Port, SocketOptions) -> { ok, WorkerPid } | { error, E }
 
-%% @doc {@section Network} Listens on a socket and manages the fast packet loss problem.
+%% @doc {@section Network} <span style="color:red">Buggy</span> Listens on a socket and manages the fast packet loss problem.
 %%
-%% There is a defect in the canonical listener, where under extreme load a packet could be delivered before the socket has been traded off to the handler process.  This would mean that the socket could deliver one (or, theoretically, more) packets to the wrong process.  `{active,false}' is immune to this problem, but very inconvenient and in some ways against the erlang mindset.  
+%% There is a defect in the canonical listener, where under extreme load a packet could be delivered before the socket has been traded off to the handler process.  This would mean that the socket could deliver one (or, theoretically, more) packets to the wrong process.  `{active,false}' is immune to this problem, but very inconvenient and in some ways against the erlang mindset.
 %%
 %% `standard_listener' resolves the default `{active,true}' into the configuration if missing, then if active is not `{active,false}', strips the active status out, handles the socket `{active,false}', then passes to an internal handling function which re-engages the expected active status (erlang sockets when switched to active true or once immediately deliver their backlogs), and passes off to the user specified handler which receives its expected behavior without change.  (Also, this takes some of the repeat grunt work out of making listeners.)
 %%
 %% The function in Handler should be a 2-ary function which accepts a socket and the list of options the socket used, augmented with the tuple `{from_port,Port}', where `Port' is the listening port from which the connection was accepted.<span style="color:red">TODO: Needs code example</span>
 %%
-%% {@section Thanks} to MisterN for counsel, noticing several embarrassing bugs, and challenging me to refine my approach from several directions.  Thanks to Steve Vinoski for pointing out that I'd neglected to set the controlling process.
+%% {@section Thanks} to MisterN for counsel, noticing several embarrassing bugs, and challenging me to refine my approach from several directions.  Thanks to Steve Vinoski for pointing out that I'd neglected to set the controlling process.  <span style="color:red">Buggy: closing is not caught correctly, which causes an infinite loop</span>
 
 %% @since Version 96
 
@@ -2918,6 +2922,38 @@ centroid(CoordList) when is_list(CoordList) -> [ arithmetic_mean(X) || X <- zip_
 
 
 
+% todo
+
+% key_split(KeyId, TupleList)           when is_list(TupleList) -> key_split(KeyId, TupleList,                       unsorted).
+% key_split(KeyId, TupleList, unsorted) when is_list(TupleList) -> key_split(KeyId, lists:keysort(KeyId, TupleList), sorted);
+% key_split(KeyId, TupleList, sorted)   when is_list(TupleList) ->
+
+% key_minimum(
+% key_maximum(
+
+
+
+
+
+
+
+% group_by_distance(CenterList, [],           Work) -> lists:reverse(Work);
+% group_by_distance(CenterList, [Coord|RemC], Work) ->
+
+
+
+
+
+
+
+%   zip_n([ [ {CoordId,CenterId,euclidean_distance(Coord, Center)} || {CoordId,Coord} <- lists:zip(lists:seq(1,length(CoordList)),CoordList) ] || {CenterId,Center} <- lists:zip(lists:seq(1,length(CenterList)),CenterList) ]).
+
+% k_means(CoordList) when is_list(CoordList) ->
+
+
+
+
+
 %% @spec euclidean_distance(Coordinate1::coord(), Coordinate2::coord()) -> number()
 
 %% @doc {@section Math} Returns the distance between two coordinates in any N-space.  In two dimensions, this is known as the Pythagorean theorem.  The coordinates may be of any positive integer dimensionality (2d, 3d, but no -1d or 2.5d), but both coordinates must be of the same dimensionality.  The coordinates may have real-valued or negative components, but imaginary math is not implemented.  This function tolerates tuple coordinates by converting them to lists; list coordinates are thus slightly faster. ```1> scutil:euclidean_distance([0,0],[1,1]).
@@ -3063,3 +3099,32 @@ intersect_walk(_L1,            [],             Work) -> Work;
 intersect_walk([L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head == L2Head -> intersect_walk(L1Rem,          L2Rem,          [L1Head]++Work);
 intersect_walk([L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head < L2Head  -> intersect_walk(L1Rem,          [L2Head|L2Rem], Work);
 intersect_walk([L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head > L2Head  -> intersect_walk([L1Head|L1Rem], L2Rem,          Work).
+
+
+
+
+
+%% @doc tuple_member(E::any(), T::tuple()) -> true | false
+
+%% @doc Checks whether E is a member element of tuple T, analogous to `lists::member(E, L)'. ```1> scutil:tuple_member(b, {a,b,c}).
+%% true
+%%
+%% 2> scutil:tuple_member(d, {a,b,c}).
+%% false
+%%
+%% 3> scutil:tuple_member([1,2], {[1,2]}).
+%% true'''
+
+%% @since Version 123
+
+tuple_member(E, T) -> tuple_member(E, T, 1, size(T)).
+
+tuple_member(_E,_T, I, Sz) when I > Sz -> false;
+tuple_member( E, T, I, Sz) ->
+    case element(I, T) == E of
+        true  -> true;
+        false -> tuple_member(E, T, I+1, Sz)
+    end.
+
+record_member(E, R) -> tuple_member(E, R, 2, size(R)).  % just skip the 1st elem
+
