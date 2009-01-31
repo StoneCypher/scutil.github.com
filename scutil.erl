@@ -380,14 +380,18 @@
     euclidean_distance/2, % manhattan_distance chebyshev_distance minkowski_distance mahalanobis_distance hamming_distance % needs tests
 
     bayes_likelihood_of/3, % needs tests
-    
+
     count_of/2, % needs tests
 
     list_intersection/2, list_intersection/3, % needs tests
 
 %   group_by_distance/2, % needs tests
 
-    tuple_member/2, record_member/2 % needs tests
+    tuple_member/2, record_member/2, % needs tests
+
+    every_member_representation/1, every_member_representation/2, % needs tests
+
+    every_flag_representation/1 % needs tests
 
 ] ).
 
@@ -3188,3 +3192,66 @@ tuple_member( E, T, I, Sz) ->
 %% @since Version 123
 
 record_member(E, R) -> tuple_member(E, R, 2, size(R)).  % just skip the 1st elem
+
+
+
+
+
+%% @spec every_flag_representation(Flags::list()) -> list_of_lists()
+
+%% @doc {@section lists} Returns every interpretation of the list as a set of boolean flags, including all-off and all-on. ```1> scutil:every_flag_representation([1,2,3,4]).
+%% [ [], [4], [3], [3,4], [2], [2,4], [2,3], [2,3,4], [1], [1,4], [1,3], [1,3,4], [1,2], [1,2,4], [1,2,3], [1,2,3,4] ]
+%%
+%% 2> SourceOfPowers = scutil:every_flag_representation([magic,technology,evil,alien]).
+%% [[],                             % Batman
+%% [alien],                         % Superman
+%% [evil],                          % Darkseid
+%% [evil,alien],                    % Sinestro
+%% [technology],                    % Mister Terrific (Michael Holt)
+%% [technology,alien],              % The Blue Beetle
+%% [technology,evil],               % The OMACs
+%% [technology,evil,alien],         % Braniac
+%% [magic],                         % Shazam
+%% [magic,alien],                   % Green Lantern (Alan Scott)
+%% [magic,evil],                    % Lucifer Morningstar
+%% [magic,evil,alien],              % pre-crisis Star Sapphire
+%% [magic,technology],              % Alexander Luthor Jr.
+%% [magic,technology,alien],        % Mister Miracle
+%% [magic,technology,evil],         % pre-crisis Sinestro
+%% [magic,technology,evil,alien]]   % Granny Goodness'''
+
+%% @since Version 126
+
+every_flag_representation([]             ) -> [[]];
+every_flag_representation([Flag|RemFlags]) -> [ MaybeFlag ++ Reps || MaybeFlag <- [[],[Flag]], Reps <- every_flag_representation(RemFlags) ].
+
+
+
+
+
+%% @equiv every_member_representation(Memberships, no_absence)
+
+every_member_representation(Memberships) -> every_member_representation(Memberships, no_absence).
+
+%% @spec every_member_representation(Memberships::list_of_lists(), AllowAbsence::atom()) -> list_of_lists()
+
+%% @doc {@section Lists} For a list of memberships, return every possible combination of one representative member from each list.  The parameter `AllowAbsence' controls whether memberships may be unrepresented; if unrepresented memberships are possible, then one possible representation becomes the empty list. ```1> scutil:every_member_representation([ [a,b],[1,2,3],[i,ii,iii] ], no_absence).
+%% [[a,1,i], [a,1,ii], [a,1,iii], [a,2,i], [a,2,ii], [a,2,iii], [a,3,i], [a,3,ii], [a,3,iii], [b,1,i], [b,1,ii], [b,1,iii], [b,2,i], [b,2,ii], [b,2,iii], [b,3,i], [b,3,ii], [b,3,iii]]
+%%
+%% 2> scutil:every_member_representation([ [a,b],[1,2],[i,ii] ], allow_absence).
+%% [ [], [i], [ii], [1], [1,i], [1,ii], [2], [2,i], [2,ii], [a], [a,i], [a,ii], [a,1], [a,1,i], [a,1,ii], [a,2], [a,2,i], [a,2,ii], [b], [b,i], [b,ii], [b,1], [b,1,i], [b,1,ii], [b,2], [b,2,i], [b,2,ii] ]'''
+
+%% @since Version 126
+
+every_member_representation([],                          _            ) -> [[]];
+every_member_representation([Membership|RemMemberships], no_absence   ) -> [ [Member] ++ RemRep || Member <- Membership,       RemRep <- every_member_representation(RemMemberships, no_absence   ) ];
+every_member_representation([Membership|RemMemberships], allow_absence) ->
+
+    Compact = fun(Member, RemRep) ->
+        case Member of
+            empty    -> RemRep;
+            {item,X} -> [X] ++ RemRep
+        end
+    end,
+
+    [ Compact(Member, RemRep) || Member <- [empty] ++ [{item,X}||X<-Membership], RemRep <- every_member_representation(RemMemberships, allow_absence) ].
