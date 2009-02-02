@@ -2752,7 +2752,7 @@ combinations(Items, N) when is_list(Items), is_integer(N), N > 0 ->
 
 %% @spec standard_listener(Handler, Port, SocketOptions) -> { ok, WorkerPid, ListeningPort } | { error, E }
 
-%% @doc {@section Network} <span style="color:red">Buggy</span> Listens on a socket and manages the fast packet loss problem.
+%% @doc {@section Network} Listens on a socket and manages the fast packet loss problem.
 %%
 %% There is a defect in the canonical listener, where under extreme load a packet could be delivered before the socket has been traded off to the handler process.  This would mean that the socket could deliver one (or, theoretically, more) packets to the wrong process.  `{active,false}' is immune to this problem, but very inconvenient and in some ways against the erlang mindset.
 %%
@@ -2760,7 +2760,7 @@ combinations(Items, N) when is_list(Items), is_integer(N), N > 0 ->
 %%
 %% The function in Handler should be a 2-ary function which accepts a socket and the list of options the socket used, augmented with the tuple `{from_port,Port}', where `Port' is the listening port from which the connection was accepted.<span style="color:red">TODO: Needs code example</span>
 %%
-%% {@section Thanks} to MisterN for counsel, noticing several embarrassing bugs, and challenging me to refine my approach from several directions.  Thanks to Steve Vinoski for pointing out that I'd neglected to set the controlling process.  <span style="color:red">Buggy: closing is not caught correctly, which causes an infinite loop</span>
+%% {@section Thanks} to MisterN for counsel, noticing several embarrassing bugs, and challenging me to refine my approach from several directions.  Thanks to Steve Vinoski for pointing out that I'd neglected to set the controlling process, that the port closed signal was not being caught, and that ephemeral ports could nicely be supported by opening port 0 then reporting the listening port.
 
 %% @since Version 96
 
