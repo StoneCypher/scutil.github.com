@@ -2750,7 +2750,7 @@ combinations(Items, N) when is_list(Items), is_integer(N), N > 0 ->
 
 
 
-%% @spec standard_listener(Handler, Port, SocketOptions) -> { ok, WorkerPid } | { error, E }
+%% @spec standard_listener(Handler, Port, SocketOptions) -> { ok, WorkerPid, ListeningPort } | { error, E }
 
 %% @doc {@section Network} <span style="color:red">Buggy</span> Listens on a socket and manages the fast packet loss problem.
 %%
@@ -2766,7 +2766,7 @@ combinations(Items, N) when is_list(Items), is_integer(N), N > 0 ->
 
 standard_listener(Handler, Port, SocketOptions) ->
 
-    ActiveStatus = case proplists:get_value(active, SocketOptions) of 
+    ActiveStatus = case proplists:get_value(active, SocketOptions) of
         undefined -> true;
         Other     -> Other
     end,
@@ -2776,7 +2776,13 @@ standard_listener(Handler, Port, SocketOptions) ->
     case gen_tcp:listen(Port, FixedOptions) of
 
         { ok, ListeningSocket } ->
-            { ok, spawn(?MODULE, standard_listener_controller, [Handler, Port, FixedOptions, ListeningSocket, ActiveStatus, 0]) };
+
+            ListeningPort = case Port of
+                0 -> {ok, LP} = inet:port(ListeningSocket), LP;
+                _ -> Port
+            end,
+
+            { ok, spawn(?MODULE, standard_listener_controller, [Handler, Port, FixedOptions, ListeningSocket, ActiveStatus, 0]), ListeningPort };
 
         { error, E } ->
             { error, E }
@@ -2831,6 +2837,9 @@ standard_listener_accept_loop(Handler, Port, FixedOptions, ListeningSocket, Acti
             Controller ! serviced,
             spawn(?MODULE, standard_listener_shunt, [Handler, Port, FixedOptions, ConnectedSocket, ActiveStatus]),
             standard_listener_accept_loop(Handler, Port, FixedOptions, ListeningSocket, ActiveStatus, Controller);
+
+        { error, closed } ->
+            closed;
 
         { error, _E } ->
             standard_listener_accept_loop(Handler, Port, FixedOptions, ListeningSocket, ActiveStatus, Controller)
@@ -3199,26 +3208,29 @@ record_member(E, R) -> tuple_member(E, R, 2, size(R)).  % just skip the 1st elem
 
 %% @spec every_flag_representation(Flags::list()) -> list_of_lists()
 
-%% @doc {@section lists} Returns every interpretation of the list as a set of boolean flags, including all-off and all-on. ```1> scutil:every_flag_representation([1,2,3,4]).
+%% @doc {@section Lists} Returns every interpretation of the list as a set of boolean flags, including all-off and all-on. ```1> scutil:every_flag_representation([1,2,3,4]).
 %% [ [], [4], [3], [3,4], [2], [2,4], [2,3], [2,3,4], [1], [1,4], [1,3], [1,3,4], [1,2], [1,2,4], [1,2,3], [1,2,3,4] ]
 %%
-%% 2> SourceOfPowers = scutil:every_flag_representation([magic,technology,evil,alien]).
-%% [[],                             % Batman
-%% [alien],                         % Superman
-%% [evil],                          % Darkseid
-%% [evil,alien],                    % Sinestro
-%% [technology],                    % Mister Terrific (Michael Holt)
-%% [technology,alien],              % The Blue Beetle
-%% [technology,evil],               % The OMACs
-%% [technology,evil,alien],         % Braniac
-%% [magic],                         % Shazam
-%% [magic,alien],                   % Green Lantern (Alan Scott)
-%% [magic,evil],                    % Lucifer Morningstar
-%% [magic,evil,alien],              % pre-crisis Star Sapphire
-%% [magic,technology],              % Alexander Luthor Jr.
-%% [magic,technology,alien],        % Mister Miracle
-%% [magic,technology,evil],         % pre-crisis Sinestro
-%% [magic,technology,evil,alien]]   % Granny Goodness'''
+%% 2> length(scutil:every_flag_representation(lists:seq(1,16))).
+%% 65536
+%%
+%% 3> SourceOfPowers = scutil:every_flag_representation([magic,technology,evil,alien]).
+%% [[],                              % Batman
+%%  [alien],                         % Superman
+%%  [evil],                          % Darkseid
+%%  [evil,alien],                    % Sinestro
+%%  [technology],                    % Mister Terrific (Michael Holt)
+%%  [technology,alien],              % The Blue Beetle
+%%  [technology,evil],               % The OMACs
+%%  [technology,evil,alien],         % Braniac
+%%  [magic],                         % Shazam
+%%  [magic,alien],                   % Green Lantern (Alan Scott)
+%%  [magic,evil],                    % Lucifer Morningstar
+%%  [magic,evil,alien],              % pre-crisis Star Sapphire
+%%  [magic,technology],              % Alexander Luthor Jr.
+%%  [magic,technology,alien],        % Mister Miracle
+%%  [magic,technology,evil],         % pre-crisis Sinestro
+%%  [magic,technology,evil,alien]]   % Granny Goodness'''
 
 %% @since Version 126
 
