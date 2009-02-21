@@ -272,7 +272,7 @@
 
     type_of/1,
 
-    get_module_feature/2, get_module_attribute/1, get_module_attribute/2, abstract_code_from_module/1, atoms_used_by_module/1,
+    get_module_feature/2, get_module_attribute/1, get_module_attribute/2, module_abstract_code/1, module_atoms/1,
 
     byte_to_hex/1, nybble_to_hex/1, io_list_to_hex/1, % needs tests
     regex_read_matches/2, regex_read_matches/3, regex_read_matches/4, % needs tests
@@ -3388,3 +3388,16 @@ unit_scale_signal(Waveform) ->
     SignalMax                 = MaxObserved - Baseline,
 
     [ (Sample - Baseline) / SignalMax || Sample <- Waveform ].
+
+
+
+
+
+
+% todo change to use get_module_feature/2
+
+%% @since Version 130
+module_atoms(Module)         -> beam_lib:chunks(Module, [atoms]).
+
+%% @since Version 130
+module_abstract_code(Module) -> beam_lib:chunks(Module, [atoms]).
