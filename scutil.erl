@@ -183,7 +183,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines which don't classify well into larger categories<br/>
-%%     {@link type_of/1}, {@link get_module_attribute/2}, {@link scan_svn_revision/1}
+%%     {@link type_of/1}, {@link get_module_attribute/1}, {@link get_module_attribute/2}, {@link scan_svn_revision/1}
 %%   </dd>
 %% </dl>
 %%
@@ -238,6 +238,7 @@
 %% @todo add defective warnings to beginnings of @doc tags
 %% @todo add links to test data
 %% @todo add warnings re: spearman, pearson, kendall use on lists containing repetitions
+%% @todo add sections to examples: descriptive text, code example, what's it for, related, thanks
 
 
 
@@ -270,7 +271,9 @@
 -export( [
 
     type_of/1,
-    get_module_attribute/2,
+
+    get_module_feature/2, get_module_attribute/1, get_module_attribute/2, abstract_code_from_module/1, atoms_used_by_module/1,
+
     byte_to_hex/1, nybble_to_hex/1, io_list_to_hex/1, % needs tests
     regex_read_matches/2, regex_read_matches/3, regex_read_matches/4, % needs tests
     multi_do/3, multi_do/4, % needs tests
@@ -391,7 +394,11 @@
 
     every_member_representation/1, every_member_representation/2, % needs tests
 
-    every_flag_representation/1 % needs tests
+    every_flag_representation/1, % needs tests
+
+    isolate_signal/1, unit_scale_signal/1, minmax/1, % needs tests
+    
+    flesch_kincaid_readability/4, flesch_kincaid_readability_score/3, interpret_flesch_kincaid_readability_score/1 % needs_tests
 
 ] ).
 
@@ -429,6 +436,54 @@ type_of(_X)                     -> unknown.
 
 
 
+
+get_module_feature(Module, Feature) ->
+
+    case beam_lib:chunks(Module, [Feature]) of
+
+        { ok, { Module, [ {Feature,Attributes} ] } } ->
+            Attributes;
+
+        { error, beam_lib, { file_error, _, enoent} } ->
+            { error, no_such_module }
+
+    end.
+
+
+
+
+
+%% @spec get_module_attribute(Module::atom()) -> AttributeList | { error, no_such_module }
+
+%% @doc {@section Utility} Look up all attributes of a given module.  ```1> scutil:get_module_attribute(scutil).
+%% [{author,"John Haugeland <stonecypher@gmail.com>"},
+%%  {bugtracker,"http://crunchyd.com/forum/project.php?projectid=7"},
+%%  {currentsource,"http://crunchyd.com/release/scutil.zip"},
+%%  {description,"StoneCypher's utility library."},
+%%  {library_requirements,[{testerl,16}]},
+%%  {license,[{mit_license,"http://scutil.com/license.html"}]},
+%%  {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
+%%  {publicsvn,"svn://crunchyd.com/scutil/"},
+%%  {svn_head,"$HeadURL$"},
+%%  {svn_id,"$Id$"},
+%%  {svn_revision,"$Revision$"},
+%%  {testerl_export,[{[],scutil_testsuite}]},
+%%  {vsn,[134633400955530778836494569152232539093]},
+%%  {webpage,"http://scutil.com/"}]'''
+
+%% @since Version 129
+
+get_module_attribute(Module) ->
+
+    case beam_lib:chunks(Module, [attributes]) of
+
+        { ok, { _, [ {attributes,Attributes} ] } } ->
+            Attributes;
+
+        { error, beam_lib, { file_error, _, enoent} } ->
+            { error, no_such_module }
+
+    end.
 
 %% @spec get_module_attribute(Module::atom(), Attribute::atom()) -> { value, {Attribute, Value} } | { error, no_such_attribute } | { error, no_such_module }
 
@@ -2617,7 +2672,7 @@ map_reduce(Function, Workload, JobsPerNode, Nodes) ->
 
 map_reduce_worker(_Function, [],             _Computers, [],      WorkDone) -> {_,Out} = lists:unzip(lists:keysort(1,WorkDone)), Out;                               % no work left, no work out?  done.
 map_reduce_worker( Function, [],              Computers, WorkOut, WorkDone) -> map_reduce_wait_for_work(Function, [],             Computers, WorkOut, WorkDone);    % no work left, work out?  wait.
-map_reduce_worker( Function, TaggedWorkload, [],         WorkOut, WorkDone) -> map_reduce_wait_for_work(Function, TaggedWorkload, [],        WorkOut, WorkDone);    % work left, no computers left?  wait.
+map_reduce_worker( Function, TaggedWorkload,  [],        WorkOut, WorkDone) -> map_reduce_wait_for_work(Function, TaggedWorkload, [],        WorkOut, WorkDone);    % work left, no computers left?  wait.
 map_reduce_worker( Function, TaggedWorkload,  Computers, WorkOut, WorkDone) -> map_reduce_do_work(      Function, TaggedWorkload, Computers, WorkOut, WorkDone).    % work left, computers left?  do work.
 
 
@@ -3252,7 +3307,35 @@ every_member_representation(Memberships) -> every_member_representation(Membersh
 %%
 %% 2> scutil:every_member_representation([ [a,b],[1,2],[i,ii] ], allow_absence).
 %% [ [], [i], [ii], [1], [1,i], [1,ii], [2], [2,i], [2,ii], [a], [a,i], [a,ii], [a,1], [a,1,i], [a,1,ii], [a,2], [a,2,i], [a,2,ii], [b], [b,i], [b,ii], [b,1], [b,1,i], [b,1,ii], [b,2], [b,2,i], [b,2,ii] ]'''
-
+%%
+%% 3> Format = fun(Person, Place, Weapon) -> "It was " ++ Person ++ " in the " ++ Place ++ " with the " ++ Weapon ++ "!" end.
+%% #Fun<erl_eval.18.105910772>
+%%
+%% 4> { People, Places, Weapons } = { ["Col. Mustard", "Mr. Green"], ["the billiards room", "the kitchen"], ["a lead pipe", "a knife", "a gun"] }.
+%% {["Col. Mustard","Mr. Green"],
+%%  ["the billiards room","the kitchen"],
+%%  ["a lead pipe","a knife","a gun"]}
+%%
+%% 5> Places.
+%% ["the billiards room","the kitchen"]
+%%
+%% 6> Format("Mrs. Scarlett", "the observatory", "a noose").
+%% "It was Mrs. Scarlett in the the observatory with the a noose!"
+%%
+%% 7> EveryClueOutcome = [ Format(ThisPerson, ThisPlace, ThisWeapon) || ThisPerson <- People, ThisPlace <- Places, ThisWeapon <- Weapons ].
+%% ["It was Col. Mustard in the the billiards room with the a lead pipe!",
+%%  "It was Col. Mustard in the the billiards room with the a knife!",
+%%  "It was Col. Mustard in the the billiards room with the a gun!",
+%%  "It was Col. Mustard in the the kitchen with the a lead pipe!",
+%%  "It was Col. Mustard in the the kitchen with the a knife!",
+%%  "It was Col. Mustard in the the kitchen with the a gun!",
+%%  "It was Mr. Green in the the billiards room with the a lead pipe!",
+%%  "It was Mr. Green in the the billiards room with the a knife!",
+%%  "It was Mr. Green in the the billiards room with the a gun!",
+%%  "It was Mr. Green in the the kitchen with the a lead pipe!",
+%%  "It was Mr. Green in the the kitchen with the a knife!",
+%%  "It was Mr. Green in the the kitchen with the a gun!"]
+%%
 %% @since Version 126
 
 every_member_representation([],                          _            ) -> [[]];
@@ -3267,3 +3350,41 @@ every_member_representation([Membership|RemMemberships], allow_absence) ->
     end,
 
     [ Compact(Member, RemRep) || Member <- [empty] ++ [{item,X}||X<-Membership], RemRep <- every_member_representation(RemMemberships, allow_absence) ].
+
+
+
+
+
+%% @since Version 129
+
+isolate_signal(Waveform) ->
+
+    Baseline = lists:min(Waveform),
+    [ Sample - Baseline || Sample <- Waveform ].
+
+
+
+
+
+%% @since Version 129
+
+minmax([FirstItem|RestOfList]) -> minmax(RestOfList, FirstItem, FirstItem).
+
+% can never be both smaller than min and larger than max, so this is safe
+minmax([],                    Min, Max)                     -> {Min,Max};
+minmax([ThisItem|RestOfList], Min, Max) when ThisItem < Min -> minmax(RestOfList, ThisItem, Max);
+minmax([ThisItem|RestOfList], Min, Max) when ThisItem > Max -> minmax(RestOfList, Min,      ThisItem);
+minmax([_ThsItem|RestOfList], Min, Max)                     -> minmax(RestOfList, Min,      Max).
+
+
+
+
+
+%% @since Version 129
+
+unit_scale_signal(Waveform) ->
+
+    { Baseline, MaxObserved } = minmax(Waveform),
+    SignalMax                 = MaxObserved - Baseline,
+
+    [ (Sample - Baseline) / SignalMax || Sample <- Waveform ].
