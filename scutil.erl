@@ -3446,3 +3446,6 @@ interpret_flesch_kincaid_readability_score(R)              -> { difficult,      
 flesch_kincaid_readability_score(Words, Sentences, Syllables) ->
 
     206.835 - (1.015 * (Words/Sentences)) - (84.6 * (Syllables/Words)).
+
+
+
