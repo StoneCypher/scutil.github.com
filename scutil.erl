@@ -397,7 +397,7 @@
     every_flag_representation/1, % needs tests
 
     isolate_signal/1, unit_scale_signal/1, minmax/1, % needs tests
-    
+
     flesch_kincaid_readability/4, flesch_kincaid_readability_score/3, interpret_flesch_kincaid_readability_score/1 % needs_tests
 
 ] ).
@@ -3302,40 +3302,40 @@ every_member_representation(Memberships) -> every_member_representation(Membersh
 
 %% @spec every_member_representation(Memberships::list_of_lists(), AllowAbsence::atom()) -> list_of_lists()
 
-%% @doc {@section Lists} For a list of memberships, return every possible combination of one representative member from each list.  The parameter `AllowAbsence' controls whether memberships may be unrepresented; if unrepresented memberships are possible, then one possible representation becomes the empty list. ```1> scutil:every_member_representation([ [a,b],[1,2,3],[i,ii,iii] ], no_absence).
-%% [[a,1,i], [a,1,ii], [a,1,iii], [a,2,i], [a,2,ii], [a,2,iii], [a,3,i], [a,3,ii], [a,3,iii], [b,1,i], [b,1,ii], [b,1,iii], [b,2,i], [b,2,ii], [b,2,iii], [b,3,i], [b,3,ii], [b,3,iii]]
-%%
-%% 2> scutil:every_member_representation([ [a,b],[1,2],[i,ii] ], allow_absence).
-%% [ [], [i], [ii], [1], [1,i], [1,ii], [2], [2,i], [2,ii], [a], [a,i], [a,ii], [a,1], [a,1,i], [a,1,ii], [a,2], [a,2,i], [a,2,ii], [b], [b,i], [b,ii], [b,1], [b,1,i], [b,1,ii], [b,2], [b,2,i], [b,2,ii] ]'''
-%%
-%% 3> Format = fun(Person, Place, Weapon) -> "It was " ++ Person ++ " in the " ++ Place ++ " with the " ++ Weapon ++ "!" end.
-%% #Fun<erl_eval.18.105910772>
-%%
-%% 4> { People, Places, Weapons } = { ["Col. Mustard", "Mr. Green"], ["the billiards room", "the kitchen"], ["a lead pipe", "a knife", "a gun"] }.
-%% {["Col. Mustard","Mr. Green"],
-%%  ["the billiards room","the kitchen"],
-%%  ["a lead pipe","a knife","a gun"]}
-%%
-%% 5> Places.
-%% ["the billiards room","the kitchen"]
-%%
-%% 6> Format("Mrs. Scarlett", "the observatory", "a noose").
-%% "It was Mrs. Scarlett in the the observatory with the a noose!"
-%%
-%% 7> EveryClueOutcome = [ Format(ThisPerson, ThisPlace, ThisWeapon) || ThisPerson <- People, ThisPlace <- Places, ThisWeapon <- Weapons ].
-%% ["It was Col. Mustard in the the billiards room with the a lead pipe!",
-%%  "It was Col. Mustard in the the billiards room with the a knife!",
-%%  "It was Col. Mustard in the the billiards room with the a gun!",
-%%  "It was Col. Mustard in the the kitchen with the a lead pipe!",
-%%  "It was Col. Mustard in the the kitchen with the a knife!",
-%%  "It was Col. Mustard in the the kitchen with the a gun!",
-%%  "It was Mr. Green in the the billiards room with the a lead pipe!",
-%%  "It was Mr. Green in the the billiards room with the a knife!",
-%%  "It was Mr. Green in the the billiards room with the a gun!",
-%%  "It was Mr. Green in the the kitchen with the a lead pipe!",
-%%  "It was Mr. Green in the the kitchen with the a knife!",
-%%  "It was Mr. Green in the the kitchen with the a gun!"]
-%%
+% % @doc {@section Lists} For a list of memberships, return every possible combination of one representative member from each list.  The parameter `AllowAbsence' controls whether memberships may be unrepresented; if unrepresented memberships are possible, then one possible representation becomes the empty list. ```1> scutil:every_member_representation([ [a,b],[1,2,3],[i,ii,iii] ], no_absence).
+% % [[a,1,i], [a,1,ii], [a,1,iii], [a,2,i], [a,2,ii], [a,2,iii], [a,3,i], [a,3,ii], [a,3,iii], [b,1,i], [b,1,ii], [b,1,iii], [b,2,i], [b,2,ii], [b,2,iii], [b,3,i], [b,3,ii], [b,3,iii]]
+% %
+% % 2> scutil:every_member_representation([ [a,b],[1,2],[i,ii] ], allow_absence).
+% % [ [], [i], [ii], [1], [1,i], [1,ii], [2], [2,i], [2,ii], [a], [a,i], [a,ii], [a,1], [a,1,i], [a,1,ii], [a,2], [a,2,i], [a,2,ii], [b], [b,i], [b,ii], [b,1], [b,1,i], [b,1,ii], [b,2], [b,2,i], [b,2,ii] ]'''
+% %
+% % 3> Format = fun(Person, Place, Weapon) -> "It was " ++ Person ++ " in the " ++ Place ++ " with the " ++ Weapon ++ "!" end.
+% % #Fun<erl_eval.18.105910772>
+% %
+% % 4> { People, Places, Weapons } = { ["Col. Mustard", "Mr. Green"], ["the billiards room", "the kitchen"], ["a lead pipe", "a knife", "a gun"] }.
+% % {["Col. Mustard","Mr. Green"],
+% %  ["the billiards room","the kitchen"],
+% %  ["a lead pipe","a knife","a gun"]}
+% %
+% % 5> Places.
+% % ["the billiards room","the kitchen"]
+% %
+% % 6> Format("Mrs. Scarlett", "the observatory", "a noose").
+% % "It was Mrs. Scarlett in the the observatory with the a noose!"
+% %
+% % 7> EveryClueOutcome = [ Format(ThisPerson, ThisPlace, ThisWeapon) || ThisPerson <- People, ThisPlace <- Places, ThisWeapon <- Weapons ].
+% % ["It was Col. Mustard in the the billiards room with the a lead pipe!",
+% %  "It was Col. Mustard in the the billiards room with the a knife!",
+% %  "It was Col. Mustard in the the billiards room with the a gun!",
+% %  "It was Col. Mustard in the the kitchen with the a lead pipe!",
+% %  "It was Col. Mustard in the the kitchen with the a knife!",
+% %  "It was Col. Mustard in the the kitchen with the a gun!",
+% %  "It was Mr. Green in the the billiards room with the a lead pipe!",
+% %  "It was Mr. Green in the the billiards room with the a knife!",
+% %  "It was Mr. Green in the the billiards room with the a gun!",
+% %  "It was Mr. Green in the the kitchen with the a lead pipe!",
+% %  "It was Mr. Green in the the kitchen with the a knife!",
+% %  "It was Mr. Green in the the kitchen with the a gun!"]
+% %
 %% @since Version 126
 
 every_member_representation([],                          _            ) -> [[]];
