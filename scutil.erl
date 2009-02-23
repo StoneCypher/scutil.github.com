@@ -4,6 +4,10 @@
 %% @version $Revision$
 %% @since September 14, 2007
 
+% To automatically generate documentation, from the erlang shell, type:
+% edoc:files(["/projects/libraries/erlang/scutil/scutil.erl"], [{dir,"/projects/libraries/erlang/scutil/docs/"}]).
+% Replace those paths with paths appropriate for your machine.
+
 %% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of various routines of a variety of topics which have aggregated from reuse in other projects.</p>
 %%
 %% <ul>
