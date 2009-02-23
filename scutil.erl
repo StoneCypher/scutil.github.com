@@ -3410,6 +3410,8 @@ module_abstract_code(Module) -> beam_lib:chunks(Module, [atoms]).
 
 %% @since Version 131
 
+flesch_kincaid_readability(Data) -> flesch_kincaid_readability(Data, fun count_words/1, fun count_sentences/1, fun count_syllables/1).
+
 flesch_kincaid_readability(Data, WordCounter, SentenceCounter, SyllableCounter) ->
 
     Words     = WordCounter(Data),
