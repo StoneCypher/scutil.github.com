@@ -10,6 +10,8 @@
 
 %% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of various routines of a variety of topics which have aggregated from reuse in other projects.</p>
 %%
+%% <table style="border: 1px solid black; background-color: #eee;"><tr><td style="padding: 0 2em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_users.js?style=blue"></script></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_cocomo.js?salary=80000"></script></td><td style="margin-left: 0.1em; width: 20em;"><div><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_basic_stats.js"></script></div></td></tr></table>
+%%
 %% <ul>
 %%   <li>{@section Conversion}</li>
 %%   <li>{@section Counters}</li>
@@ -3414,7 +3416,7 @@ module_abstract_code(Module) -> beam_lib:chunks(Module, [atoms]).
 
 %% @since Version 131
 
-flesch_kincaid_readability(Data) -> flesch_kincaid_readability(Data, fun count_words/1, fun count_sentences/1, fun count_syllables/1).
+% flesch_kincaid_readability(Data) -> flesch_kincaid_readability(Data, fun count_words/1, fun count_sentences/1, fun count_syllables/1).
 
 flesch_kincaid_readability(Data, WordCounter, SentenceCounter, SyllableCounter) ->
 
@@ -3452,6 +3454,3 @@ interpret_flesch_kincaid_readability_score(R)              -> { difficult,      
 flesch_kincaid_readability_score(Words, Sentences, Syllables) ->
 
     206.835 - (1.015 * (Words/Sentences)) - (84.6 * (Syllables/Words)).
-
-
-
