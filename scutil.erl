@@ -10,7 +10,7 @@
 
 %% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of various routines of a variety of topics which have aggregated from reuse in other projects.</p>
 %%
-%% <table style="border: 1px solid black; background-color: #eee;"><tr><td style="padding: 0 2em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_users.js?style=blue"></script></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_cocomo.js?salary=80000"></script></td><td style="margin-left: 0.1em; width: 20em;"><div><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_basic_stats.js"></script></div></td></tr></table>
+%% <table style="border: 1px solid black;"><tr><td style="padding: 0 2em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_users.js?style=blue"></script></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_cocomo.js?salary=80000"></script></td><td style="margin-left: 0.1em;"><div><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_basic_stats.js"></script></div></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_factoids.js"></script></td></tr></table>
 %%
 %% <ul>
 %%   <li>{@section Conversion}</li>
@@ -29,7 +29,7 @@
 %%   <li>{@section Statistics}</li>
 %%   <li>{@section String} and</li>
 %%   <li>{@section Utility} routines.</li>
-%% </ul>
+%% </ul> <style type="text/css">h2,h3 { margin-top:5em; } h3.typedecl { margin-top:2em; }</style>
 %%
 %% <p>
 %%   This file has aggregated
@@ -195,6 +195,10 @@
 %%
 %% == License ==
 %% <p>ScUtil is MIT license, because <a href="http://WhyIHateTheGPL.com/">the author feels very strongly against the GPL</a>.</p>
+%%
+%% == Registration ==
+%% <p>ScUtil is free and may be used at discretion.  However, the author would appreciate three things if you have time:</p>
+%% <table><tr><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_users.js?style=blue"></script></td><td><ol><li>Putting a link to the main domain <a style="font-family:consolas,monospace" href="http://scutil.com/">http://scutil.com/</a> on your site(s) to help get the word out</li><li style="margin-top: 0.75em;">Marking yourself a user of the library on <a href="https://www.ohloh.net/p/scutil">ohloh</a> (<i style="color:#369;">press the button to the left if you're already a user</i>), to help get the word out</li><li style="margin-top: 0.75em;">Dropping me an email at <a style="font-family:consolas,monospace" href="mailto:stonecypher@gmail.com">stonecypher@gmail.com</a>, to let me know where my library has ended up.  It's interesting.</li></ol></td></tr></table>
 %%
 %% == Thanks ==
 %% <p>ScUtil has profited significantly from the donations of time, understanding and code given by a variety of generous friends and strangers.  The list of small tweaks would
@@ -3454,3 +3458,15 @@ interpret_flesch_kincaid_readability_score(R)              -> { difficult,      
 flesch_kincaid_readability_score(Words, Sentences, Syllables) ->
 
     206.835 - (1.015 * (Words/Sentences)) - (84.6 * (Syllables/Words)).
+
+
+
+
+
+% count_words(Source) -> count_words(Source, keep_hyphens).
+%
+% count_words(Source, keep_hyphens) -> count_words(Source, keep_hyphens, 0, not_word).
+%
+% count_words([],    _Hyphens,      Count,_WordState) -> Count;
+% count_words(Source, keep_hyphens, Count, not_word)  ->
+
