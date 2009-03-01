@@ -1,14 +1,27 @@
 
+%%%%%%%%%%
+%%
+%%  ScUtil
+%%  ------
+%%
+%%  StoneCypher's erlang utility library.
+%%
+%%  Code starts several hundred lines down; search for -module.  EDoc requires a lot of the documentation to be at the beginning of the file.
+%%
+%%  To automatically generate documentation, from the erlang shell, type:
+%%    edoc:files(["/projects/libraries/erlang/scutil/scutil.erl"], [{dir,"/projects/libraries/erlang/scutil/docs/"}]).
+%%  Replace those paths with paths appropriate for your machine.
+
+
+
+
+
 %% @author John Haugeland <stonecypher@gmail.com>
 %% @copyright 2007 - current John Haugeland, All Rights Reserved
 %% @version $Revision$
 %% @since September 14, 2007
 
-% To automatically generate documentation, from the erlang shell, type:
-% edoc:files(["/projects/libraries/erlang/scutil/scutil.erl"], [{dir,"/projects/libraries/erlang/scutil/docs/"}]).
-% Replace those paths with paths appropriate for your machine.
-
-%% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of various routines of a variety of topics which have aggregated from reuse in other projects.</p>
+%% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of hundreds of routines of a variety of topics which have aggregated from reuse in other projects.</p>
 %%
 %% <table style="border: 1px solid black;"><tr><td style="padding: 0 2em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_users.js?style=blue"></script></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_cocomo.js?salary=80000"></script></td><td style="margin-left: 0.1em;"><div><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_basic_stats.js"></script></div></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_factoids.js"></script></td></tr></table>
 %%
@@ -29,7 +42,7 @@
 %%   <li>{@section Statistics}</li>
 %%   <li>{@section String} and</li>
 %%   <li>{@section Utility} routines.</li>
-%% </ul> <style type="text/css">h2,h3 { margin-top:5em; } h3.typedecl { margin-top:2em; }</style>
+%% </ul> <style type="text/css">h2,h3 { margin-top:6em; } h3.typedecl { margin-top:3em; }</style>
 %%
 %% <p>
 %%   This file has aggregated
@@ -57,7 +70,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines for tracking counters shared between processes<br/>
-%%     {@link counter/1}, {@link reset_counter/1}, {@link inc_counter/1}, {@link inc_counter/2}, {@link dec_counter/1}, {@link dec_counter/2}, {@link adjust_counter/2}, {@link set_counter/2}
+%%     {@link counter/1}, {@link counters/1}, {@link reset_counter/1}, {@link inc_counter/1}, {@link inc_counter/2}, {@link dec_counter/1}, {@link dec_counter/2}, {@link adjust_counter/2}, {@link set_counter/2}
 %%   </dd>
 %% </dl>
 %% === Dispatch ===
@@ -282,7 +295,8 @@
 
     type_of/1,
 
-    get_module_feature/2, get_module_attribute/1, get_module_attribute/2, module_abstract_code/1, module_atoms/1,
+    get_module_feature/2, get_module_attribute/1, get_module_attribute/2, module_abstract_code/1, module_abstract_code/2, module_abstract_attributes/1, module_abstract_functions/1, module_abstract_functions/2, module_atoms/1,
+      module_count_entrypoints/1, % needs tests
 
     byte_to_hex/1, nybble_to_hex/1, io_list_to_hex/1, % needs tests
     regex_read_matches/2, regex_read_matches/3, regex_read_matches/4, % needs tests
@@ -327,7 +341,7 @@
     all_unique_pairings/1, % needs tests
     walk_unique_pairings/2, % needs tests
     list_to_number/1, % needs tests
-    counter/1, inc_counter/1, inc_counter/2, dec_counter/1, dec_counter/2, reset_counter/1, adjust_counter/2, set_counter/2, counter_process/0, % needs tests
+    counter/1, counters/1, inc_counter/1, inc_counter/2, dec_counter/1, dec_counter/2, reset_counter/1, adjust_counter/2, set_counter/2, counter_process/0, % needs tests
     start_register_if_not_running/3, start_register_if_not_running/4, start_register_if_not_running/5, % needs tests
     wait_until_terminate/0, wait_until_terminate/1, % needs tests
     module_has_function/2, % needs tests
@@ -408,7 +422,7 @@
 
     isolate_signal/1, unit_scale_signal/1, minmax/1, % needs tests
 
-    flesch_kincaid_readability/4, flesch_kincaid_readability_score/3, interpret_flesch_kincaid_readability_score/1 % needs_tests
+    flesch_kincaid_readability/4, flesch_kincaid_readability_score/3, interpret_flesch_kincaid_score/1 % needs_tests
 
 ] ).
 
@@ -1990,6 +2004,19 @@ counter(Name) ->
 
 
 
+%% @spec counters(Names::list()) -> list_of_integers()
+
+%% @doc {@section Counters} Checks a counter's value; if the counter was not already defined, it will report zero. ```1> scutil:counter(hello).
+%% 0'''
+
+%% @since Version 138
+
+counters(Names) -> [ counter(X) || X <- Names ].
+
+
+
+
+
 %% @equiv adjust_counter(Name,1)
 inc_counter(Name)    -> adjust_counter(Name, 1).
 
@@ -3404,13 +3431,25 @@ unit_scale_signal(Waveform) ->
 
 
 
-% todo change to use get_module_feature/2
+%% @since Version 130
+module_atoms(Module) -> get_module_feature(Module, atoms).
 
 %% @since Version 130
-module_atoms(Module)         -> beam_lib:chunks(Module, [atoms]).
+module_abstract_code(Module)             -> module_abstract_code(Module, unstripped).
+module_abstract_code(Module, unstripped) -> get_module_feature(Module, abstract_code);
+module_abstract_code(Module, stripped)   -> { raw_abstract_v1, ACode } = get_module_feature(Module, abstract_code), ACode.
 
-%% @since Version 130
-module_abstract_code(Module) -> beam_lib:chunks(Module, [atoms]).
+%% @since version 138
+module_abstract_attributes(Module) -> [ {Id,Name,Value}       || {attribute,Id,Name,Value}     <- module_abstract_code(Module, stripped) ].
+
+%% @since version 138
+module_abstract_functions(Module)        -> [ {Id,Name,Arity,Code}  || {function,Id,Name,Arity,Code} <- module_abstract_code(Module, stripped) ].
+
+%% @since version 138
+module_abstract_functions(Module, FName) -> [ {Id,Name,Arity,Code}  || {function,Id,Name,Arity,Code} <- module_abstract_code(Module, stripped), Name==FName ].
+
+%% @since version 138
+module_count_entrypoints(Module) -> length(scutil:module_abstract_functions(Module)).
 
 
 
@@ -3420,6 +3459,7 @@ module_abstract_code(Module) -> beam_lib:chunks(Module, [atoms]).
 
 %% @since Version 131
 
+% todo
 % flesch_kincaid_readability(Data) -> flesch_kincaid_readability(Data, fun count_words/1, fun count_sentences/1, fun count_syllables/1).
 
 flesch_kincaid_readability(Data, WordCounter, SentenceCounter, SyllableCounter) ->
@@ -3428,7 +3468,7 @@ flesch_kincaid_readability(Data, WordCounter, SentenceCounter, SyllableCounter) 
     Sentences = SentenceCounter(Data),
     Syllables = SyllableCounter(Data),
 
-    interpret_flesch_kincaid_readability_score(
+    interpret_flesch_kincaid_score(
       flesch_kincaid_readability_score(Words, Sentences, Syllables)
     ).
 
@@ -3438,13 +3478,13 @@ flesch_kincaid_readability(Data, WordCounter, SentenceCounter, SyllableCounter) 
 
 %% @since Version 131
 
-interpret_flesch_kincaid_readability_score(R) when R > 100 -> { easy_before_11_years,     R };
-interpret_flesch_kincaid_readability_score(R) when R >  90 -> { easy_at_11_years,         R };
-interpret_flesch_kincaid_readability_score(R) when R >  70 -> { easy_for_11_to_13_years,  R };
-interpret_flesch_kincaid_readability_score(R) when R >  60 -> { easy_for_13_to_15_years,  R };
-interpret_flesch_kincaid_readability_score(R) when R >  30 -> { appropriate_for_15_years, R };
-interpret_flesch_kincaid_readability_score(R) when R >   0 -> { appropriate_for_college,  R };
-interpret_flesch_kincaid_readability_score(R)              -> { difficult,                R }.
+interpret_flesch_kincaid_score(R) when R > 100 -> { easy_before_11_years,     R };
+interpret_flesch_kincaid_score(R) when R >  90 -> { easy_at_11_years,         R };
+interpret_flesch_kincaid_score(R) when R >  70 -> { easy_for_11_to_13_years,  R };
+interpret_flesch_kincaid_score(R) when R >  60 -> { easy_for_13_to_15_years,  R };
+interpret_flesch_kincaid_score(R) when R >  30 -> { appropriate_for_15_years, R };
+interpret_flesch_kincaid_score(R) when R >   0 -> { appropriate_for_college,  R };
+interpret_flesch_kincaid_score(R)              -> { difficult,                R }.
 
 
 
