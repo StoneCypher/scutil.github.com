@@ -76,8 +76,7 @@
 %   sort/1,
 %   usort/1,
 
-    to_list/1
-%   from_list/1,   to_list/1,
+    from_list/1,   to_list/1
 %   from_binary/1, to_binary/1,
 
 ]).
@@ -86,7 +85,7 @@
 
 
 
--record(dq_queue, {inlist, outlist, dole_count}).
+-record(dq_queue, {inlist=[], outlist=[], dole_count=2}).
 
 
 
@@ -95,7 +94,7 @@
 %% @since Version 141
 new() ->
 
-    #dq_queue{ inlist=[], outlist=[], dole_count=2 }.
+    #dq_queue{}.
 
 
 
@@ -103,7 +102,7 @@ new() ->
 %% @since Version 141
 new(X) ->
 
-    #dq_queue{ inlist=[], outlist=[X], dole_count=2 }.
+    #dq_queue{ outlist=[X] }.
 
 
 
@@ -112,7 +111,7 @@ new(X) ->
 %% @since Version 141
 new(X, DoleCount) ->
 
-    #dq_queue{ inlist=[], outlist=[X], dole_count=DoleCount }.
+    #dq_queue{ outlist=[X], dole_count=DoleCount }.
 
 
 
@@ -278,3 +277,12 @@ to_list(Queue) when is_record(Queue, dq_queue) ->
 
     Z = normalize(Queue),
     Z#dq_queue.outlist.
+
+
+
+
+
+%% @since Version 153
+from_list(Inputs) when is_list(Inputs) ->
+
+    #dq_queue{outlist=Inputs}.
