@@ -88,7 +88,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines whose purpose is to clarify dependant code by presenting their name, rather than routine behavior, as well as to establish standard result messages where appropriate<br/>
-%%     {@link even_or_odd/1}, {@link absolute_difference/2}, {@link receive_one/0}, {@link start_register_if_not_running/3}, {@link start_register_if_not_running/4}, {@link start_register_if_not_running/5} (see also {@link square/1})
+%%     {@link even_or_odd/1}, {@link absolute_difference/2}, {@link receive_one/0}, {@link start_register_if_not_running/3}, {@link start_register_if_not_running/4}, {@link start_register_if_not_running/5} (see also {@link square/1}, {@link cube/1})
 %%   </dd>
 %% </dl>
 %% === List ===
@@ -104,7 +104,7 @@
 %%   <dt></dt>
 %%   <dd>
 %%     Routines for higher math computation missing from the standard math module.<br/>
-%%     {@link list_product/1}, {@link dot_product/2}, {@link cross_product/2}, {@link vector_magnitude/1}, {@link normalize_vector/1}, {@link root_mean_square/1}, {@link root_sum_square/1}, {@link tuple_sum/1}, {@link square/1}, {@link mod/2}
+%%     {@link list_product/1}, {@link dot_product/2}, {@link cross_product/2}, {@link vector_magnitude/1}, {@link normalize_vector/1}, {@link root_mean_square/1}, {@link root_sum_square/1}, {@link tuple_sum/1}, {@link square/1}, {@link cube/1}, {@link mod/2}
 %%   </dd>
 %% </dl>
 %% === Network ===
