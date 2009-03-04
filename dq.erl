@@ -60,12 +60,12 @@
 
     is_dq_queue/1,
 
-    normalize/1,  push/2,  pop/1,  peek/1
+    normalize/1,  push/2,  pop/1,  peek/1,
 %   rnormalize/1, rpush/2, rpop/1, rpeek/2,
 
 %   split/1, split/2,   % 1,2,3,4 -> 12, 34
 %   dole/1,  dole/2,    % 1,2,3,4 -> 13, 24
-    set_dole/2,
+    set_dole/2
 
 %   merge/2,
 %   filter/2
@@ -110,7 +110,7 @@ new(X, DoleCount) ->
 
 %% @since Version 142
 is_dq_queue(Queue) when is_record(Queue, dq_queue) -> true;
-is_dq_queue(Queue)                                 -> false.
+is_dq_queue(_Queue)                                -> false.
 
 
 
@@ -121,6 +121,15 @@ is_dq_queue(Queue)                                 -> false.
 normalize(Queue) when is_record(Queue, dq_queue) ->
 
     #dq_queue{ inlist=[], outlist=Queue#dq_queue.outlist ++ lists:reverse(Queue#dq_queue.inlist) }.
+
+
+
+
+
+%% @since Version 143
+set_dole(Queue, DoleCount) when is_record(Queue, dq_queue), is_integer(DoleCount) ->
+
+    Queue#dq_queue{ dole_count=DoleCount }.
 
 
 
@@ -150,26 +159,6 @@ pop(Queue) when is_record(Queue, dq_queue) ->
 
         [Out|OutRem] ->
             { Out, Queue#dq_queue{outlist=OutRem} }
-
-    end.
-
-
-
-
-
-%% @since Version 141
-peek(Queue) when is_record(Queue, dq_queue) ->
-
-    case Queue#dq_queue.outlist of
-
-        [] ->
-            case Queue#dq_queue.inlist of
-                [] -> empty;
-                In -> lists:last(In)
-            end;
-
-        [OutHead|_OutRem] ->
-            OutHead
 
     end.
 
