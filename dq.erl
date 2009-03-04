@@ -61,14 +61,21 @@
     is_dq_queue/1,
 
     normalize/1,  push/2,  pop/1,  peek/1,
-%   rnormalize/1, rpush/2, rpop/1, rpeek/2,
+    rnormalize/1, rpush/2, rpop/1, rpeek/1,
 
 %   split/1, split/2,   % 1,2,3,4 -> 12, 34
 %   dole/1,  dole/2,    % 1,2,3,4 -> 13, 24
     set_dole/2
 
 %   merge/2,
-%   filter/2
+%   filter/2,
+%   fold/2,
+
+%   sort/1,
+%   usort/1,
+
+%   from_list/1,   to_list/1,
+%   from_binary/1, to_binary/1,
 
 ]).
 
@@ -126,6 +133,15 @@ normalize(Queue) when is_record(Queue, dq_queue) ->
 
 
 
+%% @since Version 144
+rnormalize(Queue) when is_record(Queue, dq_queue) ->
+
+    #dq_queue{ outlist=[], inlist=Queue#dq_queue.inlist ++ lists:reverse(Queue#dq_queue.outlist) }.
+
+
+
+
+
 %% @since Version 143
 set_dole(Queue, DoleCount) when is_record(Queue, dq_queue), is_integer(DoleCount) ->
 
@@ -139,6 +155,15 @@ set_dole(Queue, DoleCount) when is_record(Queue, dq_queue), is_integer(DoleCount
 push(Item, Queue) when is_record(Queue, dq_queue) ->
 
     Queue#dq_queue{inlist=[Item]++Queue#dq_queue.inlist}.
+
+
+
+
+
+%% @since Version 144
+rpush(Item, Queue) when is_record(Queue, dq_queue) ->
+
+    Queue#dq_queue{outlist=[Item]++Queue#dq_queue.outlist}.
 
 
 
@@ -166,6 +191,28 @@ pop(Queue) when is_record(Queue, dq_queue) ->
 
 
 
+%% @since Version 144
+rpop(Queue) when is_record(Queue, dq_queue) ->
+
+    case Queue#dq_queue.inlist of
+
+        [] ->
+            case Queue#dq_queue.outlist of
+                []  -> empty;
+                Out ->
+                    [Head|Rem] = Out,
+                    { Head, #dq_queue{ outlist=[], inlist=lists:reverse(Rem) } }
+            end;
+
+        [In|InRem] ->
+            { In, Queue#dq_queue{inlist=InRem} }
+
+    end.
+
+
+
+
+
 %% @since Version 141
 peek(Queue) when is_record(Queue, dq_queue) ->
 
@@ -179,6 +226,26 @@ peek(Queue) when is_record(Queue, dq_queue) ->
 
         [OutHead|_OutRem] ->
             OutHead
+
+    end.
+
+
+
+
+
+%% @since Version 144
+rpeek(Queue) when is_record(Queue, dq_queue) ->
+
+    case Queue#dq_queue.inlist of
+
+        [] ->
+            case Queue#dq_queue.outlist of
+                []  -> empty;
+                Out -> lists:last(Out)
+            end;
+
+        [InHead|_InRem] ->
+            InHead
 
     end.
 
