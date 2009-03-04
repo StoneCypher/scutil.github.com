@@ -469,6 +469,8 @@ type_of(_X)                     -> unknown.
 
 
 
+%% @since Version 127
+
 get_module_feature(Module, Feature) ->
 
     case beam_lib:chunks(Module, [Feature]) of
@@ -2715,6 +2717,7 @@ map_reduce(Function, Workload, JobsPerNode, Nodes) ->
 
 
 
+%% @private
 map_reduce_worker(_Function, [],             _Computers, [],      WorkDone) -> {_,Out} = lists:unzip(lists:keysort(1,WorkDone)), Out;                               % no work left, no work out?  done.
 map_reduce_worker( Function, [],              Computers, WorkOut, WorkDone) -> map_reduce_wait_for_work(Function, [],             Computers, WorkOut, WorkDone);    % no work left, work out?  wait.
 map_reduce_worker( Function, TaggedWorkload,  [],        WorkOut, WorkDone) -> map_reduce_wait_for_work(Function, TaggedWorkload, [],        WorkOut, WorkDone);    % work left, no computers left?  wait.
@@ -2724,6 +2727,7 @@ map_reduce_worker( Function, TaggedWorkload,  Computers, WorkOut, WorkDone) -> m
 
 
 
+%% @private
 map_reduce_wait_for_work(Function, TaggedWorkload, Computers, WorkOut, WorkDone) ->
 
     receive
@@ -2734,6 +2738,7 @@ map_reduce_wait_for_work(Function, TaggedWorkload, Computers, WorkOut, WorkDone)
 
 
 
+%% @private
 map_reduce_do_work(Function, [{Tag,Workload}|RemWorkload], [Computer|RemComputers], WorkOut, WorkDone) ->
 
     spawn(Computer, fun(Who,What,Which,With) -> Who ! {work_done, node(), Which, apply(What,With) } end, [self(),Function,Tag,Workload]),
