@@ -285,7 +285,7 @@
 -description("StoneCypher's utility library.").
 
 -testerl_export( { [], scutil_testsuite } ).
--library_requirements( [ {testerl,16} ] ).
+-library_requirements( [ {dq,141}, {testerl,16} ] ).
 
 
 
