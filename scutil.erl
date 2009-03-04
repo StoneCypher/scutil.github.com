@@ -428,7 +428,9 @@
 
     halstead_complexity/4, halstead_complexity/5, % needs tests
 
-    eval/1, eval/2 % needs tests
+    eval/1, eval/2, % needs tests
+    
+    gen_docs/1 % needs tests
 
 ] ).
 
@@ -3590,3 +3592,9 @@ eval(S, Environ) ->
     {ok,Scanned,_} = erl_scan:string(S),
     {ok,Parsed} = erl_parse:parse_exprs(Scanned),
     erl_eval:exprs(Parsed,Environ).
+
+
+
+
+
+gen_docs([From, To]) -> edoc:files( [From++"scutil/scutil.erl", From++"scutil/dq.erl"], [{dir, To}]).
