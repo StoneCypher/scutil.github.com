@@ -3600,5 +3600,8 @@ eval(S, Environ) ->
 gen_docs([From, To]) -> 
     
     edoc:files( [From++"scutil/scutil.erl", From++"scutil/dq.erl"], [{dir, To}]),
-    receive after 20000 -> init:stop().
+    receive 
+    after 20000 -> 
+       init:stop()
+    end.
 
