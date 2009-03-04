@@ -3597,7 +3597,7 @@ eval(S, Environ) ->
 
 
 
-gen_docs([From, To]) -> 
-    
-    edoc:files( [From++"scutil/scutil.erl", From++"scutil/dq.erl"], [{dir, To}]).
+%% @since Version 152
+gen_docs([From, To]) ->
 
+    edoc:files( [From++"scutil/scutil.erl", From++"scutil/dq.erl"], [{dir, To}]).
