@@ -18,7 +18,8 @@
 %% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Discussion forum at</span><a href="http://crunchyd.com/forum/scutil-discussion/">CrunchyD Forums</a></span>
 %% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Bugtracker at</span><a href="http://crunchyd.com/forum/project.php?projectid=7">CrunchyD Forums</a></span>
 %% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date: 2009-03-03 23:27:18 -0700 (Tue, 03 Mar 2009) $</tt></span>
-%% @reference <span style="margin-top:1em;padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Test sets require min. version 16</span><a href="http://testerl.com/">TestErl</a></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Part of</span><a href="http://scutil.com/" title="The ScUtil Library">The ScUtil Library</a></span>
+%% @reference <span style="margin-top:1em;padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Test sets require min. version 16</span><a href="http://testerl.com/">TestErl</a></span>
 
 %% @todo add @see cross-references between related functions
 %% @todo add thanks tables and cross-references
@@ -59,6 +60,7 @@
     queue_size/1,
 
     is_dq_queue/1,
+    is_empty/1,
 
     normalize/1,  push/2,  pop/1,  peek/1,
     rnormalize/1, rpush/2, rpop/1, rpeek/1,
@@ -119,6 +121,13 @@ new(X, DoleCount) ->
 is_dq_queue(Queue) when is_record(Queue, dq_queue) -> true;
 is_dq_queue(_Queue)                                -> false.
 
+
+
+
+
+%% @since Version 145
+is_empty({dq_queue, [], [], _}) -> true;
+is_empty(_)                     -> false.
 
 
 

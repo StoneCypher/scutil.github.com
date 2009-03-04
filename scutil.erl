@@ -21,9 +21,11 @@
 %% @version $Revision$
 %% @since September 14, 2007
 
+% % % <table style="border: 1px solid black;"><tr><td style="padding: 0 2em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_users.js?style=blue"></script></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_cocomo.js?salary=80000"></script></td><td style="margin-left: 0.1em;"><div><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_basic_stats.js"></script></div></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_factoids.js"></script></td></tr></table>
+
 %% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of hundreds of routines of a variety of topics which have aggregated from reuse in other projects.</p>
 %%
-%% <table style="border: 1px solid black;"><tr><td style="padding: 0 2em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_users.js?style=blue"></script></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_cocomo.js?salary=80000"></script></td><td style="margin-left: 0.1em;"><div><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_basic_stats.js"></script></div></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_factoids.js"></script></td></tr></table>
+%% <table style="border: 1px solid black;"><tr><td style="padding: 0 2em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_users.js?style=blue"></script></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_cocomo.js?salary=80000"></script></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_factoids.js"></script></td></tr></table>
 %%
 %% <ul>
 %%   <li>{@section Conversion}</li>
