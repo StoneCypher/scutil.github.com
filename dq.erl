@@ -76,8 +76,8 @@
 %   sort/1,
 %   usort/1,
 
-    from_list/1,   to_list/1
-%   from_binary/1, to_binary/1,
+    from_list/1,  to_list/1,
+    from_tuple/1, to_tuple/1
 
 ]).
 
@@ -278,6 +278,11 @@ to_list(Queue) when is_record(Queue, dq_queue) ->
     Z = normalize(Queue),
     Z#dq_queue.outlist.
 
+%% @since Version 154
+to_tuple(Queue) when is_record(Queue, dq_queue) ->
+
+    list_to_tuple(to_list(Queue)).
+
 
 
 
@@ -286,3 +291,8 @@ to_list(Queue) when is_record(Queue, dq_queue) ->
 from_list(Inputs) when is_list(Inputs) ->
 
     #dq_queue{outlist=Inputs}.
+
+%% @since Version 154
+from_tuple(Input) when is_tuple(Input) ->
+
+    from_list(tuple_to_list(Input)).
