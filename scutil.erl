@@ -428,7 +428,7 @@
 
     halstead_complexity/4, halstead_complexity/5, % needs tests
 
-    tq/1, tq_push/2, tq_pop/1, tq_size/1 % needs tests
+    eval/1, eval/2 % needs tests
 
 ] ).
 
@@ -3571,3 +3571,22 @@ halstead_complexity(DistinctOperators, DistinctOperands, TotalOperators, TotalOp
     Effort            = Volume * Difficulty,
 
     { Effort, [{volume, Volume}, {difficulty, Difficulty}, {program_length, ProgramLength}, {program_vocabulary, ProgramVocabulary}] }.
+
+
+
+
+
+%% @since Version 146
+% modified from http://www.trapexit.org/String_Eval
+
+eval(S) ->
+    {ok,Scanned,_} = erl_scan:string(S),
+    {ok,Parsed} = erl_parse:parse_exprs(Scanned),
+    erl_eval:exprs(Parsed,erl_eval:new_bindings()).
+
+%% @since Version 146
+% from http://www.trapexit.org/String_Eval
+eval(S,Environ) ->
+    {ok,Scanned,_} = erl_scan:string(S),
+    {ok,Parsed} = erl_parse:parse_exprs(Scanned),
+    erl_eval:exprs(Parsed,Environ).
