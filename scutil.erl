@@ -295,7 +295,7 @@
 
     type_of/1,
 
-    get_module_feature/2, get_module_attribute/1, get_module_attribute/2, module_abstract_code/1, module_abstract_code/2, module_abstract_attributes/1, module_abstract_functions/1, module_abstract_functions/2, module_atoms/1,
+    get_module_feature/2, get_module_attribute/1, get_module_attribute/2, abstract_code/1, abstract_code/2, abstract_attributes/1, abstract_functions/1, abstract_function/2, module_atoms/1,
       entrypoint_count/1, list_entrypoints/1, list_entrypoints/2, function_stats/1, list_function_labels/1, function_label_count/1, function_point_count/1, list_function_points/1, % needs tests
 
     byte_to_hex/1, nybble_to_hex/1, io_list_to_hex/1, % needs tests
@@ -422,9 +422,11 @@
 
     isolate_signal/1, unit_scale_signal/1, minmax/1, % needs tests
 
-    flesch_kincaid_readability/4, flesch_kincaid_readability_score/3, interpret_flesch_kincaid_score/1, % needs_tests
+    flesch_kincaid_readability/4, flesch_kincaid_readability_score/3, interpret_flesch_kincaid_score/1, % needs tests
 
-    halstead_complexity/4, halstead_complexity/5 % needs_tests
+    halstead_complexity/4, halstead_complexity/5, % needs tests
+
+    tq/1, tq_push/2, tq_pop/1, tq_size/1 % needs tests
 
 ] ).
 
@@ -3437,30 +3439,30 @@ unit_scale_signal(Waveform) ->
 module_atoms(Module) -> get_module_feature(Module, atoms).
 
 %% @since Version 130
-module_abstract_code(Module)             -> module_abstract_code(Module, unstripped).
-module_abstract_code(Module, unstripped) -> get_module_feature(Module, abstract_code);
-module_abstract_code(Module, stripped)   -> { raw_abstract_v1, ACode } = get_module_feature(Module, abstract_code), ACode.
+abstract_code(Module)             -> abstract_code(Module, unstripped).
+abstract_code(Module, unstripped) -> get_module_feature(Module, abstract_code);
+abstract_code(Module, stripped)   -> { raw_abstract_v1, ACode } = get_module_feature(Module, abstract_code), ACode.
 
 %% @since version 138
-module_abstract_attributes(Module) -> [ {Id,Name,Value} || {attribute,Id,Name,Value} <- module_abstract_code(Module, stripped) ].
+abstract_attributes(Module) -> [ {Id,Name,Value} || {attribute,Id,Name,Value} <- abstract_code(Module, stripped) ].
 
 %% @since version 138
-module_abstract_functions(Module) -> [ {Id,Name,Arity,Code}  || {function,Id,Name,Arity,Code} <- module_abstract_code(Module, stripped) ].
+abstract_functions(Module) -> [ {Id,Name,Arity,Code}  || {function,Id,Name,Arity,Code} <- abstract_code(Module, stripped) ].
 
 %% @since version 138
-module_abstract_functions(Module, FName) -> [ {Id,Name,Arity,Code}  || {function,Id,Name,Arity,Code} <- module_abstract_code(Module, stripped), Name==FName ].
+abstract_function(Module, FName) -> [ {Id,Name,Arity,Code}  || {function,Id,Name,Arity,Code} <- abstract_code(Module, stripped), Name==FName ].
 
 %% @since Version 140
-list_entrypoints(Module) -> lists:flatten([ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- scutil:module_abstract_functions(Module) ]).
+list_entrypoints(Module) -> lists:flatten([ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- scutil:abstract_functions(Module) ]).
 
 %% @since Version 140
-list_entrypoints(Module, FName) -> lists:flatten([ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- scutil:module_abstract_functions(Module), L==FName ]).
+list_entrypoints(Module, FName) -> lists:flatten([ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- scutil:abstract_functions(Module), L==FName ]).
 
 %% @since Version 140
-list_function_points(Module) -> lists:usort([ {L,A} || {_,L,A,_} <- scutil:module_abstract_functions(Module) ]).
+list_function_points(Module) -> lists:usort([ {L,A} || {_,L,A,_} <- scutil:abstract_functions(Module) ]).
 
 %% @since Version 140
-list_function_labels(Module) -> lists:usort([ L || {_,L,_,_} <- scutil:module_abstract_functions(Module) ]).
+list_function_labels(Module) -> lists:usort([ L || {_,L,_,_} <- scutil:abstract_functions(Module) ]).
 
 %% @since version 138
 entrypoint_count(Module) -> length(list_entrypoints(Module)).
@@ -3567,11 +3569,3 @@ halstead_complexity(DistinctOperators, DistinctOperands, TotalOperators, TotalOp
     Effort            = Volume * Difficulty,
 
     { Effort, [{volume, Volume}, {difficulty, Difficulty}, {program_length, ProgramLength}, {program_vocabulary, ProgramVocabulary}] }.
-
-
-
-
-
-%% @since Version 140
-
-
