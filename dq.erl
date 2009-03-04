@@ -67,7 +67,7 @@
 
 %   split/1, split/2,   % 1,2,3,4 -> 12, 34
 %   dole/1,  dole/2,    % 1,2,3,4 -> 13, 24
-    set_dole/2
+    set_dole/2,
 
 %   merge/2,
 %   filter/2,
@@ -76,6 +76,7 @@
 %   sort/1,
 %   usort/1,
 
+    to_list/1
 %   from_list/1,   to_list/1,
 %   from_binary/1, to_binary/1,
 
@@ -268,3 +269,12 @@ queue_size(Queue) when is_record(Queue, dq_queue) ->
     length(Queue#dq_queue.inlist) +
     length(Queue#dq_queue.outlist).
 
+
+
+
+
+%% @since Version 152
+to_list(Queue) when is_record(Queue, dq_queue) ->
+
+    Z = normalize(Queue),
+    Z#dq_queue.outlist.
