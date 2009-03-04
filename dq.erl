@@ -267,3 +267,4 @@ queue_size(Queue) when is_record(Queue, dq_queue) ->
 
     length(Queue#dq_queue.inlist) +
     length(Queue#dq_queue.outlist).
+
