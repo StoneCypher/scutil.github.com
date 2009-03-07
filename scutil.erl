@@ -2847,7 +2847,7 @@ combinations(Items, 1) when is_list(Items) -> Items;
 combinations([],   _N)                     -> [];
 combinations(Items, N) when is_list(Items), is_integer(N), N > 0 ->
 
-    [ lists:append( [lists:nth(I, Items)], [J] )          ||
+    [ lists:flatten(lists:append( [lists:nth(I, Items)], [J] )) ||
       I <- lists:seq(1, length(Items)),
       J <- combinations( lists:nthtail(I, Items), (N-1) )  ].
 
