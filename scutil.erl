@@ -436,7 +436,9 @@
 
     list_rotate/2, index_of_first/2, rotate_to_first/2, rotate_first_to_end/2, % needs tests
 
-    columnated_rows/2 % needs tests
+    columnated_rows/2, columns/2, % needs tests
+    
+    floor/1, ceil/1, ceiling/1 % needs tests
 
 ] ).
 
@@ -3702,7 +3704,35 @@ rotate_first_to_end(Item, List) ->
 
 
 %% @since Version 171
-columnated_rows(ColumnCount, List) -> columnated_rows(List, lists:duplicate(ColumnCount, []), 0).
+columnated_rows(RowCount, List) -> columnated_rows(List, lists:duplicate(RowCount, []), 0).
 
 columnated_rows([],             Output,          Unrotate) -> list_rotate(Unrotate, [ lists:reverse(Column) || Column <- Output]);
 columnated_rows([Item|ListRem], [Output|OutRem], Unrotate) -> columnated_rows(ListRem, OutRem++[[Item]++Output], Unrotate-1).
+
+
+
+
+
+%% @since Version 172
+floor(X) -> floor_t(trunc(X), trunc(X)-X).
+
+%% @private
+floor_t(T, Td) when Td < 0 -> T;
+floor_t(T, Td) when Td > 0 -> T-1;
+floor_t(T,_Td)             -> T.
+
+
+
+
+
+%% @since Version 172
+%% @equiv ceiling(X)
+ceil(X) -> ceiling(X).
+
+%% @since Version 172
+ceiling(X) -> ceiling_t(trunc(X), trunc(X)-X).
+
+%% @private
+ceiling_t(T, Td) when Td < 0 -> T+1;
+ceiling_t(T, Td) when Td > 0 -> T;
+ceiling_t(T,_Td)             -> T.
