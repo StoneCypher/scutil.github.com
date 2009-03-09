@@ -429,8 +429,12 @@
     halstead_complexity/4, halstead_complexity/5, % needs tests
 
     eval/1, eval/2, % needs tests
+
+    gen_docs/1, % needs tests
+
+    factorial/1, % needs tests
     
-    gen_docs/1 % needs tests
+    list_rotate/2 % needs tests
 
 ] ).
 
@@ -3624,3 +3628,30 @@ eval(S, Environ) ->
 gen_docs([From, To]) ->
 
     edoc:files( [From++"scutil/scutil.erl", From++"scutil/dq.erl"], [{dir, To}]).
+
+
+
+
+
+%% @since Version 168
+factorial(X) -> factorial(X, 1).
+
+factorial(0,_Counter) -> 0;
+factorial(1, Counter) -> Counter ;
+
+factorial(X, Counter) when is_integer(X), X > 1 -> factorial(X-1, Counter*X).
+
+
+
+
+
+%% @since Version 168
+list_rotate(0, List) ->
+    List;
+
+list_rotate(By, List) when By < 0 ->
+    list_rotate(length(List) + By, List);
+
+list_rotate(By, List) ->
+    { Front, Rear } = lists:split(By, List),
+    Rear ++ Front.
