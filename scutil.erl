@@ -3736,3 +3736,12 @@ ceiling(X) -> ceiling_t(trunc(X), trunc(X)-X).
 ceiling_t(T, Td) when Td < 0 -> T+1;
 ceiling_t(T, Td) when Td > 0 -> T;
 ceiling_t(T,_Td)             -> T.
+
+
+
+
+
+%% @since Version 173
+columns(ColumnCount, List) ->
+
+    columnated_rows(ceiling(length(List) / ColumnCount), List).
