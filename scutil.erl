@@ -3696,3 +3696,13 @@ rotate_to_first(Item, List) ->
 %% @since Version 170
 rotate_first_to_end(Item, List) ->
     list_rotate(index_of_first(Item, List), List).
+
+
+
+
+
+%% @since Version 171
+columnated_rows(ColumnCount, List) -> columnated_rows(List, lists:duplicate(ColumnCount, []), 0).
+
+columnated_rows([],             Output,          Unrotate) -> list_rotate(Unrotate, [ lists:reverse(Column) || Column <- Output]);
+columnated_rows([Item|ListRem], [Output|OutRem], Unrotate) -> columnated_rows(ListRem, OutRem++[[Item]++Output], Unrotate-1).
