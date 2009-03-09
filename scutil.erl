@@ -434,7 +434,9 @@
 
     factorial/1, % needs tests
 
-    list_rotate/2, index_of_first/2 % needs tests
+    list_rotate/2, index_of_first/2, rotate_to_first/2, rotate_first_to_end/2, % needs tests
+
+    columnated_rows/2 % needs tests
 
 ] ).
 
@@ -3678,3 +3680,19 @@ index_of_first(Item, [Item|_ListRem], Pos) ->
 
 index_of_first(Item, [_OtherItem|ListRem], Pos) ->
     index_of_first(Item, ListRem, Pos+1).
+
+
+
+
+
+%% @since Version 170
+rotate_to_first(Item, List) ->
+    list_rotate(index_of_first(Item, List)-1, List).
+
+
+
+
+
+%% @since Version 170
+rotate_first_to_end(Item, List) ->
+    list_rotate(index_of_first(Item, List), List).
