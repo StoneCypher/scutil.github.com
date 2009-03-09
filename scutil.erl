@@ -433,8 +433,8 @@
     gen_docs/1, % needs tests
 
     factorial/1, % needs tests
-    
-    list_rotate/2 % needs tests
+
+    list_rotate/2, index_of_first/2 % needs tests
 
 ] ).
 
@@ -3649,9 +3649,32 @@ factorial(X, Counter) when is_integer(X), X > 1 -> factorial(X-1, Counter*X).
 list_rotate(0, List) ->
     List;
 
+list_rotate(By, List) when By =< (-(length(List))) ->
+    list_rotate(By rem length(List), List);
+
 list_rotate(By, List) when By < 0 ->
     list_rotate(length(List) + By, List);
+
+list_rotate(By, List) when By >= length(List) ->
+    list_rotate(By rem length(List), List);
 
 list_rotate(By, List) ->
     { Front, Rear } = lists:split(By, List),
     Rear ++ Front.
+
+
+
+
+
+%% @since Version 169
+index_of_first(Item, List) ->
+    index_of_first(Item, List, 1).
+
+index_of_first(_Item, [], _Pos) ->
+    undefined;
+
+index_of_first(Item, [Item|_ListRem], Pos) ->
+    Pos;
+
+index_of_first(Item, [_OtherItem|ListRem], Pos) ->
+    index_of_first(Item, ListRem, Pos+1).
