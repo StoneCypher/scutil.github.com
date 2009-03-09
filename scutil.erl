@@ -3472,9 +3472,20 @@ unit_scale_signal(Waveform) ->
 module_atoms(Module) -> get_module_feature(Module, atoms).
 
 %% @since Version 130
-abstract_code(Module)             -> abstract_code(Module, unstripped).
-abstract_code(Module, unstripped) -> get_module_feature(Module, abstract_code);
-abstract_code(Module, stripped)   -> { raw_abstract_v1, ACode } = get_module_feature(Module, abstract_code), ACode.
+abstract_code(Module)          -> abstract_code(Module, unstripped).
+abstract_code(Module, DoStrip) ->
+
+    case get_module_feature(Module, abstract_code) of
+
+        { raw_abstract_v1, ACode } ->
+            case DoStrip of
+                stripped   -> ACode;
+                unstripped -> { raw_abstract_v1, ACode }
+            end;
+
+        no_abstract_code ->
+            { error, "ScUtil's abstract code functions require that a module be compiled with debug_info enabled, eg 'c(" ++ atom_to_list(Module) ++ ",[debug_info]).'" }
+    end.
 
 %% @since version 138
 abstract_attributes(Module) -> [ {Id,Name,Value} || {attribute,Id,Name,Value} <- abstract_code(Module, stripped) ].
