@@ -66,3 +66,15 @@ code_from_clause({clause, _Id, _Args, _Where, Code}) ->
 
 where_from_clause({clause, _Id, _Args, Where, _Code}) ->
     Where.
+
+
+
+
+
+resolve_purities(PurityList) -> resolve_purities(PurityList, pure).
+
+resolve_purities([],                    Worst      ) -> Worst;
+resolve_purities([pure|RemList],        Worst      ) -> resolve_purities(RemList, Worst);
+resolve_purities([{unknown,X}|RemList], pure       ) -> resolve_purities(RemList, {unknown,X});
+resolve_purities([{unknown,_}|RemList], {unknown,X}) -> resolve_purities(RemList, {unknown,X});
+resolve_purities([{impure,X}|_RemList], _)           -> {impure,X}.
