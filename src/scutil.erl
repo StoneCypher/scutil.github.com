@@ -438,7 +438,9 @@
 
     columnated_rows/2, columns/2, % needs tests
     
-    floor/1, ceil/1, ceiling/1 % needs tests
+    floor/1, ceil/1, ceiling/1, % needs tests
+    
+    get_linked_processes/0 % needs tests
 
 ] ).
 
