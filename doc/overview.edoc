@@ -1,9 +1,8 @@
 @author John Haugeland <stonecypher@gmail.com>
 
-@copyright See the @copyright module tag [page 5] for details.
-@reference See the @reference module tag [page 5] for details.
-@since See the @since module tag [page 6] for details.
-@title Specifies a title for the overview page. This tag can only be used in an overview file. The
-@version See the @version module tag [page 6] for details.
+@copyright 2007-current John Haugeland, all rights reserved.
+@since September 14, 2007
+@title The ScUtil library collection
+@version $Revision$
 
 @doc <table style="border: 1px solid black;"><tr><td style="padding: 0 2em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_users.js?style=blue"></script></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_cocomo.js?salary=80000"></script></td><td style="margin-left: 0.1em;"><div><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_basic_stats.js"></script></div></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_factoids.js"></script></td></tr></table>
