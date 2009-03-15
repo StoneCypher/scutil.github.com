@@ -52,3 +52,17 @@ is_pure_clauselist(Module, ThisFunction, ClauseList) ->
 
 is_pure_clause(Module, ThisFunction, Clause) ->
     resolve_purities([ purity(Module, ThisFunction, code_from_clause(Clause)), purity(Module, ThisFunction, where_from_clause(Clause)) ]).
+
+
+
+
+
+code_from_clause({clause, _Id, _Args, _Where, Code}) ->
+    Code.
+
+
+
+
+
+where_from_clause({clause, _Id, _Args, Where, _Code}) ->
+    Where.
