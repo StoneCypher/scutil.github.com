@@ -100,3 +100,23 @@ purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '<',    Oper1, Ope
 purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '>',    Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
 purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '=<',   Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
 purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '>=',   Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+
+
+
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '+',    Oper1}       ) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1)]);
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '+',    Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '-',    Oper1}       ) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1)]);
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '-',    Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '*',    Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '/',    Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, 'rem',  Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, 'div',  Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, 'band', Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, 'bnot', Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, 'bxor', Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, 'bor',  Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, 'bsl',  Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, 'bsr',  Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
