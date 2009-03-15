@@ -87,4 +87,16 @@ purity(_ThisModule, _ThisFunction, {var,     _UnknownIdNumberTodo, _Label}) -> p
 purity(_ThisModule, _ThisFunction, {atom,    _UnknownIdNumberTodo, _Label}) -> pure;
 purity(_ThisModule, _ThisFunction, {integer, _UnknownIdNumberTodo, _Label}) -> pure;
 
-purity(_ThisModule, _ThisFunction, {nil,     _UnknownIdNumberTodo}) -> pure.
+purity(_ThisModule, _ThisFunction, {nil,     _UnknownIdNumberTodo}) -> pure;            % actually empty list, huhu
+
+
+
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '==',   Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '/=',   Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '=:=',  Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '=/=',  Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '<',    Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '>',    Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '=<',   Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '>=',   Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
