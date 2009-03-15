@@ -78,3 +78,13 @@ resolve_purities([pure|RemList],        Worst      ) -> resolve_purities(RemList
 resolve_purities([{unknown,X}|RemList], pure       ) -> resolve_purities(RemList, {unknown,X});
 resolve_purities([{unknown,_}|RemList], {unknown,X}) -> resolve_purities(RemList, {unknown,X});
 resolve_purities([{impure,X}|_RemList], _)           -> {impure,X}.
+
+
+
+
+
+purity(_ThisModule, _ThisFunction, {var,     _UnknownIdNumberTodo, _Label}) -> pure;
+purity(_ThisModule, _ThisFunction, {atom,    _UnknownIdNumberTodo, _Label}) -> pure;
+purity(_ThisModule, _ThisFunction, {integer, _UnknownIdNumberTodo, _Label}) -> pure;
+
+purity(_ThisModule, _ThisFunction, {nil,     _UnknownIdNumberTodo}) -> pure.
