@@ -49,3 +49,6 @@ is_pure(Module, FunctionID, Function, Arity) ->
 
 is_pure_clauselist(Module, ThisFunction, ClauseList) ->
     resolve_purities([ is_pure_clause(Module, ThisFunction, Clause) || Clause <- ClauseList ]).
+
+is_pure_clause(Module, ThisFunction, Clause) ->
+    resolve_purities([ purity(Module, ThisFunction, code_from_clause(Clause)), purity(Module, ThisFunction, where_from_clause(Clause)) ]).
