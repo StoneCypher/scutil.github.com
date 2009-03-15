@@ -35,7 +35,7 @@
 
 
 
--module(dq).
+-module(scutil.dq).
 
 -author("John Haugeland <stonecypher@gmail.com>").
 -webpage("http://scutil.com/").
