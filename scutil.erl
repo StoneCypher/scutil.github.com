@@ -3642,7 +3642,7 @@ eval(S, Environ) ->
 %% @since Version 152
 gen_docs([From, To]) ->
 
-    edoc:files( [From++"scutil/scutil.erl", From++"scutil/dq.erl"], [{dir, To}]).
+    edoc:application(scutil, From, [{dir, To}]).
 
 
 
