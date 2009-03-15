@@ -3770,5 +3770,6 @@ get_linked_processes() ->
 
 
 
-%% mapsplode(
-%% exp_map_imp(
+%% mapsplode( % todo      [ Func(X) || X <- explode(Delim, Source) ]
+%% exp_map_imp( % todo    implode(Delim, [Func(X) || X <- explode(Delim, Source) ] )    % maybe called imp_mapsplode?
+%% quotesplode(           ("a,b,'c,d',e","'") -> ["a","b","'c,d'","e"]

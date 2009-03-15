@@ -29,7 +29,6 @@
 %% @todo add untested warnings to beginnings of @doc tags
 %% @todo add defective warnings to beginnings of @doc tags
 %% @todo add links to test data
-%% @todo add warnings re: spearman, pearson, kendall use on lists containing repetitions
 %% @todo add sections to examples: descriptive text, code example, what's it for, related, thanks
 
 
@@ -61,7 +60,7 @@
     new/0, new/1, new/2,
     queue_size/1,
 
-    is_dq_queue/1,
+    is_dq/1,
     is_empty/1,
 
     normalize/1,  push/2,  pop/1,  peek/1,
@@ -120,8 +119,8 @@ new(X, DoleCount) ->
 
 
 %% @since Version 142
-is_dq_queue(Queue) when is_record(Queue, dq_queue) -> true;
-is_dq_queue(_Queue)                                -> false.
+is_dq(Queue) when is_record(Queue, dq_queue) -> true;
+is_dq(_Queue)                                -> false.
 
 
 
