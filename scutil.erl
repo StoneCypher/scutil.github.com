@@ -3756,3 +3756,19 @@ ceiling_t(T,_Td)             -> T.
 columns(ColumnCount, List) ->
 
     columnated_rows(ceiling(length(List) / ColumnCount), List).
+
+
+
+
+
+%% @since Version 175
+get_linked_processes() ->
+    [U] = [ V || {links,V} <- process_info(self()) ],
+    U.
+
+
+
+
+
+%% mapsplode(
+%% exp_map_imp(
