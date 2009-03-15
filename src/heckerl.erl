@@ -172,3 +172,8 @@ purity(_ThisModule, _ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownI
 purity( ThisModule,  ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, ThisFunction}, Args}) -> resolve_purities([purity(ThisModule, ThisFunction, Arg)||Arg<-Args]);
 purity( ThisModule,  ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, NewFunction},  Args}) -> resolve_purities([is_pure(ThisModule, NewFunction)] ++ [purity(ThisModule,ThisFunction,Arg)||Arg<-Args]);
 
+% purity( Module,  ThisFunction, {remote, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, NewModule}, {atom, _UnknownIdNumber3Todo, NewFunc}, Args}) -> purity(NewModule, Function, {call, NewModule, NewFunction, Args
+
+purity( ThisModule,  ThisFunction, {cons, _UnknownIdNumberTodo, Item1, Item2}) -> resolve_purities([purity(ThisModule, ThisFunction, Item1), purity(ThisModule, ThisFunction, Item2)]);
+
+purity( ThisModule,  ThisFunction, {tuple, _UnknownIdNumberTodo, Items}) -> resolve_purities([purity(ThisModule, ThisFunction, Item) || Item <- Items]);
