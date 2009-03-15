@@ -42,3 +42,10 @@ is_pure(Module, Function, Arity) ->
 
 is_pure(Module, FunctionID, Function, Arity) ->
     is_pure_clauselist(Module, Function, lists:flatten([ ClauseList || {  Id, Func, Ar, ClauseList } <- scutil:abstract_function(Module, Function),  Func==Function, Id==FunctionID, Ar==Arity ])).
+
+
+
+
+
+is_pure_clauselist(Module, ThisFunction, ClauseList) ->
+    resolve_purities([ is_pure_clause(Module, ThisFunction, Clause) || Clause <- ClauseList ]).
