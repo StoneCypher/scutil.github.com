@@ -18,7 +18,7 @@
 
 %% @author John Haugeland <stonecypher@gmail.com>
 %% @copyright 2007 - current John Haugeland, All Rights Reserved
-%% @version $Revision$
+%% @version $Revision: 177 $
 %% @since September 14, 2007
 
 % % % <table style="border: 1px solid black;"><tr><td style="padding: 0 2em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_users.js?style=blue"></script></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_cocomo.js?salary=80000"></script></td><td style="margin-left: 0.1em;"><div><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_basic_stats.js"></script></div></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_factoids.js"></script></td></tr></table>
@@ -253,7 +253,7 @@
 %% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Public SVN at</span><a href="svn://crunchyd.com/scutil/">svn://crunchyd.com/scutil/</a></span>
 %% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Discussion forum at</span><a href="http://crunchyd.com/forum/scutil-discussion/">CrunchyD Forums</a></span>
 %% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Bugtracker at</span><a href="http://crunchyd.com/forum/project.php?projectid=7">CrunchyD Forums</a></span>
-%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date$</tt></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date: 2009-03-15 13:47:01 -0600 (Sun, 15 Mar 2009) $</tt></span>
 %% @reference <span style="margin-top:1em;padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Test sets require min. version 16</span><a href="http://testerl.com/">TestErl</a></span>
 
 %% @todo add @see cross-references between related functions
@@ -280,9 +280,9 @@
 -publicforum("http://crunchyd.com/forum/scutil-discussion/").
 -currentsource("http://crunchyd.com/release/scutil.zip").
 
--svn_id("$Id$").
--svn_head("$HeadURL$").
--svn_revision("$Revision$").
+-svn_id("$Id: scutil.erl 177 2009-03-15 19:47:01Z john $").
+-svn_head("$HeadURL: svn://crunchyd.com/scutil/scutil.erl $").
+-svn_revision("$Revision: 177 $").
 
 -description("StoneCypher's utility library.").
 
@@ -506,9 +506,9 @@ get_module_feature(Module, Feature) ->
 %%  {license,[{mit_license,"http://scutil.com/license.html"}]},
 %%  {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
 %%  {publicsvn,"svn://crunchyd.com/scutil/"},
-%%  {svn_head,"$HeadURL$"},
-%%  {svn_id,"$Id$"},
-%%  {svn_revision,"$Revision$"},
+%%  {svn_head,"$HeadURL: svn://crunchyd.com/scutil/scutil.erl $"},
+%%  {svn_id,"$Id: scutil.erl 177 2009-03-15 19:47:01Z john $"},
+%%  {svn_revision,"$Revision: 177 $"},
 %%  {testerl_export,[{[],scutil_testsuite}]},
 %%  {vsn,[134633400955530778836494569152232539093]},
 %%  {webpage,"http://scutil.com/"}]'''
