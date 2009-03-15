@@ -177,3 +177,7 @@ purity( ThisModule,  ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownI
 purity( ThisModule,  ThisFunction, {cons, _UnknownIdNumberTodo, Item1, Item2}) -> resolve_purities([purity(ThisModule, ThisFunction, Item1), purity(ThisModule, ThisFunction, Item2)]);
 
 purity( ThisModule,  ThisFunction, {tuple, _UnknownIdNumberTodo, Items}) -> resolve_purities([purity(ThisModule, ThisFunction, Item) || Item <- Items]);
+
+purity( ThisModule,  ThisFunction, List) when is_list(List) -> resolve_purities([ purity(ThisModule, ThisFunction, Item) || Item <- List ]);
+
+purity(_ThisModule, _ThisFunction, X) -> { unknown, X }.
