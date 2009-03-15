@@ -132,3 +132,35 @@ purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, 'xor',  Oper1, Ope
 
 purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, 'orelse',  Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
 purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, 'andalso', Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+
+
+
+%% @todo bit syntax expressions 6.16 http://erlang.org/doc/reference_manual/expressions.html
+%% @todo fun expressions 6.17 http://erlang.org/doc/reference_manual/expressions.html
+
+
+
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '++', Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '--', Oper1, Oper2}) -> resolve_purities([purity(ThisModule, ThisFunction, Oper1), purity(ThisModule, ThisFunction, Oper2)]);
+
+
+
+
+%% dets goes here
+
+
+
+
+
+purity(_ThisModule, _ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, is_integer},   [{var, _UnknownIdNumber3Todo, _SomeVar}]}) -> pure;
+purity(_ThisModule, _ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, is_float},     [{var, _UnknownIdNumber3Todo, _SomeVar}]}) -> pure;
+purity(_ThisModule, _ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, is_list},      [{var, _UnknownIdNumber3Todo, _SomeVar}]}) -> pure;
+purity(_ThisModule, _ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, is_tuple},     [{var, _UnknownIdNumber3Todo, _SomeVar}]}) -> pure;
+purity(_ThisModule, _ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, is_binary},    [{var, _UnknownIdNumber3Todo, _SomeVar}]}) -> pure;
+purity(_ThisModule, _ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, is_atom},      [{var, _UnknownIdNumber3Todo, _SomeVar}]}) -> pure;
+purity(_ThisModule, _ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, is_pid},       [{var, _UnknownIdNumber3Todo, _SomeVar}]}) -> pure;
+purity(_ThisModule, _ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, is_port},      [{var, _UnknownIdNumber3Todo, _SomeVar}]}) -> pure;
+purity(_ThisModule, _ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, is_reference}, [{var, _UnknownIdNumber3Todo, _SomeVar}]}) -> pure;
+purity(_ThisModule, _ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, is_bitstring}, [{var, _UnknownIdNumber3Todo, _SomeVar}]}) -> pure;
+purity(_ThisModule, _ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, is_boolean},   [{var, _UnknownIdNumber3Todo, _SomeVar}]}) -> pure;
+purity(_ThisModule, _ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, is_function},  [{var, _UnknownIdNumber3Todo, _SomeVar}]}) -> pure;
