@@ -164,3 +164,11 @@ purity(_ThisModule, _ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownI
 purity(_ThisModule, _ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, is_bitstring}, [{var, _UnknownIdNumber3Todo, _SomeVar}]}) -> pure;
 purity(_ThisModule, _ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, is_boolean},   [{var, _UnknownIdNumber3Todo, _SomeVar}]}) -> pure;
 purity(_ThisModule, _ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, is_function},  [{var, _UnknownIdNumber3Todo, _SomeVar}]}) -> pure;
+
+
+
+
+
+purity( ThisModule,  ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, ThisFunction}, Args}) -> resolve_purities([purity(ThisModule, ThisFunction, Arg)||Arg<-Args]);
+purity( ThisModule,  ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, NewFunction},  Args}) -> resolve_purities([is_pure(ThisModule, NewFunction)] ++ [purity(ThisModule,ThisFunction,Arg)||Arg<-Args]);
+
