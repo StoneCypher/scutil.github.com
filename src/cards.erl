@@ -224,13 +224,89 @@ german_deck() ->
 
 %% @since Version 200
 
-domino_deck()        -> [ {A,B} || A <- [1,2,3,4,5,6], B <- [1,2,3,4,5,6], A =< B ].
+domino_deck() ->
+
+    [ {A,B} ||
+
+        A <- [1,2,3,4,5,6],
+        B <- [1,2,3,4,5,6],
+
+        A =< B
+
+    ].
+
+
+
+
+
+%% @spec chinese_money_deck() -> list()
+
+%% @doc One of the oldest decks of cards known, originating from China; predates all other known decks except domino decks.  ```1> Show = fun(Cards) -> io:format("~s~n",[scutil:columnated_text(Cards, [{columns,4}])]) end.
+%% #Fun<erl_eval.6.13229925>
+%%
+%% 2> Show(cards:chinese_money_deck()).
+%%      {2,coins}        {2,strings}   {2,myriads}   {2,tens_of_myriads}
+%%      {3,coins}        {3,strings}   {3,myriads}   {3,tens_of_myriads}
+%%      {4,coins}        {4,strings}   {4,myriads}   {4,tens_of_myriads}
+%%      {5,coins}        {5,strings}   {5,myriads}   {5,tens_of_myriads}
+%%      {6,coins}        {6,strings}   {6,myriads}   {6,tens_of_myriads}
+%%      {7,coins}        {7,strings}   {7,myriads}   {7,tens_of_myriads}
+%%      {8,coins}        {8,strings}   {8,myriads}   {8,tens_of_myriads}
+%%      {9,coins}        {9,strings}   {9,myriads}   {9,tens_of_myriads}
+%% {1,tens_of_myriads}
+%% ok
+%%
+%% 3> length(cards:chinese_money_deck()).
+%% 33'''
 
 %% @since Version 200
-chinese_money_deck() -> [ {Val,Suit} || Val <- [2,3,4,5,6,7,8,9], Suit <- [coins,strings,myriads,tens_of_myriads] ] ++ [{1,tens_of_myriads}].   % that's right, 2-9 in each suit except tens, which is 1-9.
+
+chinese_money_deck() ->
+
+    [ {Value,Suit} ||
+
+        Value <- [2,3,4,5,6,7,8,9],
+        Suit  <- [coins,strings,myriads,tens_of_myriads]
+
+    ] ++ [{1,tens_of_myriads}].   % that's right, 2-9 in each suit except tens, which is 1-9.
+
+
+
+
+
+%% @spec piquet_deck() -> list()
+
+%% @doc A modern French specialty game deck (a subset of the normal deck).  ```1> Show = fun(Cards) -> io:format("~s~n",[scutil:columnated_text(Cards, [{columns,4}])]) end.
+%% #Fun<erl_eval.6.13229925>
+%%
+%% 2> Show(cards:piquet_deck()).
+%%  {ace,hearts}     {ace,spades}     {ace,diamonds}     {ace,clubs}
+%%   {7,hearts}       {7,spades}       {7,diamonds}       {7,clubs}
+%%   {8,hearts}       {8,spades}       {8,diamonds}       {8,clubs}
+%%   {9,hearts}       {9,spades}       {9,diamonds}       {9,clubs}
+%%  {10,hearts}      {10,spades}      {10,diamonds}      {10,clubs}
+%% {knave,hearts}   {knave,spades}   {knave,diamonds}   {knave,clubs}
+%% {queen,hearts}   {queen,spades}   {queen,diamonds}   {queen,clubs}
+%% {king,hearts}    {king,spades}    {king,diamonds}    {king,clubs}
+%% ok
+%%
+%% 3> length(cards:piquet_deck()).
+%% 32'''
 
 %% @since Version 200
-piquet_deck()        -> [ {Face,Suit} || Face <- [ace,7,8,9,10,jack,queen,king], Suit <- [hearts,spades,diamonds,clubs] ].
+
+piquet_deck() ->
+
+    [ {Face,Suit} ||
+
+        Face <- [ace,7,8,9,10,knave,queen,king],
+        Suit <- [hearts,spades,diamonds,clubs]
+
+    ].
+
+
+
+
 
 %% @since Version 200
 pinochle_deck()      -> [ {Face,Suit} || Face <- [ace,9,10,jack,queen,king], Suit <- [hearts,spades,diamonds,clubs] ].
