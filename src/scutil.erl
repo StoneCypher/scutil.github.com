@@ -18,7 +18,7 @@
 
 %% @author John Haugeland <stonecypher@gmail.com>
 %% @copyright 2007 - current John Haugeland, All Rights Reserved
-%% @version $Revision: 177 $
+%% @version $Revision$
 %% @since September 14, 2007
 
 % % % <table style="border: 1px solid black;"><tr><td style="padding: 0 2em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_users.js?style=blue"></script></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_cocomo.js?salary=80000"></script></td><td style="margin-left: 0.1em;"><div><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_basic_stats.js"></script></div></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_factoids.js"></script></td></tr></table>
@@ -280,9 +280,9 @@
 -publicforum("http://crunchyd.com/forum/scutil-discussion/").
 -currentsource("http://crunchyd.com/release/scutil.zip").
 
--svn_id("$Id: scutil.erl 177 2009-03-15 19:47:01Z john $").
--svn_head("$HeadURL: svn://crunchyd.com/scutil/scutil.erl $").
--svn_revision("$Revision: 177 $").
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
 
 -description("StoneCypher's utility library.").
 
@@ -514,9 +514,9 @@ get_module_feature(Module, Feature) ->
 %%  {license,[{mit_license,"http://scutil.com/license.html"}]},
 %%  {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
 %%  {publicsvn,"svn://crunchyd.com/scutil/"},
-%%  {svn_head,"$HeadURL: svn://crunchyd.com/scutil/scutil.erl $"},
-%%  {svn_id,"$Id: scutil.erl 177 2009-03-15 19:47:01Z john $"},
-%%  {svn_revision,"$Revision: 177 $"},
+%%  {svn_head,"$HeadURL$"},
+%%  {svn_id,"$Id$"},
+%%  {svn_revision,"$Revision$"},
 %%  {testerl_export,[{[],scutil_testsuite}]},
 %%  {vsn,[134633400955530778836494569152232539093]},
 %%  {webpage,"http://scutil.com/"}]'''
