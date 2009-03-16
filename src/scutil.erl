@@ -442,7 +442,9 @@
     
     get_linked_processes/0, % needs tests
     
-    key_duplicate/1 % needs tests
+    key_duplicate/1, % needs tests
+    
+    mersenne_prime/1 % needs tests
 
 ] ).
 
@@ -3784,3 +3786,22 @@ get_linked_processes() ->
 
 %% @since Version 200
 key_duplicate(KeyList) -> lists:flatten([ lists:duplicate(Key, Value) || {Key,Value} <- KeyList ]).
+
+
+
+
+
+%% @since Version 201
+mersenne_prime(Which) -> mersenne_prime_worker(Which, 1).
+
+%% @private
+mersenne_prime_worker(0,      Current)                  -> Current - 1;
+mersenne_prime_worker(Remain, Current) when Remain > 30 -> mersenne_prime_worker(Remain-30, Current*1073741824);
+mersenne_prime_worker(Remain, Current)                  -> mersenne_prime_worker(Remain-1,  Current*2).
+
+
+
+
+% todo invert this so that it returns {currentcount, fun, result} so that it can be continued
+% generate(0, _) -> [];
+% generate(N, Fun) when is_integer(N) andalso N > 0 andalso is_function(Fun) -> [Fun()] ++ generate(N-1,Fun).
