@@ -308,41 +308,242 @@ piquet_deck() ->
 
 
 
-%% @since Version 200
-pinochle_deck()      -> [ {Face,Suit} || Face <- [ace,9,10,jack,queen,king], Suit <- [hearts,spades,diamonds,clubs] ].
+%% @spec pinochle_deck() -> list()
+
+%% @doc A specialty American deck featuring two copies each of the cards ace and nine through king inclusive from the American standard deck.  ```1> Show = fun(Cards) -> io:format("~s~n",[scutil:columnated_text(Cards, [{columns,4}])]) end.
+%% #Fun<erl_eval.6.13229925>
+%%
+%% 2> Show(cards:pinochle_deck()).
+%%  {ace,hearts}     {ace,spades}     {ace,diamonds}     {ace,clubs}
+%%   {9,hearts}       {9,spades}       {9,diamonds}       {9,clubs}
+%%  {10,hearts}      {10,spades}      {10,diamonds}      {10,clubs}
+%% {jack,hearts}    {jack,spades}    {jack,diamonds}    {jack,clubs}
+%% {queen,hearts}   {queen,spades}   {queen,diamonds}   {queen,clubs}
+%% {king,hearts}    {king,spades}    {king,diamonds}    {king,clubs}
+%%  {ace,hearts}     {ace,spades}     {ace,diamonds}     {ace,clubs}
+%%   {9,hearts}       {9,spades}       {9,diamonds}       {9,clubs}
+%%  {10,hearts}      {10,spades}      {10,diamonds}      {10,clubs}
+%% {jack,hearts}    {jack,spades}    {jack,diamonds}    {jack,clubs}
+%% {queen,hearts}   {queen,spades}   {queen,diamonds}   {queen,clubs}
+%% {king,hearts}    {king,spades}    {king,diamonds}    {king,clubs}
+%% ok
+%%
+%% 3> length(cards:pinochle_deck()).
+%% 48'''
 
 %% @since Version 200
-tarot_deck()         -> [ {Face,Suit} || Face <- [ace,2,3,4,5,6,7,8,9,10,jack,knight,queen,king], Suit <- [hearts,spades,diamonds,clubs] ] ++ [ {major,X} || X <- lists:seq(1,21) ] ++ [{the_fool,0}].
+
+pinochle_deck() ->
+
+    lists:flatten(
+        lists:duplicate(2,
+
+            [ {Face,Suit} ||
+
+                Face <- [ace,9,10,jack,queen,king],
+                Suit <- [hearts,spades,diamonds,clubs]
+
+            ]
+
+        )
+    ).
+
+
+
+
+
+%% @spec tarot_deck() -> list()
+
+%% @doc The standard (tarot de Marseilles) tarot divination deck, with 78 cards between minor arcana, major arcana and the fool.  ```1> Show = fun(Cards) -> io:format("~s~n",[scutil:columnated_text(Cards, [{columns,4}])]) end.
+%% #Fun<erl_eval.6.13229925>
+%%
+%% 2> Show(cards:pinochle_deck()).
+%%  {ace,hearts}     {ace,spades}     {ace,diamonds}     {ace,clubs}
+%%   {9,hearts}       {9,spades}       {9,diamonds}       {9,clubs}
+%%  {10,hearts}      {10,spades}      {10,diamonds}      {10,clubs}
+%% {jack,hearts}    {jack,spades}    {jack,diamonds}    {jack,clubs}
+%% {queen,hearts}   {queen,spades}   {queen,diamonds}   {queen,clubs}
+%% {king,hearts}    {king,spades}    {king,diamonds}    {king,clubs}
+%%  {ace,hearts}     {ace,spades}     {ace,diamonds}     {ace,clubs}
+%%   {9,hearts}       {9,spades}       {9,diamonds}       {9,clubs}
+%%  {10,hearts}      {10,spades}      {10,diamonds}      {10,clubs}
+%% {jack,hearts}    {jack,spades}    {jack,diamonds}    {jack,clubs}
+%% {queen,hearts}   {queen,spades}   {queen,diamonds}   {queen,clubs}
+%% {king,hearts}    {king,spades}    {king,diamonds}    {king,clubs}
+%% ok
+%%
+%% 3> length(cards:pinochle_deck()).
+%% 48'''
 
 %% @since Version 200
-doppelkopf_deck()         -> doppelkopf_deck(nines).
+
+tarot_deck() ->
+
+    [ {Face,Suit} ||
+        Face <- [ace,2,3,4,5,6,7,8,9,10,jack,knight,queen,king],
+        Suit <- [hearts,spades,diamonds,clubs]
+    ] ++
+
+    [ {major,X} ||
+        X <- lists:seq(1,21)
+    ] ++
+
+    [{the_fool,0}].
+
+
+
+
+
+%% @equiv doppelkopf_deck(nines)
+%% @since Version 200
+doppelkopf_deck() ->
+
+    doppelkopf_deck(nines).
+
 
 %% @since Version 200
-doppelkopf_deck(nines)    -> [ {Face,Suit} || Face <- [ace,9,10,jack,queen,king], Suit <- [hearts,bells,leaves,acorns] ];
-doppelkopf_deck(no_nines) -> [ {Face,Suit} || Face <- [ace,10,jack,queen,king], Suit <- [hearts,bells,leaves,acorns] ].
+doppelkopf_deck(nines) ->
+
+    [ {Face,Suit} ||
+
+        Face <- [ace,9,10,jack,queen,king],
+        Suit <- [hearts,bells,leaves,acorns]
+
+    ];
+
+
+doppelkopf_deck(no_nines) ->
+
+    [ {Face,Suit} ||
+
+        Face <- [ace,10,jack,queen,king],
+        Suit <- [hearts,bells,leaves,acorns]
+
+    ].
+
+
+
+
 
 %% @since Version 200
-hungarian_deck() -> [ {Face,Suit} || Face <-    [vii,viii,ix,x,under,over,king,ace], Suit <- [hearts,bells,leaves,acorns] ].
+hungarian_deck() -> 
+
+    [ {Face,Suit} || 
+    
+        Face <- [vii,viii,ix,x,under,over,king,ace], 
+        Suit <- [hearts,bells,leaves,acorns] 
+        
+    ].
+
+
+
+
 
 %% @since Version 200
-austrian_deck()  -> [ {Face,Suit} || Face <- [vi,vii,viii,ix,x,under,over,king,ace], Suit <- [hearts,bells,leaves,acorns] ].
+austrian_deck() -> 
+
+    [ {Face,Suit} || 
+    
+        Face <- [vi,vii,viii,ix,x,under,over,king,ace], 
+        Suit <- [hearts,bells,leaves,acorns] 
+        
+    ].
+
+
+
+
 
 %% @since Version 200
-swiss_deck()     -> [ {Face,Suit} || Face <- [6,7,8,9,banner,under,over,king,ace], Suit <- [roses,bells,acorns,shields] ].
+swiss_deck() -> 
+
+    [ {Face,Suit} || 
+    
+         Face <- [6,7,8,9,banner,under,over,king,ace], 
+         Suit <- [roses,bells,acorns,shields] 
+         
+    ].
+
+
+
+
 
 %% @since Version 200
-italian_deck()   -> [ {Face,Suit} || Face <- [ace,2,3,4,5,6,7,infantry,cavalry,king], Suit <- [coins,swords,cups,clubs] ].
+italian_deck() -> 
+
+    [ {Face,Suit} || 
+    
+        Face <- [ace,2,3,4,5,6,7,infantry,cavalry,king], 
+        Suit <- [coins,swords,cups,clubs] 
+        
+    ].
+
+
+
+
 
 %% @since Version 200
-euchre_deck()    -> [ {Face,Suit} || Face <- [9,10,jack,queen,king,ace], Suit <- [hearts,spades,diamonds,clubs] ].
+euchre_deck() -> 
+
+    [ {Face,Suit} || 
+    
+        Face <- [9,10,jack,queen,king,ace], 
+        Suit <- [hearts,spades,diamonds,clubs]
+
+    ].
+
+
+
+
 
 %% @since Version 200
-mille_bornes_deck() -> scutil:key_duplicate([
-  {3,{hazard,accident}},{3,{hazard,out_of_gas}},{3,{hazard,flat_tire}},{4,{hazard,speed_limit}},{5,{hazard,stop}},
-  {6,{remedy,repair}},{6,{remedy,gasoline}},{6,{remedy,spare_tire}},{6,{remedy,end_of_speed_limit}},{14,{remedy,go}},
-  {1,{safety,driving_ace}},{1,{safety,extra_tank}},{1,{safety,puncture_proof}},{1,{safety,right_of_way}},
-  {10,{distance,25}},{10,{distance,50}},{10,{distance,75}},{12,{distance,100}},{4,{distance,200}}
-]).
+mille_bornes_deck() -> 
+
+    scutil:key_duplicate( [
+
+        {3,  {hazard,accident}    },
+        {3,  {hazard,out_of_gas}  },
+        {3,  {hazard,flat_tire}   },
+        {4,  {hazard,speed_limit} },
+        {5,  {hazard,stop}        },
+
+        {6,  {remedy,repair}             },
+        {6,  {remedy,gasoline}           },
+        {6,  {remedy,spare_tire}         },
+        {6,  {remedy,end_of_speed_limit} },
+        {14, {remedy,go}                 },
+
+        {1,  {safety,driving_ace}    },
+        {1,  {safety,extra_tank}     },
+        {1,  {safety,puncture_proof} },
+        {1,  {safety,right_of_way}   },
+
+        {10, {distance,25}  },
+        {10, {distance,50}  },
+        {10, {distance,75}  },
+        {12, {distance,100} },
+        {4,  {distance,200} }
+
+    ] ).
+
+
+
+
 
 %% @since Version 200
-uno_deck() -> [ {Face,Color} || Face <- lists:seq(0,9)++lists:seq(1,9)++[reverse,reverse,skip,skip,draw_two,draw_two], Color <- [red,yellow,green,blue] ] ++ lists:flatten(lists:duplicate(4, [{draw_four,wild},{wild,wild}])).
+uno_deck() -> 
+
+    [ {Face,Color} || 
+    
+        Face <- lists:seq(0,9) 
+             ++ lists:seq(1,9) 
+             ++ [reverse,reverse,skip,skip,draw_two,draw_two], 
+             
+        Color <- [red,yellow,green,blue] 
+    
+    ] ++ 
+    
+    lists:flatten(
+        lists:duplicate(4, 
+            [{draw_four,wild},{wild,wild}]
+        )
+    ).
