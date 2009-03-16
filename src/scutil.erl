@@ -444,7 +444,9 @@
     
     key_duplicate/1, % needs tests
     
-    mersenne_prime/1 % needs tests
+    mersenne_prime/1, % needs tests
+    
+    levenshtein/2 % needs tests
 
 ] ).
 
@@ -3805,3 +3807,33 @@ mersenne_prime_worker(Remain, Current)                  -> mersenne_prime_worker
 % todo invert this so that it returns {currentcount, fun, result} so that it can be continued
 % generate(0, _) -> [];
 % generate(N, Fun) when is_integer(N) andalso N > 0 andalso is_function(Fun) -> [Fun()] ++ generate(N-1,Fun).
+
+
+
+
+
+% by fredrik svensson and adam lindberg, from http://www.merriampark.com/lderlang.htm
+
+%% @since Version 202
+levenshtein(Same,   Same  ) when is_list(Same)                           -> 0;
+levenshtein(String, []    ) when is_list(String)                         -> length(String);
+levenshtein([],     String) when is_list(String)                         -> length(String);
+levenshtein(Source, Target) when is_list(Source) andalso is_list(Target) -> levenshtein_rec(Source, Target, lists:seq(0, length(Target)), 1).
+
+% Recurses over every character in the source string and calculates a list of distances
+%% @private
+levenshtein_rec([SrcHead|SrcTail], Target, DistList, Step) -> levenshtein_rec(SrcTail, Target, levenshtein_distlist(Target, DistList, SrcHead, [Step], Step), Step + 1);
+levenshtein_rec([],                _,      DistList, _   ) -> lists:last(DistList).
+
+% Generates a distance list with distance values for every character in the target string
+%% @private
+levenshtein_distlist([TargetHead|TargetTail], [DLH|DLT], SourceChar, NewDistList, LastDist) when length(DLT) > 0 ->
+    Min = lists:min([LastDist + 1, hd(DLT) + 1, DLH + lev_dif(TargetHead, SourceChar)]),
+    levenshtein_distlist(TargetTail, DLT, SourceChar, NewDistList ++ [Min], Min);
+
+levenshtein_distlist([], _, _, NewDistList, _) -> NewDistList.
+
+% Calculates the difference between two characters or other values
+%% @private
+lev_dif(C,   C  ) -> 0;
+lev_dif(_C1, _C2) -> 1.
