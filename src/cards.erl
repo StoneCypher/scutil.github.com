@@ -65,11 +65,26 @@
 %% @since Version 200
 mameluke_deck()      -> [ {Face,Suit} || Face <- [1,2,3,4,5,6,7,8,9,10,duke,viceroy,king], Suit <- [polo_stick,coin,sword,cup] ].
 
+%% @doc The first standardized European card deck, also known as the Rouennais deck; does not feature jokers.  ```1> scutil:columnate(cards:american_deck(), [{columns,4}]).
+%% [" {ace,hearts}     {ace,spades}     {ace,diamonds}     {ace,clubs} ",
+%%  "  {2,hearts}       {2,spades}       {2,diamonds}       {2,clubs}  ",
+%%  "  {3,hearts}       {3,spades}       {3,diamonds}       {3,clubs}  ",
+%%  "  {4,hearts}       {4,spades}       {4,diamonds}       {4,clubs}  ",
+%%  "  {5,hearts}       {5,spades}       {5,diamonds}       {5,clubs}  ",
+%%  "  {6,hearts}       {6,spades}       {6,diamonds}       {6,clubs}  ",
+%%  "  {7,hearts}       {7,spades}       {7,diamonds}       {7,clubs}  ",
+%%  "  {8,hearts}       {8,spades}       {8,diamonds}       {8,clubs}  ",
+%%  "  {9,hearts}       {9,spades}       {9,diamonds}       {9,clubs}  ",
+%%  " {10,hearts}      {10,spades}      {10,diamonds}      {10,clubs}  ",
+%%  "{jack,hearts}    {jack,spades}    {jack,diamonds}    {jack,clubs} ",
+%%  "{queen,hearts}   {queen,spades}   {queen,diamonds}   {queen,clubs}",
+%%  "{king,hearts}    {king,spades}    {king,diamonds}    {king,clubs} ",
+%%  " {joker,big}     {joker,little}                                   "]'''
 %% @since Version 200
 french_deck()        -> [ {Face,Suit} || Face <- [ace,2,3,4,5,6,7,8,9,10,knave,queen,king], Suit <- [hearts,spades,diamonds,clubs] ].
 
 %% @spec american_deck() -> list()
-%% @doc The world's most common deck, in use in most casinos, in North and South America, Australia, the United Kingdom and in parts of Japan and Hong Kong.  109> scutil:columnate(cards:american_deck(), [{columns,4}]).
+%% @doc The world's most common deck, in use in most casinos, in North and South America, Australia, the United Kingdom and in parts of Japan and Hong Kong; features jokers.  ```1> scutil:columnate(cards:american_deck(), [{columns,4}]).
 %% [" {ace,hearts}     {ace,spades}     {ace,diamonds}     {ace,clubs} ",
 %%  "  {2,hearts}       {2,spades}       {2,diamonds}       {2,clubs}  ",
 %%  "  {3,hearts}       {3,spades}       {3,diamonds}       {3,clubs}  ",
