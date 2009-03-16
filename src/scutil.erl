@@ -436,7 +436,7 @@
 
     list_rotate/2, index_of_first/2, rotate_to_first/2, rotate_first_to_end/2, % needs tests
 
-    columnated_rows/2, columns/2, columnate/1, columnate/2, % needs tests
+    columnated_rows/2, columns/2, columnate/1, columnate/2, columnated_text/2, % needs tests
     first_row/1, first_or_nothing/1, % needs tests
     
     floor/1, ceil/1, ceiling/1, % needs tests
@@ -3792,7 +3792,7 @@ columnate(List) -> columnate(List, []).
 %% @since Version 204
 columnate(List, Options) ->
 
-    Settings = lists:keymerge(1, Options, [{columns, 2}, {margin, 3}, {align, center}] ),
+    Settings = lists:ukeymerge(1, Options, [{align, center}, {columns, 2}, {margin, 3}] ),
 
     [ColumnCount, Margin, Align] = [proplists:get_value(X, Settings) || X <- [columns,margin,align] ],
 
@@ -3819,8 +3819,23 @@ columnate(List, Options) ->
 
 
 
+%% @since Version 205
+
+columnated_text(List, Options) ->
+
+    implode("\r\n", columnate(List, Options)).
+
+
+
+
+
 %% @since Version 204
-columnate_each_row([ []|_],_Format, Output) -> lists:reverse(Output);
+
+columnate_each_row([ []|_],_Format, Output) ->
+
+    lists:reverse(Output);
+
+
 columnate_each_row(Columns, Format, Output) ->
 
     {ThisRow, RemRows} = first_row(Columns),
