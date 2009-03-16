@@ -146,7 +146,8 @@ purity( ThisModule,  ThisFunction, {op, _UnknownIdNumberTodo, '--', Oper1, Oper2
 
 
 
-%% dets goes here
+
+purity('dets', ThisFunction, _) -> { impure, "dets:" ++ atom_to_list(ThisFunction) ++ " has side effects on disk" };
 
 
 
@@ -172,7 +173,7 @@ purity(_ThisModule, _ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownI
 purity( ThisModule,  ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, ThisFunction}, Args}) -> resolve_purities([purity(ThisModule, ThisFunction, Arg)||Arg<-Args]);
 purity( ThisModule,  ThisFunction, {call, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, NewFunction},  Args}) -> resolve_purities([is_pure(ThisModule, NewFunction)] ++ [purity(ThisModule,ThisFunction,Arg)||Arg<-Args]);
 
-% purity( Module,  ThisFunction, {remote, _UnknownIdNumberTodo, {atom, _UnknownIdNumber2Todo, NewModule}, {atom, _UnknownIdNumber3Todo, NewFunc}, Args}) -> purity(NewModule, Function, {call, NewModule, NewFunction, Args
+% purity(_ThisModule, _ThisFunction, {call, _UnknownIdNumberTodo, {remote, UnknownIdNumber2Todo, {atom, _UnknownIdNumber3Todo, NewModule}, {atom, UnknownIdNumber4Todo, NewFunc}}, Args}) -> purity(NewModule, NewFunc, {call, UnknownIdNumber2Todo, {atom, UnknownIdNumber4Todo, NewFunc}, Args});
 
 purity( ThisModule,  ThisFunction, {cons, _UnknownIdNumberTodo, Item1, Item2}) -> resolve_purities([purity(ThisModule, ThisFunction, Item1), purity(ThisModule, ThisFunction, Item2)]);
 

@@ -440,7 +440,9 @@
     
     floor/1, ceil/1, ceiling/1, % needs tests
     
-    get_linked_processes/0 % needs tests
+    get_linked_processes/0, % needs tests
+    
+    key_duplicate/1 % needs tests
 
 ] ).
 
@@ -3775,3 +3777,10 @@ get_linked_processes() ->
 %% mapsplode( % todo      [ Func(X) || X <- explode(Delim, Source) ]
 %% exp_map_imp( % todo    implode(Delim, [Func(X) || X <- explode(Delim, Source) ] )    % maybe called imp_mapsplode?
 %% quotesplode(           ("a,b,'c,d',e","'") -> ["a","b","'c,d'","e"]
+
+
+
+
+
+%% @since Version 200
+key_duplicate(KeyList) -> lists:flatten([ lists:duplicate(Key, Value) || {Key,Value} <- KeyList ]).
