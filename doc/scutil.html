@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>ScUtil is StoneCypher's Utility Library, a collection of hundreds of routines of a variety of topics which have aggregated from reuse in other projects.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 177 $</p>
+<p><b>Version:</b> $Revision: 204 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 <p><b>References</b><ul><li><span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Website is</span><a href="http://scutil.com/">http://scutil.com/</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Author's Website</span><a href="http://fullof.bs">Full of BS</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Direct link to zip archive</span><a href="http://crunchyd.com/release/scutil.zip">Current version</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">This library is released under the</span><a href="http://scutil.com/license.html">MIT License</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Public SVN at</span><a href="svn://crunchyd.com/scutil/">svn://crunchyd.com/scutil/</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Discussion forum at</span><a href="http://crunchyd.com/forum/scutil-discussion/">CrunchyD Forums</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Bugtracker at</span><a href="http://crunchyd.com/forum/project.php?projectid=7">CrunchyD Forums</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date: 2009-03-15 13:47:01 -0600 (Sun, 15 Mar 2009) $</tt></span></li><li><span style="margin-top:1em;padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Test sets require min. version 16</span><a href="http://testerl.com/">TestErl</a></span></li></ul></p>
@@ -416,6 +416,9 @@
 <tr><td valign="top"><a href="#central_moments-2">central_moments/2</a></td><td>Equivalent to <tt>[central_moment(List, N) || N &lt;- Moments]</tt>.
 </td></tr>
 <tr><td valign="top"><a href="#centroid-1">centroid/1</a></td><td><a href="#Statistics">Statistics</a> Calculates the coordinate which represents the per-axis arithmetic mean of a set of points.</td></tr>
+<tr><td valign="top"><a href="#columnate-1">columnate/1</a></td><td>Equivalent to <a href="#columnate-3"><tt>columnate(List, 2, 3)</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#columnate-2">columnate/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#columnated_rows-2">columnated_rows/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#columns-2">columns/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#combinations-2">combinations/2</a></td><td><a href="#List">List</a> Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.</td></tr>
@@ -453,6 +456,8 @@
 </td></tr>
 <tr><td valign="top"><a href="#f32_iolist_to_int-5">f32_iolist_to_int/5</a></td><td></td></tr>
 <tr><td valign="top"><a href="#factorial-1">factorial/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#first_or_nothing-1">first_or_nothing/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#first_row-1">first_row/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#flesch_kincaid_readability-4">flesch_kincaid_readability/4</a></td><td></td></tr>
 <tr><td valign="top"><a href="#flesch_kincaid_readability_score-3">flesch_kincaid_readability_score/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#float_to_f32_iolist-1">float_to_f32_iolist/1</a></td><td></td></tr>
@@ -463,6 +468,7 @@
 <tr><td valign="top"><a href="#function_stats-1">function_stats/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#gen_docs-1">gen_docs/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#geometric_mean-1">geometric_mean/1</a></td><td><a href="#Statistics">Statistics</a> Take the geometric mean of a list of numbers.</td></tr>
+<tr><td valign="top"><a href="#get_linked_processes-0">get_linked_processes/0</a></td><td></td></tr>
 <tr><td valign="top"><a href="#get_module_attribute-1">get_module_attribute/1</a></td><td><a href="#Utility">Utility</a> Look up all attributes of a given module.</td></tr>
 <tr><td valign="top"><a href="#get_module_attribute-2">get_module_attribute/2</a></td><td><a href="#Utility">Utility</a> <span style="color:red">Buggy</span> Look up an Erlang module attribute value by title.</td></tr>
 <tr><td valign="top"><a href="#get_module_feature-2">get_module_feature/2</a></td><td></td></tr>
@@ -495,8 +501,10 @@
 <tr><td valign="top"><a href="#kendall_correlation-1">kendall_correlation/1</a></td><td><a href="#Statistics">Statistics</a> Compute the Kendall Tau Rank Correlation Coefficient of a list of coordinate tuples.</td></tr>
 <tr><td valign="top"><a href="#kendall_correlation-2">kendall_correlation/2</a></td><td>Equivalent to <a href="#kendall_correlation-1"><tt>kendall_correlation(lists:zip(List1, List2))</tt></a>.
 </td></tr>
+<tr><td valign="top"><a href="#key_duplicate-1">key_duplicate/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#kurtosis-1">kurtosis/1</a></td><td>Equivalent to <a href="#central_moment-2"><tt>central_moment(List, 4)</tt></a>.
 </td></tr>
+<tr><td valign="top"><a href="#levenshtein-2">levenshtein/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#list_entrypoints-1">list_entrypoints/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#list_entrypoints-2">list_entrypoints/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#list_function_labels-1">list_function_labels/1</a></td><td></td></tr>
@@ -515,6 +523,7 @@
 <tr><td valign="top"><a href="#map_reduce-4">map_reduce/4</a></td><td><a href="#Parallelism">Parallelism</a> Takes a workload, a function, a count of jobs per node and a node list, and distributes work on demand to available nodes until fulfilled.</td></tr>
 <tr><td valign="top"><a href="#median-1">median/1</a></td><td><a href="#Statistics">Statistics</a> Takes the median (central) value of a list.</td></tr>
 <tr><td valign="top"><a href="#median_absolute_deviation-1">median_absolute_deviation/1</a></td><td><a href="#Statistics">Statistics</a> Calculate the median absolute deviation of a <code><a href="#type-numericlist">numericlist()</a></code>.</td></tr>
+<tr><td valign="top"><a href="#mersenne_prime-1">mersenne_prime/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#minmax-1">minmax/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#mod-2">mod/2</a></td><td><a href="#Math">Math</a> Takes the modulus of an integer by another integer.</td></tr>
 <tr><td valign="top"><a href="#mode-1">mode/1</a></td><td><a href="#Statistics">Statistics</a> Takes the mode (most common) value(s) of a list, as a list.</td></tr>
@@ -836,17 +845,30 @@
   [2.2,1.8,2.2]</pre></p>
 <p><b>Introduced in:</b> Version 118</p>
 
+<h3 class="function"><a name="columnate-1">columnate/1</a></h3>
+<div class="spec">
+<p><tt>columnate(List) -&gt; any()</tt></p>
+</div><p>Equivalent to <a href="#columnate-3"><tt>columnate(List, 2, 3)</tt></a>.</p>
+
+<p><b>Introduced in:</b> Version 204</p>
+
+<h3 class="function"><a name="columnate-2">columnate/2</a></h3>
+<div class="spec">
+<p><tt>columnate(List, Options) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 204</p>
+
 <h3 class="function"><a name="columnated_rows-2">columnated_rows/2</a></h3>
 <div class="spec">
-<p><tt>columnated_rows(RowCount, List) -&gt; any()</tt></p>
+<p><tt>columnated_rows(ColumnCount, List) -&gt; any()</tt></p>
 </div>
-<p><b>Introduced in:</b> Version 171</p>
+<p><b>Introduced in:</b> Version 173</p>
 
 <h3 class="function"><a name="columns-2">columns/2</a></h3>
 <div class="spec">
-<p><tt>columns(ColumnCount, List) -&gt; any()</tt></p>
+<p><tt>columns(RowCount, List) -&gt; any()</tt></p>
 </div>
-<p><b>Introduced in:</b> Version 173</p>
+<p><b>Introduced in:</b> Version 171</p>
 
 <h3 class="function"><a name="combinations-2">combinations/2</a></h3>
 <div class="spec">
@@ -1123,6 +1145,17 @@
 </div>
 <p><b>Introduced in:</b> Version 168</p>
 
+<h3 class="function"><a name="first_or_nothing-1">first_or_nothing/1</a></h3>
+<div class="spec">
+<p><tt>first_or_nothing(T) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 204</p>
+
+<h3 class="function"><a name="first_row-1">first_row/1</a></h3>
+<div class="spec">
+<p><tt>first_row(Columns) -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="flesch_kincaid_readability-4">flesch_kincaid_readability/4</a></h3>
 <div class="spec">
 <p><tt>flesch_kincaid_readability(Data, WordCounter, SentenceCounter, SyllableCounter) -&gt; any()</tt></p>
@@ -1183,6 +1216,12 @@
 <p><b>Introduced in:</b> Version 34</p>
 <p><b>See also:</b> <a href="#arithmetic_mean-1">arithmetic_mean/1</a>, <a href="#gmean_vector_normal-1">gmean_vector_normal/1</a>, <a href="#harmonic_mean-1">harmonic_mean/1</a>.</p>
 
+<h3 class="function"><a name="get_linked_processes-0">get_linked_processes/0</a></h3>
+<div class="spec">
+<p><tt>get_linked_processes() -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 175</p>
+
 <h3 class="function"><a name="get_module_attribute-1">get_module_attribute/1</a></h3>
 <div class="spec">
 <p><tt>get_module_attribute(Module::atom()) -&gt; AttributeList | {error, no_such_module}</tt></p>
@@ -1195,9 +1234,9 @@
    {license,[{mit_license,"http://scutil.com/license.html"}]},
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
-   {svn_head,"$HeadURL: svn://crunchyd.com/scutil/scutil.erl $"},
-   {svn_id,"$Id: scutil.erl 177 2009-03-15 19:47:01Z john $"},
-   {svn_revision,"$Revision: 177 $"},
+   {svn_head,"$HeadURL: svn://crunchyd.com/scutil/src/scutil.erl $"},
+   {svn_id,"$Id: scutil.erl 204 2009-03-16 01:49:25Z john $"},
+   {svn_revision,"$Revision: 204 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1394,11 +1433,23 @@
 </div><p>Equivalent to <a href="#kendall_correlation-1"><tt>kendall_correlation(lists:zip(List1, List2))</tt></a>.</p>
 
 
+<h3 class="function"><a name="key_duplicate-1">key_duplicate/1</a></h3>
+<div class="spec">
+<p><tt>key_duplicate(KeyList) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 200</p>
+
 <h3 class="function"><a name="kurtosis-1">kurtosis/1</a></h3>
 <div class="spec">
 <p><tt>kurtosis(List) -&gt; any()</tt></p>
 </div><p>Equivalent to <a href="#central_moment-2"><tt>central_moment(List, 4)</tt></a>.</p>
 
+
+<h3 class="function"><a name="levenshtein-2">levenshtein/2</a></h3>
+<div class="spec">
+<p><tt>levenshtein(Same, String) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 202</p>
 
 <h3 class="function"><a name="list_entrypoints-1">list_entrypoints/1</a></h3>
 <div class="spec">
@@ -1503,6 +1554,12 @@
 </div><p><a href="#Statistics">Statistics</a> Calculate the median absolute deviation of a <code><a href="#type-numericlist">numericlist()</a></code>. <pre>  1&gt; scutil:median_absolute_deviation([1,1,2,2,4,6,9]).
   1</pre></p>
 <p><b>Introduced in:</b> Version 81</p>
+
+<h3 class="function"><a name="mersenne_prime-1">mersenne_prime/1</a></h3>
+<div class="spec">
+<p><tt>mersenne_prime(Which) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 201</p>
 
 <h3 class="function"><a name="minmax-1">minmax/1</a></h3>
 <div class="spec">
@@ -2265,6 +2322,6 @@
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 15 2009, 15:29:49.</i></p>
+<p><i>Generated by EDoc, Mar 15 2009, 20:05:38.</i></p>
 </body>
 </html>

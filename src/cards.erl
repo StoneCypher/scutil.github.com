@@ -48,6 +48,7 @@
 
 
 %% @spec mameluke_deck() -> list()
+
 %% @doc One of the oldest decks of cards known, originating from Egypt; probably the point between Chinese Money Cards and the early European decks.  ```1> scutil:columnate(cards:mameluke_deck(), [{columns,4}]).
 %% ["   {1,polo_stick}         {1,coin}         {1,sword}         {1,cup}   ",
 %%  "   {2,polo_stick}         {2,coin}         {2,sword}         {2,cup}   ",
@@ -62,10 +63,25 @@
 %%  " {duke,polo_stick}      {duke,coin}      {duke,sword}      {duke,cup}  ",
 %%  "{viceroy,polo_stick}   {viceroy,coin}   {viceroy,sword}   {viceroy,cup}",
 %%  " {king,polo_stick}      {king,coin}      {king,sword}      {king,cup}  "]'''
-%% @since Version 200
-mameluke_deck()      -> [ {Face,Suit} || Face <- [1,2,3,4,5,6,7,8,9,10,duke,viceroy,king], Suit <- [polo_stick,coin,sword,cup] ].
 
-%% @doc The first standardized European card deck, also known as the Rouennais deck; does not feature jokers.  ```1> scutil:columnate(cards:american_deck(), [{columns,4}]).
+%% @since Version 200
+
+mameluke_deck() ->
+
+   [ {Face,Suit} ||
+
+       Face <- [1,2,3,4,5,6,7,8,9,10,duke,viceroy,king],
+       Suit <- [polo_stick,coin,sword,cup]
+
+   ].
+
+
+
+
+
+%% @spec french_deck() -> list()
+
+%% @doc The first standardized European card deck, also known as the Rouennais deck; does not feature jokers, and uses `knave' where many expect `jack'.  ```1> scutil:columnate(cards:french_deck(), [{columns,4}]).
 %% [" {ace,hearts}     {ace,spades}     {ace,diamonds}     {ace,clubs} ",
 %%  "  {2,hearts}       {2,spades}       {2,diamonds}       {2,clubs}  ",
 %%  "  {3,hearts}       {3,spades}       {3,diamonds}       {3,clubs}  ",
@@ -76,15 +92,28 @@ mameluke_deck()      -> [ {Face,Suit} || Face <- [1,2,3,4,5,6,7,8,9,10,duke,vice
 %%  "  {8,hearts}       {8,spades}       {8,diamonds}       {8,clubs}  ",
 %%  "  {9,hearts}       {9,spades}       {9,diamonds}       {9,clubs}  ",
 %%  " {10,hearts}      {10,spades}      {10,diamonds}      {10,clubs}  ",
-%%  "{jack,hearts}    {jack,spades}    {jack,diamonds}    {jack,clubs} ",
+%%  "{knave,hearts}   {knave,spades}   {knave,diamonds}   {knave,clubs}",
 %%  "{queen,hearts}   {queen,spades}   {queen,diamonds}   {queen,clubs}",
-%%  "{king,hearts}    {king,spades}    {king,diamonds}    {king,clubs} ",
-%%  " {joker,big}     {joker,little}                                   "]'''
+%%  "{king,hearts}    {king,spades}    {king,diamonds}    {king,clubs} "]'''
+
 %% @since Version 200
-french_deck()        -> [ {Face,Suit} || Face <- [ace,2,3,4,5,6,7,8,9,10,knave,queen,king], Suit <- [hearts,spades,diamonds,clubs] ].
+
+french_deck() ->
+
+    [ {Face,Suit} ||
+
+        Face <- [ace,2,3,4,5,6,7,8,9,10,knave,queen,king],
+        Suit <- [hearts,spades,diamonds,clubs]
+
+    ].
+
+
+
+
 
 %% @spec american_deck() -> list()
-%% @doc The world's most common deck, in use in most casinos, in North and South America, Australia, the United Kingdom and in parts of Japan and Hong Kong; features jokers.  ```1> scutil:columnate(cards:american_deck(), [{columns,4}]).
+
+%% @doc The world's most common deck, in use in most casinos, in North/South America, Australia, the UK and in parts of Japan and Hong Kong; features jokers.  ```1> scutil:columnate(cards:american_deck(), [{columns,4}]).
 %% [" {ace,hearts}     {ace,spades}     {ace,diamonds}     {ace,clubs} ",
 %%  "  {2,hearts}       {2,spades}       {2,diamonds}       {2,clubs}  ",
 %%  "  {3,hearts}       {3,spades}       {3,diamonds}       {3,clubs}  ",
@@ -99,11 +128,54 @@ french_deck()        -> [ {Face,Suit} || Face <- [ace,2,3,4,5,6,7,8,9,10,knave,q
 %%  "{queen,hearts}   {queen,spades}   {queen,diamonds}   {queen,clubs}",
 %%  "{king,hearts}    {king,spades}    {king,diamonds}    {king,clubs} ",
 %%  " {joker,big}     {joker,little}                                   "]'''
-%% @since Version 200
-american_deck()      -> [ {Face,Suit} || Face <- [ace,2,3,4,5,6,7,8,9,10,jack,queen,king], Suit <- [hearts,spades,diamonds,clubs] ] ++ [ {joker,big}, {joker,little} ].
 
 %% @since Version 200
-german_deck()        -> [ {Face,Suit} || Face <- [ace,2,3,4,5,6,7,8,9,10,jack,queen,king], Suit <- [hearts,bells,leaves,acorns] ] ++ [ {joker,big}, {joker,little} ].
+
+american_deck() ->
+
+    [ {Face,Suit} ||
+
+        Face <- [ace,2,3,4,5,6,7,8,9,10,jack,queen,king],
+        Suit <- [hearts,spades,diamonds,clubs]
+
+    ] ++ [ {joker,big}, {joker,little} ].
+
+
+
+
+
+%% @spec german_deck() -> list()
+
+%% @doc The deck used in most of Germany; uses different suits than American decks, and has jokers.  ```1> 111> scutil:columnate(cards:german_deck(), [{columns,4}]).
+%% [" {ace,hearts}     {ace,bells}      {ace,leaves}     {ace,acorns} ",
+%%  "  {2,hearts}       {2,bells}        {2,leaves}       {2,acorns}  ",
+%%  "  {3,hearts}       {3,bells}        {3,leaves}       {3,acorns}  ",
+%%  "  {4,hearts}       {4,bells}        {4,leaves}       {4,acorns}  ",
+%%  "  {5,hearts}       {5,bells}        {5,leaves}       {5,acorns}  ",
+%%  "  {6,hearts}       {6,bells}        {6,leaves}       {6,acorns}  ",
+%%  "  {7,hearts}       {7,bells}        {7,leaves}       {7,acorns}  ",
+%%  "  {8,hearts}       {8,bells}        {8,leaves}       {8,acorns}  ",
+%%  "  {9,hearts}       {9,bells}        {9,leaves}       {9,acorns}  ",
+%%  " {10,hearts}       {10,bells}      {10,leaves}      {10,acorns}  ",
+%%  "{jack,hearts}     {jack,bells}    {jack,leaves}    {jack,acorns} ",
+%%  "{queen,hearts}   {queen,bells}    {queen,leaves}   {queen,acorns}",
+%%  "{king,hearts}     {king,bells}    {king,leaves}    {king,acorns} ",
+%%  " {joker,big}     {joker,little}                                  "]'''
+
+%% @since Version 200
+
+german_deck() -> 
+
+    [ {Face,Suit} || 
+    
+        Face <- [ace,2,3,4,5,6,7,8,9,10,jack,queen,king], 
+        Suit <- [hearts,bells,leaves,acorns] 
+        
+    ] ++ [ {joker,big}, {joker,little} ].
+
+
+
+
 
 %% @since Version 200
 domino_deck()        -> [ {A,B} || A <- [1,2,3,4,5,6], B <- [1,2,3,4,5,6], A =< B ].
