@@ -287,7 +287,11 @@
 -description("StoneCypher's utility library.").
 
 -testerl_export( { [], scutil_testsuite } ).
--library_requirements( [ {dq,141}, {testerl,16} ] ).
+
+-library_requirements([
+    {dq,      141},
+    {testerl, 16}
+]).
 
 
 
@@ -555,9 +559,15 @@ get_module_attribute(Module,Attribute) ->
     case beam_lib:chunks(Module, [attributes]) of
 
         { ok, { _, [ {attributes,Attributes} ] } } ->
+
             case lists:keysearch(Attribute, 1, Attributes) of
-                { value, {Attribute,Value} }   -> Value;
-                false                          -> { error, no_such_attribute }
+
+                { value, {Attribute,Value} } -> 
+                    Value;
+
+                false ->
+                    { error, no_such_attribute }
+
             end;
 
         { error, beam_lib, { file_error, _, enoent} } ->
@@ -588,7 +598,8 @@ hex_to_int(Hex) when is_integer(Hex), Hex >= $0, Hex =< $9 -> Hex - $0;
 hex_to_int(Hex) when is_integer(Hex), Hex >= $a, Hex =< $f -> Hex - $a + 10;
 hex_to_int(Hex) when is_integer(Hex), Hex >= $A, Hex =< $F -> Hex - $A + 10;
 
-hex_to_int(Hex) when is_list(Hex) -> hex_to_int(Hex, 0).
+hex_to_int(Hex) when is_list(Hex) -> 
+    hex_to_int(Hex, 0).
 
 hex_to_int([],          Acc) -> Acc;
 hex_to_int([Digit|Rem], Acc) -> hex_to_int(Rem, (Acc bsl 4) + hex_to_int(Digit)).
@@ -609,7 +620,9 @@ hex_to_int([Digit|Rem], Acc) -> hex_to_int(Rem, (Acc bsl 4) + hex_to_int(Digit))
 
 %% @since Version 20
 
-byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 -> [ nybble_to_hex(TheByte bsr 4), nybble_to_hex(TheByte band 15) ].
+byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 -> 
+
+    [ nybble_to_hex(TheByte bsr 4), nybble_to_hex(TheByte band 15) ].
 
 
 
@@ -627,8 +640,15 @@ byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 -> [
 
 %% @since Version 19
 
-nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 0,  Nyb < 10 -> $0 + Nyb;
-nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 10, Nyb < 16 -> $a + Nyb - 10.
+nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 0,  Nyb < 10 ->
+
+    $0 + Nyb;
+    
+
+
+nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 10, Nyb < 16 ->
+
+    $a + Nyb - 10.
 
 
 
@@ -646,11 +666,28 @@ nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 10, Nyb < 16 -> $a + Nyb - 10.
 
 %% @since Version 19
 
-io_list_to_hex(Input) when is_list(Input)                                            -> io_list_to_hex(Input, []).
+io_list_to_hex(Input) when is_list(Input) ->
 
-io_list_to_hex([],               Work)                                               -> lists:reverse(Work);
-io_list_to_hex([Item|Remainder], Work) when is_integer(Item), Item >= 0, Item =< 255 -> [A,B] = byte_to_hex(Item), io_list_to_hex(Remainder, [B,A]++Work);
-io_list_to_hex(_,                _)                                                  -> {error, not_an_io_list}.
+    io_list_to_hex(Input, []).
+
+
+
+io_list_to_hex([], Work) -> 
+
+    lists:reverse(Work);
+    
+
+
+io_list_to_hex([Item|Remainder], Work) when is_integer(Item), Item >= 0, Item =< 255 -> 
+
+    [A,B] = byte_to_hex(Item), 
+    io_list_to_hex(Remainder, [B,A]++Work);
+    
+
+
+io_list_to_hex(_, _) ->
+
+    {error, not_an_io_list}.
 
 
 
@@ -658,7 +695,11 @@ io_list_to_hex(_,                _)                                             
 
 %% @equiv multi_do(C,M,F,[])
 %% @since Version 38
-multi_do(C, Module, Func)             -> multi_do(C, Module, Func, [],   []).
+multi_do(C, Module, Func) ->
+   
+    multi_do(C, Module, Func, [],   []).
+
+
 
 %% @spec multi_do(Count::integer(), Module::atom(), Function::atom(), Args::list()) -> list()
 
@@ -669,10 +710,21 @@ multi_do(C, Module, Func)             -> multi_do(C, Module, Func, [],   []).
 %% [2377,2559,1713,8489,4468,3261,3344,3751,380,2525]'''
 
 %% @since Version 38
-multi_do(C, Module, Func, Args)       -> multi_do(C, Module, Func, Args, []).
+multi_do(C, Module, Func, Args) ->
+    
+    multi_do(C, Module, Func, Args, []).
 
-multi_do(0,_Module,_Func,_Args, Work) -> Work;
-multi_do(I, Module, Func, Args, Work) -> multi_do(I-1, Module, Func, Args, Work ++ [apply(Module, Func, Args)]).
+
+
+multi_do(0,_Module,_Func,_Args, Work) -> 
+
+    Work;
+    
+    
+
+multi_do(I, Module, Func, Args, Work) -> 
+    
+    multi_do(I-1, Module, Func, Args, Work ++ [apply(Module, Func, Args)]).
 
 
 
@@ -680,11 +732,22 @@ multi_do(I, Module, Func, Args, Work) -> multi_do(I-1, Module, Func, Args, Work 
 
 %% @equiv regex_read_matches(String, Reg, {0,0})
 %% @since Version 41
-regex_read_matches(String, Reg) -> regex_read_matches(String, Reg, {0,0}).
+
+regex_read_matches(String, Reg) ->
+
+    regex_read_matches(String, Reg, {0,0}).
+
+
+
 
 %% @equiv regex_read_matches(String, Reg, {TrimFront,TrimLength})
 %% @since Version 41
-regex_read_matches(String, Reg, TrimFront, TrimLength) -> regex_read_matches(String, Reg, {TrimFront, TrimLength}).
+
+regex_read_matches(String, Reg, TrimFront, TrimLength) ->
+
+    regex_read_matches(String, Reg, {TrimFront, TrimLength}).
+
+
 
 %% @spec regex_read_matches(String::string(), Reg::string(), { TrimFront::integer(), TrimLength::integer() }) -> list() | { error, E }
 
@@ -700,11 +763,17 @@ regex_read_matches(String, Reg, TrimFront, TrimLength) -> regex_read_matches(Str
 %% Why provide the equivalent syntaxes (_, _, {A,B}) and (_, _, A,B) ?  Without the tuple is more natural to many, but with the tuple is far more convenient for database-driven behavior, as well as the internal implementation.  I frequently find myself using both forms, and so every time I simplify I find myself wrapping the non-removed form back into the removed form.  Does it violate the simplest interface principle?  Yeah, but in this case it's a boon, IMO.  As such, keeping both forms.
 
 %% @since Version 41
+
 regex_read_matches(String, Reg, {TrimFront, TrimLength}) ->
 
     case regexp:matches(String, Reg) of
-        { match, Matches } -> [ string:substr(String, Start+TrimFront, End-(TrimLength+1)) || {Start,End} <- Matches ];
-        { error, E }       -> { error, E }
+
+        { match, Matches } ->
+            [ string:substr(String, Start+TrimFront, End-(TrimLength+1)) || {Start,End} <- Matches ];
+
+        { error, E } ->
+            { error, E }
+
     end.
 
 
@@ -729,8 +798,17 @@ regex_read_matches(String, Reg, {TrimFront, TrimLength}) ->
 
 grid_scatter(0, []) -> []; % skips a lot of work
 
-grid_scatter(Count, {SizeX, SizeY}) -> scutil:random_from(Count, [ {X,Y} || X <- lists:seq(1,SizeX), Y <- lists:seq(1,SizeY) ]);
-grid_scatter(Count, Size)           -> grid_scatter(Count, {Size, Size}).
+
+
+grid_scatter(Count, {SizeX, SizeY}) ->
+
+    scutil:random_from(Count, [ {X,Y} || X <- lists:seq(1,SizeX), Y <- lists:seq(1,SizeY) ]);
+
+
+
+grid_scatter(Count, Size) ->
+
+    grid_scatter(Count, {Size, Size}).
 
 
 
@@ -774,8 +852,13 @@ srand(A,B,C) ->
     RandomGeneratorPid = spawn(?MODULE, random_generator, [A,B,C]),
 
     case whereis(scutil_rand_source) of
-        undefined -> ok;
-        _Defined  -> unregister(scutil_rand_source)  % todo fixme leak : this should notify the old rand_source that it is being discarded
+
+        undefined ->
+            ok;
+
+        _Defined ->
+            unregister(scutil_rand_source)  % todo fixme leak : this should notify the old rand_source that it is being discarded
+
     end,
 
     register(scutil_rand_source, RandomGeneratorPid),
@@ -856,11 +939,21 @@ rand(Range) ->
 
 %% @equiv random_from(1, List, no_remainder)
 %% @since Version 6
-random_from(   List) -> [X] = random_from(1, List, no_remainder), X.
+
+random_from(List) ->
+
+    [X] = random_from(1, List, no_remainder), X.
+
+
 
 %% @equiv random_from(N, List, no_remainder)
 %% @since Version 6
-random_from(N, List) -> random_from(N, List, no_remainder).
+
+random_from(N, List) ->
+
+    random_from(N, List, no_remainder).
+
+
 
 %% @spec random_from(N::integer(), List::list(), WantRemainder::want_remainder()) -> list()
 
@@ -889,8 +982,16 @@ random_from(N, List) -> random_from(N, List, no_remainder).
 %% thai'''
 
 %% @since Version 6
-random_from(N, List, no_remainder) -> {R,_} = random_from(N,List,remainder), R;
-random_from(N, List, remainder)    -> lists:split(N,shuffle(List)).
+
+random_from(N, List, no_remainder) ->
+    
+    {R,_} = random_from(N,List,remainder), R;
+
+
+
+random_from(N, List, remainder) ->
+    
+    lists:split(N,shuffle(List)).
 
 
 
@@ -912,19 +1013,36 @@ random_from(N, List, remainder)    -> lists:split(N,shuffle(List)).
 %% @since Version 10
 
 % InputList is [ {Item,Weight}, {Item,Weight}, ... ]
+
 random_from_weighted(InputList) when is_list(InputList) ->
+
     RandomLimit = rand(lists:sum([ Weight || {_,Weight} <- InputList ])),  % the random cap is equal to the sum of all the weights
     random_from_weighted_worker(InputList, RandomLimit).                   % call the worker with the original list and the cap
 
+
+
 % if the list is empty, the cap for randomness was calculated wrongly, and as such the random point is too high
-random_from_weighted_worker([], _) -> { error, limit_miscalculation };
+
+random_from_weighted_worker([], _) ->
+
+    { error, limit_miscalculation };
+
+
 
 % but if the list has reasonable contents and the limit is a pos-or-0 integer
+
 random_from_weighted_worker(InputList, Limit) when is_list(InputList), is_integer(Limit), Limit >= 0 ->
+
     [ {Item,Weight} | Remainder ] = InputList,   % break off the input list's head as {I,W} and keep the rest as Remainder
+
     case Weight =< Limit of                                             % if the weight is less than or equal to the limit,
-        true  -> random_from_weighted_worker(Remainder, Limit-Weight);  % recurse the next item with a decremented weight
-        false -> Item                                                   % if not, this item is the one we want
+
+        true  ->
+            random_from_weighted_worker(Remainder, Limit-Weight);       % recurse the next item with a decremented weight
+
+        false ->
+            Item                                                        % if not, this item is the one we want
+
     end.
 
 
@@ -944,6 +1062,10 @@ elements(Config, Requested, KeyIdx)        when is_list(Config), is_list(Request
 elements(Config, Requested, strip)         when is_list(Config), is_list(Requested)                     -> elements_worker([], Config, Requested, 1,      strip).
 elements(Config, Requested, KeyIdx, strip) when is_list(Config), is_list(Requested), is_integer(KeyIdx) -> elements_worker([], Config, Requested, KeyIdx, strip).
 
+
+
+
+
 % implementation
 
 elements_worker(Retlist, _,      [],        _)      -> Retlist;
@@ -952,10 +1074,21 @@ elements_worker(Retlist, Config, Requested, KeyIdx) ->
     [ ThisRequest | RemainingRequests ] = Requested,
 
     case lists:keysearch(ThisRequest, KeyIdx, Config) of
-        false            -> elements_worker(Retlist ++ [undefined], Config, RemainingRequests, KeyIdx);
-        { value, Tuple } -> elements_worker(Retlist ++ [Tuple],     Config, RemainingRequests, KeyIdx);
-        AnythingElse     -> { error, response_not_understood, { for, lists, keysearch, { ThisRequest, Config } }, { got, AnythingElse } }
+
+        false ->
+            elements_worker(Retlist ++ [undefined], Config, RemainingRequests, KeyIdx);
+
+        { value, Tuple } ->
+            elements_worker(Retlist ++ [Tuple],     Config, RemainingRequests, KeyIdx);
+
+        AnythingElse ->
+            { error, response_not_understood, { for, lists, keysearch, { ThisRequest, Config } }, { got, AnythingElse } }
+
     end.
+
+
+
+
 
 elements_worker(Retlist, _,      [],        _,      strip) -> Retlist;
 elements_worker(Retlist, Config, Requested, KeyIdx, strip) ->
@@ -963,9 +1096,16 @@ elements_worker(Retlist, Config, Requested, KeyIdx, strip) ->
     [ ThisRequest | RemainingRequests ] = Requested,
 
     case lists:keysearch(ThisRequest, KeyIdx, Config) of
-        false                -> elements_worker(Retlist ++ [undefined], Config, RemainingRequests, KeyIdx, strip);
-        { value, {_,Tuple} } -> elements_worker(Retlist ++ [Tuple],     Config, RemainingRequests, KeyIdx, strip);
-        AnythingElse         -> { error, response_not_understood, { for, lists, keysearch, { ThisRequest, Config } }, { got, AnythingElse } }
+
+        false ->
+            elements_worker(Retlist ++ [undefined], Config, RemainingRequests, KeyIdx, strip);
+
+        { value, {_,Tuple} } ->
+            elements_worker(Retlist ++ [Tuple],     Config, RemainingRequests, KeyIdx, strip);
+
+        AnythingElse ->
+            { error, response_not_understood, { for, lists, keysearch, { ThisRequest, Config } }, { got, AnythingElse } }
+
     end.
 
 
@@ -990,8 +1130,15 @@ elements_worker(Retlist, Config, Requested, KeyIdx, strip) ->
 
 %% @since Version 31
 
-sanitize_tokens(List, Allowed) when is_list(List), is_function(Allowed) -> lists:filter(Allowed, List);
-sanitize_tokens(List, Allowed) when is_list(List), is_list(Allowed)     -> lists:filter(fun(X) -> lists:member(X,Allowed) end, List).
+sanitize_tokens(List, Allowed) when is_list(List), is_function(Allowed) ->
+
+    lists:filter(Allowed, List);
+
+
+
+sanitize_tokens(List, Allowed) when is_list(List), is_list(Allowed) ->
+
+    lists:filter(fun(X) -> lists:member(X,Allowed) end, List).
 
 
 
@@ -1006,7 +1153,9 @@ sanitize_tokens(List, Allowed) when is_list(List), is_list(Allowed)     -> lists
 
 %% @since Version 31
 
-sanitize_filename(Filename) -> sanitize_tokens(Filename, lists:seq($a,$z)++lists:seq($A,$Z)++lists:seq($0,$9)++"-_()[]").
+sanitize_filename(Filename) ->
+
+    sanitize_tokens(Filename, lists:seq($a,$z)++lists:seq($A,$Z)++lists:seq($0,$9)++"-_()[]").
 
 
 
@@ -1042,8 +1191,10 @@ sanitize_filename(Filename) -> sanitize_tokens(Filename, lists:seq($a,$z)++lists
 
 receive_one() ->
 
-    receive (X) -> { item, X }
-    after 0     -> nothing_there
+    receive (X) ->
+        { item, X }
+    after 0 ->
+        nothing_there
     end.
 
 
@@ -1063,8 +1214,15 @@ receive_one() ->
 
 %% @since Version 33
 
-arithmetic_mean([])                      -> 0.0;
-arithmetic_mean(List) when is_list(List) -> lists:sum(List) / length(List).
+arithmetic_mean([]) ->
+
+    0.0;
+
+
+
+arithmetic_mean(List) when is_list(List) ->
+    
+    lists:sum(List) / length(List).
 
 
 
@@ -1081,8 +1239,15 @@ arithmetic_mean(List) when is_list(List) -> lists:sum(List) / length(List).
 
 %% @since Version 34
 
-geometric_mean([])                       -> 0.0;
-geometric_mean(List)  when is_list(List) -> math:exp(scutil:arithmetic_mean([math:log(X)||X<-List])).
+geometric_mean([]) ->
+    
+    0.0;
+
+
+
+geometric_mean(List) when is_list(List) ->
+    
+    math:exp(scutil:arithmetic_mean([math:log(X)||X<-List])).
 
 
 
@@ -1099,8 +1264,15 @@ geometric_mean(List)  when is_list(List) -> math:exp(scutil:arithmetic_mean([mat
 
 %% @since Version 35
 
-harmonic_mean([])                        -> 0.0;
-harmonic_mean(List)   when is_list(List) -> length(List) / lists:sum([ 1/X || X<-List ]).
+harmonic_mean([]) ->
+    
+    0.0;
+
+
+
+harmonic_mean(List) when is_list(List) ->
+    
+    length(List) / lists:sum([ 1/X || X<-List ]).
 
 
 
@@ -1116,10 +1288,21 @@ harmonic_mean(List)   when is_list(List) -> length(List) / lists:sum([ 1/X || X<
 
 %% @since Version 44
 
-weighted_arithmetic_mean(List)   when is_list(List) -> weighted_arithmetic_mean(List, 0, 0).
+weighted_arithmetic_mean(List) when is_list(List) ->
+    
+    weighted_arithmetic_mean(List, 0, 0).
 
-weighted_arithmetic_mean([],           Num, Denom)  -> Num/Denom;
-weighted_arithmetic_mean([{V,W}|Tail], Num, Denom)  -> weighted_arithmetic_mean(Tail, Num+(W*V), Denom+W).
+
+
+weighted_arithmetic_mean([], Num, Denom) ->
+
+    Num/Denom;
+
+
+
+weighted_arithmetic_mean( [{V,W} | Tail], Num, Denom) ->
+
+    weighted_arithmetic_mean(Tail, Num+(W*V), Denom+W).
 
 
 
@@ -1132,8 +1315,15 @@ weighted_arithmetic_mean([{V,W}|Tail], Num, Denom)  -> weighted_arithmetic_mean(
 
 %% @since Version 8
 
-even_or_odd(Num) when is_integer(Num), Num band 1 == 0 -> even;
-even_or_odd(Num) when is_integer(Num)                  -> odd.
+even_or_odd(Num) when is_integer(Num), Num band 1 == 0 ->
+
+    even;
+
+
+
+even_or_odd(Num) when is_integer(Num) ->
+
+    odd.
 
 
 
@@ -1153,9 +1343,16 @@ median(List) when is_list(List) ->
 
     SList = lists:sort(List),
     Length = length(SList),
+
     case even_or_odd(Length) of
-        even -> [A,B] = lists:sublist(SList, round(Length/2), 2), (A+B)/2;
-        odd  -> lists:nth( round((Length+1)/2), SList )
+
+        even ->
+            [A,B] = lists:sublist(SList, round(Length/2), 2),
+            (A+B)/2;
+
+        odd ->
+            lists:nth( round((Length+1)/2), SList )
+
     end.
 
 
@@ -1178,14 +1375,39 @@ median(List) when is_list(List) ->
 
 %% @since Version 8
 
-mode([])                      -> [];
-mode(List) when is_list(List) -> mode_front(lists:reverse(lists:keysort(2, scutil:histograph(List)))).
+mode([]) ->
 
-mode_front([{Item,Freq}|Tail])                      -> mode_front(Tail, Freq, [Item]).
+    [];
 
-mode_front([ {Item, Freq} | Tail], Freq,   Results) -> mode_front(Tail, Freq, [Item]++Results);
-mode_front([{_Item,_Freq} |_Tail],_Better, Results) -> Results;
-mode_front([],                    _Freq,   Results) -> Results.
+
+
+mode(List) when is_list(List) ->
+    
+    mode_front(lists:reverse(lists:keysort(2, scutil:histograph(List)))).
+
+
+
+mode_front([{Item,Freq}|Tail]) ->
+    
+    mode_front(Tail, Freq, [Item]).
+
+
+
+mode_front([ {Item, Freq} | Tail],  Freq,   Results) ->
+
+    mode_front(Tail, Freq, [Item]++Results);
+
+
+
+mode_front([ {_Item,_Freq} |_Tail], _Better, Results) ->
+
+    Results;
+
+
+
+mode_front( [], _Freq, Results) ->
+
+    Results.
 
 
 
@@ -1198,7 +1420,9 @@ mode_front([],                    _Freq,   Results) -> Results.
 
 %% @since Version 39
 
-absolute_difference(A,B) -> abs(A-B).
+absolute_difference(A,B) -> 
+
+    abs(A-B).
 
 
 
@@ -1211,10 +1435,21 @@ absolute_difference(A,B) -> abs(A-B).
 
 %% @since Version 39
 
-list_product(List) when is_list(List) -> list_product(List, 1).
+list_product(List) when is_list(List) ->
 
-list_product([],          Counter) -> Counter;
-list_product([Head|Tail], Counter) -> list_product(Tail, Counter*Head).
+    list_product(List, 1).
+
+
+
+list_product([], Counter) ->
+
+    Counter;
+
+
+
+list_product([Head|Tail], Counter) ->
+
+    list_product(Tail, Counter*Head).
 
 
 
@@ -1237,9 +1472,25 @@ histograph(List) when is_list(List) ->
     [Head|Tail] = lists:sort(List),
     histo_count(Tail, Head, 1, []).
 
-histo_count([],             Current, Count, Work) -> lists:reverse([{Current,Count}]++Work);
-histo_count([Current|Tail], Current, Count, Work) -> histo_count(Tail, Current, Count+1, Work);
-histo_count([New|Tail],     Current, Count, Work) -> histo_count(Tail, New,     1,       [{Current,Count}]++Work).
+
+
+%% @private
+
+histo_count( [], Current, Count, Work) -> 
+
+     lists:reverse([{Current,Count}]++Work);
+
+
+
+histo_count( [Current|Tail], Current, Count, Work) -> 
+
+    histo_count(Tail, Current, Count+1, Work);
+    
+    
+
+histo_count( [New|Tail], Current, Count, Work) -> 
+
+    histo_count(Tail, New, 1, [{Current,Count}] ++ Work).
 
 
 
@@ -1274,7 +1525,9 @@ std_deviation(Values) when is_list(Values) ->
 
 %% @since Version 39
 
-root_mean_square(List) when is_list(List) -> math:sqrt(arithmetic_mean([ Val*Val || Val <- List ])).
+root_mean_square(List) when is_list(List) ->
+
+    math:sqrt(arithmetic_mean([ Val*Val || Val <- List ])).
 
 
 
@@ -1294,7 +1547,9 @@ root_mean_square(List) when is_list(List) -> math:sqrt(arithmetic_mean([ Val*Val
 
 %% @since Version 42
 
-ranks_of(List) when is_list(List) -> lists:zip(lists:seq(1,length(List)),lists:reverse(lists:sort(List))).
+ranks_of(List) when is_list(List) ->
+
+    lists:zip(lists:seq(1,length(List)),lists:reverse(lists:sort(List))).
 
 
 
@@ -1313,23 +1568,50 @@ ranks_of(List) when is_list(List) -> lists:zip(lists:seq(1,length(List)),lists:r
 
 %% @since Version 42
 
-tied_ranks_of(List) -> tied_rank_worker(ranks_of(List), [], no_prev_value).
+tied_ranks_of(List) -> 
 
-tied_add_prev(Work, {FoundAt, NewValue}) -> lists:duplicate(length(FoundAt),{lists:sum(FoundAt) / length(FoundAt), NewValue}) ++ Work.
+    tied_rank_worker(ranks_of(List), [], no_prev_value).
+    
+    
 
 
-tied_rank_worker([],               Work, PrevValue) -> lists:reverse(tied_add_prev(Work, PrevValue));
+
+%% @private
+
+tied_add_prev(Work, {FoundAt, NewValue}) ->
+
+    lists:duplicate( length(FoundAt), {lists:sum(FoundAt)/length(FoundAt), NewValue} ) ++ Work.
+
+
+
+
+
+%% @private
+
+tied_rank_worker([], Work, PrevValue) -> 
+
+    lists:reverse(tied_add_prev(Work, PrevValue));
+    
+    
+
 tied_rank_worker([Item|Remainder], Work, PrevValue) ->
+    
     case PrevValue of
+    
         no_prev_value ->
             {BaseRank,BaseVal} = Item,
             tied_rank_worker(Remainder, Work, {[BaseRank],BaseVal});
+
         {FoundAt,OldVal} ->
+
             case Item of
+
                 {Id,OldVal} ->
                     tied_rank_worker(Remainder, Work,                           {[Id]++FoundAt,OldVal});
+
                 {Id,NewVal} ->
                     tied_rank_worker(Remainder, tied_add_prev(Work, PrevValue), {[Id],NewVal})
+
             end
     end.
 
@@ -1350,11 +1632,19 @@ tied_rank_worker([Item|Remainder], Work, PrevValue) ->
 %% @since Version 42
 
 ordered_ranks_of(List) when is_list(List) ->
+    
     ordered_ranks_of(List, tied_ranks_of(List), []).
 
-ordered_ranks_of([], [], Work) -> lists:reverse(Work);
+
+
+ordered_ranks_of([], [], Work) -> 
+
+    lists:reverse(Work);
+
+
 
 ordered_ranks_of([Front|Rem], Ranks, Work) ->
+    
     {value,Item} = lists:keysearch(Front,2,Ranks),
     {IRank,Front} = Item,
     ordered_ranks_of(Rem, Ranks--[Item], [{IRank,Front}]++Work).
@@ -1372,7 +1662,9 @@ ordered_ranks_of([Front|Rem], Ranks, Work) ->
 
 %% @since Version 2
 
-to_lines(Text) -> string:tokens(Text, "\r\n"). % yay convenience functions
+to_lines(Text) -> 
+
+    string:tokens(Text, "\r\n"). % yay convenience functions
 
 
 
@@ -1400,14 +1692,26 @@ to_lines(Text) -> string:tokens(Text, "\r\n"). % yay convenience functions
 %% @since Version 49
 
 pearson_correlation(TupleList) when is_list(TupleList) ->
+    
     {A,B} = lists:unzip(TupleList),
     pearson_correlation(A,B).
 
+
+
 %% @equiv pearson_correlation(lists:zip(List1, List2))
 
-pearson_correlation(List1, _)     when length(List1) < 2 -> {r,0.0};
+pearson_correlation(List1, _) when length(List1) < 2 -> 
 
-pearson_correlation(List1, List2) when is_list(List1), is_list(List2), length(List1) /= length(List2) -> {error, lists_must_be_same_length};
+    {r, 0.0};
+    
+
+
+pearson_correlation(List1, List2) when length(List1) /= length(List2) -> 
+
+    {error, lists_must_be_same_length};
+    
+    
+
 pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
     SumXY = lists:sum([A*B || {A,B} <- lists:zip(List1,List2) ]),   % the sum of the products of each matched pair
@@ -1421,11 +1725,18 @@ pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
     N     = length(List1),
 
     case math:sqrt(   ( (N*SumXX)-(SumX*SumX) )   *   ( (N*SumYY)-(SumY*SumY) )   ) of
-        0     -> {r,0.0};  % some nasty value sets otherwise cause divide by zero
-        0.0   -> {r,0.0};  % eg [ [1,1,1,1,1], [1,1,2,1,2] ]
+        
+        0 ->
+            {r, 0.0};  % some nasty value sets otherwise cause divide by zero
+
+
+        0.0 ->
+            {r, 0.0};  % eg [ [1,1,1,1,1], [1,1,2,1,2] ]
+
         Denom ->
           Numer = (N*SumXY) - (SumX * SumY),
           {r, (Numer/Denom)}
+
     end.
 
 
@@ -1454,14 +1765,27 @@ pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 %% @since Version 50
 
 spearman_correlation(TupleList) when is_list(TupleList) ->
+    
     {A,B} = lists:unzip(TupleList),
     spearman_correlation(A,B).
 
+
+
+
 %% @equiv spearman_correlation(lists:zip(List1, List2))
 
-spearman_correlation(List1, _)     when length(List1) < 2 -> {rsquared,0.0};
+spearman_correlation(List1, _) when length(List1) < 2 -> 
 
-spearman_correlation(List1, List2) when is_list(List1), is_list(List2), length(List1) /= length(List2) -> {error, lists_must_be_same_length};
+    {rsquared, 0.0};
+
+
+
+spearman_correlation(List1, List2) when length(List1) /= length(List2) ->
+
+    {error, lists_must_be_same_length};
+
+
+
 spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
     {TR1,_} = lists:unzip(ordered_ranks_of(List1)),
@@ -1470,7 +1794,7 @@ spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
     Numerator   = 6 * lists:sum([ (D1-D2)*(D1-D2) || {D1,D2} <- lists:zip(TR1,TR2) ]),
     Denominator = math:pow(length(List1),3)-length(List1),
 
-    {rsquared,1-(Numerator/Denominator)}.
+    {rsquared, 1-(Numerator/Denominator) }.
 
 
 
@@ -1498,14 +1822,26 @@ spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 %% @since Version 51
 
 kendall_correlation(TupleList) when is_list(TupleList) ->
+
     {A,B} = lists:unzip(TupleList),
     kendall_correlation(A,B).
 
+
+
 %% @equiv kendall_correlation(lists:zip(List1, List2))
 
-kendall_correlation(List1, _)     when length(List1) < 2 -> {tau,0.0};
+kendall_correlation(List1, _) when length(List1) < 2 -> 
 
-kendall_correlation(List1, List2) when is_list(List1), is_list(List2), length(List1) /= length(List2) -> {error, lists_must_be_same_length};
+    {tau, 0.0};
+
+
+
+kendall_correlation(List1, List2) when length(List1) /= length(List2) -> 
+
+    {error, lists_must_be_same_length};
+    
+    
+
 kendall_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
     {RA,_} = lists:unzip(ordered_ranks_of(List1)),
@@ -1519,10 +1855,27 @@ kendall_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
     {tau, -(( (4*P) / (N * (N - 1))) - 1) }.
 
-kendall_right_of([],    Work) -> lists:reverse(Work);
-kendall_right_of([F|R], Work) -> kendall_right_of(R, [kendall_right_of_item(F,R)]++Work).
 
-kendall_right_of_item(B, Rem) -> length([R || R <- Rem, R < B]).
+
+
+
+%% @private
+
+kendall_right_of([], Work) -> 
+
+    lists:reverse(Work);
+    
+    
+
+kendall_right_of([F|R], Work) -> 
+
+    kendall_right_of(R, [kendall_right_of_item(F,R)]++Work).
+    
+
+
+kendall_right_of_item(B, Rem) -> 
+
+    length([R || R <- Rem, R < B]).
 
 
 
@@ -1552,15 +1905,24 @@ kendall_right_of_item(B, Rem) -> length([R || R <- Rem, R < B]).
 %% @since Version 50
 
 moment(List, N) when is_list(List), is_number(N) ->
+    
     scutil:arithmetic_mean( [ math:pow(Item, N) || Item <- List ] ).
+
+
 
 %% @equiv [ moment(List, N) || N <- [2,3,4] ]
 
-moments(List)                                -> moments(List, [2,3,4]).
+moments(List) -> 
+
+    moments(List, [2,3,4]).
+    
+
 
 %% @equiv [ moment(List, N) || N <- Moments ]
 
-moments(List, Moments) when is_list(Moments) -> [ moment(List, M) || M <- Moments ].
+moments(List, Moments) when is_list(Moments) -> 
+
+    [ moment(List, M) || M <- Moments ].
 
 
 
@@ -1570,7 +1932,7 @@ moments(List, Moments) when is_list(Moments) -> [ moment(List, M) || M <- Moment
 
 %% @spec central_moment(List::list(), N::integer()) -> float()
 
-%% @doc {@section Statistics} Takes the Nth cetral moment of a list.  The Nth central moment of a list is the arithmetic mean of (the list items each minus the mean of the list, each 
+%% @doc {@section Statistics} Takes the Nth cetral moment of a list.  The Nth central moment of a list is the arithmetic mean of (the list items each minus the mean of the list, each
 %% taken to the Nth power).  In a sense, this is the "normalized" moment.  Fractional Ns are not defined.  Not to be confused with {@link moment/2}.  {@section Thanks} to Kraln and
 %% Chile for straightening me out on moments and central moments.  ```1> scutil:central_moment([1,1,1], 2).
 %% 0.0
@@ -1587,24 +1949,43 @@ moments(List, Moments) when is_list(Moments) -> [ moment(List, M) || M <- Moment
 %% @since Version 50
 
 central_moment(List, N) when is_list(List), is_integer(N) ->
+    
     ListAMean = scutil:arithmetic_mean(List),
     scutil:arithmetic_mean( [ math:pow(Item-ListAMean, N) || Item <- List ] ).
 
+
+
 %% @equiv [ central_moment(List, N) || N <- [2,3,4] ]
-central_moments(List)                                -> central_moments(List, [2,3,4]).
+
+central_moments(List) ->
+
+    central_moments(List, [2,3,4]).
+
+
 
 %% @equiv [ central_moment(List, N) || N <- Moments ]
-central_moments(List, Moments) when is_list(Moments) -> [ central_moment(List, M) || M <- Moments ].
+
+central_moments(List, Moments) when is_list(Moments) -> 
+
+    [ central_moment(List, M) || M <- Moments ].
 
 
 
 
 
 %% @equiv central_moment(List, 3)
-skewness(List) -> central_moment(List, 3).
+
+skewness(List) -> 
+
+    central_moment(List, 3).
+    
+
 
 %% @equiv central_moment(List, 4)
-kurtosis(List) -> central_moment(List, 4).
+
+kurtosis(List) -> 
+
+    central_moment(List, 4).
 
 
 
@@ -1653,7 +2034,7 @@ qsp_average(W, InputVecs) ->
     GetSqVnDp = fun(Xi) ->
         VnDp = abs(dot_product(W, Xi)),
         VnDp * VnDp
-        end,
+    end,
 
     arithmetic_mean([ GetSqVnDp(Xi) || Xi <- InputVecs ]).
 
@@ -1685,6 +2066,7 @@ qsp_average(W, InputVecs) ->
 %% @todo implement tuple variation
 
 dot_product(VX, VY) ->
+    
     lists:sum( [ X*Y || {X,Y} <- lists:zip(VX,VY) ] ).
 
 
@@ -1717,9 +2099,13 @@ dot_product(VX, VY) ->
 %% @todo implement 7-dimensional variation, http://en.wikipedia.org/wiki/Seven-dimensional_cross_product
 
 cross_product( {X1,Y1,Z1}, {X2,Y2,Z2} ) ->
+    
     { (Y1*Z2) - (Z1*Y2) , (Z1*X2) - (X1*Z2), (X1*Y2) - (Y1*X2) };
 
+
+
 cross_product( [X1,Y1,Z1], [X2,Y2,Z2] ) ->
+
     [ (Y1*Z2) - (Z1*Y2) , (Z1*X2) - (X1*Z2), (X1*Y2) - (Y1*X2) ].
 
 
@@ -1735,10 +2121,21 @@ cross_product( [X1,Y1,Z1], [X2,Y2,Z2] ) ->
 
 %% @since Version 86
 
-tuple_sum(T) when is_tuple(T) -> tuple_sum(T, 1, size(T), 0).
+tuple_sum(T) when is_tuple(T) -> 
 
-tuple_sum(_T, Which, Max, Work) when Which > Max -> Work;
-tuple_sum( T, Which, Max, Work)                  -> tuple_sum(T, Which+1, Max, Work+element(Which, T)).
+    tuple_sum(T, 1, size(T), 0).
+
+
+
+tuple_sum(_T, Which, Max, Work) when Which > Max -> 
+
+    Work;
+
+
+
+tuple_sum( T, Which, Max, Work) ->
+
+     tuple_sum(T, Which+1, Max, Work+element(Which, T)).
 
 
 
@@ -1753,9 +2150,18 @@ tuple_sum( T, Which, Max, Work)                  -> tuple_sum(T, Which+1, Max, W
 %% @since Version 85
 
 root_sum_square(VX) when is_list(VX) ->
+    
     math:sqrt(lists:sum([ X*X || X <- VX ]));
 
-root_sum_square(VX) when is_tuple(VX) -> root_sum_square(tuple_to_list(VX)).
+
+
+root_sum_square(VX) when is_tuple(VX) -> 
+
+    root_sum_square(tuple_to_list(VX)).
+
+
+
+
 
 %% @equiv root_sum_square(VX)
 
@@ -1776,7 +2182,9 @@ root_sum_square(VX) when is_tuple(VX) -> root_sum_square(tuple_to_list(VX)).
 
 %% @since Version 85
 
-vector_magnitude(VX) -> root_sum_square(VX).
+vector_magnitude(VX) -> 
+
+    root_sum_square(VX).
 
 
 
@@ -1792,10 +2200,15 @@ vector_magnitude(VX) -> root_sum_square(VX).
 %% @since Version 85
 
 normalize_vector(VX) when is_list(VX) ->
+    
     VM = vector_magnitude(VX),
     [ X / VM || X <- VX ];
 
-normalize_vector(VX) when is_tuple(VX) -> list_to_tuple(normalize_vector(tuple_to_list(VX))).
+
+
+normalize_vector(VX) when is_tuple(VX) -> 
+
+    list_to_tuple(normalize_vector(tuple_to_list(VX))).
 
 
 
@@ -1807,7 +2220,9 @@ normalize_vector(VX) when is_tuple(VX) -> list_to_tuple(normalize_vector(tuple_t
 
 %% @since Version 85
 
-amean_vector_normal(VX) -> arithmetic_mean(normalize_vector(VX)).
+amean_vector_normal(VX) -> 
+
+    arithmetic_mean(normalize_vector(VX)).
 
 
 
@@ -1819,7 +2234,9 @@ amean_vector_normal(VX) -> arithmetic_mean(normalize_vector(VX)).
 
 %% @since Version 85
 
-gmean_vector_normal(VX) ->  geometric_mean(normalize_vector(VX)).
+gmean_vector_normal(VX) -> 
+
+    geometric_mean(normalize_vector(VX)).
 
 
 
@@ -1831,7 +2248,9 @@ gmean_vector_normal(VX) ->  geometric_mean(normalize_vector(VX)).
 
 %% @since Version 85
 
-hmean_vector_normal(VX) ->   harmonic_mean(normalize_vector(VX)).
+hmean_vector_normal(VX) -> 
+
+    harmonic_mean(normalize_vector(VX)).
 
 
 
@@ -1840,8 +2259,11 @@ hmean_vector_normal(VX) ->   harmonic_mean(normalize_vector(VX)).
 % Create sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples, where key K appears in both A and B
 
 shared_keys(TupleList) when is_list(TupleList) ->
+    
     {A,B} = lists:unzip(TupleList),
     shared_keys(lists:sort(A),lists:sort(B)).
+
+
 
 %% @type keylist() = keylist().  All members of keylists are tuples of two-or-greater arity, and the first element is considered their key in the list.  List keys are unique; therefore `[{a,1},{b,1}]' is a keylist, but `[{a,1},{a,1}]' is not.
 %% @type sorted_keylist() = keylist().  A sorted keylist is a keylist in the order provided by {@link lists:sort/1}.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.
@@ -1851,31 +2273,63 @@ shared_keys(TupleList) when is_list(TupleList) ->
 %% @doc Equivalent to {@link shared_keys/1}, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.
 
 shared_keys(TupleList, presorted) when is_list(TupleList) ->
+    
     {A,B} = lists:unzip(TupleList),
     shared_keys(A,B);
+
+
 
 %% @doc Create sorted list X of 3-ary tuples `{K,Ai,Bi}' from sorted lists A, B of 2ary `{K,Ai}'/`{K,Bi}' tuples, where key `K' appears in both `A' and `B'.
 
 shared_keys(A,B) when is_list(A), is_list(B) ->
+    
     both_lists_next_item(lists:sort(A),lists:sort(B),[]).
+
+
 
 %% @equiv shared_keys(lists:sort(A),lists:sort(B))
 %% @spec shared_keys(A::sorted_keylist(), B::sorted_keylist(), Presorted::presorted) -> sorted_keylist()
 %% @doc Equivalent to {@link shared_keys/2}, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.
 
 shared_keys(A,B,presorted) when is_list(A), is_list(B) ->
+    
     both_lists_next_item(A,B,[]).
 
-both_lists_next_item([],             _,              Work) -> lists:reverse(Work);
-both_lists_next_item(_,              [],             Work) -> lists:reverse(Work);
-both_lists_next_item([ {K,Ai} | Ar], [ {K,Bi} | Br], Work) -> both_lists_next_item(Ar, Br, [{K,Ai,Bi}]++Work);
 
-both_lists_next_item(IA,             IB,             Work) ->
+
+both_lists_next_item([], _, Work) -> 
+
+    lists:reverse(Work);
+    
+    
+
+%% @private
+
+both_lists_next_item(_, [], Work) ->
+
+    lists:reverse(Work);
+
+
+
+both_lists_next_item([ {K,Ai} | Ar], [ {K,Bi} | Br], Work) ->
+
+    both_lists_next_item(Ar, Br, [{K,Ai,Bi}]++Work);
+
+
+
+both_lists_next_item(IA, IB, Work) ->
+
     [{Ka,_}|Ar] = IA,
     [{Kb,_}|Br] = IB,
+
     if
-        Ka < Kb -> both_lists_next_item(Ar, IB, Work);
-        true    -> both_lists_next_item(IA, Br, Work)
+
+        Ka < Kb ->
+            both_lists_next_item(Ar, IB, Work);
+
+        true ->
+            both_lists_next_item(IA, Br, Work)
+
     end.
 
 
@@ -1893,10 +2347,21 @@ both_lists_next_item(IA,             IB,             Work) ->
 
 %% @since Version 31
 
-all_unique_pairings(A) when is_list(A) -> all_unique_pairings(A,[]).
+all_unique_pairings(A) when is_list(A) -> 
 
-all_unique_pairings([],      Work) -> Work;
-all_unique_pairings([Ai|Ar], Work) -> all_unique_pairings(Ar, [{Ai,Ari}||Ari<-Ar] ++ Work).
+    all_unique_pairings(A,[]).
+    
+
+
+all_unique_pairings([], Work) -> 
+
+    Work;
+    
+    
+
+all_unique_pairings([Ai|Ar], Work) -> 
+
+     all_unique_pairings(Ar, [{Ai,Ari}||Ari<-Ar] ++ Work).
 
 
 
@@ -1906,13 +2371,27 @@ all_unique_pairings([Ai|Ar], Work) -> all_unique_pairings(Ar, [{Ai,Ari}||Ari<-Ar
 
 % comeback
 
-walk_unique_pairings([],    _) -> ok;
+walk_unique_pairings([], _) -> 
+
+    ok;
+    
+    
+
 walk_unique_pairings([A|R], F) when is_function(F) ->
+    
     walk_unique_pairings(A, R, F),
     walk_unique_pairings(R, F).
 
-walk_unique_pairings(_A, [],     _F) -> ok;
+
+
+walk_unique_pairings(_A, [],     _F) -> 
+
+    ok;
+
+
+
 walk_unique_pairings( A, [Rh|Rr], F) ->
+
     F(A,Rh),
     walk_unique_pairings(A, Rr, F).
 
@@ -1934,9 +2413,15 @@ walk_unique_pairings( A, [Rh|Rr], F) ->
 %% @since Version 8
 
 list_to_number(X) ->
+
     case catch list_to_float(X) of
-        {'EXIT',_} -> list_to_integer(X);
-        Y -> Y
+
+        {'EXIT',_} ->
+            list_to_integer(X);
+
+        Y ->
+            Y
+
     end.
 
 
@@ -1944,10 +2429,20 @@ list_to_number(X) ->
 
 
 %% @equiv start_register_if_not_running(node(), Name, Module, Function, [])
-start_register_if_not_running(Name, Module, Function) -> start_register_if_not_running(node(), Name, Module, Function, []).
+
+start_register_if_not_running(Name, Module, Function) -> 
+
+    start_register_if_not_running(node(), Name, Module, Function, []).
+    
+
 
 %% @equiv start_register_if_not_running(node(), Name, Module, Function, Args)
-start_register_if_not_running(Name, Module, Function, Args) -> start_register_if_not_running(node(), Name, Module, Function, Args).
+
+start_register_if_not_running(Name, Module, Function, Args) ->
+
+    start_register_if_not_running(node(), Name, Module, Function, Args).
+
+
 
 %% @spec start_register_if_not_running(Node::atom(), Name::atom(), Module::atom(), Function::atom(), Args::list()) -> pid() | ok
 
@@ -1983,8 +2478,14 @@ start_register_if_not_running(Name, Module, Function, Args) -> start_register_if
 start_register_if_not_running(Node, Name, Module, Function, Args) when is_atom(Name), is_atom(Module), is_atom(Function), is_list(Args) ->
 
     case whereis(Name) of
-        undefined -> register(Name, spawn(Node, Module, Function, Args)), ok;
-        _         -> ok
+
+        undefined -> 
+            register(Name, spawn(Node, Module, Function, Args)),
+            ok;
+
+        _ ->
+            ok
+
     end.
 
 
@@ -2038,23 +2539,43 @@ counter(Name) ->
 
 %% @since Version 138
 
-counters(Names) -> [ counter(X) || X <- Names ].
+counters(Names) -> 
+
+    [ counter(X) || X <- Names ].
 
 
 
 
 
 %% @equiv adjust_counter(Name,1)
-inc_counter(Name)    -> adjust_counter(Name, 1).
+
+inc_counter(Name) ->
+
+    adjust_counter(Name, 1).
+
+
 
 %% @equiv adjust_counter(Name,By)
-inc_counter(Name,By) -> adjust_counter(Name, By).
+
+inc_counter(Name,By) ->
+
+    adjust_counter(Name, By).
+
+
 
 %% @equiv adjust_counter(Name,-1)
-dec_counter(Name)    -> adjust_counter(Name, -1).
+
+dec_counter(Name) ->
+
+    adjust_counter(Name, -1).
+
+
 
 %% @equiv adjust_counter(Name,-1*By)
-dec_counter(Name,By) -> adjust_counter(Name, -1*By).
+
+dec_counter(Name,By) ->
+
+    adjust_counter(Name, -1*By).
 
 
 
@@ -2092,7 +2613,9 @@ adjust_counter(Name, By) when is_number(By) ->
 
 %% @since Version 54
 
-reset_counter(Name) -> set_counter(Name, 0).
+reset_counter(Name) -> 
+
+    set_counter(Name, 0).
 
 
 
@@ -2135,25 +2658,65 @@ set_counter(Name, To) when is_number(To) ->
 %% @private
 
 counter_process() ->
+   
     receive
-        shutdown -> ok;
+   
+
+        shutdown ->
+            ok;
+
+
         {Caller, get_counter, Name} ->
+
             case get(Name) of
-                undefined -> Caller ! {counter_at, Name, 0}, put(Name,0), counter_process();
-                Defined   -> Caller ! {counter_at, Name, Defined},        counter_process()
+
+                undefined ->
+                    Caller ! {counter_at, Name, 0}, 
+                    put(Name,0),
+                    counter_process();
+
+                Defined ->
+                    Caller ! {counter_at, Name, Defined},
+                    counter_process()
+
             end;
+
+
         {Caller, adjust_counter, Name, By} ->
+
             case get(Name) of
-                undefined ->                 Caller ! {counter_at, Name, By},  put(Name,By),  counter_process();
-                Defined   -> New=Defined+By, Caller ! {counter_at, Name, New}, put(Name,New), counter_process()
+
+                undefined ->
+                    Caller ! {counter_at, Name, By},
+                    put(Name,By),
+                    counter_process();
+
+                Defined ->
+                    New = Defined+By,
+                    Caller ! {counter_at, Name, New},
+                    put(Name,New),
+                    counter_process()
+
             end;
+
+
         {Caller, set_counter, Name, To} ->
+
             Caller ! {counter_at, Name, To},
+
             case To of
-                0 -> erase(Name);
-                T -> put(Name,T)
+
+                0 ->
+                    erase(Name);
+
+                T ->
+                    put(Name,T)
+
             end,
+
             counter_process()
+
+
     end.
 
 
@@ -2161,25 +2724,51 @@ counter_process() ->
 
 
 %% @equiv wait_until_terminate(quiet)
-wait_until_terminate() -> wait_until_terminate(quiet).
+
+wait_until_terminate() ->
+
+    wait_until_terminate(quiet).
+
+
 
 %% @spec wait_until_terminate(IsQuiet::atom()) -> ok
 
 wait_until_terminate(quiet) ->
+
     receive
-        terminate -> ok;
-        _         -> wait_until_terminate(quiet)
+
+        terminate ->
+            ok;
+
+        _ ->
+            wait_until_terminate(quiet)
+
     end;
 
+
+
 wait_until_terminate(loud) ->
+
     receive
-        terminate -> ok;
-        X         -> io:format("Received ~p~n", [X]), wait_until_terminate(loud)
+
+        terminate ->
+            ok;
+
+        X ->
+            io:format("Received ~p~n", [X]),
+            wait_until_terminate(loud)
+
     end.
 
 
 
 
+
+%% @spec module_has_function(Module::atom(), Function::atom()) -> boolean()
+
+%% @doc TODO
+
+%% @since Version 84
 
 module_has_function(Module, Function) ->
 
@@ -2210,8 +2799,14 @@ module_has_function(Module, Function) ->
 %% @since Version 8
 
 shuffle(List) ->
-   WeightedAndShuffled        = lists:map( fun(Item) -> { random:uniform(), Item } end, List ),
+
+   WeightedAndShuffled = lists:map(
+       fun(Item) -> { random:uniform(), Item } end, 
+       List 
+   ),
+
    { _, SortedAndDeweighted } = lists:unzip(lists:keysort(1, WeightedAndShuffled)),
+
    SortedAndDeweighted.
 
 
@@ -2224,18 +2819,36 @@ shuffle(List) ->
 
 call_after_worker(MS, Func, Args, Handler) ->
 
-    receive after MS ->
+    receive 
+        % Nothing
+
+    after MS ->
+
 
         case Func of
-            { Module, FuncName } -> Result = apply(Module, FuncName, Args);
-            FuncName             -> Result = apply(FuncName, Args)
+
+            { Module, FuncName } ->
+                Result = apply(Module, FuncName, Args);
+
+            FuncName ->
+                Result = apply(FuncName, Args)
+
         end,
 
+
         case Handler of
-            { handler, PID, Handle } -> PID ! { call_after_result, Result, Handle };
-            { handler, PID }         -> PID ! { call_after_result, Result };
-            no_handler_pid           -> ok
+
+            { handler, PID, Handle } ->
+                PID ! { call_after_result, Result, Handle };
+
+            { handler, PID } ->
+                PID ! { call_after_result, Result };
+
+            no_handler_pid ->
+                ok
+
         end
+
 
     end.
 
@@ -2244,10 +2857,20 @@ call_after_worker(MS, Func, Args, Handler) ->
 
 
 %% @equiv call_after(Length, Func, [],   {handler,self()})
-call_after(Length, Func)                -> call_after(Length, Func, [],   {handler,self()}).
+
+call_after(Length, Func) ->
+
+    call_after(Length, Func, [], {handler, self()} ).
+
+
+
 
 %% @equiv call_after(Length, Func, Args, {handler,self()})
-call_after(Length, Func, Args)          -> call_after(Length, Func, Args, {handler,self()}).
+call_after(Length, Func, Args) -> 
+
+    call_after(Length, Func, Args, {handler,self()}).
+
+
 
 %% @type handler() = { handler, PID } | { handler, PID, IdHandle } | no_handler_pid.  Use a handler() to provide handling behavior to functions like {@link call_after/1}.  The PID given is the pid to which result messages will be sent.  If an IdHandle is given, that IdHandle is passed back with the result, to pass extra information back to identify which result it is.  The atom no_handler_pid specifies that you would prefer the result to be discarded.
 
@@ -2286,7 +2909,11 @@ call_after(Length, Func, Args, Handler) ->
 
 %% @equiv permute(List, length(List))
 
-permute(List) -> permute(List, length(List)).
+permute(List) -> 
+
+    permute(List, length(List)).
+    
+
 
 %% @type positive_integer() = integer().  Positive integer must be greater than zero.
 
@@ -2300,8 +2927,20 @@ permute(List) -> permute(List, length(List)).
 
 %% @since Version 17
 
-permute(List, 1)     when is_list(List)                    -> [ [T]    || T <- List ];
-permute(List, Depth) when is_list(List), is_integer(Depth) -> [ [T]++R || T <- List, R <- permute(List--[T], Depth-1) ].
+permute(List, 1) when is_list(List) -> 
+
+    [ [T] || 
+        T <- List 
+    ];
+
+
+
+permute(List, Depth) when is_list(List), is_integer(Depth) ->
+
+    [ [T]++R ||
+        T <- List,
+        R <- permute(List--[T], Depth-1)
+    ].
 
 
 
@@ -2317,7 +2956,9 @@ permute(List, Depth) when is_list(List), is_integer(Depth) -> [ [T]++R || T <- L
 
 %% @since Version 9
 
-has_bit(Num, Bit) when is_integer(Num), is_integer(Bit), Num > 0, Bit >= 0, Bit < 64 -> (Num band (1 bsl Bit)) > 0.
+has_bit(Num, Bit) when is_integer(Num), is_integer(Bit), Num > 0, Bit >= 0, Bit < 64 -> 
+
+    (Num band (1 bsl Bit)) > 0.
 
 
 
@@ -2332,7 +2973,7 @@ has_bit(Num, Bit) when is_integer(Num), is_integer(Bit), Num > 0, Bit >= 0, Bit 
 
 count_bits(Num) when is_integer(Num), Num > 0 ->
 
-    length([S || S <- lists:seq(0,63), has_bit(Num, S) == true]).
+    length( [S || S <- lists:seq(0,63), has_bit(Num, S) == true] ).
 
 
 
@@ -2364,6 +3005,8 @@ diff_timestamp({AM,AS,AU}, {BM, BS, BU}) ->
 
 
 
+%% @since Version 38
+
 benchmark(Fun, Args) ->
 
     Start  = now(),
@@ -2388,10 +3031,23 @@ benchmark(Module, Func, Args) ->
 
 
 
-expand_label({Label,List}) when is_list(List) -> [ {Label,L} || L<-List ];
-expand_label({Label,Item})                    -> {Label, Item}.
+%% @since Version 51
 
-expand_labels(List)        when is_list(List) -> lists:flatten([ expand_label(X) || X <- List ]).
+expand_label({Label,List}) when is_list(List) ->
+
+     [ {Label,L} || L<-List ];
+     
+     
+
+expand_label({Label,Item}) -> 
+
+    {Label, Item}.
+    
+
+
+expand_labels(List) when is_list(List) -> 
+
+    lists:flatten( [ expand_label(X) || X <- List ] ).
 
 
 
@@ -2404,7 +3060,7 @@ expand_labels(List)        when is_list(List) -> lists:flatten([ expand_label(X)
 
 erlang_b_distribution(N,A) ->
 
-   Num = math:pow(A,N) / scutil:factorial(N),
+   Num   = math:pow(A,N) / scutil:factorial(N),
    Denom = lists:sum([ math:pow(A,I) / scutil:factorial(I) || I <- lists:seq(0,N) ]),
 
    Num / Denom.
@@ -2418,7 +3074,7 @@ erlang_b_distribution(N,A) ->
 
 erlang_c_distribution(N,A) ->
 
-   Num = (math:pow(A,N) / scutil:factorial(N)) * (N/(N-A)),
+   Num   = (math:pow(A,N) / scutil:factorial(N)) * (N/(N-A)),
    Denom = lists:sum([ math:pow(A,I) / scutil:factorial(I) || I <- lists:seq(0,N-1) ]) + ((math:pow(A,N)/scutil:factorial(N))*(N/(N-A))),
 
    {wait_probability, Num / Denom}.
@@ -2428,7 +3084,19 @@ erlang_c_distribution(N,A) ->
 
 
 % thanks for a much better implementation, etnt
-implode(Separator, Data) when is_list(Data) andalso is_list(Separator) -> lists:foldr(fun(Item,[]) -> Item; (Item,Acc) -> Item ++ Separator ++ Acc end, "", Data).
+
+implode(Separator, Data) when is_list(Data) andalso is_list(Separator) ->
+
+    lists:foldr(
+
+        fun(Item, [])  -> Item;
+           (Item, Acc) -> Item ++ Separator ++ Acc 
+        end,
+
+        "",
+        Data
+
+    ).
 
 
 
@@ -2447,8 +3115,13 @@ implode(Separator, Data) when is_list(Data) andalso is_list(Separator) -> lists:
 mod(Base, Range) when is_integer(Base), is_integer(Range) ->
 
     case Base rem Range of
-        X when X < 0 -> X + Range;
-        Z            -> Z
+
+        X when X < 0 -> 
+            X + Range;
+
+        Z ->
+            Z
+
     end.
 
 
@@ -2466,6 +3139,7 @@ scan_svn_revision(Module) ->
 
     "$Revision: " ++ X = get_module_attribute(Module, svn_revision),
     [ Head | _Rem ]    = string:tokens(X, " "),
+
     list_to_integer(Head).
 
 
@@ -2494,7 +3168,11 @@ median_absolute_deviation(List) when is_list(List) ->
 
 %% @since Version 83
 
-make_notebook(Notebook) -> ok.
+%% @todo complete
+
+make_notebook(Notebook) ->
+
+    { error, not_yet_implemented }.
 
 
 
@@ -2506,7 +3184,11 @@ make_notebook(Notebook) -> ok.
 
 %% @since Version 83
 
-remove_notebook(Notebook) -> ok.
+%% @todo complete
+
+remove_notebook(Notebook) -> 
+
+    { error, not_yet_implemented }.
 
 
 
@@ -2518,14 +3200,21 @@ remove_notebook(Notebook) -> ok.
 
 %% @since Version 83
 
-has_notebook(Notebook) -> ok.
+%% @todo complete
 
+has_notebook(Notebook) ->
+
+    { error, not_yet_implemented }.
 
 
 
 
 %% @equiv annote(Notebook, [{NoteName, NewValue}])
-annote(Notebook, NoteName, NewValue) -> annote(Notebook, [{NoteName, NewValue}]).
+
+annote(Notebook, NoteName, NewValue) -> 
+
+    annote(Notebook, [{NoteName, NewValue}] ).
+
 
 
 %% @spec annote(Notebook::filename(), List::kv_list()) -> ok | { error, E }
@@ -2533,12 +3222,17 @@ annote(Notebook, NoteName, NewValue) -> annote(Notebook, [{NoteName, NewValue}])
 %% @doc {@section Persistence} Stores a key/value pair to a notebook file, overwriting a match existing key if present; if the notebook does not exist, it is automatically created.    DETS opening and closing are automatically managed.
 
 %% @since Version 83
-annote(Notebook, NameValuePair) when is_list(Notebook), is_tuple(NameValuePair) -> annote(Notebook, [NameValuePair]);
+
+annote(Notebook, NameValuePair) when is_list(Notebook), is_tuple(NameValuePair) -> 
+
+    annote(Notebook, [NameValuePair]);
+
+
 
 annote(Notebook, NameValuePairs) when is_list(Notebook), is_list(NameValuePairs) ->
 
     get_notebook_table(Notebook),
-    [dets:insert(Notebook, {Term, Value}) || {Term, Value} <- NameValuePairs],
+    [ dets:insert(Notebook, {Term, Value}) || {Term, Value} <- NameValuePairs ],
     close_notebook_table(Notebook).
 
 
@@ -2555,8 +3249,13 @@ read_note(Notebook, NoteName) when is_list(Notebook) ->
     get_notebook_table(Notebook),
 
     CurrentConfig = case dets:match(Notebook, {NoteName, '$1'}) of
-        []    -> undefined;
-        [[X]] -> { value, X }
+
+        [] ->
+            undefined;
+
+        [[X]] ->
+            { value, X }
+
     end,
 
     close_notebook_table(Notebook),
@@ -2573,7 +3272,11 @@ read_note(Notebook, NoteName) when is_list(Notebook) ->
 
 %% @since Version 83
 
-has_note(Notebook, NoteName) -> ok.
+%% @todo complete
+
+has_note(Notebook, NoteName) ->
+
+    { error, not_yet_implemented }.
 
 
 
@@ -2585,11 +3288,16 @@ has_note(Notebook, NoteName) -> ok.
 
 %% @since Version 83
 
-remove_note(Notebook, NoteName)  when is_atom(Notebook), is_atom(NoteName)  -> remove_note(Notebook, [NoteName]);
+remove_note(Notebook, NoteName) when is_atom(Notebook), is_atom(NoteName) ->
+
+    remove_note(Notebook, [NoteName]);
+
+
+
 remove_note(Notebook, NoteNames) when is_atom(Notebook), is_list(NoteNames) ->
 
     get_notebook_table(Notebook),
-    [dets:delete(Notebook, NoteName) || NoteName <- NoteNames],
+    [ dets:delete(Notebook, NoteName) || NoteName <- NoteNames ],
     close_notebook_table(Notebook).
 
 
@@ -2597,16 +3305,20 @@ remove_note(Notebook, NoteNames) when is_atom(Notebook), is_list(NoteNames) ->
 
 
 %% @private
-get_notebook_table(TableName) when is_list(TableName) -> dets:open_file(TableName, [{type, set}]).
+
+get_notebook_table(TableName) when is_list(TableName) -> 
+
+    dets:open_file(TableName, [{type, set}] ).
+
+
+
+
 
 %% @private
-close_notebook_table(TableName) when is_list(TableName) -> dets:close(TableName).
 
+close_notebook_table(TableName) when is_list(TableName) ->
 
-
-
-
-
+    dets:close(TableName).
 
 
 
@@ -2712,20 +3424,31 @@ close_notebook_table(TableName) when is_list(TableName) -> dets:close(TableName)
 
 
 %% @equiv map_reduce(Function, Workload, 1, nodes())
-map_reduce(Function, Workload) -> map_reduce(Function, Workload, 1, nodes()).
+
+map_reduce(Function, Workload) ->
+
+    map_reduce(Function, Workload, 1, nodes() ).
+
+
 
 %% @equiv map_reduce(Function, Workload, JobsPerNode, nodes())
-map_reduce(Function, Workload, JobsPerNode) -> map_reduce(Function, Workload, JobsPerNode, nodes()).
+
+map_reduce(Function, Workload, JobsPerNode) ->
+
+    map_reduce(Function, Workload, JobsPerNode, nodes() ).
+
+
 
 %% @spec map_reduce(Function::function(), Workload::list(), JobsPerNode::positive_integer(), Nodes::list()) -> list()
 
 %% @doc {@section Parallelism} Takes a workload, a function, a count of jobs per node and a node list, and distributes work on demand to available nodes until fulfilled.  Results are provided in the order the workload was provided, regardless of in what order they are completed or received. ```
 %% '''<span style="color:red">TODO: add crash handling behavior, progress querying behavior</span>
+
 map_reduce(Function, Workload, JobsPerNode, Nodes) ->
 
     Computers      = lists:flatten(lists:duplicate(JobsPerNode, Nodes)),
-    WorkOut        = [],
     TaggedWorkload = lists:zip(lists:seq(1,length(Workload)), Workload),
+    WorkOut        = [],
     WorkDone       = [],
 
     map_reduce_worker(Function, TaggedWorkload, Computers, WorkOut, WorkDone).
@@ -2735,6 +3458,7 @@ map_reduce(Function, Workload, JobsPerNode, Nodes) ->
 
 
 %% @private
+
 map_reduce_worker(_Function, [],             _Computers, [],      WorkDone) -> {_,Out} = lists:unzip(lists:keysort(1,WorkDone)), Out;                               % no work left, no work out?  done.
 map_reduce_worker( Function, [],              Computers, WorkOut, WorkDone) -> map_reduce_wait_for_work(Function, [],             Computers, WorkOut, WorkDone);    % no work left, work out?  wait.
 map_reduce_worker( Function, TaggedWorkload,  [],        WorkOut, WorkDone) -> map_reduce_wait_for_work(Function, TaggedWorkload, [],        WorkOut, WorkDone);    % work left, no computers left?  wait.
@@ -2748,7 +3472,10 @@ map_reduce_worker( Function, TaggedWorkload,  Computers, WorkOut, WorkDone) -> m
 map_reduce_wait_for_work(Function, TaggedWorkload, Computers, WorkOut, WorkDone) ->
 
     receive
-        { work_done, Computer, Tag, Result } -> map_reduce_worker(Function, TaggedWorkload, Computers++[Computer], WorkOut--[Tag], WorkDone++[{Tag,Result}])
+
+        { work_done, Computer, Tag, Result } ->
+            map_reduce_worker(Function, TaggedWorkload, Computers ++ [Computer], WorkOut -- [Tag], WorkDone ++ [{Tag,Result}] )
+
     end.
 
 
@@ -2758,9 +3485,19 @@ map_reduce_wait_for_work(Function, TaggedWorkload, Computers, WorkOut, WorkDone)
 %% @private
 map_reduce_do_work(Function, [{Tag,Workload}|RemWorkload], [Computer|RemComputers], WorkOut, WorkDone) ->
 
-    spawn(Computer, fun(Who,What,Which,With) -> Who ! {work_done, node(), Which, apply(What,With) } end, [self(),Function,Tag,Workload]),
-    map_reduce_worker(Function, RemWorkload, RemComputers, WorkOut++[Tag], WorkDone).
+    spawn(
 
+        Computer,
+
+        fun(Who,What,Which,With) ->
+            Who ! {work_done, node(), Which, apply(What,With) }
+        end,
+
+        [ self(), Function, Tag, Workload ]
+
+    ),
+
+    map_reduce_worker(Function, RemWorkload, RemComputers, WorkOut++[Tag], WorkDone).
 
 
 
@@ -2860,13 +3597,24 @@ map_reduce_do_work(Function, [{Tag,Workload}|RemWorkload], [Computer|RemComputer
 
 %% @since Version 89
 
-combinations(Items, 1) when is_list(Items) -> Items;
-combinations([],   _N)                     -> [];
+combinations(Items, 1) when is_list(Items) -> 
+
+    Items;
+
+
+
+combinations([], _N) -> 
+
+   [];
+
+
+
 combinations(Items, N) when is_list(Items), is_integer(N), N > 0 ->
 
     [ lists:flatten(lists:append( [lists:nth(I, Items)], [J] )) ||
       I <- lists:seq(1, length(Items)),
-      J <- combinations( lists:nthtail(I, Items), (N-1) )  ].
+      J <- combinations( lists:nthtail(I, Items), (N-1) )  
+    ].
 
 
 
@@ -2888,20 +3636,34 @@ combinations(Items, N) when is_list(Items), is_integer(N), N > 0 ->
 
 standard_listener(Handler, Port, SocketOptions) ->
 
+
     ActiveStatus = case proplists:get_value(active, SocketOptions) of
-        undefined -> true;
-        Other     -> Other
+
+        undefined ->
+            true;
+
+        Other ->
+            Other
+
     end,
 
+
     FixedOptions = proplists:delete(active, SocketOptions) ++ [{active, false}],
+
 
     case gen_tcp:listen(Port, FixedOptions) of
 
         { ok, ListeningSocket } ->
 
             ListeningPort = case Port of
-                0 -> {ok, LP} = inet:port(ListeningSocket), LP;
-                _ -> Port
+
+                0 -> 
+                    {ok, LP} = inet:port(ListeningSocket),
+                    LP;
+
+                _ ->
+                    Port
+
             end,
 
             { ok, spawn(?MODULE, standard_listener_controller, [Handler, Port, FixedOptions, ListeningSocket, ActiveStatus, 0]), ListeningPort };
@@ -2921,6 +3683,9 @@ standard_listener_controller(Handler, Port, FixedOptions, ListeningSocket, Activ
 
     ListenLoop = spawn_link(?MODULE, standard_listener_accept_loop, [Handler, Port, FixedOptions, ListeningSocket, ActiveStatus, self()]),
     standard_listener_controller(Handler, Port, FixedOptions, ListeningSocket, ActiveStatus, AcceptCount, ListenLoop).
+
+
+
 
 %% @private
 
@@ -2980,8 +3745,13 @@ standard_listener_shunt(Handler, Port, FixedOptions, ConnectedSocket, ActiveStat
     CollectedOptions = proplists:delete(active, FixedOptions) ++ [{active, ActiveStatus}, {from_port, Port}],
 
     case ActiveStatus of
-        false    -> ok;
-        NotFalse -> inet:setopts(ConnectedSocket, [{active, NotFalse}])
+
+        false ->
+            ok;
+
+        NotFalse ->
+            inet:setopts(ConnectedSocket, [{active, NotFalse}])
+
     end,
 
     Handler(ConnectedSocket, CollectedOptions).
@@ -2991,80 +3761,171 @@ standard_listener_shunt(Handler, Port, FixedOptions, ConnectedSocket, ActiveStat
 
 
 %% @equiv int_to_u32_iolist(X, little)
-int_to_u32_iolist(X)                                 -> int_to_u32_iolist(X, little).
 
-int_to_u32_iolist(X, little) when X>=0, X<4294967296 -> binary_to_list(<<X:32/little>>);
-int_to_u32_iolist(X, big)    when X>=0, X<4294967296 -> binary_to_list(<<X:32/big>>).
+int_to_u32_iolist(X) ->
+
+    int_to_u32_iolist(X, little).
+
+
+
+%% @todo need spec, doc, since
+
+int_to_u32_iolist(X, little) when X>=0, X<4294967296 ->
+
+    binary_to_list( <<X:32/little>> );
+
+int_to_u32_iolist(X, big)    when X>=0, X<4294967296 ->
+    binary_to_list( <<X:32/big>> ).
 
 
 
 
 
 %% @equiv u32_iolist_to_int(A,B,C,D, little)
-u32_iolist_to_int( [A,B,C,D] )          -> u32_iolist_to_int(A,B,C,D, little).
+
+u32_iolist_to_int( [A,B,C,D] ) ->
+   u32_iolist_to_int(A,B,C,D, little).
+
+
 
 %% @equiv u32_iolist_to_int(A,B,C,D, Endianness)
-u32_iolist_to_int( [A,B,C,D], little )  -> u32_iolist_to_int(A,B,C,D, little);
-u32_iolist_to_int( [A,B,C,D], big )     -> u32_iolist_to_int(A,B,C,D, big).
+
+u32_iolist_to_int( [A,B,C,D], little ) ->
+    u32_iolist_to_int(A,B,C,D, little);
+
+u32_iolist_to_int( [A,B,C,D], big ) ->
+    u32_iolist_to_int(A,B,C,D, big).
+
+
+
+
 
 %% @equiv u32_iolist_to_int(A,B,C,D, little)
-u32_iolist_to_int(  A,B,C,D  )          -> u32_iolist_to_int(A,B,C,D, little).
 
-u32_iolist_to_int(  A,B,C,D , little  ) -> <<X:32/little>> = list_to_binary([A,B,C,D]), X;
-u32_iolist_to_int(  A,B,C,D , big  )    -> <<X:32/big>>    = list_to_binary([A,B,C,D]), X.
+u32_iolist_to_int( A,B,C,D ) ->
+
+    u32_iolist_to_int( A,B,C,D, little).
+
+
+%% @todo need spec, doc, since
+
+u32_iolist_to_int( A,B,C,D , little  ) ->
+
+    <<X:32/little>> = list_to_binary([A,B,C,D]),
+    X;
+
+u32_iolist_to_int( A,B,C,D , big  )    ->
+
+    <<X:32/big>> = list_to_binary([A,B,C,D]),
+    X.
 
 
 
 
 
 %% @equiv int_to_u64_iolist(X, little)
-int_to_u64_iolist(X)         -> int_to_u64_iolist(X, little).
 
-int_to_u64_iolist(X, little) -> binary_to_list(<<X:64/little>>);
-int_to_u64_iolist(X, big)    -> binary_to_list(<<X:64/big>>).
+int_to_u64_iolist(X) ->
+    int_to_u64_iolist(X, little).
+
+
+%% @todo need spec, doc, since
+
+int_to_u64_iolist(X, little) ->
+    binary_to_list( <<X:64/little>> );
+
+int_to_u64_iolist(X, big) ->
+    binary_to_list( <<X:64/big>> ).
 
 
 
 
 
 %% @equiv u64_iolist_to_int(A,B,C,D,E,F,G,H, little)
-u64_iolist_to_int( [A,B,C,D,E,F,G,H] )         -> u64_iolist_to_int(A,B,C,D,E,F,G,H, little).
+
+u64_iolist_to_int( [A,B,C,D,E,F,G,H] ) ->
+    u64_iolist_to_int( A,B,C,D,E,F,G,H, little).
+
 
 %% @equiv u64_iolist_to_int(A,B,C,D,E,F,G,H, Endianness)
-u64_iolist_to_int( [A,B,C,D,E,F,G,H], little ) -> u64_iolist_to_int(A,B,C,D,E,F,G,H, little);
-u64_iolist_to_int( [A,B,C,D,E,F,G,H], big )    -> u64_iolist_to_int(A,B,C,D,E,F,G,H, big).
+
+u64_iolist_to_int( [A,B,C,D,E,F,G,H], little ) ->
+    u64_iolist_to_int( A,B,C,D,E,F,G,H, little);
+
+u64_iolist_to_int( [A,B,C,D,E,F,G,H], big ) ->
+    u64_iolist_to_int( A,B,C,D,E,F,G,H, big).
+
+
+
+
 
 %% @equiv u64_iolist_to_int(A,B,C,D,E,F,G,H, little)
-u64_iolist_to_int(  A,B,C,D,E,F,G,H  )         -> u64_iolist_to_int(A,B,C,D,E,F,G,H, little).
 
-u64_iolist_to_int(  A,B,C,D,E,F,G,H , little ) -> <<X:64/little>> = list_to_binary([A,B,C,D,E,F,G,H]), X;
-u64_iolist_to_int(  A,B,C,D,E,F,G,H , big )    -> <<X:64/big>>    = list_to_binary([A,B,C,D,E,F,G,H]), X.
-
+u64_iolist_to_int( A,B,C,D,E,F,G,H ) -> 
+    u64_iolist_to_int(A,B,C,D,E,F,G,H, little).
 
 
+%% @todo need spec, doc, sinces
+u64_iolist_to_int( A,B,C,D,E,F,G,H , little ) ->
+
+    <<X:64/little>> = list_to_binary([A,B,C,D,E,F,G,H]),
+    X;
+
+u64_iolist_to_int( A,B,C,D,E,F,G,H , big ) ->
+
+    <<X:64/big>> = list_to_binary([A,B,C,D,E,F,G,H]),
+    X.
 
 
-float_to_f32_iolist(X)         -> float_to_f32_iolist(X, little).
 
-float_to_f32_iolist(X, little) -> binary_to_list(<<X:32/float-little>>);
-float_to_f32_iolist(X, big)    -> binary_to_list(<<X:32/float-big>>).
+
+
+%% @todo need spec, doc, since
+
+float_to_f32_iolist(X) ->
+    float_to_f32_iolist(X, little).
+
+
+%% @todo need spec, doc, since
+float_to_f32_iolist(X, little) ->
+    binary_to_list(<<X:32/float-little>>);
+
+float_to_f32_iolist(X, big) ->
+    binary_to_list(<<X:32/float-big>>).
 
 
 
 
 
 %% @equiv f32_iolist_to_int(A,B,C,D, little)
-f32_iolist_to_int( [A,B,C,D] )         -> f32_iolist_to_int(A,B,C,D, little).
+f32_iolist_to_int( [A,B,C,D] ) -> 
+    f32_iolist_to_int(A,B,C,D, little).
+
 
 %% @equiv f32_iolist_to_int(A,B,C,D, Endianness)
-f32_iolist_to_int( [A,B,C,D], little ) -> f32_iolist_to_int(A,B,C,D, little);
-f32_iolist_to_int( [A,B,C,D], big    ) -> f32_iolist_to_int(A,B,C,D, big).
+f32_iolist_to_int( [A,B,C,D], little ) ->
+    f32_iolist_to_int(A,B,C,D, little);
+
+f32_iolist_to_int( [A,B,C,D], big ) ->
+    f32_iolist_to_int(A,B,C,D, big).
+
+
+
+
 
 %% @equiv f32_iolist_to_int(A,B,C,D, little)
-f32_iolist_to_int(  A,B,C,D  )         -> f32_iolist_to_int(A,B,C,D, little).
+f32_iolist_to_int( A,B,C,D  ) -> 
+    f32_iolist_to_int(A,B,C,D, little).
 
-f32_iolist_to_int(  A,B,C,D , little ) -> <<X:32/float-little>> = list_to_binary([A,B,C,D]), X;
-f32_iolist_to_int(  A,B,C,D , big    ) -> <<X:32/float-big>>    = list_to_binary([A,B,C,D]), X.
+
+%% @todo need spec, doc, since
+f32_iolist_to_int( A,B,C,D , little ) ->
+    <<X:32/float-little>> = list_to_binary([A,B,C,D]),
+    X;
+
+f32_iolist_to_int( A,B,C,D , big ) -> 
+    <<X:32/float-big>> = list_to_binary([A,B,C,D]), 
+    X.
 
 
 
@@ -3080,7 +3941,9 @@ f32_iolist_to_int(  A,B,C,D , big    ) -> <<X:32/float-big>>    = list_to_binary
 
 %% @since Version 108
 
-square(X) -> X*X.
+square(X) -> 
+    
+    X*X.
 
 
 
@@ -3096,7 +3959,9 @@ square(X) -> X*X.
 
 %% @since Version 165
 
-cube(X) -> X*X*X.
+cube(X) -> 
+
+    X*X*X.
 
 
 
@@ -3120,7 +3985,11 @@ cube(X) -> X*X*X.
 
 %% @since Version 118
 
-centroid(CoordList) when is_list(CoordList) -> [ arithmetic_mean(X) || X <- zip_n(CoordList, to_list) ].
+centroid(CoordList) when is_list(CoordList) -> 
+
+    [ arithmetic_mean(X) || 
+        X <- zip_n(CoordList, to_list)
+    ].
 
 
 
@@ -3171,8 +4040,18 @@ centroid(CoordList) when is_list(CoordList) -> [ arithmetic_mean(X) || X <- zip_
 
 %% @since Version 108
 
-euclidean_distance(C1, C2) when is_tuple(C1) -> euclidean_distance( tuple_to_list(C1), C2                );
-euclidean_distance(C1, C2) when is_tuple(C2) -> euclidean_distance( C1,                tuple_to_list(C2) );
+euclidean_distance(C1, C2) when is_tuple(C1) -> 
+
+    euclidean_distance( tuple_to_list(C1), C2 );
+
+
+
+euclidean_distance(C1, C2) when is_tuple(C2) ->
+
+    euclidean_distance( C1, tuple_to_list(C2) );
+
+
+
 euclidean_distance(C1, C2) ->
 
     % squaring makes taking the absolute value to get unsigned magnitude redundant; that's not an omission, it's an optimization
@@ -3184,7 +4063,12 @@ euclidean_distance(C1, C2) ->
 
 %% @spec zip_n(Ls::list()) -> list_of_tuples()
 %% @equiv zip_n(Ls, to_tuple)
-zip_n(Ls) -> zip_n(Ls, to_tuple).
+
+zip_n(Ls) ->
+
+    zip_n(Ls, to_tuple).
+
+
 
 %% @spec zip_n(Ls::list(), ResultType::atom()) -> list_of_tuples()
 
@@ -3202,16 +4086,59 @@ zip_n(Ls) -> zip_n(Ls, to_tuple).
 %% {@section Thanks} Thanks to Vladimir Sessikov for contributing this to and thus allowing conscription from <a href="http://www.erlang.org/ml-archive/erlang-questions/200207/msg00066.html">the mailing list</a>.
 
 %% @since Version 108
-zip_n(Ls, to_tuple) -> [list_to_tuple(L) || L <- zip_n_listn(Ls)];
-zip_n(Ls, to_list) -> zip_n_listn(Ls).
 
-zip_n_listn(Ls) -> [lists:reverse(L) || L <- zip_n_foldn(fun (A, Acc) -> [A|Acc] end, [], Ls)].
+zip_n(Ls, to_tuple) -> 
 
-zip_n_foldn(_,   _,    []) -> [];
-zip_n_foldn(Fun, Acc0, Ls) -> zip_n_foldn(Fun, Acc0, Ls, []).
+    [ list_to_tuple(L) || 
+        L <- zip_n_listn(Ls)
+    ];
 
-zip_n_foldn(_,   _,    [[]|_], Ret) -> lists:reverse(Ret);
-zip_n_foldn(Fun, Acc0, Ls,     Ret) -> zip_n_foldn(Fun, Acc0, [tl(L) || L <- Ls], [lists:foldl(Fun, Acc0, [hd(L) || L <- Ls])|Ret]).
+
+
+zip_n(Ls, to_list) ->
+
+    zip_n_listn(Ls).
+
+
+
+%% @private
+
+zip_n_listn(Ls) ->
+
+    [ lists:reverse(L) ||
+        L <- zip_n_foldn(fun (A, Acc) -> [A|Acc] end, [], Ls)
+    ].
+
+
+
+%% @private
+
+zip_n_foldn(_, _, []) -> 
+
+    [];
+    
+
+
+zip_n_foldn(Fun, Acc0, Ls) -> 
+
+    zip_n_foldn(Fun, Acc0, Ls, []).
+    
+
+
+zip_n_foldn(_, _, [ [] | _ ], Ret) -> 
+
+    lists:reverse(Ret);
+    
+    
+
+zip_n_foldn(Fun, Acc0, Ls, Ret) -> 
+
+    zip_n_foldn(
+        Fun, 
+        Acc0, 
+        [ tl(L) || L <- Ls ],
+        [ lists:foldl(Fun, Acc0, [hd(L) || L <- Ls] ) | Ret ]
+    ).
 
 
 
@@ -3235,20 +4162,36 @@ zip_n_foldn(Fun, Acc0, Ls,     Ret) -> zip_n_foldn(Fun, Acc0, [tl(L) || L <- Ls]
 
 %% @since Version 110
 
-bayes_likelihood_of(Event, Given, Data) -> bayes_likelihood_worker(Event, Given, 0, 0, Data).
+bayes_likelihood_of(Event, Given, Data) -> 
 
-bayes_likelihood_worker(_Event,_Given, EventAndGivenCount, GivenCount, [])         -> EventAndGivenCount / GivenCount;
+    bayes_likelihood_worker(Event, Given, 0, 0, Data).
+    
+
+
+bayes_likelihood_worker(_Event,_Given, EventAndGivenCount, GivenCount, []) ->
+
+    EventAndGivenCount / GivenCount;
+    
+    
+
 bayes_likelihood_worker( Event, Given, EventAndGivenCount, GivenCount, [Data|Rem]) ->
 
     case lists:member(Given, Data) of
 
         true  ->
+    
             case lists:member(Event, Data) of
-                true  -> bayes_likelihood_worker(Event, Given, EventAndGivenCount+1, GivenCount+1, Rem);
-                false -> bayes_likelihood_worker(Event, Given, EventAndGivenCount,   GivenCount+1, Rem)
+    
+                true -> 
+                    bayes_likelihood_worker(Event, Given, EventAndGivenCount+1, GivenCount+1, Rem);
+
+                false -> 
+                    bayes_likelihood_worker(Event, Given, EventAndGivenCount,   GivenCount+1, Rem)
+
             end;
 
         false ->
+
             bayes_likelihood_worker(Event, Given, EventAndGivenCount, GivenCount, Rem)
 
     end.
@@ -3272,7 +4215,28 @@ bayes_likelihood_worker( Event, Given, EventAndGivenCount, GivenCount, [Data|Rem
 
 %% @since Version 117
 
-count_of(Item, List) -> lists:foldl(fun(X, Counter) -> case X of Item -> Counter+1; _ -> Counter end end, 0, List).
+count_of(Item, List) -> 
+
+    lists:foldl(
+
+        fun(X, Counter) ->
+
+            case X of
+
+                Item ->
+                    Counter+1;
+
+                _ ->
+                    Counter
+
+            end
+
+        end,
+
+        0,
+        List
+
+    ).
 
 
 
@@ -3280,7 +4244,11 @@ count_of(Item, List) -> lists:foldl(fun(X, Counter) -> case X of Item -> Counter
 
 %% @equiv list_intersection(List1, List2, unsorted)
 
-list_intersection(List1, List2)           -> list_intersection(List1, List2, unsorted).
+list_intersection(List1, List2) -> 
+
+    list_intersection(List1, List2, unsorted).
+    
+
 
 %% @spec list_intersection(List1::list(), List2::list(), IsSorted::atom()) -> list()
 
@@ -3292,15 +4260,47 @@ list_intersection(List1, List2)           -> list_intersection(List1, List2, uns
 
 %% @since Version 120
 
-list_intersection(List1, List2, unsorted) -> list_intersection(lists:sort(List1), lists:sort(List2), sorted);
-list_intersection(List1, List2, sorted)   -> intersect_walk(List1, List2, []).
+list_intersection(List1, List2, unsorted) -> 
 
-intersect_walk([],             _L2,            Work) -> Work;
-intersect_walk(_L1,            [],             Work) -> Work;
+    list_intersection(lists:sort(List1), lists:sort(List2), sorted);
+    
+    
 
-intersect_walk([L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head == L2Head -> intersect_walk(L1Rem,          L2Rem,          [L1Head]++Work);
-intersect_walk([L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head < L2Head  -> intersect_walk(L1Rem,          [L2Head|L2Rem], Work);
-intersect_walk([L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head > L2Head  -> intersect_walk([L1Head|L1Rem], L2Rem,          Work).
+list_intersection(List1, List2, sorted) -> 
+
+    intersect_walk(List1, List2, []).
+    
+
+
+%% @private
+
+intersect_walk( [], _L2, Work ) -> 
+
+    Work;
+    
+    
+
+intersect_walk( _L1, [], Work) -> 
+
+    Work;
+    
+
+
+intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head == L2Head -> 
+
+    intersect_walk(L1Rem, L2Rem, [L1Head]++Work);
+
+
+
+intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head < L2Head ->
+
+    intersect_walk(L1Rem, [L2Head|L2Rem], Work);
+
+
+
+intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head > L2Head ->
+
+    intersect_walk( [L1Head|L1Rem], L2Rem, Work).
 
 
 
@@ -3319,13 +4319,28 @@ intersect_walk([L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head > L2Head  -> in
 
 %% @since Version 123
 
-tuple_member(E, T) -> tuple_member(E, T, 1, size(T)).
+tuple_member(E, T) -> 
 
-tuple_member(_E,_T, I, Sz) when I > Sz -> false;
-tuple_member( E, T, I, Sz) ->
+    tuple_member(E, T, 1, size(T)).
+
+
+
+tuple_member(_E,_T, I, Sz) 
+
+    when I > Sz -> false;
+    
+    
+
+tuple_member(E, T, I, Sz) ->
+
     case element(I, T) == E of
-        true  -> true;
-        false -> tuple_member(E, T, I+1, Sz)
+
+        true  ->
+            true;
+
+        false ->
+            tuple_member(E, T, I+1, Sz)
+
     end.
 
 
@@ -3338,7 +4353,9 @@ tuple_member( E, T, I, Sz) ->
 
 %% @since Version 123
 
-record_member(E, R) -> tuple_member(E, R, 2, size(R)).  % just skip the 1st elem
+record_member(E, R) -> 
+
+    tuple_member(E, R, 2, size(R)).  % just skip the 1st elem
 
 
 
@@ -3372,8 +4389,19 @@ record_member(E, R) -> tuple_member(E, R, 2, size(R)).  % just skip the 1st elem
 
 %% @since Version 126
 
-every_flag_representation([]             ) -> [[]];
-every_flag_representation([Flag|RemFlags]) -> [ MaybeFlag ++ Reps || MaybeFlag <- [[],[Flag]], Reps <- every_flag_representation(RemFlags) ].
+every_flag_representation([]) ->
+    
+    [[]];
+
+
+
+
+every_flag_representation([Flag|RemFlags]) ->
+    
+    [ MaybeFlag ++ Reps ||
+        MaybeFlag <- [[],[Flag]],
+        Reps      <- every_flag_representation(RemFlags)
+    ].
 
 
 
@@ -3381,7 +4409,11 @@ every_flag_representation([Flag|RemFlags]) -> [ MaybeFlag ++ Reps || MaybeFlag <
 
 %% @equiv every_member_representation(Memberships, no_absence)
 
-every_member_representation(Memberships) -> every_member_representation(Memberships, no_absence).
+every_member_representation(Memberships) -> 
+
+    every_member_representation(Memberships, no_absence).
+
+
 
 %% @spec every_member_representation(Memberships::list_of_lists(), AllowAbsence::atom()) -> list_of_lists()
 
@@ -3421,18 +4453,41 @@ every_member_representation(Memberships) -> every_member_representation(Membersh
 % %
 %% @since Version 126
 
-every_member_representation([],                          _            ) -> [[]];
-every_member_representation([Membership|RemMemberships], no_absence   ) -> [ [Member] ++ RemRep || Member <- Membership,       RemRep <- every_member_representation(RemMemberships, no_absence   ) ];
-every_member_representation([Membership|RemMemberships], allow_absence) ->
+every_member_representation([], _) ->
+
+    [[]];
+    
+
+
+every_member_representation( [Membership|RemMemberships], no_absence   ) -> 
+
+    [ [Member] ++ RemRep || 
+        Member <- Membership,       
+        RemRep <- every_member_representation(RemMemberships, no_absence) 
+    ];
+    
+    
+
+every_member_representation( [Membership|RemMemberships], allow_absence) ->
 
     Compact = fun(Member, RemRep) ->
+    
         case Member of
-            empty    -> RemRep;
-            {item,X} -> [X] ++ RemRep
+    
+            empty -> 
+                RemRep;
+
+            {item,X} -> 
+                [X] ++ RemRep
+
         end
+
     end,
 
-    [ Compact(Member, RemRep) || Member <- [empty] ++ [{item,X}||X<-Membership], RemRep <- every_member_representation(RemMemberships, allow_absence) ].
+    [ Compact(Member, RemRep) ||
+        Member <- [empty] ++ [{item,X}||X<-Membership],
+        RemRep <- every_member_representation(RemMemberships, allow_absence)
+    ].
 
 
 
@@ -3443,7 +4498,10 @@ every_member_representation([Membership|RemMemberships], allow_absence) ->
 isolate_signal(Waveform) ->
 
     Baseline = lists:min(Waveform),
-    [ Sample - Baseline || Sample <- Waveform ].
+
+    [ Sample - Baseline ||
+        Sample <- Waveform
+    ].
 
 
 
@@ -3451,13 +4509,33 @@ isolate_signal(Waveform) ->
 
 %% @since Version 129
 
-minmax([FirstItem|RestOfList]) -> minmax(RestOfList, FirstItem, FirstItem).
+minmax( [FirstItem|RestOfList]) -> 
+
+    minmax(RestOfList, FirstItem, FirstItem).
+    
+
 
 % can never be both smaller than min and larger than max, so this is safe
-minmax([],                    Min, Max)                     -> {Min,Max};
-minmax([ThisItem|RestOfList], Min, Max) when ThisItem < Min -> minmax(RestOfList, ThisItem, Max);
-minmax([ThisItem|RestOfList], Min, Max) when ThisItem > Max -> minmax(RestOfList, Min,      ThisItem);
-minmax([_ThsItem|RestOfList], Min, Max)                     -> minmax(RestOfList, Min,      Max).
+minmax( [], Min, Max) ->
+
+    {Min,Max};
+
+
+
+minmax( [ThisItem|RestOfList], Min, Max) when ThisItem < Min ->
+
+    minmax(RestOfList, ThisItem, Max);
+
+
+
+minmax( [ThisItem|RestOfList], Min, Max) when ThisItem > Max ->
+
+    minmax(RestOfList, Min, ThisItem);
+    
+
+minmax( [_ThsItem|RestOfList], Min, Max) -> 
+
+    minmax(RestOfList, Min,      Max).
 
 
 
@@ -3470,7 +4548,9 @@ unit_scale_signal(Waveform) ->
     { Baseline, MaxObserved } = minmax(Waveform),
     SignalMax                 = MaxObserved - Baseline,
 
-    [ (Sample - Baseline) / SignalMax || Sample <- Waveform ].
+    [ (Sample - Baseline) / SignalMax || 
+        Sample <- Waveform 
+    ].
 
 
 
@@ -3478,56 +4558,176 @@ unit_scale_signal(Waveform) ->
 
 
 %% @since Version 130
-module_atoms(Module) -> get_module_feature(Module, atoms).
+
+module_atoms(Module) -> 
+
+    get_module_feature(Module, atoms).
+
+
+
+
 
 %% @since Version 130
-abstract_code(Module)          -> abstract_code(Module, unstripped).
+
+abstract_code(Module) ->
+
+    abstract_code(Module, unstripped).
+
+
+
 abstract_code(Module, DoStrip) ->
 
     case get_module_feature(Module, abstract_code) of
 
         { raw_abstract_v1, ACode } ->
+
             case DoStrip of
-                stripped   -> ACode;
-                unstripped -> { raw_abstract_v1, ACode }
+                
+                stripped -> 
+                    ACode;
+
+                unstripped -> 
+                    { raw_abstract_v1, ACode }
+
             end;
 
         no_abstract_code ->
+
             { error, "ScUtil's abstract code functions require that a module be compiled with debug_info enabled, eg 'c(" ++ atom_to_list(Module) ++ ",[debug_info]).'" }
+
     end.
 
-%% @since version 138
-abstract_attributes(Module) -> [ {Id,Name,Value} || {attribute,Id,Name,Value} <- abstract_code(Module, stripped) ].
+
+
+
 
 %% @since version 138
-abstract_functions(Module) -> [ {Id,Name,Arity,Code}  || {function,Id,Name,Arity,Code} <- abstract_code(Module, stripped) ].
+
+abstract_attributes(Module) ->
+
+    [ {Id, Name, Value} ||
+        {attribute, Id, Name, Value} <- abstract_code(Module, stripped)
+    ].
+
+
+
+
 
 %% @since version 138
-abstract_function(Module, FName) -> [ {Id,Name,Arity,Code}  || {function,Id,Name,Arity,Code} <- abstract_code(Module, stripped), Name==FName ].
 
-%% @since Version 140
-list_entrypoints(Module) -> lists:flatten([ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- scutil:abstract_functions(Module) ]).
+abstract_functions(Module) ->
 
-%% @since Version 140
-list_entrypoints(Module, FName) -> lists:flatten([ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- scutil:abstract_functions(Module), L==FName ]).
+    [ {Id, Name, Arity, Code} ||
+        {function, Id, Name, Arity, Code} <- abstract_code(Module, stripped)
+    ].
 
-%% @since Version 140
-list_function_points(Module) -> lists:usort([ {L,A} || {_,L,A,_} <- scutil:abstract_functions(Module) ]).
 
-%% @since Version 140
-list_function_labels(Module) -> lists:usort([ L || {_,L,_,_} <- scutil:abstract_functions(Module) ]).
+
+
 
 %% @since version 138
-entrypoint_count(Module) -> length(list_entrypoints(Module)).
+
+abstract_function(Module, FName) ->
+
+    [ {Id, Name, Arity, Code} ||
+        {function, Id, Name, Arity, Code} <- abstract_code(Module, stripped),
+        Name == FName
+    ].
+
+
+
+
 
 %% @since Version 140
-function_label_count(Module) -> length(list_function_labels(Module)).
+
+list_entrypoints(Module) ->
+
+    lists:flatten(
+        [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- scutil:abstract_functions(Module) ]
+    ).
+
+
+
+
 
 %% @since Version 140
-function_point_count(Module) -> length(list_function_points(Module)).
+
+list_entrypoints(Module, FName) ->
+
+    lists:flatten(
+        [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- scutil:abstract_functions(Module), L==FName ]
+    ).
+
+
+
+
 
 %% @since Version 140
-function_stats(Module) -> [ {entrypoints, entrypoint_count(Module)}, {function_labels, function_label_count(Module)}, {function_points, function_point_count(Module)} ].
+
+list_function_points(Module) ->
+
+    lists:usort(
+        [ {L,A} ||
+            {_,L,A,_} <- scutil:abstract_functions(Module)
+        ]
+    ).
+
+
+
+
+
+%% @since Version 140
+
+list_function_labels(Module) ->
+
+    lists:usort(
+        [ L ||
+            {_,L,_,_} <- scutil:abstract_functions(Module)
+        ]
+    ).
+
+
+
+
+
+%% @since version 138
+
+entrypoint_count(Module) ->
+
+    length(list_entrypoints(Module)).
+
+
+
+
+
+%% @since Version 140
+
+function_label_count(Module) ->
+
+    length(list_function_labels(Module)).
+
+
+
+
+
+%% @since Version 140
+
+function_point_count(Module) ->
+
+    length(list_function_points(Module)).
+
+
+
+
+
+%% @since Version 140
+
+function_stats(Module) -> 
+
+    [ { entrypoints,     entrypoint_count(Module)     },
+      { function_labels, function_label_count(Module) },
+      { function_points, function_point_count(Module) }
+    ].
 
 
 
@@ -3630,7 +4830,9 @@ halstead_complexity(DistinctOperators, DistinctOperands, TotalOperators, TotalOp
 %% @since Version 146
 % modified from http://www.trapexit.org/String_Eval
 
-eval(S) -> eval(S,erl_eval:new_bindings()).
+eval(S) -> 
+
+    eval(S,erl_eval:new_bindings()).
 
 
 
@@ -3638,10 +4840,11 @@ eval(S) -> eval(S,erl_eval:new_bindings()).
 
 %% @since Version 146
 % from http://www.trapexit.org/String_Eval
+
 eval(S, Environ) ->
 
-    {ok,Scanned,_} = erl_scan:string(S),
-    {ok,Parsed} = erl_parse:parse_exprs(Scanned),
+    {ok, Scanned,_} = erl_scan:string(S),
+    {ok, Parsed}    = erl_parse:parse_exprs(Scanned),
     erl_eval:exprs(Parsed,Environ).
 
 
@@ -3649,7 +4852,8 @@ eval(S, Environ) ->
 
 
 %% @since Version 152
-gen_docs([From, To]) ->
+
+gen_docs( [From, To] ) ->
 
     edoc:application(scutil, From, [{dir,To},{new,true}] ).
 
@@ -3658,31 +4862,63 @@ gen_docs([From, To]) ->
 
 
 %% @since Version 168
-factorial(X) -> factorial(X, 1).
 
-factorial(0,_Counter) -> 0;
-factorial(1, Counter) -> Counter ;
+factorial(X) ->
 
-factorial(X, Counter) when is_integer(X), X > 1 -> factorial(X-1, Counter*X).
+    factorial(X, 1).
+
+
+
+%% @private
+
+factorial(0, _Counter) -> 
+
+    0;
+    
+    
+
+factorial(1, Counter) -> 
+
+    Counter;
+
+
+
+factorial(X, Counter) when is_integer(X), X > 1 ->
+
+    factorial(X-1, Counter*X).
 
 
 
 
 
 %% @since Version 168
+
 list_rotate(0, List) ->
+
     List;
 
+
+
 list_rotate(By, List) when By =< (-(length(List))) ->
+    
     list_rotate(By rem length(List), List);
+
+
 
 list_rotate(By, List) when By < 0 ->
+    
     list_rotate(length(List) + By, List);
 
+
+
 list_rotate(By, List) when By >= length(List) ->
+    
     list_rotate(By rem length(List), List);
 
+
+
 list_rotate(By, List) ->
+    
     { Front, Rear } = lists:split(By, List),
     Rear ++ Front.
 
@@ -3691,16 +4927,27 @@ list_rotate(By, List) ->
 
 
 %% @since Version 169
+
 index_of_first(Item, List) ->
+
     index_of_first(Item, List, 1).
 
+
+
 index_of_first(_Item, [], _Pos) ->
+
     undefined;
 
+
+
 index_of_first(Item, [Item|_ListRem], Pos) ->
+
     Pos;
 
+
+
 index_of_first(Item, [_OtherItem|ListRem], Pos) ->
+
     index_of_first(Item, ListRem, Pos+1).
 
 
@@ -3708,7 +4955,9 @@ index_of_first(Item, [_OtherItem|ListRem], Pos) ->
 
 
 %% @since Version 170
+
 rotate_to_first(Item, List) ->
+
     list_rotate(index_of_first(Item, List)-1, List).
 
 
@@ -3716,7 +4965,9 @@ rotate_to_first(Item, List) ->
 
 
 %% @since Version 170
+
 rotate_first_to_end(Item, List) ->
+
     list_rotate(index_of_first(Item, List), List).
 
 
@@ -3724,19 +4975,35 @@ rotate_first_to_end(Item, List) ->
 
 
 %% @since Version 171
-columns(RowCount, List) -> columns(List, lists:duplicate(RowCount, []), 0).
 
-columns([],             Output,          Unrotate) -> list_rotate(Unrotate, [ lists:reverse(Column) || Column <- Output]);
-columns([Item|ListRem], [Output|OutRem], Unrotate) -> columns(ListRem, OutRem++[[Item]++Output], Unrotate-1).
+columns(RowCount, List) -> 
+
+    columns(List, lists:duplicate(RowCount, []), 0).
+
+
+
+columns( [], Output, Unrotate) -> list_rotate(Unrotate, [ lists:reverse(Column) || Column <- Output]);
+
+
+
+columns( [Item|ListRem], [Output|OutRem], Unrotate) ->
+
+    columns(ListRem, OutRem++[[Item]++Output], Unrotate-1).
 
 
 
 
 
 %% @since Version 172
-floor(X) -> floor_t(trunc(X), trunc(X)-X).
+
+floor(X) ->
+
+     floor_t(trunc(X), trunc(X)-X).
+
+
 
 %% @private
+
 floor_t(T, Td) when Td < 0 -> T;
 floor_t(T, Td) when Td > 0 -> T-1;
 floor_t(T,_Td)             -> T.
@@ -3747,12 +5014,25 @@ floor_t(T,_Td)             -> T.
 
 %% @since Version 172
 %% @equiv ceiling(X)
-ceil(X) -> ceiling(X).
+
+ceil(X) -> 
+
+     ceiling(X).
+
+
+
+
 
 %% @since Version 172
-ceiling(X) -> ceiling_t(trunc(X), trunc(X)-X).
+
+ceiling(X) ->
+
+     ceiling_t(trunc(X), trunc(X)-X).
+
+
 
 %% @private
+
 ceiling_t(T, Td) when Td < 0 -> T+1;
 ceiling_t(T, Td) when Td > 0 -> T;
 ceiling_t(T,_Td)             -> T.
@@ -3762,6 +5042,7 @@ ceiling_t(T,_Td)             -> T.
 
 
 %% @since Version 173
+
 columnated_rows(ColumnCount, List) ->
 
     columns(ceiling(length(List) / ColumnCount), List).
@@ -3771,13 +5052,39 @@ columnated_rows(ColumnCount, List) ->
 
 
 %% @since Version 204
-first_or_nothing([H|T]) -> {H,T};
-first_or_nothing([])    -> {[],[]}.
 
-first_row(Columns) -> first_row(Columns, [], []).
+first_or_nothing( [H|T] ) ->
 
-first_row([],                OutCols, Work) -> { lists:reverse(Work), lists:reverse(OutCols) };
-first_row([ThisCol|RemCols], OutCols, Work) ->
+    {H,T};
+
+
+
+first_or_nothing( [] ) ->
+
+    { [], [] }.
+
+
+
+
+
+%% @todo needs spec, doc, since
+
+first_row(Columns) ->
+
+     first_row(Columns, [], []).
+
+
+
+%% @private
+
+first_row( [], OutCols, Work) ->
+
+    { lists:reverse(Work), lists:reverse(OutCols) };
+
+
+
+first_row( [ThisCol|RemCols], OutCols, Work) ->
+
     {Item,ColRem} = first_or_nothing(ThisCol),
     first_row(RemCols, [ColRem]++OutCols, [Item]++Work).
 
@@ -3787,31 +5094,39 @@ first_row([ThisCol|RemCols], OutCols, Work) ->
 
 %% @equiv columnate(List, 2, 3)
 %% @since Version 204
-columnate(List) -> columnate(List, []).
+
+columnate(List) ->
+
+    columnate(List, []).
+
+
 
 %% @since Version 204
+
 columnate(List, Options) ->
 
     Settings = lists:ukeymerge(1, Options, [{align, center}, {columns, 2}, {margin, 3}] ),
 
-    [ColumnCount, Margin, Align] = [proplists:get_value(X, Settings) || X <- [columns,margin,align] ],
+    [ColumnCount, Margin, Align] = [ proplists:get_value(X, Settings) || X <- [columns,margin,align] ],
 
     Columns = scutil:columns(ColumnCount, List),
 
-    MinWidths = [ lists:max([length(lists:flatten(io_lib:format("~w",[Item]))) || Item <- Col]) || Col <- Columns ],
+    MinWidths = [ lists:max( [length(lists:flatten(io_lib:format("~w",[Item]))) || Item <- Col]) || Col <- Columns ],
 
     DoAlign = fun(Item, Width) ->
+
         case Align of
-            left   -> string:left(  lists:flatten(io_lib:format("~w",[Item])), Width);
-            center -> string:centre(lists:flatten(io_lib:format("~w",[Item])), Width);
-            centre -> string:centre(lists:flatten(io_lib:format("~w",[Item])), Width);
-            right  -> string:right( lists:flatten(io_lib:format("~w",[Item])), Width)
+            left   -> string:left(   lists:flatten( io_lib:format("~w",[Item]) ), Width);
+            center -> string:centre( lists:flatten( io_lib:format("~w",[Item]) ), Width);
+            centre -> string:centre( lists:flatten( io_lib:format("~w",[Item]) ), Width);
+            right  -> string:right(  lists:flatten( io_lib:format("~w",[Item]) ), Width)
         end
+
     end,
 
     Aligned = [ [ DoAlign(Item, Width) || Item <- Col]  || {Width, Col} <- lists:zip(MinWidths, Columns) ],
 
-    Format = implode(lists:duplicate(Margin, $ ), ["~"++integer_to_list(Width)++"s"||Width<-MinWidths]),
+    Format = implode( lists:duplicate(Margin, $ ), [ "~" ++ integer_to_list(Width) ++ "s" || Width <- MinWidths ] ),
 
     columnate_each_row(Aligned, Format, []).
 
@@ -3831,9 +5146,10 @@ columnated_text(List, Options) ->
 
 %% @since Version 204
 
-columnate_each_row([ []|_],_Format, Output) ->
+columnate_each_row( [ [] | _ ], _Format, Output) ->
 
     lists:reverse(Output);
+
 
 
 columnate_each_row(Columns, Format, Output) ->
@@ -3848,8 +5164,13 @@ columnate_each_row(Columns, Format, Output) ->
 
 
 %% @since Version 175
+
 get_linked_processes() ->
-    [U] = [ V || {links,V} <- process_info(self()) ],
+
+    [U] = [ V || 
+        {links,V} <- process_info(self()) 
+    ],
+
     U.
 
 
@@ -3865,19 +5186,38 @@ get_linked_processes() ->
 
 
 %% @since Version 200
-key_duplicate(KeyList) -> lists:flatten([ lists:duplicate(Key, Value) || {Key,Value} <- KeyList ]).
+
+key_duplicate(KeyList) ->
+
+    lists:flatten( [ lists:duplicate(Key, Value) || {Key,Value} <- KeyList ] ).
 
 
 
 
 
 %% @since Version 201
+
 mersenne_prime(Which) -> mersenne_prime_worker(Which, 1).
 
+
+
 %% @private
-mersenne_prime_worker(0,      Current)                  -> Current - 1;
-mersenne_prime_worker(Remain, Current) when Remain > 30 -> mersenne_prime_worker(Remain-30, Current*1073741824);
-mersenne_prime_worker(Remain, Current)                  -> mersenne_prime_worker(Remain-1,  Current*2).
+
+mersenne_prime_worker(0, Current) -> 
+
+    Current - 1;
+    
+    
+
+mersenne_prime_worker(Remain, Current) when Remain > 30 -> 
+
+    mersenne_prime_worker(Remain-30, Current*1073741824);
+    
+    
+
+mersenne_prime_worker(Remain, Current) -> 
+
+    mersenne_prime_worker(Remain-1, Current*2).
 
 
 
@@ -3893,25 +5233,78 @@ mersenne_prime_worker(Remain, Current)                  -> mersenne_prime_worker
 % by fredrik svensson and adam lindberg, from http://www.merriampark.com/lderlang.htm
 
 %% @since Version 202
-levenshtein(Same,   Same  ) when is_list(Same)                           -> 0;
-levenshtein(String, []    ) when is_list(String)                         -> length(String);
-levenshtein([],     String) when is_list(String)                         -> length(String);
-levenshtein(Source, Target) when is_list(Source) andalso is_list(Target) -> levenshtein_rec(Source, Target, lists:seq(0, length(Target)), 1).
+
+levenshtein(Same, Same) when is_list(Same) ->
+
+    0;
+
+
+
+levenshtein(String, []) when is_list(String) -> 
+
+    length(String);
+
+
+
+levenshtein( [], String) when is_list(String) -> 
+
+    length(String);
+
+
+
+levenshtein(Source, Target) when is_list(Source), is_list(Target) -> 
+
+    levenshtein_rec(Source, Target, lists:seq(0, length(Target)), 1).
+
+
+
+
 
 % Recurses over every character in the source string and calculates a list of distances
 %% @private
-levenshtein_rec([SrcHead|SrcTail], Target, DistList, Step) -> levenshtein_rec(SrcTail, Target, levenshtein_distlist(Target, DistList, SrcHead, [Step], Step), Step + 1);
-levenshtein_rec([],                _,      DistList, _   ) -> lists:last(DistList).
+
+levenshtein_rec( [SrcHead|SrcTail], Target, DistList, Step) ->
+
+    levenshtein_rec(SrcTail, Target, levenshtein_distlist(Target, DistList, SrcHead, [Step], Step), Step + 1);
+
+
+
+levenshtein_rec( [], _, DistList, _) -> 
+
+    lists:last(DistList).
+
+
+
+
 
 % Generates a distance list with distance values for every character in the target string
 %% @private
+
 levenshtein_distlist([TargetHead|TargetTail], [DLH|DLT], SourceChar, NewDistList, LastDist) when length(DLT) > 0 ->
-    Min = lists:min([LastDist + 1, hd(DLT) + 1, DLH + lev_dif(TargetHead, SourceChar)]),
+    
+    Min = lists:min( [LastDist + 1, hd(DLT) + 1, DLH + lev_dif(TargetHead, SourceChar)] ),
     levenshtein_distlist(TargetTail, DLT, SourceChar, NewDistList ++ [Min], Min);
 
-levenshtein_distlist([], _, _, NewDistList, _) -> NewDistList.
+
+
+levenshtein_distlist([], _, _, NewDistList, _) -> 
+
+    NewDistList.
+    
+
 
 % Calculates the difference between two characters or other values
 %% @private
-lev_dif(C,   C  ) -> 0;
+
+lev_dif( C,   C ) -> 0;
 lev_dif(_C1, _C2) -> 1.
+
+
+
+
+
+%% @since Version 211
+
+make_node(Name, Host) ->
+
+    list_to_atom(Name ++ "@" ++ Host).
