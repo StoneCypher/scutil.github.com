@@ -451,7 +451,9 @@
 
     make_node/2, % needs tests
     
-    map_scanline/2, map_scanline/3 % needs tests
+    map_scanline/2, map_scanline/3, % needs tests
+    
+    list_to_term/1 % needs tests
 
 ] ).
 
@@ -5353,3 +5355,27 @@ map_scanline(F,L,A) ->
     ),
 
     {lists:reverse(R), lists:reverse(M)}.
+
+
+
+
+
+% Like binary_to_term, but not so much for binaries
+% thanks dizzyd (modified for error reporting)
+
+%% @since Version 215
+
+list_to_term(List) ->
+
+    case catch erl_scan:string(List) of
+
+        { ok, Tokens, _ } ->
+
+            case erl_parse:parse_term( Tokens ++ [{ dot, 1 }] ) of
+                { ok,Term } -> Term;
+                Error       -> { error, Error }
+            end;
+
+        Error -> { error, Error }
+
+    end.

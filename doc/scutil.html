@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>ScUtil is StoneCypher's Utility Library, a collection of hundreds of routines of a variety of topics which have aggregated from reuse in other projects.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 213 $</p>
+<p><b>Version:</b> $Revision: 214 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 <p><b>References</b><ul><li><span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Website is</span><a href="http://scutil.com/">http://scutil.com/</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Author's Website</span><a href="http://fullof.bs">Full of BS</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Direct link to zip archive</span><a href="http://crunchyd.com/release/scutil.zip">Current version</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">This library is released under the</span><a href="http://scutil.com/license.html">MIT License</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Public SVN at</span><a href="svn://crunchyd.com/scutil/">svn://crunchyd.com/scutil/</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Discussion forum at</span><a href="http://crunchyd.com/forum/scutil-discussion/">CrunchyD Forums</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Bugtracker at</span><a href="http://crunchyd.com/forum/project.php?projectid=7">CrunchyD Forums</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date: 2009-03-15 13:47:01 -0600 (Sun, 15 Mar 2009) $</tt></span></li><li><span style="margin-top:1em;padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Test sets require min. version 16</span><a href="http://testerl.com/">TestErl</a></span></li></ul></p>
@@ -521,6 +521,8 @@
 <tr><td valign="top"><a href="#map_reduce-3">map_reduce/3</a></td><td>Equivalent to <a href="#map_reduce-4"><tt>map_reduce(Function, Workload, JobsPerNode, nodes())</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#map_reduce-4">map_reduce/4</a></td><td><a href="#Parallelism">Parallelism</a> Takes a workload, a function, a count of jobs per node and a node list, and distributes work on demand to available nodes until fulfilled.</td></tr>
+<tr><td valign="top"><a href="#map_scanline-2">map_scanline/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#map_scanline-3">map_scanline/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#median-1">median/1</a></td><td><a href="#Statistics">Statistics</a> Takes the median (central) value of a list.</td></tr>
 <tr><td valign="top"><a href="#median_absolute_deviation-1">median_absolute_deviation/1</a></td><td><a href="#Statistics">Statistics</a> Calculate the median absolute deviation of a <code><a href="#type-numericlist">numericlist()</a></code>.</td></tr>
 <tr><td valign="top"><a href="#mersenne_prime-1">mersenne_prime/1</a></td><td></td></tr>
@@ -1243,8 +1245,8 @@
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/src/scutil.erl $"},
-   {svn_id,"$Id: scutil.erl 213 2009-03-20 04:13:09Z john $"},
-   {svn_revision,"$Revision: 213 $"},
+   {svn_id,"$Id: scutil.erl 214 2009-03-20 04:33:04Z john $"},
+   {svn_revision,"$Revision: 214 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1553,6 +1555,18 @@
 <div class="spec">
 <p><tt>map_reduce(Function::function(), Workload::list(), JobsPerNode::<a href="#type-positive_integer">positive_integer()</a>, Nodes::list()) -&gt; list()</tt></p>
 </div><p><a href="#Parallelism">Parallelism</a> Takes a workload, a function, a count of jobs per node and a node list, and distributes work on demand to available nodes until fulfilled.  Results are provided in the order the workload was provided, regardless of in what order they are completed or received. <pre></pre><span style="color:red">TODO: add crash handling behavior, progress querying behavior</span></p>
+
+<h3 class="function"><a name="map_scanline-2">map_scanline/2</a></h3>
+<div class="spec">
+<p><tt>map_scanline(F, L) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 214</p>
+
+<h3 class="function"><a name="map_scanline-3">map_scanline/3</a></h3>
+<div class="spec">
+<p><tt>map_scanline(F, L, A) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 214</p>
 
 <h3 class="function"><a name="median-1">median/1</a></h3>
 <div class="spec">
@@ -2337,6 +2351,6 @@
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 19 2009, 22:31:53.</i></p>
+<p><i>Generated by EDoc, Mar 19 2009, 22:33:51.</i></p>
 </body>
 </html>
