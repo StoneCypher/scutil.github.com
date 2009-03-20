@@ -5363,7 +5363,7 @@ map_scanline(F,L,A) ->
 % Like binary_to_term, but not so much for binaries
 % thanks dizzyd (modified for error reporting)
 
-%% @since Version 215
+%% @since Version 216
 
 list_to_term(List) ->
 
