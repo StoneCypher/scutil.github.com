@@ -460,7 +460,9 @@
     
     explode/2, explode/3, % needs tests
     
-    starts_with/2 % needs tests
+    starts_with/2, % needs tests
+    
+    extrema_of/1 % needs tests
 
 ] ).
 
@@ -5499,3 +5501,42 @@ starts_with(Main,   Prefix) ->
         PHead /= MHead -> false;
         true           -> starts_with(MRemain, PRemain)
     end.
+
+
+
+
+
+%% @since Version 221
+
+extrema_of(List) ->
+
+    [First | _] = List,
+
+    lists:foldl(
+
+        fun(Next,T) ->
+    
+            io:format("~w ~w~n", [T,Next]),
+            {Hi, Lo} = T,
+    
+            Lo2 = if 
+                Next < Lo ->
+                    Next;
+                true ->
+                    Lo
+            end,
+
+            Hi2 = if 
+                Next > Hi -> 
+                    Next; 
+                true -> 
+                    Hi 
+            end,
+
+            {Hi2, Lo2}
+
+        end,
+
+        {First,First},
+        List
+    ).
