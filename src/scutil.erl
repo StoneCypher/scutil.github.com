@@ -438,18 +438,20 @@
 
     columnated_rows/2, columns/2, columnate/1, columnate/2, columnated_text/2, % needs tests
     first_row/1, first_or_nothing/1, % needs tests
-    
+
     floor/1, ceil/1, ceiling/1, % needs tests
-    
+
     get_linked_processes/0, % needs tests
-    
+
     key_duplicate/1, % needs tests
-    
+
     mersenne_prime/1, % needs tests
-    
+
     levenshtein/2, % needs tests
+
+    make_node/2, % needs tests
     
-    make_node/2 % needs tests
+    map_scanline/2, map_scaline/3 % needs tests
 
 ] ).
 
@@ -5306,3 +5308,48 @@ lev_dif(_C1, _C2) -> 1.
 make_node(Name, Host) ->
 
     list_to_atom(Name ++ "@" ++ Host).
+
+
+
+
+
+% parses a string on all three newline types, discarding any empty lines; applies F as a functor to each line,
+% and returns the tuple of the remainder and then a list of all results from the functor(s) issued
+% thanks ayrnieu
+
+%% @since Version 214
+
+map_scanline(F,L) ->
+
+    {R,M} = lists:foldl(
+        fun
+            ( C, R = {[],_} ) when C == $\r orelse C == $\n -> R;
+            ( C, {S,M}      ) when C == $\r orelse C == $\n -> { [], [ F(lists:reverse(S)) | M ] };
+            ( C, {S,M}      )                               -> { [C|S], M }
+        end,
+        {[],[]}, L
+    ),
+
+    {lists:reverse(R), lists:reverse(M)}.
+
+
+
+
+
+% third argument passes argument list as secondary argument to the functor, useful for passing ancillary state
+% modified from map_scaline/2 by ayrnieu
+
+%% @since Version 214
+
+map_scanline(F,L,A) ->
+
+    {R,M} = lists:foldl(
+        fun
+            ( C, R = {[],_} ) when C == $\r orelse C == $\n -> R;
+            ( C, {S,M}      ) when C == $\r orelse C == $\n -> { [], [ F(lists:reverse(S), A) | M ] };
+            ( C, {S,M}      )                               -> { [C|S], M }
+        end,
+        {[],[]}, L
+    ),
+
+    {lists:reverse(R), lists:reverse(M)}.
