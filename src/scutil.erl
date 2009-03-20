@@ -9,7 +9,7 @@
 %%  Code starts several hundred lines down; search for -module.  EDoc requires a lot of the documentation to be at the beginning of the file.
 %%
 %%  To automatically generate documentation, from the erlang shell, type:
-%%    edoc:files(["/projects/libraries/erlang/scutil/scutil.erl"], [{dir,"/projects/libraries/erlang/scutil/docs/"}]).
+%%    edoc:application(scutil, "/projects/libraries/erlang/scutil/src", [{dir,"/projects/libraries/erlang/scutil/doc"}]).
 %%  Replace those paths with paths appropriate for your machine.
 
 
@@ -21,11 +21,9 @@
 %% @version $Revision$
 %% @since September 14, 2007
 
-% % % <table style="border: 1px solid black;"><tr><td style="padding: 0 2em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_users.js?style=blue"></script></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_cocomo.js?salary=80000"></script></td><td style="margin-left: 0.1em;"><div><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_basic_stats.js"></script></div></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_factoids.js"></script></td></tr></table>
-
 %% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of hundreds of routines of a variety of topics which have aggregated from reuse in other projects.</p>
 %%
-%% <table style="border: 1px solid black;"><tr><td style="padding: 0 2em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_users.js?style=blue"></script></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_cocomo.js?salary=80000"></script></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_factoids.js"></script></td></tr></table>
+%% <table style="border: 1px solid black;"><tr><td style="text-align: center; padding: 0 2em;"><div style="display: block; width: 3em; padding-left: 6em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_users.js?style=blue"></script></div></td><td style="padding-left: 2em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_cocomo.js?salary=80000"></script></td></tr><tr><td style="padding-left: 2em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_languages.js"></script></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_factoids.js"></script></td></tr></table>
 %%
 %% <ul>
 %%   <li>{@section Conversion}</li>
@@ -451,7 +449,9 @@
     
     mersenne_prime/1, % needs tests
     
-    levenshtein/2 % needs tests
+    levenshtein/2, % needs tests
+    
+    make_node/2 % needs tests
 
 ] ).
 
@@ -984,13 +984,13 @@ random_from(N, List) ->
 %% @since Version 6
 
 random_from(N, List, no_remainder) ->
-    
+
     {R,_} = random_from(N,List,remainder), R;
 
 
 
 random_from(N, List, remainder) ->
-    
+
     lists:split(N,shuffle(List)).
 
 
@@ -1632,19 +1632,19 @@ tied_rank_worker([Item|Remainder], Work, PrevValue) ->
 %% @since Version 42
 
 ordered_ranks_of(List) when is_list(List) ->
-    
+
     ordered_ranks_of(List, tied_ranks_of(List), []).
 
 
 
-ordered_ranks_of([], [], Work) -> 
+ordered_ranks_of([], [], Work) ->
 
     lists:reverse(Work);
 
 
 
 ordered_ranks_of([Front|Rem], Ranks, Work) ->
-    
+
     {value,Item} = lists:keysearch(Front,2,Ranks),
     {IRank,Front} = Item,
     ordered_ranks_of(Rem, Ranks--[Item], [{IRank,Front}]++Work).
@@ -1662,7 +1662,7 @@ ordered_ranks_of([Front|Rem], Ranks, Work) ->
 
 %% @since Version 2
 
-to_lines(Text) -> 
+to_lines(Text) ->
 
     string:tokens(Text, "\r\n"). % yay convenience functions
 
@@ -1692,7 +1692,7 @@ to_lines(Text) ->
 %% @since Version 49
 
 pearson_correlation(TupleList) when is_list(TupleList) ->
-    
+
     {A,B} = lists:unzip(TupleList),
     pearson_correlation(A,B).
 
@@ -1700,17 +1700,17 @@ pearson_correlation(TupleList) when is_list(TupleList) ->
 
 %% @equiv pearson_correlation(lists:zip(List1, List2))
 
-pearson_correlation(List1, _) when length(List1) < 2 -> 
+pearson_correlation(List1, _) when length(List1) < 2 ->
 
     {r, 0.0};
-    
 
 
-pearson_correlation(List1, List2) when length(List1) /= length(List2) -> 
+
+pearson_correlation(List1, List2) when length(List1) /= length(List2) ->
 
     {error, lists_must_be_same_length};
-    
-    
+
+
 
 pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
@@ -1725,7 +1725,7 @@ pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
     N     = length(List1),
 
     case math:sqrt(   ( (N*SumXX)-(SumX*SumX) )   *   ( (N*SumYY)-(SumY*SumY) )   ) of
-        
+
         0 ->
             {r, 0.0};  % some nasty value sets otherwise cause divide by zero
 
@@ -2801,8 +2801,8 @@ module_has_function(Module, Function) ->
 shuffle(List) ->
 
    WeightedAndShuffled = lists:map(
-       fun(Item) -> { random:uniform(), Item } end, 
-       List 
+       fun(Item) -> { random:uniform(), Item } end,
+       List
    ),
 
    { _, SortedAndDeweighted } = lists:unzip(lists:keysort(1, WeightedAndShuffled)),
