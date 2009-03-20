@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>ScUtil is StoneCypher's Utility Library, a collection of hundreds of routines of a variety of topics which have aggregated from reuse in other projects.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 217 $</p>
+<p><b>Version:</b> $Revision: 219 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 <p><b>References</b><ul><li><span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Website is</span><a href="http://scutil.com/">http://scutil.com/</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Author's Website</span><a href="http://fullof.bs">Full of BS</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Direct link to zip archive</span><a href="http://crunchyd.com/release/scutil.zip">Current version</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">This library is released under the</span><a href="http://scutil.com/license.html">MIT License</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Public SVN at</span><a href="svn://crunchyd.com/scutil/">svn://crunchyd.com/scutil/</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Discussion forum at</span><a href="http://crunchyd.com/forum/scutil-discussion/">CrunchyD Forums</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Bugtracker at</span><a href="http://crunchyd.com/forum/project.php?projectid=7">CrunchyD Forums</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date: 2009-03-15 13:47:01 -0600 (Sun, 15 Mar 2009) $</tt></span></li><li><span style="margin-top:1em;padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Test sets require min. version 16</span><a href="http://testerl.com/">TestErl</a></span></li></ul></p>
@@ -447,6 +447,8 @@
 <tr><td valign="top"><a href="#every_member_representation-2">every_member_representation/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#expand_label-1">expand_label/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#expand_labels-1">expand_labels/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#explode-2">explode/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#explode-3">explode/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#f32_iolist_to_int-1">f32_iolist_to_int/1</a></td><td>Equivalent to <a href="#f32_iolist_to_int-5"><tt>f32_iolist_to_int(A, B, C, D, little)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#f32_iolist_to_int-2">f32_iolist_to_int/2</a></td><td>Equivalent to <a href="#f32_iolist_to_int-5"><tt>f32_iolist_to_int(A, B, C, D, Endianness)</tt></a>.
@@ -496,6 +498,10 @@
 <tr><td valign="top"><a href="#int_to_u64_iolist-2">int_to_u64_iolist/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#interpret_flesch_kincaid_score-1">interpret_flesch_kincaid_score/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#io_list_to_hex-1">io_list_to_hex/1</a></td><td><a href="#Conversion">Conversion</a> Convert an io_list() to a hexstring().</td></tr>
+<tr><td valign="top"><a href="#is_numeric_char-1">is_numeric_char/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#is_numeric_char-2">is_numeric_char/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#is_numeric_string-1">is_numeric_string/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#is_numeric_string-2">is_numeric_string/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#isolate_signal-1">isolate_signal/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#kendall_correlation-1">kendall_correlation/1</a></td><td><a href="#Statistics">Statistics</a> Compute the Kendall Tau Rank Correlation Coefficient of a list of coordinate tuples.</td></tr>
 <tr><td valign="top"><a href="#kendall_correlation-2">kendall_correlation/2</a></td><td>Equivalent to <a href="#kendall_correlation-1"><tt>kendall_correlation(lists:zip(List1, List2))</tt></a>.
@@ -598,6 +604,7 @@
 			      Function, Args)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#start_register_if_not_running-5">start_register_if_not_running/5</a></td><td><a href="#Documentary">Documentary</a> Check whether a process is registered locally, and if not, spawn it with a give function and arguments.</td></tr>
+<tr><td valign="top"><a href="#starts_with-2">starts_with/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#std_deviation-1">std_deviation/1</a></td><td><a href="#Statistics">Statistics</a> Measures the standard deviation of the values in the list.</td></tr>
 <tr><td valign="top"><a href="#tied_ranks_of-1">tied_ranks_of/1</a></td><td><a href="#Statistics">Statistics</a> Returns a ranked ordering of the list with tie rankings.</td></tr>
 <tr><td valign="top"><a href="#to_lines-1">to_lines/1</a></td><td><a href="#String">String</a> Cuts a string according to any of the three newline conventions (even mixed), and discards empty strings.</td></tr>
@@ -1127,6 +1134,18 @@
 <p><tt>expand_labels(List) -&gt; any()</tt></p>
 </div>
 
+<h3 class="function"><a name="explode-2">explode/2</a></h3>
+<div class="spec">
+<p><tt>explode(Separator, Term) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 220</p>
+
+<h3 class="function"><a name="explode-3">explode/3</a></h3>
+<div class="spec">
+<p><tt>explode(Separator, Term, Max) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 220</p>
+
 <h3 class="function"><a name="f32_iolist_to_int-1">f32_iolist_to_int/1</a></h3>
 <div class="spec">
 <p><tt>f32_iolist_to_int(X1) -&gt; any()</tt></p>
@@ -1246,8 +1265,8 @@
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/src/scutil.erl $"},
-   {svn_id,"$Id: scutil.erl 217 2009-03-20 04:38:57Z john $"},
-   {svn_revision,"$Revision: 217 $"},
+   {svn_id,"$Id: scutil.erl 219 2009-03-20 05:03:02Z john $"},
+   {svn_revision,"$Revision: 219 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1412,6 +1431,28 @@
   2&gt; scutil:io_list_to_hex("a08n408nbqa").
   "6130386e3430386e627161"</pre></p>
 <p><b>Introduced in:</b> Version 19</p>
+
+<h3 class="function"><a name="is_numeric_char-1">is_numeric_char/1</a></h3>
+<div class="spec">
+<p><tt>is_numeric_char(Ch) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 219</p>
+
+<h3 class="function"><a name="is_numeric_char-2">is_numeric_char/2</a></h3>
+<div class="spec">
+<p><tt>is_numeric_char(Ch, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="is_numeric_string-1">is_numeric_string/1</a></h3>
+<div class="spec">
+<p><tt>is_numeric_string(Str) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 219</p>
+
+<h3 class="function"><a name="is_numeric_string-2">is_numeric_string/2</a></h3>
+<div class="spec">
+<p><tt>is_numeric_string(Str, X2) -&gt; any()</tt></p>
+</div>
 
 <h3 class="function"><a name="isolate_signal-1">isolate_signal/1</a></h3>
 <div class="spec">
@@ -2181,6 +2222,12 @@
   &lt;0.731.0&gt;</pre></p>
 <p><b>Introduced in:</b> Version 8</p>
 
+<h3 class="function"><a name="starts_with-2">starts_with/2</a></h3>
+<div class="spec">
+<p><tt>starts_with(Remain, Prefix) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 220</p>
+
 <h3 class="function"><a name="std_deviation-1">std_deviation/1</a></h3>
 <div class="spec">
 <p><tt>std_deviation(Values::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt></p>
@@ -2358,6 +2405,6 @@
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 19 2009, 23:01:06.</i></p>
+<p><i>Generated by EDoc, Mar 19 2009, 23:23:39.</i></p>
 </body>
 </html>

@@ -455,8 +455,12 @@
     
     list_to_term/1, % needs tests
 
-    is_numeric_char/1, is_numeric_char/2,    % needs tests
-    is_numeric_string/1, is_numeric_string/2 % needs tests
+    is_numeric_char/1, is_numeric_char/2,     % needs tests
+    is_numeric_string/1, is_numeric_string/2, % needs tests
+    
+    explode/2, explode/3, % needs tests
+    
+    starts_with/2 % needs tests
 
 ] ).
 
@@ -5274,7 +5278,7 @@ levenshtein_rec( [SrcHead|SrcTail], Target, DistList, Step) ->
 
 
 
-levenshtein_rec( [], _, DistList, _) -> 
+levenshtein_rec( [], _, DistList, _) ->
 
     lists:last(DistList).
 
@@ -5286,16 +5290,16 @@ levenshtein_rec( [], _, DistList, _) ->
 %% @private
 
 levenshtein_distlist([TargetHead|TargetTail], [DLH|DLT], SourceChar, NewDistList, LastDist) when length(DLT) > 0 ->
-    
+
     Min = lists:min( [LastDist + 1, hd(DLT) + 1, DLH + lev_dif(TargetHead, SourceChar)] ),
     levenshtein_distlist(TargetTail, DLT, SourceChar, NewDistList ++ [Min], Min);
 
 
 
-levenshtein_distlist([], _, _, NewDistList, _) -> 
+levenshtein_distlist([], _, _, NewDistList, _) ->
 
     NewDistList.
-    
+
 
 
 % Calculates the difference between two characters or other values
@@ -5402,3 +5406,96 @@ is_numeric_char(_, _)                                                    -> fals
 
 is_numeric_string(Str)          -> is_numeric_string(Str, decimal).
 is_numeric_string(Str, decimal) -> lists:all({scutil,is_numeric_char}, Str).
+
+
+
+
+
+%% @since Version 220
+
+explode(Separator, Term) ->
+
+    explode(Separator, Term, [], [], -1,  0).
+
+
+
+%% @since Version 220
+
+explode(Separator, Term, Max) ->
+
+    explode(Separator, Term, [], [], Max, 0).
+
+
+
+%% @private
+%% @since Version 220
+
+explode(_Separator, [], Pass, Out, _Max, _Cur) ->
+
+    Out ++ [Pass];
+
+
+
+%% @private
+%% @since Version 220
+
+explode(Separator, Remainder, Pass, Out, -1, _Cur) -> % ignore cap
+
+    case starts_with(Remainder, Separator) of
+
+        false ->
+
+            [ThisChar | Following] = Remainder,
+            explode(Separator, Following, Pass ++ [ThisChar], Out, -1, 0);
+
+        { true, LeftOver } ->
+
+            explode(Separator, LeftOver, [], Out ++ [Pass], -1, 0)
+
+    end;
+
+
+
+%% @private
+%% @since Version 220
+
+explode(Separator, Remainder, Pass, Out, Max, Cur) -> % check cap
+
+    if
+        Cur+1 >= Max ->
+            Out ++ [Remainder];
+
+        true ->
+
+            case starts_with(Remainder, Separator) of
+
+                false ->
+
+                    [ThisChar | Following] = Remainder,
+                    explode(Separator, Following, Pass ++ [ThisChar], Out, Max, Cur);
+
+                { true, LeftOver } ->
+
+                    explode(Separator, LeftOver, [], Out ++ [Pass], Max, Cur+1)
+
+            end
+
+    end.
+
+
+
+
+
+%% @since Version 220
+
+starts_with(Remain, [])     -> { true, Remain };
+starts_with([],     _)      -> false;
+starts_with(Main,   Prefix) ->
+
+    [ MHead | MRemain ] = Main,
+    [ PHead | PRemain ] = Prefix,
+
+    if
+        PHead /= MHead -> false;
+        true           -> starts_with(MRemain, PRemain)
+    end.
