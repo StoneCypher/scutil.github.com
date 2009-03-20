@@ -23,8 +23,6 @@
 
 %% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of hundreds of routines of a variety of topics which have aggregated from reuse in other projects.</p>
 %%
-%% <table style="border: 1px solid black;"><tr><td style="text-align: center; padding: 0 2em;"><div style="display: block; width: 3em; padding-left: 6em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_users.js?style=blue"></script></div></td><td style="padding-left: 2em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_cocomo.js?salary=80000"></script></td></tr><tr><td style="padding-left: 2em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_languages.js"></script></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_factoids.js"></script></td></tr></table>
-%%
 %% <ul>
 %%   <li>{@section Conversion}</li>
 %%   <li>{@section Counters}</li>
