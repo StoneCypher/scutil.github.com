@@ -451,7 +451,7 @@
 
     make_node/2, % needs tests
     
-    map_scanline/2, map_scaline/3 % needs tests
+    map_scanline/2, map_scanline/3 % needs tests
 
 ] ).
 
