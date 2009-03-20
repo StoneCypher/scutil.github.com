@@ -453,7 +453,10 @@
     
     map_scanline/2, map_scanline/3, % needs tests
     
-    list_to_term/1 % needs tests
+    list_to_term/1, % needs tests
+
+    is_numeric_char/1, is_numeric_char/2,    % needs tests
+    is_numeric_string/1, is_numeric_string/2 % needs tests
 
 ] ).
 
@@ -5379,3 +5382,23 @@ list_to_term(List) ->
         Error -> { error, Error }
 
     end.
+
+
+
+
+
+%% @since Version 219
+
+is_numeric_char(Ch) -> is_numeric_char(Ch, decimal).
+
+is_numeric_char(Ch, decimal) when $0 =< Ch, Ch =< $9; Ch == $-; Ch == $. -> true;
+is_numeric_char(_, _)                                                    -> false.
+
+
+
+
+
+%% @since Version 219
+
+is_numeric_string(Str)          -> is_numeric_string(Str, decimal).
+is_numeric_string(Str, decimal) -> lists:all({scutil,is_numeric_char}, Str).
