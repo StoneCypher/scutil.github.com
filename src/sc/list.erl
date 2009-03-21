@@ -542,7 +542,7 @@ combinations(Items, 1) when is_list(Items) ->
 
 
 
-combinations([], _N) -> 
+combinations([], _N) ->
 
    [];
 
@@ -552,7 +552,7 @@ combinations(Items, N) when is_list(Items), is_integer(N), N > 0 ->
 
     [ lists:flatten(lists:append( [lists:nth(I, Items)], [J] )) ||
       I <- lists:seq(1, length(Items)),
-      J <- combinations( lists:nthtail(I, Items), (N-1) )  
+      J <- combinations( lists:nthtail(I, Items), (N-1) )
     ].
 
 
@@ -576,3 +576,219 @@ expand_label({Label,Item}) ->
 expand_labels(List) when is_list(List) ->
 
     lists:flatten( [ expand_label(X) || X <- List ] ).
+
+
+
+
+
+%% @equiv permute(List, length(List))
+
+permute(List) -> 
+
+    permute(List, length(List)).
+    
+
+
+%% @type positive_integer() = integer().  Positive integer must be greater than zero.
+
+%% @spec permute(List::list(), Depth::positive_integer()) -> list()
+
+%% @doc {@section Utility} Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast {@link combinations/2}.  Permutations are all valid orderings of a set of tokens; the permutations of `[a,b]' for example are `[a,b]' and `[b,a]'.  Depth limitation means the permutations of a smaller count of tokens from the main set; the 2-limited permutations of `[a,b,c]' for example are `[a,b]', `[a,c]', `[b,a]', `[b,c]', `[c,a]' and `[c,b]'.  Permutations are not ordered.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> scutil:permute(["dave","kate","pat"]).
+%% [{"pat","kate","dave"}, {"kate","pat","dave"}, {"pat","dave","kate"}, {"dave","pat","kate"}, {"kate","dave","pat"}, {"dave","kate","pat"}]
+%%
+%% 2> scutil:permute([fast, strong, smart, lucky], 2).
+%% [{strong,fast}, {smart,fast}, {lucky,fast}, {fast,strong}, {smart,strong}, {lucky,strong}, {fast,smart}, {strong,smart}, {lucky,smart}, {fast,lucky}, {strong,lucky}, {smart,lucky}]'''
+
+%% @since Version 17
+
+permute(List, 1) when is_list(List) -> 
+
+    [ [T] || 
+        T <- List 
+    ];
+
+
+
+permute(List, Depth) when is_list(List), is_integer(Depth) ->
+
+    [ [T]++R ||
+        T <- List,
+        R <- permute(List--[T], Depth-1)
+    ].
+
+
+
+
+
+%% @spec shuffle(List::list()) -> list()
+
+%% @doc {@section Random} Return a list with the original list's shallow members in a random order.  Deep lists are not shuffled; `[ [a,b,c], [d,e,f], [g,h,i] ]' will never produce sublist reorderings (`[b,c,a]') or list mixing (`[b,g,e]'), only reordering of the three top level lists.  The output list will always be the same length as the input list.  Repeated items and mixed types in input lists are safe. ```1> scutil:shuffle(lists:seq(1,9)).
+%% [8,4,7,9,5,2,6,1,3]
+%%
+%% 2> {TheFaces, TheSuits} = {  [ace] ++ lists:seq(2,10) ++ [jack,queen,king],  [hearts,spades,clubs,diamonds]  }
+%% {[ace,jack,queen,king,2,3,4,5,6,7,8,9,10],
+%%  [hearts,spades,clubs,diamonds]}
+%%
+%% 3> Deck = scutil:shuffle([ {Face,Suit} || Face <- TheFaces, Suit <- TheSuits ]).
+%% [ {6,spades}, {7,hearts}, {8,clubs}, {queen,spades}, {6,diamonds}, {ace,...}, {...} | ...]
+%%
+%% 4> scutil:shuffle([ duck,duck,duck,duck, goose ]).
+%% [duck,goose,duck,duck,duck]'''
+%%
+%% <i>Originally found at <a href="http://wiki.trapexit.org/index.php/RandomShuffle">http://wiki.trapexit.org/index.php/RandomShuffle</a>; refactored for clarity, and unnecessary repeat nesting behavior removed.</i>
+
+%% @since Version 8
+
+shuffle(List) ->
+
+   WeightedAndShuffled = lists:map(
+       fun(Item) -> { random:uniform(), Item } end,
+       List
+   ),
+
+   { _, SortedAndDeweighted } = lists:unzip(lists:keysort(1, WeightedAndShuffled)),
+
+   SortedAndDeweighted.
+
+
+
+
+
+% Create sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples, where key K appears in both A and B
+
+shared_keys(TupleList) when is_list(TupleList) ->
+    
+    {A,B} = lists:unzip(TupleList),
+    shared_keys(lists:sort(A),lists:sort(B)).
+
+
+
+%% @type keylist() = keylist().  All members of keylists are tuples of two-or-greater arity, and the first element is considered their key in the list.  List keys are unique; therefore `[{a,1},{b,1}]' is a keylist, but `[{a,1},{a,1}]' is not.
+%% @type sorted_keylist() = keylist().  A sorted keylist is a keylist in the order provided by {@link lists:sort/1}.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.
+
+%% @equiv shared_keys(lists:zip(lists:sort(A), lists:sort(B)))
+%% @spec shared_keys(TupleList::sorted_keylist(), Presorted::presorted) -> sorted_keylist()
+%% @doc Equivalent to {@link shared_keys/1}, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.
+
+shared_keys(TupleList, presorted) when is_list(TupleList) ->
+    
+    {A,B} = lists:unzip(TupleList),
+    shared_keys(A,B);
+
+
+
+%% @doc Create sorted list X of 3-ary tuples `{K,Ai,Bi}' from sorted lists A, B of 2ary `{K,Ai}'/`{K,Bi}' tuples, where key `K' appears in both `A' and `B'.
+
+shared_keys(A,B) when is_list(A), is_list(B) ->
+    
+    both_lists_next_item(lists:sort(A),lists:sort(B),[]).
+
+
+
+%% @equiv shared_keys(lists:sort(A),lists:sort(B))
+%% @spec shared_keys(A::sorted_keylist(), B::sorted_keylist(), Presorted::presorted) -> sorted_keylist()
+%% @doc Equivalent to {@link shared_keys/2}, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.
+
+shared_keys(A,B,presorted) when is_list(A), is_list(B) ->
+    
+    both_lists_next_item(A,B,[]).
+
+
+
+both_lists_next_item([], _, Work) -> 
+
+    lists:reverse(Work);
+    
+    
+
+%% @private
+
+both_lists_next_item(_, [], Work) ->
+
+    lists:reverse(Work);
+
+
+
+both_lists_next_item([ {K,Ai} | Ar], [ {K,Bi} | Br], Work) ->
+
+    both_lists_next_item(Ar, Br, [{K,Ai,Bi}]++Work);
+
+
+
+both_lists_next_item(IA, IB, Work) ->
+
+    [{Ka,_}|Ar] = IA,
+    [{Kb,_}|Br] = IB,
+
+    if
+
+        Ka < Kb ->
+            both_lists_next_item(Ar, IB, Work);
+
+        true ->
+            both_lists_next_item(IA, Br, Work)
+
+    end.
+
+
+
+
+
+% collects results; do not use for huge lists
+
+%% @deprecated Use {@link combinations/2} instead.
+
+%% @spec all_unique_pairings(List::list()) -> tuple_list()
+
+%% @doc {@section List} Generate every unique pair of elements from a list; deprecated in favor of {@link combinations/2}.  ```1> scutil:all_unique_pairings([a,b,c]).
+%% [{b,c},{a,b},{a,c}]'''
+
+%% @since Version 31
+
+all_unique_pairings(A) when is_list(A) -> 
+
+    all_unique_pairings(A,[]).
+    
+
+
+all_unique_pairings([], Work) -> 
+
+    Work;
+    
+    
+
+all_unique_pairings([Ai|Ar], Work) -> 
+
+     all_unique_pairings(Ar, [{Ai,Ari}||Ari<-Ar] ++ Work).
+
+
+
+
+
+% used for side effects, doesn't gather results; appropriate for enormous lists
+
+% comeback
+
+walk_unique_pairings([], _) -> 
+
+    ok;
+    
+    
+
+walk_unique_pairings([A|R], F) when is_function(F) ->
+    
+    walk_unique_pairings(A, R, F),
+    walk_unique_pairings(R, F).
+
+
+
+walk_unique_pairings(_A, [],     _F) -> 
+
+    ok;
+
+
+
+walk_unique_pairings( A, [Rh|Rr], F) ->
+
+    F(A,Rh),
+    walk_unique_pairings(A, Rr, F).

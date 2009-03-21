@@ -252,3 +252,18 @@ scan_svn_revision(Module) ->
     [ Head | _Rem ]    = string:tokens(X, " "),
 
     list_to_integer(Head).
+
+
+
+
+
+%% @spec module_has_function(Module::atom(), Function::atom()) -> boolean()
+
+%% @doc TODO
+
+%% @since Version 84
+
+module_has_function(Module, Function) ->
+
+    scutil:deprecate("module_has_function() is deprecated in favor of erlang:function_exported/3"),
+    lists:keymember(Function, 1, apply(Module, module_info, [exports])).

@@ -169,3 +169,32 @@ f32_iolist_to_int( A,B,C,D , little ) ->
 f32_iolist_to_int( A,B,C,D , big ) -> 
     <<X:32/float-big>> = list_to_binary([A,B,C,D]), 
     X.
+
+
+
+
+
+%% @spec list_to_number(X::list()) -> number()
+
+%% @doc {@section Conversion} Converts a list into a number; integers will be returned if there is no mantissa in the list representation. ```1> scutil:list_to_number("2").
+%% 2
+%%
+%% 2> scutil:list_to_number("2.0").
+%% 2.0
+%%
+%% 3> scutil:list_to_number("2.1").
+%% 2.1'''
+
+%% @since Version 8
+
+list_to_number(X) ->
+
+    case catch list_to_float(X) of
+
+        {'EXIT',_} ->
+            list_to_integer(X);
+
+        Y ->
+            Y
+
+    end.
