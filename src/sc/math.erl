@@ -165,3 +165,25 @@ mod(Base, Range) when is_integer(Base), is_integer(Range) ->
             Z
 
     end.
+
+
+
+
+
+
+
+%% @spec root_sum_square(VX::vector()) -> number()
+
+%% @doc {@section Math} Calculate the magnitude (also known as the root sum square)
+
+%% @since Version 85
+
+root_sum_square(VX) when is_list(VX) ->
+    
+    math:sqrt(lists:sum([ X*X || X <- VX ]));
+
+
+
+root_sum_square(VX) when is_tuple(VX) -> 
+
+    root_sum_square(tuple_to_list(VX)).

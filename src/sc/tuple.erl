@@ -39,3 +39,32 @@ tuple_member(E, T, I, Sz) ->
             tuple_member(E, T, I+1, Sz)
 
     end.
+
+
+
+
+
+%% @type numeric_tuple() = tuple().  Every member of a {@type numeric_tuple()} must be a {@type number()}.
+%% @type relaxed_numeric_tuple() = numeric_tuple().  Relaxed numeric tuples are allowed to contain non-numeric elements, which are treated as zero for purposes of computation.
+
+%% @spec tuple_sum(T::relaxed_numeric_tuple()) -> number()
+
+%% @doc {@section Math} Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero. ```1>'''
+
+%% @since Version 86
+
+tuple_sum(T) when is_tuple(T) -> 
+
+    tuple_sum(T, 1, size(T), 0).
+
+
+
+tuple_sum(_T, Which, Max, Work) when Which > Max -> 
+
+    Work;
+
+
+
+tuple_sum( T, Which, Max, Work) ->
+
+     tuple_sum(T, Which+1, Max, Work+element(Which, T)).
