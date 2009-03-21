@@ -819,3 +819,35 @@ list_product([], Counter) ->
 list_product([Head|Tail], Counter) ->
 
     list_product(Tail, Counter*Head).
+
+
+
+
+
+%% @type filterfunction() = function().  Filter functions are 1ary binary predicates - they accept an argument and return either true or false.
+%% @type sanitizer() = list() | filterfunction().  Sanitizers are used by {@link sanitize_tokens/2} for input sanitization; they define what parts of an input list are valid, and the remainder are removed.  Sanitizers may either be a list of acceptable elements or a filter function.
+
+%% @spec sanitize_tokens(InputList::list(), Allowed::sanitizer()) -> list()
+
+%% @doc {@section List} Remove unacceptable elements from an input list, as defined by another list or a filter function.  Common reasons for sanitization include reducing arbitrary or bulk data to key format (such as using an original filename and new size to generate a new filename or database key) and removing malformed items from a list before processing. ```1> scutil:sanitize_tokens("ae0z4nb'wc-04bn ze0e 0;4ci ;e0o5rn;", "ace").
+%% "aeceece"
+%%
+%% 2> Classifier = fun(apple) -> true; (banana) -> true; (cherry) -> true; (date) -> true; (elderberry) -> true; (_) -> false end.
+%% #Fun<erl_eval.6.13229925>
+%%
+%% 3> scutil:sanitize_tokens([apple, boat, cherry, dog, elderberry], Classifier).
+%% [apple,cherry,elderberry]'''
+
+%% @see sanitize_filename/1
+
+%% @since Version 31
+
+sanitize_tokens(List, Allowed) when is_list(List), is_function(Allowed) ->
+
+    lists:filter(Allowed, List);
+
+
+
+sanitize_tokens(List, Allowed) when is_list(List), is_list(Allowed) ->
+
+    lists:filter(fun(X) -> lists:member(X,Allowed) end, List).

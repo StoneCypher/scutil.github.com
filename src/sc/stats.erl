@@ -327,3 +327,199 @@ histo_count( [Current|Tail], Current, Count, Work) ->
 histo_count( [New|Tail], Current, Count, Work) -> 
 
     histo_count(Tail, New, 1, [{Current,Count}] ++ Work).
+
+
+
+
+
+%% @spec median(List::numericlist()) -> any()
+
+%% @doc {@section Statistics} Takes the median (central) value of a list.  Sorts the input list, then finds and returns the middle value.  ```1> scutil:median([1,2,999]).
+%% 2'''
+
+%% @see arithmetic_mean/1
+%% @see mode/1
+
+%% @since Version 8
+
+median(List) when is_list(List) ->
+
+    SList = lists:sort(List),
+    Length = length(SList),
+
+    case even_or_odd(Length) of
+
+        even ->
+            [A,B] = lists:sublist(SList, round(Length/2), 2),
+            (A+B)/2;
+
+        odd ->
+            lists:nth( round((Length+1)/2), SList )
+
+    end.
+
+
+
+
+
+%% @spec mode(List::numericlist()) -> any()
+
+%% @doc {@section Statistics} Takes the mode (most common) value(s) of a list, as a list.  If there are more than one value tied for most common, all tied will be returned.  This function is safe for mixed-type lists, and does not perform deep traversal (that is, the mode of `[ [2,2] ]' is `[2,2]', not `2'). ```scutil:mode([1,2,1,3,1,4]).
+%% [1]
+%%
+%% 2> scutil:mode([ [1,2,3], [2,3,4], [3,4,5], [2,3,4] ]).
+%% [[2,3,4]]
+%%
+%% 3> scutil:mode([ a,b, 1, a,b, 2, a,b, 3 ]).
+%% [a,b]'''
+
+%% @see arithmetic_mean/1
+%% @see median/1
+
+%% @since Version 8
+
+mode([]) ->
+
+    [];
+
+
+
+mode(List) when is_list(List) ->
+    
+    mode_front(lists:reverse(lists:keysort(2, scutil:histograph(List)))).
+
+
+
+mode_front([{Item,Freq}|Tail]) ->
+    
+    mode_front(Tail, Freq, [Item]).
+
+
+
+mode_front([ {Item, Freq} | Tail],  Freq,   Results) ->
+
+    mode_front(Tail, Freq, [Item]++Results);
+
+
+
+mode_front([ {_Item,_Freq} |_Tail], _Better, Results) ->
+
+    Results;
+
+
+
+mode_front( [], _Freq, Results) ->
+
+    Results.
+
+
+
+
+
+%% @type numericlist() = list().  All members of a numeric list must be number()s.
+%% @spec arithmetic_mean(InputList::numericlist()) -> float()
+
+%% @doc {@section Statistics} Take the arithmetic mean (often called the average) of a list of numbers. ```1> scutil:arithmetic_mean([1,2,3,4,5]).
+%% 3.0'''
+
+%% @see geometric_mean/1
+%% @see harmonic_mean/1
+%% @see weighted_arithmetic_mean/1
+%% @see amean_vector_normal/1
+
+%% @since Version 33
+
+arithmetic_mean([]) ->
+
+    0.0;
+
+
+
+arithmetic_mean(List) when is_list(List) ->
+    
+    lists:sum(List) / length(List).
+
+
+
+
+
+%% @spec geometric_mean(InputList::numericlist()) -> float()
+
+%% @doc {@section Statistics} Take the geometric mean of a list of numbers. ```1> scutil:geometric_mean([1,2,3,4,5]).
+%% 2.6051710846973517''' The naive approach ```geometric_mean(List) -> math:pow(scutil:list_product(List), 1/length(List)).''' is not used because it accumulates error very quickly, and is as such unsuited to huge lists.
+
+%% @see arithmetic_mean/1
+%% @see harmonic_mean/1
+%% @see gmean_vector_normal/1
+
+%% @since Version 34
+
+geometric_mean([]) ->
+    
+    0.0;
+
+
+
+geometric_mean(List) when is_list(List) ->
+    
+    math:exp(scutil:arithmetic_mean([math:log(X)||X<-List])).
+
+
+
+
+
+%% @spec harmonic_mean(InputList::numericlist()) -> float()
+
+%% @doc {@section Statistics} Take the harmonic mean of a list of numbers. ```1> scutil:harmonic_mean([1,2,3,4,5]).
+%% 2.18978102189781'''
+
+%% @see arithmetic_mean/1
+%% @see geometric_mean/1
+%% @see hmean_vector_normal/1
+
+%% @since Version 35
+
+harmonic_mean([]) ->
+    
+    0.0;
+
+
+
+harmonic_mean(List) when is_list(List) ->
+    
+    length(List) / lists:sum([ 1/X || X<-List ]).
+
+
+
+
+
+%% @spec weighted_arithmetic_mean(InputList::weightlist()) -> float()
+
+%% @doc {@section Statistics} Take the weighted arithmetic mean of the input values. ```1> scutil:weighted_arithmetic_mean([ {8,1}, {3,4}, {16,1} ]).
+%% 6.0'''
+
+%% @see arithmetic_mean/1
+%% @see amean_vector_normal/1
+
+%% @since Version 44
+
+weighted_arithmetic_mean(List) when is_list(List) ->
+    
+    weighted_arithmetic_mean(List, 0, 0).
+
+
+
+weighted_arithmetic_mean([], Num, Denom) ->
+
+    Num/Denom;
+
+
+
+weighted_arithmetic_mean( [{V,W} | Tail], Num, Denom) ->
+
+    weighted_arithmetic_mean(Tail, Num+(W*V), Denom+W).
+
+
+
+
+
