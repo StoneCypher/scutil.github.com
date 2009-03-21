@@ -148,3 +148,48 @@ standard_listener_shunt(Handler, Port, FixedOptions, ConnectedSocket, ActiveStat
     end,
 
     Handler(ConnectedSocket, CollectedOptions).
+
+
+
+
+
+
+%start() ->
+%
+%    case gen_tcp:listen(25,[]) of
+%
+%        { ok, ListeningSocket } -> { ok, listening_on_pid, spawn(?MODULE, accept_loop, [ListeningSocket]) };
+%        { error, E }            -> { error, E }
+%
+%    end.
+%
+%
+%
+%
+%
+%accept_loop(ListeningSocket) ->
+%
+%    case gen_tcp:accept(ListeningSocket) of
+%
+%        { ok, ConnectedSocket } ->
+%            spawn(?MODULE, handler_loop, [ConnectedSocket]),
+%            accept_loop(ListeningSocket);
+%
+%        { error, E } ->
+%            accept_loop(ListeningSocket)
+%
+%    end.
+%
+%
+%
+%
+%
+%handler_loop(ConnectedSocket) ->
+%
+%    receive
+%
+%        terminate              -> ok;
+%        { tcp, Socket, Input } -> gen_tcp:send(Socket, "You said " ++ Input ++ "\r\n"), handler_loop(ConnectedSocket);
+%        { error, E }           -> { error, E }
+%
+%    end.

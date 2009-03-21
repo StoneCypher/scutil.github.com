@@ -267,3 +267,123 @@ module_has_function(Module, Function) ->
 
     scutil:deprecate("module_has_function() is deprecated in favor of erlang:function_exported/3"),
     lists:keymember(Function, 1, apply(Module, module_info, [exports])).
+
+
+
+
+
+%% @type typelabel() = [ integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown ].  Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
+
+%% @spec type_of(Argument::any()) -> typelabel()
+
+%% @doc {@section Utility} Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of `is_bitstring()' . ```1> scutil:type_of(1).
+%% integer
+%%
+%% 2> scutil:type_of({hello,world}).
+%% tuple'''
+
+%% @since Version 14
+
+type_of(X) when is_integer(X)   -> integer;
+type_of(X) when is_float(X)     -> float;
+type_of(X) when is_list(X)      -> list;
+type_of(X) when is_tuple(X)     -> tuple;
+type_of(X) when is_binary(X)    -> binary;
+type_of(X) when is_bitstring(X) -> bitstring;  % will fail before erlang 12
+type_of(X) when is_boolean(X)   -> boolean;
+type_of(X) when is_function(X)  -> function;
+type_of(X) when is_pid(X)       -> pid;
+type_of(X) when is_port(X)      -> port;
+type_of(X) when is_reference(X) -> reference;
+type_of(X) when is_atom(X)      -> atom;
+
+type_of(_X)                     -> unknown.
+
+
+
+
+
+%% @since Version 127
+
+get_module_feature(Module, Feature) ->
+
+    case beam_lib:chunks(Module, [Feature]) of
+
+        { ok, { Module, [ {Feature,Attributes} ] } } ->
+            Attributes;
+
+        { error, beam_lib, { file_error, _, enoent} } ->
+            { error, no_such_module }
+
+    end.
+
+
+
+
+
+%% @spec get_module_attribute(Module::atom()) -> AttributeList | { error, no_such_module }
+
+%% @doc {@section Utility} Look up all attributes of a given module.  ```1> scutil:get_module_attribute(scutil).
+%% [{author,"John Haugeland <stonecypher@gmail.com>"},
+%%  {bugtracker,"http://crunchyd.com/forum/project.php?projectid=7"},
+%%  {currentsource,"http://crunchyd.com/release/scutil.zip"},
+%%  {description,"StoneCypher's utility library."},
+%%  {library_requirements,[{testerl,16}]},
+%%  {license,[{mit_license,"http://scutil.com/license.html"}]},
+%%  {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
+%%  {publicsvn,"svn://crunchyd.com/scutil/"},
+%%  {svn_head,"$HeadURL$"},
+%%  {svn_id,"$Id$"},
+%%  {svn_revision,"$Revision$"},
+%%  {testerl_export,[{[],scutil_testsuite}]},
+%%  {vsn,[134633400955530778836494569152232539093]},
+%%  {webpage,"http://scutil.com/"}]'''
+
+%% @since Version 129
+
+get_module_attribute(Module) ->
+
+    case beam_lib:chunks(Module, [attributes]) of
+
+        { ok, { _, [ {attributes,Attributes} ] } } ->
+            Attributes;
+
+        { error, beam_lib, { file_error, _, enoent} } ->
+            { error, no_such_module }
+
+    end.
+
+%% @spec get_module_attribute(Module::atom(), Attribute::atom()) -> { value, {Attribute, Value} } | { error, no_such_attribute } | { error, no_such_module }
+
+%% @doc {@section Utility} <span style="color:red">Buggy</span> Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  ```1> scutil:get_module_attribute(scutil, author).
+%% "John Haugeland <stonecypher@gmail.com>"
+%%
+%% 2> scutil:get_module_attribute(scutil, license).
+%% [{mit_license,"http://scutil.com/license.html"}]'''{@section Thanks} to Alain O'Dea for pointing out defects in this routine regarding repeated module elements, and available improvements to the provided API.  <a href="http://fullof.bs/reading-module-attributes-in-erlang#comment-475" target="_blank">Mr. O'Dea's insightful advice</a> will be implemented, but that time has not yet come.
+
+%% @since Version 23
+
+get_module_attribute(Module,Attribute) ->
+
+    % Found at http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html
+    % Reformatted for clarity, removed unnessecary framing list
+    % Added error handling behavior
+
+    case beam_lib:chunks(Module, [attributes]) of
+
+        { ok, { _, [ {attributes,Attributes} ] } } ->
+
+            case lists:keysearch(Attribute, 1, Attributes) of
+
+                { value, {Attribute,Value} } -> 
+                    Value;
+
+                false ->
+                    { error, no_such_attribute }
+
+            end;
+
+        { error, beam_lib, { file_error, _, enoent} } ->
+            { error, no_such_module }
+
+    end.

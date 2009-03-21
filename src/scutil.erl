@@ -295,6 +295,10 @@
 
 -export( [
 
+    compile_all/1,       % not finished   % needs tests
+    install/1,           % not finished   % needs tests
+    verify_install/0,    % not finished   % needs tests
+
     type_of/1,
 
     byte_to_hex/1, nybble_to_hex/1, io_list_to_hex/1, % needs tests
@@ -447,613 +451,23 @@
     levenshtein/2, % needs tests
 
     make_node/2, % needs tests
-    
+
     map_scanline/2, map_scanline/3, % needs tests
-    
+
     list_to_term/1, % needs tests
 
     is_numeric_char/1, is_numeric_char/2,     % needs tests
     is_numeric_string/1, is_numeric_string/2, % needs tests
-    
+
     explode/2, explode/3, % needs tests
 
     starts_with/2, % needs tests
 
     extrema_of/1, % needs tests
-    
+
     expected_value/1
 
 ] ).
-
-
-
-
-
-%% @type typelabel() = [ integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown ].  Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
-
-%% @spec type_of(Argument::any()) -> typelabel()
-
-%% @doc {@section Utility} Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of `is_bitstring()' . ```1> scutil:type_of(1).
-%% integer
-%%
-%% 2> scutil:type_of({hello,world}).
-%% tuple'''
-
-%% @since Version 14
-
-type_of(X) when is_integer(X)   -> integer;
-type_of(X) when is_float(X)     -> float;
-type_of(X) when is_list(X)      -> list;
-type_of(X) when is_tuple(X)     -> tuple;
-type_of(X) when is_binary(X)    -> binary;
-type_of(X) when is_bitstring(X) -> bitstring;  % will fail before erlang 12
-type_of(X) when is_boolean(X)   -> boolean;
-type_of(X) when is_function(X)  -> function;
-type_of(X) when is_pid(X)       -> pid;
-type_of(X) when is_port(X)      -> port;
-type_of(X) when is_reference(X) -> reference;
-type_of(X) when is_atom(X)      -> atom;
-
-type_of(_X)                     -> unknown.
-
-
-
-
-
-%% @since Version 127
-
-get_module_feature(Module, Feature) ->
-
-    case beam_lib:chunks(Module, [Feature]) of
-
-        { ok, { Module, [ {Feature,Attributes} ] } } ->
-            Attributes;
-
-        { error, beam_lib, { file_error, _, enoent} } ->
-            { error, no_such_module }
-
-    end.
-
-
-
-
-
-%% @spec get_module_attribute(Module::atom()) -> AttributeList | { error, no_such_module }
-
-%% @doc {@section Utility} Look up all attributes of a given module.  ```1> scutil:get_module_attribute(scutil).
-%% [{author,"John Haugeland <stonecypher@gmail.com>"},
-%%  {bugtracker,"http://crunchyd.com/forum/project.php?projectid=7"},
-%%  {currentsource,"http://crunchyd.com/release/scutil.zip"},
-%%  {description,"StoneCypher's utility library."},
-%%  {library_requirements,[{testerl,16}]},
-%%  {license,[{mit_license,"http://scutil.com/license.html"}]},
-%%  {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
-%%  {publicsvn,"svn://crunchyd.com/scutil/"},
-%%  {svn_head,"$HeadURL$"},
-%%  {svn_id,"$Id$"},
-%%  {svn_revision,"$Revision$"},
-%%  {testerl_export,[{[],scutil_testsuite}]},
-%%  {vsn,[134633400955530778836494569152232539093]},
-%%  {webpage,"http://scutil.com/"}]'''
-
-%% @since Version 129
-
-get_module_attribute(Module) ->
-
-    case beam_lib:chunks(Module, [attributes]) of
-
-        { ok, { _, [ {attributes,Attributes} ] } } ->
-            Attributes;
-
-        { error, beam_lib, { file_error, _, enoent} } ->
-            { error, no_such_module }
-
-    end.
-
-%% @spec get_module_attribute(Module::atom(), Attribute::atom()) -> { value, {Attribute, Value} } | { error, no_such_attribute } | { error, no_such_module }
-
-%% @doc {@section Utility} <span style="color:red">Buggy</span> Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  ```1> scutil:get_module_attribute(scutil, author).
-%% "John Haugeland <stonecypher@gmail.com>"
-%%
-%% 2> scutil:get_module_attribute(scutil, license).
-%% [{mit_license,"http://scutil.com/license.html"}]'''{@section Thanks} to Alain O'Dea for pointing out defects in this routine regarding repeated module elements, and available improvements to the provided API.  <a href="http://fullof.bs/reading-module-attributes-in-erlang#comment-475" target="_blank">Mr. O'Dea's insightful advice</a> will be implemented, but that time has not yet come.
-
-%% @since Version 23
-
-get_module_attribute(Module,Attribute) ->
-
-    % Found at http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html
-    % Reformatted for clarity, removed unnessecary framing list
-    % Added error handling behavior
-
-    case beam_lib:chunks(Module, [attributes]) of
-
-        { ok, { _, [ {attributes,Attributes} ] } } ->
-
-            case lists:keysearch(Attribute, 1, Attributes) of
-
-                { value, {Attribute,Value} } -> 
-                    Value;
-
-                false ->
-                    { error, no_such_attribute }
-
-            end;
-
-        { error, beam_lib, { file_error, _, enoent} } ->
-            { error, no_such_module }
-
-    end.
-
-
-
-
-
-%% @type hexchar() = integer().  Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.
-%% @type hexstring() = list().  All elements of the list must be of type {@type hexchar()}.
-
-%% @spec hex_to_int(HexChar::hexstring() | hexchar()) -> integer()
-%% @doc {@section Conversion} Convert a hexstring() or hexchar() into its numeric value. ```1> scutil:hex_to_int("c0ffEE").
-%% 12648430
-%%
-%% 2> scutil:hex_to_int($e).
-%% 14
-%%
-%% 3> scutil:hex_to_int("100").
-%% 256'''
-
-%% @since Version 18
-
-hex_to_int(Hex) when is_integer(Hex), Hex >= $0, Hex =< $9 -> Hex - $0;
-hex_to_int(Hex) when is_integer(Hex), Hex >= $a, Hex =< $f -> Hex - $a + 10;
-hex_to_int(Hex) when is_integer(Hex), Hex >= $A, Hex =< $F -> Hex - $A + 10;
-
-hex_to_int(Hex) when is_list(Hex) -> 
-    hex_to_int(Hex, 0).
-
-hex_to_int([],          Acc) -> Acc;
-hex_to_int([Digit|Rem], Acc) -> hex_to_int(Rem, (Acc bsl 4) + hex_to_int(Digit)).
-
-
-
-
-
-%% @type byte() = integer().  A byte must be an integer in the range 0-255, inclusive.  (Technically this is an octet, not a byte, but the word byte is extensively misused throughout the erlang documentation and standard library, which makes this an important concession, so we're when-in-Rome-ing.)
-
-%% @spec byte_to_hex(TheByte::byte()) -> hexstring()
-
-%% @doc {@section Conversion} Convert a byte() into a hexstring().  The hexstring() result will always be two characters (left padded with zero if necessary). ```1> scutil:byte_to_hex(7).
-%% "07"
-%%
-%% 2> scutil:byte_to_hex(255).
-%% "ff"'''
-
-%% @since Version 20
-
-byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 -> 
-
-    [ nybble_to_hex(TheByte bsr 4), nybble_to_hex(TheByte band 15) ].
-
-
-
-
-
-%% @type nybble() = integer().  A nybble must be an integer in the range 0-15, inclusive.
-
-%% @spec nybble_to_hex(Nyb::nybble()) -> integer()
-
-%% @doc {@section Conversion} Convert a nybble() to a hexchar(). ```1> scutil:nybble_to_hex(7).
-%% 55
-%%
-%% 2> scutil:nybble_to_hex(15).
-%% 102'''
-
-%% @since Version 19
-
-nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 0,  Nyb < 10 ->
-
-    $0 + Nyb;
-    
-
-
-nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 10, Nyb < 16 ->
-
-    $a + Nyb - 10.
-
-
-
-
-
-%% @type io_list() = list().  Every list member of an {@type io_list()} must be a {@type byte()}.
-
-%% @spec io_list_to_hex(Input::io_list()) -> hexstring()
-
-%% @doc {@section Conversion} Convert an io_list() to a hexstring().  ```1> scutil:io_list_to_hex("a").
-%% "61"
-%%
-%% 2> scutil:io_list_to_hex("a08n408nbqa").
-%% "6130386e3430386e627161"'''
-
-%% @since Version 19
-
-io_list_to_hex(Input) when is_list(Input) ->
-
-    io_list_to_hex(Input, []).
-
-
-
-io_list_to_hex([], Work) -> 
-
-    lists:reverse(Work);
-    
-
-
-io_list_to_hex([Item|Remainder], Work) when is_integer(Item), Item >= 0, Item =< 255 -> 
-
-    [A,B] = byte_to_hex(Item), 
-    io_list_to_hex(Remainder, [B,A]++Work);
-    
-
-
-io_list_to_hex(_, _) ->
-
-    {error, not_an_io_list}.
-
-
-
-
-
-%% @equiv multi_do(C,M,F,[])
-%% @since Version 38
-multi_do(C, Module, Func) ->
-   
-    multi_do(C, Module, Func, [],   []).
-
-
-
-%% @spec multi_do(Count::integer(), Module::atom(), Function::atom(), Args::list()) -> list()
-
-%% @doc {@section Serialism} Take an iteration count, a module name, a function name and an argument list, and repeatedly apply the argument list to the module/function, count times.  This is primarily useful with nondeterministic functions whose result might change despite identical arguments, such as functions with random behavior; for example, this function is invoked to implement stochastic testing in <a href="http://testerl.com/">TestErl</a>. ```1> scutil:multi_do(10, scutil, rand, [100]).
-%% [9,94,4,82,77,44,89,19,45,92]
-%%
-%% 2> scutil:multi_do(10, scutil, rand, [10000]).
-%% [2377,2559,1713,8489,4468,3261,3344,3751,380,2525]'''
-
-%% @since Version 38
-multi_do(C, Module, Func, Args) ->
-    
-    multi_do(C, Module, Func, Args, []).
-
-
-
-multi_do(0,_Module,_Func,_Args, Work) -> 
-
-    Work;
-    
-    
-
-multi_do(I, Module, Func, Args, Work) -> 
-    
-    multi_do(I-1, Module, Func, Args, Work ++ [apply(Module, Func, Args)]).
-
-
-
-
-
-%% @equiv regex_read_matches(String, Reg, {0,0})
-%% @since Version 41
-
-regex_read_matches(String, Reg) ->
-
-    regex_read_matches(String, Reg, {0,0}).
-
-
-
-
-%% @equiv regex_read_matches(String, Reg, {TrimFront,TrimLength})
-%% @since Version 41
-
-regex_read_matches(String, Reg, TrimFront, TrimLength) ->
-
-    regex_read_matches(String, Reg, {TrimFront, TrimLength}).
-
-
-
-%% @spec regex_read_matches(String::string(), Reg::string(), { TrimFront::integer(), TrimLength::integer() }) -> list() | { error, E }
-
-%% @doc {@section Regex} Take a string and a regular expression (and optionally an offset and length to trim to in each result), and return a list of all matches.  For a trim length of {A,B}, the first A and last B characters of each result will be removed.```1> scutil:regex_read_matches("0j2  4g5  8t9", "[0-9](.)[0-9]").
-%% ["0j2","4g5","8t9"]
-%%
-%% 2> scutil:regex_read_matches("0j2  4g5  8t9", "[0-9](.)[0-9]", {1,1}).
-%% ["j","g","t"]
-%%
-%% 3> scutil:regex_read_matches("0j2  4g5  8t9", "[0-9](.)[0-9]", 1, 1).
-%% ["j","g","t"]'''
-%%
-%% Why provide the equivalent syntaxes (_, _, {A,B}) and (_, _, A,B) ?  Without the tuple is more natural to many, but with the tuple is far more convenient for database-driven behavior, as well as the internal implementation.  I frequently find myself using both forms, and so every time I simplify I find myself wrapping the non-removed form back into the removed form.  Does it violate the simplest interface principle?  Yeah, but in this case it's a boon, IMO.  As such, keeping both forms.
-
-%% @since Version 41
-
-regex_read_matches(String, Reg, {TrimFront, TrimLength}) ->
-
-    case regexp:matches(String, Reg) of
-
-        { match, Matches } ->
-            [ string:substr(String, Start+TrimFront, End-(TrimLength+1)) || {Start,End} <- Matches ];
-
-        { error, E } ->
-            { error, E }
-
-    end.
-
-
-
-
-
-%% @type gridsize() = coord2() | integer().  Coordinates are the width and height of a (1,1) originated grid; as such, coordinates are of the range [1,X] , [1,Y] inclusive, and returned in the form {A,B}.  The integer form implies a square grid.
-%% @type coord() = tuple().  Every member of a {@type coord()} is a {@type number()}.  Represents a coordinate, which may imply a sized cartesian space.  Many functions expect integer coordinates; the type does not require them.  This type does not define member count.  If your function requires a specific count of members, name it, as in a {@type coord2()} or {@type coord3()}.
-%% @type coordlist() = list().  All members of a {@type coordlist()} must be {@type coord()}s.  All member coordinates must be of the same size, though this type does not define what that size is.  If your function requires a specific count of members, name it, as in a {@type coord2list()} or {@type coord3list()}.
-%% @type coord2() = { number(), number() }.  Represents a coordinate, which may imply a sized rectangle.  Many functions expect integer coordinates; the type does not require them.
-%% @type coord2list() = list().  All members of a {@type coord2list()} must be {@type coord2()}s.
-%% @type coord3() = { number(), number(), number() }.  Represents a coordinate, which may imply a sized 3d box region.  Many functions expect integer coordinates; the type does not require them.
-%% @type coord3list() = list().  All members of a {@type coord3list()} must be {@type coord3()}s.
-
-%% @spec grid_scatter(Count::integer(), Size::gridsize()) -> coordlist()
-
-%% @doc {@section Random} Return a Count-length list of non-repeating coordinates in a grid of specified size; useful for feature generation.
-
-%% @todo @comeback give code examples (edoc was failing here?)
-
-%% @since Version 42
-
-grid_scatter(0, []) -> []; % skips a lot of work
-
-
-
-grid_scatter(Count, {SizeX, SizeY}) ->
-
-    scutil:random_from(Count, [ {X,Y} || X <- lists:seq(1,SizeX), Y <- lists:seq(1,SizeY) ]);
-
-
-
-grid_scatter(Count, Size) ->
-
-    grid_scatter(Count, {Size, Size}).
-
-
-
-
-
-%% @spec srand() -> { ok, { seeded, Seed } }
-
-%% @doc {@section Random} <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want to know what seed was used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> scutil:srand().
-%% {ok,{seeded,{1227,902172,685000}}}
-%%
-%% 2> scutil:srand().
-%% {ok,{seeded,{1227,902173,231000}}}'''
-
-%% @since Version 5
-%% @todo migrate to labelled random generators, so that concurrent generators do not necessarily interfere with one another
-
-srand() ->
-
-    {A,B,C} = erlang:now(),
-    srand(A,B,C).
-
-
-
-
-
-%% @spec srand(A::integer(), B::integer(), C::integer()) -> { ok, { seeded, Seed } }
-%% @doc {@section Random} <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want set what seed is used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> scutil:srand(1,2,3).
-%% {ok,{seeded,{1,2,3}}}
-%%
-%% 2> scutil:srand().
-%% {ok,{seeded,{1227,902568,604600}}}
-%%
-%% 3> scutil:srand(1,2,3).
-%% {ok,{seeded,{1,2,3}}}'''
-
-%% @since Version 5
-%% @todo migrate to labelled random generators, so that concurrent generators do not necessarily interfere with one another
-
-srand(A,B,C) ->
-
-    RandomGeneratorPid = spawn(?MODULE, random_generator, [A,B,C]),
-
-    case whereis(scutil_rand_source) of
-
-        undefined ->
-            ok;
-
-        _Defined ->
-            unregister(scutil_rand_source)  % todo fixme leak : this should notify the old rand_source that it is being discarded
-
-    end,
-
-    register(scutil_rand_source, RandomGeneratorPid),
-    { ok, { seeded, {A,B,C} } }.
-
-
-
-
-
-%% @private
-
-random_generator(SeedA, SeedB, SeedC) ->
-
-    random:seed(SeedA, SeedB, SeedC),
-    random_generator().
-
-
-
-
-
-%% @private
-
-random_generator() ->
-
-    receive
-
-        terminate ->
-            { ok, terminated };
-
-        [Return, Range] ->
-            Val = random:uniform(Range),
-            Return ! Val,
-            random_generator();
-
-        _  ->
-            random_generator()
-
-    end.
-
-
-
-
-
-%% @spec rand(Range::integer()) -> integer()
-
-%% @doc {@section Random} Returns a pseudorandom integer on the range `[0 - (Range-1)]' inclusive. ```1> scutil:rand(100).
-%% 9
-%%
-%% 2> [ scutil:rand(100) || X <- lists:seq(1,10) ].
-%% [12,27,99,86,20,96,28,36,28,15]
-%%
-%% 3> scutil:histograph([ scutil:rand(10) || X <- lists:seq(1,10000) ]).
-%% [{0,992}, {1,990}, {2,992}, {3,1033}, {4,1017}, {5,1003}, {6,996}, {7,1024}, {8,969}, {9,984}]
-%%
-%% 4> scutil:histograph([ scutil:rand(10) || X <- lists:seq(1,10000) ]).
-%% [{0,1028}, {1,979}, {2,934}, {3,970}, {4,1035}, {5,1007}, {6,986}, {7,1012}, {8,1052}, {9,997}]'''
-
-%% @since Version 5
-
-rand(Range) ->
-
-    case whereis(scutil_rand_source) of
-
-        undefined ->
-            srand(),
-            rand(Range);
-
-        _ ->
-
-            scutil_rand_source ! [ self(), Range ],
-            receive RandVal -> RandVal - 1 end
-
-    end.
-
-
-
-
-
-%% @equiv random_from(1, List, no_remainder)
-%% @since Version 6
-
-random_from(List) ->
-
-    [X] = random_from(1, List, no_remainder), X.
-
-
-
-%% @equiv random_from(N, List, no_remainder)
-%% @since Version 6
-
-random_from(N, List) ->
-
-    random_from(N, List, no_remainder).
-
-
-
-%% @spec random_from(N::integer(), List::list(), WantRemainder::want_remainder()) -> list()
-
-%% @doc {@section Random} Take N non-repeating random elements from a list in undefined order.  If the atom `remainder' is passed in as the third argument, the unused portion of the source list will be returned as the second member of a 2ary tuple with the results; the default is no_remainder, which only returns the result set.  Mixed type input lists are perfectly safe, and membership for random selection is shallow (ie, `[ [1,2], [3,4] ]' as an input list would only generate outputs of lists, never integers.)```1> scutil:random_from([monday,tuesday,wednesday,thursday,friday]).
-%% friday
-%%
-%% 2> scutil:random_from(4, lists:seq(1,20)).
-%% [6,3,15,12]
-%%
-%% 3> scutil:random_from(3, [warrior, mage, cleric, thief, paladin, ranger, bard]).
-%% [cleric,warrior,ranger]
-%%
-%% 4> scutil:random_from(6, [mixed, [1,2,3], 4, {five,5}, 3, 67.2, <<"Hello">>, 8]).
-%% [[1,2,3],{five,5},4,mixed,<<"Hello">>,67.2]
-%%
-%% 5> {Team1, Team2} = scutil:random_from(3, [alice,bob,cathy,dave,edward,fawn], remainder).
-%% {[cathy,fawn,dave],[bob,edward,alice]}
-%%
-%% 6> Team1.
-%% [cathy,fawn,dave]
-%%
-%% 7> Where_Food = fun() -> scutil:random_from([deli, fastfood, chinese, mexican, steakhouse, bistro, greek, indian, thai, sushi]) end.
-%% #Fun<erl_eval.20.67289768>
-%%
-%% 8> Where_Food().
-%% thai'''
-
-%% @since Version 6
-
-random_from(N, List, no_remainder) ->
-
-    {R,_} = random_from(N,List,remainder), R;
-
-
-
-random_from(N, List, remainder) ->
-
-    lists:split(N,shuffle(List)).
-
-
-
-
-
-%% @type weightedvalue() = { Value::any(), Weight::number() }.  Used by functions like weighted_arithmetic_mean/1 and random_from_weighted/1, weightedvalue()s represent a value with an associated importance or "weight".
-%% @type weightlist() = list().  All members of weightlists must be weightedvalue()s.
-
-%% @spec random_from_weighted(InputList::weightlist()) -> any()
-
-%% @doc {@section Random} Take a random single item from a list with weighted probabilities.  Probabilities may be any numeric type, and may be any non-negative value (items with zero probability will be omitted).  Input is a `weightlist()', which is a list in the form `[{Item,Probability}, {I2,P2}, ...]'. There is no requirement to normalize probabilities to any range, though probabilities normalized to ranges will still work as expected. ```1> scutil:random_from([ {quad,4}, {double,2}, {single,1} ]).
-%% quad
-%%
-%% 2> [ scutil:random_from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X <- lists:seq(1,10) ].
-%% [single,quad,quad,double,quad,double,quad,quad,quad,double]
-%%
-%% 3> scutil:histograph([ scutil:random_from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X <- lists:seq(1,777777) ]).
-%% [{double,222200},{quad,444165},{single,111412}]'''
-%% @since Version 10
-
-% InputList is [ {Item,Weight}, {Item,Weight}, ... ]
-
-random_from_weighted(InputList) when is_list(InputList) ->
-
-    RandomLimit = rand(lists:sum([ Weight || {_,Weight} <- InputList ])),  % the random cap is equal to the sum of all the weights
-    random_from_weighted_worker(InputList, RandomLimit).                   % call the worker with the original list and the cap
-
-
-
-% if the list is empty, the cap for randomness was calculated wrongly, and as such the random point is too high
-
-random_from_weighted_worker([], _) ->
-
-    { error, limit_miscalculation };
-
-
-
-% but if the list has reasonable contents and the limit is a pos-or-0 integer
-
-random_from_weighted_worker(InputList, Limit) when is_list(InputList), is_integer(Limit), Limit >= 0 ->
-
-    [ {Item,Weight} | Remainder ] = InputList,   % break off the input list's head as {I,W} and keep the rest as Remainder
-
-    case Weight =< Limit of                                             % if the weight is less than or equal to the limit,
-
-        true  ->
-            random_from_weighted_worker(Remainder, Limit-Weight);       % recurse the next item with a decremented weight
-
-        false ->
-            Item                                                        % if not, this item is the one we want
-
-    end.
 
 
 
@@ -1143,64 +557,6 @@ even_or_odd(Num) when is_integer(Num) ->
 
 
 
-
-%start() ->
-%
-%    case gen_tcp:listen(25,[]) of
-%
-%        { ok, ListeningSocket } -> { ok, listening_on_pid, spawn(?MODULE, accept_loop, [ListeningSocket]) };
-%        { error, E }            -> { error, E }
-%
-%    end.
-%
-%
-%
-%
-%
-%accept_loop(ListeningSocket) ->
-%
-%    case gen_tcp:accept(ListeningSocket) of
-%
-%        { ok, ConnectedSocket } ->
-%            spawn(?MODULE, handler_loop, [ConnectedSocket]),
-%            accept_loop(ListeningSocket);
-%
-%        { error, E } ->
-%            accept_loop(ListeningSocket)
-%
-%    end.
-%
-%
-%
-%
-%
-%handler_loop(ConnectedSocket) ->
-%
-%    receive
-%
-%        terminate              -> ok;
-%        { tcp, Socket, Input } -> gen_tcp:send(Socket, "You said " ++ Input ++ "\r\n"), handler_loop(ConnectedSocket);
-%        { error, E }           -> { error, E }
-%
-%    end.
-
-
-
-
-
-%% @todo TODO
-
-% key_split(KeyId, TupleList)           when is_list(TupleList) -> key_split(KeyId, TupleList,                       unsorted).
-% key_split(KeyId, TupleList, unsorted) when is_list(TupleList) -> key_split(KeyId, lists:keysort(KeyId, TupleList), sorted);
-% key_split(KeyId, TupleList, sorted)   when is_list(TupleList) ->
-
-% key_minimum(
-% key_maximum(
-
-
-
-
-
 %% @since Version 152
 
 gen_docs( [From, To] ) ->
@@ -1210,6 +566,40 @@ gen_docs( [From, To] ) ->
 
 
 
-% todo invert this so that it returns {currentcount, fun, result} so that it can be continued
-% generate(0, _) -> [];
-% generate(N, Fun) when is_integer(N) andalso N > 0 andalso is_function(Fun) -> [Fun()] ++ generate(N-1,Fun).
+
+%% @since Version 2??
+
+compile_all(From) ->
+
+    c(From ++ "src/list.erl").
+
+
+
+
+
+%% @since Version 2??
+
+install(From) ->
+
+    compile_all(From),
+    gen_docs(From ++ "src/", From ++ "doc/"),
+
+    case verify_install() of
+
+        correct ->
+            { ok, installed }.
+
+        { broken, Reason } ->
+            { broken, Reason }
+
+    end.
+
+
+
+
+
+%% @since Version 2??
+
+verify_install() ->
+
+    { error, not_yet_implemented }.
