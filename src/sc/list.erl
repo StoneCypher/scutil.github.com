@@ -77,3 +77,86 @@ list_to_term(List) ->
 key_duplicate(KeyList) ->
 
     lists:flatten( [ lists:duplicate(Key, Value) || {Key,Value} <- KeyList ] ).
+
+
+
+
+
+%% @since Version 168
+
+list_rotate(0, List) ->
+
+    List;
+
+
+
+list_rotate(By, List) when By =< (-(length(List))) ->
+    
+    list_rotate(By rem length(List), List);
+
+
+
+list_rotate(By, List) when By < 0 ->
+
+    list_rotate(length(List) + By, List);
+
+
+
+list_rotate(By, List) when By >= length(List) ->
+
+    list_rotate(By rem length(List), List);
+
+
+
+list_rotate(By, List) ->
+
+    { Front, Rear } = lists:split(By, List),
+    Rear ++ Front.
+
+
+
+
+
+%% @since Version 169
+
+index_of_first(Item, List) ->
+
+    index_of_first(Item, List, 1).
+
+
+
+index_of_first(_Item, [], _Pos) ->
+
+    undefined;
+
+
+
+index_of_first(Item, [Item|_ListRem], Pos) ->
+
+    Pos;
+
+
+
+index_of_first(Item, [_OtherItem|ListRem], Pos) ->
+
+    index_of_first(Item, ListRem, Pos+1).
+
+
+
+
+
+%% @since Version 170
+
+rotate_to_first(Item, List) ->
+
+    list_rotate(index_of_first(Item, List)-1, List).
+
+
+
+
+
+%% @since Version 170
+
+rotate_first_to_end(Item, List) ->
+
+    list_rotate(index_of_first(Item, List), List).
