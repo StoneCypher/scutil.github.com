@@ -871,3 +871,66 @@ sanitize_tokens(List, Allowed) when is_list(List), is_list(Allowed) ->
 % todo invert this so that it returns {currentcount, fun, result} so that it can be continued
 % generate(0, _) -> [];
 % generate(N, Fun) when is_integer(N) andalso N > 0 andalso is_function(Fun) -> [Fun()] ++ generate(N-1,Fun).
+
+
+
+
+
+% todo implement catching tuple { key, reqtype } from list, to auto-convert before return
+% todo There may be a crashing bug here for repeated attributes, which are apparently legal, see http://fullof.bs/reading-module-attributes-in-erlang#comment-466
+% todo It may help to re-implement this using proplists instead of doing it manually, profile
+%% @todo document this
+
+% interface
+
+elements(Config, Requested)                when is_list(Config), is_list(Requested)                     -> elements_worker([], Config, Requested, 1).
+elements(Config, Requested, KeyIdx)        when is_list(Config), is_list(Requested), is_integer(KeyIdx) -> elements_worker([], Config, Requested, KeyIdx);
+
+elements(Config, Requested, strip)         when is_list(Config), is_list(Requested)                     -> elements_worker([], Config, Requested, 1,      strip).
+elements(Config, Requested, KeyIdx, strip) when is_list(Config), is_list(Requested), is_integer(KeyIdx) -> elements_worker([], Config, Requested, KeyIdx, strip).
+
+
+
+
+
+% implementation
+
+elements_worker(Retlist, _,      [],        _)      -> Retlist;
+elements_worker(Retlist, Config, Requested, KeyIdx) ->
+
+    [ ThisRequest | RemainingRequests ] = Requested,
+
+    case lists:keysearch(ThisRequest, KeyIdx, Config) of
+
+        false ->
+            elements_worker(Retlist ++ [undefined], Config, RemainingRequests, KeyIdx);
+
+        { value, Tuple } ->
+            elements_worker(Retlist ++ [Tuple],     Config, RemainingRequests, KeyIdx);
+
+        AnythingElse ->
+            { error, response_not_understood, { for, lists, keysearch, { ThisRequest, Config } }, { got, AnythingElse } }
+
+    end.
+
+
+
+
+
+elements_worker(Retlist, _,      [],        _,      strip) -> Retlist;
+elements_worker(Retlist, Config, Requested, KeyIdx, strip) ->
+
+    [ ThisRequest | RemainingRequests ] = Requested,
+
+    case lists:keysearch(ThisRequest, KeyIdx, Config) of
+
+        false ->
+            elements_worker(Retlist ++ [undefined], Config, RemainingRequests, KeyIdx, strip);
+
+        { value, {_,Tuple} } ->
+            elements_worker(Retlist ++ [Tuple],     Config, RemainingRequests, KeyIdx, strip);
+
+        AnythingElse ->
+            { error, response_not_understood, { for, lists, keysearch, { ThisRequest, Config } }, { got, AnythingElse } }
+
+    end.
