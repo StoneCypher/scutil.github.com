@@ -1,0 +1,4 @@
+
+-module(sc.lazy).
+
+-export( [] ).
