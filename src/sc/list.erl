@@ -67,3 +67,13 @@ list_to_term(List) ->
         Error -> { error, Error }
 
     end.
+
+
+
+
+
+%% @since Version 200
+
+key_duplicate(KeyList) ->
+
+    lists:flatten( [ lists:duplicate(Key, Value) || {Key,Value} <- KeyList ] ).

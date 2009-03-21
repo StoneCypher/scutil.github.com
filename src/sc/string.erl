@@ -149,3 +149,76 @@ map_scanline(F,L,A) ->
     ),
 
     {lists:reverse(R), lists:reverse(M)}.
+
+
+
+
+
+% by fredrik svensson and adam lindberg, from http://www.merriampark.com/lderlang.htm
+
+%% @since Version 202
+
+levenshtein(Same, Same) when is_list(Same) ->
+
+    0;
+
+
+
+levenshtein(String, []) when is_list(String) ->
+
+    length(String);
+
+
+
+levenshtein( [], String) when is_list(String) -> 
+
+    length(String);
+
+
+
+levenshtein(Source, Target) when is_list(Source), is_list(Target) -> 
+
+    levenshtein_rec(Source, Target, lists:seq(0, length(Target)), 1).
+
+
+
+
+
+% Recurses over every character in the source string and calculates a list of distances
+%% @private
+
+levenshtein_rec( [SrcHead|SrcTail], Target, DistList, Step) ->
+
+    levenshtein_rec(SrcTail, Target, levenshtein_distlist(Target, DistList, SrcHead, [Step], Step), Step + 1);
+
+
+
+levenshtein_rec( [], _, DistList, _) ->
+
+    lists:last(DistList).
+
+
+
+
+
+% Generates a distance list with distance values for every character in the target string
+%% @private
+
+levenshtein_distlist([TargetHead|TargetTail], [DLH|DLT], SourceChar, NewDistList, LastDist) when length(DLT) > 0 ->
+
+    Min = lists:min( [LastDist + 1, hd(DLT) + 1, DLH + lev_dif(TargetHead, SourceChar)] ),
+    levenshtein_distlist(TargetTail, DLT, SourceChar, NewDistList ++ [Min], Min);
+
+
+
+levenshtein_distlist([], _, _, NewDistList, _) ->
+
+    NewDistList.
+
+
+
+% Calculates the difference between two characters or other values
+%% @private
+
+lev_dif( C,   C ) -> 0;
+lev_dif(_C1, _C2) -> 1.
