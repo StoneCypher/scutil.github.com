@@ -5517,22 +5517,22 @@ extrema_of(List) ->
     lists:foldl(
 
         fun(Next,T) ->
-    
+
             io:format("~w ~w~n", [T,Next]),
             {Hi, Lo} = T,
-    
-            Lo2 = if 
+
+            Lo2 = if
                 Next < Lo ->
                     Next;
                 true ->
                     Lo
             end,
 
-            Hi2 = if 
-                Next > Hi -> 
-                    Next; 
-                true -> 
-                    Hi 
+            Hi2 = if
+                Next > Hi ->
+                    Next;
+                true ->
+                    Hi
             end,
 
             {Hi2, Lo2}
