@@ -222,3 +222,11 @@ levenshtein_distlist([], _, _, NewDistList, _) ->
 
 lev_dif( C,   C ) -> 0;
 lev_dif(_C1, _C2) -> 1.
+
+
+
+
+
+%% mapsplode( % todo      [ Func(X) || X <- explode(Delim, Source) ]
+%% exp_map_imp( % todo    implode(Delim, [Func(X) || X <- explode(Delim, Source) ] )    % maybe called imp_mapsplode?
+%% quotesplode(           ("a,b,'c,d',e","'") -> ["a","b","'c,d'","e"]
