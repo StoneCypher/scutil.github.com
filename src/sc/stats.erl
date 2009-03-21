@@ -157,3 +157,173 @@ gmean_vector_normal(VX) ->
 hmean_vector_normal(VX) -> 
 
     harmonic_mean(normalize_vector(VX)).
+
+
+
+
+
+% thanks to Chile and Kraln for straightening me out on moments and central moments
+
+%% @spec moment(List::list(), N::number()) -> float()
+
+%% @doc {@section Statistics} Takes the Nth moment of a list.  The Nth moment of a list is the arithmetic mean of the list items, each taken to the Nth power.  Fractional Ns are well defined
+%% and have obscure uses, though most will only ever use this with integer values of N; this function is valid for both.  Not to be confused with {@link central_moment/2}.  {@section Thanks}
+%% to Kraln and Chile for straightening me out on moments and central moments.  ```1> scutil:moment([1,1,1], 2).
+%% 1.0
+%%
+%% 2> scutil:moment([2,2,2], 2).
+%% 4.0
+%%
+%% 3> scutil:moment([1,2,3], 2).
+%% 4.666666666666667
+%%
+%% 4> scutil:moment([1,2,3], 3).
+%% 12.0
+%%
+%% 5> scutil:moment([1,2,3], 3.5).
+%% 19.693026767781483'''
+
+%% @since Version 50
+
+moment(List, N) when is_list(List), is_number(N) ->
+    
+    scutil:arithmetic_mean( [ math:pow(Item, N) || Item <- List ] ).
+
+
+
+%% @equiv [ moment(List, N) || N <- [2,3,4] ]
+
+moments(List) -> 
+
+    moments(List, [2,3,4]).
+    
+
+
+%% @equiv [ moment(List, N) || N <- Moments ]
+
+moments(List, Moments) when is_list(Moments) -> 
+
+    [ moment(List, M) || M <- Moments ].
+
+
+
+
+
+% thanks to Chile and Kraln for straightening me out on moments and central moments
+
+%% @spec central_moment(List::list(), N::integer()) -> float()
+
+%% @doc {@section Statistics} Takes the Nth cetral moment of a list.  The Nth central moment of a list is the arithmetic mean of (the list items each minus the mean of the list, each
+%% taken to the Nth power).  In a sense, this is the "normalized" moment.  Fractional Ns are not defined.  Not to be confused with {@link moment/2}.  {@section Thanks} to Kraln and
+%% Chile for straightening me out on moments and central moments.  ```1> scutil:central_moment([1,1,1], 2).
+%% 0.0
+%%
+%% 2> scutil:central_moment([2,2,2], 2).
+%% 0.0
+%%
+%% 3> scutil:central_moment([1,2,3], 2).
+%% 0.666666666666666
+%%
+%% 4> scutil:central_moment([1,2,3], 3).
+%% 0.0'''
+
+%% @since Version 50
+
+central_moment(List, N) when is_list(List), is_integer(N) ->
+    
+    ListAMean = scutil:arithmetic_mean(List),
+    scutil:arithmetic_mean( [ math:pow(Item-ListAMean, N) || Item <- List ] ).
+
+
+
+%% @equiv [ central_moment(List, N) || N <- [2,3,4] ]
+
+central_moments(List) ->
+
+    central_moments(List, [2,3,4]).
+
+
+
+%% @equiv [ central_moment(List, N) || N <- Moments ]
+
+central_moments(List, Moments) when is_list(Moments) -> 
+
+    [ central_moment(List, M) || M <- Moments ].
+
+
+
+
+
+%% @equiv central_moment(List, 3)
+
+skewness(List) -> 
+
+    central_moment(List, 3).
+    
+
+
+%% @equiv central_moment(List, 4)
+
+kurtosis(List) -> 
+
+    central_moment(List, 4).
+
+
+
+
+
+%% @spec std_deviation(Values::numericlist()) -> float()
+
+%% @doc {@section Statistics} Measures the standard deviation of the values in the list.  ```1> scutil:std_deviation([1,2,3,4,5]).
+%% 1.4142135623730951
+%%
+%% 2> scutil:std_deviation([2,2,2,2,2]).
+%% 0.0'''
+
+%% @since Version 39
+
+std_deviation(Values) when is_list(Values) ->
+
+    Mean = arithmetic_mean(Values),
+    math:sqrt(arithmetic_mean([ (Val-Mean)*(Val-Mean) || Val <- Values ])).
+
+
+
+
+
+%% @spec histograph(List::list()) -> weightlist()
+
+%% @doc {@section Statistics} Takes a histograph count of the items in the list.  Mixed type lists are safe.  Input lists do not need to be sorted.  The histograph is shallow - that is, the histograph of `[ [1,2], [1,2], [2,2] ]' is `[ {[1,2],2}, {[2,2],1} ]', not `[ {1,2}, {2,4} ]'. ```1> scutil:histograph([1,2,a,2,b,1,b,1,b,2,a,2,2,1]).
+%% [{1,4},{2,5},{a,2},{b,3}]
+%%
+%% 2> scutil:histograph([ scutil:rand(10) || X <- lists:seq(1,100000) ]).
+%% [{0,10044}, {1,9892}, {2,10009}, {3,10016}, {4,10050}, {5,10113}, {6,9990}, {7,9994}, {8,10004}, {9,9888}]'''
+
+%% @since Version 19
+
+%% @todo add an argument presort to this and other functions to skip the sorting pass
+
+histograph(List) when is_list(List) ->
+
+    [Head|Tail] = lists:sort(List),
+    histo_count(Tail, Head, 1, []).
+
+
+
+%% @private
+
+histo_count( [], Current, Count, Work) -> 
+
+     lists:reverse([{Current,Count}]++Work);
+
+
+
+histo_count( [Current|Tail], Current, Count, Work) -> 
+
+    histo_count(Tail, Current, Count+1, Work);
+    
+    
+
+histo_count( [New|Tail], Current, Count, Work) -> 
+
+    histo_count(Tail, New, 1, [{Current,Count}] ++ Work).

@@ -792,3 +792,30 @@ walk_unique_pairings( A, [Rh|Rr], F) ->
 
     F(A,Rh),
     walk_unique_pairings(A, Rr, F).
+
+
+
+
+
+%% @spec list_product(A::numericlist()) -> number()
+
+%% @doc {@section Math} Takes the product of all numbers in the list.  Offered mostly to make dependant code clearer. ```1> scutil:list_product([1,2,5.4]).
+%% 10.8'''
+
+%% @since Version 39
+
+list_product(List) when is_list(List) ->
+
+    list_product(List, 1).
+
+
+
+list_product([], Counter) ->
+
+    Counter;
+
+
+
+list_product([Head|Tail], Counter) ->
+
+    list_product(Tail, Counter*Head).

@@ -48,3 +48,20 @@ interpret_flesch_kincaid_score(R) when R >  60 -> { easy_for_13_to_15_years,  R 
 interpret_flesch_kincaid_score(R) when R >  30 -> { appropriate_for_15_years, R };
 interpret_flesch_kincaid_score(R) when R >   0 -> { appropriate_for_college,  R };
 interpret_flesch_kincaid_score(R)              -> { difficult,                R }.
+
+
+
+
+
+%% @type stringlist() = list().  Every member of a stringlist() is a string().
+
+%% @spec to_lines(Text::string()) -> stringlist()
+
+%% @doc {@section String} Cuts a string according to any of the three newline conventions (even mixed), and discards empty strings. ```1> scutil:to_lines("one\rtwo\nthree\r\nfour\r\r\rfive").
+%% ["one","two","three","four","five"]'''
+
+%% @since Version 2
+
+to_lines(Text) ->
+
+    string:tokens(Text, "\r\n"). % yay convenience functions
