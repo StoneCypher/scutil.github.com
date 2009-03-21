@@ -230,3 +230,22 @@ lev_dif(_C1, _C2) -> 1.
 %% mapsplode( % todo      [ Func(X) || X <- explode(Delim, Source) ]
 %% exp_map_imp( % todo    implode(Delim, [Func(X) || X <- explode(Delim, Source) ] )    % maybe called imp_mapsplode?
 %% quotesplode(           ("a,b,'c,d',e","'") -> ["a","b","'c,d'","e"]
+
+
+
+
+
+% thanks for a much better implementation, etnt
+
+implode(Separator, Data) when is_list(Data) andalso is_list(Separator) ->
+
+    lists:foldr(
+
+        fun(Item, [])  -> Item;
+           (Item, Acc) -> Item ++ Separator ++ Acc 
+        end,
+
+        "",
+        Data
+
+    ).

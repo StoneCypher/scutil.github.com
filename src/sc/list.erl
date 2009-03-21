@@ -516,3 +516,63 @@ zip_n_foldn(Fun, Acc0, Ls, Ret) ->
         [ tl(L) || L <- Ls ],
         [ lists:foldl(Fun, Acc0, [hd(L) || L <- Ls] ) | Ret ]
     ).
+
+
+
+
+
+%% @type list_of_lists() = list().  Every member of a {@type list_of_lists()} is a {@type list()}.
+
+%% @spec combinations(Items::list(), OutputItemSize::positive_integer()) -> list_of_lists()
+
+%% @doc {@section List} Provides a list of every unique combination of input terms, order-ignorant; contrast {@link permute/2}.  Permutations are all unique combinations of a set of tokens; the 2-permutations of `[a,b,c]' for example are `[a,b]', `[a,c]' and `[b,c]'.  Note the absence of other orderings, such as `[b,a]', which are provided by {@link permute/2}.  Combinations are taken of a smaller count of tokens than the main set.  Combinations are not ordered, but this implementation happens to provide answers in the same order as the input list.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> scutil:combinations([a,b,c,d],2).
+%% [[a,b],[a,c],[a,d],[b,c],[b,d],[c,d]]
+%%
+%% 2> scutil:combinations(["dave","kate","pat"],2).
+%% [["dave","kate"],["dave","pat"],["kate","pat"]]
+%%
+%% 3> scutil:combinations([fast, strong, smart, lucky], 2).
+%% [[fast,strong], [fast,smart], [fast,lucky], [strong,smart], [strong,lucky], [smart,lucky]]''' {@section Thanks} to Alisdair Sullivan for this implementation, which has been slightly but not significantly modified since receipt.
+
+%% @since Version 89
+
+combinations(Items, 1) when is_list(Items) -> 
+
+    Items;
+
+
+
+combinations([], _N) -> 
+
+   [];
+
+
+
+combinations(Items, N) when is_list(Items), is_integer(N), N > 0 ->
+
+    [ lists:flatten(lists:append( [lists:nth(I, Items)], [J] )) ||
+      I <- lists:seq(1, length(Items)),
+      J <- combinations( lists:nthtail(I, Items), (N-1) )  
+    ].
+
+
+
+
+
+%% @since Version 51
+
+expand_label({Label,List}) when is_list(List) ->
+
+     [ {Label,L} || L<-List ];
+
+
+
+expand_label({Label,Item}) ->
+
+    {Label, Item}.
+
+
+
+expand_labels(List) when is_list(List) ->
+
+    lists:flatten( [ expand_label(X) || X <- List ] ).
