@@ -433,3 +433,86 @@ intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head < L2Head ->
 intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head > L2Head ->
 
     intersect_walk( [L1Head|L1Rem], L2Rem, Work).
+
+
+
+
+
+%% @spec zip_n(Ls::list()) -> list_of_tuples()
+%% @equiv zip_n(Ls, to_tuple)
+
+zip_n(Ls) ->
+
+    zip_n(Ls, to_tuple).
+
+
+
+%% @spec zip_n(Ls::list(), ResultType::atom()) -> list_of_tuples()
+
+%% @doc {@section List} Computes a zip on any sized group of lists, rather than just two or three as offered by the lists module.
+%%
+%% This is actually more efficient than one might expect at first glance.  I ran a benchmark of 100,000 transformations of a list of lists into a list of tuples using {@link benchmark/3} and {@link multi_do/4} against both zip_n and the library function zip3; the library function won at 150 seconds to 175, which is a far smaller difference than I expected.```1> Testy = [ [1,2,3], [1,2,3], [1,2,3] ].
+%% [[1,2,3],[1,2,3],[1,2,3]]
+%%
+%% 2> scutil:benchmark(scutil, multi_do, [100000, scutil, zip_n, [Testy]]).
+%% {174.95563, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }
+%%
+%% 3> scutil:benchmark(scutil, multi_do, [100000, lists, zip3, Testy]).
+%% {149.605, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }'''
+%%
+%% {@section Thanks} Thanks to Vladimir Sessikov for contributing this to and thus allowing conscription from <a href="http://www.erlang.org/ml-archive/erlang-questions/200207/msg00066.html">the mailing list</a>.
+
+%% @since Version 108
+
+zip_n(Ls, to_tuple) -> 
+
+    [ list_to_tuple(L) || 
+        L <- zip_n_listn(Ls)
+    ];
+
+
+
+zip_n(Ls, to_list) ->
+
+    zip_n_listn(Ls).
+
+
+
+%% @private
+
+zip_n_listn(Ls) ->
+
+    [ lists:reverse(L) ||
+        L <- zip_n_foldn(fun (A, Acc) -> [A|Acc] end, [], Ls)
+    ].
+
+
+
+%% @private
+
+zip_n_foldn(_, _, []) -> 
+
+    [];
+    
+
+
+zip_n_foldn(Fun, Acc0, Ls) -> 
+
+    zip_n_foldn(Fun, Acc0, Ls, []).
+    
+
+
+zip_n_foldn(_, _, [ [] | _ ], Ret) -> 
+
+    lists:reverse(Ret);
+    
+    
+
+zip_n_foldn(Fun, Acc0, Ls, Ret) -> 
+
+    zip_n_foldn(
+        Fun, 
+        Acc0, 
+        [ tl(L) || L <- Ls ],
+        [ lists:foldl(Fun, Acc0, [hd(L) || L <- Ls] ) | Ret ]
+    ).

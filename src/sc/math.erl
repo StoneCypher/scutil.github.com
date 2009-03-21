@@ -103,3 +103,39 @@ factorial(1, Counter) ->
 factorial(X, Counter) when is_integer(X), X > 1 ->
 
     factorial(X-1, Counter*X).
+
+
+
+
+
+%% @spec square(Input::number()) -> number()
+
+%% @doc {@section Math} Squares the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions. ```1> scutil:square(2).
+%% 4
+%%
+%% 2> scutil:square(2.5).
+%% 6.25'''
+
+%% @since Version 108
+
+square(X) -> 
+    
+    X*X.
+
+
+
+
+
+%% @spec cube(Input::number()) -> number()
+
+%% @doc {@section Math} Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions. ```1> scutil:cube(2).
+%% 8
+%%
+%% 2> scutil:cube(2.5).
+%% 6.25'''
+
+%% @since Version 165
+
+cube(X) -> 
+
+    X*X*X.
