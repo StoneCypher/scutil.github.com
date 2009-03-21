@@ -191,3 +191,46 @@ function_labels(Module) ->
             {_,L,_,_} <- scutil:abstract_functions(Module)
         ]
     ).
+
+
+
+
+
+%% @since version 138
+
+entrypoint_count(Module) ->
+
+    length(list_entrypoints(Module)).
+
+
+
+
+
+%% @since Version 140
+
+function_label_count(Module) ->
+
+    length(list_function_labels(Module)).
+
+
+
+
+
+%% @since Version 140
+
+function_point_count(Module) ->
+
+    length(list_function_points(Module)).
+
+
+
+
+
+%% @since Version 140
+
+function_stats(Module) -> 
+
+    [ { entrypoints,     entrypoint_count(Module)     },
+      { function_labels, function_label_count(Module) },
+      { function_points, function_point_count(Module) }
+    ].
