@@ -4566,34 +4566,6 @@ unit_scale_signal(Waveform) ->
 
 
 
-%% @since Version 140
-
-list_function_points(Module) ->
-
-    lists:usort(
-        [ {L,A} ||
-            {_,L,A,_} <- scutil:abstract_functions(Module)
-        ]
-    ).
-
-
-
-
-
-%% @since Version 140
-
-list_function_labels(Module) ->
-
-    lists:usort(
-        [ L ||
-            {_,L,_,_} <- scutil:abstract_functions(Module)
-        ]
-    ).
-
-
-
-
-
 %% @since version 138
 
 entrypoint_count(Module) ->
