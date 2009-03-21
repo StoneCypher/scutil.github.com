@@ -297,9 +297,6 @@
 
     type_of/1,
 
-    get_module_feature/2, get_module_attribute/1, get_module_attribute/2, abstract_code/1, abstract_code/2, abstract_attributes/1, abstract_functions/1, abstract_function/2, module_atoms/1,
-      entrypoint_count/1, list_entrypoints/1, list_entrypoints/2, function_stats/1, list_function_labels/1, function_label_count/1, function_point_count/1, list_function_points/1, % needs tests
-
     byte_to_hex/1, nybble_to_hex/1, io_list_to_hex/1, % needs tests
     regex_read_matches/2, regex_read_matches/3, regex_read_matches/4, % needs tests
     multi_do/3, multi_do/4, % needs tests
@@ -4564,112 +4561,6 @@ unit_scale_signal(Waveform) ->
     [ (Sample - Baseline) / SignalMax || 
         Sample <- Waveform 
     ].
-
-
-
-
-
-
-%% @since Version 130
-
-module_atoms(Module) -> 
-
-    get_module_feature(Module, atoms).
-
-
-
-
-
-%% @since Version 130
-
-abstract_code(Module) ->
-
-    abstract_code(Module, unstripped).
-
-
-
-abstract_code(Module, DoStrip) ->
-
-    case get_module_feature(Module, abstract_code) of
-
-        { raw_abstract_v1, ACode } ->
-
-            case DoStrip of
-                
-                stripped -> 
-                    ACode;
-
-                unstripped -> 
-                    { raw_abstract_v1, ACode }
-
-            end;
-
-        no_abstract_code ->
-
-            { error, "ScUtil's abstract code functions require that a module be compiled with debug_info enabled, eg 'c(" ++ atom_to_list(Module) ++ ",[debug_info]).'" }
-
-    end.
-
-
-
-
-
-%% @since version 138
-
-abstract_attributes(Module) ->
-
-    [ {Id, Name, Value} ||
-        {attribute, Id, Name, Value} <- abstract_code(Module, stripped)
-    ].
-
-
-
-
-
-%% @since version 138
-
-abstract_functions(Module) ->
-
-    [ {Id, Name, Arity, Code} ||
-        {function, Id, Name, Arity, Code} <- abstract_code(Module, stripped)
-    ].
-
-
-
-
-
-%% @since version 138
-
-abstract_function(Module, FName) ->
-
-    [ {Id, Name, Arity, Code} ||
-        {function, Id, Name, Arity, Code} <- abstract_code(Module, stripped),
-        Name == FName
-    ].
-
-
-
-
-
-%% @since Version 140
-
-list_entrypoints(Module) ->
-
-    lists:flatten(
-        [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- scutil:abstract_functions(Module) ]
-    ).
-
-
-
-
-
-%% @since Version 140
-
-list_entrypoints(Module, FName) ->
-
-    lists:flatten(
-        [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- scutil:abstract_functions(Module), L==FName ]
-    ).
 
 
 
