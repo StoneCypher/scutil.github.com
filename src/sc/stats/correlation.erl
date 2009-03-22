@@ -26,6 +26,37 @@
 
 
 
+-module(sc.stats.correlation).
+
+-author("John Haugeland <stonecypher@gmail.com>").
+-webpage("http://scutil.com/").
+-license( {mit_license, "http://scutil.com/license.html"} ).
+
+-publicsvn("svn://crunchyd.com/scutil/").
+-currentsource("http://crunchyd.com/release/scutil.zip").
+
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
+
+-description("The correlations section of the statistics package").
+
+-testerl_export( { [], sc_stats_correlation_testsuite } ).  % todo needs test suite
+
+-library_requirements([
+]).
+
+
+
+
+
+-export( [
+] ).
+
+
+
+
+
 %% @todo use test data at http://changingminds.org/explanations/research/analysis/pearson.htm
 
 %% @spec pearson_correlation(TupleList::coordlist()) -> { r, Correlation::number() }
@@ -49,7 +80,7 @@
 
 pearson_correlation(TupleList) when is_list(TupleList) ->
 
-    {A,B} = lists:unzip(TupleList),
+    {A,B} = .lists:unzip(TupleList),
     pearson_correlation(A,B).
 
 
@@ -70,17 +101,17 @@ pearson_correlation(List1, List2) when length(List1) /= length(List2) ->
 
 pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
-    SumXY = lists:sum([A*B || {A,B} <- lists:zip(List1,List2) ]),   % the sum of the products of each matched pair
+    SumXY = .lists:sum([A*B || {A,B} <- .lists:zip(List1,List2) ]),   % the sum of the products of each matched pair
 
-    SumX  = lists:sum(List1),
-    SumY  = lists:sum(List2),
+    SumX  = .lists:sum(List1),
+    SumY  = .lists:sum(List2),
 
-    SumXX = lists:sum([L*L || L<-List1]),                           % the sums of the squared items
-    SumYY = lists:sum([L*L || L<-List2]),
+    SumXX = .lists:sum([L*L || L<-List1]),                            % the sums of the squared items
+    SumYY = .lists:sum([L*L || L<-List2]),
 
     N     = length(List1),
 
-    case math:sqrt(   ( (N*SumXX)-(SumX*SumX) )   *   ( (N*SumYY)-(SumY*SumY) )   ) of
+    case .math:sqrt(   ( (N*SumXX)-(SumX*SumX) )   *   ( (N*SumYY)-(SumY*SumY) )   ) of
 
         0 ->
             {r, 0.0};  % some nasty value sets otherwise cause divide by zero
@@ -122,7 +153,7 @@ pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
 spearman_correlation(TupleList) when is_list(TupleList) ->
     
-    {A,B} = lists:unzip(TupleList),
+    {A,B} = .lists:unzip(TupleList),
     spearman_correlation(A,B).
 
 
@@ -144,11 +175,11 @@ spearman_correlation(List1, List2) when length(List1) /= length(List2) ->
 
 spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
-    {TR1,_} = lists:unzip(ordered_ranks_of(List1)),
-    {TR2,_} = lists:unzip(ordered_ranks_of(List2)),
+    {TR1,_} = .lists:unzip(ordered_ranks_of(List1)),
+    {TR2,_} = .lists:unzip(ordered_ranks_of(List2)),
 
-    Numerator   = 6 * lists:sum([ (D1-D2)*(D1-D2) || {D1,D2} <- lists:zip(TR1,TR2) ]),
-    Denominator = math:pow(length(List1),3)-length(List1),
+    Numerator   = 6 * .lists:sum([ (D1-D2)*(D1-D2) || {D1,D2} <- .lists:zip(TR1,TR2) ]),
+    Denominator = .math:pow(length(List1),3)-length(List1),
 
     {rsquared, 1-(Numerator/Denominator) }.
 
@@ -179,7 +210,7 @@ spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
 kendall_correlation(TupleList) when is_list(TupleList) ->
 
-    {A,B} = lists:unzip(TupleList),
+    {A,B} = .lists:unzip(TupleList),
     kendall_correlation(A,B).
 
 
@@ -200,14 +231,14 @@ kendall_correlation(List1, List2) when length(List1) /= length(List2) ->
 
 kendall_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
-    {RA,_} = lists:unzip(ordered_ranks_of(List1)),
-    {RB,_} = lists:unzip(ordered_ranks_of(List2)),
+    {RA,_} = .lists:unzip(ordered_ranks_of(List1)),
+    {RB,_} = .lists:unzip(ordered_ranks_of(List2)),
 
-    Ordering = lists:keysort(1,lists:zip(RA,RB)),
-    {_,OrdB} = lists:unzip(Ordering),
+    Ordering = .lists:keysort(1,.lists:zip(RA,RB)),
+    {_,OrdB} = .lists:unzip(Ordering),
 
     N = length(List1),
-    P = lists:sum(kendall_right_of(OrdB, [])),
+    P = .lists:sum(kendall_right_of(OrdB, [])),
 
     {tau, -(( (4*P) / (N * (N - 1))) - 1) }.
 
@@ -219,7 +250,7 @@ kendall_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
 kendall_right_of([], Work) -> 
 
-    lists:reverse(Work);
+    .lists:reverse(Work);
     
     
 

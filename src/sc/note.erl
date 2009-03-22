@@ -127,7 +127,7 @@ annote(Notebook, NameValuePair) when is_list(Notebook), is_tuple(NameValuePair) 
 annote(Notebook, NameValuePairs) when is_list(Notebook), is_list(NameValuePairs) ->
 
     get_notebook_table(Notebook),
-    [ dets:insert(Notebook, {Term, Value}) || {Term, Value} <- NameValuePairs ],
+    [ .dets:insert(Notebook, {Term, Value}) || {Term, Value} <- NameValuePairs ],
     close_notebook_table(Notebook).
 
 
@@ -143,7 +143,7 @@ read_note(Notebook, NoteName) when is_list(Notebook) ->
 
     get_notebook_table(Notebook),
 
-    CurrentConfig = case dets:match(Notebook, {NoteName, '$1'}) of
+    CurrentConfig = case .dets:match(Notebook, {NoteName, '$1'}) of
 
         [] ->
             undefined;
@@ -192,7 +192,7 @@ remove_note(Notebook, NoteName) when is_atom(Notebook), is_atom(NoteName) ->
 remove_note(Notebook, NoteNames) when is_atom(Notebook), is_list(NoteNames) ->
 
     get_notebook_table(Notebook),
-    [ dets:delete(Notebook, NoteName) || NoteName <- NoteNames ],
+    [ .dets:delete(Notebook, NoteName) || NoteName <- NoteNames ],
     close_notebook_table(Notebook).
 
 
@@ -201,9 +201,9 @@ remove_note(Notebook, NoteNames) when is_atom(Notebook), is_list(NoteNames) ->
 
 %% @private
 
-get_notebook_table(TableName) when is_list(TableName) -> 
+get_notebook_table(TableName) when is_list(TableName) ->
 
-    dets:open_file(TableName, [{type, set}] ).
+    .dets:open_file(TableName, [{type, set}] ).
 
 
 
@@ -213,7 +213,7 @@ get_notebook_table(TableName) when is_list(TableName) ->
 
 close_notebook_table(TableName) when is_list(TableName) ->
 
-    dets:close(TableName).
+    .dets:close(TableName).
 
 
 

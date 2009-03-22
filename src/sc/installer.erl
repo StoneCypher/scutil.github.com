@@ -84,7 +84,9 @@ contained_modules() ->
         "counter.erl",
         "bit.erl",
         "time.erl",
-        "note.erl"
+        "note.erl",
+        "parallelism.erl",
+        "stats/correlation.erl"
     ].
 
 

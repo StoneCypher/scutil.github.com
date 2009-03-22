@@ -26,6 +26,42 @@
 
 
 
+-module(sc.parallelism).
+
+-author("John Haugeland <stonecypher@gmail.com>").
+-webpage("http://scutil.com/").
+-license( {mit_license, "http://scutil.com/license.html"} ).
+
+-publicsvn("svn://crunchyd.com/scutil/").
+-currentsource("http://crunchyd.com/release/scutil.zip").
+
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
+
+-description("Functions for parallelization across nodes in a virtual machine (eg map_reduce).").
+
+-testerl_export( { [], sc_parallelism_testsuite } ).  % todo needs test suite
+
+-library_requirements([
+]).
+
+
+
+
+
+-export( [
+  
+    map_reduce/2,
+      map_reduce/3,
+      map_reduce/4
+
+] ).
+
+
+
+
+
 %% @equiv map_reduce(Function, Workload, 1, nodes())
 
 map_reduce(Function, Workload) ->
@@ -49,8 +85,8 @@ map_reduce(Function, Workload, JobsPerNode) ->
 
 map_reduce(Function, Workload, JobsPerNode, Nodes) ->
 
-    Computers      = lists:flatten(lists:duplicate(JobsPerNode, Nodes)),
-    TaggedWorkload = lists:zip(lists:seq(1,length(Workload)), Workload),
+    Computers      = .lists:flatten(.lists:duplicate(JobsPerNode, Nodes)),
+    TaggedWorkload = .lists:zip(.lists:seq(1,length(Workload)), Workload),
     WorkOut        = [],
     WorkDone       = [],
 
@@ -62,7 +98,7 @@ map_reduce(Function, Workload, JobsPerNode, Nodes) ->
 
 %% @private
 
-map_reduce_worker(_Function, [],             _Computers, [],      WorkDone) -> {_,Out} = lists:unzip(lists:keysort(1,WorkDone)), Out;                               % no work left, no work out?  done.
+map_reduce_worker(_Function, [],             _Computers, [],      WorkDone) -> {_,Out} = .lists:unzip(.lists:keysort(1,WorkDone)), Out;                               % no work left, no work out?  done.
 map_reduce_worker( Function, [],              Computers, WorkOut, WorkDone) -> map_reduce_wait_for_work(Function, [],             Computers, WorkOut, WorkDone);    % no work left, work out?  wait.
 map_reduce_worker( Function, TaggedWorkload,  [],        WorkOut, WorkDone) -> map_reduce_wait_for_work(Function, TaggedWorkload, [],        WorkOut, WorkDone);    % work left, no computers left?  wait.
 map_reduce_worker( Function, TaggedWorkload,  Computers, WorkOut, WorkDone) -> map_reduce_do_work(      Function, TaggedWorkload, Computers, WorkOut, WorkDone).    % work left, computers left?  do work.

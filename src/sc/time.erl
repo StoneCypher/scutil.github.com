@@ -235,7 +235,7 @@ wait_until_terminate(loud) ->
             ok;
 
         X ->
-            io:format("Received ~p~n", [X]),
+            .io:format("Received ~p~n", [X]),
             wait_until_terminate(loud)
 
     end.
