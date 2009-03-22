@@ -76,7 +76,12 @@ contained_modules() ->
     [   "is.erl",
         "serialism.erl",
         "regex.erl",
-        "random.erl"
+        "random.erl",
+        "list.erl",
+        "file.erl",
+        "message.erl",
+        "math/vector.erl",
+        "counter.erl"
     ].
 
 

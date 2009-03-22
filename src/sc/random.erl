@@ -52,10 +52,20 @@
 
 -export( [
 
-    grid_scatter/1,
-      grid_scatter/2,
+    shuffle/1,
 
-    random_from_weighted/1
+    grid_scatter/2,
+
+    random_from/1,
+      random_from/2,
+      random_from/3,
+
+    random_from_weighted/1,
+
+    % exports
+
+    random_generator/0,
+      random_generator/3
 
 ] ).
 
@@ -308,8 +318,16 @@ random_from(N, List, remainder) ->
 
 random_from_weighted(InputList) when is_list(InputList) ->
 
-    RandomLimit = rand(.lists:sum([ Weight || {_,Weight} <- InputList ])),  % the random cap is equal to the sum of all the weights
+    RandomLimit = rand(
+        .lists:sum(
+            [ Weight ||
+                {_,Weight} <- InputList ]                                   % the random cap is equal to the sum of all the weights
+            )
+        ),
+
     random_from_weighted_worker(InputList, RandomLimit).                    % call the worker with the original list and the cap
+
+
 
 
 
@@ -318,6 +336,8 @@ random_from_weighted(InputList) when is_list(InputList) ->
 random_from_weighted_worker([], _) ->
 
     { error, limit_miscalculation };
+
+
 
 
 
@@ -336,3 +356,41 @@ random_from_weighted_worker(InputList, Limit) when is_list(InputList), is_intege
             Item                                                        % if not, this item is the one we want
 
     end.
+
+
+
+
+%% @spec shuffle(List::list()) -> list()
+
+%% @doc {@section Random} Return a list with the original list's shallow members in a random order.  Deep lists are not shuffled; `[ [a,b,c], [d,e,f], [g,h,i] ]' will never produce sublist reorderings (`[b,c,a]') or list mixing (`[b,g,e]'), only reordering of the three top level lists.  The output list will always be the same length as the input list.  Repeated items and mixed types in input lists are safe. ```1> scutil:shuffle(lists:seq(1,9)).
+%% [8,4,7,9,5,2,6,1,3]
+%%
+%% 2> {TheFaces, TheSuits} = {  [ace] ++ lists:seq(2,10) ++ [jack,queen,king],  [hearts,spades,clubs,diamonds]  }
+%% {[ace,jack,queen,king,2,3,4,5,6,7,8,9,10],
+%%  [hearts,spades,clubs,diamonds]}
+%%
+%% 3> Deck = scutil:shuffle([ {Face,Suit} || Face <- TheFaces, Suit <- TheSuits ]).
+%% [ {6,spades}, {7,hearts}, {8,clubs}, {queen,spades}, {6,diamonds}, {ace,...}, {...} | ...]
+%%
+%% 4> scutil:shuffle([ duck,duck,duck,duck, goose ]).
+%% [duck,goose,duck,duck,duck]'''
+%%
+%% <i>Originally found at <a href="http://wiki.trapexit.org/index.php/RandomShuffle">http://wiki.trapexit.org/index.php/RandomShuffle</a>; refactored for clarity, and unnecessary repeat nesting behavior removed.</i>
+
+%% @since Version 8
+
+shuffle(List) ->
+
+   WeightedAndShuffled = lists:map(
+       fun(Item) -> { random:uniform(), Item } end,
+       List
+   ),
+
+   { _, SortedAndDeweighted } = lists:unzip(lists:keysort(1, WeightedAndShuffled)),
+
+   SortedAndDeweighted.
+
+
+
+
+

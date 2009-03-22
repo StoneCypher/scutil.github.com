@@ -26,6 +26,38 @@
 
 
 
+-module(sc.file).
+
+-author("John Haugeland <stonecypher@gmail.com>").
+-webpage("http://scutil.com/").
+-license( {mit_license, "http://scutil.com/license.html"} ).
+
+-publicsvn("svn://crunchyd.com/scutil/").
+-currentsource("http://crunchyd.com/release/scutil.zip").
+
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
+
+-description("File and filesystem utilities.").
+
+-testerl_export( { [], sc_file_testsuite } ).  % todo needs test suite
+
+-library_requirements([
+]).
+
+
+
+
+
+-export( [
+    sanitize_filename/1
+] ).
+
+
+
+
+
 %% @spec sanitize_filename(Filename::string()) -> string()
 
 %% @doc {@section String} Sanitize an arbitrary string to be appropriate for Windows and Unix filesystems, and URLs. ```1> scutil:sanitize_filename("\h/e~l%lo! w^o@r#l*d.").
@@ -37,4 +69,10 @@
 
 sanitize_filename(Filename) ->
 
-    sanitize_tokens(Filename, lists:seq($a,$z)++lists:seq($A,$Z)++lists:seq($0,$9)++"-_()[]").
+    .sc.list:sanitize_tokens(
+        Filename,
+        .lists:seq($a,$z) ++
+          .lists:seq($A,$Z) ++
+          .lists:seq($0,$9) ++
+          "-_()[]"
+    ).

@@ -27,6 +27,55 @@
 
 
 
+
+-module(sc.counter).
+
+-author("John Haugeland <stonecypher@gmail.com>").
+-webpage("http://scutil.com/").
+-license( {mit_license, "http://scutil.com/license.html"} ).
+
+-publicsvn("svn://crunchyd.com/scutil/").
+-currentsource("http://crunchyd.com/release/scutil.zip").
+
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
+
+-description("Counter management module.").
+
+-testerl_export( { [], sc_counter_testsuite } ).  % todo needs test suite
+
+-library_requirements([
+]).
+
+
+
+
+
+-export( [
+
+    counter/1,
+    counters/1,
+    
+    inc_counter/1,
+      inc_counter/2,
+
+    dec_counter/1,
+      dec_counter/2,
+      
+    adjust_counter/2,
+    reset_counter/1,
+    
+    set_counter/2,
+    
+    % exports
+    counter_process/0
+
+] ).
+
+
+
+
 %% @spec counter(Name::any()) -> number()
 
 %% @doc {@section Counters} Checks a counter's value; if the counter was not already defined, it will report zero. ```1> scutil:counter(hello).
@@ -54,7 +103,7 @@
 
 counter(Name) ->
 
-    start_register_if_not_running(scutil_counter_process, scutil, counter_process, []),
+    .sc.process:start_register_if_not_running(scutil_counter_process, scutil, counter_process, []),
     scutil_counter_process ! {self(), get_counter, Name},
 
     receive
@@ -74,7 +123,7 @@ counter(Name) ->
 
 %% @since Version 138
 
-counters(Names) -> 
+counters(Names) ->
 
     [ counter(X) || X <- Names ].
 
@@ -131,7 +180,7 @@ dec_counter(Name,By) ->
 
 adjust_counter(Name, By) when is_number(By) ->
 
-    start_register_if_not_running(scutil_counter_process, scutil, counter_process, []),
+    .sc.process:start_register_if_not_running(scutil_counter_process, scutil, counter_process, []),
     scutil_counter_process ! {self(), adjust_counter, Name, By},
 
     receive
@@ -177,7 +226,7 @@ reset_counter(Name) ->
 
 set_counter(Name, To) when is_number(To) ->
 
-    start_register_if_not_running(scutil_counter_process, scutil, counter_process, []),
+    .sc.process:start_register_if_not_running(scutil_counter_process, scutil, counter_process, []),
     scutil_counter_process ! {self(), set_counter, Name, To},
 
     receive
@@ -193,9 +242,9 @@ set_counter(Name, To) when is_number(To) ->
 %% @private
 
 counter_process() ->
-   
+
     receive
-   
+
 
         shutdown ->
             ok;

@@ -29,7 +29,44 @@
 -module(sc.list).
 
 -export( [
-    extrema/1
+    
+    extrema/1,
+    key_duplicate/1,
+    list_rotate/2,
+    index_of_first/2,
+    rotate_to_first/2,
+    rotate_to_last/2,
+    minmax/1,
+    every_flag_representation/1,
+    every_member_representation/1,
+    count_of/2,
+
+    list_intersection/2,
+      list_intersection/3,
+      
+    zip_n/1,
+    combinations/2,
+
+    expand_label/1,
+    expand_labels/1,
+    
+    permute/1,
+      permute/2,
+      
+    shared_keys/1,
+      shared_keys/2,
+      shared_keys/3,
+
+    all_unique_pairings/1,
+    walk_unique_pairings/2,
+    list_product/1,
+    sanitize_tokens/2,
+    
+    elements/2,
+      elements/3,
+      elements/4
+
+
 ] ).
 
 
@@ -75,30 +112,6 @@ extrema(List) ->
 
 
 
-% Like binary_to_term, but not so much for binaries
-% thanks dizzyd (modified for error reporting)
-
-%% @since Version 216
-
-list_to_term(List) ->
-
-    case catch erl_scan:string(List) of
-
-        { ok, Tokens, _ } ->
-
-            case erl_parse:parse_term( Tokens ++ [{ dot, 1 }] ) of
-                { ok,Term } -> Term;
-                Error       -> { error, Error }
-            end;
-
-        Error -> { error, Error }
-
-    end.
-
-
-
-
-
 %% @since Version 200
 
 key_duplicate(KeyList) ->
@@ -118,7 +131,7 @@ list_rotate(0, List) ->
 
 
 list_rotate(By, List) when By =< (-(length(List))) ->
-    
+
     list_rotate(By rem length(List), List);
 
 
@@ -184,7 +197,7 @@ rotate_to_first(Item, List) ->
 
 %% @since Version 170
 
-rotate_first_to_end(Item, List) ->
+rotate_to_last(Item, List) ->
 
     list_rotate(index_of_first(Item, List), List).
 
@@ -195,7 +208,7 @@ rotate_first_to_end(Item, List) ->
 %% @since Version 129
 %% @todo is this the same as extrma?
 
-minmax( [FirstItem|RestOfList]) ->
+minmax( [FirstItem | RestOfList] ) ->
 
     minmax(RestOfList, FirstItem, FirstItem).
 
@@ -332,7 +345,7 @@ every_member_representation( [Membership|RemMemberships], no_absence   ) ->
         RemRep <- every_member_representation(RemMemberships, no_absence) 
     ];
     
-    
+
 
 every_member_representation( [Membership|RemMemberships], allow_absence) ->
 
@@ -403,10 +416,10 @@ count_of(Item, List) ->
 
 %% @equiv list_intersection(List1, List2, unsorted)
 
-list_intersection(List1, List2) -> 
+list_intersection(List1, List2) ->
 
     list_intersection(List1, List2, unsorted).
-    
+
 
 
 %% @spec list_intersection(List1::list(), List2::list(), IsSorted::atom()) -> list()
@@ -419,7 +432,7 @@ list_intersection(List1, List2) ->
 
 %% @since Version 120
 
-list_intersection(List1, List2, unsorted) -> 
+list_intersection(List1, List2, unsorted) ->
 
     list_intersection(lists:sort(List1), lists:sort(List2), sorted);
     
@@ -642,40 +655,6 @@ permute(List, Depth) when is_list(List), is_integer(Depth) ->
         T <- List,
         R <- permute(List--[T], Depth-1)
     ].
-
-
-
-
-
-%% @spec shuffle(List::list()) -> list()
-
-%% @doc {@section Random} Return a list with the original list's shallow members in a random order.  Deep lists are not shuffled; `[ [a,b,c], [d,e,f], [g,h,i] ]' will never produce sublist reorderings (`[b,c,a]') or list mixing (`[b,g,e]'), only reordering of the three top level lists.  The output list will always be the same length as the input list.  Repeated items and mixed types in input lists are safe. ```1> scutil:shuffle(lists:seq(1,9)).
-%% [8,4,7,9,5,2,6,1,3]
-%%
-%% 2> {TheFaces, TheSuits} = {  [ace] ++ lists:seq(2,10) ++ [jack,queen,king],  [hearts,spades,clubs,diamonds]  }
-%% {[ace,jack,queen,king,2,3,4,5,6,7,8,9,10],
-%%  [hearts,spades,clubs,diamonds]}
-%%
-%% 3> Deck = scutil:shuffle([ {Face,Suit} || Face <- TheFaces, Suit <- TheSuits ]).
-%% [ {6,spades}, {7,hearts}, {8,clubs}, {queen,spades}, {6,diamonds}, {ace,...}, {...} | ...]
-%%
-%% 4> scutil:shuffle([ duck,duck,duck,duck, goose ]).
-%% [duck,goose,duck,duck,duck]'''
-%%
-%% <i>Originally found at <a href="http://wiki.trapexit.org/index.php/RandomShuffle">http://wiki.trapexit.org/index.php/RandomShuffle</a>; refactored for clarity, and unnecessary repeat nesting behavior removed.</i>
-
-%% @since Version 8
-
-shuffle(List) ->
-
-   WeightedAndShuffled = lists:map(
-       fun(Item) -> { random:uniform(), Item } end,
-       List
-   ),
-
-   { _, SortedAndDeweighted } = lists:unzip(lists:keysort(1, WeightedAndShuffled)),
-
-   SortedAndDeweighted.
 
 
 

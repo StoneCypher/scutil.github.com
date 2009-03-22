@@ -26,6 +26,38 @@
 
 
 
+-module(sc.message).
+
+-author("John Haugeland <stonecypher@gmail.com>").
+-webpage("http://scutil.com/").
+-license( {mit_license, "http://scutil.com/license.html"} ).
+
+-publicsvn("svn://crunchyd.com/scutil/").
+-currentsource("http://crunchyd.com/release/scutil.zip").
+
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
+
+-description("Utilities for message passing and receiving.").
+
+-testerl_export( { [], sc_message_testsuite } ).  % todo needs test suite
+
+-library_requirements([
+]).
+
+
+
+
+
+-export( [
+    receive_one/0
+] ).
+
+
+
+
+
 %% @spec receive_one() -> { item, any() } | nothing_there
 
 %% @doc {@section Utility} Pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block.  ```1> scutil:receive_one().
@@ -49,15 +81,3 @@ receive_one() ->
     after 0 ->
         nothing_there
     end.
-
-
-
-
-
-%% @todo finish me
-
-% dissimilar_charset(english, lowercase) -> "abcdefghjklmnopqrstuwxyz";
-% dissimilar_charset(english, mixedcase) -> "abcdefghjklmnopqrstuwxyzABDEFGHRT";
-% dissimilar_charset(english, alphanum)  -> "abcdefghjklmnopqrstuwxyzABDEFGHRT34679".
-
-% similarize_charset   a10OZ2B8 -> aloozzBB

@@ -335,3 +335,27 @@ io_list_to_hex([Item|Remainder], Work) when is_integer(Item), Item >= 0, Item =<
 io_list_to_hex(_, _) ->
 
     {error, not_an_io_list}.
+
+
+
+
+
+% Like binary_to_term, but not so much for binaries
+% thanks dizzyd (modified for error reporting)
+
+%% @since Version 216
+
+list_to_term(List) ->
+
+    case catch erl_scan:string(List) of
+
+        { ok, Tokens, _ } ->
+
+            case erl_parse:parse_term( Tokens ++ [{ dot, 1 }] ) of
+                { ok,Term } -> Term;
+                Error       -> { error, Error }
+            end;
+
+        Error -> { error, Error }
+
+    end.

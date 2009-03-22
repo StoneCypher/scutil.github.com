@@ -92,3 +92,15 @@ interpret_flesch_kincaid_score(R)              -> { difficult,                R 
 to_lines(Text) ->
 
     string:tokens(Text, "\r\n"). % yay convenience functions
+
+
+
+
+
+%% @todo finish me
+
+% dissimilar_charset(english, lowercase) -> "abcdefghjklmnopqrstuwxyz";
+% dissimilar_charset(english, mixedcase) -> "abcdefghjklmnopqrstuwxyzABDEFGHRT";
+% dissimilar_charset(english, alphanum)  -> "abcdefghjklmnopqrstuwxyzABDEFGHRT34679".
+
+% similarize_charset   a10OZ2B8 -> aloozzBB
