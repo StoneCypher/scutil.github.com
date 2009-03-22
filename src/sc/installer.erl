@@ -73,45 +73,46 @@
 
 contained_modules() ->
 
-    [   "bayes.erl",
-        "bit.erl",
-        "bridge/local/cpp.erl",
-        "bridge/net/actionscript.erl",
-        "bridge/net/javascript.erl",
-        "code.erl",
-        "columns.erl",
-        "convert.erl",
-        "convert/weight.erl",
-        "counter.erl",
-        "distance/euclidean.erl",
-        "file.erl",
-        "is.erl",
-        "irc/client.erl",
-        "i18n.erl",
-        "list.erl",
-        "math.erl",
-        "math/vector.erl",
-        "message.erl",
-        "metrics.erl",
-        "module.erl",
-        "net.erl",
-        "note.erl",
-        "parallelism.erl",
-        "process.erl",
-        "purity.erl",
-        "random.erl",
-        "record.erl",
-        "regex.erl",
-        "serialism.erl",
-        "signal.erl",
-        "stats.erl",
-        "stats/cluster.erl",
-        "stats/correlation.erl",
-        "stats/ranks.erl",
-        "string.erl",
-        "text.erl",
-        "time.erl",
-        "tuple.erl"
+    [   string,
+
+        bayes,
+        bit,
+       [bridge,      local,       cpp],
+       [bridge,      net,         actionscript],
+       [bridge,      net,         javascript],
+        code,
+        columns,
+        convert,
+       [convert,     weight],
+        counter,
+       [distance,    euclidean],
+        file,
+        is,
+       [irc,         client],
+        i18n,
+        list,
+        math,
+       [math,        vector],
+        message,
+        metrics,
+        module,
+        net,
+        note,
+        parallelism,
+        process,
+        purity,
+        random,
+        record,
+        regex,
+        serialism,
+        signal,
+        stats,
+       [stats,       cluster],
+       [stats,       correlation],
+       [stats,       ranks],
+        text,
+        time,
+        tuple
     ].
 
 
@@ -148,7 +149,12 @@ compile_all(From, Options) ->
         (_)                 -> false
     end,
 
-    Report = [ ReportOnCompile(From ++ File, .compile:file(From ++ File, Options)) ||
+    ToFilename = fun
+        (List) when is_list(List) -> .sc.string:implode("/", [ atom_to_list(Item) || Item <- List ]) ++ ".erl";
+        (Atom) when is_atom(Atom) -> atom_to_list(Atom) ++ ".erl"
+    end,
+
+    Report = [ ReportOnCompile(From ++ ToFilename(File), .compile:file(From ++ ToFilename(File), Options)) ||
         File <- contained_modules()
     ],
 

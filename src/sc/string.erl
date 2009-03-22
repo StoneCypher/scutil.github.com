@@ -28,7 +28,23 @@
 
 -module(sc.string).
 
--export( [] ).
+-export( [
+    
+    starts_with/2,
+
+    is_numeric_string/1,
+      is_numeric_string/2,
+
+    explode/2,
+      explode/3,
+      
+    map_scanline/2,
+      map_scanline/3,       
+      
+    levenshtein/2,
+    implode/2
+
+] ).
 
 
 
@@ -44,8 +60,13 @@ starts_with(Main,   Prefix) ->
     [ PHead | PRemain ] = Prefix,
 
     if
-        PHead /= MHead -> false;
-        true           -> starts_with(MRemain, PRemain)
+
+        PHead /= MHead ->
+            false;
+
+        true ->
+            starts_with(MRemain, PRemain)
+
     end.
 
 
@@ -54,8 +75,17 @@ starts_with(Main,   Prefix) ->
 
 %% @since Version 219
 
-is_numeric_string(Str)          -> is_numeric_string(Str, decimal).
-is_numeric_string(Str, decimal) -> lists:all({scutil,is_numeric_char}, Str).
+is_numeric_string(Str) -> 
+
+    is_numeric_string(Str, decimal).
+    
+    
+    
+    
+
+is_numeric_string(Str, decimal) -> 
+
+    .lists:all({scutil,is_numeric_char}, Str).
 
 
 
@@ -144,16 +174,16 @@ explode(Separator, Remainder, Pass, Out, Max, Cur) -> % check cap
 
 map_scanline(F,L) ->
 
-    {R,M} = lists:foldl(
+    {R,M} = .lists:foldl(
         fun
             ( C, R = {[],_} ) when C == $\r orelse C == $\n -> R;
-            ( C, {S,M}      ) when C == $\r orelse C == $\n -> { [], [ F(lists:reverse(S)) | M ] };
+            ( C, {S,M}      ) when C == $\r orelse C == $\n -> { [], [ F(.lists:reverse(S)) | M ] };
             ( C, {S,M}      )                               -> { [C|S], M }
         end,
         {[],[]}, L
     ),
 
-    {lists:reverse(R), lists:reverse(M)}.
+    {.lists:reverse(R), .lists:reverse(M)}.
 
 
 
@@ -166,16 +196,16 @@ map_scanline(F,L) ->
 
 map_scanline(F,L,A) ->
 
-    {R,M} = lists:foldl(
+    {R,M} = .lists:foldl(
         fun
             ( C, R = {[],_} ) when C == $\r orelse C == $\n -> R;
-            ( C, {S,M}      ) when C == $\r orelse C == $\n -> { [], [ F(lists:reverse(S), A) | M ] };
+            ( C, {S,M}      ) when C == $\r orelse C == $\n -> { [], [ F(.lists:reverse(S), A) | M ] };
             ( C, {S,M}      )                               -> { [C|S], M }
         end,
         {[],[]}, L
     ),
 
-    {lists:reverse(R), lists:reverse(M)}.
+    {.lists:reverse(R), .lists:reverse(M)}.
 
 
 
@@ -197,15 +227,15 @@ levenshtein(String, []) when is_list(String) ->
 
 
 
-levenshtein( [], String) when is_list(String) -> 
+levenshtein( [], String) when is_list(String) ->
 
     length(String);
 
 
 
-levenshtein(Source, Target) when is_list(Source), is_list(Target) -> 
+levenshtein(Source, Target) when is_list(Source), is_list(Target) ->
 
-    levenshtein_rec(Source, Target, lists:seq(0, length(Target)), 1).
+    levenshtein_rec(Source, Target, .lists:seq(0, length(Target)), 1).
 
 
 
@@ -222,7 +252,7 @@ levenshtein_rec( [SrcHead|SrcTail], Target, DistList, Step) ->
 
 levenshtein_rec( [], _, DistList, _) ->
 
-    lists:last(DistList).
+    .lists:last(DistList).
 
 
 
@@ -233,7 +263,7 @@ levenshtein_rec( [], _, DistList, _) ->
 
 levenshtein_distlist([TargetHead|TargetTail], [DLH|DLT], SourceChar, NewDistList, LastDist) when length(DLT) > 0 ->
 
-    Min = lists:min( [LastDist + 1, hd(DLT) + 1, DLH + lev_dif(TargetHead, SourceChar)] ),
+    Min = .lists:min( [LastDist + 1, hd(DLT) + 1, DLH + lev_dif(TargetHead, SourceChar)] ),
     levenshtein_distlist(TargetTail, DLT, SourceChar, NewDistList ++ [Min], Min);
 
 
@@ -266,7 +296,7 @@ lev_dif(_C1, _C2) -> 1.
 
 implode(Separator, Data) when is_list(Data) andalso is_list(Separator) ->
 
-    lists:foldr(
+    .lists:foldr(
 
         fun(Item, [])  -> Item;
            (Item, Acc) -> Item ++ Separator ++ Acc 
