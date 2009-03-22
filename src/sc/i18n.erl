@@ -26,6 +26,37 @@
 
 
 
+-module(sc.i18n).
+
+-author("John Haugeland <stonecypher@gmail.com>").
+-webpage("http://scutil.com/").
+-license( {mit_license, "http://scutil.com/license.html"} ).
+
+-publicsvn("svn://crunchyd.com/scutil/").
+-currentsource("http://crunchyd.com/release/scutil.zip").
+
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
+
+-description("Internationalization utilities for erlang.").
+
+-testerl_export( { [], sc_i18n_testsuite } ).  % todo needs test suite
+
+-library_requirements([
+]).
+
+
+
+
+
+-export( [
+] ).
+
+
+
+
+
 % count_words(Source) -> count_words(Source, keep_hyphens).
 %
 % count_words(Source, keep_hyphens) -> count_words(Source, keep_hyphens, 0, not_word).

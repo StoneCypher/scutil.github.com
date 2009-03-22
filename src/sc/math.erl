@@ -26,7 +26,7 @@
 
 
 
--module(sc.TODO).
+-module(sc.math).
 
 -author("John Haugeland <stonecypher@gmail.com>").
 -webpage("http://scutil.com/").
@@ -39,12 +39,11 @@
 -svn_head("$HeadURL$").
 -svn_revision("$Revision$").
 
--description("TODO").
+-description("Math routines and facilities").
 
--testerl_export( { [], sc_TODO_testsuite } ).  % todo needs test suite
+-testerl_export( { [], sc_math_testsuite } ).  % todo needs test suite
 
 -library_requirements([
-    % TODO
 ]).
 
 
