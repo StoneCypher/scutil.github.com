@@ -96,10 +96,10 @@ regex_read_matches(String, Reg, TrimFront, TrimLength) ->
 
 regex_read_matches(String, Reg, {TrimFront, TrimLength}) ->
 
-    case regexp:matches(String, Reg) of
+    case .regexp:matches(String, Reg) of
 
         { match, Matches } ->
-            [ string:substr(String, Start+TrimFront, End-(TrimLength+1)) || {Start,End} <- Matches ];
+            [ .string:substr(String, Start+TrimFront, End-(TrimLength+1)) || {Start,End} <- Matches ];
 
         { error, E } ->
             { error, E }

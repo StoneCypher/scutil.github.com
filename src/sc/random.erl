@@ -85,7 +85,13 @@ grid_scatter(0, []) -> []; % skips a lot of work
 
 grid_scatter(Count, {SizeX, SizeY}) ->
 
-    scutil:random_from(Count, [ {X,Y} || X <- lists:seq(1,SizeX), Y <- lists:seq(1,SizeY) ]);
+    scutil:random_from(
+        Count, 
+        [ {X,Y} ||
+            X <- .lists:seq(1,SizeX),
+            Y <- .lists:seq(1,SizeY)
+        ]
+    );
 
 
 
@@ -155,7 +161,7 @@ srand(A,B,C) ->
 
 random_generator(SeedA, SeedB, SeedC) ->
 
-    random:seed(SeedA, SeedB, SeedC),
+    .random:seed(SeedA, SeedB, SeedC),
     random_generator().
 
 
@@ -172,7 +178,7 @@ random_generator() ->
             { ok, terminated };
 
         [Return, Range] ->
-            Val = random:uniform(Range),
+            Val = .random:uniform(Range),
             Return ! Val,
             random_generator();
 
@@ -212,7 +218,10 @@ rand(Range) ->
         _ ->
 
             scutil_rand_source ! [ self(), Range ],
-            receive RandVal -> RandVal - 1 end
+            receive 
+                RandVal -> 
+                    RandVal - 1 
+            end
 
     end.
 
@@ -274,7 +283,7 @@ random_from(N, List, no_remainder) ->
 
 random_from(N, List, remainder) ->
 
-    lists:split(N,shuffle(List)).
+    .lists:split(N,shuffle(List)).
 
 
 
@@ -299,8 +308,8 @@ random_from(N, List, remainder) ->
 
 random_from_weighted(InputList) when is_list(InputList) ->
 
-    RandomLimit = rand(lists:sum([ Weight || {_,Weight} <- InputList ])),  % the random cap is equal to the sum of all the weights
-    random_from_weighted_worker(InputList, RandomLimit).                   % call the worker with the original list and the cap
+    RandomLimit = rand(.lists:sum([ Weight || {_,Weight} <- InputList ])),  % the random cap is equal to the sum of all the weights
+    random_from_weighted_worker(InputList, RandomLimit).                    % call the worker with the original list and the cap
 
 
 
