@@ -24,12 +24,48 @@
 
 
 
+-module(sc.serialism).
+
+-author("John Haugeland <stonecypher@gmail.com>").
+-webpage("http://scutil.com/").
+-license( {mit_license, "http://scutil.com/license.html"} ).
+
+-publicsvn("svn://crunchyd.com/scutil/").
+-currentsource("http://crunchyd.com/release/scutil.zip").
+
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
+
+-description("Serialism routines, simplifying single process batch jobs.").
+
+-testerl_export( { [], sc_serialism_testsuite } ).  % todo needs test suite
+
+-library_requirements([
+    % TODO
+]).
+
+
+
+
+
+-export( [
+    multi_do/3,
+      multi_do/4
+] ).
+
+
+
+
+
 %% @equiv multi_do(C,M,F,[])
 %% @since Version 38
 
 multi_do(C, Module, Func) ->
 
     multi_do(C, Module, Func, [],   []).
+
+
 
 
 
@@ -44,17 +80,25 @@ multi_do(C, Module, Func) ->
 %% @since Version 38
 
 multi_do(C, Module, Func, Args) ->
-    
+
     multi_do(C, Module, Func, Args, []).
 
 
 
-multi_do(0,_Module,_Func,_Args, Work) -> 
+
+
+%% @private
+
+multi_do(0,_Module,_Func,_Args, Work) ->
 
     Work;
-    
-    
 
-multi_do(I, Module, Func, Args, Work) -> 
-    
+
+
+
+
+%% @private
+
+multi_do(I, Module, Func, Args, Work) ->
+
     multi_do(I-1, Module, Func, Args, Work ++ [apply(Module, Func, Args)]).

@@ -24,6 +24,40 @@
 
 
 
+-module(sc.regex).
+
+-author("John Haugeland <stonecypher@gmail.com>").
+-webpage("http://scutil.com/").
+-license( {mit_license, "http://scutil.com/license.html"} ).
+
+-publicsvn("svn://crunchyd.com/scutil/").
+-currentsource("http://crunchyd.com/release/scutil.zip").
+
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
+
+-description("Regular expression convenience tools.").
+
+-testerl_export( { [], sc_regex_testsuite } ).  % todo needs test suite
+
+-library_requirements([
+]).
+
+
+
+
+
+-export( [
+    regex_read_matches/2,
+      regex_read_matches/3,
+      regex_read_matches/4
+] ).
+
+
+
+
+
 %% @equiv regex_read_matches(String, Reg, {0,0})
 %% @since Version 41
 

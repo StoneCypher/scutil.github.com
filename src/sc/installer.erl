@@ -57,6 +57,8 @@
       compile_all/2,          % needs tests
 
     install/1,                % needs tests
+      install/2,              % needs tests
+      
     verify_install/0          % needs tests
 
 ] ).
@@ -69,7 +71,9 @@
 
 contained_modules() ->
 
-    [   "is.erl"
+    [   "is.erl",
+        "serialism.erl",
+        "regex.erl"
     ].
 
 
@@ -96,9 +100,23 @@ compile_all(From) ->
 
 compile_all(From, Options) ->
 
-    [ .compile:file(From ++ File, Options) ||
+    ReportOnCompile = fun
+        ( Module, error)         -> { error, Module };
+        (_Module, {ok,AtomName}) -> AtomName
+    end,
+
+    IsFailureCase = fun
+        ({ error,_Module }) -> true;
+        (_)                 -> false
+    end,
+
+    Report = [ ReportOnCompile(From ++ File, .compile:file(From ++ File, Options)) ||
         File <- contained_modules()
-    ].
+    ],
+
+    { Fail, Pass } = .lists:partition(IsFailureCase, Report),
+
+    { { pass, Pass }, { fail, Fail } }.
 
 
 
@@ -117,16 +135,16 @@ install(From) ->
 
 install(From, CompileOptions) ->
 
-    compile_all(From, CompileOptions),
+    Compiled = compile_all(From ++ "src/sc/", CompileOptions),
     % gen_docs([From ++ "src/", From ++ "doc/"]),
 
     case verify_install() of
 
         correct ->
-            { ok, installed };
+            { ok, installed, Compiled };
 
         { broken, Reason } ->
-            { broken, Reason }
+            { broken, Reason, Compiled }
 
     end.
 
