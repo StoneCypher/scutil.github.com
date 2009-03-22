@@ -4,7 +4,9 @@
 %% @version $Revision$
 %% @since Version 8
 
-%% @doc <p></p>
+%% @doc <!-- google analytics --><script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script><script type="text/javascript">var pageTracker = _gat._getTracker("UA-4903191-10");pageTracker._trackPageview();</script>
+%% <p></p>
+
 
 
 %% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Website is</span><a href="http://scutil.com/">http://scutil.com/</a></span>
@@ -19,6 +21,43 @@
 %% @todo add defective warnings to beginnings of @doc tags
 %% @todo add links to test data
 %% @todo add sections to examples: descriptive text, code example, what's it for, related, thanks
+
+
+
+
+
+-module(sc.random).
+
+-author("John Haugeland <stonecypher@gmail.com>").
+-webpage("http://scutil.com/").
+-license( {mit_license, "http://scutil.com/license.html"} ).
+
+-publicsvn("svn://crunchyd.com/scutil/").
+-currentsource("http://crunchyd.com/release/scutil.zip").
+
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
+
+-description("Pseudorandom behavior mechanisms for simplicity.").
+
+-testerl_export( { [], sc_random_testsuite } ).  % todo needs test suite
+
+-library_requirements([
+]).
+
+
+
+
+
+-export( [
+
+    grid_scatter/1,
+      grid_scatter/2,
+
+    random_from_weighted/1
+
+] ).
 
 
 

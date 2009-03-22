@@ -4,7 +4,9 @@
 %% @version $Revision$
 %% @since Version 8
 
-%% @doc <p></p>
+%% @doc <!-- google analytics --><script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script><script type="text/javascript">var pageTracker = _gat._getTracker("UA-4903191-10");pageTracker._trackPageview();</script>
+%% <p></p>
+
 
 
 %% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Website is</span><a href="http://scutil.com/">http://scutil.com/</a></span>
@@ -42,7 +44,6 @@
 -testerl_export( { [], sc_serialism_testsuite } ).  % todo needs test suite
 
 -library_requirements([
-    % TODO
 ]).
 
 
