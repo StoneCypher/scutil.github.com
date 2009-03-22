@@ -26,6 +26,73 @@
 
 
 
+-module(sc.convert).
+
+-author("John Haugeland <stonecypher@gmail.com>").
+-webpage("http://scutil.com/").
+-license( {mit_license, "http://scutil.com/license.html"} ).
+
+-publicsvn("svn://crunchyd.com/scutil/").
+-currentsource("http://crunchyd.com/release/scutil.zip").
+
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
+
+-description("Conversion utilities, each between types, between units and representations.").
+
+-testerl_export( { [], sc_convert_testsuite } ).  % todo needs test suite
+
+-library_requirements([
+]).
+
+
+
+
+
+-export( [
+
+  int_to_u32_iolist/1,
+    int_to_u32_iolist/2,
+
+  u32_iolist_to_int/1,
+    u32_iolist_to_int/2,
+    u32_iolist_to_int/4,
+    u32_iolist_to_int/5,
+
+  int_to_u64_iolist/1,
+    int_to_u64_iolist/2,
+
+  u64_iolist_to_int/1,
+    u64_iolist_to_int/2,
+    u64_iolist_to_int/8,
+    u64_iolist_to_int/9,
+
+  float_to_f32_iolist/1,
+    float_to_f32_iolist/2,
+
+  f32_iolist_to_int/1,
+    f32_iolist_to_int/2,
+    f32_iolist_to_int/4,
+    f32_iolist_to_int/5,
+    
+  list_to_number/1,
+  
+  hex_to_int/1,
+    hex_to_int/2,
+    
+  byte_to_hex/1,
+  nybble_to_hex/1,
+  io_list_to_hex/1,
+  
+  list_to_term/1
+
+] ).
+
+
+
+
+
 %% @equiv int_to_u32_iolist(X, little)
 
 int_to_u32_iolist(X) ->
@@ -127,7 +194,7 @@ u64_iolist_to_int( [A,B,C,D,E,F,G,H], big ) ->
 
 %% @equiv u64_iolist_to_int(A,B,C,D,E,F,G,H, little)
 
-u64_iolist_to_int( A,B,C,D,E,F,G,H ) -> 
+u64_iolist_to_int( A,B,C,D,E,F,G,H ) ->
     u64_iolist_to_int(A,B,C,D,E,F,G,H, little).
 
 
@@ -180,7 +247,7 @@ f32_iolist_to_int( [A,B,C,D], big ) ->
 
 
 %% @equiv f32_iolist_to_int(A,B,C,D, little)
-f32_iolist_to_int( A,B,C,D  ) -> 
+f32_iolist_to_int( A,B,C,D  ) ->
     f32_iolist_to_int(A,B,C,D, little).
 
 

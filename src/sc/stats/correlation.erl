@@ -51,6 +51,16 @@
 
 
 -export( [
+
+  pearson_correlation/1,
+    pearson_correlation/2,
+
+  spearman_correlation/1,
+    spearman_correlation/2,
+
+  kendall_correlation/1,
+    kendall_correlation/2
+
 ] ).
 
 
@@ -161,7 +171,7 @@ spearman_correlation(TupleList) when is_list(TupleList) ->
 
 %% @equiv spearman_correlation(lists:zip(List1, List2))
 
-spearman_correlation(List1, _) when length(List1) < 2 -> 
+spearman_correlation(List1, _) when length(List1) < 2 ->
 
     {rsquared, 0.0};
 
@@ -175,8 +185,8 @@ spearman_correlation(List1, List2) when length(List1) /= length(List2) ->
 
 spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
-    {TR1,_} = .lists:unzip(ordered_ranks_of(List1)),
-    {TR2,_} = .lists:unzip(ordered_ranks_of(List2)),
+    {TR1,_} = .lists:unzip(.sc.stats.ranks:ordered_ranks_of(List1)),
+    {TR2,_} = .lists:unzip(.sc.stats.ranks:ordered_ranks_of(List2)),
 
     Numerator   = 6 * .lists:sum([ (D1-D2)*(D1-D2) || {D1,D2} <- .lists:zip(TR1,TR2) ]),
     Denominator = .math:pow(length(List1),3)-length(List1),
@@ -217,7 +227,7 @@ kendall_correlation(TupleList) when is_list(TupleList) ->
 
 %% @equiv kendall_correlation(lists:zip(List1, List2))
 
-kendall_correlation(List1, _) when length(List1) < 2 -> 
+kendall_correlation(List1, _) when length(List1) < 2 ->
 
     {tau, 0.0};
 
@@ -231,10 +241,10 @@ kendall_correlation(List1, List2) when length(List1) /= length(List2) ->
 
 kendall_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
-    {RA,_} = .lists:unzip(ordered_ranks_of(List1)),
-    {RB,_} = .lists:unzip(ordered_ranks_of(List2)),
+    {RA,_} = .lists:unzip(.sc.stats.ranks:ordered_ranks_of(List1)),
+    {RB,_} = .lists:unzip(.sc.stats.ranks:ordered_ranks_of(List2)),
 
-    Ordering = .lists:keysort(1,.lists:zip(RA,RB)),
+    Ordering = .lists:keysort(1, .lists:zip(RA,RB)),
     {_,OrdB} = .lists:unzip(Ordering),
 
     N = length(List1),
