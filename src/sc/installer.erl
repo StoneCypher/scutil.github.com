@@ -81,7 +81,10 @@ contained_modules() ->
         "file.erl",
         "message.erl",
         "math/vector.erl",
-        "counter.erl"
+        "counter.erl",
+        "bit.erl",
+        "time.erl",
+        "note.erl"
     ].
 
 

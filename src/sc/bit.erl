@@ -26,6 +26,39 @@
 
 
 
+-module(sc.bit).
+
+-author("John Haugeland <stonecypher@gmail.com>").
+-webpage("http://scutil.com/").
+-license( {mit_license, "http://scutil.com/license.html"} ).
+
+-publicsvn("svn://crunchyd.com/scutil/").
+-currentsource("http://crunchyd.com/release/scutil.zip").
+
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
+
+-description("Bit handling utilities.").
+
+-testerl_export( { [], sc_bit_testsuite } ).  % todo needs test suite
+
+-library_requirements([
+]).
+
+
+
+
+
+-export( [
+    has_bit/2,
+    count_bits/1
+] ).
+
+
+
+
+
 %% @spec has_bit(Number::non_negative_integer(), Bit::non_negative_integer()) -> true | false
 
 %% @doc {@section Utility} Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of `Num'.  ```1> scutil:has_bit(5,0).
