@@ -1,7 +1,7 @@
 
 %% @author John Haugeland <stonecypher@gmail.com>
 %% @copyright 2007 - current John Haugeland, All Rights Reserved
-%% @version $Revision$
+%% @version $Revision: 249 $
 %% @since Version 8
 
 %% @doc <!-- google analytics --><script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script><script type="text/javascript">var pageTracker = _gat._getTracker("UA-4903191-10");pageTracker._trackPageview();</script>
@@ -21,6 +21,40 @@
 %% @todo add defective warnings to beginnings of @doc tags
 %% @todo add links to test data
 %% @todo add sections to examples: descriptive text, code example, what's it for, related, thanks
+
+
+
+
+
+-module(sc.math.vector).
+
+-author("John Haugeland <stonecypher@gmail.com>").
+-webpage("http://scutil.com/").
+-license( {mit_license, "http://scutil.com/license.html"} ).
+
+-publicsvn("svn://crunchyd.com/scutil/").
+-currentsource("http://crunchyd.com/release/scutil.zip").
+
+-svn_id("$Id: scutil.erl 244 2009-03-21 17:53:57Z john $").
+-svn_head("$HeadURL: svn://crunchyd.com/scutil/src/scutil.erl $").
+-svn_revision("$Revision: 244 $").
+
+-description("Vector calculations for math, physics and 3d.  This means vector in the physics sense, not in the datastructure sense.").
+
+-testerl_export( { [], sc_vector_testsuite } ).  % todo needs test suite
+
+-library_requirements([
+]).
+
+
+
+
+
+-export( [
+    qsp_average/2,
+    dot_product/2,
+    cross_product/2
+] ).
 
 
 
@@ -71,7 +105,7 @@ qsp_average(W, InputVecs) ->
         VnDp * VnDp
     end,
 
-    arithmetic_mean([ GetSqVnDp(Xi) || Xi <- InputVecs ]).
+    .sc.stats.means:arithmetic_mean([ GetSqVnDp(Xi) || Xi <- InputVecs ]).
 
 
 
@@ -101,8 +135,8 @@ qsp_average(W, InputVecs) ->
 %% @todo implement tuple variation
 
 dot_product(VX, VY) ->
-    
-    lists:sum( [ X*Y || {X,Y} <- lists:zip(VX,VY) ] ).
+
+    .lists:sum( [ X*Y || {X,Y} <- .lists:zip(VX,VY) ] ).
 
 
 
@@ -134,7 +168,7 @@ dot_product(VX, VY) ->
 %% @todo implement 7-dimensional variation, http://en.wikipedia.org/wiki/Seven-dimensional_cross_product
 
 cross_product( {X1,Y1,Z1}, {X2,Y2,Z2} ) ->
-    
+
     { (Y1*Z2) - (Z1*Y2) , (Z1*X2) - (X1*Z2), (X1*Y2) - (Y1*X2) };
 
 
