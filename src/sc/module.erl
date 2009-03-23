@@ -33,15 +33,13 @@
 -license( {mit_license, "http://scutil.com/license.html"} ).
 
 -publicsvn("svn://crunchyd.com/scutil/").
--bugtracker("http://crunchyd.com/forum/project.php?projectid=7").
--publicforum("http://crunchyd.com/forum/scutil-discussion/").
 -currentsource("http://crunchyd.com/release/scutil.zip").
 
 -svn_id("$Id$").
 -svn_head("$HeadURL$").
 -svn_revision("$Revision$").
 
--description("StoneCypher's utility library.").
+-description("Routines for working with modules directly, after compile.").
 
 -testerl_export( { [], scutil_testsuite } ).
 

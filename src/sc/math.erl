@@ -51,6 +51,19 @@
 
 
 -export( [
+
+    mersenne_prime/1,            % needs tests
+    floor/1,                     % needs tests
+    ceil/1,                      % needs tests
+    ceiling/1,                   % needs tests
+    factorial/1,                 % needs tests
+    square/1,                    % needs tests
+    cube/1,                      % needs tests
+    mod/2,                       % needs tests
+    root_sum_square/1,           % needs tests
+    root_mean_square/1,          % needs tests
+    absolute_difference/2        % needs tests
+
 ] ).
 
 
@@ -65,19 +78,19 @@ mersenne_prime(Which) -> mersenne_prime_worker(Which, 1).
 
 %% @private
 
-mersenne_prime_worker(0, Current) -> 
+mersenne_prime_worker(0, Current) ->
 
     Current - 1;
-    
-    
 
-mersenne_prime_worker(Remain, Current) when Remain > 30 -> 
+
+
+mersenne_prime_worker(Remain, Current) when Remain > 30 ->
 
     mersenne_prime_worker(Remain-30, Current*1073741824);
-    
-    
 
-mersenne_prime_worker(Remain, Current) -> 
+
+
+mersenne_prime_worker(Remain, Current) ->
 
     mersenne_prime_worker(Remain-1, Current*2).
 
@@ -279,7 +292,7 @@ root_sum_square(VX) when is_tuple(VX) ->
 
 root_mean_square(List) when is_list(List) ->
 
-    math:sqrt(arithmetic_mean([ Val*Val || Val <- List ])).
+    math:sqrt(.sc.stats.means:arithmetic([ Val*Val || Val <- List ])).
 
 
 

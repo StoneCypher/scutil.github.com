@@ -39,9 +39,9 @@
 -svn_head("$HeadURL$").
 -svn_revision("$Revision$").
 
--description("An IRC server").
+-description("Botserv service for the SC IRC server").
 
--testerl_export( { [], sc_TODO_testsuite } ).  % todo needs test suite
+-testerl_export( { [], sc_irc_server_botserv_testsuite } ).  % todo needs test suite
 
 -library_requirements([
 ]).

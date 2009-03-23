@@ -33,8 +33,6 @@
 -license( {mit_license, "http://scutil.com/license.html"} ).
 
 -publicsvn("svn://crunchyd.com/scutil/").
--bugtracker("http://crunchyd.com/forum/project.php?projectid=7").
--publicforum("http://crunchyd.com/forum/scutil-discussion/").
 -currentsource("http://crunchyd.com/release/scutil.zip").
 
 -svn_id("$Id$").
@@ -43,7 +41,7 @@
 
 -description("StoneCypher's utility library.").
 
--testerl_export( { [], scutil_testsuite } ).
+-testerl_export( { [], sc_code_testsuite } ).
 
 -library_requirements( [] ).
 
@@ -68,7 +66,7 @@
 
 abstract(Module) ->
 
-    abstract_code(Module, unstripped).
+    abstract(Module, unstripped).
 
 
 
@@ -80,7 +78,7 @@ abstract(Module) ->
 
 abstract(Module, DoStrip) ->
 
-    case get_module_feature(Module, abstract_code) of
+    case .sc.module:feature(Module, abstract_code) of
 
         { raw_abstract_v1, ACode } ->
 

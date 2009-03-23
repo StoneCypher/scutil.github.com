@@ -24,6 +24,37 @@
 
 
 
+-module(sc.signal).
+
+-author("John Haugeland <stonecypher@gmail.com>").
+-webpage("http://scutil.com/").
+-license( {mit_license, "http://scutil.com/license.html"} ).
+
+-publicsvn("svn://crunchyd.com/scutil/").
+-currentsource("http://crunchyd.com/release/scutil.zip").
+
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
+
+-description("Basic signal handling routines.").
+
+-testerl_export( { [], sc_signal_testsuite } ).  % todo needs test suite
+
+-library_requirements([
+]).
+
+
+
+
+
+-export( [
+] ).
+
+
+
+
+
 %% @since Version 129
 
 unit_scale_signal(Waveform) ->

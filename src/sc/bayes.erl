@@ -24,6 +24,37 @@
 
 
 
+-module(sc.bayes).
+
+-author("John Haugeland <stonecypher@gmail.com>").
+-webpage("http://scutil.com/").
+-license( {mit_license, "http://scutil.com/license.html"} ).
+
+-publicsvn("svn://crunchyd.com/scutil/").
+-currentsource("http://crunchyd.com/release/scutil.zip").
+
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
+
+-description("Basic bayesian inference and bayesian analysis tools").
+
+-testerl_export( { [], sc_bayes_testsuite } ).  % todo needs test suite
+
+-library_requirements([
+]).
+
+
+
+
+
+-export( [
+] ).
+
+
+
+
+
 %% @spec bayes_likelihood_of(Event, Given, Data) -> float
 
 %% @doc {@section Probability} <span style="color:red">TODO</span> Calculates the probability of a hypothetical event in the context of a dataset and a baseline given item, using Bayesian inference.  Bayesian inference sorts through the dataset looking for baselines, counting them; when a given is found, the hypothetical event is also looked for, counting them only when the baseline given is located first.  Then, the dividend of the hypothetical and given counts is returned as a likelihood estimation on the range `[0.0 .. 1.0]'.  ```1> scutil:bayes_likelihood_of(cancer, positive, [[cancer,positive],[healthy,negative],[cancer,positive],[healthy,positive]]).

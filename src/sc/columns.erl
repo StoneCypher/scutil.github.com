@@ -26,21 +26,69 @@
 
 
 
+-module(sc.columns).
+
+-author("John Haugeland <stonecypher@gmail.com>").
+-webpage("http://scutil.com/").
+-license( {mit_license, "http://scutil.com/license.html"} ).
+
+-publicsvn("svn://crunchyd.com/scutil/").
+-currentsource("http://crunchyd.com/release/scutil.zip").
+
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
+
+-description("Text columnation routines").
+
+-testerl_export( { [], sc_columns_testsuite } ).  % todo needs test suite
+
+-library_requirements([
+]).
+
+
+
+
+
+-export( [
+
+    columnated_text/2,
+    columnated_rows/2,
+
+    columnate/1,
+      columnate/2,
+
+    columns/2,
+    first_row/1
+
+] ).
+
+
+
+
+
 %% @since Version 171
 
-columns(RowCount, List) -> 
+columns(RowCount, List) ->
 
-    columns(List, lists:duplicate(RowCount, []), 0).
+    columns(List, .lists:duplicate(RowCount, []), 0).
 
 
 
-columns( [], Output, Unrotate) -> list_rotate(Unrotate, [ lists:reverse(Column) || Column <- Output]);
+columns( [], Output, Unrotate) -> 
+
+    .sc.list:rotate(
+        Unrotate, 
+        [ .lists:reverse(Column) ||
+            Column <- Output
+        ]
+    );
 
 
 
 columns( [Item|ListRem], [Output|OutRem], Unrotate) ->
 
-    columns(ListRem, OutRem++[[Item]++Output], Unrotate-1).
+    columns(ListRem, OutRem ++ [[Item]++Output], Unrotate-1).
 
 
 
@@ -50,7 +98,7 @@ columns( [Item|ListRem], [Output|OutRem], Unrotate) ->
 
 columnated_rows(ColumnCount, List) ->
 
-    columns(ceiling(length(List) / ColumnCount), List).
+    columns(.sc.math:ceiling(length(List) / ColumnCount), List).
 
 
 
@@ -84,7 +132,7 @@ first_row(Columns) ->
 
 first_row( [], OutCols, Work) ->
 
-    { lists:reverse(Work), lists:reverse(OutCols) };
+    { .lists:reverse(Work), .lists:reverse(OutCols) };
 
 
 
@@ -110,28 +158,28 @@ columnate(List) ->
 
 columnate(List, Options) ->
 
-    Settings = lists:ukeymerge(1, Options, [{align, center}, {columns, 2}, {margin, 3}] ),
+    Settings = .lists:ukeymerge(1, Options, [{align, center}, {columns, 2}, {margin, 3}] ),
 
-    [ColumnCount, Margin, Align] = [ proplists:get_value(X, Settings) || X <- [columns,margin,align] ],
+    [ColumnCount, Margin, Align] = [ .proplists:get_value(X, Settings) || X <- [columns,margin,align] ],
 
-    Columns = scutil:columns(ColumnCount, List),
+    Columns = columns(ColumnCount, List),
 
-    MinWidths = [ lists:max( [length(lists:flatten(io_lib:format("~w",[Item]))) || Item <- Col]) || Col <- Columns ],
+    MinWidths = [ .lists:max( [length(.lists:flatten(.io_lib:format("~w",[Item]))) || Item <- Col]) || Col <- Columns ],
 
     DoAlign = fun(Item, Width) ->
 
         case Align of
-            left   -> string:left(   lists:flatten( io_lib:format("~w",[Item]) ), Width);
-            center -> string:centre( lists:flatten( io_lib:format("~w",[Item]) ), Width);
-            centre -> string:centre( lists:flatten( io_lib:format("~w",[Item]) ), Width);
-            right  -> string:right(  lists:flatten( io_lib:format("~w",[Item]) ), Width)
+            left   -> .string:left(   .lists:flatten( .io_lib:format("~w",[Item]) ), Width);
+            center -> .string:centre( .lists:flatten( .io_lib:format("~w",[Item]) ), Width);
+            centre -> .string:centre( .lists:flatten( .io_lib:format("~w",[Item]) ), Width);
+            right  -> .string:right(  .lists:flatten( .io_lib:format("~w",[Item]) ), Width)
         end
 
     end,
 
-    Aligned = [ [ DoAlign(Item, Width) || Item <- Col]  || {Width, Col} <- lists:zip(MinWidths, Columns) ],
+    Aligned = [ [ DoAlign(Item, Width) || Item <- Col]  || {Width, Col} <- .lists:zip(MinWidths, Columns) ],
 
-    Format = implode( lists:duplicate(Margin, $ ), [ "~" ++ integer_to_list(Width) ++ "s" || Width <- MinWidths ] ),
+    Format = .sc.list:implode( .lists:duplicate(Margin, $ ), [ "~" ++ integer_to_list(Width) ++ "s" || Width <- MinWidths ] ),
 
     columnate_each_row(Aligned, Format, []).
 
@@ -143,7 +191,7 @@ columnate(List, Options) ->
 
 columnated_text(List, Options) ->
 
-    implode("\r\n", columnate(List, Options)).
+    .sc.list:implode("\r\n", columnate(List, Options)).
 
 
 
@@ -153,12 +201,12 @@ columnated_text(List, Options) ->
 
 columnate_each_row( [ [] | _ ], _Format, Output) ->
 
-    lists:reverse(Output);
+    .lists:reverse(Output);
 
 
 
 columnate_each_row(Columns, Format, Output) ->
 
     {ThisRow, RemRows} = first_row(Columns),
-    ThisOut = lists:flatten(io_lib:format(Format, ThisRow)),
+    ThisOut = .lists:flatten(.io_lib:format(Format, ThisRow)),
     columnate_each_row(RemRows, Format, [ThisOut]++Output).

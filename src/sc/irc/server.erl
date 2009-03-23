@@ -39,9 +39,9 @@
 -svn_head("$HeadURL$").
 -svn_revision("$Revision$").
 
--description("An IRC server").
+-description("An IRC server implemented in Erlang; follows the IRC protocol for clients, but not for server -> server communication").
 
--testerl_export( { [], sc_TODO_testsuite } ).  % todo needs test suite
+-testerl_export( { [], sc_irc_server_testsuite } ).  % todo needs test suite
 
 -library_requirements([
 ]).

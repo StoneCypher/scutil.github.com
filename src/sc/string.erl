@@ -28,6 +28,28 @@
 
 -module(sc.string).
 
+-author("John Haugeland <stonecypher@gmail.com>").
+-webpage("http://scutil.com/").
+-license( {mit_license, "http://scutil.com/license.html"} ).
+
+-publicsvn("svn://crunchyd.com/scutil/").
+-currentsource("http://crunchyd.com/release/scutil.zip").
+
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
+
+-description("String handling and manipulation routines.  Largely distinguished from the lists module by intent, rather than capability, which sucks, but when in Rome.").
+
+-testerl_export( { [], sc_string_testsuite } ).  % todo needs test suite
+
+-library_requirements([
+]).
+
+
+
+
+
 -export( [
     
     starts_with/2,

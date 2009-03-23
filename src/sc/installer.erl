@@ -77,9 +77,9 @@ contained_modules() ->
 
         bayes,
         bit,
-       [bridge,      local,       cpp],
-       [bridge,      net,         actionscript],
-       [bridge,      net,         javascript],
+       [bridges,     local,       cpp],
+       [bridges,     net,         actionscript],
+       [bridges,     net,         javascript],
         code,
         columns,
         convert,
