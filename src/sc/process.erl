@@ -51,6 +51,13 @@
 
 
 -export( [
+
+    get_linked_processes/0,
+
+    start_register_if_not_running/3,
+      start_register_if_not_running/4,
+      start_register_if_not_running/5
+
 ] ).
 
 

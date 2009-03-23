@@ -51,6 +51,10 @@
 
 
 -export( [
+    
+    halstead_complexity/4,
+      halstead_complexity/5
+
 ] ).
 
 

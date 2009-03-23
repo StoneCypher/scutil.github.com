@@ -24,6 +24,41 @@
 
 
 
+-module(sc.tuple).
+
+-author("John Haugeland <stonecypher@gmail.com>").
+-webpage("http://scutil.com/").
+-license( {mit_license, "http://scutil.com/license.html"} ).
+
+-publicsvn("svn://crunchyd.com/scutil/").
+-currentsource("http://crunchyd.com/release/scutil.zip").
+
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
+
+-description("Functions for working with tuples.").
+
+-testerl_export( { [], sc_tuple_testsuite } ).  % todo needs test suite
+
+-library_requirements([
+]).
+
+
+
+
+
+-export( [
+
+    tuple_member/2,
+    tuple_sum/1
+
+] ).
+
+
+
+
+
 %% @spec tuple_member(E::any(), T::tuple()) -> true | false
 
 %% @doc Checks whether E is a member element of tuple T, analogous to `lists::member(E, L)'. ```1> scutil:tuple_member(b, {a,b,c}).

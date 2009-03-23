@@ -49,6 +49,9 @@
 
 
 -export( [
+
+    likelihood/3
+
 ] ).
 
 
@@ -73,19 +76,19 @@
 
 %% @since Version 110
 
-bayes_likelihood_of(Event, Given, Data) -> 
+likelihood(Event, Given, Data) ->
 
-    bayes_likelihood_worker(Event, Given, 0, 0, Data).
-    
+    likelihood_worker(Event, Given, 0, 0, Data).
 
 
-bayes_likelihood_worker(_Event,_Given, EventAndGivenCount, GivenCount, []) ->
+
+likelihood_worker(_Event,_Given, EventAndGivenCount, GivenCount, []) ->
 
     EventAndGivenCount / GivenCount;
-    
-    
 
-bayes_likelihood_worker( Event, Given, EventAndGivenCount, GivenCount, [Data|Rem]) ->
+
+
+likelihood_worker( Event, Given, EventAndGivenCount, GivenCount, [Data|Rem]) ->
 
     case lists:member(Given, Data) of
 
@@ -94,15 +97,15 @@ bayes_likelihood_worker( Event, Given, EventAndGivenCount, GivenCount, [Data|Rem
             case lists:member(Event, Data) of
     
                 true -> 
-                    bayes_likelihood_worker(Event, Given, EventAndGivenCount+1, GivenCount+1, Rem);
+                    likelihood_worker(Event, Given, EventAndGivenCount+1, GivenCount+1, Rem);
 
-                false -> 
-                    bayes_likelihood_worker(Event, Given, EventAndGivenCount,   GivenCount+1, Rem)
+                false ->
+                    likelihood_worker(Event, Given, EventAndGivenCount,   GivenCount+1, Rem)
 
             end;
 
         false ->
 
-            bayes_likelihood_worker(Event, Given, EventAndGivenCount, GivenCount, Rem)
+            likelihood_worker(Event, Given, EventAndGivenCount, GivenCount, Rem)
 
     end.

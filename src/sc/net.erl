@@ -51,6 +51,18 @@
 
 
 -export( [
+
+    make_node/2,
+    standard_listener/3,
+
+    % export
+    
+    standard_listener_controller/6,
+      standard_listener_controller/7,
+
+    standard_listener_accept_loop/6,
+    standard_listener_shunt/5
+
 ] ).
 
 
@@ -104,7 +116,7 @@ standard_listener(Handler, Port, SocketOptions) ->
 
             ListeningPort = case Port of
 
-                0 -> 
+                0 ->
                     {ok, LP} = inet:port(ListeningSocket),
                     LP;
 

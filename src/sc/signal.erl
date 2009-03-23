@@ -49,7 +49,7 @@
 
 
 -export( [
-%    unit_scale_signal/1,
+    unit_scale_signal/1,
     isolate_signal/1
 ] ).
 

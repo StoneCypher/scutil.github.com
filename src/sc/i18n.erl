@@ -51,6 +51,10 @@
 
 
 -export( [
+
+    is_numeric_char/1,
+      is_numeric_char/2
+
 ] ).
 
 
