@@ -51,6 +51,12 @@
 
 
 -export( [
+
+    flesch_kincaid_readability_score/3,
+    flesch_kincaid_readability/4,
+    interpret_flesch_kincaid_score/1,
+    to_lines/1
+
 ] ).
 
 

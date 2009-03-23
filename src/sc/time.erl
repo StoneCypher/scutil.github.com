@@ -51,6 +51,23 @@
 
 
 -export( [
+
+    diff_timestamp/2,
+
+    benchmark/2,
+      benchmark/3,
+
+    call_after/2,
+      call_after/3,
+      call_after/4,
+
+    wait_until_terminate/0,
+      wait_until_terminate/1,
+
+    % exports
+
+    call_after_worker/4
+
 ] ).
 
 
@@ -115,19 +132,19 @@ benchmark(Module, Func, Args) ->
 
 call_after_worker(MS, Func, Args, Handler) ->
 
-    receive 
+    receive
         % Nothing
 
     after MS ->
 
 
-        case Func of
+        Result = case Func of
 
             { Module, FuncName } ->
-                Result = apply(Module, FuncName, Args);
+                apply(Module, FuncName, Args);
 
             FuncName ->
-                Result = apply(FuncName, Args)
+                apply(FuncName, Args)
 
         end,
 
@@ -162,7 +179,7 @@ call_after(Length, Func) ->
 
 
 %% @equiv call_after(Length, Func, Args, {handler,self()})
-call_after(Length, Func, Args) -> 
+call_after(Length, Func, Args) ->
 
     call_after(Length, Func, Args, {handler,self()}).
 

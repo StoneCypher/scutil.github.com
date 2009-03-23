@@ -135,7 +135,7 @@ gen_docs( [From, To] ) ->
 
 standard_compile_options() ->
 
-    [debug_info, report, return, warn_export_all, warn_export_vars, warn_obsolete_guard, warn_unused_import].
+    [debug_info, return, warn_export_all, warn_export_vars, warn_obsolete_guard, warn_unused_import].
 
 
 
@@ -154,15 +154,16 @@ compile_all(From, Options) ->
 
 
     ReportOnCompile = fun
-        ( Module, error)                           -> { error, Module };
-        ( Module, {error, ErrorList, WarningList}) -> { error, Module, ErrorList, WarningList };
-        (_Module, {ok,AtomName})                   -> AtomName;
-        (_Module, {ok,AtomName, Warnings})         -> { AtomName, Warnings }
+        ( Module, error)                                 -> { error, Module };
+        ( Module, {error, ErrorList, WarningList})       -> { error, Module, ErrorList, WarningList };
+        (_Module, {ok,AtomName})                         -> AtomName;
+        (_Module, {ok,AtomName, Warnings})               -> { AtomName, Warnings }
     end,
 
     IsFailureCase = fun
-        ({ error,_Module }) -> true;
-        (_)                 -> false
+        ({ error,_Module })                         -> true;
+        ({ error,_Module,_ErrorList,_WarningList }) -> true;
+        (_)                                         -> false
     end,
 
     IsWarningCase = fun
