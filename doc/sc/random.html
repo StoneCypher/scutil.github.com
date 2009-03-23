@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Module sc.random</title>
+<link rel="stylesheet" type="text/css" href="../stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module sc.random</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul><script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script><script type="text/javascript">var pageTracker = _gat._getTracker("UA-4903191-10");pageTracker._trackPageview();</script>.
+<p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
+
+<p><b>Version:</b> $Revision$</p>
+<p><b>Introduced in:</b> Version 8</p>
+<p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
+<p><b>References</b><ul><li><span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Website is</span><a href="http://scutil.com/">http://scutil.com/</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Author's Website</span><a href="http://fullof.bs">Full of BS</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">This library is released under the</span><a href="http://scutil.com/license.html">MIT License</a></span></li><li><span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date: 2009-03-15 13:47:01 -0600 (Sun, 15 Mar 2009) $</tt></span></li></ul></p>
+
+<h2><a name="description">Description</a></h2><script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script><script type="text/javascript">var pageTracker = _gat._getTracker("UA-4903191-10");pageTracker._trackPageview();</script>
+  <p> </p>
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-coord">coord()</a></h3>
+<p><tt>coord() = tuple()</tt></p>
+<p>Every member of a <code><a href="#type-coord">coord()</a></code> is a <code>number()</code>.  Represents a coordinate, which may imply a sized cartesian space.  Many functions expect integer coordinates; the type does not require them.  This type does not define member count.  If your function requires a specific count of members, name it, as in a <code><a href="#type-coord2">coord2()</a></code> or <code><a href="#type-coord3">coord3()</a></code>.</p>
+
+<h3 class="typedecl"><a name="type-coord2">coord2()</a></h3>
+<p><tt>coord2() = {number(), number()}</tt></p>
+<p>Represents a coordinate, which may imply a sized rectangle.  Many functions expect integer coordinates; the type does not require them.</p>
+
+<h3 class="typedecl"><a name="type-coord2list">coord2list()</a></h3>
+<p><tt>coord2list() = list()</tt></p>
+<p>All members of a <code><a href="#type-coord2list">coord2list()</a></code> must be <code><a href="#type-coord2">coord2()</a></code>s.</p>
+
+<h3 class="typedecl"><a name="type-coord3">coord3()</a></h3>
+<p><tt>coord3() = {number(), number(), number()}</tt></p>
+<p>Represents a coordinate, which may imply a sized 3d box region.  Many functions expect integer coordinates; the type does not require them.</p>
+
+<h3 class="typedecl"><a name="type-coord3list">coord3list()</a></h3>
+<p><tt>coord3list() = list()</tt></p>
+<p>All members of a <code><a href="#type-coord3list">coord3list()</a></code> must be <code><a href="#type-coord3">coord3()</a></code>s.</p>
+
+<h3 class="typedecl"><a name="type-coordlist">coordlist()</a></h3>
+<p><tt>coordlist() = list()</tt></p>
+<p>All members of a <code><a href="#type-coordlist">coordlist()</a></code> must be <code><a href="#type-coord">coord()</a></code>s.  All member coordinates must be of the same size, though this type does not define what that size is.  If your function requires a specific count of members, name it, as in a <code><a href="#type-coord2list">coord2list()</a></code> or <code><a href="#type-coord3list">coord3list()</a></code>.</p>
+
+<h3 class="typedecl"><a name="type-gridsize">gridsize()</a></h3>
+<p><tt>gridsize() = <a href="#type-coord2">coord2()</a> | integer()</tt></p>
+<p>Coordinates are the width and height of a (1,1) originated grid; as such, coordinates are of the range [1,X] , [1,Y] inclusive, and returned in the form {A,B}.  The integer form implies a square grid.</p>
+
+<h3 class="typedecl"><a name="type-weightedvalue">weightedvalue()</a></h3>
+<p><tt>weightedvalue() = {Value::any(), Weight::number()}</tt></p>
+<p>Used by functions like weighted_arithmetic_mean/1 and random_from_weighted/1, weightedvalue()s represent a value with an associated importance or "weight".</p>
+
+<h3 class="typedecl"><a name="type-weightlist">weightlist()</a></h3>
+<p><tt>weightlist() = list()</tt></p>
+<p>All members of weightlists must be weightedvalue()s.</p>
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#grid_scatter-2">grid_scatter/2</a></td><td><a href="#Random">Random</a> Return a Count-length list of non-repeating coordinates in a grid of specified size; useful for feature generation.</td></tr>
+<tr><td valign="top"><a href="#random_from-1">random_from/1</a></td><td>Equivalent to <a href="#random_from-3"><tt>random_from(1, List, no_remainder)</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#random_from-2">random_from/2</a></td><td>Equivalent to <a href="#random_from-3"><tt>random_from(N, List, no_remainder)</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#random_from-3">random_from/3</a></td><td><a href="#Random">Random</a> Take N non-repeating random elements from a list in undefined order.</td></tr>
+<tr><td valign="top"><a href="#random_from_weighted-1">random_from_weighted/1</a></td><td><a href="#Random">Random</a> Take a random single item from a list with weighted probabilities.</td></tr>
+<tr><td valign="top"><a href="#shuffle-1">shuffle/1</a></td><td><a href="#Random">Random</a> Return a list with the original list's shallow members in a random order.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="grid_scatter-2">grid_scatter/2</a></h3>
+<div class="spec">
+<p><tt>grid_scatter(Count::integer(), Size::<a href="#type-gridsize">gridsize()</a>) -&gt; <a href="#type-coordlist">coordlist()</a></tt></p>
+</div><p><a href="#Random">Random</a> Return a Count-length list of non-repeating coordinates in a grid of specified size; useful for feature generation.</p>
+<p><b>Introduced in:</b> Version 42</p>
+
+<h3 class="function"><a name="random_from-1">random_from/1</a></h3>
+<div class="spec">
+<p><tt>random_from(List) -&gt; any()</tt></p>
+</div><p>Equivalent to <a href="#random_from-3"><tt>random_from(1, List, no_remainder)</tt></a>.</p>
+
+<p><b>Introduced in:</b> Version 6</p>
+
+<h3 class="function"><a name="random_from-2">random_from/2</a></h3>
+<div class="spec">
+<p><tt>random_from(N, List) -&gt; any()</tt></p>
+</div><p>Equivalent to <a href="#random_from-3"><tt>random_from(N, List, no_remainder)</tt></a>.</p>
+
+<p><b>Introduced in:</b> Version 6</p>
+
+<h3 class="function"><a name="random_from-3">random_from/3</a></h3>
+<div class="spec">
+<p><tt>random_from(N::integer(), List::list(), WantRemainder::<a href="#type-want_remainder">want_remainder()</a>) -&gt; list()</tt></p>
+</div><p><a href="#Random">Random</a> Take N non-repeating random elements from a list in undefined order.  If the atom <code>remainder</code> is passed in as the third argument, the unused portion of the source list will be returned as the second member of a 2ary tuple with the results; the default is no_remainder, which only returns the result set.  Mixed type input lists are perfectly safe, and membership for random selection is shallow (ie, <code>[ [1,2], [3,4] ]</code> as an input list would only generate outputs of lists, never integers.)<pre>  1&gt; scutil:random_from([monday,tuesday,wednesday,thursday,friday]).
+  friday
+ 
+  2&gt; scutil:random_from(4, lists:seq(1,20)).
+  [6,3,15,12]
+ 
+  3&gt; scutil:random_from(3, [warrior, mage, cleric, thief, paladin, ranger, bard]).
+  [cleric,warrior,ranger]
+ 
+  4&gt; scutil:random_from(6, [mixed, [1,2,3], 4, {five,5}, 3, 67.2, &lt;&lt;"Hello"&gt;&gt;, 8]).
+  [[1,2,3],{five,5},4,mixed,&lt;&lt;"Hello"&gt;&gt;,67.2]
+ 
+  5&gt; {Team1, Team2} = scutil:random_from(3, [alice,bob,cathy,dave,edward,fawn], remainder).
+  {[cathy,fawn,dave],[bob,edward,alice]}
+ 
+  6&gt; Team1.
+  [cathy,fawn,dave]
+ 
+  7&gt; Where_Food = fun() -&gt; scutil:random_from([deli, fastfood, chinese, mexican, steakhouse, bistro, greek, indian, thai, sushi]) end.
+  #Fun&lt;erl_eval.20.67289768&gt;
+ 
+  8&gt; Where_Food().
+  thai</pre></p>
+<p><b>Introduced in:</b> Version 6</p>
+
+<h3 class="function"><a name="random_from_weighted-1">random_from_weighted/1</a></h3>
+<div class="spec">
+<p><tt>random_from_weighted(InputList::<a href="#type-weightlist">weightlist()</a>) -&gt; any()</tt></p>
+</div><p><a href="#Random">Random</a> Take a random single item from a list with weighted probabilities.  Probabilities may be any numeric type, and may be any non-negative value (items with zero probability will be omitted).  Input is a <code>weightlist()</code>, which is a list in the form <code>[{Item,Probability}, {I2,P2}, ...]</code>. There is no requirement to normalize probabilities to any range, though probabilities normalized to ranges will still work as expected. <pre>  1&gt; scutil:random_from([ {quad,4}, {double,2}, {single,1} ]).
+  quad
+ 
+  2&gt; [ scutil:random_from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X &lt;- lists:seq(1,10) ].
+  [single,quad,quad,double,quad,double,quad,quad,quad,double]
+ 
+  3&gt; scutil:histograph([ scutil:random_from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X &lt;- lists:seq(1,777777) ]).
+  [{double,222200},{quad,444165},{single,111412}]</pre></p>
+<p><b>Introduced in:</b> Version 10</p>
+
+<h3 class="function"><a name="shuffle-1">shuffle/1</a></h3>
+<div class="spec">
+<p><tt>shuffle(List::list()) -&gt; list()</tt></p>
+</div><p><a href="#Random">Random</a> Return a list with the original list's shallow members in a random order.  Deep lists are not shuffled; <code>[ [a,b,c], [d,e,f], [g,h,i] ]</code> will never produce sublist reorderings (<code>[b,c,a]</code>) or list mixing (<code>[b,g,e]</code>), only reordering of the three top level lists.  The output list will always be the same length as the input list.  Repeated items and mixed types in input lists are safe. <pre>  1&gt; scutil:shuffle(lists:seq(1,9)).
+  [8,4,7,9,5,2,6,1,3]
+ 
+  2&gt; {TheFaces, TheSuits} = {  [ace] ++ lists:seq(2,10) ++ [jack,queen,king],  [hearts,spades,clubs,diamonds]  }
+  {[ace,jack,queen,king,2,3,4,5,6,7,8,9,10],
+   [hearts,spades,clubs,diamonds]}
+ 
+  3&gt; Deck = scutil:shuffle([ {Face,Suit} || Face &lt;- TheFaces, Suit &lt;- TheSuits ]).
+  [ {6,spades}, {7,hearts}, {8,clubs}, {queen,spades}, {6,diamonds}, {ace,...}, {...} | ...]
+ 
+  4&gt; scutil:shuffle([ duck,duck,duck,duck, goose ]).
+  [duck,goose,duck,duck,duck]</pre>
+ 
+  <i>Originally found at <a href="http://wiki.trapexit.org/index.php/RandomShuffle">http://wiki.trapexit.org/index.php/RandomShuffle</a>; refactored for clarity, and unnecessary repeat nesting behavior removed.</i></p>
+<p><b>Introduced in:</b> Version 8</p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Mar 22 2009, 20:57:25.</i></p>
+</body>
+</html>
