@@ -81,6 +81,7 @@ contained_modules() ->
        [bridges,     net,         actionscript],
        [bridges,     net,         javascript],
         code,
+       [code,        metrics],
         columns,
         convert,
        [convert,     weight],
@@ -94,7 +95,6 @@ contained_modules() ->
         math,
        [math,        vector],
         message,
-        metrics,
         module,
         net,
         note,
@@ -129,24 +129,45 @@ gen_docs( [From, To] ) ->
 
 
 
+%% @private
+
+%% @since Version 260
+
+standard_compile_options() ->
+
+    [debug_info, report, return, warn_export_all, warn_export_vars, warn_obsolete_guard, warn_unused_import].
+
+
+
+
+
 %% @since Version 244
 
 compile_all(From) ->
 
-    compile_all(From, []).
+    compile_all(From, standard_compile_options()).
 
 
 
 compile_all(From, Options) ->
 
+
+
     ReportOnCompile = fun
-        ( Module, error)         -> { error, Module };
-        (_Module, {ok,AtomName}) -> AtomName
+        ( Module, error)                           -> { error, Module };
+        ( Module, {error, ErrorList, WarningList}) -> { error, Module, ErrorList, WarningList };
+        (_Module, {ok,AtomName})                   -> AtomName;
+        (_Module, {ok,AtomName, Warnings})         -> { AtomName, Warnings }
     end,
 
     IsFailureCase = fun
         ({ error,_Module }) -> true;
         (_)                 -> false
+    end,
+
+    IsWarningCase = fun
+        ({ ModuleAtom, [] })       -> false;
+        ({ ModuleAtom, Warnings }) -> true
     end,
 
     ToFilename = fun
@@ -158,9 +179,10 @@ compile_all(From, Options) ->
         File <- contained_modules()
     ],
 
-    { Fail, Pass } = .lists:partition(IsFailureCase, Report),
+    { Fail, PassWarn } = .lists:partition(IsFailureCase, Report),
+    { Warn, Pass     } = .lists:partition(IsWarningCase, PassWarn),
 
-    { { pass, Pass }, { fail, Fail } }.
+    { { pass, Pass }, { warn, Warn }, { fail, Fail } }.
 
 
 
@@ -170,7 +192,7 @@ compile_all(From, Options) ->
 
 install(From) ->
 
-    install(From, []).
+    install(From, standard_compile_options()).
 
 
 

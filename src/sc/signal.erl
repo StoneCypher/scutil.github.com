@@ -49,6 +49,8 @@
 
 
 -export( [
+%    unit_scale_signal/1,
+    isolate_signal/1
 ] ).
 
 
@@ -59,10 +61,10 @@
 
 unit_scale_signal(Waveform) ->
 
-    { Baseline, MaxObserved } = minmax(Waveform),
+    { Baseline, MaxObserved } = .sc.list:minmax(Waveform),
     SignalMax                 = MaxObserved - Baseline,
 
-    [ (Sample - Baseline) / SignalMax || 
+    [ (Sample - Baseline) / SignalMax ||
         Sample <- Waveform
     ].
 

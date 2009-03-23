@@ -75,3 +75,8 @@ even_or_odd(Num) when is_integer(Num), Num band 1 == 0 ->
 even_or_odd(Num) when is_integer(Num) ->
 
     odd.
+
+
+
+
+

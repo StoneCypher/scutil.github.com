@@ -41,9 +41,10 @@
 
 -description("Routines for working with modules directly, after compile.").
 
--testerl_export( { [], scutil_testsuite } ).
+-testerl_export( { [], sc_module_testsuite } ).
 
--library_requirements( [] ).
+-library_requirements( [
+] ).
 
 
 
@@ -51,10 +52,10 @@
 
 -export( [
 
-    get_module_feature/2,       % needs tests
+    feature/2,       % needs tests
 
-    get_module_attribute/1,     % needs tests
-    get_module_attribute/2,     % needs tests
+    attribute/1,     % needs tests
+    attribute/2,     % needs tests
 
     abstract_attributes/1,      % needs tests
 
@@ -63,19 +64,21 @@
 
     atoms/1,             % needs tests
 
-
     entrypoints/1,         % needs tests
     entrypoints/2,         % needs tests
 
-
     function_labels/1,     % needs tests
-    function_points/1      % needs tests
+    function_points/1,     % needs tests
 
     entrypoint_count/1,         % needs tests
+    
     function_label_count/1,     % needs tests
     function_point_count/1,     % needs tests
 
     function_stats/1,           % needs tests
+
+    svn_revision/1,
+    has_function/2
 
 ] ).
 
@@ -89,7 +92,7 @@
 
 atoms(Module) ->
 
-    get_module_feature(Module, atoms).
+    .sc.module:feature(Module, atoms).
 
 
 
@@ -101,7 +104,7 @@ atoms(Module) ->
 abstract_attributes(Module) ->
 
     [ {Id, Name, Value} ||
-        {attribute, Id, Name, Value} <- abstract_code(Module, stripped)
+        {attribute, Id, Name, Value} <- .sc.code:abstract(Module, stripped)
     ].
 
 
@@ -114,7 +117,7 @@ abstract_attributes(Module) ->
 abstract_functions(Module) ->
 
     [ {Id, Name, Arity, Code} ||
-        {function, Id, Name, Arity, Code} <- abstract_code(Module, stripped)
+        {function, Id, Name, Arity, Code} <- .sc.code:abstract(Module, stripped)
     ].
 
 
@@ -127,7 +130,7 @@ abstract_functions(Module) ->
 abstract_function(Module, FName) ->
 
     [ {Id, Name, Arity, Code} ||
-        {function, Id, Name, Arity, Code} <- abstract_code(Module, stripped),
+        {function, Id, Name, Arity, Code} <- .sc.code:abstract(Module, stripped),
         Name == FName
     ].
 
@@ -140,8 +143,8 @@ abstract_function(Module, FName) ->
 % was `scutil:list_entrypoints/1'
 entrypoints(Module) ->
 
-    lists:flatten(
-        [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- scutil:abstract_functions(Module) ]
+    .lists:flatten(
+        [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- .sc.code:abstract_functions(Module) ]
     ).
 
 
@@ -153,8 +156,8 @@ entrypoints(Module) ->
 % was `scutil:list_entrypoints/2'
 entrypoints(Module, FName) ->
 
-    lists:flatten(
-        [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- scutil:abstract_functions(Module), L==FName ]
+    .lists:flatten(
+        [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- .sc.code:abstract_functions(Module), L==FName ]
     ).
 
 
@@ -166,9 +169,9 @@ entrypoints(Module, FName) ->
 % was `scutil:list_function_points/1'
 function_points(Module) ->
 
-    lists:usort(
+    .lists:usort(
         [ {L,A} ||
-            {_,L,A,_} <- scutil:abstract_functions(Module)
+            {_,L,A,_} <- .sc.code:abstract_functions(Module)
         ]
     ).
 
@@ -181,39 +184,9 @@ function_points(Module) ->
 % was `scutil:list_function_labels/1'
 function_labels(Module) ->
 
-    lists:usort(
+    .lists:usort(
         [ L ||
-            {_,L,_,_} <- scutil:abstract_functions(Module)
-        ]
-    ).
-
-
-
-
-
-%% @since Version 140
-
-% was `scutil:list_function_points/1'
-function_points(Module) ->
-
-    lists:usort(
-        [ {L,A} ||
-            {_,L,A,_} <- scutil:abstract_functions(Module)
-        ]
-    ).
-
-
-
-
-
-%% @since Version 140
-
-% was `scutil:list_function_labels/1'
-function_labels(Module) ->
-
-    lists:usort(
-        [ L ||
-            {_,L,_,_} <- scutil:abstract_functions(Module)
+            {_,L,_,_} <- .sc.code:abstract_functions(Module)
         ]
     ).
 
@@ -225,7 +198,7 @@ function_labels(Module) ->
 
 entrypoint_count(Module) ->
 
-    length(list_entrypoints(Module)).
+    length(entrypoints(Module)).
 
 
 
@@ -235,7 +208,7 @@ entrypoint_count(Module) ->
 
 function_label_count(Module) ->
 
-    length(list_function_labels(Module)).
+    length(function_labels(Module)).
 
 
 
@@ -245,7 +218,7 @@ function_label_count(Module) ->
 
 function_point_count(Module) ->
 
-    length(list_function_points(Module)).
+    length(function_points(Module)).
 
 
 
@@ -253,7 +226,7 @@ function_point_count(Module) ->
 
 %% @since Version 140
 
-function_stats(Module) -> 
+function_stats(Module) ->
 
     [ { entrypoints,     entrypoint_count(Module)     },
       { function_labels, function_label_count(Module) },
@@ -271,10 +244,10 @@ function_stats(Module) ->
 
 %% @since Version 44
 
-scan_svn_revision(Module) ->
+svn_revision(Module) ->
 
-    "$Revision: " ++ X = get_module_attribute(Module, svn_revision),
-    [ Head | _Rem ]    = string:tokens(X, " "),
+    "$Revision: " ++ X = attribute(Module, svn_revision),
+    [ Head | _Rem ]    = .string:tokens(X, " "),
 
     list_to_integer(Head).
 
@@ -288,41 +261,12 @@ scan_svn_revision(Module) ->
 
 %% @since Version 84
 
-module_has_function(Module, Function) ->
+% was scutil:module_has_function/2
+
+has_function(Module, Function) ->
 
     scutil:deprecate("module_has_function() is deprecated in favor of erlang:function_exported/3"),
-    lists:keymember(Function, 1, apply(Module, module_info, [exports])).
-
-
-
-
-
-%% @type typelabel() = [ integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown ].  Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
-
-%% @spec type_of(Argument::any()) -> typelabel()
-
-%% @doc {@section Utility} Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of `is_bitstring()' . ```1> scutil:type_of(1).
-%% integer
-%%
-%% 2> scutil:type_of({hello,world}).
-%% tuple'''
-
-%% @since Version 14
-
-type_of(X) when is_integer(X)   -> integer;
-type_of(X) when is_float(X)     -> float;
-type_of(X) when is_list(X)      -> list;
-type_of(X) when is_tuple(X)     -> tuple;
-type_of(X) when is_binary(X)    -> binary;
-type_of(X) when is_bitstring(X) -> bitstring;  % will fail before erlang 12
-type_of(X) when is_boolean(X)   -> boolean;
-type_of(X) when is_function(X)  -> function;
-type_of(X) when is_pid(X)       -> pid;
-type_of(X) when is_port(X)      -> port;
-type_of(X) when is_reference(X) -> reference;
-type_of(X) when is_atom(X)      -> atom;
-
-type_of(_X)                     -> unknown.
+    .lists:keymember(Function, 1, apply(Module, module_info, [exports])).
 
 
 
@@ -330,14 +274,16 @@ type_of(_X)                     -> unknown.
 
 %% @since Version 127
 
-get_module_feature(Module, Feature) ->
+% was scutil:get_module_feature/2
 
-    case beam_lib:chunks(Module, [Feature]) of
+feature(Module, Feature) ->
+
+    case .beam_lib:chunks(Module, [Feature]) of
 
         { ok, { Module, [ {Feature,Attributes} ] } } ->
             Attributes;
 
-        { error, beam_lib, { file_error, _, enoent} } ->
+        { error, .beam_lib, { file_error, _, enoent} } ->
             { error, no_such_module }
 
     end.
@@ -366,14 +312,16 @@ get_module_feature(Module, Feature) ->
 
 %% @since Version 129
 
-get_module_attribute(Module) ->
+% was scutil:get_module_attribute/1
 
-    case beam_lib:chunks(Module, [attributes]) of
+attribute(Module) ->
+
+    case .beam_lib:chunks(Module, [attributes]) of
 
         { ok, { _, [ {attributes,Attributes} ] } } ->
             Attributes;
 
-        { error, beam_lib, { file_error, _, enoent} } ->
+        { error, .beam_lib, { file_error, _, enoent} } ->
             { error, no_such_module }
 
     end.
@@ -388,19 +336,21 @@ get_module_attribute(Module) ->
 
 %% @since Version 23
 
-get_module_attribute(Module,Attribute) ->
+% was scutil:get_module_attribute/2
+
+attribute(Module,Attribute) ->
 
     % Found at http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html
     % Reformatted for clarity, removed unnessecary framing list
     % Added error handling behavior
 
-    case beam_lib:chunks(Module, [attributes]) of
+    case .beam_lib:chunks(Module, [attributes]) of
 
         { ok, { _, [ {attributes,Attributes} ] } } ->
 
-            case lists:keysearch(Attribute, 1, Attributes) of
+            case .lists:keysearch(Attribute, 1, Attributes) of
 
-                { value, {Attribute,Value} } -> 
+                { value, {Attribute,Value} } ->
                     Value;
 
                 false ->
