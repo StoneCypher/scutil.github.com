@@ -86,13 +86,13 @@ contained_modules() ->
         convert,
        [convert,     weight],
         counter,
-       [distance,    euclidean],
         file,
         is,
        [irc,         client],
         i18n,
         list,
         math,
+       [math,        space,       euclidean],
        [math,        vector],
         message,
         module,
@@ -151,8 +151,6 @@ compile_all(From) ->
 
 compile_all(From, Options) ->
 
-
-
     ReportOnCompile = fun
         ( Module, error)                                 -> { error, Module };
         ( Module, {error, ErrorList, WarningList})       -> { error, Module, ErrorList, WarningList };
@@ -167,8 +165,8 @@ compile_all(From, Options) ->
     end,
 
     IsWarningCase = fun
-        ({ ModuleAtom, [] })       -> false;
-        ({ ModuleAtom, Warnings }) -> true
+        ({_ModuleAtom, [] })       -> false;
+        ({_ModuleAtom,_Warnings }) -> true
     end,
 
     ToFilename = fun
@@ -182,6 +180,14 @@ compile_all(From, Options) ->
 
     { Fail, PassWarn } = .lists:partition(IsFailureCase, Report),
     { Warn, Pass     } = .lists:partition(IsWarningCase, PassWarn),
+
+    LoadFile = fun(Passed) ->
+        [LastPiece|_]      = .lists:reverse(.sc.string:explode(".", atom_to_list(Passed))),
+        {_, Bin, FileName} = .code:get_object_code(list_to_atom(LastPiece)),
+        .code:load_binary(Passed, FileName, Bin)
+    end,
+
+    [ LoadFile(Passed) || {Passed,[]} <- Pass ],
 
     { { pass, Pass }, { warn, Warn }, { fail, Fail } }.
 
@@ -202,7 +208,12 @@ install(From) ->
 
 install(From, CompileOptions) ->
 
-    Compiled = compile_all(From ++ "src/sc/", CompileOptions),
+    % first compile and load the string module because the installer uses it
+    .compile:file(From++"/src/sc/string.erl"),
+    {_, Bin, FileName} = .code:get_object_code(string),
+    .code:load_binary('sc.string', FileName, Bin),
+
+    Compiled = compile_all(From ++ "/src/sc/", CompileOptions),
     % gen_docs([From ++ "src/", From ++ "doc/"]),
 
     case verify_install() of

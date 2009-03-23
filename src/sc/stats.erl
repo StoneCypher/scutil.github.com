@@ -51,6 +51,39 @@
 
 
 -export( [
+
+    expected_value/1,
+    median_absolute_value/1,
+    erlang_b_distribution/2,
+    erlang_c_distribution/2,
+
+    moment/2,
+
+    moments/1,
+      moments/2,
+
+    central_moment/2,
+
+    central_moments/1,
+      central_moments/2,
+      
+    skewness/1,
+    kurtosis/1,
+    std_deviation/1,
+    
+    histograph/1,
+    mode/1,
+    median/1,
+    
+    amean_vector_normal/1,
+    gmean_vector_normal/1,
+    hmean_vector_normal/1,
+
+    arithmetic_mean/1,
+    geometric_mean/1,
+    harmonic_mean/1,
+
+
 ] ).
 
 
@@ -118,57 +151,6 @@ erlang_c_distribution(N,A) ->
    Denom = lists:sum([ math:pow(A,I) / scutil:factorial(I) || I <- lists:seq(0,N-1) ]) + ((math:pow(A,N)/scutil:factorial(N))*(N/(N-A))),
 
    {wait_probability, Num / Denom}.
-
-
-
-
-
-%% @equiv root_sum_square(VX)
-
-%% @doc {@section Math} Returns the magnitude of a vector.  A vector's magnitude is the length of its hypoteneuse (and is as such the root sum square of its components).  A vector can be seen as the product of its unit vector and its magnitude; as such many people see a vector's magnitude as its scale. ```1> scutil:vector_magnitude([0,0,0]).
-%% 0.0
-%%
-%% 2> scutil:vector_magnitude([1,0,0]).
-%% 1.0
-%%
-%% 3> scutil:vector_magnitude([1,1,1]).
-%% 1.7320508075688772
-%%
-%% 4> scutil:vector_magnitude([1,2,3]).
-%% 3.7416573867739413
-%%
-%% 5> scutil:vector_magnitude([0,0.4,0.6,0.2,0.4,0.529150262213]).
-%% 1.0000000000000433'''
-
-%% @since Version 85
-
-vector_magnitude(VX) -> 
-
-    root_sum_square(VX).
-
-
-
-
-
-%% @type unit_vector() = vector().  The hypoteneuse of a unit vector is precisely one unit long.  Unit vectors are also called normalized or magnitude-normalized vectors.
-
-%% @spec normalize_vector(Vector::vector()) -> unit_vector()
-
-%% @doc {@section Math} Returns the magnitude of a vector.  A vector's magnitude is the length of its hypoteneuse.  A vector can be seen as the product of its unit vector and its magnitude; as such many people see a vector's magnitude as its scale.  The normal of the zero vector is undefined, in the way that dividing by zero is undefined, and will throw an arithmetic exception. ```1> scutil:normalize_vector([0,3,4]).
-%% [0.0,0.6,0.8]'''<span style="color:red">TODO: When tuple comprehensions are introduced to the language, convert this to using them.</span>
-
-%% @since Version 85
-
-normalize_vector(VX) when is_list(VX) ->
-    
-    VM = vector_magnitude(VX),
-    [ X / VM || X <- VX ];
-
-
-
-normalize_vector(VX) when is_tuple(VX) -> 
-
-    list_to_tuple(normalize_vector(tuple_to_list(VX))).
 
 
 
@@ -375,7 +357,7 @@ histo_count( [], Current, Count, Work) ->
 histo_count( [Current|Tail], Current, Count, Work) -> 
 
     histo_count(Tail, Current, Count+1, Work);
-    
+
     
 
 histo_count( [New|Tail], Current, Count, Work) -> 
@@ -540,7 +522,7 @@ harmonic_mean([]) ->
 
 
 harmonic_mean(List) when is_list(List) ->
-    
+
     length(List) / lists:sum([ 1/X || X<-List ]).
 
 
