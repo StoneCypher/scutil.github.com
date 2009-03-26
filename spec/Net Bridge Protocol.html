@@ -18,7 +18,7 @@
       headerBlock { display: block; background-color: #def; margin: 1.5em 2.25em; padding: 0.5em 0.75em; }
       header      { display: block; font-size: 225%; margin: 0; padding: 0; border-bottom: 3px solid #58b; font-weight: bold; }
       subheader   { display: block; font-size: 160%; margin: 0; padding: 0; }
-      topic       { display: block; font-size: 125%; margin: 2em 2em 1em 2em; font-weight: bold; }
+      topic       { display: block; font-size: 125%; margin: 4em 2em 1em 2em; font-weight: bold; border-bottom: 1px solid #6ae; }
 
       subheaderAuthors { float: right; }
       revision         { font-family: consolas, monospace; }
@@ -51,19 +51,39 @@
     <definition>
 
       <para>
-      Blah
+        The Net Bridge Protocol, hereafter NBP, is a simple message oriented protocol.  The intent is to provide a simple string interface between languages.  Except during the connection phase, which has special rules, messages
+        are simply length prepended strings which are handed back and forth.  Length prepends are unsigned 32-bit integers.  The NBP is an octet oriented protocol; it may only transfer sequential strings of 8-bit bytes.  These
+        bytes may be interpreted by the implementors of the protocol however desired, but within the discussion of the protocol, they will be discussed from the C perspective of unsigned characters on an 8-bit character machine.
       </para>
 
       <para>
-      Blah
-      </para>
-
-      <para>
-      Blah
+        The Net Bridge Protocol has two phases: connection phase and transit phase.  The connection phase is a simple bidirectional negotiation.  The transit phase is a message transfer phase.  After a socket is accepted, the
+        connection phase begins immediately.  The connection phase will then either make a demand or switch to the transit phase.  Demands all lead to the transit phase, more demands or a new connection; eventually the transit
+        phase will be reached.  The transit phase is then permanent until disconnection.
       </para>
 
     </definition>
 
+    <topic>Connection Phase</topic>
+
+    <definition>
+
+      <para>
+        Blah
+      </para>
+
+    </definition>
+
+
+    <topic>Transit Phase</topic>
+
+    <definition>
+
+      <para>
+        Blah
+      </para>
+
+    </definition>
     <protocol>
     </protocol>
 
