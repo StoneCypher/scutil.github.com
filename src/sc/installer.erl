@@ -151,6 +151,7 @@ compile_all(From) ->
 
 compile_all(From, Options) ->
 
+
     ReportOnCompile = fun
         ( Module, error)                                 -> { error, Module };
         ( Module, {error, ErrorList, WarningList})       -> { error, Module, ErrorList, WarningList };
@@ -174,9 +175,11 @@ compile_all(From, Options) ->
         (Atom) when is_atom(Atom) -> atom_to_list(Atom) ++ ".erl"
     end,
 
+
     Report = [ ReportOnCompile(From ++ ToFilename(File), .compile:file(From ++ ToFilename(File), Options)) ||
         File <- contained_modules()
     ],
+
 
     { Fail, PassWarn } = .lists:partition(IsFailureCase, Report),
     { Warn, Pass     } = .lists:partition(IsWarningCase, PassWarn),
@@ -186,6 +189,7 @@ compile_all(From, Options) ->
         {_, Bin, FileName} = .code:get_object_code(list_to_atom(LastPiece)),
         .code:load_binary(Passed, FileName, Bin)
     end,
+
 
     [ LoadFile(Passed) || {Passed,[]} <- Pass ],
 
