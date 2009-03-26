@@ -6,11 +6,30 @@ digraph G {
     node  [shape=Mrecord];
     edge  [];
 
-    "server_start"  [label="{Server Start|Listen Socket}"];
-    "accept_socket" [label="{Accept Socket|Good accept?|{Yes|No}}"];
+    "server_start"     [label="{Server Start|<f0>Listen Socket}"];
+    "accept_socket"    [label="{<f0>Accept Socket|{<f1>Success|<f2>Fail}}"];
+    "connection_phase" [label="{<f0>Connection Phase|Send Protocol Requirements|{<f1>Comply|<f2>Fail}}"];
+    "command_phase"    [label="{<f0>Command Phase|Search for Commands|{<f1>Not Found|<f2>Found}}"];
+    "issue_command"    [label="{<f0>Issue Command|<f1>Authorize|<f2>Reconnect To|<f3>Disconnect, allow reconnect|<f4>Disconnect with prejudice|<f5>Upgrade required}"];
+    "authorize"        [label="{<f0>Authorize|Sends Salt|{<f1>Pass|<f2>Fail|<f3>Reject}}"]
 
+    server_start        -> accept_socket:f0    [];
 
-    server_start -> accept_socket -> connection_phase -> broadcast_requirements -> wait_for_negotiate -> accept_or_deny -> accept_connection -> demand_phase
+    accept_socket:f1    -> connection_phase:f0 [];
+    accept_socket:f2    -> close_connection    [];
+
+    connection_phase:f1 -> command_phase:f0    [];
+
+    command_phase:f2    -> issue_command:f0    [];
+
+    issue_command:f1:w  -> authorize:f0        [];
+
+    issue_command:f2:e  -> close_connection    [];
+    issue_command:f3:e  -> close_connection    [];
+    issue_command:f4:e  -> close_connection    [];
+    issue_command:f5:e  -> close_connection    [];
+
+    accept_or_deny -> accept_connection -> demand_phase
 
     demand_phase -> look_for_demands -> no_more_demands -> transit_phase
 
