@@ -1,0 +1,29 @@
+digraph G {
+
+    graph [];
+    node  [shape=Mrecord];
+    edge  [];
+
+    "server_start"  [label="{Server Start|Listen Socket}"];
+    "accept_socket" [label="{Accept Socket|Good accept?|{Yes|No}}"];
+
+
+    server_start -> accept_socket -> connection_phase -> broadcast_requirements -> wait_for_negotiate -> accept_or_deny -> accept_connection -> demand_phase
+
+    demand_phase -> look_for_demands -> no_more_demands -> transit_phase
+
+    look_for_demands -> demand_found -> make_demand -> was_demand_satisfied
+
+    was_demand_satisfied -> no_demand_was_not_satisfied -> close_connection
+
+    was_demand_satisfied -> yes_demand_was_satisfied
+      yes_demand_was_satisfied -> look_for_demands [constraint=false]
+
+
+
+    accept_or_deny -> deny -> close_connection
+
+
+
+
+}
