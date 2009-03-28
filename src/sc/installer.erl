@@ -86,7 +86,7 @@ contained_modules() ->
         convert,
        [convert,     weight],
         counter,
-        file,
+        file_z,
         is,
        [irc,         client],
         i18n,

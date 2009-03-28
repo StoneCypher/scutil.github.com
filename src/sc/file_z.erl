@@ -1,11 +1,11 @@
 
 %% @author John Haugeland <stonecypher@gmail.com>
 %% @copyright 2007 - current John Haugeland, All Rights Reserved
-%% @version $Revision$
+%% @version $Revision: 251 $
 %% @since Version 8
 
 %% @doc <!-- google analytics --><script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script><script type="text/javascript">var pageTracker = _gat._getTracker("UA-4903191-10");pageTracker._trackPageview();</script>
-%% <p></p>
+%% <p>This module is currently called file_z because a defect in the Erlang VM means that if this module is compiled as file, it will override the official file module during the boot process, breaking the VM.</p>
 
 
 
@@ -26,7 +26,7 @@
 
 
 
--module(sc.file).
+-module(sc.file_z).
 
 -author("John Haugeland <stonecypher@gmail.com>").
 -webpage("http://scutil.com/").
@@ -35,9 +35,9 @@
 -publicsvn("svn://crunchyd.com/scutil/").
 -currentsource("http://crunchyd.com/release/scutil.zip").
 
--svn_id("$Id$").
--svn_head("$HeadURL$").
--svn_revision("$Revision$").
+-svn_id("$Id: file.erl 251 2009-03-22 06:14:12Z john $").
+-svn_head("$HeadURL: svn://crunchyd.com/scutil/src/sc/file.erl $").
+-svn_revision("$Revision: 251 $").
 
 -description("File and filesystem utilities.").
 
