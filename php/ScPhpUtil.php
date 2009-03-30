@@ -1,12 +1,8 @@
 <?php
 
-  require_once('ScPhpTest.php');
-
-
-
-
-
   // $Revision$
+
+  require_once('ScPhpTest.php');
 
 
 

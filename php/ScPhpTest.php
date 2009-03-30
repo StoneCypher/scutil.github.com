@@ -25,7 +25,13 @@
           $TestInstance = new $HookClass();
 
           foreach ($TestInstance->TestHooks() as $SetName => $Settings) {
-              $output[] = array('name' => $SetName, 'result_type' => 'fail', 'reason' => 'Not yet loading hooks', 'contains'=>array());
+            
+              require_once($Settings['file']);
+              $ThisTest = new $Settings['class']();
+              $result   = $ThisTest->run();
+
+              $output[] = array('name' => $SetName, 'result_type' => 'fail', 'reason' => 'Not yet loading hooks', 'contains'=>$result);
+
           }
 
           return $output;

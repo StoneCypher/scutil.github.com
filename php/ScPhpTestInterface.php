@@ -8,7 +8,7 @@
 
   interface ScPhpTestInterface {
 
-      public function Run();
+      public function run();
 
   };
 
