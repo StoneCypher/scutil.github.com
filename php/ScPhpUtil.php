@@ -18,4 +18,24 @@
 
   EnforceMinimumPhpVersion('5.1.6', '<html><head><title>Needs newer PHP</title></head><body><p>Requires a minimum PHP version of <tt>5.1.6</tt> .</p></body></html>');
 
+
+
+
+
+  class sc {
+
+
+
+
+
+      public static function WriteIf($Clause, $Text) {
+          return (($Clause)? $Text : '');
+      }
+
+
+
+
+
+  };
+
 ?>
