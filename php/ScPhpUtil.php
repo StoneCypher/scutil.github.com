@@ -36,6 +36,14 @@
 
 
 
+      public static function EchoIf($Clause, $Text) {
+          echo WriteIf($Clause, $Text);
+      }
+
+
+
+
+
   };
 
 ?>
