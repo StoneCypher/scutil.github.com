@@ -1,7 +1,7 @@
 
 %% @author John Haugeland <stonecypher@gmail.com>
 %% @copyright 2007 - current John Haugeland, All Rights Reserved
-%% @version $Revision: 262 $
+%% @version $Revision$
 %% @since Version 8
 
 %% @doc <p></p>
@@ -33,9 +33,9 @@
 -publicsvn("svn://crunchyd.com/scutil/").
 -currentsource("http://crunchyd.com/release/scutil.zip").
 
--svn_id("$Id: bayes.erl 262 2009-03-23 02:28:23Z john $").
--svn_head("$HeadURL: svn://crunchyd.com/scutil/src/sc/bayes.erl $").
--svn_revision("$Revision: 262 $").
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
 
 -description("Basic bayesian inference and bayesian analysis tools").
 

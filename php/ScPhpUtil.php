@@ -1,6 +1,6 @@
 <?php
 
-  // $Revision: 7 $
+  // $Revision$
 
   // can't use class wrapped version enforcement in case the class breaks from too-old php before it gets there, lol
   // always use the class method version instead plskthx

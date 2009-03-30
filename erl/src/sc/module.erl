@@ -1,7 +1,7 @@
 
 %% @author John Haugeland <stonecypher@gmail.com>
 %% @copyright 2007 - current John Haugeland, All Rights Reserved
-%% @version $Revision: 260 $
+%% @version $Revision$
 %% @since Version 8
 
 %% @doc <!-- google analytics --><script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script><script type="text/javascript">var pageTracker = _gat._getTracker("UA-4903191-10");pageTracker._trackPageview();</script>
@@ -35,9 +35,9 @@
 -publicsvn("svn://crunchyd.com/scutil/").
 -currentsource("http://crunchyd.com/release/scutil.zip").
 
--svn_id("$Id: module.erl 260 2009-03-23 01:44:10Z john $").
--svn_head("$HeadURL: svn://crunchyd.com/scutil/src/sc/module.erl $").
--svn_revision("$Revision: 260 $").
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
 
 -description("Routines for working with modules directly, after compile.").
 
@@ -303,9 +303,9 @@ feature(Module, Feature) ->
 %%  {license,[{mit_license,"http://scutil.com/license.html"}]},
 %%  {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
 %%  {publicsvn,"svn://crunchyd.com/scutil/"},
-%%  {svn_head,"$HeadURL: svn://crunchyd.com/scutil/src/sc/module.erl $"},
-%%  {svn_id,"$Id: module.erl 260 2009-03-23 01:44:10Z john $"},
-%%  {svn_revision,"$Revision: 260 $"},
+%%  {svn_head,"$HeadURL$"},
+%%  {svn_id,"$Id$"},
+%%  {svn_revision,"$Revision$"},
 %%  {testerl_export,[{[],scutil_testsuite}]},
 %%  {vsn,[134633400955530778836494569152232539093]},
 %%  {webpage,"http://scutil.com/"}]'''

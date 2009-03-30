@@ -1,7 +1,7 @@
 
 %% @author John Haugeland <stonecypher@gmail.com>
 %% @copyright 2007 - current John Haugeland, All Rights Reserved
-%% @version $Revision: 262 $
+%% @version $Revision$
 %% @since Version 8
 
 %% @doc <!-- google analytics --><script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script><script type="text/javascript">var pageTracker = _gat._getTracker("UA-4903191-10");pageTracker._trackPageview();</script>
@@ -35,9 +35,9 @@
 -publicsvn("svn://crunchyd.com/scutil/").
 -currentsource("http://crunchyd.com/release/scutil.zip").
 
--svn_id("$Id: metrics.erl 262 2009-03-23 02:28:23Z john $").
--svn_head("$HeadURL: svn://crunchyd.com/scutil/src/sc/code/metrics.erl $").
--svn_revision("$Revision: 262 $").
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
 
 -description("Analytic code metrics, such as the Halstead complexity, cyclomatic complexity and more.").
 

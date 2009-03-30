@@ -3,7 +3,7 @@
 @copyright 2007-current John Haugeland, all rights reserved.
 @since September 14, 2007
 @title The ScUtil library collection
-@version $Revision: 243 $
+@version $Revision$
 
 @doc ScUtil is a collection of erlang libraries (originally just the eponymous ScUtil, but now many others) released freely under the MIT license for general consumption.  
 

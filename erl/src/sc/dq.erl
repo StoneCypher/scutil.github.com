@@ -5,7 +5,7 @@
 
 %% @author John Haugeland <stonecypher@gmail.com>
 %% @copyright 2007 - current John Haugeland, All Rights Reserved
-%% @version $Revision: 236 $
+%% @version $Revision$
 %% @since March 3, 2009
 
 %% @doc <p>Docs pending.  TODO add ohloh widgets</p>
@@ -46,9 +46,9 @@
 -publicforum("http://crunchyd.com/forum/scutil-discussion/").
 -currentsource("http://crunchyd.com/release/scutil.zip").
 
--svn_id("$Id: dq.erl 236 2009-03-21 05:03:49Z john $").
--svn_head("$HeadURL: svn://crunchyd.com/scutil/src/sc/dq.erl $").
--svn_revision("$Revision: 236 $").
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
 
 -description("StoneCypher's utility library.").
 

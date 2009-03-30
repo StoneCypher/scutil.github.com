@@ -18,7 +18,7 @@
 
 %% @author John Haugeland <stonecypher@gmail.com>
 %% @copyright 2007 - current John Haugeland, All Rights Reserved
-%% @version $Revision: 244 $
+%% @version $Revision$
 %% @since September 14, 2007
 
 %% @doc <p>ScUtil is StoneCypher's Utility Library, a collection of hundreds of routines of a variety of topics which have aggregated from reuse in other projects.</p>
@@ -276,9 +276,9 @@
 -publicforum("http://crunchyd.com/forum/scutil-discussion/").
 -currentsource("http://crunchyd.com/release/scutil.zip").
 
--svn_id("$Id: scutil.erl 244 2009-03-21 17:53:57Z john $").
--svn_head("$HeadURL: svn://crunchyd.com/scutil/src/scutil.erl $").
--svn_revision("$Revision: 244 $").
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
 
 -description("StoneCypher's utility library.").
 

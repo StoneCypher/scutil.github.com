@@ -1,7 +1,7 @@
 
 %% @author John Haugeland <stonecypher@gmail.com>
 %% @copyright 2007 - current John Haugeland, All Rights Reserved
-%% @version $Revision: 261 $
+%% @version $Revision$
 %% @since Version 8
 
 %% @doc <!-- google analytics --><script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script><script type="text/javascript">var pageTracker = _gat._getTracker("UA-4903191-10");pageTracker._trackPageview();</script>
@@ -35,9 +35,9 @@
 -publicsvn("svn://crunchyd.com/scutil/").
 -currentsource("http://crunchyd.com/release/scutil.zip").
 
--svn_id("$Id: time.erl 261 2009-03-23 02:06:00Z john $").
--svn_head("$HeadURL: svn://crunchyd.com/scutil/src/sc/time.erl $").
--svn_revision("$Revision: 261 $").
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
 
 -description("Time measurement and benchmarking utilities.").
 

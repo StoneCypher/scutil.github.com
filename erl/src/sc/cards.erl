@@ -9,9 +9,9 @@
 -bugtracker(none).
 -publicforum(none).
 
--svn_id("$Id: cards.erl 229 2009-03-21 04:28:34Z john $").
--svn_head("$HeadURL: svn://crunchyd.com/scutil/src/sc/cards.erl $").
--svn_revision("$Revision: 229 $").
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
 
 -description("Deck management for card games.").
 

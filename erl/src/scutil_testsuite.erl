@@ -10,9 +10,9 @@
 -bugtracker("http://crunchyd.com/forum/project.php?projectid=7").
 -publicforum("http://crunchyd.com/forum/scutil-discussion/").
 
--svn_id("$Id: scutil_testsuite.erl 203 2009-03-16 00:36:01Z john $").
--svn_head("$HeadURL: svn://crunchyd.com/scutil/src/scutil_testsuite.erl $").
--svn_revision("$Revision: 203 $").
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
 
 -testerl_export( this_is_a_testsuite ).
 

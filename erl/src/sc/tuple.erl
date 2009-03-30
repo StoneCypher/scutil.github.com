@@ -1,7 +1,7 @@
 
 %% @author John Haugeland <stonecypher@gmail.com>
 %% @copyright 2007 - current John Haugeland, All Rights Reserved
-%% @version $Revision: 263 $
+%% @version $Revision$
 %% @since Version 8
 
 %% @doc <p></p>
@@ -33,9 +33,9 @@
 -publicsvn("svn://crunchyd.com/scutil/").
 -currentsource("http://crunchyd.com/release/scutil.zip").
 
--svn_id("$Id: tuple.erl 263 2009-03-23 05:45:59Z john $").
--svn_head("$HeadURL: svn://crunchyd.com/scutil/src/sc/tuple.erl $").
--svn_revision("$Revision: 263 $").
+-svn_id("$Id$").
+-svn_head("$HeadURL$").
+-svn_revision("$Revision$").
 
 -description("Functions for working with tuples.").
 
