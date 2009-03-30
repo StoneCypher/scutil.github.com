@@ -1,0 +1,20 @@
+@author John Haugeland <stonecypher@gmail.com>
+
+@copyright 2007-current John Haugeland, all rights reserved.
+@since September 14, 2007
+@title The ScUtil library collection
+@version $Revision: 243 $
+
+@doc ScUtil is a collection of erlang libraries (originally just the eponymous ScUtil, but now many others) released freely under the MIT license for general consumption.  
+
+<table style="border: 1px solid black;"><tr><td style="text-align: center; padding: 0 2em;"><div style="display: block; width: 3em; padding-left: 6em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_users.js?style=blue"></script></div><p style="font-style: italic; color: #789;">Help spread the word</p></td><td style="padding-left: 2em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_cocomo.js?salary=80000"></script></td></tr><tr><td style="padding-left: 2em;"><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_languages.js"></script></td><td><script type="text/javascript" src="http://www.ohloh.net/p/316896/widgets/project_factoids.js"></script></td></tr></table>
+
+The Great Renaming began in March 20 2009 during Version 225, wherein the old module `scutil', which had become too large, began to be broken up into a series of modules under namespace `sc'.  This has made the documentation far more readable, and given me an excuse to hand-sieve code; it has also resulted in a massive improvement in code readability, function name predictability, clarity and a much more granular and better sorted presentation.
+
+I thought about writing a proxy module to maintain backwards compatability, but the new structure is importantly different and more powerful, so I want to encourage people to move to the new name structure ASAP.  As such, I'm breaking backwards compatability to force people to migrate.  Tough love.  <span style="text-decoration:underline;color:#600;font-weight:bold;background-color:yellow;">If you'd like the old name layout, its last primary version was <tt>223</tt>.</span>  Please use the new name layout instead, though.
+
+Included are a large collection of libraries, including a set of datastructures (dq, cards, soon pq, soon trie), two complementary testing frameworks and some simple card game behaviors; on their way are dozens more libraries which I'm consolidating from other repositories (because running several dozen repos turns out to suck.)  The library list covers math, statistics, parallelism and serialism, probability, randomness, list and string behaviors, statistics, counters, conversion, network and dispatch behaviors and more.
+
+Among the inbound in the future are an irc client module and server module, geolocation based on the free hostip.info database, two more complementary types of testing, a flash policy server, an actionscript communications bridge, an ISO 8601 date handling library, a new kind of webserver, a paypal API wrapper, an amazon API wrapper, an actionscript communications bridge, a prolog, a no-translation native JSON handler and more.
+
+@end
