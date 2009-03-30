@@ -1,12 +1,14 @@
 <?php
 
+  // $Revision$
+
 
 
 
 
   interface ScPhpTestInterface {
 
-      public static function Run();
+      public function Run();
 
   };
 

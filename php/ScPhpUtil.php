@@ -63,7 +63,7 @@
 
 
 
-      public static function TestHooks() {
+      public function TestHooks() {
 
           return array('ScPhpUtil Master Test' => array('file'=>'ScPhpUtil_Testset.php', 'class'=>'ScPhpUtil_Testset', 'args'=>array()) );
 
