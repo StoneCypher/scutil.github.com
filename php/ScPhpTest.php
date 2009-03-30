@@ -6,7 +6,9 @@
 
 
 
-  require_once('ScPhpTestInterface.php');
+  require_once('ScPhpTest_Result.php');
+  require_once('ScPhpTest_ResultGroup.php');
+
   require_once('ScPhpTestableInterface.php');
 
   require_once('ScPhpTest_Result.php');

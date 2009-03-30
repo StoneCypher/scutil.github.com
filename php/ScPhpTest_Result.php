@@ -1,15 +1,20 @@
 <?php
 
+  // $Revision$
 
-
-
-
-  class ScPhpTest_Result {
+  require_once('ScPhpTest_ResultBase.php');
 
 
 
 
 
+  class ScPhpTest_Result extends ScPhpTest_ResultBase {
+
+
+
+
+
+      private $TestType;
       private $ResultName;
       private $ResultState;
       private $ResultReason;
@@ -19,42 +24,16 @@
 
 
       public function ResultType() {
-
-          if ($contents === false) {
-              return $ThisPassed;
-          }
-
+          return $ResultState;
       }
 
 
 
 
 
-      public function isPass() {
-          return (ResultType() === 'pass');
-      }
+      public function __construct($testtype, $name, $state, $reason='No reason given') {
 
-
-
-
-
-      public function isWarn() {
-          return (ResultType() === 'warn');
-      }
-
-
-
-
-      public function isFail() {
-          return (ResultType() === 'fail');
-      }
-
-
-
-
-
-      public function __construct($name, $state, $reason='No reason given') {
-
+          $this->TestType     = $testtype;
           $this->ResultName   = $name;
           $this->ResultReason = $reason;
 

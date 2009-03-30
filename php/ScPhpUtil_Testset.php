@@ -1,10 +1,12 @@
 <?php
 
+  // $Revision$
 
 
 
 
-  class ScPhpUtil_Testset implements ScPhpTestInterface {
+
+  class ScPhpUtil_Testset extends ScPhpTest_ResultGroup {
 
 
 
@@ -13,7 +15,7 @@
       public function run() {
 
           return array(
-              new ScPhpTest_Result('Running', 'pass')
+              new ScPhpTest_Result('unit', 'Running', 'pass')
           );
 
       }
