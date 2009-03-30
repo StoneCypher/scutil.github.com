@@ -44,6 +44,27 @@
 
 
 
+      public static function UseStartPoint($StartPoint) {
+
+          if (!(is_array($StartPoint))) {
+              $StartPoint = array($StartPoint);
+          }
+
+          foreach ($StartPoint as $sp) {
+              self::$StartPointsUsed[$sp] = true;
+          }
+
+      }
+
+
+
+
+
+      private static var $StartPointsUsed = array();
+
+
+
+
   };
 
 ?>
