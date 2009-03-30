@@ -1,6 +1,6 @@
 <?php
 
-  require_once('ScPhpTestableInterface.php');
+  require_once('ScPhpTest.php');
 
 
 
