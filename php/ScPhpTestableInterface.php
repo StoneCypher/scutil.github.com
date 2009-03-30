@@ -4,11 +4,11 @@
 
 
 
-   interface ScPhpTestableInterface {
+  interface ScPhpTestableInterface {
 
-       static public function TestHooks();
+      public function TestHooks();
 
-   };
+  };
 
 
 
