@@ -1,17 +1,24 @@
 <?php
 
+  require_once('ScPhpTestableInterface.php');
+
+
+
+
+
   // $Revision$
+
+
+
+
 
   // can't use class wrapped version enforcement in case the class breaks from too-old php before it gets there, lol
   // always use the class method version instead plskthx
 
-  function EnforceMinimumPhpVersion($ver, $message)
+  function EnforceMinimumPhpVersion($ver, $message) {
 
       if (!(version_compare(phpversion(), $ver) === 1)) {
-
-          die (
-          );
-
+          die($message);
       }
 
   }
@@ -22,7 +29,7 @@
 
 
 
-  class sc {
+  class Sc implements ScPhpTestableInterface {
 
 
 
@@ -70,7 +77,7 @@
 
 
 
-      private static var $StartPointsUsed = array();
+      private static $StartPointsUsed = array();
 
 
 
