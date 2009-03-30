@@ -9,6 +9,8 @@
   require_once('ScPhpTestInterface.php');
   require_once('ScPhpTestableInterface.php');
 
+  require_once('ScPhpTest_Result.php');
+
 
 
 
@@ -27,10 +29,9 @@
           foreach ($TestInstance->TestHooks() as $SetName => $Settings) {
             
               require_once($Settings['file']);
-              $ThisTest = new $Settings['class']();
-              $result   = $ThisTest->run();
 
-              $output[] = array('name' => $SetName, 'result_type' => 'fail', 'reason' => 'Not yet loading hooks', 'contains'=>$result);
+              $ThisTest = new $Settings['class']();
+              $output[] = $ThisTest->run();
 
           }
 
