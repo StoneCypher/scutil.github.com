@@ -24,7 +24,15 @@
 
 
       public function ResultType() {
-          return $ResultState;
+          return $this->ResultState;
+      }
+
+
+
+
+
+      public function TestType() {
+          return $this->TestType;
       }
 
 
@@ -38,10 +46,13 @@
           $this->ResultReason = $reason;
 
           switch ($state) {
+
               case 'pass' : $this->ResultState = 'pass'; break;
               case 'warn' : $this->ResultState = 'warn'; break;
               case 'fail' : $this->ResultState = 'fail'; break;
+
               default     : die("Illegal result state: $state in constructing ScPhpTest_Result for $name");
+
           }
 
       }

@@ -1,6 +1,6 @@
 <?php
 
-  // $Revision: 286 $
+  // $Revision$
 
   require_once('ScPhpTest_ResultBase.php');
 
@@ -14,6 +14,7 @@
 
 
 
+      abstract public function TestType();
       abstract public function ResultType();
 
 
