@@ -43,3 +43,23 @@ function RemoveClassRepeatedlyIfPresent(Tag, tclass) {
     }
   }
 }
+
+
+
+
+
+// Todo: change this from two arguments to a single list argument, so that N zebra colors may be supported
+
+//function Zebrafy(Tag, RowType, class1, class2) {
+//
+//  var kid = Tag.firstChild;
+//  var cl1 = true;
+//
+//  while (kid != undefined) {
+//    if (kid.nodeName != RowType.toUpperCase()) { kid = kid.nextSibling; continue; }
+//    AddClassIfMissing(kid, cl1? class1 : class2);
+//    cl1 = cl1? false:true;
+//    kid = kid.nextSibling;
+//  }
+//
+//}
