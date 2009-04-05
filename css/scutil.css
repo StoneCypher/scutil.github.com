@@ -31,6 +31,7 @@
 /* Class hvtable tables use a special table header class headergap for the double-direction header cell, which hides that cell and provides mask borders for a better appearance. */
 /* If you add the body class colorpage, the page takes on a light cyan background; the background of table cells turns white and table headers lighter gray; header backgrounds turn slightly darker blue to compensate. */
 /* Headers have a negative 0.65em left margin, where EM is scaled to their font range (225% - 125%). */
+/* Adding widthconstrain sets a tag to 42em width, which is a good reading width.  This is indended for element containers, but will work individually on each element if needed. */
 
 
 
@@ -38,3 +39,9 @@
 
 body.scpage     { margin: 0; border: 0; padding: 2em 3em; font-family: candara, verdana, arial, sans-serif; }
 body.colorpage  { background-color: #f0f8ff; }
+
+
+.scpage p       { text-indent: 2.5em; line-height: 140%; margin: 0; padding: 0; text-align: justify; }
+.scpage p+p     { margin-top: 1em; }
+
+.widthconstrain { max-width: 42em; }
