@@ -62,3 +62,25 @@ body.colorpage  { background-color: #f0f8ff; }
 
 .scpage.bgcolorheaders h1, .scpage.bgcolorheaders h2, .scpage.bgcolorheaders h3,
 .scpage.bgcolorheaders h4, .scpage.bgcolorheaders h5, .scpage.bgcolorheaders h6    { padding: 0.25em 0.65em; }
+
+
+.colorheaders h1             { color: #025; }
+.colorheaders h2             { color: #037; }
+.colorheaders h3             { color: #049; }
+.colorheaders h4             { color: #05b; }
+.colorheaders h5             { color: #06d; }
+.colorheaders h6             { color: #07f; }
+
+.bgcolorheaders h1           { background-color: #d0e8ff; }
+.bgcolorheaders h2           { background-color: #d6ebff; }
+.bgcolorheaders h3           { background-color: #dceeff; }
+.bgcolorheaders h4           { background-color: #e2f1ff; }
+.bgcolorheaders h5           { background-color: #e8f4ff; }
+.bgcolorheaders h6           { background-color: #eef7ff; }
+
+.colorpage.bgcolorheaders h1 { background-color: #c0d8ff; }
+.colorpage.bgcolorheaders h2 { background-color: #c6dbff; }
+.colorpage.bgcolorheaders h3 { background-color: #ccdeff; }
+.colorpage.bgcolorheaders h4 { background-color: #d2e1ff; }
+.colorpage.bgcolorheaders h5 { background-color: #d8e4ff; }
+.colorpage.bgcolorheaders h6 { background-color: #dee7ff; }
