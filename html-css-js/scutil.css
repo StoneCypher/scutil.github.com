@@ -1,0 +1,431 @@
+
+/* ScUtil CSS, see http://scutil.com/ and http://scutil.com/docs/ */
+/* MIT License, see http://scutil.com/license.html */
+
+/* Registration is free, easy, optional and good for your google rank, see http://scutil.com/register/ */
+
+/* $Revision: 319 $ */
+/* $HeadURL: svn://crunchyd.com/scutil/css/scutil.css $ */
+/* $Id: scutil.css 319 2009-04-05 22:35:59Z john $ */
+
+/* TODO find a documentation extractor for css */
+
+
+
+
+
+/* if you add the class "scpage" to your page, a whole bunch of magic formatting that I happen to like occurs */
+/* I strip the margins and padding off of a lot of tags, then add them back explicitly for different tag pairs */
+/* I pad the document body by 2,3 em */
+/* I aim for candara, verdana, arial, then sans-serif as my primary text fonts; for headers, I use 'arno pro smbd', 'adobe garamond', garamond, 'times new roman', serif. */
+/* Paragraphs have a 2.5em indent and 140% line height.  Gaps between paragraphs are 1em margin. */
+/* Headers are black, unless you add the body class colorheaders, at which point they turn to a blue/aqua scale that lightens as the header class augments. */
+/* Header backgrounds are white unless you add the body class bgcolorheaders, at which point they turn to a blue scale that lightens as the header class augments. Headers are also cosmetically padded extra, and that padding color area now takes the left negative space instead of the text.  */
+/* Tables have very light gray cells and light gray headers. Table headers and table cells are middle aligned.  Table headers are centered; table cells are justified.  */
+/* Tables have a 2px black outline, 1px internal borders (black on headers, gray otherwise) and are border-collapsed. */
+/* If you add the table class verticaltable, table cells become centered and table headers, which are now expected only at the tops of columns, become bottom aligned. */
+/* If you add the table class horizontaltable, table cells become top justified and table headers, which are now expected only at the lefts of columns, become top right aligned. */
+/* If you add the table class hvtable, table cells become middle centered.  Table headers now require class rowheader or colheader, expected each at the lefts of rows and the tops of columns respectively. */
+/* Class rowheader tableheaders, which are expected only at the left of rows, are top right aligned. */
+/* Class colheader tableheaders, which are expected only at the top of columns, are bottom center aligned. */
+/* Class hvtable tables use a special table header class headergap for the double-direction header cell, which hides that cell and provides mask borders for a better appearance. */
+/* HvTable interior borders are 2px thick gray instead of 1px thick black to prevent the rendering artifacts that come with varying width lines without changing the visual weight of the line.  It's a semi-hack. */
+/* If you add the body class colorpage, the page takes on a light cyan background; the background of table cells turns white and table headers lighter gray; header backgrounds turn slightly darker blue to compensate. */
+/* Headers have a negative 0.65em left margin, where EM is scaled to their font range (225% - 125%). */
+/* Adding widthconstrain sets a tag to 42em width, which is a good reading width.  This is indended for element containers, but will work individually on each element if needed. */
+
+
+
+
+
+/* Basic scpage rule */
+
+body.scpage {
+
+    margin      : 0;
+    border      : 0;
+    padding     : 2em 3em;
+    font-family : candara, verdana, arial, sans-serif;
+
+}
+
+
+
+
+
+body.colorpage {
+
+    background-color : #f0f8ff;
+
+}
+
+
+
+
+
+.scpage p {
+
+    text-indent : 2.5em;
+    line-height : 140%;
+    margin      : 0;
+    padding     : 0;
+    text-align  : justify;
+
+}
+
+
+
+
+
+.scpage p+p {
+
+  margin-top : 1em;
+
+}
+
+
+
+
+
+.widthconstrain {
+
+  max-width : 42em;
+
+}
+
+
+
+
+
+.scpage h1,
+.scpage h2,
+.scpage h3,
+.scpage h4,
+.scpage h5,
+.scpage h6 {
+
+    margin      : 0 0 0 -0.65em;
+    padding     : 0;
+    border      : 0;
+    font-family : 'arno pro smbd', 'adobe garamond', garamond, 'times new roman', serif;
+
+}
+
+
+
+
+
+.scpage h1+p,
+.scpage h2+p,
+.scpage h3+p,
+.scpage h4+p,
+.scpage h5+p,
+.scpage h6+p {
+
+    margin-top : 1em;
+
+}
+
+
+
+
+
+.scpage p+h1,
+.scpage p+h2,
+.scpage p+h3,
+.scpage p+h4,
+.scpage p+h5,
+.scpage p+h6 {
+
+    margin-top : 2em;
+
+}
+
+
+
+
+
+.scpage h1 { font-size : 225%; }
+.scpage h2 { font-size : 185%; }
+.scpage h3 { font-size : 165%; }
+.scpage h4 { font-size : 150%; }
+.scpage h5 { font-size : 135%; }
+.scpage h6 { font-size : 120%; }
+
+
+.scpage.bgcolorheaders h1,
+.scpage.bgcolorheaders h2,
+.scpage.bgcolorheaders h3,
+.scpage.bgcolorheaders h4,
+.scpage.bgcolorheaders h5,
+.scpage.bgcolorheaders h6 { 
+  
+    padding : 0.25em 0.65em;
+    
+}
+
+
+
+
+
+.colorheaders h1 { color : #025; }
+.colorheaders h2 { color : #037; }
+.colorheaders h3 { color : #049; }
+.colorheaders h4 { color : #05b; }
+.colorheaders h5 { color : #06d; }
+.colorheaders h6 { color : #07f; }
+
+
+
+
+
+.bgcolorheaders h1           { background-color : #d0e8ff; }
+.bgcolorheaders h2           { background-color : #d6ebff; }
+.bgcolorheaders h3           { background-color : #dceeff; }
+.bgcolorheaders h4           { background-color : #e2f1ff; }
+.bgcolorheaders h5           { background-color : #e8f4ff; }
+.bgcolorheaders h6           { background-color : #eef7ff; }
+
+.colorpage.bgcolorheaders h1 { background-color : #c0d8ff; }
+.colorpage.bgcolorheaders h2 { background-color : #c6dbff; }
+.colorpage.bgcolorheaders h3 { background-color : #ccdeff; }
+.colorpage.bgcolorheaders h4 { background-color : #d2e1ff; }
+.colorpage.bgcolorheaders h5 { background-color : #d8e4ff; }
+.colorpage.bgcolorheaders h6 { background-color : #dee7ff; }
+
+
+
+
+
+.scpage table { 
+  
+    border-collapse : collapse;
+    margin          : 1.5em 1em;
+    padding         : 0;
+    border          : 2px solid black;
+
+}
+
+
+
+
+.scpage table.hvtable { 
+  
+    border       : solid black;
+    border-width : 0 2px 2px 0;
+    
+}
+
+
+
+
+
+.scpage th, 
+.scpage td { 
+  
+    padding        : 0.25em 0.75em;
+    margin         : 0;
+    font-weight    : normal;
+    vertical-align : middle;
+
+}
+
+
+
+
+
+.scpage th { 
+  
+    background-color : #ddd;
+    text-align       : center;
+    border           : 1px solid black;
+    text-align       : center;
+
+}
+
+
+
+
+
+.scpage td { 
+  
+    background-color : #f8f8f8;
+    text-align       : justify;
+    border           : 1px solid #888;
+    text-align       : justify;
+
+}
+
+
+
+
+
+.colorpage th { 
+  
+    background-color : #e3e3e3;
+    text-align       : center;
+    border           : 1px solid black;
+    
+}
+
+
+
+
+.colorpage td { 
+
+    background-color : white;
+    text-align       : justify;
+    border           : 1px solid #888;
+    
+}
+
+
+
+
+
+.zebraodd th {
+  
+    background-color : #d6d6d6;
+    
+}
+
+
+
+
+
+.colorpage .zebraodd th { 
+  
+    background-color : #dadada;
+    
+}
+
+
+
+
+
+.zebraodd td { 
+  
+  background-color : #f0f0f0;
+  
+}
+
+
+
+
+
+.colorpage .zebraodd td { 
+  
+    background-color : #f8f8f8;
+    
+}
+
+
+
+
+
+.verticaltable td { 
+  
+    text-align     : center;
+    vertical-align : middle;
+
+}
+
+
+
+
+
+.verticaltable th { 
+  
+    text-align     : center; 
+    vertical-align : bottom;
+
+}
+
+
+
+
+
+.horizontaltable th {
+
+    text-align     : right;
+    vertical-align : top;
+
+}
+
+
+
+
+
+.horizontaltable td {
+
+    text-align     : justify;
+    vertical-align : top;
+
+}
+
+
+
+
+
+.hvtable td {
+
+    text-align     : center;
+    vertical-align : middle;
+
+}
+
+
+
+
+
+.hvtable .rowheader {
+
+    text-align     : right;
+    vertical-align : top;
+
+}
+
+
+
+
+
+.hvtable .colheader {
+
+    text-align     : center;
+    vertical-align : bottom;
+
+}
+
+
+
+
+
+.scpage .hvtable .rowheader {
+
+    border-left  : 2px solid black;
+    border-right : 2px solid #888;
+
+}
+
+
+
+
+
+.scpage .hvtable .colheader {
+
+    border-top    : 2px solid black;
+    border-bottom : 2px solid #888;
+
+}
+
+
+
+
+
+.scpage th.headergap {
+
+    border           : solid black;
+    border-width     : 0 2px 2px 0;
+    background-color : transparent;
+
+}
