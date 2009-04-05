@@ -55,7 +55,7 @@ body.scpage {
 
 body.colorpage {
 
-    background-color: #f0f8ff;
+    background-color : #f0f8ff;
 
 }
 
@@ -63,7 +63,7 @@ body.colorpage {
 
 
 
-.scpage p { 
+.scpage p {
 
     text-indent : 2.5em;
     line-height : 140%;
@@ -77,33 +77,33 @@ body.colorpage {
 
 
 
-.scpage p+p { 
-  
-  margin-top: 1em; 
-  
+.scpage p+p {
+
+  margin-top : 1em;
+
 }
 
 
 
 
 
-.widthconstrain { 
-  
-  max-width: 42em; 
-  
+.widthconstrain {
+
+  max-width : 42em;
+
 }
 
 
 
 
 
-.scpage h1,   
-.scpage h2,   
-.scpage h3,   
-.scpage h4,   
-.scpage h5,   
-.scpage h6 { 
-    
+.scpage h1,
+.scpage h2,
+.scpage h3,
+.scpage h4,
+.scpage h5,
+.scpage h6 {
+
     margin      : 0 0 0 -0.65em;
     padding     : 0;
     border      : 0;
@@ -115,15 +115,15 @@ body.colorpage {
 
 
 
-.scpage h1+p, 
-.scpage h2+p, 
-.scpage h3+p, 
-.scpage h4+p, 
-.scpage h5+p, 
-.scpage h6+p { 
-  
-    margin-top: 1em; 
-    
+.scpage h1+p,
+.scpage h2+p,
+.scpage h3+p,
+.scpage h4+p,
+.scpage h5+p,
+.scpage h6+p {
+
+    margin-top : 1em;
+
 }
 
 
@@ -137,7 +137,7 @@ body.colorpage {
 .scpage p+h5,
 .scpage p+h6 {
 
-    margin-top: 2em;
+    margin-top : 2em;
 
 }
 
@@ -145,12 +145,12 @@ body.colorpage {
 
 
 
-.scpage h1 { font-size: 225%; }
-.scpage h2 { font-size: 185%; }
-.scpage h3 { font-size: 165%; }
-.scpage h4 { font-size: 150%; }
-.scpage h5 { font-size: 135%; }
-.scpage h6 { font-size: 120%; }
+.scpage h1 { font-size : 225%; }
+.scpage h2 { font-size : 185%; }
+.scpage h3 { font-size : 165%; }
+.scpage h4 { font-size : 150%; }
+.scpage h5 { font-size : 135%; }
+.scpage h6 { font-size : 120%; }
 
 
 .scpage.bgcolorheaders h1,
@@ -160,7 +160,7 @@ body.colorpage {
 .scpage.bgcolorheaders h5,
 .scpage.bgcolorheaders h6 { 
   
-    padding: 0.25em 0.65em; 
+    padding : 0.25em 0.65em;
     
 }
 
@@ -168,30 +168,30 @@ body.colorpage {
 
 
 
-.colorheaders h1 { color: #025; }
-.colorheaders h2 { color: #037; }
-.colorheaders h3 { color: #049; }
-.colorheaders h4 { color: #05b; }
-.colorheaders h5 { color: #06d; }
-.colorheaders h6 { color: #07f; }
+.colorheaders h1 { color : #025; }
+.colorheaders h2 { color : #037; }
+.colorheaders h3 { color : #049; }
+.colorheaders h4 { color : #05b; }
+.colorheaders h5 { color : #06d; }
+.colorheaders h6 { color : #07f; }
 
 
 
 
 
-.bgcolorheaders h1           { background-color: #d0e8ff; }
-.bgcolorheaders h2           { background-color: #d6ebff; }
-.bgcolorheaders h3           { background-color: #dceeff; }
-.bgcolorheaders h4           { background-color: #e2f1ff; }
-.bgcolorheaders h5           { background-color: #e8f4ff; }
-.bgcolorheaders h6           { background-color: #eef7ff; }
+.bgcolorheaders h1           { background-color : #d0e8ff; }
+.bgcolorheaders h2           { background-color : #d6ebff; }
+.bgcolorheaders h3           { background-color : #dceeff; }
+.bgcolorheaders h4           { background-color : #e2f1ff; }
+.bgcolorheaders h5           { background-color : #e8f4ff; }
+.bgcolorheaders h6           { background-color : #eef7ff; }
 
-.colorpage.bgcolorheaders h1 { background-color: #c0d8ff; }
-.colorpage.bgcolorheaders h2 { background-color: #c6dbff; }
-.colorpage.bgcolorheaders h3 { background-color: #ccdeff; }
-.colorpage.bgcolorheaders h4 { background-color: #d2e1ff; }
-.colorpage.bgcolorheaders h5 { background-color: #d8e4ff; }
-.colorpage.bgcolorheaders h6 { background-color: #dee7ff; }
+.colorpage.bgcolorheaders h1 { background-color : #c0d8ff; }
+.colorpage.bgcolorheaders h2 { background-color : #c6dbff; }
+.colorpage.bgcolorheaders h3 { background-color : #ccdeff; }
+.colorpage.bgcolorheaders h4 { background-color : #d2e1ff; }
+.colorpage.bgcolorheaders h5 { background-color : #d8e4ff; }
+.colorpage.bgcolorheaders h6 { background-color : #dee7ff; }
 
 
 
@@ -211,8 +211,8 @@ body.colorpage {
 
 .scpage table.hvtable { 
   
-    border: solid black; 
-    border-width: 0 2px 2px 0; 
+    border       : solid black;
+    border-width : 0 2px 2px 0;
     
 }
 
@@ -262,9 +262,9 @@ body.colorpage {
 
 .colorpage th { 
   
-    background-color: #e3e3e3; 
-    text-align: center;  
-    border: 1px solid black; 
+    background-color : #e3e3e3;
+    text-align       : center;
+    border           : 1px solid black;
     
 }
 
@@ -272,10 +272,10 @@ body.colorpage {
 
 
 .colorpage td { 
-  
-    background-color: white;   
-    text-align: justify; 
-    border: 1px solid #888;  
+
+    background-color : white;
+    text-align       : justify;
+    border           : 1px solid #888;
     
 }
 
@@ -283,9 +283,9 @@ body.colorpage {
 
 
 
-.zebraodd th { 
+.zebraodd th {
   
-    background-color: #d6d6d6; 
+    background-color : #d6d6d6;
     
 }
 
@@ -295,7 +295,7 @@ body.colorpage {
 
 .colorpage .zebraodd th { 
   
-    background-color: #dadada; 
+    background-color : #dadada;
     
 }
 
@@ -305,7 +305,7 @@ body.colorpage {
 
 .zebraodd td { 
   
-  background-color: #f0f0f0; 
+  background-color : #f0f0f0;
   
 }
 
@@ -315,7 +315,7 @@ body.colorpage {
 
 .colorpage .zebraodd td { 
   
-    background-color: #f8f8f8; 
+    background-color : #f8f8f8;
     
 }
 
