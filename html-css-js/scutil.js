@@ -1,9 +1,9 @@
 
-// $Revision: 323 $
-// $Date: 2009-04-05 17:01:30 -0600 (Sun, 05 Apr 2009) $
+// $Revision$
+// $Date$
 // since April 3, 2009
-// $Id: scutil.js 323 2009-04-05 23:01:30Z john $
-// $HeadURL: svn://crunchyd.com/scutil/js/scutil.js $
+// $Id$
+// $HeadURL$
 
 
 
