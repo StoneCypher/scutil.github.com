@@ -38,19 +38,111 @@
 
 
 
-body.scpage     { margin: 0; border: 0; padding: 2em 3em; font-family: candara, verdana, arial, sans-serif; }
-body.colorpage  { background-color: #f0f8ff; }
+/* Basic scpage rule */
+
+body.scpage {
+
+    margin      : 0;
+    border      : 0;
+    padding     : 2em 3em;
+    font-family : candara, verdana, arial, sans-serif;
+
+}
 
 
-.scpage p       { text-indent: 2.5em; line-height: 140%; margin: 0; padding: 0; text-align: justify; }
-.scpage p+p     { margin-top: 1em; }
-
-.widthconstrain { max-width: 42em; }
 
 
-.scpage h1,   .scpage h2,   .scpage h3,   .scpage h4,   .scpage h5,   .scpage h6   { margin: 0 0 0 -0.65em; padding: 0; border: 0; font-family: 'arno pro smbd', 'adobe garamond', garamond, 'times new roman', serif; }
-.scpage h1+p, .scpage h2+p, .scpage h3+p, .scpage h4+p, .scpage h5+p, .scpage h6+p { margin-top: 1em; }
-.scpage p+h1, .scpage p+h2, .scpage p+h3, .scpage p+h4, .scpage p+h5, .scpage p+h6 { margin-top: 2em; }
+
+body.colorpage {
+
+    background-color: #f0f8ff;
+
+}
+
+
+
+
+
+.scpage p { 
+
+    text-indent : 2.5em;
+    line-height : 140%;
+    margin      : 0;
+    padding     : 0;
+    text-align  : justify;
+
+}
+
+
+
+
+
+.scpage p+p { 
+  
+  margin-top: 1em; 
+  
+}
+
+
+
+
+
+.widthconstrain { 
+  
+  max-width: 42em; 
+  
+}
+
+
+
+
+
+.scpage h1,   
+.scpage h2,   
+.scpage h3,   
+.scpage h4,   
+.scpage h5,   
+.scpage h6 { 
+    
+    margin      : 0 0 0 -0.65em;
+    padding     : 0;
+    border      : 0;
+    font-family : 'arno pro smbd', 'adobe garamond', garamond, 'times new roman', serif;
+
+}
+
+
+
+
+
+.scpage h1+p, 
+.scpage h2+p, 
+.scpage h3+p, 
+.scpage h4+p, 
+.scpage h5+p, 
+.scpage h6+p { 
+  
+    margin-top: 1em; 
+    
+}
+
+
+
+
+
+.scpage p+h1,
+.scpage p+h2,
+.scpage p+h3,
+.scpage p+h4,
+.scpage p+h5,
+.scpage p+h6 {
+
+    margin-top: 2em;
+
+}
+
+
+
 
 
 .scpage h1 { font-size: 225%; }
@@ -61,16 +153,31 @@ body.colorpage  { background-color: #f0f8ff; }
 .scpage h6 { font-size: 120%; }
 
 
-.scpage.bgcolorheaders h1, .scpage.bgcolorheaders h2, .scpage.bgcolorheaders h3,
-.scpage.bgcolorheaders h4, .scpage.bgcolorheaders h5, .scpage.bgcolorheaders h6    { padding: 0.25em 0.65em; }
+.scpage.bgcolorheaders h1,
+.scpage.bgcolorheaders h2,
+.scpage.bgcolorheaders h3,
+.scpage.bgcolorheaders h4,
+.scpage.bgcolorheaders h5,
+.scpage.bgcolorheaders h6 { 
+  
+    padding: 0.25em 0.65em; 
+    
+}
 
 
-.colorheaders h1             { color: #025; }
-.colorheaders h2             { color: #037; }
-.colorheaders h3             { color: #049; }
-.colorheaders h4             { color: #05b; }
-.colorheaders h5             { color: #06d; }
-.colorheaders h6             { color: #07f; }
+
+
+
+.colorheaders h1 { color: #025; }
+.colorheaders h2 { color: #037; }
+.colorheaders h3 { color: #049; }
+.colorheaders h4 { color: #05b; }
+.colorheaders h5 { color: #06d; }
+.colorheaders h6 { color: #07f; }
+
+
+
+
 
 .bgcolorheaders h1           { background-color: #d0e8ff; }
 .bgcolorheaders h2           { background-color: #d6ebff; }
@@ -87,33 +194,238 @@ body.colorpage  { background-color: #f0f8ff; }
 .colorpage.bgcolorheaders h6 { background-color: #dee7ff; }
 
 
-.scpage table          { border-collapse: collapse; margin: 1.5em 1em; padding: 0; border: 2px solid black; }
-.scpage table.hvtable  { border: solid black; border-width: 0 2px 2px 0; }
-
-.scpage th, .scpage td { padding: 0.25em 0.75em; margin: 0; font-weight: normal; vertical-align: middle; }
-.scpage th             { background-color: #ddd;    text-align: center;  border: 1px solid black; text-align: center; }
-.scpage td             { background-color: #f8f8f8; text-align: justify; border: 1px solid #888;  text-align: justify; }
-.colorpage th          { background-color: #e3e3e3; text-align: center;  border: 1px solid black; }
-.colorpage td          { background-color: white;   text-align: justify; border: 1px solid #888;  }
-
-.zebraodd th            { background-color: #d6d6d6; }
-.colorpage .zebraodd th { background-color: #dadada; }
-
-.zebraodd td            { background-color: #f0f0f0; }
-.colorpage .zebraodd td { background-color: #f8f8f8; }
 
 
-.verticaltable   td { text-align: center; vertical-align: middle; }
-.verticaltable   th { text-align: center; vertical-align: bottom; }
 
-.horizontaltable th { text-align: right;   vertical-align: top; }
-.horizontaltable td { text-align: justify; vertical-align: top; }
+.scpage table { 
+  
+    border-collapse : collapse;
+    margin          : 1.5em 1em;
+    padding         : 0;
+    border          : 2px solid black;
 
-.hvtable td         { text-align: center;  vertical-align: middle; }
-.hvtable .rowheader { text-align: right;   vertical-align: top;    }
-.hvtable .colheader { text-align: center;  vertical-align: bottom; }
+}
 
-.scpage .hvtable .rowheader { border-left: 2px solid black; border-right:  2px solid #888; }
-.scpage .hvtable .colheader { border-top:  2px solid black; border-bottom: 2px solid #888; }
 
-.scpage th.headergap { border: solid black; border-width: 0 2px 2px 0; background-color: transparent; }
+
+
+.scpage table.hvtable { 
+  
+    border: solid black; 
+    border-width: 0 2px 2px 0; 
+    
+}
+
+
+
+
+
+.scpage th, 
+.scpage td { 
+  
+    padding        : 0.25em 0.75em;
+    margin         : 0;
+    font-weight    : normal;
+    vertical-align : middle;
+
+}
+
+
+
+
+
+.scpage th { 
+  
+    background-color : #ddd;
+    text-align       : center;
+    border           : 1px solid black;
+    text-align       : center;
+
+}
+
+
+
+
+
+.scpage td { 
+  
+    background-color : #f8f8f8;
+    text-align       : justify;
+    border           : 1px solid #888;
+    text-align       : justify;
+
+}
+
+
+
+
+
+.colorpage th { 
+  
+    background-color: #e3e3e3; 
+    text-align: center;  
+    border: 1px solid black; 
+    
+}
+
+
+
+
+.colorpage td { 
+  
+    background-color: white;   
+    text-align: justify; 
+    border: 1px solid #888;  
+    
+}
+
+
+
+
+
+.zebraodd th { 
+  
+    background-color: #d6d6d6; 
+    
+}
+
+
+
+
+
+.colorpage .zebraodd th { 
+  
+    background-color: #dadada; 
+    
+}
+
+
+
+
+
+.zebraodd td { 
+  
+  background-color: #f0f0f0; 
+  
+}
+
+
+
+
+
+.colorpage .zebraodd td { 
+  
+    background-color: #f8f8f8; 
+    
+}
+
+
+
+
+
+.verticaltable td { 
+  
+    text-align     : center;
+    vertical-align : middle;
+
+}
+
+
+
+
+
+.verticaltable th { 
+  
+    text-align     : center; 
+    vertical-align : bottom;
+
+}
+
+
+
+
+
+.horizontaltable th {
+
+    text-align     : right;
+    vertical-align : top;
+
+}
+
+
+
+
+
+.horizontaltable td {
+
+    text-align     : justify;
+    vertical-align : top;
+
+}
+
+
+
+
+
+.hvtable td {
+
+    text-align     : center;
+    vertical-align : middle;
+
+}
+
+
+
+
+
+.hvtable .rowheader {
+
+    text-align     : right;
+    vertical-align : top;
+
+}
+
+
+
+
+
+.hvtable .colheader {
+
+    text-align     : center;
+    vertical-align : bottom;
+
+}
+
+
+
+
+
+.scpage .hvtable .rowheader {
+
+    border-left  : 2px solid black;
+    border-right : 2px solid #888;
+
+}
+
+
+
+
+
+.scpage .hvtable .colheader {
+
+    border-top    : 2px solid black;
+    border-bottom : 2px solid #888;
+
+}
+
+
+
+
+
+.scpage th.headergap {
+
+    border           : solid black;
+    border-width     : 0 2px 2px 0;
+    background-color : transparent;
+
+}
