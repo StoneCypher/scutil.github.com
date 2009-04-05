@@ -6,21 +6,23 @@ digraph G {
     node  [fillcolor=white style=filled shape=Mrecord fontname="candara"];
     edge  [];
 
-    "server_start"             [label="{Server Start|<listensocket>Listen Socket}"        fillcolor=khaki1 style=filled];
-    "accept_socket"            [label="{<in>Accept Socket|{<success>Success|<fail>Fail}}" fillcolor=khaki1 style=filled];
-    "connection_phase"         [label="{<in>Connection Phase|Send Protocol Requirements|{<comply>Comply|<fail>Fail}}"];
-    "require_auth"             [label="{<in>Does server require auth?|{<no>No|<yes>Yes}}"];
-    "authorize"                [label="{<in>Authorize|Sends Salt|{<pass>Pass|<reject>Reject|<fail>Fail}}"];
-    "command_phase"            [label="{<in>Command Phase|Search for Commands|{<nocommands>No Commands|<command>Command}}"];
-    "issue_command"            [label="{<in>Issue Command|<reconnectto>Reconnect To|<disconnect>Disconnect, allow reconnect|<disconnectpr>Disconnect with prejudice|<upgrade>Upgrade required}"];
-    "negotiation_phase"        [label="{<in>Negotiation Phase|<wait>Wait for bridge request|{<bad>Not supported|<good>Supported|<none>None}}"];
-    "protocol_require_auth"    [label="{<in>Does protocol require auth?|{<no>No|<yes>Yes}}"];
-    "protocol_authorize"       [label="{<in>Protocol Authorize|Sends Salt|{<pass>Pass|<fail>Fail|<reject>Reject}}"];
-    "transit_phase"            [label="{<in>Transit Phase|Rules change to transit mode}"];
-    "immediate_reconnect"      [label="Immediate Reconnect"];
-    "close_connection_message" [label="{Provide message why|Connection Closed}"];
-    "close_connection"         [label="Close this\nconnection" shape=ellipse fillcolor=lightpink style=filled]
-    "start_transit_phase"      [label="Switch to\ntransit mode" shape=ellipse fillcolor=darkolivegreen1 style=filled]
+    "server_start"                 [label="{Server Start|<listensocket>Listen Socket}"        fillcolor=khaki1 style=filled];
+    "accept_socket"                [label="{<in>Accept Socket|{<success>Success|<fail>Fail}}" fillcolor=khaki1 style=filled];
+    "connection_phase"             [label="{<in>Connection Phase|Send Protocol Requirements|{<comply>Comply|<fail>Fail}}"];
+    "require_auth"                 [label="{<in>Does server require auth?|{<no>No|<yes>Yes}}"];
+    "authorize"                    [label="{<in>Authorize|Sends Salt|{<pass>Pass|<reject>Reject|<fail>Fail}}"];
+    "command_phase"                [label="{<in>Command Phase|Search for Commands|{<nocommands>No Commands|<command>Command}}"];
+    "issue_command"                [label="{<in>Issue Command|<reconnectto>Reconnect To|<disconnect>Disconnect, allow reconnect|<disconnectpr>Disconnect with prejudice|<upgrade>Upgrade required}"];
+    "negotiation_phase"            [label="{<in>Negotiation Phase|<wait>Wait for bridge request|{<bad>Not supported|<good>Supported|<none>None}}"];
+    "protocol_require_auth"        [label="{<in>Does protocol require auth?|{<no>No|<yes>Yes}}"];
+    "protocol_authorize"           [label="{<in>Protocol Authorize|Sends Salt|{<pass>Pass|<fail>Fail|<reject>Reject}}"];
+    "transit_phase"                [label="{<in>Transit Phase|Rules change to transit mode}"];
+    "immediate_reconnect"          [label="Immediate Reconnect"];
+    "close_connection_message"     [label="{Provide message why|Connection Closed}"];
+    "close_connection"             [label="Close this\nconnection" shape=ellipse fillcolor=lightpink style=filled];
+    "start_transit_phase"          [label="Switch to\ntransit mode" shape=ellipse fillcolor=darkolivegreen1 style=filled];
+    "send_no_auth_needed_message"  [label="Send 'no auth\nneeded' message"];
+    "send_no_pauth_needed_message" [label="Send 'no pauth\nneeded' message"];
 
     server_start:listensocket     -> accept_socket:in               [penwidth=5];
 
@@ -31,7 +33,8 @@ digraph G {
     connection_phase:fail         -> close_connection_message       [];
 
     require_auth:yes              -> authorize:in                   [];
-    require_auth:no               -> command_phase:in               [penwidth=5];
+    require_auth:no               -> send_no_auth_needed_message    [penwidth=5];
+    send_no_auth_needed_message   -> command_phase:in               [penwidth=5];
 
     close_connection_message      -> close_connection               [];
 
@@ -55,7 +58,8 @@ digraph G {
     negotiation_phase:good:s      -> protocol_require_auth:in:ne    [penwidth=5];
 
     protocol_require_auth:yes     -> protocol_authorize:in          [penwidth=5];
-    protocol_require_auth:no      -> transit_phase:in               [];
+    protocol_require_auth:no      -> send_no_pauth_needed_message   [];
+    send_no_pauth_needed_message  -> transit_phase:in               [];
 
     protocol_authorize:pass       -> transit_phase:in               [penwidth=5];
     protocol_authorize:fail       -> close_connection               [];
