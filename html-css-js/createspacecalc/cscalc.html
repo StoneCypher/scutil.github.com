@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+  <head>
+
+    <title></title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="KEYWORDS" content="Home" />
+    <meta name="robots" content="index,follow" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    <script language="JavaScript" type="text/javascript">
+
+      function writeto(who, what) { document.getElementById(who).innerHTML = what.toFixed(2); }
+
+      function update() {
+
+        var NormalCosts   = { "floor": 3.66, "base": 1.50, "page": 0.02  };
+        var ColorCosts    = { "floor": 6.55, "base": 1.75, "page": 0.12  };
+        var ProCosts      = { "floor": 2.25, "base": 0.85, "page": 0.013 };
+        var ProColorCosts = { "floor": 4.45, "base": 0.85, "page": 0.09  };
+
+        var pages = parseInt(document.getElementById('pagecount').value);
+        var price = parseFloat(document.getElementById('price').value);
+        var color = document.getElementById('color').checked;
+
+        var BasePrice = color? ColorCosts    : NormalCosts;
+        var ProPrice  = color? ProColorCosts : ProCosts;
+
+        var csfee  = Math.max(BasePrice.floor, BasePrice.base + (BasePrice.page * pages));  writeto('cs',  csfee);
+        var cspfee = Math.max(ProPrice.floor,  ProPrice.base  + (ProPrice.page  * pages));  writeto('csp', cspfee);
+        var amfee  = Math.max(BasePrice.floor, BasePrice.base + (BasePrice.page * pages));  writeto('am',  amfee);
+        var ampfee = Math.max(ProPrice.floor,  ProPrice.base  + (ProPrice.page  * pages));  writeto('amp', ampfee);
+
+        var cstake = price * 0.2;  writeto('tcs', cstake);  writeto('tcsp', cstake);
+        var amtake = price * 0.4;  writeto('tam', amtake);  writeto('tamp', amtake);
+
+        writeto('pcs',  price - (csfee  + cstake));
+        writeto('pam',  price - (amfee  + amtake));
+        writeto('pcsp', price - (cspfee + cstake));
+        writeto('pamp', price - (ampfee + amtake));
+
+      }
+
+    </script>
+
+    <style type="text/css" media="screen,projection">
+
+      body  { padding: 2em 3em; font-family: candara; background-color: #f0f8ff; }
+
+      input { width: 4em; }
+      label { display: block; margin-bottom: 0.25em; }
+
+      table { border: 2px solid black; border-collapse: collapse; margin-top: 2em; }
+      td    { border: 1px solid black; text-align: center; padding: 0.25em 0.5em; background-color: white; }
+
+    </style>
+
+  </head>
+
+
+  <body>
+
+  <p style="color:red">
+    TODO: These prices are probably way out of date.  Make this less ugly, make the HTML meta tag improvements from the unified HTML template, explain what this is for, and explain that
+    we'd love it if CreateSpace would take, use and maintain this widget instead of making people think, because people don't want to think.
+  </p>
+
+    <label for="pagecount"><input id="pagecount"             onKeyUp= "update();"/> pages</label>
+    <label for="price"    ><input id="price"                 onKeyUp= "update();"/> price (dollars)</label>
+    <label for="color"    ><input id="color" type="checkbox" onchange="update();"/> is color</label>
+
+    <table>
+
+      <tr>
+        <td colspan="2">Basic</td><td colspan="2">Pro</td>
+      </tr>
+
+      <tr>
+        <td>CS</td><td>Amazon</td><td>CS Pro</td><td>Amazon Pro</td>
+      </tr>
+
+      <tr>
+        <td id="cs">0.00</td><td id="am">0.00</td><td id="csp">0.00</td><td id="amp">0.00</td>
+      </tr>
+
+      <tr>
+        <td id="tcs">0.00</td><td id="tam">0.00</td><td id="tcsp">0.00</td><td id="tamp">0.00</td>
+      </tr>
+
+      <tr>
+        <td id="pcs">0.00</td><td id="pam">0.00</td><td id="pcsp">0.00</td><td id="pamp">0.00</td>
+      </tr>
+
+    </table>
+
+  </body>
+
+</html>
