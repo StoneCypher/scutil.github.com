@@ -45,3 +45,20 @@ body.colorpage  { background-color: #f0f8ff; }
 .scpage p+p     { margin-top: 1em; }
 
 .widthconstrain { max-width: 42em; }
+
+
+.scpage h1,   .scpage h2,   .scpage h3,   .scpage h4,   .scpage h5,   .scpage h6   { margin: 0 0 0 -0.65em; padding: 0; border: 0; font-family: 'arno pro smbd', 'adobe garamond', garamond, 'times new roman', serif; }
+.scpage h1+p, .scpage h2+p, .scpage h3+p, .scpage h4+p, .scpage h5+p, .scpage h6+p { margin-top: 1em; }
+.scpage p+h1, .scpage p+h2, .scpage p+h3, .scpage p+h4, .scpage p+h5, .scpage p+h6 { margin-top: 2em; }
+
+
+.scpage h1 { font-size: 225%; }
+.scpage h2 { font-size: 185%; }
+.scpage h3 { font-size: 165%; }
+.scpage h4 { font-size: 150%; }
+.scpage h5 { font-size: 135%; }
+.scpage h6 { font-size: 120%; }
+
+
+.scpage.bgcolorheaders h1, .scpage.bgcolorheaders h2, .scpage.bgcolorheaders h3,
+.scpage.bgcolorheaders h4, .scpage.bgcolorheaders h5, .scpage.bgcolorheaders h6    { padding: 0.25em 0.65em; }
