@@ -101,3 +101,12 @@ body.colorpage  { background-color: #f0f8ff; }
 
 .horizontaltable th { text-align: right;   vertical-align: top; }
 .horizontaltable td { text-align: justify; vertical-align: top; }
+
+.hvtable td         { text-align: center;  vertical-align: middle; }
+.hvtable .rowheader { text-align: right;   vertical-align: top;    }
+.hvtable .colheader { text-align: center;  vertical-align: bottom; }
+
+.scpage .hvtable .rowheader { border-left: 2px solid black; border-right:  2px solid #888; }
+.scpage .hvtable .colheader { border-top:  2px solid black; border-bottom: 2px solid #888; }
+
+.scpage th.headergap { border: solid black; border-width: 0 2px 2px 0; background-color: transparent; }
