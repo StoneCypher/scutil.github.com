@@ -84,3 +84,13 @@ body.colorpage  { background-color: #f0f8ff; }
 .colorpage.bgcolorheaders h4 { background-color: #d2e1ff; }
 .colorpage.bgcolorheaders h5 { background-color: #d8e4ff; }
 .colorpage.bgcolorheaders h6 { background-color: #dee7ff; }
+
+
+.scpage table          { border-collapse: collapse; margin: 1.5em 1em; padding: 0; border: 2px solid black; }
+.scpage table.hvtable  { border: solid black; border-width: 0 2px 2px 0; }
+
+.scpage th, .scpage td { padding: 0.25em 0.75em; margin: 0; font-weight: normal; vertical-align: middle; }
+.scpage th             { background-color: #ddd;    text-align: center;  border: 1px solid black; text-align: center; }
+.scpage td             { background-color: #f8f8f8; text-align: justify; border: 1px solid #888;  text-align: justify; }
+.colorpage th          { background-color: #e3e3e3; text-align: center;  border: 1px solid black; }
+.colorpage td          { background-color: white;   text-align: justify; border: 1px solid #888;  }
