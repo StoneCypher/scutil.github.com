@@ -94,3 +94,10 @@ body.colorpage  { background-color: #f0f8ff; }
 .scpage td             { background-color: #f8f8f8; text-align: justify; border: 1px solid #888;  text-align: justify; }
 .colorpage th          { background-color: #e3e3e3; text-align: center;  border: 1px solid black; }
 .colorpage td          { background-color: white;   text-align: justify; border: 1px solid #888;  }
+
+
+.verticaltable   td { text-align: center; vertical-align: middle; }
+.verticaltable   th { text-align: center; vertical-align: bottom; }
+
+.horizontaltable th { text-align: right;   vertical-align: top; }
+.horizontaltable td { text-align: justify; vertical-align: top; }
