@@ -3,14 +3,39 @@
 
 function AddClassIfMissing(Tag, tclass) {
 
-  switch (Tag.className) {
-    case ''        : Tag.className = tclass; break;
-    case undefined : Tag.className = tclass; break;
-    default :
-      var Classes = Tag.className.split(' ');
-      for (i in Classes) { if (Classes[i] == tclass) { return; } }
-      Tag.className += (' ' + tclass);
-  }
+    // depending on the class name
+    switch (Tag.className) {
+
+        // if it exists and is empty, set to the class and leave
+        case '' :
+            Tag.className = tclass;
+            break;
+
+        // if it doesn't exist, set to the class and leave
+        case undefined :
+            Tag.className = tclass;
+            break;
+
+        // if there is/are class(es),
+        default :
+
+            // tokenise on spaces
+            var Classes = Tag.className.split(' ');
+
+            // iterate the resulting classes
+            for (i in Classes) { 
+
+                // if one matches the to-be-added, do nothing and return
+                if (Classes[i] == tclass) {
+                    return;
+                }
+            }
+
+            // otherwise stuff the class and a space on the front and return
+            Tag.className += (' ' + tclass);
+
+    }
+
 }
 
 
@@ -20,14 +45,24 @@ function AddClassIfMissing(Tag, tclass) {
 // only removes the first instance of the class if repeated
 
 function RemoveClassOnceIfPresent(Tag, tclass) {
-  var Classes = Tag.className.split(' ');
-  for (i in Classes) {
-    if (Classes[i] == tclass) {
-      Classes.splice(i, 1);
-      Tag.className = Classes.join(' ');
-      return;
+
+    // take the current class list and tokenize on spaces
+    var Classes = Tag.className.split(' ');
+    
+    // iterate the resulting classes
+    for (i in Classes) {
+
+        // remove any matching element
+        if (Classes[i] == tclass) {
+
+            Classes.splice(i, 1);
+            
+            // then immediately recombine and return
+            Tag.className = Classes.join(' ');
+            return;
+
+        }
     }
-  }
 }
 
 
@@ -35,31 +70,72 @@ function RemoveClassOnceIfPresent(Tag, tclass) {
 
 
 function RemoveClassRepeatedlyIfPresent(Tag, tclass) {
-  var Classes = Tag.className.split(' ');
-  for (i in Classes) {
-    if (Classes[i] == tclass) {
-      Classes.splice(i, 1);
-      Tag.className = Classes.join(' ');
+
+    // Take the current class list and tokenise it on spaces.
+    var Classes = Tag.className.split(' ');
+
+    // iterate the resulting classes
+    for (i in Classes) {
+
+        // even though the non-match of a tclass would get skipped, the repeated joins can cause combinatoric
+        // space expansion if there are extra 0-length strings getting .join()ed back together to make more,
+        // so we discard them as a memory space safety issue
+
+        if (Classes[i] == '') {
+            Classes.splice(i, 1);
+        }
+
+        // remove any matching element
+
+        if (Classes[i] == tclass) {
+            Classes.splice(i, 1);
+        }
+
     }
-  }
+
+    // Recombine the result
+
+    Tag.className = Classes.join(' ');
+
 }
 
 
 
 
 
-// Todo: change this from two arguments to a single list argument, so that N zebra colors may be supported
+function Zebrafy(Tag, RowType, ClassList) {
 
-//function Zebrafy(Tag, RowType, class1, class2) {
-//
-//  var kid = Tag.firstChild;
-//  var cl1 = true;
-//
-//  while (kid != undefined) {
-//    if (kid.nodeName != RowType.toUpperCase()) { kid = kid.nextSibling; continue; }
-//    AddClassIfMissing(kid, cl1? class1 : class2);
-//    cl1 = cl1? false:true;
-//    kid = kid.nextSibling;
-//  }
-//
-//}
+
+    // get the first child of the container to start the tag iteration
+    var kid = Tag.firstChild;
+
+    // cc is the class count - how many classes there are.  cached because object inspection could have a changing value (no mutability control in javascript :( )
+    var cc = ClassList.length;
+
+    // ci is the class index - the current class.  started at -1 so that when the counter is immediately incremented, it's to the correct default of 0, to skip uptick safety logic.
+    var ci = -1;
+
+
+    // loop will terminate when out of children
+    while (kid != undefined) {
+
+        // if it isn't the kind of child counted, skip to the next without incrementing the class counter
+        if (kid.nodeName != RowType.toUpperCase()) {
+            kid = kid.nextSibling;
+            continue;
+        }
+
+        // increment the class counter, and zero on tick-over
+        if ((++ci) >= cc) {
+            ci = 0;
+        }
+
+        // set the target row's class
+        AddClassIfMissing(kid, ClassList[ci]);
+
+        // next tag
+        kid = kid.nextSibling;
+
+    }
+
+}
