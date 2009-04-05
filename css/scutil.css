@@ -29,6 +29,7 @@
 /* Class rowheader tableheaders, which are expected only at the left of rows, are top right aligned. */
 /* Class colheader tableheaders, which are expected only at the top of columns, are bottom center aligned. */
 /* Class hvtable tables use a special table header class headergap for the double-direction header cell, which hides that cell and provides mask borders for a better appearance. */
+/* HvTable interior borders are 2px thick gray instead of 1px thick black to prevent the rendering artifacts that come with varying width lines without changing the visual weight of the line.  It's a semi-hack. */
 /* If you add the body class colorpage, the page takes on a light cyan background; the background of table cells turns white and table headers lighter gray; header backgrounds turn slightly darker blue to compensate. */
 /* Headers have a negative 0.65em left margin, where EM is scaled to their font range (225% - 125%). */
 /* Adding widthconstrain sets a tag to 42em width, which is a good reading width.  This is indended for element containers, but will work individually on each element if needed. */
