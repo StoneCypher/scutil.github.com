@@ -1,5 +1,13 @@
 
 // $Revision$
+// $Date$
+// since April 3, 2009
+// $Id$
+// $HeadURL$
+
+
+
+
 
 function AddClassIfMissing(Tag, tclass) {
 
