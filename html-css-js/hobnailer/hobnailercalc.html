@@ -1,0 +1,446 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+  <head>
+
+    <title></title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="KEYWORDS" content="Home" />
+    <meta name="robots" content="index,follow" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+
+
+
+
+    <style type="text/css" media="screen,projection">
+
+      html        { margin: 0; padding: 0; border: 0; }
+      body        { margin: 0; padding: 2em 3em; border: 0; font-family: candara, verdana, tahoma, sans-serif; background-color: #def; }
+
+      table       { border: 2px solid black; border-collapse: collapse; margin: 0; padding: 0; }
+      td          { border: 1px solid #888; background-color: #ddd; padding: 0.4em 0.8em; }
+      td+td       { background-color: #eee; }
+      th          { padding: 0.4em 0.8em; }
+
+      input       { background: #f4f4f4; border: 1px solid #ddd;  width: 5em; }
+      input:hover { background: #f8f8f8; border: 1px solid #888;  }
+      input:focus { background: white;   border: 1px solid black; }
+
+      #result     { float: right; }
+
+      #resulttable td+td { text-align: center; }
+
+      .hide       { display: none; }
+      .hide td    { display: none; padding: 0; }
+
+      .floatafter { position: relative; left: 2em; top: 1em; }
+      .headafter  { position: relative; left: 4.35em; top: 1em; font-weight: normal; }
+      .fixAfter   { padding: 0.4em 0.3em 0.4em 0.8em; }
+
+      table a     { text-decoration: none; color: black; }
+
+      th          { background-color: #ace; text-align: left; }
+      th+th       { text-align: center; }
+
+      .leadWidth  { width: 5em; }
+
+      #commenttd  { background-color: #f99; }
+
+      #sizeframe  { margin-top: 1.5em; }
+
+    </style>
+
+
+
+
+
+    <script language="JavaScript" type="text/javascript">
+
+
+
+
+
+      var Values     = ['unset', 'unset'];
+      var NodeSize   = 'unset';
+      var LinkSize   = 'unset';
+      var TrainCount = 'unset';
+      var EvalCount  = 'unset';
+
+
+
+
+
+      function UpdateNodeSize() {
+        NodeSize = parseInt(document.getElementById('nodeSize').value);
+        UpdateDisplay();
+      }
+
+
+
+
+
+      function UpdateLinkSize() {
+        LinkSize = parseInt(document.getElementById('linkSize').value);
+        UpdateDisplay();
+      }
+
+
+
+
+
+      function UpdateTrainCount() {
+        TrainCount = parseInt(document.getElementById('trainCount').value);
+        UpdateDisplay();
+      }
+
+
+
+
+
+      function UpdateEvalCount() {
+        EvalCount = parseInt(document.getElementById('evalCount').value);
+        UpdateDisplay();
+      }
+
+
+
+
+
+      function SetTrainSize() {
+
+      }
+
+
+
+
+
+      function SetEvalSize() {
+
+      }
+
+
+
+
+
+      function SetRamRequirement() {
+
+      }
+
+
+
+
+
+      function Summate() {
+
+        var Prev = false;
+        var Link = 0;
+        var Node = 0;
+
+        for (Val in Values) {
+
+          if (Values[Val] == 'unset')    { return { 'result':'fail', 'reason':'Must set value in ' + LayerName(Val) }; }
+          if (Values[Val] == '')         { return { 'result':'fail', 'reason':'Must set value in ' + LayerName(Val) }; }
+          if (!(isInteger(Values[Val]))) { return { 'result':'fail', 'reason':'Value in ' + LayerName(Val) + ' must be an integer' }; }
+          if (Values[Val] <= 0)          { return { 'result':'fail', 'reason':'Value in ' + LayerName(Val) + ' must be greater than zero' }; }   // stupid highlighter fix >
+
+          if (Prev == false) { Prev = Values[Val]; Node += Values[Val]; }
+          else               { Link += (Prev*Values[Val]); Node += Values[Val]; Prev=Values[Val]; }
+
+        }
+
+        return { 'result':'success', 'links':Link, 'nodes':Node };
+
+      }
+
+
+
+
+
+      function SetEvaluationStateSize() {
+
+        if (NodeSize == 'unset')    { return { 'result':'fail', 'reason':'Node Size is unset' }; }
+        if (!(isInteger(NodeSize))) { return { 'result':'fail', 'reason':'Node Size must be an integer' }; }
+        if (NodeSize <= 0)          { return { 'result':'fail', 'reason':'Node Size must be greater than zero' }; } // stupid highlighter fix >
+        if (NodeSize == '')         { return { 'result':'fail', 'reason':'Node Size is unset' }; }
+
+        return { 'result':'success', 'size':NodeSize };
+
+      }
+
+
+
+
+
+      function SetTrainingStateSize() {
+
+        if (LinkSize == 'unset')    { return { 'result':'fail', 'reason':'Link Size is unset' }; }
+        if (!(isInteger(LinkSize))) { return { 'result':'fail', 'reason':'Link Size must be an integer' }; }
+        if (LinkSize <= 0)          { return { 'result':'fail', 'reason':'Link Size must be greater than zero' }; } // stupid highlighter fix >
+        if (LinkSize == '')         { return { 'result':'fail', 'reason':'Link Size is unset' }; }
+
+        return { 'result':'success', 'size':LinkSize };
+
+      }
+
+
+
+
+
+      function SetTrainingStateCount() {
+
+        if (TrainCount == 'unset')    { return { 'result':'fail', 'reason':'Train Count is unset' }; }
+        if (!(isInteger(TrainCount))) { return { 'result':'fail', 'reason':'Train Count must be an integer' }; }
+        if (TrainCount <= 0)          { return { 'result':'fail', 'reason':'Train Count must be greater than zero' }; } // stupid highlighter fix >
+        if (TrainCount == '')         { return { 'result':'fail', 'reason':'Train Count is unset' }; }
+
+        return { 'result':'success', 'size':TrainCount };
+
+      }
+
+
+
+
+
+      function ShowComment(Comment) {
+        document.getElementById('commenttd').innerHTML = Comment;
+        document.getElementById('comment').className   = '';
+      }
+
+
+
+
+
+      function HideComment() {
+        document.getElementById('comment').className = 'hide';
+      }
+
+
+
+
+
+      function LayerName(ID) {
+        return (Val == 0)? 'Outputs' : (Val == Values.length-1)? 'Inputs' : 'Layer ' + Val;
+      }
+
+
+
+
+
+      function RemakeTable() {
+
+        var LayerFrame = document.getElementById('layerframe');
+
+        var NewTab     = document.createElement('table');
+        NewTab.id      = 'layertable';
+
+        var Current    = 0;
+
+        var HeadRow          = document.createElement('tr');
+        HeadRow.id           = 'row' + Current.toString();
+
+        var HeadHeader       = document.createElement('th');
+        HeadHeader.id        = 'cell' + Current.toString();
+        HeadHeader.innerHTML = 'Structure';
+
+        var HeadCell         = document.createElement('th');
+        HeadCell.id          = 'cell' + Current.toString();
+        HeadCell.innerHTML   = '<a href="#" onClick="AddRow(0)" class="headafter">+</a>';
+
+        HeadRow.appendChild(HeadHeader);
+        HeadRow.appendChild(HeadCell);
+        NewTab.appendChild(HeadRow);
+
+        for (Val in Values) {
+
+          var NewRow          = document.createElement('tr');
+          NewRow.id           = 'row' + Current.toString();
+
+          var NewHeader       = document.createElement('td');
+          NewHeader.id        = 'cell' + Current.toString();
+          NewHeader.className = 'leadWidth';
+          NewHeader.innerHTML = ((!((Val==0)||(Val==(Values.length-1))))? ' <a href="#" onClick="RemRow(' + Val + ');">&nbsp; - &nbsp;</a> ':'') + LayerName(Val);
+
+          var NewCell         = document.createElement('td');
+          NewCell.id          = 'cell' + Current.toString();
+          NewCell.className   = 'fixAfter';
+          NewCell.innerHTML   = '<input id="input' + Val + '" value="' + Values[Val] + '" onKeyUp="UpdateRow(' + Val + ')"><a onClick="AddRow(' + (parseInt(Val)+1) + ')" href="#" class="floatafter">+</a>';
+
+          NewRow.appendChild(NewHeader);
+          NewRow.appendChild(NewCell);
+          NewTab.appendChild(NewRow);
+
+        }
+
+        LayerFrame.innerHTML = '';  // boo, hiss
+        LayerFrame.appendChild(NewTab);
+
+      }
+
+
+
+
+
+      function isInteger(s) {
+        return (s.toString().search(/^-?[0-9]+$/) == 0);
+      }
+
+
+
+
+
+      function addCommas(num) {
+
+	var nStr = num.toString();
+	var x    = nStr.split('.');
+	var x1   = x[0];
+	var x2   = x.length > 1 ? '.' + x[1] : '';
+	var rgx = /(\d+)(\d{3})/;
+
+	while (rgx.test(x1)) { x1 = x1.replace(rgx, '$1' + ',' + '$2');	}
+	return x1 + x2;
+
+      }
+
+
+
+
+
+      function UpdateDisplay() {
+
+        var NewState = Summate();
+
+        if (NewState.result == 'success') {
+          document.getElementById('bptscount').innerHTML = addCommas(NewState.links);
+          document.getElementById('bpescount').innerHTML = addCommas(NewState.nodes);
+
+          var Train = SetTrainingStateSize();
+          if (Train.result == 'success') {
+            document.getElementById('bptssize').innerHTML  = addCommas(Train.size);
+            document.getElementById('bptstotal').innerHTML = addCommas(Train.size * NewState.links);
+
+            var EvalS = SetEvaluationStateSize();
+            if (EvalS.result == 'success') {
+              document.getElementById('bpessize').innerHTML  = addCommas(EvalS.size);
+              document.getElementById('bpestotal').innerHTML = addCommas(EvalS.size * NewState.nodes);
+
+              var TrainC = SetTrainingStateCount(); // comeback
+              if (TrainC.result == 'success') {
+                document.getElementById('tssize').innerHTML  = addCommas(Train.size * NewState.links);
+                document.getElementById('tscount').innerHTML = addCommas(TrainC.size);
+                document.getElementById('tstotal').innerHTML = addCommas(TrainC.size * Train.size * NewState.links);
+
+//                var EvalC = SetTrainingStateCount(); // comeback
+//                if (EvalC.result == 'success') {
+//                  document.getElementById('tssize').innerHTML  = addCommas(Train.size * NewState.links);
+//                  document.getElementById('tscount').innerHTML = addCommas(EvalC.size);
+//                  document.getElementById('tstotal').innerHTML = addCommas(EvalC.size * Train.size * NewState.links);
+                  HideComment();
+
+//                } else {
+//                  ShowComment(EvalC.reason);
+//                }
+
+              } else {
+                ShowComment(TrainC.reason);
+              }
+
+            } else {
+              ShowComment(EvalS.reason);
+            }
+
+          } else {
+            ShowComment(Train.reason);
+          }
+
+        } else {
+          document.getElementById('bptscount').innerHTML = 'N/A';
+          document.getElementById('bpescount').innerHTML = 'N/A';
+          ShowComment(NewState.reason);
+        }
+
+      }
+
+
+
+
+
+      function UpdateRow(ID) {
+        Values[ID] = parseInt(document.getElementById('input'+ID).value);
+        UpdateDisplay();
+      }
+
+
+
+
+
+      function AddRow(NewVal) {
+        Values.splice(NewVal, 0, "unset");
+        RemakeTable();
+        UpdateDisplay();
+      }
+
+
+
+
+
+      function RemRow(whichRow) {
+        Values.splice(whichRow, 1);
+        RemakeTable();
+        UpdateDisplay();
+      }
+
+
+
+
+
+    </script>
+
+
+
+
+
+  </head>
+
+
+
+
+
+  <body onload="RemakeTable(); UpdateDisplay();">
+
+
+
+    <div id="result">
+      <table id="resulttable">
+        <tr><th></th><th>Count</th><th>Size</th><th>Total</th></tr>
+        <tr><td>Training State</td><td id="bptscount">N/A</td><td id="bptssize">N/A</td><td id="bptstotal">N/A</td></tr>
+        <tr><td>Evaluation State</td><td id="bpescount">N/A</td><td id="bpessize">N/A</td><td id="bpestotal">N/A</td></tr>
+        <tr><td>Training Set</td><td id="tscount">N/A</td><td id="tssize">N/A</td><td id="tstotal">N/A</td></tr>
+        <tr><td>Evaluation Set</td><td id="escount">N/A</td><td id="essize">N/A</td><td id="estotal">N/A</td></tr>
+        <tr><td>RAM Requirements</td><td id="RamRequirements" colspan="3">N/A</td></tr>
+        <tr id="comment" class="hide"><td id="commenttd" colspan="4"></td></tr>
+      </table>
+    </div>
+
+
+
+    <div id="layerframe"></div>
+
+
+
+    <div id="sizeframe">
+      <table>
+        <tr><th colspan="2">Settings</th></tr>
+        <tr><td class="leadWidth">Link Size</td><td><input value="unset" onKeyUp="UpdateLinkSize();" id="linkSize"/></td></tr>
+        <tr><td>Node Size</td><td><input value="unset" onKeyUp="UpdateNodeSize();" id="nodeSize"/></td></tr>
+        <tr><td>Train Count</td><td><input value="unset" onKeyUp="UpdateTrainCount();" id="trainCount"/></td></tr>
+        <tr><td>Eval Count</td><td><input value="unset" onKeyUp="UpdateEvalCount();" id="evalCount"/></td></tr>
+      </table>
+    </div>
+
+
+
+  </body>
+
+</html>

@@ -49,13 +49,6 @@
 
           return self::Make('label', self::Make(), array($utype, $uvalue));
 
-        echo "<label for=\"$id\" id=\"{$id}label\"><input name=\"$id\" id=\"$id\"";
-
-        if ($type  != '') { echo " type=\"$type\""; }
-        if ($value != '') { echo " value=\"$value\""; }
-
-        echo "></input> $id</label>";
-
       }
 
 
