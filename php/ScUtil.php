@@ -118,17 +118,18 @@
           } else {
 
               // The saturation is (the difference between minimum and maximum value) divided by maximum value - that is, the ratio of the value range to the max value
-              $S = $range / $vMax;
+              $S      = $range / $vMax;
+              $hRange = $range / 2;
 
               // Delete range edge lengths to get hue wheel position, which will be on the range [ -1/6, 1/6 ]
-              $del_R = ( ( ( $vMax - $vR ) / 6 ) + ( $range / 2 ) ) / $range;
-              $del_G = ( ( ( $vMax - $vG ) / 6 ) + ( $range / 2 ) ) / $range;
-              $del_B = ( ( ( $vMax - $vB ) / 6 ) + ( $range / 2 ) ) / $range;
+              $del_R = ( ( ( $vMax - $vR ) / 6 ) + $hRange ) / $range;
+              $del_G = ( ( ( $vMax - $vG ) / 6 ) + $hRange ) / $range;
+              $del_B = ( ( ( $vMax - $vB ) / 6 ) + $hRange ) / $range;
 
               // Hue is the delete range plus N/3
-              if      ($vR == $vMax) $H = $del_B - $del_G;
-              else if ($vG == $vMax) $H = ( 1 / 3 ) + $del_R - $del_B;
-              else if ($vB == $vMax) $H = ( 2 / 3 ) + $del_G - $del_R;
+              if      ($vR == $vMax) { $H =         $del_B - $del_G; }
+              else if ($vG == $vMax) { $H = (1/3) + $del_R - $del_B; }
+              else if ($vB == $vMax) { $H = (2/3) + $del_G - $del_R; }
 
               // This can result in an over-range by 1/6 in either direction, whereupon it's safe to return a full increment/decrement to re-range
               if ($H < 0) {
@@ -154,7 +155,7 @@
 
 
 
-      function hsv_to_rgb($H, $S, $V) { // HSV Values:Number 0-1, RGB Results:Number 0-255
+      public static function hsv_to_rgb($H, $S, $V) { // HSV Values:Number 0-1, RGB Results:Number 0-255
 
           $RGB = array();
 
@@ -187,6 +188,112 @@
           }
 
           return array('r'=>$R, 'g'=>$G, 'b'=>$B);
+
+      }
+
+
+
+
+
+      public static function any($items) {
+
+          foreach ($items as $i) {
+              if ($i == true) { 
+                  return true; 
+              }
+          }
+
+          return false;
+
+      }
+
+
+
+
+
+      public static function strong_any($items) {
+
+          foreach ($items as $i) {
+              if ($i === true) { 
+                  return true; 
+              }
+          }
+
+          return false;
+
+      }
+
+
+
+
+
+      public static function all($items) {
+
+          foreach ($items as $i) {
+              if ($i != true) { 
+                  return false; 
+              }
+          }
+
+          return true;
+
+      }
+
+
+
+
+
+      public static function strong_all($items) {
+
+          foreach ($items as $i) {
+              if ($i !== true) { 
+                  return false; 
+              }
+          }
+
+          return true;
+
+      }
+
+
+
+
+
+      public static function has_each_key($target, $keylist) {
+
+          foreach ($keylist as $key) {
+              if (!(isset($target[$key]))) { 
+                  return false; 
+              }
+          }
+
+          return true;
+
+      }
+
+
+
+
+
+      // potentially very expensive!
+
+//      public static function has_each_member($target, $memberlist) {
+//
+//          // TODO look for a non-brute-iterative approach to this, as this is too slow
+//          // in C++ it's easy to make this o(lg n)
+//          foreach ($memberlist as $m) {
+//              if (
+//          }
+//
+//      }
+
+
+
+
+
+      public static function member_set_or($target, $key, $default) {
+
+          return ((isset($target[$key]))? ($target[$key]) : ($default));
 
       }
 
