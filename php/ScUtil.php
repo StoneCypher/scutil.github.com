@@ -301,6 +301,72 @@
 
 
 
+      // unfortunately this only works with non-temporaries, due to the reference; PHP has no mechanism 
+      // for doing this that will work with temporaries of which I am aware (not even macros)
+
+      public static function val_if_set_or(&$var, $default) {
+
+          if (isset($var)) { 
+              return $var;
+          }
+
+          return $default;
+
+      }
+      
+      
+      
+      
+
+      function zip($inputs) {
+
+          $nArgs = func_num_args();
+
+          if ($nArgs < 1) {
+              return false;
+          }
+
+          $inputs   = array(NULL);
+          $matchLen = false;
+
+          for ($i=0; $i<$nArgs; ++$i) {
+
+              $inputs[$i+1] = func_get_arg($i);
+
+              if ($i == 0) {
+                  $matchLen = count($inputs[$i+1]);
+              }
+
+              if (!(is_array($inputs[$i+1]))) {
+                  return false;
+              }
+
+              if (count($inputs[$i+1]) != $matchLen) {
+                  return false;
+              }
+
+          }
+
+          return call_user_func_array('array_map', $inputs);
+
+      }
+
+// echo "1)\n";
+// print_r(zip(array(1,2,3),array(4,5,6)));
+//
+// echo "2)\n";
+// print_r(zip(array(1,2,3),array(4,5)));
+//
+// echo "3)\n";
+// print_r(zip(array(1,2,3),5));
+//
+// echo "4)\n";
+// print_r(zip(array(1,2,3,4),array(5,6,7,8),array(9,10,11,12)));
+
+
+
+
+
       private static $StartPointsUsed = array();
 
 
