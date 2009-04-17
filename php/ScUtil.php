@@ -76,6 +76,9 @@
 
 
 
+
+      // Unfortunately since PHP scans and lexes a file before executing it, neither this code nor anything like it can
+      // prevent syntax errors from too-old PHP editions.  But hey, it's a start.
       public static function EnforceMinimumPhpVersion($ver, $message) {
 
           if (!(version_compare(phpversion(), $ver) === 1)) {
@@ -313,10 +316,10 @@
           return $default;
 
       }
-      
-      
-      
-      
+
+
+
+
 
       function zip($inputs) {
 
