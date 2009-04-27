@@ -14,13 +14,14 @@ function emptyish(X) {
     // there are a variety of reasons not to add empty lists or empty objects
 
     switch (X) {
-    
+
         case 0:
         case 0.0:
         case false:
         case null:
         case '':
         case undefined:
+        case Number.NAN:
             return true;
 
     }
