@@ -9,6 +9,30 @@
 
 
 
+var scutil_LastUniqueIdFound = 0;
+
+function CreateUniqueId(Prefix, Suffix) {
+
+    var uPref = (Prefix == undefined)? '' : Prefix;
+    var uSuff = (Suffix == undefined)? '' : Suffix;
+
+    var Curr;
+
+    while (true) {
+
+        ++scutil_LastUniqueIdFound;
+
+        Curr = Prefix + scutil_LastUniqueIdFound.toString() + Suffix;
+        if (document.getElementById(Curr) == undefined) {
+            return scutil_LastUniqueIdFound;
+        }
+    }
+
+}
+
+
+
+
 function emptyish(X) {
 
     // there are a variety of reasons not to add empty lists or empty objects
