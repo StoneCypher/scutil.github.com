@@ -24,7 +24,7 @@ function CreateUniqueId(Prefix, Suffix) {
 
         Curr = Prefix + scutil_LastUniqueIdFound.toString() + Suffix;
         if (document.getElementById(Curr) == undefined) {
-            return scutil_LastUniqueIdFound;
+            return Curr;
         }
     }
 
