@@ -49,9 +49,7 @@
 
 
 -export( [
-
-    record_member/2
-
+    member/2
 ] ).
 
 
@@ -64,6 +62,6 @@
 
 %% @since Version 123
 
-record_member(E, R) ->
+member(E, R) ->
 
-    .sc.tuple:member(E, R, 2, size(R)).  % just skip the 1st elem
+    sc_tuple:member(E, R, 2, size(R)).  % just skip the 1st elem

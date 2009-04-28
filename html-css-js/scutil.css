@@ -293,38 +293,38 @@ body.colorpage {
 
 
 
-.colorpage .zebraodd th { 
-  
+.colorpage .zebraodd th {
+
     background-color : #dadada;
-    
+
 }
 
 
 
 
 
-.zebraodd td { 
-  
+.zebraodd td {
+
   background-color : #f0f0f0;
-  
+
 }
 
 
 
 
 
-.colorpage .zebraodd td { 
-  
+.colorpage .zebraodd td {
+
     background-color : #f8f8f8;
-    
+
 }
 
 
 
 
 
-.verticaltable td { 
-  
+.verticaltable td {
+
     text-align     : center;
     vertical-align : middle;
 
@@ -334,9 +334,9 @@ body.colorpage {
 
 
 
-.verticaltable th { 
-  
-    text-align     : center; 
+.verticaltable th {
+
+    text-align     : center;
     vertical-align : bottom;
 
 }
@@ -427,5 +427,15 @@ body.colorpage {
     border           : solid black;
     border-width     : 0 2px 2px 0;
     background-color : transparent;
+
+}
+
+
+
+
+
+tt, code {
+
+    font-family: consolas, lucida console, monospace;
 
 }

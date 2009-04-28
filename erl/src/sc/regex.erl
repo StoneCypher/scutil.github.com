@@ -26,7 +26,7 @@
 
 
 
--module(sc.regex).
+-module(sc_regex).
 
 -author("John Haugeland <stonecypher@gmail.com>").
 -webpage("http://scutil.com/").
@@ -51,55 +51,55 @@
 
 
 -export( [
-    regex_read_matches/2,
-      regex_read_matches/3,
-      regex_read_matches/4
+    matches/2,
+      matches/3,
+      matches/4
 ] ).
 
 
 
 
 
-%% @equiv regex_read_matches(String, Reg, {0,0})
+%% @equiv matches(String, Reg, {0,0})
 %% @since Version 41
 
-regex_read_matches(String, Reg) ->
+matches(String, Reg) ->
 
-    regex_read_matches(String, Reg, {0,0}).
-
-
+    matches(String, Reg, {0,0}).
 
 
-%% @equiv regex_read_matches(String, Reg, {TrimFront,TrimLength})
+
+
+%% @equiv matches(String, Reg, {TrimFront,TrimLength})
 %% @since Version 41
 
-regex_read_matches(String, Reg, TrimFront, TrimLength) ->
+matches(String, Reg, TrimFront, TrimLength) ->
 
-    regex_read_matches(String, Reg, {TrimFront, TrimLength}).
+    matches(String, Reg, {TrimFront, TrimLength}).
 
 
 
-%% @spec regex_read_matches(String::string(), Reg::string(), { TrimFront::integer(), TrimLength::integer() }) -> list() | { error, E }
+%% @spec matches(String::string(), Reg::string(), { TrimFront::integer(), TrimLength::integer() }) -> list() | { error, E }
 
-%% @doc {@section Regex} Take a string and a regular expression (and optionally an offset and length to trim to in each result), and return a list of all matches.  For a trim length of {A,B}, the first A and last B characters of each result will be removed.```1> scutil:regex_read_matches("0j2  4g5  8t9", "[0-9](.)[0-9]").
+%% @doc {@section Regex} Take a string and a regular expression (and optionally an offset and length to trim to in each result), and return a list of all matches.  For a trim length of {A,B}, the first A and last B characters of each result will be removed.```1> scutil:matches("0j2  4g5  8t9", "[0-9](.)[0-9]").
 %% ["0j2","4g5","8t9"]
 %%
-%% 2> scutil:regex_read_matches("0j2  4g5  8t9", "[0-9](.)[0-9]", {1,1}).
+%% 2> scutil:matches("0j2  4g5  8t9", "[0-9](.)[0-9]", {1,1}).
 %% ["j","g","t"]
 %%
-%% 3> scutil:regex_read_matches("0j2  4g5  8t9", "[0-9](.)[0-9]", 1, 1).
+%% 3> scutil:matches("0j2  4g5  8t9", "[0-9](.)[0-9]", 1, 1).
 %% ["j","g","t"]'''
 %%
 %% Why provide the equivalent syntaxes (_, _, {A,B}) and (_, _, A,B) ?  Without the tuple is more natural to many, but with the tuple is far more convenient for database-driven behavior, as well as the internal implementation.  I frequently find myself using both forms, and so every time I simplify I find myself wrapping the non-removed form back into the removed form.  Does it violate the simplest interface principle?  Yeah, but in this case it's a boon, IMO.  As such, keeping both forms.
 
 %% @since Version 41
 
-regex_read_matches(String, Reg, {TrimFront, TrimLength}) ->
+matches(String, Reg, {TrimFront, TrimLength}) ->
 
-    case .regexp:matches(String, Reg) of
+    case regexp:matches(String, Reg) of
 
         { match, Matches } ->
-            [ .string:substr(String, Start+TrimFront, End-(TrimLength+1)) || {Start,End} <- Matches ];
+            [ string:substr(String, Start+TrimFront, End-(TrimLength+1)) || {Start,End} <- Matches ];
 
         { error, E } ->
             { error, E }

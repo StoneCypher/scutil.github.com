@@ -24,7 +24,7 @@
 
 
 
--module(sc.signal).
+-module(sc_signal).
 
 -author("John Haugeland <stonecypher@gmail.com>").
 -webpage("http://scutil.com/").
@@ -49,8 +49,8 @@
 
 
 -export( [
-    unit_scale_signal/1,
-    isolate_signal/1
+    unit_scale/1,
+    isolate/1
 ] ).
 
 
@@ -59,9 +59,9 @@
 
 %% @since Version 129
 
-unit_scale_signal(Waveform) ->
+unit_scale(Waveform) ->
 
-    { Baseline, MaxObserved } = .sc.list:minmax(Waveform),
+    { Baseline, MaxObserved } = sc_lists:minmax(Waveform),
     SignalMax                 = MaxObserved - Baseline,
 
     [ (Sample - Baseline) / SignalMax ||
@@ -74,7 +74,7 @@ unit_scale_signal(Waveform) ->
 
 %% @since Version 129
 
-isolate_signal(Waveform) ->
+isolate(Waveform) ->
 
     Baseline = lists:min(Waveform),
 

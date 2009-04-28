@@ -52,9 +52,9 @@
 
 -export( [
 
-    flesch_kincaid_readability_score/3,
-    flesch_kincaid_readability/4,
-    interpret_flesch_kincaid_score/1,
+    calc_fk_readability/3,
+    fk_readability/4,
+    labelled_fk_readability/1,
     to_lines/1
 
 ] ).
@@ -74,7 +74,7 @@
 
 %% @since Version 131
 
-flesch_kincaid_readability_score(Words, Sentences, Syllables) ->
+calc_fk_readability(Words, Sentences, Syllables) ->
 
     206.835 - (1.015 * (Words/Sentences)) - (84.6 * (Syllables/Words)).
 
@@ -87,16 +87,16 @@ flesch_kincaid_readability_score(Words, Sentences, Syllables) ->
 %% @since Version 131
 
 % todo
-% flesch_kincaid_readability(Data) -> flesch_kincaid_readability(Data, fun count_words/1, fun count_sentences/1, fun count_syllables/1).
+% fk_readability(Data) -> fk_readability(Data, fun count_words/1, fun count_sentences/1, fun count_syllables/1).
 
-flesch_kincaid_readability(Data, WordCounter, SentenceCounter, SyllableCounter) ->
+fk_readability(Data, WordCounter, SentenceCounter, SyllableCounter) ->
 
     Words     = WordCounter(Data),
     Sentences = SentenceCounter(Data),
     Syllables = SyllableCounter(Data),
 
-    interpret_flesch_kincaid_score(
-      flesch_kincaid_readability_score(Words, Sentences, Syllables)
+    labelled_fk_readability(
+      calc_fk_readability(Words, Sentences, Syllables)
     ).
 
 
@@ -105,13 +105,13 @@ flesch_kincaid_readability(Data, WordCounter, SentenceCounter, SyllableCounter) 
 
 %% @since Version 131
 
-interpret_flesch_kincaid_score(R) when R > 100 -> { easy_before_11_years,     R };
-interpret_flesch_kincaid_score(R) when R >  90 -> { easy_at_11_years,         R };
-interpret_flesch_kincaid_score(R) when R >  70 -> { easy_for_11_to_13_years,  R };
-interpret_flesch_kincaid_score(R) when R >  60 -> { easy_for_13_to_15_years,  R };
-interpret_flesch_kincaid_score(R) when R >  30 -> { appropriate_for_15_years, R };
-interpret_flesch_kincaid_score(R) when R >   0 -> { appropriate_for_college,  R };
-interpret_flesch_kincaid_score(R)              -> { difficult,                R }.
+labelled_fk_readability(R) when R > 100 -> { easy_before_11_years,     R };
+labelled_fk_readability(R) when R >  90 -> { easy_at_11_years,         R };
+labelled_fk_readability(R) when R >  70 -> { easy_for_11_to_13_years,  R };
+labelled_fk_readability(R) when R >  60 -> { easy_for_13_to_15_years,  R };
+labelled_fk_readability(R) when R >  30 -> { appropriate_for_15_years, R };
+labelled_fk_readability(R) when R >   0 -> { appropriate_for_college,  R };
+labelled_fk_readability(R)              -> { difficult,                R }.
 
 
 
