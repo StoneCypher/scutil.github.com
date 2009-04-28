@@ -35,7 +35,7 @@ function CreateUniqueId(Prefix, Suffix) {
 
 function emptyish(X) {
 
-    // there are a variety of reasons not to add empty lists or empty objects
+    // there are a variety of reasons not to add empty objects
 
     switch (X) {
 
@@ -44,6 +44,7 @@ function emptyish(X) {
         case false:
         case null:
         case '':
+        case []:
         case undefined:
         case Number.NAN:
             return true;
@@ -53,6 +54,7 @@ function emptyish(X) {
     return false;
 
 }
+
 
 
 
