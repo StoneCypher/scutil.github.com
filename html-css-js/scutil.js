@@ -13,8 +13,8 @@ var scutil_LastUniqueIdFound = 0;
 
 function CreateUniqueId(Prefix, Suffix) {
 
-    var uPref = (Prefix == undefined)? '' : Prefix;
-    var uSuff = (Suffix == undefined)? '' : Suffix;
+    var uPref = (Prefix == undefined)? 'id_' : Prefix;
+    var uSuff = (Suffix == undefined)? ''    : Suffix;
 
     var Curr;
 
