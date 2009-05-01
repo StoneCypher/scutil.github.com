@@ -26,7 +26,7 @@
 
 
 
--module(sc_euclid_space).
+-module(sc_distance).
 
 -author("John Haugeland <stonecypher@gmail.com>").
 -webpage("http://scutil.com/").
@@ -39,9 +39,9 @@
 -svn_head("$HeadURL$").
 -svn_revision("$Revision$").
 
--description("Euclidean distance metrics").
+-description("Distance metrics").
 
--testerl_export( { [], sc_math_space_euclidean_testsuite } ).  % todo needs test suite
+-testerl_export( { [], sc_distance_testsuite } ).  % todo needs test suite
 
 -library_requirements([
 ]).
@@ -52,7 +52,7 @@
 
 -export( [
 
-    distance/2
+    euclidean/2
 
 ] ).
 
@@ -75,19 +75,19 @@
 
 % was scutil:euclidean_distance/2
 
-distance(C1, C2) when is_tuple(C1) ->
+euclidean(C1, C2) when is_tuple(C1) ->
 
-    distance( tuple_to_list(C1), C2 );
-
-
-
-distance(C1, C2) when is_tuple(C2) ->
-
-    distance( C1, tuple_to_list(C2) );
+    euclidean( tuple_to_list(C1), C2 );
 
 
 
-distance(C1, C2) ->
+euclidean(C1, C2) when is_tuple(C2) ->
+
+    euclidean( C1, tuple_to_list(C2) );
+
+
+
+euclidean(C1, C2) ->
 
     % squaring makes taking the absolute value to get unsigned magnitude redundant; that's not an omission, it's an optimization
     math:sqrt(

@@ -51,7 +51,8 @@
 -export( [
 
     member/2,
-    sum/1
+    sum/1,
+    key_min/2
 
 ] ).
 
@@ -124,3 +125,40 @@ sum(_T, Which, Max, Work) when Which > Max ->
 sum( T, Which, Max, Work) ->
 
      sum(T, Which+1, Max, Work+element(Which, T)).
+
+
+
+
+
+%% @since Version 343
+
+key_min(Pos, List) ->
+
+    key_min(Pos, List, false).
+
+
+
+%% @since Version 343
+
+key_min(_Pos, [], Best) ->
+
+    Best;
+
+
+
+%% @since Version 343
+
+key_min(Pos, [Cur|Rem], false) ->
+
+    key_min(Pos, Rem, Cur);
+
+
+
+%% @since Version 343
+
+key_min(Pos, [Cur|Rem], Item) ->
+
+    case element(Pos, Cur) < element(Pos, Item) of
+        true  -> key_min(Pos, Rem, Cur);
+        false -> key_min(Pos, Rem, Item)
+    end.                                

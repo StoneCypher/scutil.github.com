@@ -53,7 +53,8 @@
 
 
 -export( [
-    centroid/1
+    centroid/1,
+    nearest_to/2
 ] ).
 
 
@@ -98,6 +99,27 @@
 
 centroid(CoordList) when is_list(CoordList) ->
 
-    [ sc_means:arithmetic_mean(X) ||
+    [ sc_stats:arithmetic_mean(X) ||
         X <- sc_lists:zip_n(CoordList, to_list)
     ].
+
+
+
+
+
+%% @since Version 343
+
+nearest_to(Centers, Point) ->
+
+    { C, _ } = sc_tuple:key_min(2, [ { Center, sc_distance:euclidean(Center, Point) } || Center <- Centers ]),
+    C.
+
+
+
+
+
+%% @since Version 344
+
+% by_distance(Centers, Points) when is_list(Centers), is_list(Points) ->
+
+  %  [ [ { Distance, Center, Point } || Center <- Centers ] || Point <- Points]

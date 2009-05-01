@@ -51,7 +51,7 @@
 
 
 -export( [
-    
+
     extrema/1,
     key_duplicate/1,
     list_rotate/2,
@@ -65,8 +65,10 @@
 
     list_intersection/2,
       list_intersection/3,
-      
+
     zip_n/1,
+      zip_n/2,
+
     combinations/2,
 
     expand_label/1,
