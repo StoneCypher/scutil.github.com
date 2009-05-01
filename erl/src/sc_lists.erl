@@ -93,7 +93,10 @@
     reverse_map/2,
     reverse_filter/2,
     reverse_map_filter/3,
-    postfix/2
+    postfix/2,
+
+    keygroup/2,
+      keygroup/3
 
 ] ).
 
@@ -1064,3 +1067,68 @@ reverse_map_filter([Item|Rem], Work, MapFun, FilterFun) ->
 postfix(Postfix, String) ->
 
     lists:prefix(lists:reverse(Postfix), lists:reverse(String)).
+
+
+
+
+
+%% @since Version 335
+
+keygroup(Pos, List) ->
+
+    keygroup(Pos, List, unsorted).
+
+
+
+
+
+%% @since Version 335
+
+keygroup(Pos, List, unsorted) when is_list(List) ->
+
+    SList = lists:keysort(Pos,List),
+    [F|_] = SList,
+
+    keygroup(Pos, SList, element(Pos,F), [], []);
+
+
+
+
+
+%% @since Version 335
+
+keygroup(Pos, List, sorted) when is_list(List) ->
+
+    [F|_] = List,
+
+    keygroup(Pos, List, element(Pos,F), [], []).
+
+
+
+
+
+%% @since Version 335
+
+keygroup(_Pos, [], WorkKey, Work, Output) ->
+
+    [{WorkKey, Work}] ++ Output;
+
+
+
+
+
+%% @since Version 335
+
+keygroup(Pos, [Item|Rem], WorkKey, Work, Output) ->
+
+    NewKey = element(Pos, Item),
+
+    case NewKey == WorkKey of
+
+        true  ->
+            keygroup(Pos, Rem, WorkKey, [Item]++Work, Output);
+
+        false ->
+            keygroup(Pos, Rem, NewKey,  [Item],       [{WorkKey,Work}]++Output)
+
+    end.

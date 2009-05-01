@@ -95,7 +95,7 @@ grid_scatter(0, []) -> []; % skips a lot of work
 
 grid_scatter(Count, {SizeX, SizeY}) ->
 
-    scutil:from(
+    sc_random:from(
         Count,
         [ {X,Y} ||
             X <- lists:seq(1,SizeX),

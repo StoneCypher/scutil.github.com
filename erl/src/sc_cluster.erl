@@ -123,4 +123,4 @@ nearest_to(Centers, Point) ->
 
 by_distance(Centers, Points) when is_list(Centers), is_list(Points) ->
 
-    lists:keysort(1, [ { nearest_to(Centers, Point), Point } || Point <- Points ]).
+    sc_lists:keygroup(1, [ { nearest_to(Centers, Point), Point } || Point <- Points ]).
