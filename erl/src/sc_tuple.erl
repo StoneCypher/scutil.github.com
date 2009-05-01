@@ -52,7 +52,12 @@
 
     member/2,
     sum/1,
-    key_min/2
+
+    keymin/2,
+      keymax/2,
+      keyextrema/2
+
+%   keygroup/1
 
 ] ).
 
@@ -132,15 +137,15 @@ sum( T, Which, Max, Work) ->
 
 %% @since Version 343
 
-key_min(Pos, List) ->
+keymin(Pos, List) ->
 
-    key_min(Pos, List, false).
+    keymin(Pos, List, false).
 
 
 
 %% @since Version 343
 
-key_min(_Pos, [], Best) ->
+keymin(_Pos, [], Best) ->
 
     Best;
 
@@ -148,17 +153,99 @@ key_min(_Pos, [], Best) ->
 
 %% @since Version 343
 
-key_min(Pos, [Cur|Rem], false) ->
+keymin(Pos, [Cur|Rem], false) ->
 
-    key_min(Pos, Rem, Cur);
+    keymin(Pos, Rem, Cur);
 
 
 
 %% @since Version 343
 
-key_min(Pos, [Cur|Rem], Item) ->
+keymin(Pos, [Cur|Rem], Item) ->
 
     case element(Pos, Cur) < element(Pos, Item) of
-        true  -> key_min(Pos, Rem, Cur);
-        false -> key_min(Pos, Rem, Item)
-    end.                                
+        true  -> keymin(Pos, Rem, Cur);
+        false -> keymin(Pos, Rem, Item)
+    end.
+
+
+
+
+
+%% @since Version 344
+
+keymax(Pos, List) ->
+
+    keymax(Pos, List, false).
+
+
+
+%% @since Version 344
+
+keymax(_Pos, [], Best) ->
+
+    Best;
+
+
+
+%% @since Version 344
+
+keymax(Pos, [Cur|Rem], false) ->
+
+    keymax(Pos, Rem, Cur);
+
+
+
+%% @since Version 344
+
+keymax(Pos, [Cur|Rem], Item) ->
+
+    case element(Pos, Cur) > element(Pos, Item) of
+        true  -> keymax(Pos, Rem, Cur);
+        false -> keymax(Pos, Rem, Item)
+    end.
+
+
+
+
+
+%% @since Version 344
+
+keyextrema(Pos, List) ->
+
+    keyextrema(Pos, List, false, false).
+
+
+
+%% @since Version 344
+
+keyextrema(_Pos, [], Lowest, Highest) ->
+
+    {Lowest, Highest};
+
+
+
+%% @since Version 344
+
+keyextrema(Pos, [Cur|Rem], false, false) ->
+
+    keyextrema(Pos, Rem, Cur, Cur);
+
+
+
+%% @since Version 344
+
+keyextrema(Pos, [Cur|Rem], Lowest, Highest) ->
+
+    if
+
+        element(Pos, Cur) < element(Pos, Lowest) ->
+            keyextrema(Pos, Rem, Cur,    Highest);
+
+        element(Pos, Cur) > element(Pos, Highest) ->
+            keyextrema(Pos, Rem, Lowest, Cur);
+
+        true ->
+            keyextrema(Pos, Rem, Lowest, Highest)
+
+    end.

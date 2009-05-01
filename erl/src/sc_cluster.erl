@@ -54,7 +54,8 @@
 
 -export( [
     centroid/1,
-    nearest_to/2
+    nearest_to/2,
+    by_distance/2
 ] ).
 
 
@@ -111,7 +112,7 @@ centroid(CoordList) when is_list(CoordList) ->
 
 nearest_to(Centers, Point) ->
 
-    { C, _ } = sc_tuple:key_min(2, [ { Center, sc_distance:euclidean(Center, Point) } || Center <- Centers ]),
+    { C, _ } = sc_tuple:keymin(2, [ { Center, sc_distance:euclidean(Center, Point) } || Center <- Centers ]),
     C.
 
 
@@ -120,6 +121,6 @@ nearest_to(Centers, Point) ->
 
 %% @since Version 344
 
-% by_distance(Centers, Points) when is_list(Centers), is_list(Points) ->
+by_distance(Centers, Points) when is_list(Centers), is_list(Points) ->
 
-  %  [ [ { Distance, Center, Point } || Center <- Centers ] || Point <- Points]
+    lists:keysort(1, [ { nearest_to(Centers, Point), Point } || Point <- Points ]).
