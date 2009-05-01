@@ -1072,7 +1072,7 @@ postfix(Postfix, String) ->
 
 
 
-%% @since Version 335
+%% @since Version 345
 
 keygroup(Pos, List) ->
 
@@ -1082,7 +1082,7 @@ keygroup(Pos, List) ->
 
 
 
-%% @since Version 335
+%% @since Version 345
 
 keygroup(Pos, List, unsorted) when is_list(List) ->
 
@@ -1095,7 +1095,7 @@ keygroup(Pos, List, unsorted) when is_list(List) ->
 
 
 
-%% @since Version 335
+%% @since Version 345
 
 keygroup(Pos, List, sorted) when is_list(List) ->
 
@@ -1107,7 +1107,7 @@ keygroup(Pos, List, sorted) when is_list(List) ->
 
 
 
-%% @since Version 335
+%% @since Version 345
 
 keygroup(_Pos, [], WorkKey, Work, Output) ->
 
@@ -1117,7 +1117,7 @@ keygroup(_Pos, [], WorkKey, Work, Output) ->
 
 
 
-%% @since Version 335
+%% @since Version 345
 
 keygroup(Pos, [Item|Rem], WorkKey, Work, Output) ->
 
