@@ -1,13 +1,14 @@
-EEP: 3
-Title: Sample reStructuredText EEP Template
-Version: $Revision$
+EEP: XXX
+Title: Augmenting the console safely for color
+Version: $Revision: 37 $
 Last-Modified: $Date: 2008-07-11 15:47:13 +0200 (Fri, 11 Jul 2008) $
-Author: Per Gustafsson [pergu(at)it(dot)uu(dot)se]
-Status: Active
-Type: Process
+Author: John Haugeland [STONECYPHERatGMAILdotCOM]
+Status: Draft
+Type: Standards Track
 Content-Type: text/x-rst
-Created: 05-Aug-2002
-Post-History: 30-Aug-2002
+Created: 05-May-2009
+Erlang-Version: R14A
+Post-History: TODO (eg 30-Aug-2002, ...)
 
 
 Abstract
