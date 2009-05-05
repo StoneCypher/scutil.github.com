@@ -14,17 +14,27 @@ Post-History: TODO (eg 30-Aug-2002, ...)
 Abstract
 ========
 
-Erlang would benefit from a more able console.  Among desirable improvements are the ability to use color and to invoke controls such as
-console clearing.  There are significant benefits to the color presentation of data, especially (as is commonly the case in crashing
-circumstances) during the high speed presentation of data.  A mechanism is proposed to provide the benefits of colorization in a way that
-applies to legacy software, would not break/affect legacy, which exposes more complex color control for newer applications, satisfies
-legacy (2- and 16-color) terminal color depths, and allows the use of more complex color palettes without fear of polluting historic
-systems with arbitrary control codes.  Care is taken in this mechanism to not reinvent the wheel; this mechanism makes the use of NCurses,
-termcap or similar libraries possible without limiting the color behavior to platforms supporting those libraries.
+Erlang would benefit from a more able console.  Among desirable 
+improvements are the ability to use color and to invoke controls such as
+console clearing.  There are significant benefits to the color 
+presentation of data, especially (as is commonly the case in crashing
+circumstances) during the high speed presentation of data.  A mechanism 
+is proposed to provide the benefits of colorization in a way that applies 
+to legacy software, would not break/affect legacy, which exposes more 
+complex color control for newer applications, satisfies legacy (2- and 
+16-color) terminal color depths, and allows the use of more complex color 
+palettes without fear of polluting historic systems with arbitrary 
+control codes.  Care is taken in this mechanism to not reinvent the 
+wheel; this mechanism makes the use of NCurses, termcap or similar 
+libraries possible without limiting the color behavior to platforms 
+supporting those libraries.
 
-The described strategy has a second benefit, in allowing trivial user themes without effort by the application programmer.  This theming
-allows semantic or context driven coloration, and supportins CSS-like implicit/voluntary explicit chained fallback to defaults.  This
-mechanism allows productive expansion of the theme topic list without concern regarding conflicts in terminology.
+The described strategy has a second benefit, in allowing trivial user 
+themes without effort by the application programmer.  This theming allows 
+semantic or context driven coloration, and supportins CSS-like 
+implicit/voluntary explicit chained fallback to defaults.  This mechanism 
+allows productive expansion of the theme topic list without concern 
+regarding conflicts in terminology.
 
 Finally, the performance impact of this strategy is negligable.
 
@@ -32,67 +42,160 @@ Finally, the performance impact of this strategy is negligable.
 License
 =======
 
-The author of this EEP wants to use the MIT license, which is in the spirit of the requirements of EEP-0001, but does not comply with the
-concrete restrictions thereof.  If required, the author will place this document in the public domain, but would like feedback from the
-EEP team whether the MIT license is acceptable.
+The author of this EEP wants to use the MIT license, which is in the 
+spirit of the requirements of EEP-0001, but does not comply with the 
+concrete restrictions thereof.  If required, the author will place this 
+document in the public domain, but would like feedback from the EEP team 
+whether the MIT license is acceptable.
 
-The EEP team is invited to replace this paragraph with a paragraph placing this document either under the MIT license, or in the public
-domain.  The author of this document would strongly prefer the MIT license if possible for reasons that do not need to be discussed in an
-EEP.  The author of this document will use the EEP team's choice here to guide his future section 3 statements.
+The EEP team is invited to replace this paragraph with a paragraph 
+placing this document either under the MIT license, or in the public
+domain.  The author of this document would strongly prefer the MIT 
+license if possible for reasons that do not need to be discussed in an
+EEP.  The author of this document will use the EEP team's choice here to 
+guide his future section 3 statements.
 
 If the MIT license is used, please the following text:
 
-    This document is placed under the MIT license by John Haugeland as of May 4, 2009.  The license may be found at http://scutil.com/license.html .
+    This document is placed under the MIT license by John Haugeland as of 
+    May 4, 2009.  The license may be found as the `ScUtil MIT License`_.  TODO SET LINK IN REFERENCES
 
 If the public domain is used, please use the following text:
 
-    This document is placed into the public domain by John Haugeland as of May 4, 2009.
+    This document is placed into the public domain by John Haugeland as 
+    of May 4, 2009.
 
-Thank you for your patience; I will resolve future sections 3 according to your upcoming choice.
+Thank you for your patience; I will resolve future sections 3 according 
+to your upcoming choice.
 
 
 Specification
 =============
 
-This is a proposal for an extension to the Erlang consoles and the standard library to allow some basic extension of color into the
-interactive shell and into output consoles where appropriate, while updating without affecting legacy software where appropriate.  The
-intent of this proposal is to allow a low-impact mechanism to update the standard output of existing software with color to improve
-readability, as well as to provide facilities for new software to engage complex color behavior to provide a far more visible and
-usable console experience.  The specification is geared towards theme-driven color systems rather than explicit color systems in order
-to support consoles which are uniformly customizable, but does allow explicit color as well.
+This is a proposal for an extension to the Erlang consoles and the 
+standard library to allow some basic extension of color into the 
+interactive shell and into output consoles where appropriate, while 
+updating without affecting legacy software where appropriate.  The 
+intent of this proposal is to allow a low-impact mechanism to update the 
+standard output of existing software with color to improve readability, 
+as well as to provide facilities for new software to engage complex 
+color behavior to provide a far more visible and usable console 
+experience.  The specification is geared towards theme-driven color 
+systems rather than explicit color systems in order to support consoles 
+which are uniformly customizable, but does allow explicit color as well.
 
 A brief foreward on terminology:
 
-    There is significant confusion in the discussion contemporaneous with this writing over the nature of the terms *terminal* and
-    *console*.  In particular, the erlang runtime interactive interface and the operating system command line interface are both
-    referred to as *console*, leading to significant confusion both in discussion and in thought regarding which capabilities and
-    expectations to satisfy.  To that end, I voluntarily withdraw from both terms, in favor of unused terms which I may therefore
-    specifically define, to remove said ambiguity.  This confusion also obscures in particular the role of the supporting tools for
-    said shell, most frequently what may or may not be provided by a terminal connection program (eg ssh, telnet) or by a window 
-    manager environment (eg an x-windows shell) as opposed to what is provided by the minimum required providend.  As this author 
-    comes from the C mindset, this author believes that a providend extension which is not available to the bare minimum legal 
-    environment (what a C programmer would call a "hosted environment") is inappropriate.
+    There is significant confusion in the discussion contemporaneous with 
+    this writing over the nature of the terms *terminal* and *console*.  
+    In particular, the erlang runtime interactive interface and the 
+    operating system command line interface are both referred to as 
+    *console*, leading to significant confusion both in discussion and in 
+    thought regarding which capabilities and expectations to satisfy.  To 
+    that end, I voluntarily withdraw from both terms, in favor of unused 
+    terms which I may therefore specifically define, to remove said 
+    ambiguity.  This confusion also obscures in particular the role of 
+    the supporting tools for said shell, most frequently what may or may 
+    not be provided by a terminal connection program (eg ssh, telnet) or 
+    by a window manager environment (eg an x-windows shell) as opposed to 
+    what is provided by the minimum required providend.  As this author
+    comes from the C mindset, this author believes that a providend 
+    extension which is not available to the bare minimum legal 
+    environment (what a C programmer would call a "hosted environment") 
+    is inappropriate.
 
-    I will refer to the operating system's command line interface as the *shell*.  This refers specifically to the system provided by
-    the operating system hosting the Erlang runtime.  If you're on a windows machine, using PuTTY to connect to your linux hosting box,
-    your shell is probably Bash and its requisite infrastructure.  The shell does not include the tools which come from PuTTY in this
-    example.
+    I will refer to the operating system's command line interface as the 
+    *shell*.  This refers specifically to the system provided by the 
+    operating system hosting the Erlang runtime.  If you're on a windows 
+    machine, using PuTTY to connect to your linux hosting box, your shell 
+    is probably Bash and its requisite infrastructure.  The shell does 
+    not include the tools which come from PuTTY in this example.
 
-    I will refer to the interstitial software between the shell and the user as the *client*.  In the above example, the client is
-    PuTTY.  The client is frequently a point wherein in-data encodings are intended to be parsed.  However, this author believes it is
-    important to remember that valid clients include black boxes at the other end of OS pipes, which have no capabilities of any kind
-    other than read/write buffer.  Other real-world clients include the Windows windowed text shell and the Windows C console, which
-    is frequently referred to as a "DOS console" for contextual clarity.
+    I will refer to the interstitial software between the shell and the 
+    user as the *client*.  In the above example, the client is PuTTY.  
+    The client is frequently a point wherein in-data encodings are 
+    intended to be parsed.  However, this author believes it is important 
+    to remember that valid clients include black boxes at the other end 
+    of OS pipes, which have no capabilities of any kind other than 
+    read/write buffer.  Other real-world clients include the Windows 
+    windowed text shell and the Windows C console, which is frequently 
+    referred to as a "DOS console" for contextual clarity.
 
-    I will refer to the optional interpreter interface as the *interactive*, because it sounds kind of neat.  The interactive is what
-    some people call "the erlang console", or what you avoid by starting a VM with ``-noshell``.  The reason for distinguishing the
-    interactive is a role separation: many (some might argue the most important) uses of erlang are in non-interactive circumstances.
-    As such, a coloration mechanism which affects them in any way is obviously fundamentally broken and unacceptably dangerous.
-    Therefore, partitioning topics as being particular to the interactive helps discriminate appropriate responses to said topics.
+    I will refer to the optional interpreter interface as the 
+    *interactive*, because it sounds kind of neat.  The interactive is 
+    what some people call "the erlang console", or what you avoid by 
+    starting a VM with ``-noshell``.  The reason for distinguishing the
+    interactive is a role separation: many (some might argue the most 
+    important) uses of erlang are in non-interactive circumstances. As 
+    such, a coloration mechanism which affects them in any way is 
+    obviously fundamentally broken and unacceptably dangerous. Therefore,
+    partitioning topics as being particular to the interactive helps 
+    discriminate appropriate responses to said topics.
 
 This
- 
+
 TODO
+
+
+Motivation
+==========
+
+This is just barely an alteration to Erlang.  Primarily this is the 
+provision of a new library.  There is a miniscule alteration to the 
+runtimes with a disproportionately large provision impact on a suggested 
+library service which is attached.  There is no fundamental alteration 
+to the Erlang language, only a nearly trivial extension to its provided 
+toolchain, and a relatively simple extension to its provided standard 
+library.
+
+The reason the existing interactive and standard library need to be 
+augmented is a sensible decision regarding safety.  Because the Erlang 
+VM is expected to deal with binary data, and because the Erlang 
+interactive is meant to expect to dump arbitrary terms to console during 
+crashes and other failure reports, having meaning in data sequences sent 
+to the console is dangerous.  Whereas quoting schemes are possible and 
+eventually safe, the germane observation at the time was that to make 
+character sequences which might be misinterpreted as protocol commands 
+into printable characters was a general case win.  This author agrees 
+with that choice and wishes it to be maintained.
+
+At the same time, there is significant value to color in the console.  
+Provided that the limitation minefield is satisfied (discussed below), 
+and provided that a user is able to suppress undesired color and to 
+customize the general colorset to their preferred experience and expect 
+that to propogate across dependant applications, a meaningful and 
+productive augment can be developed wherein applications may request 
+their labels be drawn in the warning color, and a mix of errors and 
+legitimate console output would be easily differentiated by their 
+appearance.  This also leads to the otherwise near-mystical ability to 
+see errors in a console flood - either your spider sense picks out that 
+there are more braces and colons than indented, or you see a whole bunch 
+of red fly past on a generally blue/green window.  The latter is somewhat 
+easier than the former, and likely to succeed when someone isn't trying.
+
+One important and often overlooked purpose of theming is the support of 
+the significant colorblind population.  The general colorblind rate is 
+1.3%, which is biassed strongly towards males (the male colorblindness 
+rate is nearly double the female).  It is likely that there are several 
+hundred or perhaps several thousand Erlang programmers who would be 
+adversely affected by a coloring system which could not accomodate their 
+form of colorblindness.  Problematically, colorblindness turns out to be 
+a bewildering array of individually rare similar conditions with distinct 
+impacts on which parts of which color channels are visible; attempting to 
+support colorblindness is a complexity challenge akin to attempting to 
+support natural languages, but has an extremely simple single case 
+implementation, meaning it's best left to the end user.  This system's 
+design explicitly accomodates colorblind users.
+
+The runtime alteration is in the implementation of the driver library, 
+which in this EEP is referred to as module fio_driver.  The fio driver 
+implements all runtime
+
+TODO
+
+The motivation is critical for EEPs that want to change the Erlang language. It should clearly explain why the existing language
+specification is inadequate to address the problem that the EEP solves. EEP submissions without sufficient motivation may be rejected
+outright.
 
 
 Rationale
