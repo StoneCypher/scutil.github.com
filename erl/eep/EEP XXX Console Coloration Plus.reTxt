@@ -14,19 +14,19 @@ Post-History: TODO (eg 30-Aug-2002, ...)
 Abstract
 ========
 
-This EEP provides a boilerplate or sample template for creating your
-own reStructuredText EEPs.  In conjunction with the content guidelines
-in EEP 1 [1]_, this should make it easy for you to conform your own
-EEPs to the format outlined below.
+Erlang would benefit from a more able console.  Among desirable improvements are the ability to use color and to invoke controls such as
+console clearing.  There are significant benefits to the color presentation of data, especially (as is commonly the case in crashing
+circumstances) during the high speed presentation of data.  A mechanism is proposed to provide the benefits of colorization in a way that
+applies to legacy software, would not break/affect legacy, which exposes more complex color control for newer applications, satisfies
+legacy (2- and 16-color) terminal color depths, and allows the use of more complex color palettes without fear of polluting historic
+systems with arbitrary control codes.  Care is taken in this mechanism to not reinvent the wheel; this mechanism makes the use of NCurses,
+termcap or similar libraries possible without limiting the color behavior to platforms supporting those libraries.
 
-Note: if you are reading this EEP via the web, you should first grab
-the text (reStructuredText) source of this EEP in order to complete
-the steps below.  **DO NOT USE THE HTML FILE AS YOUR TEMPLATE!**
+The described strategy has a second benefit, in allowing trivial user themes without effort by the application programmer.  This theming
+allows semantic or context driven coloration, and supportins CSS-like implicit/voluntary explicit chained fallback to defaults.  This
+mechanism allows productive expansion of the theme topic list without concern regarding conflicts in terminology.
 
-If you would prefer not to use markup in your EEP, please see EEP 2,
-"Sample Plaintext EEP Template" [2]_.
-
-This EEP is a slightly revised version of PEP 12 [3]_.
+Finally, the performance impact of this strategy is negligable.
 
 
 Rationale
