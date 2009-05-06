@@ -12,7 +12,7 @@
 %% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Website is</span><a href="http://scutil.com/">http://scutil.com/</a></span>
 %% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Author's Website</span><a href="http://fullof.bs">Full of BS</a></span>
 %% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">This library is released under the</span><a href="http://scutil.com/license.html">MIT License</a></span>
-%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date: 2009-04-05 16:16:32 -0600 (Sun, 05 Apr 2009) $</tt></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date$</tt></span>
 
 %% @todo add @see cross-references between related functions
 %% @todo add thanks tables and cross-references
@@ -61,24 +61,6 @@
       by_distance/2
 
 ] ).
-
-
-
-
-% todo
-
-% group_by_distance(CenterList, [],           Work) -> lists:reverse(Work);
-% group_by_distance(CenterList, [Coord|RemC], Work) ->
-
-%   zip_n([ [ {CoordId,CenterId,euclidean_distance(Coord, Center)} || {CoordId,Coord} <- lists:zip(lists:seq(1,length(CoordList)),CoordList) ] || {CenterId,Center} <- lists:zip(lists:seq(1,length(CenterList)),CenterList) ]).
-
-
-
-
-
-% todo
-
-% k_means(CoordList) when is_list(CoordList) ->
 
 
 
@@ -147,3 +129,12 @@ by_distance(Centers, Points) when is_list(Centers), is_list(Points) ->
     end,
 
     [ Grab(Center) || Center <- Centers ].
+
+
+
+
+
+%% @since Version 347
+
+k_means(KCount, ItemList) when is_integer(KCount), is_list(CoordList) ->
+

@@ -41,6 +41,8 @@
 
     is_destroyed/1,
 
+    to_list/1,
+
 %%%%%%%%%%%%%
 
     cq_loop/4
@@ -54,6 +56,10 @@
 cq_loop(Position, Depth, Data, Len) ->
 
     receive
+
+        { Sender, to_list } ->
+            Sender ! { error, "Not yet implemented" },
+            cq_loop(Position, Depth, Data, Len);
 
         { Sender, read } ->
             MNext = Position + 1,
@@ -180,7 +186,6 @@ peek({sc_cq,Pid}) ->
 
 peek(At, {sc_cq,Pid}) ->
 
-
     case is_process_alive(Pid) of
 
         true ->
@@ -208,7 +213,6 @@ peek(At, {sc_cq,Pid}) ->
 
 write(Value, {sc_cq,Pid}) ->
 
-
     case is_process_alive(Pid) of
 
         true ->
@@ -234,8 +238,34 @@ write(Value, {sc_cq,Pid}) ->
 
 
 
-read({sc_cq,Pid}) ->
+to_list({sc_cq,Pid}) ->
 
+    case is_process_alive(Pid) of
+
+        true ->
+
+            Pid ! { self(), to_list },
+            receive
+
+                { cq_ok, cq_to_list, V } ->
+                    V;
+
+                { error, E } ->
+                    { error, E }
+
+            end;
+
+        false ->
+
+            { error, "Process is dead." }
+
+    end.
+
+
+
+
+
+read({sc_cq,Pid}) ->
 
     case is_process_alive(Pid) of
 
