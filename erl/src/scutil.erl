@@ -269,6 +269,8 @@
 
 -author("John Haugeland <stonecypher@gmail.com>").
 -webpage("http://scutil.com/").
+-twitter("ScUtil").
+-twitter("JohnHaugeland").
 -license( {mit_license, "http://scutil.com/license.html"} ).
 
 -publicsvn("svn://crunchyd.com/scutil/").
