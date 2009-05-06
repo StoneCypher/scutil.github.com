@@ -3,6 +3,7 @@
 
 -author("John Haugeland <stonecypher@gmail.com>").
 -webpage("http://scutil.com/").
+-author_blog("http://fullof.bs/").
 -twitter("ScUtil").
 -twitter("JohnHaugeland").
 -license( {mit_license, "http://scutil.com/license.html"} ).
