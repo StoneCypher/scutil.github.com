@@ -51,23 +51,57 @@
 
 
 
-cq_loop(Position, FinalPos, Data, Len) ->
+cq_loop(Position, Depth, Data, Len) ->
 
     receive
 
         { Sender, read } ->
-            { error, not_yet_implemented };
+            MNext = Position + 1,
+            Next  = if
+                MNext > Len ->
+                    1;
+                true ->
+                    MNext
+            end,
+            Sender ! { cq_value, element(Position, Data) },
+            cq_loop(MNext, Depth-1, Data, Len);
 
         { Sender, write, Value } ->
-            { error, not_yet_implemented };
+
+            if
+                Depth == Len ->
+
+                    MNext = Position + 1,
+                    Next  = if
+                        MNext > Len ->
+                            1;
+                        true ->
+                            MNext
+                    end,
+                    Sender ! cq_ok,
+                    cq_loop(Next, Depth, setelement(Position, Data, Value), Len);
+
+                true ->
+
+                    MPos = Position + Depth,
+                    Pos  = if
+                        MPos > Len ->
+                            MPos rem len;
+                        true ->
+                            MPos
+                    end,
+                    Sender ! cq_ok,
+                    cq_loop(Position, Depth+1, setelement(Pos, Data, Value), Len)
+
+            end;
 
         { Sender, peek } ->
             Sender ! { cq_value, element(Position, Data) },
-            cq_loop(Position, FinalPos, Data, Len);
+            cq_loop(Position, Depth, Data, Len);
 
         { Sender, peek, At } ->
             Sender ! { cq_value, element(At, Data) },
-            cq_loop(Position, FinalPos, Data, Len);
+            cq_loop(Position, Depth, Data, Len);
 
         { Sender, terminate } ->
             Sender ! { cq_ok, cq_terminating },
