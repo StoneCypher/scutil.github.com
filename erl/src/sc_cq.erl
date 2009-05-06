@@ -26,7 +26,7 @@
 -export( [
 
     create/1,
-%      create/2,
+      create/2,
 
 %    write/2,
 
@@ -40,9 +40,40 @@
 
 
 
+
 create(Size) ->
 
     list_to_tuple( [sc_cq, 1, list_to_tuple( lists:duplicate(Size,0) )] ).
+
+
+
+
+
+create(Size, InitialValues) when is_tuple(InitialValues), size(InitialValues) == Size ->
+
+    list_to_tuple( [sc_cq, 1, InitialValues] );
+
+
+
+
+
+% create(Size, InitialValues) when is_tuple(InitialValues), size(InitialValues) < Size ->
+
+%     list_to_tuple( [sc_cq, 1, list_to_tuple( lists:duplicate(Size,0) )] );
+
+
+
+
+
+create(Size, InitialValues) when is_tuple(InitialValues) ->
+
+    { error, "Initial values supplied are too many for the queue size specified." }.
+
+
+
+
+
+% create(Size, InitialValues) when is_list(InitialValues)
 
 
 
