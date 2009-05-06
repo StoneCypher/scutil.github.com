@@ -66,7 +66,8 @@ cq_loop(Position, FinalPos, Data, Len) ->
             cq_loop(Position, FinalPos, Data, Len);
 
         { Sender, peek, At } ->
-            { error, not_yet_implemented };
+            Sender ! { cq_value, element(At, Data) },
+            cq_loop(Position, FinalPos, Data, Len);
 
         { Sender, terminate } ->
             Sender ! { cq_ok, cq_terminating },
