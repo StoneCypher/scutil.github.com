@@ -28,11 +28,11 @@
     create/1,
       create/2,
 
-%    write/2,
+    write/2,
 
-%    read/1,
+    read/1,
 
-%    peek/1,
+    peek/1,
       peek/2,
 
     worker_process_of/1,
@@ -47,7 +47,7 @@
 
 
 
-cq_loop(Position, Data) ->
+cq_loop(Position, LastPos, Data) ->
 
     receive
 
@@ -83,7 +83,7 @@ create(Size) ->
 
 create(Size, InitialValues) when is_tuple(InitialValues), size(InitialValues) == Size ->
 
-    {sc_cq, lists:spawn(?MODULE, cq_loop, [1, list_to_tuple( lists:duplicate(Size,0) )] )};
+    {sc_cq, spawn(?MODULE, cq_loop, [1, 0, list_to_tuple( lists:duplicate(Size,0) )] )};
 
 
 
@@ -116,7 +116,41 @@ peek(At, {sc_cq,Pid}) ->
     Pid ! { self(), peek, At },
     receive
 
-        { value, V } ->
+        { cq_value, V } ->
+            { value, V };
+
+        { error, E } ->
+            { error, E }
+
+    end.
+
+
+
+
+
+write(Value, {sc_cq,Pid}) ->
+
+    Pid ! { self(), write, Value },
+    receive
+
+        cq_ok ->
+            ok;
+
+        { error, E } ->
+            { error, E }
+
+    end.
+
+
+
+
+
+read({sc_cq,Pid}) ->
+
+    Pid ! { self(), read },
+    receive
+
+        { cq_value, V } ->
             { value, V };
 
         { error, E } ->
