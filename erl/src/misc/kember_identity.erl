@@ -119,4 +119,4 @@ start() ->
     {A,B,C} = now(),
     random:seed(A,B,C),
 
-    search_indefinately().
+    { ok, spawn(?MODULE, search_indefinately, []) }.
