@@ -111,6 +111,23 @@ create(Size, InitialValues) when is_tuple(InitialValues) ->
 
 
 
+peek({sc_cq,Pid}) ->
+
+    Pid ! { self(), peek },
+    receive
+
+        { cq_value, V } ->
+            { value, V };
+
+        { error, E } ->
+            { error, E }
+
+    end.
+
+
+
+
+
 peek(At, {sc_cq,Pid}) ->
 
     Pid ! { self(), peek, At },
