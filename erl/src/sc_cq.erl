@@ -33,7 +33,13 @@
 %    read/1,
 
 %    peek/1,
-      peek/2
+      peek/2,
+
+    worker_process_of/1,
+
+%%%%%%%%%%%%%
+
+    cq_loop/2
 
 ] ).
 
@@ -41,9 +47,35 @@
 
 
 
+cq_loop(Position, Data) ->
+
+    receive
+
+        { Sender, read } ->
+            { error, not_yet_implemented };
+
+        { Sender, write, Value } ->
+            { error, not_yet_implemented };
+
+        { Sender, peek } ->
+            { error, not_yet_implemented };
+
+        { Sender, peek, At } ->
+            { error, not_yet_implemented };
+
+        { Sender, terminate } ->
+            Sender ! { ok, cq_terminating },
+            ok
+
+    end.
+
+
+
+
+
 create(Size) ->
 
-    list_to_tuple( [sc_cq, 1, list_to_tuple( lists:duplicate(Size,0) )] ).
+    create(Size, list_to_tuple( lists:duplicate(Size,0) )).
 
 
 
@@ -51,7 +83,7 @@ create(Size) ->
 
 create(Size, InitialValues) when is_tuple(InitialValues), size(InitialValues) == Size ->
 
-    list_to_tuple( [sc_cq, 1, InitialValues] );
+    {sc_cq, lists:spawn(?MODULE, cq_loop, [1, list_to_tuple( lists:duplicate(Size,0) )] )};
 
 
 
@@ -79,6 +111,23 @@ create(Size, InitialValues) when is_tuple(InitialValues) ->
 
 
 
-peek(At, {sc_cq,_,Queue}) when is_tuple(Queue) ->
+peek(At, {sc_cq,Pid}) ->
 
-    element(At, Queue).
+    Pid ! { self(), peek, At },
+    receive
+
+        { value, V } ->
+            { value, V };
+
+        { error, E } ->
+            { error, E }
+
+    end.
+
+
+
+
+
+worker_process_of({sc_cq, Pid}) ->
+
+    Pid.
