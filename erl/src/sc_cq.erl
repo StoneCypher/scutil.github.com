@@ -88,7 +88,7 @@ create(Size) ->
 
 create(Size, InitialValues) when is_tuple(InitialValues), size(InitialValues) == Size ->
 
-    {sc_cq, spawn(?MODULE, cq_loop, [1, 0, list_to_tuple( lists:duplicate(Size,0) ), Size] )};
+    {sc_cq, spawn(?MODULE, cq_loop, [1, 0, InitialValues, Size] )};
 
 
 
