@@ -16,8 +16,8 @@
 
 -description("Efficient circular queue.").
 
--testerl_export( { [], scutil_testsuite } ).
--library_requirements( [ {dq,141}, {testerl,16} ] ).
+-testerl_export( { [], sc_cq_testsuite } ).
+-library_requirements( [] ).
 
 
 
@@ -33,7 +33,7 @@
 %    read/1,
 
 %    peek/1,
-%      peek/2
+      peek/2
 
 ] ).
 
@@ -43,3 +43,11 @@
 create(Size) ->
 
     list_to_tuple( [sc_cq, 1, list_to_tuple( lists:duplicate(Size,0) )] ).
+
+
+
+
+
+peek(At, {sc_cq,_,Queue}) when is_tuple(Queue) ->
+
+    element(At, Queue).
