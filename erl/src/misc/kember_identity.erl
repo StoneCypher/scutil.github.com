@@ -38,8 +38,8 @@
 
 
 
-
-% Must issue crypto:start() before using test_kember_identity
+% Each KI process will take roughly 1/N of your CPU, where N is your core count.
+% Want to max out a quad core?  Start four times.
 
 
 
@@ -82,7 +82,7 @@ search_n(N) ->
 
 gen_rand_input() ->
 
-    [ random:uniform(256) - 1 || _Character <- lists:seq(1,random:uniform(20)) ].
+    [ random:uniform(256) - 1 || _Character <- lists:seq(1,16) ].
 
 
 
