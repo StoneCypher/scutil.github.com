@@ -39,6 +39,8 @@
 
     worker_process_of/1,
 
+    is_destroyed/1,
+
 %%%%%%%%%%%%%
 
     cq_loop/4
@@ -49,7 +51,7 @@
 
 
 
-cq_loop(Position, LastPos, Data, Len) ->
+cq_loop(Position, FinalPos, Data, Len) ->
 
     receive
 
@@ -60,7 +62,8 @@ cq_loop(Position, LastPos, Data, Len) ->
             { error, not_yet_implemented };
 
         { Sender, peek } ->
-            { error, not_yet_implemented };
+            Sender ! { cq_value, element(Position, Data) },
+            cq_loop(Position, FinalPos, Data, Len);
 
         { Sender, peek, At } ->
             { error, not_yet_implemented };
@@ -115,14 +118,24 @@ create(_Size, InitialValues) when is_tuple(InitialValues) ->
 
 peek({sc_cq,Pid}) ->
 
-    Pid ! { self(), peek },
-    receive
+    case is_process_alive(Pid) of
 
-        { cq_value, V } ->
-            { value, V };
+        true ->
 
-        { error, E } ->
-            { error, E }
+            Pid ! { self(), peek },
+            receive
+
+                { cq_value, V } ->
+                    { value, V };
+
+                { error, E } ->
+                    { error, E }
+
+            end;
+
+        false ->
+
+            { error, "Process is dead." }
 
     end.
 
@@ -132,14 +145,25 @@ peek({sc_cq,Pid}) ->
 
 peek(At, {sc_cq,Pid}) ->
 
-    Pid ! { self(), peek, At },
-    receive
 
-        { cq_value, V } ->
-            { value, V };
+    case is_process_alive(Pid) of
 
-        { error, E } ->
-            { error, E }
+        true ->
+
+            Pid ! { self(), peek, At },
+            receive
+
+                { cq_value, V } ->
+                    { value, V };
+
+                { error, E } ->
+                    { error, E }
+
+            end;
+
+        false ->
+
+            { error, "Process is dead." }
 
     end.
 
@@ -149,14 +173,25 @@ peek(At, {sc_cq,Pid}) ->
 
 write(Value, {sc_cq,Pid}) ->
 
-    Pid ! { self(), write, Value },
-    receive
 
-        cq_ok ->
-            ok;
+    case is_process_alive(Pid) of
 
-        { error, E } ->
-            { error, E }
+        true ->
+
+            Pid ! { self(), write, Value },
+            receive
+
+                cq_ok ->
+                    ok;
+
+                { error, E } ->
+                    { error, E }
+
+            end;
+
+        false ->
+
+            { error, "Process is dead." }
 
     end.
 
@@ -166,14 +201,25 @@ write(Value, {sc_cq,Pid}) ->
 
 read({sc_cq,Pid}) ->
 
-    Pid ! { self(), read },
-    receive
 
-        { cq_value, V } ->
-            { value, V };
+    case is_process_alive(Pid) of
 
-        { error, E } ->
-            { error, E }
+        true ->
+
+            Pid ! { self(), read },
+            receive
+
+                { cq_value, V } ->
+                    { value, V };
+
+                { error, E } ->
+                    { error, E }
+
+            end;
+
+        false ->
+
+            { error, "Process is dead." }
 
     end.
 
@@ -201,6 +247,22 @@ destroy({sc_cq,Pid}) ->
         false ->
 
             { error, "Process is dead" }
+
+    end.
+
+
+
+
+
+is_destroyed({sc_cq,Pid}) ->
+
+    case is_process_alive(Pid) of
+
+        true ->
+            false;
+
+        false ->
+            true
 
     end.
 
