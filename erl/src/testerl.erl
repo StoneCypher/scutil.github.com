@@ -3,6 +3,7 @@
 
 -author("John Haugeland - stonecypher@gmail.com").
 -webpage("http://testerl.com/").
+-twitter("JohnHaugeland").
 -license( {mit_license, "http://crunchyd.com/testerl/license.html"} ).
 
 -publicsvn("svn://crunchyd.com/testerl/").
