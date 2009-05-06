@@ -35,11 +35,13 @@
     peek/1,
       peek/2,
 
+    destroy/1,
+
     worker_process_of/1,
 
 %%%%%%%%%%%%%
 
-    cq_loop/2
+    cq_loop/4
 
 ] ).
 
@@ -47,7 +49,7 @@
 
 
 
-cq_loop(Position, LastPos, Data) ->
+cq_loop(Position, LastPos, Data, Len) ->
 
     receive
 
@@ -64,7 +66,7 @@ cq_loop(Position, LastPos, Data) ->
             { error, not_yet_implemented };
 
         { Sender, terminate } ->
-            Sender ! { ok, cq_terminating },
+            Sender ! { cq_ok, cq_terminating },
             ok
 
     end.
@@ -83,7 +85,7 @@ create(Size) ->
 
 create(Size, InitialValues) when is_tuple(InitialValues), size(InitialValues) == Size ->
 
-    {sc_cq, spawn(?MODULE, cq_loop, [1, 0, list_to_tuple( lists:duplicate(Size,0) )] )};
+    {sc_cq, spawn(?MODULE, cq_loop, [1, 0, list_to_tuple( lists:duplicate(Size,0) ), Size] )};
 
 
 
@@ -97,7 +99,7 @@ create(Size, InitialValues) when is_tuple(InitialValues), size(InitialValues) ==
 
 
 
-create(Size, InitialValues) when is_tuple(InitialValues) ->
+create(_Size, InitialValues) when is_tuple(InitialValues) ->
 
     { error, "Initial values supplied are too many for the queue size specified." }.
 
@@ -172,6 +174,33 @@ read({sc_cq,Pid}) ->
 
         { error, E } ->
             { error, E }
+
+    end.
+
+
+
+
+
+destroy({sc_cq,Pid}) ->
+
+    case is_process_alive(Pid) of
+
+        true ->
+
+            Pid ! { self(), terminate },
+            receive
+
+                { cq_ok, cq_terminating } ->
+                    ok;
+
+                { error, E } ->
+                    { error, E }
+
+            end;
+
+        false ->
+
+            { error, "Process is dead" }
 
     end.
 
