@@ -161,34 +161,34 @@ with that choice and wishes it to be maintained.
 
 At the same time, there is significant value to color in the console.  
 Provided that the limitation minefield is satisfied (discussed below), 
-and provided that a user is able to suppress undesired color and to 
-customize the general colorset to their preferred experience and expect 
-that to propogate across dependant applications, a meaningful and 
-productive augment can be developed wherein applications may request 
-their labels be drawn in the warning color, and a mix of errors and 
-legitimate console output would be easily differentiated by their 
-appearance.  This also leads to the otherwise near-mystical ability to 
-see errors in a console flood - either your spider sense picks out that 
-there are more braces and colons than indented, or you see a whole bunch 
-of red fly past on a generally blue/green window.  The latter is somewhat 
+and provided that a user is able to suppress undesired color and to
+customize the general colorset to their preferred experience and expect
+that to propogate across dependant applications, a meaningful and
+productive augment can be developed wherein applications may request
+their labels be drawn in the warning color, and a mix of errors and
+legitimate console output would be easily differentiated by their
+appearance.  This also leads to the otherwise near-mystical ability to
+see errors in a console flood - either your spider sense picks out that
+there are more braces and colons than indented, or you see a whole bunch
+of red fly past on a generally blue/green window.  The latter is somewhat
 easier than the former, and likely to succeed when someone isn't trying.
 
-One important and often overlooked purpose of theming is the support of 
-the significant colorblind population.  The general colorblind rate is 
-1.3%, which is biassed strongly towards males (the male colorblindness 
-rate is nearly double the female).  It is likely that there are several 
-hundred or perhaps several thousand Erlang programmers who would be 
-adversely affected by a coloring system which could not accomodate their 
-form of colorblindness.  Problematically, colorblindness turns out to be 
-a bewildering array of individually rare similar conditions with distinct 
-impacts on which parts of which color channels are visible; attempting to 
-support colorblindness is a complexity challenge akin to attempting to 
-support natural languages, but has an extremely simple single case 
-implementation, meaning it's best left to the end user.  This system's 
+One important and often overlooked purpose of theming is the support of
+the significant colorblind population.  The general colorblind rate is
+1.3%, which is biassed strongly towards males (the male colorblindness
+rate is nearly double the female).  It is likely that there are several
+hundred or perhaps several thousand Erlang programmers who would be
+adversely affected by a coloring system which could not accomodate their
+form of colorblindness.  Problematically, colorblindness turns out to be
+a bewildering array of individually rare similar conditions with distinct
+impacts on which parts of which color channels are visible; attempting to
+support colorblindness is a complexity challenge akin to attempting to
+support natural languages, but has an extremely simple single case
+implementation, meaning it's best left to the end user.  This system's
 design explicitly accomodates colorblind users.
 
-The runtime alteration is in the implementation of the driver library, 
-which in this EEP is referred to as module fio_driver.  The fio driver 
+The runtime alteration is in the implementation of the driver library,
+which in this EEP is referred to as module fio_driver.  The fio driver
 implements all runtime
 
 TODO
@@ -201,12 +201,137 @@ outright.
 Rationale
 =========
 
-ReStructuredText is offered as an alternative to plaintext EEPs, to
-allow EEP authors more functionality and expressivity, while
-maintaining easy readability in the source text.  The processed HTML
-form makes the functionality accessible to readers: live hyperlinks,
-styled text, tables, images, and automatic tables of contents, among
-other advantages.
+The primary underlying rationale for this mechanism is that the portion 
+of the Erlang environment that is typically the console is largely 
+undefined with respect to the application running within it.  In some 
+ways this is greatly desirable: being aware of the console allows people 
+to implement extra behavior by knowing what console they're talking to, 
+and hacking around things that they know about that console to get 
+behaviors that aren't available in portable Erlang.  Keeping that ability 
+out of a programmer's hands prevents a subtle form of code decay which 
+plagues many modern applications.
+
+Another significant concern is the major variability in the nature of 
+real world Erlang consoles: Erlang runs, among other places, on embedded 
+hardware (the canonical but hardly the only example being the AX 301 
+family of phone hardware), over monochrome legacy terminals and through 
+OS pipes to any number of logging systems.  Any approach to improved 
+console capability which caused significant problems for those 
+interfaces, or which would require intermediary applications and/or 
+drivers, would be considered a failure, whether the result of lack of 
+such is injected noise or lost text.  If only formatting is lost, the 
+approach is considered a valid capability reduction (because it's not 
+like you're going to require color support on a monochrome device, 
+right?)
+
+Of significant concern in this design are several points:
+
+  - The ability to present correctly on limited devices
+
+  - The ability to provide true color on supporting devices
+
+  - Zero impact on legacy code either in structure or functionality
+
+    - Includes things that shouldn't matter in theory but often do in 
+      practice, such as polluting the process dictionary
+
+  - Applicability to legacy software: there are meaningful color 
+    improvements to be made for software designed for mono
+
+  - User configurability: color schemes are like pizza toppings, everyone 
+    wants something different
+
+    - Themed configurability: the user should be able to provide 
+      categoric rules
+
+    - Themed extensibility: the author of this EEP does not pretend to 
+      foresee every valid theme topic
+
+    - Theme sharing: some people are better at color than others, and of 
+      those, many like to share
+
+  - Performance impact: there shouldn't be much of one
+
+At this time, community consensus has not yet been established.  Because
+of the frequently acrimonious nature of bikeshed topics, in combination
+with the varying set of viewpoints about what is and what is not desirable 
+in a coloration system, it seemed best to simply write the EEP and let 
+consensus be built (or destroyed) around a longer exposition of an example 
+implementation.
+
+One point does have consensus: many programmers strongly desire color, for 
+a variety of different reasons.  Several people have gone as far as to 
+experiment with altering the Windows console to get it.  This EEP author 
+believes that there is consensus that some direction towards official 
+capability would be beneficial, though the nature of such direction is as 
+yet under debate.
+
+
+
+One known dissenting viewpoint is that a console control mechanism for 
+color and cursor behavior should be built on existing ANSI X.364 or VT 
+terminal codes.  This EEP does not agree with that viewpoint, on several 
+grounds:
+
+  * The current consoles consist of at least the Unix shell console, the 
+    DOS shell console and the Windows text window.  Of these, neither the 
+    second nor the third have support for VT codes, which is displayed by 
+    manually emitting them with io:format().  The Unix shell console does 
+    not have native support for ANSI/VT, though the terminal program used 
+    to log in remotely to a UNIX machine frequently does, as frequently 
+    do the window shells in many X environments.  However, given that 
+    those are by no means practically universal, much less required to be 
+    present, and given that this is problematic for embedded and OS pipe 
+    logged implementations due to the ANSI chaff that would be introduced, 
+    the author of this EEP finds the ANSI/VT approach unpallatable.
+
+  * Significant engineering would be required to introduce ansi/vt support 
+    into either the Windows or the DOS erlang console.  The author of this 
+    EEP believes that engineering would be significantly more work than the 
+    approach in this proposal.  No amount of engineering would repair this 
+    for embedded or pipe parsed/logged circumstances.
+
+  * This limits us to the archaic and generally undesirable properties of 
+    1970s text terminals.
+
+  * This does not appear to offer any significant advantages over the 
+    mechanism described herein.  Cited is ease of implementation due to 
+    NCurses / termcap's availabilty on Unix, but since that's almost 
+    certainly how the Unix console's implementation of this mechanism would 
+    be made anyway, that's merely observation that it would be slightly 
+    easier to cut away everyone but those to whom NCurses/termcap apply and 
+    go with that.  The author of this EEP finds the amount of work involved 
+    in a proper isolation essentially negligable (the example implementation 
+    below took only three hours), and the benefits both with regards to the 
+    clarity of dependant code and the strict maintenance of backwards 
+    compatability entirely worth the already completed effort.
+
+  * A stub driver for platforms which have not yet implemented color support 
+    is the same for every platform, provided below, and is only a handful of 
+    lines of code.  Platform capability can be progressively expanded, 
+    queried by knowledgable applications, and ignored by legacy and
+    disinterested applications.
+
+Another dissenting viewpoint is that the console itself should be responsible 
+for a significantly more lightweight implementation of coloration, which 
+(similar to the current Windows implementation) simply provides a fixed set 
+of circumstantial colors.  This approach has two significant benefits: it's 
+even easier to implement, and someone already did it.  Detriments include the 
+inability to provide applications any voluntary access to color, or other 
+console features such as clearing or text attributes.
+
+TODO get links to the guy who haxed werl to show color prompts
+
+The person who has already done this did so quite some time ago, and the
+author of this EEP is unaware of any point at which that person was asked 
+their opinion of source-available coloration.  As such, this document cannot 
+state that person's position on these alternative approaches.  This author 
+would like to believe his approach would be appreciable to the other 
+Erlanger, on grounds that it explicitly supports all of the features the 
+other Erlanger's approach was meant to create, as well as significant other 
+capability, without requiring any work above and beyond normal code (just 
+as the other Erlanger's approach.)  However, only that person speaking up 
+will create clarity.
 
 
 How to Use This Template
@@ -283,7 +408,7 @@ directions below.
 
       Post-History: 14-Aug-2001, 03-Sept-2001
 
-  You must manually add new dates and check them in.  If you don't      
+  You must manually add new dates and check them in.  If you don't
   have check-in privileges, send your changes to the EEP editors.
 
 - Add a Replaces header if your EEP obsoletes an earlier EEP.  The
