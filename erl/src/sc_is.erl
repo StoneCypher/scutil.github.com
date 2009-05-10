@@ -52,7 +52,9 @@
 
 
 -export( [
-    even_or_odd/1
+    even_or_odd/1,
+    unique_list/1,
+    sorted_list/1
 ] ).
 
 
@@ -75,3 +77,54 @@ even_or_odd(Num) when is_integer(Num), Num band 1 == 0 ->
 even_or_odd(Num) when is_integer(Num) ->
 
     odd.
+
+
+
+
+
+%% @spec unique_list(List::list()) -> true | false
+
+%% @doc Returns true if the list is unique; false otherwise.  List uniqueness is defined as whether any member of the list compares equally to any other member; deep list inspection is not performed.  Comparison is type-safe. ```2> sc_is:unique_list([1,2,3]).
+%% true
+%%
+%% 2> sc_is:unique_list([1,2,3,1]).
+%% false
+%%
+%% 3> sc_is:unique_list([1,2,3,{1}]).
+%% true
+%%
+%% 4> sc_is:unique_list([1,2,3,[1]]).
+%% true
+%%
+%% 5> sc_is:unique_list([1,2,3,[1],[1]]).
+%% false'''
+
+%% @since Version 372
+
+unique_list(List) ->
+
+    length(lists:usort(List)) == length(List).
+
+
+
+
+
+%% @spec sorted_list(List::list()) -> true | false
+
+%% @doc Returns true if the list is sorted; false otherwise.  List sortedness is typesafe, and defined equivalently to how defined by the language and `lists:sort()'. ```1> sc_is:sorted_list([1,2,3]).
+%% true
+%%
+%% 2> sc_is:sorted_list([1,2,3,1]).
+%% false
+%%
+%% 3> sc_is:sorted_list([1,2,3,false]).
+%% true
+%%
+%% 4> sc_is:sorted_list([false,1,2,3]).
+%% false'''
+
+%% @since Version 372
+
+sorted_list(List) ->
+
+    lists:sort(List) == List.
