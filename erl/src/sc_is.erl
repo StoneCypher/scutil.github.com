@@ -125,6 +125,32 @@ unique_list(List) ->
 
 %% @since Version 372
 
-sorted_list(List) ->
+sorted_list([]) ->
 
-    lists:sort(List) == List.
+    true;
+
+
+
+sorted_list([Head|Rem]) ->
+
+    sorted_list_worker(Rem, Head).
+
+
+
+
+
+sorted_list_worker([], _Last) ->
+
+    true;
+
+
+
+sorted_list_worker([Cur|Rem], Last) when Cur >= Last ->
+
+    sorted_list_worker(Rem, Cur);
+
+
+
+sorted_list_worker([_Cur|_Rem], _Last) ->
+
+    false.
