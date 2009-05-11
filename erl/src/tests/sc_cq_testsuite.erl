@@ -16,12 +16,22 @@
 
 -description("Testset for sc_cq (circular queue)").
 
+-library_requirements([
+    {scutil,  161},
+    {testerl, 66}
+]).
+
 
 
 
 
 -testerl_export( this_is_a_testsuite ).   %  no_testsuite, this_is_a_testsuite or { [], foo_testsuite }
--library_requirements( [] ).
+-testerl_sufficient_for(0).
+
+-testerl_bindings([
+    { {sc_cq,peek,1}, test_peek_1 },
+    { {sc_cq,peek,2}, test_peek_2 }
+]).
 
 
 
@@ -35,7 +45,8 @@
 
 
 
-test_read_write() ->
+test_peek() ->
+
 
     Q  = sc_cq:create(5,{1,2,3,4,5}),
 
@@ -49,7 +60,14 @@ test_read_write() ->
     T3 = testerl:must_equal("sc_cq:peek/1 post-write", fun sc_cq:peek/1, [Q],   {value,aa}),
     T4 = testerl:must_equal("sc_cq:peek/2 post-write", fun sc_cq:peek/2, [3,Q], {value,ca}),
 
-    [ T1, T2, T3, T4 ].
+
+    R  = sc_cq:create(5),
+
+    T5 = testerl:must_equal("sc_cq:peek/1 on empty",   fun sc_cq:peek/1, [R],   empty),
+    T6 = testerl:must_equal("sc_cq:peek/2 on empty",   fun sc_cq:peek/2, [3,R], empty),
+
+
+    [ T1, T2, T3, T4, T5, T6 ].
 
 
 
@@ -57,5 +75,7 @@ test_read_write() ->
 
 run(_Hooks, _Options) ->
 
-    [   testerl:assemble("Read and Write", test_read_write())
+    testerl:bindings() ++
+
+    [   testerl:assemble("Peek/1,2", test_peek())
     ].
