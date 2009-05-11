@@ -42,6 +42,7 @@
     is_destroyed/1,
 
     to_list/1,
+    to_tuple/1,
 
 %%%%%%%%%%%%%
 
@@ -53,12 +54,14 @@
 
 
 
+%% @since Version 364
+
 cq_loop(Position, Depth, Data, Len) ->
 
     receive
 
-        { Sender, to_list } ->
-            Sender ! { error, "Not yet implemented" },
+        { Sender, to_tuple } ->
+            Sender ! { error, {"Not yet implemented", Data} },
             cq_loop(Position, Depth, Data, Len);
 
         { Sender, read } ->
@@ -119,6 +122,8 @@ cq_loop(Position, Depth, Data, Len) ->
 
 
 
+%% @since Version 364
+
 create(Size) ->
 
     create(Size, list_to_tuple( lists:duplicate(Size,0) )).
@@ -126,6 +131,8 @@ create(Size) ->
 
 
 
+
+%% @since Version 364
 
 create(Size, InitialValues) when is_tuple(InitialValues), size(InitialValues) == Size ->
 
@@ -143,6 +150,8 @@ create(Size, InitialValues) when is_tuple(InitialValues), size(InitialValues) ==
 
 
 
+%% @since Version 364
+
 create(_Size, InitialValues) when is_tuple(InitialValues) ->
 
     { error, "Initial values supplied are too many for the queue size specified." }.
@@ -156,6 +165,8 @@ create(_Size, InitialValues) when is_tuple(InitialValues) ->
 
 
 
+
+%% @since Version 364
 
 peek({sc_cq,Pid}) ->
 
@@ -184,6 +195,8 @@ peek({sc_cq,Pid}) ->
 
 
 
+%% @since Version 364
+
 peek(At, {sc_cq,Pid}) ->
 
     case is_process_alive(Pid) of
@@ -210,6 +223,8 @@ peek(At, {sc_cq,Pid}) ->
 
 
 
+
+%% @since Version 364
 
 write(Value, {sc_cq,Pid}) ->
 
@@ -238,13 +253,25 @@ write(Value, {sc_cq,Pid}) ->
 
 
 
+%% @since Version 375
+
 to_list({sc_cq,Pid}) ->
+
+    tuple_to_list(to_tuple({sc_cq,Pid})).
+
+
+
+
+
+%% @since Version 375
+
+to_tuple({sc_cq,Pid}) ->
 
     case is_process_alive(Pid) of
 
         true ->
 
-            Pid ! { self(), to_list },
+            Pid ! { self(), to_tuple },
             receive
 
                 { cq_ok, cq_to_list, V } ->

@@ -3,7 +3,8 @@
 
 -author("John Haugeland - stonecypher@gmail.com").
 -webpage("http://scutil.com/").
--twitter("JohnHaugeland").
+-twitter({"JohnHaugeland", "http://twitter.com/JohnHaugeland"}).
+-twitter({"ScUtil", "http://twitter.com/ScUtil"}).
 -license( {mit_license, "http://scutil.com/license.html"} ).
 
 -publicsvn("svn://crunchyd.com/scutil/").
@@ -38,8 +39,38 @@
 
 
 -export( [
-    run/2
+
+    run/2,
+
+    test_peek_1/0,
+    test_peek_2/0
+
 ] ).
+
+
+
+
+
+test_peek_1() ->
+
+    InitiallyEmpty = sc_cq:create(5),
+    T1             = testerl:must_equal("initially empty peek/1",            fun sc_cq:peek/1, [InitiallyEmpty], empty),
+
+    sc_cq:write(a, InitiallyEmpty),
+    T2             = testerl:must_equal("initially empty post-write peek/1", fun sc_cq:peek/1, [InitiallyEmpty], {value,a}),
+
+    [ sc_cq:write(X, InitiallyEmpty) || X <- [b,c,d,e,f] ],
+    T3             = testerl:must_equal("initially empty post-wrap peek/1",  fun sc_cq:peek/1, [InitiallyEmpty], {value,b}),
+
+    [T1, T2, T3].
+
+
+
+
+
+test_peek_2() ->
+
+    [].
 
 
 
@@ -74,8 +105,6 @@ test_peek() ->
 
 
 run(_Hooks, _Options) ->
-
-    testerl:bindings() ++
 
     [   testerl:assemble("Peek/1,2", test_peek())
     ].

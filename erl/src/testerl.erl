@@ -25,7 +25,7 @@
 
 -export([
 
-    test/1, 
+    test/1,
       test/2,
 
     assemble/2,
@@ -35,9 +35,9 @@
     must_equal_epsilon/5,
     must_fail/2,
 
-    check_library_requirements/1
+    check_library_requirements/1,
 
-    bindings/0
+    bindings/1
 
 ]).
 
@@ -152,7 +152,7 @@ assemble_worker(Name, [Item|Rem], Pass,Warn,Fail) ->
 
 start_tests(Hooks, TestModule, Options) ->
 
-    assemble(TestModule, TestModule:run(Hooks, Options)).
+    assemble(TestModule, bindings(TestModule) ++ TestModule:run(Hooks, Options)).
 
 
 
@@ -303,8 +303,41 @@ check_each_library_requirement([ {Lib,Ver} | Rem ], Work) ->
 
 %% @since Version 373
 
-bindings() -> 
+bindings(Module) ->
 
-%% @todo
-    [].
+    case sc_module:attribute(Module, testerl_bindings) of
 
+        {error,no_such_module} ->
+            [{warn, lists:flatten(io_lib:format("Requested module bindings for non-existant module ~p", [Module])), []}];
+
+        {error,no_such_attribute} ->
+            [{warn, lists:flatten(io_lib:format("Requested module bindings for module without explicit bindings ~p", [Module])), []}];
+
+        [] ->
+            [];
+
+        List when is_list(List) ->
+            bindings_worker(Module, List, []);
+
+        _Other ->
+            [{fail, "Unknown binding type", []}]
+
+    end.
+
+
+
+
+
+%% @since Version 376
+
+bindings_worker(Module, [], Work) ->
+
+    Work;
+
+
+
+bindings_worker(Module, [{{Mod,Func,Arity},BoundBy}|BindingRem], Work) ->
+
+    Result = testerl:assemble(lists:flatten(io_lib:format("~p:~p/~p", [Mod, Func, Arity])), Module:BoundBy()),
+
+    bindings_worker(Module, BindingRem, [Result]++Work).
