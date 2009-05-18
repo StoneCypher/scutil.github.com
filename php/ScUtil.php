@@ -304,12 +304,54 @@
 
 
 
-      // unfortunately this only works with non-temporaries, due to the reference; PHP has no mechanism 
+      function flatten_once($Array) {
+
+          $out = array();
+          foreach ($Array as $val) {
+              if (is_array($val)) {
+                  foreach ($val as $v) {
+                      $out[] = $v;
+                  }
+              } else {
+                  $out[] = $val;
+              }
+          }
+
+          return $out;
+
+      }
+
+
+
+
+
+      function flatten($Array) {
+
+          $out = array();
+          foreach ($Array as $val) {
+              if (is_array($val)) {
+                  foreach (flatten($val) as $v) {
+                      $out[] = $v;
+                  }
+              } else {
+                  $out[] = $val;
+              }
+          }
+
+          return $out;
+
+      }
+
+
+
+
+
+      // unfortunately this only works with non-temporaries, due to the reference; PHP has no mechanism
       // for doing this that will work with temporaries of which I am aware (not even macros)
 
       public static function val_if_set_or(&$var, $default) {
 
-          if (isset($var)) { 
+          if (isset($var)) {
               return $var;
           }
 
