@@ -115,12 +115,12 @@ body.colorpage {
 
 
 
-.scpage h1+p,
-.scpage h2+p,
-.scpage h3+p,
-.scpage h4+p,
-.scpage h5+p,
-.scpage h6+p {
+.scpage h1+p, .scpage h1+ul, .scpage h1+ol, .scpage h1+dl,
+.scpage h2+p, .scpage h2+ul, .scpage h2+ol, .scpage h2+dl,
+.scpage h3+p, .scpage h3+ul, .scpage h3+ol, .scpage h3+dl,
+.scpage h4+p, .scpage h4+ul, .scpage h4+ol, .scpage h4+dl,
+.scpage h5+p, .scpage h5+ul, .scpage h5+ol, .scpage h5+dl,
+.scpage h6+p, .scpage h6+ul, .scpage h6+ol, .scpage h6+dl {
 
     margin-top : 1em;
 
@@ -130,12 +130,12 @@ body.colorpage {
 
 
 
-.scpage p+h1,
-.scpage p+h2,
-.scpage p+h3,
-.scpage p+h4,
-.scpage p+h5,
-.scpage p+h6 {
+.scpage p+h1, .scpage ul+h1, .scpage ol+h1, .scpage dl+h1,
+.scpage p+h2, .scpage ul+h2, .scpage ol+h2, .scpage dl+h2,
+.scpage p+h3, .scpage ul+h3, .scpage ol+h3, .scpage dl+h3,
+.scpage p+h4, .scpage ul+h4, .scpage ol+h4, .scpage dl+h4,
+.scpage p+h5, .scpage ul+h5, .scpage ol+h5, .scpage dl+h5,
+.scpage p+h6, .scpage ul+h6, .scpage ol+h6, .scpage dl+h6 {
 
     margin-top : 2em;
 
@@ -158,10 +158,10 @@ body.colorpage {
 .scpage.bgcolorheaders h3,
 .scpage.bgcolorheaders h4,
 .scpage.bgcolorheaders h5,
-.scpage.bgcolorheaders h6 { 
-  
+.scpage.bgcolorheaders h6 {
+
     padding : 0.25em 0.65em;
-    
+
 }
 
 
@@ -260,23 +260,23 @@ body.colorpage {
 
 
 
-.colorpage th { 
-  
+.colorpage th {
+
     background-color : #e3e3e3;
     text-align       : center;
     border           : 1px solid black;
-    
+
 }
 
 
 
 
-.colorpage td { 
+.colorpage td {
 
     background-color : white;
     text-align       : justify;
     border           : 1px solid #888;
-    
+
 }
 
 
@@ -284,9 +284,9 @@ body.colorpage {
 
 
 .zebraodd th {
-  
+
     background-color : #d6d6d6;
-    
+
 }
 
 
@@ -439,3 +439,13 @@ tt, code {
     font-family: consolas, lucida console, monospace;
 
 }
+
+
+
+
+dd      { padding: 0; text-align: justify; margin: 0 0 0 1.5em; font-size: 90%; }
+dt      { padding: 0; text-align: justify; margin: 0; font-weight: bold; }
+dt + dd { margin-top: 0.2em; }
+dd + dt { margin-top: 0.8em; }
+
+
