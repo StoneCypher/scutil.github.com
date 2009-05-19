@@ -116,7 +116,7 @@ pearson(List1, List2) when is_list(List1), is_list(List2) ->
     SumX  = lists:sum(List1),
     SumY  = lists:sum(List2),
 
-    SumXX = lists:sum([L*L || L<-List1]),                            % the sums of the squared items
+    SumXX = lists:sum([L*L || L<-List1]),                           % the sums of the squared items
     SumYY = lists:sum([L*L || L<-List2]),
 
     N     = length(List1),

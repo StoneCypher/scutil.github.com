@@ -345,15 +345,15 @@ from_weighted_worker([], _) ->
 
 from_weighted_worker(InputList, Limit) when is_list(InputList), is_integer(Limit), Limit >= 0 ->
 
-    [ {Item,Weight} | Remainder ] = InputList,   % break off the input list's head as {I,W} and keep the rest as Remainder
+    [ {Item,Weight} | Remainder ] = InputList,                   % break off the input list's head as {I,W} and keep the rest as Remainder
 
-    case Weight =< Limit of                                             % if the weight is less than or equal to the limit,
+    case Weight =< Limit of                                      % if the weight is less than or equal to the limit,
 
         true  ->
             from_weighted_worker(Remainder, Limit-Weight);       % recurse the next item with a decremented weight
 
         false ->
-            Item                                                        % if not, this item is the one we want
+            Item                                                 % if not, this item is the one we want
 
     end.
 

@@ -3,6 +3,8 @@
 
 -author("John Haugeland <stonecypher@gmail.com>").
 -webpage("http://scutil.com/").
+-twitter({"JohnHaugeland", "http://twitter.com/JohnHaugeland"}).
+-twitter({"ScUtil", "http://twitter.com/ScUtil"}).
 -license( {mit_license, "http://scutil.com/license.html"} ).
 
 -publicsvn("svn://crunchyd.com/scutil/").
@@ -13,11 +15,24 @@
 -svn_id("$Id$").
 -svn_head("$HeadURL$").
 -svn_revision("$Revision$").
+-svn_date("$Date$").
 
 -description("Efficient circular queue.").
 
+
+
+
+
 -testerl_export( { [], sc_cq_testsuite } ).
--library_requirements( [] ).
+
+
+
+
+
+-library_requirements([
+    {scutil,  161},
+    {testerl, 66}
+]).
 
 
 

@@ -96,7 +96,9 @@
     postfix/2,
 
     keygroup/2,
-      keygroup/3
+      keygroup/3,
+
+    split_all/2
 
 ] ).
 
@@ -1132,3 +1134,39 @@ keygroup(Pos, [Item|Rem], WorkKey, Work, Output) ->
             keygroup(Pos, Rem, NewKey,  [Item],       [{WorkKey,Work}]++Output)
 
     end.
+
+
+
+
+
+%% @since Version XXX TODO
+
+split_all(N, List) ->
+
+    split_all(N, N, List, [], []).
+
+
+
+
+
+split_all(_N, _BlockN, [], Current, Work) ->
+
+    lists:reverse([lists:reverse(Current)] ++ Work);
+
+
+
+
+
+split_all(N, 0, Workload, Current, Work) ->
+
+    split_all(N, N, Workload, [], [lists:reverse(Current)] ++ Work);
+
+
+
+
+
+split_all(N, BN, [Item|Rem], Current, Work) ->
+
+    split_all(N, BN-1, Rem, [Item]++Current, Work).
+
+

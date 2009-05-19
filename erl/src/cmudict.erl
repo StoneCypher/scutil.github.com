@@ -2,8 +2,9 @@
 -module(cmudict).
 
 -author("John Haugeland - stonecypher@gmail.com").
--webpage(none).
--twitter("JohnHaugeland").
+-webpage("http://scutil.com/").
+-twitter({"JohnHaugeland", "http://twitter.com/JohnHaugeland"}).
+-twitter({"ScUtil", "http://twitter.com/ScUtil"}).
 -license( {mit_license, "http://scutil.com/license.html"} ).  % proprietary or { licensename, "url" } eg "http://fullof.bs/standard_license.html"
 
 -publicsvn(none).
@@ -14,7 +15,7 @@
 -svn_head("$HeadURL$").
 -svn_revision("$Revision$").
 
--description("").
+-description("Routines to work with the CMU Pronouncing Dictionary").
 
 
 
@@ -36,6 +37,8 @@
 
 
 
+%% @since Version 379
+
 chop_term([]) ->
 
     skip;
@@ -55,6 +58,8 @@ chop_term(Term) ->
 
 
 
+
+%% @since Version 379
 
 walk_list([], Work, Output) ->
 
@@ -83,6 +88,8 @@ walk_list([NewChar | LData], Work, Output) ->
 
 
 
+%% @since Version 379
+
 file_to_plist(File) ->
 
     {ok, Data} = file:read_file(File),
@@ -92,10 +99,14 @@ file_to_plist(File) ->
 
 
 
+%% @since Version 379
+
 to_plist(BData) when is_binary(BData) ->
    to_plist(binary_to_list(BData));
 
 
+
+%% @since Version 379
 
 to_plist(LData) when is_list(LData) ->
     walk_list(LData, [], []).

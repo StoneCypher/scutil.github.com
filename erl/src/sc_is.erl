@@ -44,7 +44,8 @@
 -testerl_export( { [], sc_is_testsuite } ).  % todo needs test suite
 
 -library_requirements([
-    % TODO
+    {scutil,  161},
+    {testerl, 66}
 ]).
 
 
