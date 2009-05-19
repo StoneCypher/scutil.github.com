@@ -3,21 +3,24 @@
 
 -author("John Haugeland - stonecypher@gmail.com").
 -webpage("http://testerl.com/").
--twitter("JohnHaugeland").
+-twitter({"JohnHaugeland", "http://twitter.com/JohnHaugeland"}).
+-twitter({"ScUtil", "http://twitter.com/ScUtil"}).
 -license( {mit_license, "http://crunchyd.com/testerl/license.html"} ).
 
 -publicsvn("svn://crunchyd.com/testerl/").
 -bugtracker("http://crunchyd.com/forum/project.php?projectid=4").
 -publicforum("http://crunchyd.com/forum/testerl-discussion/").
+-currentsource("http://crunchyd.com/release/scutil.zip").
 
 -svn_id("$Id$").
 -svn_head("$HeadURL$").
 -svn_revision("$Revision$").
 
--testerl_export( { [], testerl_testsuite } ).
--library_requirements( [ {scutil,55} ] ).
-
 -description("The testerl erlang testsuite system").
+
+-testerl_export( { [], testerl_testsuite } ).
+
+-library_requirements( [ {scutil,55} ] ).
 
 
 

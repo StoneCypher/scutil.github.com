@@ -1,5 +1,6 @@
 
 -module(sc_cq_testsuite).
+-behaviour(testerl_testsuite_behaviour).
 
 -author("John Haugeland - stonecypher@gmail.com").
 -webpage("http://scutil.com/").
@@ -10,6 +11,7 @@
 -publicsvn("svn://crunchyd.com/scutil/").
 -bugtracker(none).
 -publicforum(none).
+-currentsource("http://crunchyd.com/release/scutil.zip").
 
 -svn_id("$Id$").
 -svn_head("$HeadURL$").

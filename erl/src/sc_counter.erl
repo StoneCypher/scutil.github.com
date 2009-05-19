@@ -54,20 +54,19 @@
 
 -export( [
 
-    counter/1,
-    counters/1,
+    at/1,
 
-    inc_counter/1,
-      inc_counter/2,
+    inc/1,
+      inc/2,
 
-    dec_counter/1,
-      dec_counter/2,
-      
-    adjust_counter/2,
-    reset_counter/1,
-    
-    set_counter/2,
-    
+    dec/1,
+      dec/2,
+
+    adjust_by/2,
+    reset/1,
+
+    set/2,
+
     % exports
     counter_process/0
 
@@ -81,19 +80,19 @@
 %% @doc {@section Counters} Checks a counter's value; if the counter was not already defined, it will report zero. ```1> sc_counter:counter(hello).
 %% 0
 %%
-%% 2> sc_counter:inc_counter(hello).
+%% 2> sc_counter:inc(hello).
 %% 1
 %%
-%% 3> sc_counter:inc_counter(hello).
+%% 3> sc_counter:inc(hello).
 %% 2
 %%
-%% 4> sc_counter:inc_counter(hello).
+%% 4> sc_counter:inc(hello).
 %% 3
 %%
 %% 5> sc_counter:counter(hello).
 %% 3
 %%
-%% 6> sc_counter:reset_counter(hello).
+%% 6> sc_counter:reset(hello).
 %% 0
 %%
 %% 7> sc_counter:counter(hello).
@@ -101,7 +100,11 @@
 
 %% @since Version 54
 
-counter(Name) ->
+at(Names) when is_list(Names) ->
+
+    [ at(X) || X <- Names ];
+
+at(Name) ->
 
     sc_process:start_register_if_not_running(sc_counter_counter_process, sc_counter, counter_process, []),
     sc_counter_counter_process ! {self(), get_counter, Name},
@@ -116,72 +119,57 @@ counter(Name) ->
 
 
 
-%% @spec counters(Names::list()) -> list_of_integers()
+%% @equiv adjust_by(Name,1)
 
-%% @doc {@section Counters} Checks a counter's value; if the counter was not already defined, it will report zero. ```1> sc_counter:counter(hello).
-%% 0'''
+inc(Name) ->
 
-%% @since Version 138
-
-counters(Names) ->
-
-    [ counter(X) || X <- Names ].
+    adjust_by(Name, 1).
 
 
 
+%% @equiv adjust_by(Name,By)
 
+inc(Name,By) ->
 
-%% @equiv adjust_counter(Name,1)
-
-inc_counter(Name) ->
-
-    adjust_counter(Name, 1).
-
-
-
-%% @equiv adjust_counter(Name,By)
-
-inc_counter(Name,By) ->
-
-    adjust_counter(Name, By).
+    adjust_by(Name, By).
 
 
 
-%% @equiv adjust_counter(Name,-1)
+%% @equiv adjust_by(Name,-1)
 
-dec_counter(Name) ->
+dec(Name) ->
 
-    adjust_counter(Name, -1).
+    adjust_by(Name, -1).
 
 
 
-%% @equiv adjust_counter(Name,-1*By)
+%% @equiv adjust_by(Name,-1*By)
 
-dec_counter(Name,By) ->
+dec(Name,By) ->
 
-    adjust_counter(Name, -1*By).
+    adjust_by(Name, -1*By).
 
 
 
 
 
-%% @spec adjust_counter(Name::any(), By::number()) -> number()
+%% @spec adjust_by(Name::any(), By::number()) -> number()
 
 %% @doc {@section Counters} Adds to a counter's value; if the counter was not already defined, it will become the value in the `By' argument. ```1> sc_counter:counter(hello).
 %% 0
 %%
-%% 2> sc_counter:inc_counter(hello).
+%% 2> sc_counter:inc(hello).
 %% 1
 %%
-%% 3> sc_counter:adjust_counter(hello, 3).
+%% 3> sc_counter:adjust_by(hello, 3).
 %% 4'''
 
 %% @since Version 54
 
-adjust_counter(Name, By) when is_number(By) ->
+adjust_by(Name, By) when is_number(By) ->
 
     sc_process:start_register_if_not_running(sc_counter_counter_process, sc_counter, counter_process, []),
-    sc_counter_counter_process ! {self(), adjust_counter, Name, By},
+    sc_counter_counter_process ! {self(), adjust_by_counter, Name, By},
 
     receive
         {counter_at, Name, Val} -> Val
@@ -193,30 +181,30 @@ adjust_counter(Name, By) when is_number(By) ->
 
 
 
-%% @equiv set_counter(Name, 0)
+%% @equiv set(Name, 0)
 
 %% @since Version 54
 
-reset_counter(Name) -> 
+reset(Name) -> 
 
-    set_counter(Name, 0).
-
-
+    set(Name, 0).
 
 
 
-%% @spec set_counter(Name::any(), To::number()) -> 0
+
+
+%% @spec set(Name::any(), To::number()) -> 0
 
 %% @doc {@section Counters} Sets a counter's value to a specific value. ```1> sc_counter:counter(hello).
 %% 0
 %%
-%% 2> sc_counter:set_counter(hello,4).
+%% 2> sc_counter:set(hello,4).
 %% 4
 %%
 %% 3> sc_counter:counter(hello).
 %% 4
 %%
-%% 4> sc_counter:reset_counter(hello).
+%% 4> sc_counter:reset(hello).
 %% 0
 %%
 %% 5> sc_counter:counter(hello).
@@ -224,7 +212,7 @@ reset_counter(Name) ->
 
 %% @since Version 54
 
-set_counter(Name, To) when is_number(To) ->
+set(Name, To) when is_number(To) ->
 
     sc_process:start_register_if_not_running(sc_counter_counter_process, sc_counter, counter_process, []),
     sc_counter_counter_process ! {self(), set_counter, Name, To},
@@ -266,7 +254,7 @@ counter_process() ->
             end;
 
 
-        {Caller, adjust_counter, Name, By} ->
+        {Caller, adjust_by_counter, Name, By} ->
 
             case get(Name) of
 
