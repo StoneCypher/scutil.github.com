@@ -35,6 +35,121 @@
 
 
 
+      public static function partition($Functor, $Array) {
+
+          $pass = array();
+          $fail = array();
+
+          foreach ($Array as $val) {
+
+              if ($Functor($val)) {
+                  $pass[] = $val;
+              } else {
+                  $fail[] = $val;
+              }
+
+          }
+
+          return array($pass, $fail);
+
+      }
+
+
+
+
+
+      public static function assoc_partition($Functor, $Array) {
+
+          $pass = array();
+          $fail = array();
+
+          foreach ($Array as $key => $val) {
+
+              if ($Functor($val)) {
+                  $pass[$key] = $val;
+              } else {
+                  $fail[$key] = $val;
+              }
+
+          }
+
+          return array($pass, $fail);
+
+      }
+
+
+
+
+
+      public static function key_partition($Functor, $Array) {
+
+          $pass = array();
+          $fail = array();
+
+          foreach ($Array as $val) {
+
+              if ($Functor($key)) {
+                  $pass[] = $key;
+              } else {
+                  $fail[] = $key;
+              }
+
+          }
+
+          return array($pass, $fail);
+
+      }
+
+
+
+
+
+      public static function key_partition_val($Functor, $Array) {
+
+          $pass = array();
+          $fail = array();
+
+          foreach ($Array as $val) {
+
+              if ($Functor($key)) {
+                  $pass[] = $val;
+              } else {
+                  $fail[] = $val;
+              }
+
+          }
+
+          return array($pass, $fail);
+
+      }
+
+
+
+
+
+      public static function assoc_key_partition($Functor, $Array) {
+
+          $pass = array();
+          $fail = array();
+
+          foreach ($Array as $key => $val) {
+
+              if ($Functor($key)) {
+                  $pass[$key] = $val;
+              } else {
+                  $fail[$key] = $val;
+              }
+
+          }
+
+          return array($pass, $fail);
+
+      }
+
+
+
+
+
       public static function WriteIf($Clause, $Text) {
           return (($Clause)? $Text : '');
       }
