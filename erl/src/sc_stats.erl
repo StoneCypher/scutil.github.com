@@ -72,7 +72,7 @@
       
     skewness/1,
     kurtosis/1,
-    std_deviation/1,
+    std_deviation/2,
 
     histograph/1,
     mode/1,
@@ -85,7 +85,7 @@
     arithmetic_mean/1,
     geometric_mean/1,
     harmonic_mean/1,
-    
+
     weighted_arithmetic_mean/1
 
 ] ).
@@ -104,11 +104,27 @@
 
 %% @since Version 222
 
-expected_value(List) -> expected_value(List, 0, 0).
+expected_value(List) ->
 
-expected_value( []                                , Sum, Range) -> Sum/Range;
-expected_value( [ {Value,Probability} | Remainder], Sum, Range) -> expected_value(Remainder, Sum+(Value*Probability), Range+Probability);
-expected_value( [ UnweightedItem      | Remainder], Sum, Range) -> expected_value([{UnweightedItem,1}] ++ Remainder, Sum, Range).
+    expected_value(List, 0, 0).
+
+
+
+expected_value([], Sum, Range) ->
+
+    Sum/Range;
+
+
+
+expected_value( [ {Value,Probability} | Remainder], Sum, Range) ->
+
+    expected_value(Remainder, Sum+(Value*Probability), Range+Probability);
+
+
+
+expected_value( [ UnweightedItem | Remainder], Sum, Range) -> 
+
+    expected_value([{UnweightedItem,1}] ++ Remainder, Sum, Range).
 
 
 
@@ -152,7 +168,9 @@ erlang_b_distribution(N,A) ->
 erlang_c_distribution(N,A) ->
 
    Num   = (math:pow(A,N) / scutil:factorial(N)) * (N/(N-A)),
-   Denom = lists:sum([ math:pow(A,I) / scutil:factorial(I) || I <- lists:seq(0,N-1) ]) + ((math:pow(A,N)/scutil:factorial(N))*(N/(N-A))),
+
+   Denom = lists:sum([ math:pow(A,I) / scutil:factorial(I) || I <- lists:seq(0,N-1) ])
+         + ((math:pow(A,N)/scutil:factorial(N))*(N/(N-A))),
 
    {wait_probability, Num / Denom}.
 
@@ -166,7 +184,7 @@ erlang_c_distribution(N,A) ->
 
 %% @since Version 85
 
-amean_vector_normal(VX) -> 
+amean_vector_normal(VX) ->
 
     arithmetic_mean(sc_vector:normalize(VX)).
 
@@ -233,7 +251,7 @@ moment(List, N) when is_list(List), is_number(N) ->
 
 %% @equiv [ moment(List, N) || N <- [2,3,4] ]
 
-moments(List) -> 
+moments(List) ->
 
     moments(List, [2,3,4]).
     
@@ -312,7 +330,7 @@ kurtosis(List) ->
 
 
 
-%% @spec std_deviation(Values::numericlist()) -> float()
+%% @spec std_deviation(Values::numericlist(), Kind::population|sample) -> float()
 
 %% @doc {@section Statistics} Measures the standard deviation of the values in the list.  ```1> scutil:std_deviation([1,2,3,4,5]).
 %% 1.4142135623730951
@@ -322,10 +340,17 @@ kurtosis(List) ->
 
 %% @since Version 39
 
-std_deviation(Values) when is_list(Values) ->
+std_deviation(Values, population) when is_list(Values) ->
 
     Mean = arithmetic_mean(Values),
-    math:sqrt(arithmetic_mean([ (Val-Mean)*(Val-Mean) || Val <- Values ])).
+    math:sqrt(arithmetic_mean([ sc_math:square(Val-Mean) || Val <- Values ]));
+
+
+
+std_deviation(Values, sample) when is_list(Values) ->
+
+    Mean = arithmetic_mean(Values),
+    math:sqrt( lists:sum([ sc_math:square(Val-Mean) || Val <- Values ]) / (length(Values)-1) ).
 
 
 
