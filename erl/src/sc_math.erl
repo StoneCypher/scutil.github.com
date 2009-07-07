@@ -249,7 +249,7 @@ root_sum_square(VX) when is_list(VX) ->
 
 
 
-root_sum_square(VX) when is_tuple(VX) -> 
+root_sum_square(VX) when is_tuple(VX) ->
 
     root_sum_square(tuple_to_list(VX)).
 
@@ -269,7 +269,7 @@ root_sum_square(VX) when is_tuple(VX) ->
 
 root_mean_square(List) when is_list(List) ->
 
-    math:sqrt(.sc.stats.means:arithmetic([ Val*Val || Val <- List ])).
+    math:sqrt(sc_stats:arithmetic_mean([ Val*Val || Val <- List ])).
 
 
 

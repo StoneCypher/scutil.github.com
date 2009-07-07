@@ -98,7 +98,13 @@
     keygroup/2,
       keygroup/3,
 
-    split_all/2
+    split_at/2,
+
+    first_pos/2,
+      first_pos/3,
+
+    last_while_pos/2,
+      last_while_pos/3
 
 ] ).
 
@@ -1139,17 +1145,17 @@ keygroup(Pos, [Item|Rem], WorkKey, Work, Output) ->
 
 
 
-%% @since Version XXX TODO
+%% @since Version 346 TODO
 
-split_all(N, List) ->
+split_at(N, List) ->
 
-    split_all(N, N, List, [], []).
-
-
+    split_at(N, N, List, [], []).
 
 
 
-split_all(_N, _BlockN, [], Current, Work) ->
+
+
+split_at(_N, _BlockN, [], Current, Work) ->
 
     lists:reverse([lists:reverse(Current)] ++ Work);
 
@@ -1157,16 +1163,91 @@ split_all(_N, _BlockN, [], Current, Work) ->
 
 
 
-split_all(N, 0, Workload, Current, Work) ->
+split_at(N, 0, Workload, Current, Work) ->
 
-    split_all(N, N, Workload, [], [lists:reverse(Current)] ++ Work);
-
-
+    split_at(N, N, Workload, [], [lists:reverse(Current)] ++ Work);
 
 
 
-split_all(N, BN, [Item|Rem], Current, Work) ->
-
-    split_all(N, BN-1, Rem, [Item]++Current, Work).
 
 
+split_at(N, BN, [Item|Rem], Current, Work) ->
+
+    split_at(N, BN-1, Rem, [Item]++Current, Work).
+
+
+
+
+
+%% @Version Since 381
+%
+% 1> sc_lists:first_pos([a,b,c,d,2,f],fun erlang:is_integer/1).
+% 5
+% 
+% 2> sc_lists:first_pos([a,b,c,d,e,f],fun erlang:is_integer/1).
+% false
+
+first_pos(List, Predicate) ->
+
+    first_pos(1, List, Predicate, false).
+
+
+
+first_pos(List, Predicate, Default) ->
+
+    first_pos(1, List, Predicate, Default).
+
+
+
+first_pos(_N, [],  _Pred, Default) ->
+
+    Default;
+
+
+
+first_pos(N, [Head|Tail], Pred, Default) ->
+
+    case Pred(Head) of
+        true  -> N;
+        false -> first_pos(N+1, Tail, Pred, Default)
+    end.
+
+
+
+
+
+%% @Version Since 381
+%
+% 1> sc_lists:last_while_pos([a,b,c,d,2,f],fun erlang:is_atom/1).
+% 4
+%
+% 2> sc_lists:last_while_pos([a,b,c,d,r,f],fun erlang:is_atom/1).
+% 6
+%
+% 3> sc_lists:last_while_pos([1,a,b,c,d,r,f],fun erlang:is_atom/1).
+% false
+
+last_while_pos(List, Predicate) ->
+
+    last_while_pos(1, List, Predicate, false).
+
+
+
+last_while_pos(List, Predicate, Default) ->
+
+    last_while_pos(1, List, Predicate, Default).
+
+
+
+last_while_pos(_N, [],  _Pred, Last) ->
+
+    Last;
+
+
+
+last_while_pos(N, [Head|Tail], Pred, Last) ->
+
+    case Pred(Head) of
+        true  -> last_while_pos(N+1, Tail, Pred, N);
+        false -> Last
+    end.

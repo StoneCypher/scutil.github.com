@@ -332,10 +332,16 @@ kurtosis(List) ->
 
 %% @spec std_deviation(Values::numericlist(), Kind::population|sample) -> float()
 
-%% @doc {@section Statistics} Measures the standard deviation of the values in the list.  ```1> scutil:std_deviation([1,2,3,4,5]).
+%% @doc {@section Statistics} Measures the standard deviation of the values in the list.  ```1> scutil:std_deviation([1,2,3,4,5],population).
 %% 1.4142135623730951
 %%
-%% 2> scutil:std_deviation([2,2,2,2,2]).
+%% 2> scutil:std_deviation([1,2,3,4,5],sample).
+%% 1.5811388300841898
+%%
+%% 3> scutil:std_deviation([2,2,2,2],population).
+%% 0.0
+%%
+%% 4> scutil:std_deviation([2,2,2,2],sample).
 %% 0.0'''
 
 %% @since Version 39
