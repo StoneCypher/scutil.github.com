@@ -35,6 +35,44 @@
 
 
 
+      function utf8_to_codepoints($utf) {
+    
+          $codepoints = array();
+          $iC         = strlen($utf);
+    
+          for ($i=0; $i<$iC; ++$i) {
+    
+              $u = ord($utf[$i]);
+    
+              if      (($u & 0x80) == 0)    { $n=1; $cp= $u;         }
+              else if (($u & 0xE0) == 0xc0) { $n=2; $cp=($u & 0x1f); }
+              else if (($u & 0xF0) == 0xe0) { $n=3; $cp=($u & 0x0f); }
+              else if (($u & 0xF8) == 0xf0) { $n=4; $cp=($u & 0x07); }
+              else if (($u & 0xFC) == 0xf8) { $n=5; $cp=($u & 0x03); }
+              else if (($u & 0xFE) == 0xfc) { $n=6; $cp=($u & 0x01); }
+              else                          { return "Invalid character data beginning at offset $i"; }
+    
+              if ($n > 1) {
+                  for ($j=1; $j<$n; ++$j) {
+                      $v = ord($utf[$i+$j]);
+                      if (($v & 0xc0) != 0x80) { return "Invalid character data beginning at offset $i, octet $j"; }
+                      $cp = ($cp << 6) | ($v & 0x3f);
+                  }
+              }
+    
+              $codepoints[] = $cp;
+              $i += ($n-1);
+    
+          }
+    
+          return $codepoints;
+    
+      }
+
+
+
+
+
       public static function partition($Functor, $Array) {
 
           $pass = array();
