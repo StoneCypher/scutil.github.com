@@ -104,7 +104,9 @@
       first_pos/3,
 
     last_while_pos/2,
-      last_while_pos/3
+      last_while_pos/3,
+      
+    partition_n/2
 
 ] ).
 
@@ -1251,3 +1253,13 @@ last_while_pos(N, [Head|Tail], Pred, Last) ->
         true  -> last_while_pos(N+1, Tail, Pred, N);
         false -> Last
     end.
+
+
+
+
+
+% @Since Version 388
+
+partition_n(Data, Function) ->
+
+    [ { GroupId, [ GDatum || { _H, GDatum } <- GroupData ] } || { GroupId, GroupData } <- keygroup( 1, [ { Function(Datum), Datum } || Datum <- Data ] ) ].
