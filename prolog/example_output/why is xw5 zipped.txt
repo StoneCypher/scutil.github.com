@@ -1,0 +1,1 @@
+Because that way it doesn't make Prolog look dominant on my ohloh stats.
