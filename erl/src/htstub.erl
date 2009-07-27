@@ -56,17 +56,21 @@
 
 
 
+%% @since Version 390
+
 default_options() ->
 
-    [   { port,    80                                     } ,
-        { ip,      { inet, {0,0,0,0} }                    } ,
-        { timeout, 300000                                 } ,
-        { handler, fun htstub_default_webserver:verbose/3 }
+    [   { port,    80                                                     } ,
+        { ip,      { inet, {0,0,0,0} }                                    } ,
+        { timeout, 300000                                                 } ,
+        { handler, fun htstub_default_webserver:no_site_configured_here/3 }
     ].
 
 
 
 
+
+%% @since Version 390
 
 serve() ->
 
@@ -74,11 +78,15 @@ serve() ->
 
 
 
+%% @since Version 390
+
 serve(Handler) when is_function(Handler) ->
 
-    serve([{handler,Handler}]);
+    serve(80,Handler);
 
 
+
+%% @since Version 390
 
 serve(Options) ->
 
@@ -86,7 +94,21 @@ serve(Options) ->
 
 
 
-serve(Port,Handler) when is_integer(Port), is_function(Handler) ->
+%% @since Version 390
+
+serve(Port, verbose) ->
+
+    serve(Port, fun htstub_default_webserver:verbose/3);
+
+
+
+serve(Port, diagnostic) ->
+
+    serve(Port, fun htstub_default_webserver:diagnostic/3);
+
+
+
+serve(Port, Handler) when is_integer(Port), is_function(Handler) ->
 
     serve([{port,Port},{handler,Handler}]).
 
@@ -94,11 +116,15 @@ serve(Port,Handler) when is_integer(Port), is_function(Handler) ->
 
 
 
+%% @since Version 390
+
 url_decode(Url) ->
 
     url_decode(Url, []).
 
 
+
+%% @since Version 390
 
 url_decode([], Work) ->
 
@@ -106,11 +132,15 @@ url_decode([], Work) ->
 
 
 
+%% @since Version 390
+
 url_decode([$%, A, B | Rem], Work) ->
 
     url_decode(Rem, [erlang:list_to_integer([A,B],16)] ++ Work);
 
 
+
+%% @since Version 390
 
 url_decode([A | Rem], Work) ->
 
@@ -120,17 +150,23 @@ url_decode([A | Rem], Work) ->
 
 
 
+%% @since Version 390
+
 html_encode(String) ->
 
     html_encode(String, []).
 
-    
-    
+
+
+%% @since Version 390
+
 html_encode([], Work) ->
 
     lists:flatten(lists:reverse(Work));
 
 
+
+%% @since Version 390
 
 html_encode([ $" | Rem ], Work) ->                                                                                        %"% Bad highlighter
 
@@ -138,11 +174,15 @@ html_encode([ $" | Rem ], Work) ->                                              
 
 
 
+%% @since Version 390
+
 html_encode([ $& | Rem ], Work) ->
 
     html_encode(Rem, ["&amp;"]++Work);
 
 
+
+%% @since Version 390
 
 html_encode([ $< | Rem ], Work) ->
 
@@ -150,11 +190,15 @@ html_encode([ $< | Rem ], Work) ->
 
 
 
+%% @since Version 390
+
 html_encode([ $> | Rem ], Work) ->
 
     html_encode(Rem, ["&gt;"]++Work);
 
 
+
+%% @since Version 390
 
 html_encode([ Normal | Rem ], Work) ->
 
@@ -163,5 +207,7 @@ html_encode([ Normal | Rem ], Work) ->
 
 
 
+
+%% @since Version 390
 
 html_decode(_) -> todo.

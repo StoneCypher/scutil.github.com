@@ -55,6 +55,8 @@
 
 
 
+%% @since Version 390
+
 parse_getline(GetLine) ->
 
     case string:tokens(GetLine, " ") of
@@ -66,12 +68,16 @@ parse_getline(GetLine) ->
 
 
 
+%% @since Version 390
+
 create_server(Options) ->
 
     % todo add something like sc_debug:chatter
     create_server(Options, no_supervisor).
 
 
+
+%% @since Version 390
 
 create_server(Options, Supervisor) ->
 
@@ -81,12 +87,16 @@ create_server(Options, Supervisor) ->
 
 
 
+%% @since Version 390
+
 construct_server_loop(Options, Supervisor) when is_pid(Supervisor) ->
 
     link(Supervisor),
     construct_server_loop(Options, no_supervisor);
 
 
+
+%% @since Version 390
 
 construct_server_loop(Options, no_supervisor) ->
 
@@ -111,6 +121,8 @@ construct_server_loop(Options, no_supervisor) ->
 
 
 
+%% @since Version 390
+
 construct_server_loop(Port, {IpType,IpAddress}, Timeout, Handler) ->
 
     ListenResult = gen_tcp:listen(Port, [list, IpType, {ip,IpAddress}, {active,false}, {packet,raw}]),
@@ -131,6 +143,8 @@ construct_server_loop(Port, {IpType,IpAddress}, Timeout, Handler) ->
 
 
 
+%% @since Version 390
+
 server_loop(ListeningSocket, Timeout, Handler) ->
 
     case gen_tcp:accept(ListeningSocket) of
@@ -150,6 +164,8 @@ server_loop(ListeningSocket, Timeout, Handler) ->
 
 
 
+
+%% @since Version 390
 
 handle_socket(ConnectedSocket, Timeout, Handler) ->
 
@@ -178,6 +194,8 @@ handle_socket(ConnectedSocket, Timeout, Handler) ->
 
 
 
+%% @since Version 390
+
 block_on_body(ConnectedSocket, Timeout, Body, Path, Protocol, Method, PHeaders) ->
 
     FinalBodyLength = list_to_integer(proplists:get_value("Content-Length", PHeaders, "0")),
@@ -187,6 +205,8 @@ block_on_body(ConnectedSocket, Timeout, Body, Path, Protocol, Method, PHeaders) 
 
 
 
+%% @since Version 390
+
 block_on_body(ConnectedSocket, Timeout, Body, Path, Protocol, Method, PHeaders, CurrentLength, BodyLength) when CurrentLength < BodyLength ->
 
     {ok,NewRecv} = gen_tcp:recv(ConnectedSocket, 0),
@@ -194,17 +214,23 @@ block_on_body(ConnectedSocket, Timeout, Body, Path, Protocol, Method, PHeaders, 
 
 
 
+%% @since Version 390
+
 block_on_body(_ConnectedSocket,_Timeout,_Body,_Path,_Protocol,_Method,_PHeaders, CurrentLength, BodyLength) when CurrentLength > BodyLength ->
 
     { error, body_length_longer_than_expected };
 
 
 
+%% @since Version 390
+
 block_on_body(_ConnectedSocket, _Timeout, Body, Path, Protocol, Method, PHeaders, BodyLength, BodyLength) ->
 
     block_on_reformat(Body, Path, Protocol, Method, PHeaders, BodyLength).
 
 
+
+%% @since Version 390
 
 block_on_reformat(Body, Path, Protocol, Method, PHeaders, BodyLength) ->
 
@@ -237,6 +263,8 @@ block_on_reformat(Body, Path, Protocol, Method, PHeaders, BodyLength) ->
 
 
 
+%% @since Version 390
+
 block_on_http_headers(ConnectedSocket, Timeout, [], PendingWork, Path, Protocol, Method) ->
 
     case gen_tcp:recv(ConnectedSocket, 0) of
@@ -250,6 +278,8 @@ block_on_http_headers(ConnectedSocket, Timeout, [], PendingWork, Path, Protocol,
     end;
 
 
+
+%% @since Version 390
 
 block_on_http_headers(ConnectedSocket, Timeout, Rem, PendingWork, Path, Protocol, Method) ->
 
@@ -270,12 +300,16 @@ block_on_http_headers(ConnectedSocket, Timeout, Rem, PendingWork, Path, Protocol
 
 
 
+%% @since Version 390
+
 block_on_parse_http(ConnectedSocket, Timeout) ->
 
     % todo support timeout
     block_on_http_request(ConnectedSocket, Timeout, [], []).
 
 
+
+%% @since Version 390
 
 block_on_http_request(ConnectedSocket, Timeout, [], PendingWork) ->
 
@@ -290,6 +324,8 @@ block_on_http_request(ConnectedSocket, Timeout, [], PendingWork) ->
     end;
 
 
+
+%% @since Version 390
 
 block_on_http_request(ConnectedSocket, Timeout, NewWork, PendingWork) ->
 
@@ -315,6 +351,8 @@ block_on_http_request(ConnectedSocket, Timeout, NewWork, PendingWork) ->
 
 
 
+
+%% @since Version 390
 
 to_statusline(100) -> "100 Continue";
 to_statusline(101) -> "101 Switching Protocols";
@@ -366,17 +404,23 @@ to_statusline(505) -> "505 HTTP Version Not Supported".
 
 
 
+%% @since Version 390
+
 return_result(ConnectedSocket, Response) when is_list(Response) ->
 
     return_result(ConnectedSocket, {200, [], Response});
 
 
 
+%% @since Version 390
+
 return_result(ConnectedSocket, {Status, Response}) when is_integer(Status), is_list(Response) ->
 
     return_result(ConnectedSocket, {Status, [{"Date",header_datestring()},{"Content-Type","text/html"},{"Content-Length",integer_to_list(length(Response))}], Response});
 
 
+
+%% @since Version 390
 
 return_result(ConnectedSocket, {Status, Headers, Response}) ->
 
@@ -385,6 +429,8 @@ return_result(ConnectedSocket, {Status, Headers, Response}) ->
 
 
 
+
+%% @since Version 390
 
 package_result(Status, Headers, Response) ->
 
@@ -396,6 +442,8 @@ package_result(Status, Headers, Response) ->
 
 
 
+
+%% @since Version 390
 
 header_datestring() ->
 
