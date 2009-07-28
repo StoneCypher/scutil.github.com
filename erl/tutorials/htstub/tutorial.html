@@ -40,27 +40,63 @@
 
       body { font-family: candara; margin: 0; padding: 0; background-color: #def; }
 
-      #content    { position: absolute; top: 0; left: 23em; bottom: 0; right: 0;                padding: 2em 3em 2em 0; }
-      #tocSidebar { position: fixed;    top: 0; left: 0;    bottom: 0;           width: 21.5em; padding: 0; overflow: auto; }
+      #content    { position: absolute; top: 0; left: 17em; bottom: 0; right: 0;                padding: 1em 1.5em 1em 0; }
+      #tocSidebar { position: fixed;    top: 0; left: 0;    bottom: 0;           width: 16.5em; padding: 0; overflow: auto; }
 
-      #toc    { background-color: #cde; margin: 2em 1.5em 2em 3em; padding: 0.25em 0.5em; }
-      #toc h1 { font-size: 125%; margin: 0; padding: 0; }
-      #toc ol { margin: 0; padding: 0 0 0 1em; }
-      #toc a  { color: #006; text-decoration: none; border-bottom: 1px solid #abf; }
+      #toc         { background-color: #cde; margin: 1em 0.5em 1em 1.5em; padding: 0.25em 0.5em; }
+      #toc h1      { font-size: 125%; margin: 0; padding: 0; }
+      #toc ol      { padding: 0 0 0 2em; margin: 0; font-size: 80%; list-style-type: upper-alpha; }
+      #toc ol ol   { padding: 0 0 0 1em; list-style-type: decimal; }
+      #toc a       { color: #006; text-decoration: none; border-bottom: 1px solid #abf; }
       #toc a:hover { background-color: #acf; }
+      #toc li      { margin-top: 0.5em; color: #00f; }
+      #toc li li   { margin-top: 0; color: #36c; }
+      #toc li li a { margin-top: 0; color: #039; border-bottom: 0; }
 
       #content h1           {                 margin: 0 0 1em 0; padding: 0.25em 0.5em; font-size: 200%; font-weight: bold; background-color: #cdf; }
       #content h1 .subtitle { display: block; margin: 0;         padding: 0;            font-size: 60%;  font-weight: normal; }
 
+      h2 { margin-top: 4em; border-bottom: 3px solid #9ac; }
+      h3 { margin-top: 2em; border-bottom: 1px solid #ace; }
+
       .AppTitle { color: #369; }
 
-      #footerlink { position: fixed; right: 4px; bottom: 2px; text-decoration: none; color: #008; border-bottom: 1px solid #00f; font-weight: bold; }
+      #footerlink { position: fixed; left: 0; right: 0; bottom: 0; text-align: center; text-decoration: none; color: #008; border-top: 1px solid #00f; font-weight: bold; background-color: #abc; padding: 0.25em; }
 
       p { text-align: justify; text-indent: 2.75em; }
 
+      dl    { background-color: #d0e0f0; padding: 0.5em 1em; margin: 0 2.75em; }
+      dt    { color: #008; font-weight: bold; border-bottom: 1px solid #abc; }
+      dd    { text-align: justify; font-size: 90%; }
+      dd+dt { margin-top: 1em; }
+
       #topcode { text-indent: 0; margin: 1em 3em; background-color: #bdf; font-weight: bold; }
 
-      code.blockcode { background-color: #bdf; font-weight: bold; font-family: consolas, "lucida console", "courier new", monospace; padding: 1em 2em; display: block; }
+      code               { background-color: #000; font-weight: bold; font-family: consolas, "lucida console", "courier new", monospace; font-size: 90%; }
+      code.blockcode     { padding: 1em 2em; display: block; white-space: pre; }
+      code.sideblockcode { padding: 0.25em 0.5em; display: block; margin: 1em 0.5em 1em 1.5em; }
+
+      strong { font-weight: bold; font-style: italic; text-decoration: underline; }
+
+      .mygeneral1-comment       { color: #3E3E00; }
+      .mygeneral1-currentline   { color: #000000; }
+      .mygeneral1-identifier    { color: #2080FF; }
+      .mygeneral1-keywords1     { color: #00C0C0; }
+      .mygeneral1-keywords2     { color: #8000FF; }
+      .mygeneral1-keywords3     { color: #4040FF; }
+      .mygeneral1-keywords4     { color: #00EA75; }
+      .mygeneral1-keywords5     { color: #00C0C0; font-weight: bold; }
+      .mygeneral1-matchedbraces { color: #C6FF00; }
+      .mygeneral1-number        { color: #C000C0; font-weight: bold; }
+      .mygeneral1-preprocessor  { color: #0000FF; }
+      .mygeneral1-rightedge     { color: #C0C0C0; }
+      .mygeneral1-selection     { color: #FFFFFF; }
+      .mygeneral1-space         { color: #000000; }
+      .mygeneral1-string        { color: #0000f0; }
+      .mygeneral1-symbol        { color: #003C78; }
+
+      #ServersAndFrameworks     { margin: 0 0 0 2.75em; padding: 0; border: 2px solid #048; border-collapse: collapse; background-color: #bcd; }
+      #ServersAndFrameworks td  { border: 1px solid #48b; padding: 1em 2em; background-color: #cde; }
 
     </style>
 
@@ -79,25 +115,196 @@
           <span class="subtitle">Using an Erlang Application-Specific Webserver Library</span>
       </h1>
 
-      <p>
-        HtStub is a webserver library.  To be long-winded about it, "<em>HtStub is an embeddable application-specific webserver
-        library for Erlang</em>."  This document serves as a bootstrap and tutorial; there are formal docs
-        <a href="http://scutil.com/docs/" title="ScUtil Documentation">elsewhere</a>.  This text is just to get people started,
-        to help them understand what HtStub is about, how to use it and what makes it different.
-      </p>
-
       <p id="purposestatement">
         HtStub is about one thing: taking the boring part out of Erlang webservers, by reducing the programmer workload to as
         close to zero as possible.
       </p>
 
-      <code class="blockcode">Server = fun(_,_,_) -> "&lt;html&gt;&lt;head/&gt;&lt;body&gt;Hello, World&lt;/body&gt;&lt;/html&gt;" end).<br/>htstub:serve(80, Server).  % that's it!</code>
-
       <a name="intro"></a><h2>Introduction</h2>
+
+      <p>
+        HtStub is a webserver library.  To be long-winded about it, "<em>HtStub is a minimalist embeddable application-specific
+        webserver library for Erlang, focussed on minimizing impact on hosting or hosted applications while remaining both
+        zero-configuration and convenient for throwaway use</em>."  This document serves as a bootstrap and tutorial; there are
+        formal docs <a href="http://scutil.com/docs/" title="ScUtil Documentation">elsewhere</a>.  This text is just to get
+        people started, to help them understand what HtStub is about, how to use it and what makes it different.
+      </p>
+
+      <code class="blockcode"><span class="mygeneral1-identifier">HelloServer</span><span class="mygeneral1-space"> </span><span class="mygeneral1-symbol">=</span><span class="mygeneral1-space"> </span><span class="mygeneral1-keywords1">fun</span><span class="mygeneral1-symbol">(</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">,</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">,</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">)</span><span class="mygeneral1-space"> </span><span class="mygeneral1-symbol">-&gt;</span><span class="mygeneral1-space"> </span><span class="mygeneral1-string">&quot;&lt;html&gt;&lt;head/&gt;&lt;body&gt;Hello, World&lt;/body&gt;&lt;/html&gt;&quot;</span><span class="mygeneral1-space"> </span><span class="mygeneral1-keywords1">end</span><span class="mygeneral1-symbol">.
+</span><span class="mygeneral1-identifier">htstub</span><span class="mygeneral1-symbol">:</span><span class="mygeneral1-identifier">serve</span><span class="mygeneral1-symbol">(</span><span class="mygeneral1-identifier">HelloServer</span><span class="mygeneral1-symbol">).
+</span></code>
+
+      <p>
+        That two-line block of code above is actually a fully complete webserver.  HtStub servers are as simple as the author is
+        able to imagine: they're each a single function which takes three arguments and spits out a response.  The arguments are
+        the contents of the request, the headers and the arguments/body, respectively; the response is either a string or a
+        tuple containing a status code, optionally some headers and a string response.
+      </p>
+
+      <p>
+        The rest of this document explains using HtStub less trivially, and related concerns like good ways to design your system,
+        and why you should care about yet another webserver.
+      </p>
+
       <a name="another"></a><h3>Another webserver? :(</h3>
-      <a name="somany"></a><h3>But there are so many!</h3>
-      <a name="thepoint"></a><h3>So what's the point?</h3>
+
+      <p>Yeah.</p>
+
+      <a name="somany"></a><h3>But there are so many already!</h3>
+
+      <p>
+        I know.  Nuts, isn't it?  It's a really easy project (especially in Erlang) that's fun and useful, and webservers are a
+        pretty good learning experience for noobs, so there are millions of them.  At the time of this writing, I'm aware of the
+        following webservers and webserver libraries for Erlang alone:
+      </p>
+
+      <table id="ServersAndFrameworks"><tr><th>Servers</th><th>Frameworks</th></tr><tr><td>
+        <ol>
+          <li>The official <a href="http://erlang.org/doc/apps/inets/http_server.html">httpd module</a></li>
+          <li>Raw sockets in <a href="http://www.erlang.org/doc/man/erlang.html#decode_packet-3">HTTP Packet</a> mode</li>
+          <li><a href="http://">YAWS</a></li>
+          <li><a href="http://">MochiWeb</a></li>
+          <li>The unnamed <a href="http://www.trapexit.org/A_fast_web_server_demonstrating_some_undocumented_Erlang_features">TrapExit Server</a> (iServe)</li>
+          <li>Joe Armstrong's <a href="http://cean.process-one.net/packages/index.yaws?action=detail&name=pico">Pico</a></li>
+          <li><a href="http://catseye.tc/projects/openflax">OpenFlax</a></li>
+          <li><a href="http://code.google.com/p/misultin/">Misultin</a></li>
+          <li><a href="http://cean.process-one.net/packages/index.yaws?action=detail&name=erlweb">ErlWeb</a> (discontinued)</li>
+          <li>The <a href="http://nullpointer.dk/?q=node/31">NullPointer.dk Server</a></li>
+          <li><a href="http://www.tornkvist.org/gitweb?p=twt.git;a=summary">Tobbe's Web Toolkit</a></li>
+          <li><a href="http://erlware.org/lib/5.5.5/crary-0.1.1/">Crary</a></li>
+          <li>The generic <a href="http://www.erlang.org/doc/man/inets.html">generic inets services</a> API</li>
+          <li>Joe's <a href="http://www.sics.se/~joe/tutorials/web_server/web_server.html">Spitting in the Sawdust</a> tutorial server</li>
+
+        </ol>
+      </td><td>
+        <ol>
+          <li><a href="http://nitrogenproject.com/web/learn">Nitrogen</a></li>
+          <li><a href="http://www.erlang-web.org/">Erlang-Web</a></li>
+          <li><a href="http://">Erlyweb</a></li>
+          <li><a href="http://sourceforge.net/projects/erlhive">ErlHive</a></li>
+          <li><a href="http://cean.process-one.net/packages/index.yaws?action=detail&name=efcgi">efCGI</a></li>
+          <li><a href="http://code.google.com/p/sgte/">SGTE</a></li>
+          <li><a href="http://blog.tornkvist.org/#">Red Hot Blog</a></li>
+          <li><a href="http://github.com/etnt/seethrough_erl/tree/master">SeeThrough</a></li>
+          <li><a href="http://blog.tornkvist.org/blog.yaws?id=1218638102346188">Dart</a></li>
+          <li><a href="http://blog.tornkvist.org/blog.yaws?id=1204931949991700">domErl</a></li>
+          <li><a href="http://code.google.com/p/erlycomet">ErlyComet</a></li>
+          <li><a href="http://cean.process-one.net/packages/index.yaws?action=detail&name=mango">Mango</a></li>
+          <li><a href="http://www.tornkvist.org/gitweb/">GitWeb</a></li>
+          <li><a href="http://erlydtl.googlecode.com/">ErlyDTL</a>
+        </ol>
+      </td></tr></table>
+
+      <p>
+        <i>(If I'm missing something, please let me know at <u>ston ecyp her@ gmai l.co m</u>.  Sorry for no link; spam, you know the drill).</i>
+      </p>
+
+      <p>
+        Many of these applications - indeed, almost all of them - are fine pieces of engineering.  They're reliable, stable, secure, efficient, and since they're all Erlang, they're all pretty awesome.  But, they aren't
+        what I wanted: they require thinking, paying attention, being careful.  I want to start and finish the web binding part of a web binding project in a matter of seconds.  The purpose of this library is to minimize
+        the drudge work of handling HTTP, but otherwise to get completely out of the way.  HtStub isn't a framework, it isn't a platform, it isn't a server even; it's a protocol implementation and a socket handler.
+      </p>
+
+      <p>
+        HtStub is the kind of thing that makes a person think "less is more".
+      </p>
+
+      <a name="thepoint"></a><h3>So what's the point of another?</h3>
+
+      <p>Well, there are actually several.  <strong>Most of it is about simplifying or removing chaff</strong>.</p>
+
+      <dl>
+
+        <dt>Shouldn't need tutorials or documentation</dt>
+        <dd>
+          With normal web languages, if you speak the language and the language is installed, you can pretty much jump right in.  You don't have to set up a whole new configurable application every time you want to make 
+          something.  ('Course, this is the tutorial/documentation for htstub, but my point is, you could get by without it.)
+        </dd>
+
+        <dt>Can't just write throwaway stuff</dt>
+        <dd>
+          I come from the scripting mindset, where it isn't uncommon to write 50-100 lines of code which are used once and then discarded.  The amount of setup for most of the Erlang webservers I found was much higher
+          than the handful of lines which would keep Erlang practical as a scripting language.  More than around four lines and I think it's too much.  HtStub needs exactly zero configuration, and may be used from the
+          console directly.
+        </dd>
+
+        <dt>Yet another set of security concepts</dt>
+        <dd>There's no reason a person should have to learn to nail down a web interface library securely.  Due to HtStub's design, here you don't have to at all.</dd>
+
+        <dt>Web programming in Erlang is a drag</dt>
+        <dd>I'll say it.  Each time I look at setting up a webserver in Erlang, I find something I want to do.  Writing configuration files, setting things up, figuring out modes, it's just tedious.</dd>
+
+        <dt>No, <em>really</em> minimal</dt>
+        <dd>There's almost nothing to HtStub.  It manages sockets, parses HTTP and returns your result.  That's it.  Can't even see stuff on disk, it's so stripped down.  The speed and safety benefits are significant.</dd>
+
+        <dt>Fast (performance)</dt>
+        <dd>
+          With all that stuff that HtStub doesn't do comes a savings on overhead HtStub doesn't have.  HtStub is significantly faster than most Erlang webservers, and under real world load is speed competitive with
+          imperative webservers as well.  Because of Erlang's mature massive process scheduler, HtStub (like many but not all Erlang webservers) is able to tolerate enormous numbers of concurrent clients, meaning that
+          large-parallelism delay servers (like massive COMET servers) are perfectly viable. <todo>Todo: Benchmarks</todo>
+        </dd>
+
+        <dt>Fast Redux (development time)</dt>
+        <dd>
+          The other kind of fast matters just as much: you're done with HtStub almost the second you remember how to spell its name.  The learning curve of HtStub is almost flat, if you already know Erlang; you just have
+          to find out what order the arguments go, and <u>you're done</u>.  Just like that.  HtStub gives you time to go make a sandwich instead of messing with
+          <tt>enormousConfig.hurkFramework.JavaBean.someApacheThing.ugh.ObscurePackage.HALP.ohNoAnRPMconflict.ini</tt> .
+        </dd>
+
+        <dt>Fast: The Reckoning (deployment time)</dt>
+        <dd>
+          The third kind of fast matters just as much: your application isn't worth much if your customer can't deploy it.  Chew on that while you look at your existing webserver's setup procedure.
+        </dd>
+
+        <dt>Bride of Son of Fast III (design time)</dt>
+        <dd>
+          The fourth kind of fast matters probably more than the other three put together.  HtStub is low concept software: it does one thing, it does it simply, and the author would like to believe it does that thing 
+          well.  There's no putting in effort to figure out the right way to build, or sorting through a million variations on how to set stuff up.  You decide where the web glues to your stuff, you put a function call
+          there, you write something to create HTML, and you call it a day.  No more wasting a half a day's work, inspiration and excitement trying to sort out whether you want FastCGI or MPM or mod_nausea or so forth;
+          instead, one uniform function call and your project is underway.
+        </dd>
+
+        <dt>It Just Works</dt>
+        <dd>If you know what directory the code is in, installation and setup is just a question of compiling the two modules.  No fuss, no muss, and you can get right on working on your application.</dd>
+
+        <dt>Embeddable, Referrable or Housable</dt>
+        <dd>
+          Sometimes the webserver should be the top part: a bunch of people host their things inside.  That's housability: write your web applications as modules (or funs, I guess) and use HtStub in standalone mode.
+          Sometimes the application should be the top part: an existing system that just wants browser access.  That's embeddability: make a call to HtStub from inside your existing application, and there's no server,
+          just an application that speaks HTTP.  Sometimes your normal webserver needs a stand-in for a special case load, especially mass parallelism, like adding chat to an existing massive PHP site by going to a
+          different subdomain or port for the heavy static load; that's referrability.  HtStub is fine for all three.
+        </dd>
+
+        <dt>Legacy interface modernization</dt>
+        <dd>
+          Got an existing large app and want a web interface for it?  App already has reporting?  Easy peasy.  Write a function that converts the existing reporting to HTML, then call that function on the results of
+          calling the reporting function with whatever came in on GET in your driver function.  Problem over, just like that, often in less than five lines of code.
+        </dd>
+
+        <dt>Trivially Modular</dt>
+        <dd>
+          Want to add a generic capability?  Not a problem: write a module.  Since the interface is so simple and well defined, chaining code to handle things either on their way in or out is similarly trivial.  There
+          is a small list of standard modules (such as virtual hosting) and example code to support custom development.
+        </dd>
+
+        <dt>No GPL contamination</dt>
+        <dd>
+          The author of HtStub is strongly against the GPL family of licenses, including LGPL.  As such, this library is released under the <a href="http://scutil.com/license.html" target="_blank" title="ScUtil License">MIT
+          License</a>.
+        </dd>
+
+      </dl>
+
       <a name="started"></a><h3>How do I get started?</h3>
+
+      <ol>
+        <li>Install <a href="http://erlang.org/">Erlang</a>.</li>
+        <li>Install <a href="http://scutil.com/" title="The ScUtil Library">ScUtil</a>.</li>
+        <li>Open an erlang console.</li>
+        <li><code style="padding: 0.1em 0.3em;"><span class="mygeneral1-identifier">htstub</span><span class="mygeneral1-symbol">:</span><span class="mygeneral1-identifier">serve</span><span class="mygeneral1-symbol">(</span><span class="mygeneral1-space"> </span><span class="mygeneral1-keywords1">fun</span><span class="mygeneral1-symbol">(</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">,</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">,</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">)</span><span class="mygeneral1-space"> </span><span class="mygeneral1-symbol">-&gt;</span><span class="mygeneral1-space"> </span><span class="mygeneral1-string">&quot;It works!&quot;</span><span class="mygeneral1-space"> </span><span class="mygeneral1-keywords1">end</span><span class="mygeneral1-space"> </span><span class="mygeneral1-symbol">).</span></code></li>
+      </ol>
+
+      <p>That's it.  You've just made your first <span class="term">Application Specific Webserver</span>, or <span class="term">ASWS</span>.</p>
 
       <h2>Step 1: You're Finished</h2>
       <h3>What Just Happened?</h3>
@@ -105,20 +312,23 @@
       <h3>Production Concerns</h3>
 
       <h2>Step 2: Basic Tools</h2>
-      <h3>Answering (Hello world; Clock)</h3>
+      <h3>Answering (Hello world; reqdump; Clock)</h3>
       <h3>Handling requests (A static site; "pages")</h3>
-      <h3>Dynamic sites (Random tagline; upper half of internet)</h3>
+      <h3>Dynamic sites (Quote; upper &frac12; internet)</h3>
       <h3>State (A simple counter; keeping notes)</h3>
-      <h3>Shared state (World's worst chat; the horse track)</h3>
+      <h3>Shared state (Awfulchat; the horse track)</h3>
 
       <h2>Step 3: Design Strategy</h2>
       <h3>Embed, Invoke or House?</h3>
+      <h3>Ajax, Comet, or Refresh?</h3>
+      <h3>Client-side or Server-side?</h3>
 
       <h2>Step 4: Deeper Tools</h2>
       <h2>Invoking and Chaining Modules</h2>
       <h2>Standard Modules</h2>
       <h2>Custom Modules</h2>
-      <h2>Step 3: You're Still Finished</h2>
+
+      <h2>Step 5: You're Still Finished</h2>
 
       <p>[09:18:50] * StoneCyqherOtherPC now has five examples for his tutorial: hello world, omg an countar, multisite splitter, betting, image post</p>
       <p>Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum </p>
@@ -155,6 +365,12 @@
     </div>
 
     <div id="tocSidebar">
+
+      <code class="sideblockcode"><span class="mygeneral1-identifier">Greeting</span><span class="mygeneral1-space">  </span><span class="mygeneral1-symbol">=</span><span class="mygeneral1-space"> </span><span class="mygeneral1-string">&quot;&lt;html&gt;&lt;head/&gt;&lt;body&gt;Hi, there.  Welcome to easier Erlang webdev.&lt;/body&gt;&lt;/html&gt;&quot;</span><span class="mygeneral1-symbol">.<br/><br/>
+</span><span class="mygeneral1-identifier">HelloDriver</span><span class="mygeneral1-space"> </span><span class="mygeneral1-symbol">=</span><span class="mygeneral1-space"> </span><span class="mygeneral1-keywords1">fun</span><span class="mygeneral1-symbol">(</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">,</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">,</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">)</span><span class="mygeneral1-space"> </span><span class="mygeneral1-symbol">-&gt;</span><span class="mygeneral1-space"> </span><br/>&nbsp; &nbsp; <span class="mygeneral1-identifier">Greeting</span><span class="mygeneral1-space"> </span><span class="mygeneral1-keywords1">end</span><span class="mygeneral1-symbol">.<br/><br/>
+</span><span class="mygeneral1-identifier">htstub</span><span class="mygeneral1-symbol">:</span><span class="mygeneral1-identifier">serve</span><span class="mygeneral1-symbol">(</span><span class="mygeneral1-identifier">HelloDriver</span><span class="mygeneral1-symbol">).
+</span></code>
+
       <div id="toc">
         <h1>Table of Contents</h1>
 
@@ -163,21 +379,52 @@
             <li><a href="#intro">Introduction</a>
               <ol>
                 <li><a href="#another">Another webserver? :(</a></li>
-                <li><a href="#somany">But there are so many!</a></li>
-                <li><a href="#thepoint">So what's the point?</a></li>
+                <li><a href="#somany">But there are so many already!</a></li>
+                <li><a href="#thepoint">So what's the point of another?</a></li>
                 <li><a href="#started">How do I get started?</a></li>
+              </ol>
+            </li>
+            <li><a href="#">Step 1: You're Finished</a>
+              <ol>
+                <li><a href="#">What Just Happened?</a></li>
+                <li><a href="#">Using this tutorial under Unix</a></li>
+                <li><a href="#">Production Concerns</a></li>
+              </ol>
+            </li>
+            <li><a href="#">Step 2: Basic Tools</a>
+              <ol>
+                <li><a href="#">Answering (Hello world; reqdump; Clock)</a></li>
+                <li><a href="#">Handling requests (A static site; "pages")</a></li>
+                <li><a href="#">Dynamic sites (Quote; upper &frac12; internet)</a></li>
+                <li><a href="#">State (A simple counter; keeping notes)</a></li>
+                <li><a href="#">Shared state (Awfulchat; the horse track)</a></li>
+              </ol>
+            </li>
+            <li><a href="#">Step 3: Design Strategy</a>
+              <ol>
+                <li><a href="#">Embed, Invoke or House?</a></li>
+                <li><a href="#">Ajax, Comet, or Refresh?</a></li>
+                <li><a href="#">Client-side or Server-side?</a></li>
+              </ol>
+            </li>
+            <li><a href="#">Step 4: Deeper Tools</a>
+              <ol>
+                <li><a href="#">Invoking and Chaining Modules</a></li>
+                <li><a href="#">Standard Modules</a></li>
+                <li><a href="#">Custom Modules</a></li>
+              </ol>
+            </li>
+            <li><a href="#">Step 5: You're Still Finished</a>
+              <ol>
               </ol>
             </li>
           </ol>
 
-
-      <p>Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum </p>
-      <p>Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum </p>
-
       </div>
+
     </div>
 
-    <a id="footerlink" href="http://scutil.com/" title="ScUtil">HtStub is part of ScUtil</a>
+    <a id="footerlink" href="http://scutil.com/" title="ScUtil" target="_blank">HtStub is part of ScUtil</a>
 
   </body>
 
