@@ -1,0 +1,82 @@
+
+foodlist(9) ->
+
+    [
+        "Elmer's",
+        "Papa Joe's",
+        "Le Cafe de Paris",
+        "Goldy's",
+        "Focaccias",
+        "Quinn's",
+        "Cracker Barrel",
+        "IHOP",
+        "Perkins"
+    ];
+
+
+
+
+
+foodlist(10) ->
+
+    foodlist(9) ++ [
+        "Bungaslow",
+        "Chilis",
+        "Red Robin",
+        "Suicidey Tacos",
+        "Hawkins Pacout",
+        "Gandolfini's",
+        "NEW mexican place near gandolfinis",
+        "NEW american place near gandolfinis",
+        "NEW thai place near office",
+        "Fuddruckers",
+        "Brazilian Steakhouse",
+        "Hawaiian Place",
+        "Firehouse Sandwiches/Pizza",
+        "New Mexican",
+        "Mexikesslers",
+        "New Italian",
+        "Willow Creek / Raw",
+        "Cottonwood",
+        "Saigon Grill",
+        "Pad Thai House",
+        "Mazzah",
+        "NEW 'the retreat' bar next to mazzah",
+        "Subway",
+        "Ridiculously ugly cajun w/ great food",
+        "Hyde Park Pub (mmm, Bar)",
+        "Old Chicago",
+        "Smoky Mountain",
+        "NEW Yokozuna",
+        "Idaho Fry Company",
+        "Ali Baba",
+        "Cheesecake Fagtory",
+        "NEW Leku Ona (near Goldy's)",
+        "Mai Thai",
+        "Old Spaghetti Factory",
+        "Cool Hand Luke's",
+        "Berry Hill"
+    ];
+
+
+
+
+
+foodlist(10.5) ->
+
+    foodlist(10) ++ [
+        "Bar Kesslers",
+        "Sockeye Grill"
+    ];
+
+
+
+
+
+foodlist(11) ->
+
+    foodlist(10.5) ++ [
+        "Morton's Steakhouse",
+        "Chandler's Steakhouse",
+        "Ichiban"
+    ].

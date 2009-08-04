@@ -293,7 +293,7 @@ from(N, List, no_remainder) ->
 
 from(N, List, remainder) ->
 
-    .lists:split(N,shuffle(List)).
+    lists:split(N, shuffle(List)).
 
 
 
@@ -380,6 +380,9 @@ from_weighted_worker(InputList, Limit) when is_list(InputList), is_integer(Limit
 %% @since Version 8
 
 shuffle(List) ->
+
+   {A1,A2,A3} = now(),       
+   random:seed(A1, A2, A3),
 
    WeightedAndShuffled = lists:map(
        fun(Item) -> { random:uniform(), Item } end,
