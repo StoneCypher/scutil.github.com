@@ -43,6 +43,15 @@
 -export([
 
     create/2,
+    
+%    current/1,
+%    next/1,
+%    next_n/2,
+%    all/1,
+%    reset/1,
+
+%    terminate/1,
+
 %     create/3
 
 %   one/0
@@ -66,43 +75,55 @@
 
 
 
-fibonacci( {state, {First,Second}} ) when is_integer(First), is_integer(Second) -> { state, { Second, First+Second } };
-fibonacci(_)                                                                    -> corrupt.
+%% @since Version 398
+
+fibonacci( {First, Second} ) when is_integer(First), is_integer(Second) -> { state, { Second, First+Second } };
+fibonacci(_)                                                            -> corrupt.
 
 
 
 
+
+%% @since Version 397
 
 core(InitializationValue, CurrentValue, Generator) ->
 
-    NewValue = receive
+    {ShouldContinue, NewValue} = receive
+
+        { Sender, current } ->
+            {true, CurrentValue};
 
         { Sender, next } ->
-            case CurrentValue of complete       -> complete;
-                                 corrupt        -> corrupt;
-                                 {state, State} -> Generator(State);
-                                 _AnythingElse  -> corrupt
+            case CurrentValue of complete       -> {true, complete};
+                                 corrupt        -> {true, corrupt};
+                                 {state, State} -> {true, Generator(State)};
+                                 _AnythingElse  -> {true, corrupt}
             end;
 
         { Sender, reset } ->
-            Generator(InitializationValue);
+            {true, {state,InitializationValue}};
 
         { Sender, terminate } ->
-            Sender ! { terminating, { sc_generator, self() } },
-            ok
+            {false, { sc_generator, { terminating, self() } } }
 
     end,
 
     Sender ! NewValue,
-    core(InitializationValue, NewValue, Generator).
+
+    case ShouldContinue of
+        true  -> core(InitializationValue, NewValue, Generator);
+        false -> ok
+    end.
 
 
 
 
+
+%% @since Version 397
 
 create(InitializationValue, Generator) ->
 
-    { sc_generator_core, spawn(fun() -> core(InitializationValue, Generator(InitializationValue), Generator) end) }.
+    { sc_generator_core, spawn(fun() -> core(InitializationValue, {state,InitializationValue}, Generator) end) }.
 
 
 % create(InitialValue, Generator, Filter) ->

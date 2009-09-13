@@ -26,7 +26,7 @@
 
 
 
--module(scmessage).
+-module(sc_message).
 
 -author("John Haugeland <stonecypher@gmail.com>").
 -webpage("http://scutil.com/").
