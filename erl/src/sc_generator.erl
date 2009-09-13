@@ -48,7 +48,7 @@
     next/1,
     next_n/2,
 %    all/1,
-%    reset/1,
+    reset/1,
 
 %    terminate/1,
 
@@ -148,6 +148,9 @@ act_on({ sc_generator_core, Pid }, Action) when is_pid(Pid) ->
 
 %% @since Version 400
 current(Core) -> act_on(Core, current).
+
+%% @since Version 403
+reset(Core)   -> act_on(Core, reset).
 
 %% @since Version 401
 next(Core)    -> act_on(Core, next).
