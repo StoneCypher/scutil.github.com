@@ -40,13 +40,16 @@
 
       body { font-family: candara; margin: 0; padding: 0; background-color: #def; }
 
+      a:visited   { color: #007; }
+
       #content    { position: absolute; top: 0; left: 17em; bottom: 0; right: 0;                padding: 1em 1.5em 1em 0; }
       #tocSidebar { position: fixed;    top: 0; left: 0;    bottom: 0;           width: 16.5em; padding: 0; overflow: auto; }
 
       #toc         { background-color: #cde; margin: 1em 0.5em 1em 1.5em; padding: 0.25em 0.5em; }
       #toc h1      { font-size: 125%; margin: 0; padding: 0; }
-      #toc ol      { padding: 0 0 0 2em; margin: 0; font-size: 80%; list-style-type: upper-alpha; }
-      #toc ol ol   { padding: 0 0 0 1em; list-style-type: decimal; }
+      #toc ol      { padding: 0 0 0 1.15em; margin: 0; font-size: 80%; list-style-type: upper-alpha; }
+      #toc ol ol   { padding: 0 0 0 0.3em; list-style-type: decimal; }
+      #toc a       { color: #006; text-decoration: none; border-bottom: 1px solid #abf; }
       #toc a       { color: #006; text-decoration: none; border-bottom: 1px solid #abf; }
       #toc a:hover { background-color: #acf; }
       #toc li      { margin-top: 0.5em; color: #00f; }
@@ -75,15 +78,20 @@
 
       #topcode { text-indent: 0; margin: 1em 3em; background-color: #bdf; font-weight: bold; }
 
-      code               { background-color: #000; font-weight: bold; font-family: consolas, "lucida console", "courier new", monospace; font-size: 90%; }
+      code               { font-size: 9.5pt; background-color: white; font-weight: bold; font-family: consolas, "lucida console", "courier new", monospace; border: 1px solid #9ab; }
       code.blockcode     { padding: 1em 2em; display: block; white-space: pre; }
       code.sideblockcode { padding: 0.25em 0.5em; display: block; margin: 1em 0.5em 1em 1.5em; }
+      code.inlinecode    { padding: 0.1em 0.3em; }
+
+      .blockcodecaption  { font-size: 60%; font-family: calibri; color: #408; }
+
+      .webaddress { font-family: consolas, monospace; background-color: #d4e5f6; font-weight: bold; }
 
       strong { font-weight: bold; font-style: italic; text-decoration: underline; }
 
       .mygeneral1-comment       { color: #3E3E00; }
       .mygeneral1-currentline   { color: #000000; }
-      .mygeneral1-identifier    { color: #2080FF; }
+      .mygeneral1-symbol        { color: #2080FF; }
       .mygeneral1-keywords1     { color: #00C0C0; }
       .mygeneral1-keywords2     { color: #8000FF; }
       .mygeneral1-keywords3     { color: #4040FF; }
@@ -96,10 +104,10 @@
       .mygeneral1-selection     { color: #FFFFFF; }
       .mygeneral1-space         { color: #000000; }
       .mygeneral1-string        { color: #0000f0; }
-      .mygeneral1-symbol        { color: #003C78; }
+      .mygeneral1-identifier    { color: #003C78; }
 
       #ServersAndFrameworks     { margin: 0 0 0 2.75em; padding: 0; border: 2px solid #048; border-collapse: collapse; background-color: #bcd; }
-      #ServersAndFrameworks td  { border: 1px solid #48b; padding: 1em 2em; background-color: #cde; }
+      #ServersAndFrameworks td  { border: 1px solid #48b; padding: 1em 3em 1em 2em; background-color: #cde; }
 
     </style>
 
@@ -123,7 +131,6 @@
         close to zero as possible.
       </p>
 
-      <br/>
       <h2><a name="intro"></a>Introduction</h2>
 
       <p>
@@ -134,12 +141,26 @@
         people started, to help them understand what HtStub is about, how to use it and what makes it different.
       </p>
 
+      <p>
+        I believe in learning by doing; in the course of this tutorial, we will implement 20 different application-specific
+        webservers.  Part of that is to show the flexibility and ease of use of the library; another part of that is to reinforce
+        just how simple it is to build a webserver specifically tailored to your needs.  If you look, these 20 different ASWSes
+        are implemented inside a tutorial which, them included, is still shorter than the preamble to the Apache docs.
+      </p>
+
+      <p>
+        So, to start, let's go for the simple standard example application: Hello, World.  This is a Hello, World application
+        specific webserver:
+      </p>
+
+      <div class="blockcodecaption">A trivial example: Hello, World</div>
       <code class="blockcode"><span class="mygeneral1-identifier">HelloServer</span><span class="mygeneral1-space"> </span><span class="mygeneral1-symbol">=</span><span class="mygeneral1-space"> </span><span class="mygeneral1-keywords1">fun</span><span class="mygeneral1-symbol">(</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">,</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">,</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">)</span><span class="mygeneral1-space"> </span><span class="mygeneral1-symbol">-&gt;</span><span class="mygeneral1-space"> </span><span class="mygeneral1-string">&quot;&lt;html&gt;&lt;head/&gt;&lt;body&gt;Hello, World&lt;/body&gt;&lt;/html&gt;&quot;</span><span class="mygeneral1-space"> </span><span class="mygeneral1-keywords1">end</span><span class="mygeneral1-symbol">.
 </span><span class="mygeneral1-identifier">htstub</span><span class="mygeneral1-symbol">:</span><span class="mygeneral1-identifier">serve</span><span class="mygeneral1-symbol">(</span><span class="mygeneral1-identifier">HelloServer</span><span class="mygeneral1-symbol">).
 </span></code>
 
       <p>
-        That two-line block of code above is actually a fully complete webserver.  HtStub servers are as simple as the author is
+        That two-line block of code above is actually a fully complete webserver.  If you've already compiled htstub, then cut and
+        paste that into a shell, and it'll Just Work.  HtStub servers are as simple as the author is
         able to imagine: they're each a single function which takes three arguments and spits out a response.  The arguments are
         the contents of the request, the headers and the arguments/body, respectively; the response is either a string or a
         tuple containing a status code, optionally some headers and a string response.
@@ -218,15 +239,18 @@
 
       <dl>
 
+        <dt>It Just Works</dt>
+        <dd>Installation and setup is just a question of compiling two modules.  No fuss, no muss, and you can get right on working on your application.</dd>
+
         <dt>Shouldn't need tutorials or documentation</dt>
         <dd>
-          With normal web languages, if you speak the language and the language is installed, you can pretty much jump right in.  You don't have to set up a whole new configurable application every time you want to make 
+          With normal web languages, if you speak the language and the language is installed, you can pretty much jump right in.  You don't have to set up a whole new configurable application every time you want to make
           something.  ('Course, this is the tutorial/documentation for htstub, but my point is, you could get by without it.)
         </dd>
 
-        <dt>Can't just write throwaway stuff</dt>
+        <dt>Simple enough for throwaway code</dt>
         <dd>
-          I come from the scripting mindset, where it isn't uncommon to write 50-100 lines of code which are used once and then discarded.  The amount of setup for most of the Erlang webservers I found was much higher
+          The author comes from the scripting mindset, where it isn't uncommon to write 50-100 lines of code which are used once and then discarded.  The amount of setup for most of the Erlang webservers I found was much higher
           than the handful of lines which would keep Erlang practical as a scripting language.  More than around four lines and I think it's too much.  HtStub needs exactly zero configuration, and may be used from the
           console directly.
         </dd>
@@ -252,7 +276,7 @@
 
         <dt>Fast Redux (development time)</dt>
         <dd>
-          The other kind of fast matters just as much: you're done with HtStub almost the second you remember how to spell its name.  The learning curve of HtStub is nearly flat, provided you already know Erlang; you just 
+          The other kind of fast matters just as much: you're done with HtStub almost the second you remember how to spell its name.  The learning curve of HtStub is nearly flat, provided you already know Erlang; you just
           have to find out in what order the arguments are presented, and <em>you're done</em>.  Just like that.  HtStub gives you time to go make a sandwich instead of messing around with
           <tt>enormousConfig&#8203;.hurkFramework&#8203;.JavaBean&#8203;.someApacheThing&#8203;.ObscurePackage&#8203;.RPMconflict.ini</tt> .
         </dd>
@@ -264,14 +288,11 @@
 
         <dt>Bride of Son of Fast II: Nightmare Lake (design time)</dt>
         <dd>
-          The fourth kind of fast matters probably more than the other three put together.  HtStub is low concept software: it does one thing, it does it simply, and the author would like to believe it does that thing 
+          The fourth kind of fast matters probably more than the other three put together.  HtStub is low concept software: it does one thing, it does it simply, and the author would like to believe it does that thing
           well.  There's no putting in effort to figure out the right way to build, or sorting through a million variations on how to set stuff up.  You decide where the web glues to your stuff, you put a function call
           there, you write something to create HTML, and you call it a day.  No more wasting a half a day's work, inspiration and excitement trying to sort out whether you want FastCGI or MPM or mod_nausea or so forth;
           instead, one uniform function call and your project is underway.
         </dd>
-
-        <dt>It Just Works</dt>
-        <dd>If you know what directory the code is in, installation and setup is just a question of compiling the two modules.  No fuss, no muss, and you can get right on working on your application.</dd>
 
         <dt>Embeddable, Referrable or Housable</dt>
         <dd>
@@ -296,7 +317,7 @@
         <dt>No GPL contamination</dt>
         <dd>
           The author of HtStub is strongly against the GPL family of licenses, including LGPL.  As such, this library is released under the <a href="http://scutil.com/license.html" target="_blank" title="ScUtil License">MIT
-          License</a>.  Neither HtStub nor its parent library <a href="http://scutil.com/" title="The ScUtil Library">ScUtil</a> will ever knowingly become dependant on GPL/related license material.  Freedom should be free 
+          License</a>.  Neither HtStub nor its parent library <a href="http://scutil.com/" title="The ScUtil Library">ScUtil</a> will ever knowingly become dependant on GPL/related license material.  Freedom should be free
           for everyone; that's <a href="http://whyIHateTheGPL.com/" title="Why I Hate The GPL">why I hate the GPL</a>.
         </dd>
 
@@ -308,18 +329,48 @@
         <li>Install <a href="http://erlang.org/">Erlang</a>.</li>
         <li>Install <a href="http://scutil.com/" title="The ScUtil Library">ScUtil</a>.</li>
         <li>Open an erlang console.</li>
-        <li><code style="padding: 0.1em 0.3em;"><span class="mygeneral1-identifier">htstub</span><span class="mygeneral1-symbol">:</span><span class="mygeneral1-identifier">serve</span><span class="mygeneral1-symbol">(</span><span class="mygeneral1-space"> </span><span class="mygeneral1-keywords1">fun</span><span class="mygeneral1-symbol">(</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">,</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">,</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">)</span><span class="mygeneral1-space"> </span><span class="mygeneral1-symbol">-&gt;</span><span class="mygeneral1-space"> </span><span class="mygeneral1-string">&quot;It works!&quot;</span><span class="mygeneral1-space"> </span><span class="mygeneral1-keywords1">end</span><span class="mygeneral1-space"> </span><span class="mygeneral1-symbol">).</span></code></li>
+        <li><code class="inlinecode"><span class="mygeneral1-identifier">htstub</span><span class="mygeneral1-symbol">:</span><span class="mygeneral1-identifier">serve</span><span class="mygeneral1-symbol">(</span><span class="mygeneral1-space"> </span><span class="mygeneral1-keywords1">fun</span><span class="mygeneral1-symbol">(</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">,</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">,</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">)</span><span class="mygeneral1-space"> </span><span class="mygeneral1-symbol">-&gt;</span><span class="mygeneral1-space"> </span><span class="mygeneral1-string">&quot;It works!&quot;</span><span class="mygeneral1-space"> </span><span class="mygeneral1-keywords1">end</span><span class="mygeneral1-space"> </span><span class="mygeneral1-symbol">).</span></code></li>
       </ol>
 
-      <p>That's it.  You've just made your first <span class="term">Application Specific Webserver</span>, or <span class="term">ASWS</span>.</p>
+      <p>
+        That's it.  You've just made your first <span class="term">Application Specific Webserver</span>, or <span class="term">ASWS</span>.
+        You should be able to browse to it from <span class="webaddress">http://(your ip address)/</span>.  If you're serving from the same
+        machine that you're browsing from, you should be able to browse that at
+        <a href="http://127.0.0.1/" target="_blank">http://127.0.0.1/</a> (opens in a new tab/window).
+      </p>
+
+      <h3><a name="underunix"></a>Using this tutorial under Unix</h3>
+
+      <p>
+        BSD and Linux have a thing where if you want to open a system port (a port &lt;= 1024), you have to be root.  Solaris has an
+        eminently sensible mechanism: you can just specify exceptions in some config file somewhere.  With BSD and Linux, you have a
+        bunch of options, none of them delightful: forward the ports through inetd/xinetd/iptables/ipchains/whatever, run Erlang as
+        root, or under BSD, there's even a kernel patch to remove the offending restriction.  There's actually a good reason for this
+        behavior, but that's beyond the scope of this tutorial.
+      </p>
+
+      <p>
+        I'm totally going to dodge that in this tutorial.  There are instructions elsewhere <span class="todo">Todo: write and insert
+        elsewhere link</span>.  For this tutorial, just open a high port; none of these examples care what port they're run on.  You can
+        deal with operating system things later, when you're not in the middle of learning.  So, the above example becomes:
+      </p>
+
+      <p><code class="inlinecode"><span class="mygeneral1-identifier">htstub</span><span class="mygeneral1-symbol">:</span><span class="mygeneral1-identifier">serve</span><span class="mygeneral1-symbol">(</span><span class="mygeneral1-space"> </span><span class="mygeneral1-number">8000</span><span class="mygeneral1-symbol">,</span><span class="mygeneral1-space"> </span><span class="mygeneral1-keywords1">fun</span><span class="mygeneral1-symbol">(</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">,</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">,</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">)</span><span class="mygeneral1-space"> </span><span class="mygeneral1-symbol">-&gt;</span><span class="mygeneral1-space"> </span><span class="mygeneral1-string">&quot;It works!&quot;</span><span class="mygeneral1-space"> </span><span class="mygeneral1-keywords1">end</span><span class="mygeneral1-space"> </span><span class="mygeneral1-symbol">).</span></code></p>
+
+      <p>
+        And to browse it, you'd go to <a href="http://127.0.0.1:8000/" target="_blank">http://127.0.0.1:8000/</a> (opens in a
+        new tab/window).
+      </p>
+
 
       <h2><a name="finished"></a>Step 1: You're Finished</h2>
-      <h3>What Just Happened?</h3>
-      <h3>Using this tutorial under Unix</h3>
-      <h3>Production Concerns</h3>
+      <h3><a name="whathappened"></a>What Just Happened?</h3>
+      <h3><a name="thatsall"></a>Wait, that's all?</h3>
+      <h3><a name="whywant"></a>So why do I want this again?</h3>
+      <h3><a name="concerns"></a>Production Concerns</h3>
 
       <h2>Step 2: Basic Tools</h2>
-      <h3>Answering (Hello world; DumpR; Clock)</h3>
+      <h3>Answering (DumpR; Clock)</h3>
       <h3>Handling requests (A static site; "pages")</h3>
       <h3>Dynamic sites (Quote; upper &frac12; internet)</h3>
       <h3>GET and POST (Nopaste; Imgpost)</h3>
@@ -343,37 +394,38 @@
 
     <div id="tocSidebar">
 
-      <code class="sideblockcode"><span class="mygeneral1-identifier">Greeting</span><span class="mygeneral1-space">  </span><span class="mygeneral1-symbol">=</span><span class="mygeneral1-space"> </span><span class="mygeneral1-string">&quot;&lt;html&gt;&lt;head/&gt;&lt;body&gt;Hi, there.  Welcome to easier Erlang webdev. &lt;/body&gt;&lt;/html&gt;&quot;</span><span class="mygeneral1-symbol">.<br/><br/>
-</span><span class="mygeneral1-identifier">HelloDriver</span><span class="mygeneral1-space"> </span><span class="mygeneral1-symbol">=</span><span class="mygeneral1-space"> </span><span class="mygeneral1-keywords1">fun</span><span class="mygeneral1-symbol">(</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">,</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">,</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">)</span><span class="mygeneral1-space"> </span><span class="mygeneral1-symbol">-&gt;</span><span class="mygeneral1-space"> </span><br/>&nbsp; &nbsp; <span class="mygeneral1-identifier">Greeting</span><span class="mygeneral1-space"> </span><span class="mygeneral1-keywords1">end</span><span class="mygeneral1-symbol">.<br/><br/>
-</span><span class="mygeneral1-identifier">htstub</span><span class="mygeneral1-symbol">:</span><span class="mygeneral1-identifier">serve</span><span class="mygeneral1-symbol">(</span><span class="mygeneral1-identifier">HelloDriver</span><span class="mygeneral1-symbol">).
-</span></code>
+      <code class="sideblockcode"><span class="mygeneral1-identifier">HelloDriver</span><span class="mygeneral1-space"> </span><span class="mygeneral1-symbol">=</span><span class="mygeneral1-space"><br/> &nbsp;</span><span class="mygeneral1-keywords1">fun</span><span class="mygeneral1-symbol">(</span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">,</span><span class="mygeneral1-space"> </span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">,</span><span class="mygeneral1-space"> </span><span class="mygeneral1-identifier">_</span><span class="mygeneral1-symbol">)</span><span class="mygeneral1-space"> </span><span class="mygeneral1-symbol">-&gt;<br/></span><span class="mygeneral1-space"> &nbsp; &nbsp;</span><span class="mygeneral1-string">&quot;&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;<br/></span><span class="mygeneral1-space"> &nbsp; &nbsp; &nbsp;</span><span class="mygeneral1-string"><span style="color:black;">Hi, there. Welcome to</span><br/></span><span class="mygeneral1-space"> &nbsp; &nbsp; &nbsp;</span><span class="mygeneral1-string"><span style="color:black;">easier Erlang webdev.</span><br/></span><span class="mygeneral1-space"> &nbsp; &nbsp;</span><span class="mygeneral1-string">&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;<br/></span><span class="mygeneral1-space"> &nbsp;</span><span class="mygeneral1-keywords1">end</span><span class="mygeneral1-symbol">.<br/><br/></span><span class="mygeneral1-identifier">htstub</span><span class="mygeneral1-symbol">:</span><span class="mygeneral1-identifier">serve</span><span class="mygeneral1-symbol">(</span><span class="mygeneral1-identifier">HelloDriver</span><span class="mygeneral1-symbol">).</span></code>
 
       <div id="toc">
         <h1>Table of Contents</h1>
 
           <ol>
             <li><a href="#top">Top</a></li>
-            <li><a href="#intro">Introduction</a>
+            <li><a href="#intro">Introduction <span class="toclight">(Hello world)</span></a>
               <ol>
                 <li><a href="#another">Another webserver? :(</a></li>
                 <li><a href="#somany">But there are so many already!</a></li>
                 <li><a href="#thepoint">So what's the point of another?</a></li>
-                <li><a href="#started">How do I get started?</a></li>
+                <li><a href="#started">How do I get started? <span class="toclight">(It Works!)</span></a></li>
+                <li><a href="#underunix">Serving from Unix <span class="toclight">(Unix Works!)</span></a></li>
               </ol>
             </li>
             <li><a href="#">Step 1: You're Finished</a>
               <ol>
                 <li><a href="#">What Just Happened?</a></li>
-                <li><a href="#">Using this tutorial under Unix</a></li>
+                <li><a href="#">Wait, that's all?</a></li>
+                <li><a href="#">So why do I want this again?</a></li>
                 <li><a href="#">Production Concerns</a></li>
               </ol>
             </li>
             <li><a href="#">Step 2: Basic Tools</a>
               <ol>
-                <li><a href="#">Answering <span class="toclight">(Hello world; DumpR; Clock)</span></a></li>
+                <li><a href="#">Answering <span class="toclight">(DumpR; Clock)</span></a></li>
                 <li><a href="#">Handling requests <span class="toclight">(A static site; "pages")</span></a></li>
-                <li><a href="#">Dynamic sites <span class="toclight">(Quote; upper &frac12; internet)</span></a></li>
+                <li><a href="#">Dynamic sites <span class="toclight">(Quote; WhereFood)</span></a></li>
                 <li><a href="#">State <span class="toclight">(A simple counter; keeping notes)</span></a></li>
+                <li><a href="#">Client Headers <span class="toclight">(BrowserID; LangSwap)</span></a></li>
+                <li><a href="#">Server Headers <span class="toclight">(LogoBot)</span></a></li>
                 <li><a href="#">GET and POST <span class="toclight">(Nopaste; Imgpost)</span></a></li>
                 <li><a href="#">Shared state <span class="toclight">(Awfulchat; the horse track)</span></a></li>
               </ol>
@@ -387,9 +439,19 @@
             </li>
             <li><a href="#">Step 4: Deeper Tools</a>
               <ol>
-                <li><a href="#">Invoking and Chaining Modules</a></li>
-                <li><a href="#">Standard Modules <span class="toclight">(VHost; Axs; Cacher)</span></a></li>
+
+                <li><a href="#">Invoking Modules <span class="toclight">(Disk)</span></a></li>
+                <li><a href="#">Chaining Modules <span class="toclight">(Access; Cacher)</span></a></li>
+                <li><a href="#">Standard Modules <span class="toclight">(VHost; Basic Server)</span></a></li>
                 <li><a href="#">Custom Modules <span class="toclight">(Principles; Bork)</span></a></li>
+              </ol>
+            </li>
+            <li><a href="#">Arguing the Design</a>
+              <ol>
+                <li><a href="#">"Where's my data argument?" <span class="toclight">(Lambda)</span></a></li>
+                <li><a href="#">"This needs a framework" <span class="toclight">(The Unix Way)</span></a></li>
+                <li><a href="#">How to argue new things <span class="toclight">(Contact info)</span></a></li>
+                <li><a href="#">"You should go GPL!" <span class="toclight">(No)</span></a></li>
               </ol>
             </li>
             <li><a href="#">Step 5: You're Still Finished</a>
@@ -400,6 +462,7 @@
           </ol>
 
       </div>
+      <br/><br/>
 
     </div>
 
