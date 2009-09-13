@@ -181,7 +181,13 @@ next(Core) -> act_on(Core, next).
 next( Core, N) when N >= 0 -> next(Core, N, []).
 
 next(_Core, 0, Work)       -> lists:reverse(Work);
-next( Core, N, Work)       -> next(Core, N-1, [next(Core)] ++ Work).
+next( Core, N, Work)       -> 
+
+    case next(Core) of
+        complete -> lists:reverse([complete] ++ Work);
+        corrupt  -> lists:reverse([corrupt]  ++ Work);
+        Other    -> next(Core, N-1, [Other] ++ Work)
+    end.
 
 
 
