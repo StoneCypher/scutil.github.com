@@ -58,6 +58,7 @@
     terminate/1,
 
     fibonacci/1,
+    countdown/1,
 
 
 
@@ -80,31 +81,48 @@ fibonacci(_)                                                            -> corru
 
 
 
+%% @since Version 398
+
+countdown( {Last, Last} ) when is_integer(Last)                   -> complete;
+countdown( {Next, Last} ) when is_integer(Next), is_integer(Last) -> { state, {Next-1, Last} };
+countdown(_)                                                      -> corrupt.
+
+
+
+
+
+eat_all(CurrentValue, Generator) -> eat_all(CurrentValue, Generator, []).
+
+eat_all(complete, _Generator, Work) -> lists:reverse(Work);
+eat_all(corrupt,  _Generator, Work) -> lists:reverse(Work);
+eat_all({state,S}, Generator, Work) -> V = Generator(S), eat_all(V, Generator, [V]++Work).
+
+
+
+
+
 %% @since Version 397
 
 core(InitializationValue, CurrentValue, Generator) ->
 
-    {ShouldContinue, NewValue} = receive
+    {ShouldContinue, ToSend, NewValue} = receive
 
-        { Sender, current } ->
-            {true, CurrentValue};
+        { Sender, current } ->                                           {true,  CurrentValue,                     CurrentValue                };
 
         { Sender, next } ->
-            case CurrentValue of complete       -> {true, complete};
-                                 corrupt        -> {true, corrupt};
-                                 {state, State} -> {true, Generator(State)};
-                                 _AnythingElse  -> {true, corrupt}
+            case CurrentValue of complete       ->                       {true,  complete,                         complete                    };
+                                 corrupt        ->                       {true,  corrupt,                          corrupt                     };
+                                 {state, State} -> G = Generator(State), {true,  G,                                G                           };
+                                 _AnythingElse  ->                       {true,  corrupt,                          corrupt                     }
             end;
 
-        { Sender, reset } ->
-            {true, {state,InitializationValue}};
-
-        { Sender, terminate } ->
-            {false, { terminating, self() } }
+        { Sender, reset }     ->                                         {true,  {state,InitializationValue},      {state,InitializationValue} };
+        { Sender, all }       ->                                         {true,  eat_all(CurrentValue, Generator), complete                    };
+        { Sender, terminate } ->                                         {false, { terminating, self() },          corrupt                     }
 
     end,
 
-    Sender ! { sc_generator, NewValue },
+    Sender ! { sc_generator, ToSend },
 
     case ShouldContinue of
         true  -> core(InitializationValue, NewValue, Generator);
@@ -168,3 +186,7 @@ next( Core, N, Work)       -> next(Core, N-1, [next(Core)] ++ Work).
 
 
 
+
+%% @since Version 405
+% Risky, eg for unbounded or huge series this will crash you, possibly slowly
+all(Core) -> act_on(Core, all).
