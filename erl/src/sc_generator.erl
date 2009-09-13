@@ -40,20 +40,23 @@
 
 
 
+%% @todo Move random module into one of these
+
+
+
+
+
 -export([
 
     create/2,
 
     current/1,
+    all/1,
 
     next/1,
-      next/2, % add filter function instead of count
-%     next/3, % filter function and count
+      next/2,
 
     reset/1,
-
-    all/1,
-%      all/2, % filter function
 
     terminate/1,
 
@@ -90,6 +93,8 @@ countdown(_)                                                      -> corrupt.
 
 
 
+
+%% @since Version 406
 
 eat_all(CurrentValue, Generator) -> eat_all(CurrentValue, Generator, []).
 
@@ -143,11 +148,7 @@ create(InitializationValue, Generator) ->
 
 
 
-% create(InitialValue, Generator, Filter) ->
-
-
-
-
+%% @since Version 403
 
 act_on({ sc_generator_core, Pid }, Action) when is_pid(Pid) ->
 
@@ -181,7 +182,7 @@ next(Core) -> act_on(Core, next).
 next( Core, N) when N >= 0 -> next(Core, N, []).
 
 next(_Core, 0, Work)       -> lists:reverse(Work);
-next( Core, N, Work)       -> 
+next( Core, N, Work)       ->
 
     case next(Core) of
         complete -> lists:reverse([complete] ++ Work);
