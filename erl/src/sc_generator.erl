@@ -43,8 +43,8 @@
 -export([
 
     create/2,
-    
-%    current/1,
+
+    current/1,
 %    next/1,
 %    next_n/2,
 %    all/1,
@@ -104,11 +104,11 @@ core(InitializationValue, CurrentValue, Generator) ->
             {true, {state,InitializationValue}};
 
         { Sender, terminate } ->
-            {false, { sc_generator, { terminating, self() } } }
+            {false, { terminating, self() } }
 
     end,
 
-    Sender ! NewValue,
+    Sender ! { sc_generator, NewValue },
 
     case ShouldContinue of
         true  -> core(InitializationValue, NewValue, Generator);
@@ -126,9 +126,20 @@ create(InitializationValue, Generator) ->
     { sc_generator_core, spawn(fun() -> core(InitializationValue, {state,InitializationValue}, Generator) end) }.
 
 
+
+
+
 % create(InitialValue, Generator, Filter) ->
 
 
 
 
-% one()
+
+%% @since Version 400
+
+current( { sc_generator_core, Pid } ) when is_pid(Pid) ->
+
+    Pid ! { self(), current }, 
+    receive
+        { sc_generator, Answer } -> Answer
+    end.
