@@ -53,7 +53,10 @@
 -export( [
 
     eval/2,
+
     dump/0,
+      dump/1,
+
     terminate/0,
 
 
@@ -80,10 +83,10 @@ cache_core() ->
             { do_not_continue, { terminating, self() } };
 
         { Sender, dump } ->
-            { continue, get() };
+            { continue, [ {{F,A},Val} || {{F,A},{val,Val}} <- get()           ] };
 
         { Sender, dump, Fun } ->
-            { continue, [ {{F,A},Val} || {{F,A},Val} <- get(), F == Fun ] };
+            { continue, [ {A,Val}     || {{F,A},{val,Val}} <- get(), F == Fun ] };
 
         { Sender, lazy_apply, Fun, Args } ->
             case get({Fun,Args}) of
@@ -101,7 +104,7 @@ cache_core() ->
     Sender ! { sc_lazy_cache, Result },
 
     case ShouldContinue of
-        continue        -> cache_core();
+        continue        -> sc_lazy:cache_core();
         do_not_continue -> ok
     end.
 
@@ -141,6 +144,27 @@ dump() ->
 
         Defined   ->
             Defined ! { self(), dump },
+            receive
+                { sc_lazy_cache, Message } -> { sc_lazy_cache, Message }
+            end
+
+    end.
+
+
+
+
+
+%% @since Version 409
+
+dump(Fun) ->
+
+    case whereis(sc_lazy_cache) of
+
+        undefined ->
+            { error, sc_lazy_cache_not_running };
+
+        Defined   ->
+            Defined ! { self(), dump, Fun },
             receive
                 { sc_lazy_cache, Message } -> { sc_lazy_cache, Message }
             end
