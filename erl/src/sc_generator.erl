@@ -45,7 +45,7 @@
     create/2,
 
     current/1,
-%    next/1,
+    next/1,
 %    next_n/2,
 %    all/1,
 %    reset/1,
@@ -135,11 +135,21 @@ create(InitializationValue, Generator) ->
 
 
 
-%% @since Version 400
+act_on(Pid, Action) when is_pid(Pid) ->
 
-current( { sc_generator_core, Pid } ) when is_pid(Pid) ->
-
-    Pid ! { self(), current }, 
+    Pid ! { self(), Action },
     receive
         { sc_generator, Answer } -> Answer
     end.
+
+
+
+
+
+%% @since Version 400
+current( { sc_generator_core, Pid } ) -> 
+    act_on(Pid, current).
+
+%% @since Version 401
+next( { sc_generator_core, Pid } ) when is_pid(Pid) ->
+    act_on(Pid, next).
