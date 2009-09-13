@@ -46,7 +46,7 @@
 
     current/1,
     next/1,
-%    next_n/2,
+    next_n/2,
 %    all/1,
 %    reset/1,
 
@@ -135,7 +135,7 @@ create(InitializationValue, Generator) ->
 
 
 
-act_on(Pid, Action) when is_pid(Pid) ->
+act_on({ sc_generator_core, Pid }, Action) when is_pid(Pid) ->
 
     Pid ! { self(), Action },
     receive
@@ -147,9 +147,13 @@ act_on(Pid, Action) when is_pid(Pid) ->
 
 
 %% @since Version 400
-current( { sc_generator_core, Pid } ) -> 
-    act_on(Pid, current).
+current(Core) -> act_on(Core, current).
 
 %% @since Version 401
-next( { sc_generator_core, Pid } ) when is_pid(Pid) ->
-    act_on(Pid, next).
+next(Core)    -> act_on(Core, next).
+
+%% @since Version 402
+next_n(Core, N) when N >= 0 -> next_n(Core, N, []).
+
+next_n(Core, 0, Work) -> lists:reverse(Work);
+next_n(Core, N, Work) -> next_n(Core, N-1, [next(Core)] ++ Work).
