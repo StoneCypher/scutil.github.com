@@ -45,21 +45,17 @@
     create/2,
 
     current/1,
+
     next/1,
-    next_n/2,
-%    all/1,
+      next/2, % add filter function instead of count
+%     next/3, % filter function and count
+
     reset/1,
 
-%    terminate/1,
+    all/1,
+%      all/2, % filter function
 
-%     create/3
-
-%   one/0
-%   many/1,
-%   all/0,
-
-%   filtered_one/1,
-%   filtered_all/1
+    terminate/1,
 
     fibonacci/1,
 
@@ -147,16 +143,28 @@ act_on({ sc_generator_core, Pid }, Action) when is_pid(Pid) ->
 
 
 %% @since Version 400
-current(Core) -> act_on(Core, current).
+current(Core)   -> act_on(Core, current).
 
 %% @since Version 403
-reset(Core)   -> act_on(Core, reset).
+reset(Core)     -> act_on(Core, reset).
+
+%% @since Version 404
+terminate(Core) -> act_on(Core, terminate).
+
+
+
+
 
 %% @since Version 401
-next(Core)    -> act_on(Core, next).
+next(Core) -> act_on(Core, next).
+
 
 %% @since Version 402
-next_n(Core, N) when N >= 0 -> next_n(Core, N, []).
+next( Core, N) when N >= 0 -> next(Core, N, []).
 
-next_n(Core, 0, Work) -> lists:reverse(Work);
-next_n(Core, N, Work) -> next_n(Core, N-1, [next(Core)] ++ Work).
+next(_Core, 0, Work)       -> lists:reverse(Work);
+next( Core, N, Work)       -> next(Core, N-1, [next(Core)] ++ Work).
+
+
+
+
