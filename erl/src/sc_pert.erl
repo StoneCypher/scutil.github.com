@@ -40,11 +40,29 @@
 
 
 
--record(activity, {
-    Name,
-    Origin,
-    Destination,
-    Time
+-record(sc_pert, {
+    name,
+    start_milestone,
+    end_milestone
+}).
+
+
+
+
+
+-record(sc_pert_activity, {
+    name,
+    origin,
+    destination,
+    duration
+}).
+
+
+
+
+
+-record(sc_pert_milestone, {
+    name
 }).
 
 
@@ -66,3 +84,18 @@
 
 ]).
 
+
+
+
+blank() -> todo.
+
+add_milestone(Pert, Milestone) when is_record(Pert, sc_pert), is_record(Milestone, sc_pert_milestone) -> todo.
+remove_milestone(Pert, MilestoneName) when is_record(Pert, sc_pert) -> todo.
+
+add_activity(Pert, Activity) when is_record(Pert, sc_pert), is_record(Activity, sc_pert_activity) -> todo.
+remove_activity(Pert, ActivityName) when is_record(Pert, sc_pert) -> todo.
+
+critical_path(Pert) -> critical_path(Pert, Pert#sc_pert.start_milestone, Pert#sc_pert.end_milestone).
+critical_path(Pert, From, To) -> todo.
+
+slack(Pert) -> todo.
