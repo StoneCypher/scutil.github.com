@@ -97,15 +97,47 @@
 
 
 
-new()                                         -> #sc_pert{}.
-new(Name)                                     -> #sc_pert{name=Name}.
-new(Name, Start, End)                         -> #sc_pert{name=Name, start_milestone=Start, end_milestone=End}.
-new(Name, Start, End, Milestones)             -> #sc_pert{name=Name, start_milestone=Start, end_milestone=End, milestones=Milestones}.
-new(Name, Start, End, Milestones, Activities) -> #sc_pert{name=Name, start_milestone=Start, end_milestone=End, milestones=Milestones, activities=Activities}.
+%% @since Version 414
+
+new() ->
+
+    #sc_pert{}.
+
+
+
+%% @since Version 414
+
+new(Name) ->
+
+    #sc_pert{name=Name}.
+
+
+
+%% @since Version 414
+
+new(Name, Start, End) -> #sc_pert{name=Name, start_milestone=Start, end_milestone=End}.
+
+
+
+%% @since Version 414
+
+new(Name, Start, End, Milestones) ->
+
+    #sc_pert{name=Name, start_milestone=Start, end_milestone=End, milestones=Milestones}.
+
+
+
+%% @since Version 414
+
+new(Name, Start, End, Milestones, Activities) ->
+
+    #sc_pert{name=Name, start_milestone=Start, end_milestone=End, milestones=Milestones, activities=Activities}.
 
 
 
 
+
+%% @since Version 414
 
 set_name(Pert, _NewName) when is_record(Pert, sc_pert) ->
 
@@ -115,13 +147,17 @@ set_name(Pert, _NewName) when is_record(Pert, sc_pert) ->
 
 
 
+%% @since Version 413
+
 add_milestone(Pert, Milestone) when is_record(Pert, sc_pert), is_record(Milestone, sc_pert_milestone) ->
 
-    todo.
+    Pert#sc_pert{milestones=[Milestone]++Pert#sc_pert.milestones}.
 
 
 
 
+
+%% @since Version 413
 
 remove_milestone(Pert, _MilestoneName) when is_record(Pert, sc_pert) ->
 
@@ -131,29 +167,37 @@ remove_milestone(Pert, _MilestoneName) when is_record(Pert, sc_pert) ->
 
 
 
-set_start_milestone(Pert, _MilestoneName) when is_record(Pert, sc_pert) ->
+%% @since Version 414
 
-    todo.
+set_start_milestone(Pert, MilestoneName) when is_record(Pert, sc_pert) ->
 
-
-
-
-
-set_end_milestone(Pert, _MilestoneName) when is_record(Pert, sc_pert) ->
-
-    todo.
+    Pert#sc_pert{start_milestone=MilestoneName}.
 
 
 
 
+
+%% @since Version 414
+
+set_end_milestone(Pert, MilestoneName) when is_record(Pert, sc_pert) ->
+
+    Pert#sc_pert{end_milestone=MilestoneName}.
+
+
+
+
+
+%% @since Version 413
 
 add_activity(Pert, Activity) when is_record(Pert, sc_pert), is_record(Activity, sc_pert_activity) ->
 
-    todo.
+    Pert#sc_pert{activities=[Activity]++Pert#sc_pert.activities}.
 
 
 
 
+
+%% @since Version 413
 
 remove_activity(Pert, _ActivityName) when is_record(Pert, sc_pert) ->
 
@@ -163,11 +207,15 @@ remove_activity(Pert, _ActivityName) when is_record(Pert, sc_pert) ->
 
 
 
+%% @since Version 413
+
 critical_path(Pert) when is_record(Pert, sc_pert) ->
 
     critical_path(Pert, Pert#sc_pert.start_milestone, Pert#sc_pert.end_milestone).
 
 
+
+%% @since Version 413
 
 critical_path(Pert, _From, _To) when is_record(Pert, sc_pert) ->
 
@@ -176,6 +224,8 @@ critical_path(Pert, _From, _To) when is_record(Pert, sc_pert) ->
 
 
 
+
+%% @since Version 413
 
 slack(Pert) when is_record(Pert, sc_pert) ->
 
