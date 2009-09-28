@@ -104,7 +104,7 @@ cache_core() ->
     Sender ! { sc_lazy_cache, Result },
 
     case ShouldContinue of
-        continue        -> sc_lazy:cache_core();
+        continue        -> cache_core();
         do_not_continue -> ok
     end.
 
