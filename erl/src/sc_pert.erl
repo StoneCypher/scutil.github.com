@@ -41,9 +41,11 @@
 
 
 -record(sc_pert, {
-    name,
-    start_milestone,
-    end_milestone
+    name            = 'sc_pert:Unnamed',
+    start_milestone = 'sc_pert:No Milestone',
+    end_milestone   = 'sc_pert:No Milestone',
+    milestones      = [],
+    activities      = []
 }).
 
 
@@ -71,10 +73,18 @@
 
 -export([
 
-    blank/0,
+    new/0,
+      new/1,
+      new/3,
+      new/4,
+      new/5,
+
+    set_name/2,
 
     add_milestone/2,
     remove_milestone/2,
+    set_start_milestone/2,
+    set_end_milestone/2,
 
     add_activity/2,
     remove_activity/2,
@@ -87,15 +97,86 @@
 
 
 
-blank() -> todo.
+new()                                         -> #sc_pert{}.
+new(Name)                                     -> #sc_pert{name=Name}.
+new(Name, Start, End)                         -> #sc_pert{name=Name, start_milestone=Start, end_milestone=End}.
+new(Name, Start, End, Milestones)             -> #sc_pert{name=Name, start_milestone=Start, end_milestone=End, milestones=Milestones}.
+new(Name, Start, End, Milestones, Activities) -> #sc_pert{name=Name, start_milestone=Start, end_milestone=End, milestones=Milestones, activities=Activities}.
 
-add_milestone(Pert, Milestone) when is_record(Pert, sc_pert), is_record(Milestone, sc_pert_milestone) -> todo.
-remove_milestone(Pert, MilestoneName) when is_record(Pert, sc_pert) -> todo.
 
-add_activity(Pert, Activity) when is_record(Pert, sc_pert), is_record(Activity, sc_pert_activity) -> todo.
-remove_activity(Pert, ActivityName) when is_record(Pert, sc_pert) -> todo.
 
-critical_path(Pert) -> critical_path(Pert, Pert#sc_pert.start_milestone, Pert#sc_pert.end_milestone).
-critical_path(Pert, From, To) -> todo.
 
-slack(Pert) -> todo.
+
+set_name(Pert, _NewName) when is_record(Pert, sc_pert) ->
+
+    todo.
+
+
+
+
+
+add_milestone(Pert, Milestone) when is_record(Pert, sc_pert), is_record(Milestone, sc_pert_milestone) ->
+
+    todo.
+
+
+
+
+
+remove_milestone(Pert, _MilestoneName) when is_record(Pert, sc_pert) ->
+
+    todo.
+
+
+
+
+
+set_start_milestone(Pert, _MilestoneName) when is_record(Pert, sc_pert) ->
+
+    todo.
+
+
+
+
+
+set_end_milestone(Pert, _MilestoneName) when is_record(Pert, sc_pert) ->
+
+    todo.
+
+
+
+
+
+add_activity(Pert, Activity) when is_record(Pert, sc_pert), is_record(Activity, sc_pert_activity) ->
+
+    todo.
+
+
+
+
+
+remove_activity(Pert, _ActivityName) when is_record(Pert, sc_pert) ->
+
+    todo.
+
+
+
+
+
+critical_path(Pert) when is_record(Pert, sc_pert) ->
+
+    critical_path(Pert, Pert#sc_pert.start_milestone, Pert#sc_pert.end_milestone).
+
+
+
+critical_path(Pert, _From, _To) when is_record(Pert, sc_pert) ->
+
+    todo.
+
+
+
+
+
+slack(Pert) when is_record(Pert, sc_pert) ->
+
+    todo.
