@@ -52,7 +52,8 @@
 
 -export( [
 
-    euclidean/2
+    euclidean/2,
+    least/2
 
 ] ).
 
@@ -97,3 +98,12 @@ euclidean(C1, C2) ->
             ]
         )
     ).
+
+
+
+
+
+least(To, List) when is_list(List) ->
+
+    [Smallest | _Remainder] = lists:keysort(2, [ {Loc, euclidean(To,Loc)} || Loc <- List]),
+    Smallest.
