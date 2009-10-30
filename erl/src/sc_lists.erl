@@ -105,8 +105,11 @@
 
     last_while_pos/2,
       last_while_pos/3,
-      
-    partition_n/2
+
+    partition_n/2,
+
+    all_neighbor_pairs/1,
+    distinct_neighbor_pairs/1
 
 ] ).
 
@@ -1263,3 +1266,25 @@ last_while_pos(N, [Head|Tail], Pred, Last) ->
 partition_n(Data, Function) ->
 
     [ { GroupId, [ GDatum || { _H, GDatum } <- GroupData ] } || { GroupId, GroupData } <- keygroup( 1, [ { Function(Datum), Datum } || Datum <- Data ] ) ].
+
+
+
+
+
+% @since Version 417
+
+all_neighbor_pairs(List) ->
+
+    all_neighbor_pairs(List, []).
+
+
+
+all_neighbor_pairs([[]], Work) ->
+
+    lists:reverse(Work);
+
+
+
+all_neighbor_pairs([A,B|Rem], Work) ->
+
+    all_neighbor_pairs(Rem, [{A,B}] ++ Work).
