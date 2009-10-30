@@ -1288,3 +1288,37 @@ all_neighbor_pairs([[]], Work) ->
 all_neighbor_pairs([A,B|Rem], Work) ->
 
     all_neighbor_pairs(Rem, [{A,B}] ++ Work).
+
+
+
+
+
+% @since Version 418
+
+distinct_neighbor_pairs(List) ->
+
+    distinct_neighbor_pairs(List, []).
+
+
+
+distinct_neighbor_pairs([], Work) ->
+
+    [];
+
+
+
+distinct_neighbor_pairs([[_LastItemIsNotInAPairByItself]], Work) ->
+
+    lists:reverse(Work);
+
+
+
+distinct_neighbor_pairs([[]], Work) ->
+
+    lists:reverse(Work);
+
+
+
+distinct_neighbor_pairs([A,B|Rem], Work) ->
+
+    distinct_neighbor_pairs(Rem, [{A,B}] ++ Work).
