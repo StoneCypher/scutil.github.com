@@ -1277,31 +1277,47 @@ partition_n(Data, Function) ->
 
 all_neighbor_pairs(List) ->
 
-    all_neighbor_pairs(List, []).
+    all_neighbor_pairs(List, make_tuples).
 
 
 
-all_neighbor_pairs([], Work) ->
+% @since Version 422
+
+all_neighbor_pairs(List, WorkType) ->
+
+    all_neighbor_pairs(List, [], WorkType).
+
+
+
+% @since Version 422
+
+all_neighbor_pairs([], Work, _Work_type) ->
 
     lists:reverse(Work);  % should actually only ever be an empty list anyway
 
 
 
-all_neighbor_pairs([[]], Work) ->
+all_neighbor_pairs([[]], Work, _Work_type) ->
 
     lists:reverse(Work);
 
 
 
-all_neighbor_pairs([_LastItemIsNotInAPairByItself], Work) ->
+all_neighbor_pairs([_LastItemIsNotInAPairByItself], Work, _Work_type) ->
 
     lists:reverse(Work);
 
 
 
-all_neighbor_pairs([A,B|Rem], Work) ->
+all_neighbor_pairs([A,B|Rem], Work, make_lists) ->
 
-    all_neighbor_pairs([B]++Rem, [{A,B}] ++ Work).
+    all_neighbor_pairs([B]++Rem, [[A,B]] ++ Work, make_lists);
+
+
+
+all_neighbor_pairs([A,B|Rem], Work, make_lists) ->
+
+    all_neighbor_pairs([B]++Rem, [{A,B}] ++ Work, make_tuples).
 
 
 
