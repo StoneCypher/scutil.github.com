@@ -1386,7 +1386,7 @@ key_cluster(_Index, []) ->
 
 key_cluster(Index, List) ->
 
-    SortedList = lists:keysort(2, List),
+    SortedList = lists:keysort(Index, List),
     [First|_]  = List,
     Current    = element(Index, First),
 
