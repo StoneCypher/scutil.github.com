@@ -84,3 +84,13 @@ gen_from(ThisChar, Work, {sc_markov_chain_pattern, Pattern}) ->
         New -> gen_from(New, [ThisChar] ++ Work, {sc_markov_chain_pattern, Pattern})
 
     end.
+
+
+
+
+
+% @since Version 429
+
+list_to_chain(List) ->
+
+    gen_from(list_to_chain_pattern(List)).
