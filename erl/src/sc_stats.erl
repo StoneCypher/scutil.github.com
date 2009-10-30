@@ -374,6 +374,12 @@ std_deviation(Values, sample) when is_list(Values) ->
 
 %% @todo add an argument presort to this and other functions to skip the sorting pass
 
+histograph([]) ->
+
+    [];
+
+
+
 histograph(List) when is_list(List) ->
 
     [Head|Tail] = lists:sort(List),
