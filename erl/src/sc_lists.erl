@@ -1285,6 +1285,12 @@ all_neighbor_pairs([[]], Work) ->
 
 
 
+all_neighbor_pairs([_LastItemIsNotInAPairByItself], Work) ->
+
+    lists:reverse(Work);
+
+
+
 all_neighbor_pairs([A,B|Rem], Work) ->
 
     all_neighbor_pairs([B]++Rem, [{A,B}] ++ Work).
@@ -1303,7 +1309,7 @@ distinct_neighbor_pairs(List) ->
 
 distinct_neighbor_pairs([], Work) ->
 
-    [];
+    lists:reverse(Work);  % should actually only ever be an empty list anyway
 
 
 
