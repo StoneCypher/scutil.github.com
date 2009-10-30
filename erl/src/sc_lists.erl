@@ -109,7 +109,9 @@
     partition_n/2,
 
     all_neighbor_pairs/1,
-    distinct_neighbor_pairs/1
+
+    distinct_neighbor_pairs/1,
+      distinct_neighbor_pairs/2
 
 ] ).
 
@@ -1279,6 +1281,12 @@ all_neighbor_pairs(List) ->
 
 
 
+all_neighbor_pairs([], Work) ->
+
+    lists:reverse(Work);  % should actually only ever be an empty list anyway
+
+
+
 all_neighbor_pairs([[]], Work) ->
 
     lists:reverse(Work);
@@ -1303,28 +1311,44 @@ all_neighbor_pairs([A,B|Rem], Work) ->
 
 distinct_neighbor_pairs(List) ->
 
-    distinct_neighbor_pairs(List, []).
+    distinct_neighbor_pairs(List, [], make_tuples).
 
 
 
-distinct_neighbor_pairs([], Work) ->
+% @since Version 421
+
+distinct_neighbor_pairs(List, MakeType) ->
+
+    distinct_neighbor_pairs(List, [], MakeType).
+
+
+
+% @since Version 421
+
+distinct_neighbor_pairs([], Work, _Make_type) ->
 
     lists:reverse(Work);  % should actually only ever be an empty list anyway
 
 
 
-distinct_neighbor_pairs([[_LastItemIsNotInAPairByItself]], Work) ->
+distinct_neighbor_pairs([[_LastItemIsNotInAPairByItself]], Work, _Make_type) ->
 
     lists:reverse(Work);
 
 
 
-distinct_neighbor_pairs([[]], Work) ->
+distinct_neighbor_pairs([[]], Work, _Make_type) ->
 
     lists:reverse(Work);
 
 
 
-distinct_neighbor_pairs([A,B|Rem], Work) ->
+distinct_neighbor_pairs([A,B|Rem], Work, make_tuples) ->
 
-    distinct_neighbor_pairs(Rem, [{A,B}] ++ Work).
+    distinct_neighbor_pairs(Rem, [{A,B}] ++ Work, make_tuples);
+
+
+
+distinct_neighbor_pairs([A,B|Rem], Work, make_lists) ->
+
+    distinct_neighbor_pairs(Rem, [[A,B]] ++ Work, make_lists).
