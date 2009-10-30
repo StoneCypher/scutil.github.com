@@ -7,13 +7,13 @@
 
 -export([
 
-%    list_to_chain/1,
+    list_to_chain/1,
     list_to_chain_pattern/1,
 
-%    weights_for/2,
-%    next_for/2,
+    weights_for/2,
+    next_for/2,
 
-%    gen_from/1
+    gen_from/1
 
 ]).
 
