@@ -1287,7 +1287,7 @@ all_neighbor_pairs([[]], Work) ->
 
 all_neighbor_pairs([A,B|Rem], Work) ->
 
-    all_neighbor_pairs(Rem, [{A,B}] ++ Work).
+    all_neighbor_pairs([B]++Rem, [{A,B}] ++ Work).
 
 
 
