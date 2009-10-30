@@ -45,3 +45,32 @@ list_to_chain_pattern(List) ->
 weights_for(Item, {sc_markov_chain_pattern, Pattern}) ->
 
     dict:fetch(Item, Pattern).
+
+
+
+
+
+% @since Version 427
+
+gen_from({sc_markov_chain_pattern, Pattern}) ->
+
+    [" " | Answer] = gen_from(" ", [], {sc_markov_chain_pattern, Pattern}),
+    case Answer of
+        []    -> gen_from({sc_markov_chain_pattern, Pattern});
+        [""]  -> gen_from({sc_markov_chain_pattern, Pattern});
+        [" "] -> gen_from({sc_markov_chain_pattern, Pattern});
+        Good  -> lists:append(Good)
+    end.
+
+
+
+
+
+gen_from(ThisChar, Work, {sc_markov_chain_pattern, Pattern}) ->
+
+    case next_for(ThisChar, {sc_markov_chain_pattern, Pattern}) of
+
+        " " -> lists:reverse([ThisChar] ++ Work);
+        New -> gen_from(New, [ThisChar] ++ Work, {sc_markov_chain_pattern, Pattern})
+
+    end.
