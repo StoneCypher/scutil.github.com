@@ -109,9 +109,12 @@
     partition_n/2,
 
     all_neighbor_pairs/1,
+      all_neighbor_pairs/2,
 
     distinct_neighbor_pairs/1,
-      distinct_neighbor_pairs/2
+      distinct_neighbor_pairs/2,
+
+    key_cluster/2
 
 ] ).
 
@@ -1315,7 +1318,7 @@ all_neighbor_pairs([A,B|Rem], Work, make_lists) ->
 
 
 
-all_neighbor_pairs([A,B|Rem], Work, make_lists) ->
+all_neighbor_pairs([A,B|Rem], Work, make_tuples) ->
 
     all_neighbor_pairs([B]++Rem, [{A,B}] ++ Work, make_tuples).
 
@@ -1368,3 +1371,51 @@ distinct_neighbor_pairs([A,B|Rem], Work, make_tuples) ->
 distinct_neighbor_pairs([A,B|Rem], Work, make_lists) ->
 
     distinct_neighbor_pairs(Rem, [[A,B]] ++ Work, make_lists).
+
+
+
+
+
+% since Version 423
+
+key_cluster(_Index, []) ->
+
+    [];
+
+
+
+key_cluster(Index, List) ->
+
+    SortedList = lists:keysort(2, List),
+    [First|_]  = List,
+    Current    = element(Index, First),
+
+    key_cluster(Index, SortedList, Current, [], []).
+
+
+
+key_cluster(Index, [], _Current, Work, Storage) ->
+
+    % Not happy about this, but too lazy to fix it.
+
+    PossibleResult = lists:reverse([ lists:reverse(Sublist) || Sublist <- ([Work] ++ Storage) ]),
+
+    [RemoveEmptyHeadCons|FixedResult] = PossibleResult,
+
+    FinalResult = case RemoveEmptyHeadCons of
+        [] -> FixedResult;
+        _  -> PossibleResult
+    end,
+
+    LabelItem = fun(Item) -> [X|_] = Item, Label = element(Index, X), { Label, Item } end,
+
+    [ LabelItem(Item) || Item <- FinalResult ];
+
+
+
+key_cluster(Index, [WorkItem|Rem], Current, Work, Storage) ->
+
+    case element(Index, WorkItem) of
+        Current -> key_cluster(Index, Rem, Current, [WorkItem]++Work, Storage);
+        Other   -> key_cluster(Index, Rem, Other,   [WorkItem],       [Work]++Storage)
+    end.
