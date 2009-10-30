@@ -50,6 +50,16 @@ weights_for(Item, {sc_markov_chain_pattern, Pattern}) ->
 
 
 
+% @since Version 428
+
+next_for(Item, {sc_markov_chain_pattern, Pattern}) ->
+
+    sc_random:from_weighted(weights_for(Item, {sc_markov_chain_pattern, Pattern})).
+
+
+
+
+
 % @since Version 427
 
 gen_from({sc_markov_chain_pattern, Pattern}) ->
