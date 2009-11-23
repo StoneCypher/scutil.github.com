@@ -234,14 +234,21 @@ block_on_body(_ConnectedSocket, _Timeout, Body, Path, Protocol, Method, PHeaders
 
 block_on_reformat(Body, Path, Protocol, Method, PHeaders, BodyLength) ->
 
-    { Site, Port } = case sc_string:explode(":", proplists:get_value("Host", PHeaders)) of
+    { Site, Port } = case proplists:get_value("Host", PHeaders) of
 
-        [ ISite, IPort ] ->
-            { ISite, list_to_integer(IPort) };
+        undefined -> { "http://127.0.0.1/", 80 };
 
-        [ ISite ] ->
-            { ISite, 80 }
+        Defined ->
 
+            case sc_string:explode(":", Defined) of
+
+                [ ISite, IPort ] ->
+                    { ISite, list_to_integer(IPort) };
+
+                [ ISite ] ->
+                    { ISite, 80 }
+
+            end
     end,
 
     "HTTP/" ++ PVer  = Protocol,
