@@ -47,13 +47,16 @@
 
     <style type="text/css" media="screen,projection">
 
-      body  { padding: 2em 3em; font-family: candara; background-color: #f0f8ff; }
+      body   { padding: 2em 3em; font-family: candara; background-color: #f0f8ff; }
 
-      input { width: 4em; }
-      label { display: block; margin-bottom: 0.25em; }
+      input  { width: 4em; }
+      label  { display: block; margin-bottom: 0.25em; }
 
-      table { border: 2px solid black; border-collapse: collapse; margin-top: 2em; }
-      td    { border: 1px solid black; text-align: center; padding: 0.25em 0.5em; background-color: white; }
+      table  { border: solid black; border-width: 0 2px 2px 0; border-collapse: collapse; margin-top: 2em; }
+      td     { border: 1px solid black; text-align: center; padding: 0.25em 0.5em; background-color: white; }
+
+      .topb  { border-top: 2px solid black; }
+      .leftb { border-left: 2px solid black; }
 
     </style>
 
@@ -74,23 +77,23 @@
     <table>
 
       <tr>
-        <td colspan="2">Basic</td><td colspan="2">Pro</td>
+        <th/><td colspan="2" class="topb leftb">Basic</td><td colspan="2" class="topb">Pro</td>
       </tr>
 
       <tr>
-        <td>CS</td><td>Amazon</td><td>CS Pro</td><td>Amazon Pro</td>
+        <th/><td class="leftb">CS</td><td>Amazon</td><td>CS Pro</td><td>Amazon Pro</td>
       </tr>
 
       <tr>
-        <td id="cs">0.00</td><td id="am">0.00</td><td id="csp">0.00</td><td id="amp">0.00</td>
+        <th class="topb leftb">Printing Cost</th><td class="leftb" id="cs">0.00</td><td id="am">0.00</td><td id="csp">0.00</td><td id="amp">0.00</td>
       </tr>
 
       <tr>
-        <td id="tcs">0.00</td><td id="tam">0.00</td><td id="tcsp">0.00</td><td id="tamp">0.00</td>
+        <th class="leftb">List Price Take</th><td class="leftb" id="tcs">0.00</td><td id="tam">0.00</td><td id="tcsp">0.00</td><td id="tamp">0.00</td>
       </tr>
 
       <tr>
-        <td id="pcs">0.00</td><td id="pam">0.00</td><td id="pcsp">0.00</td><td id="pamp">0.00</td>
+        <th class="leftb">Profit per Item</th><td class="leftb" id="pcs">0.00</td><td id="pam">0.00</td><td id="pcsp">0.00</td><td id="pamp">0.00</td>
       </tr>
 
     </table>
