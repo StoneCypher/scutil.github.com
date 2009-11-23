@@ -1,7 +1,7 @@
 
 %% @author John Haugeland <stonecypher@gmail.com>
 %% @copyright 2007 - current John Haugeland, All Rights Reserved
-%% @version $Revision$
+%% @version $Revision: 317 $
 %% @since Version 8
 
 %% @doc <!-- google analytics --><script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script><script type="text/javascript">var pageTracker = _gat._getTracker("UA-4903191-10");pageTracker._trackPageview();</script>
@@ -12,7 +12,7 @@
 %% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Website is</span><a href="http://scutil.com/">http://scutil.com/</a></span>
 %% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">Author's Website</span><a href="http://fullof.bs">Full of BS</a></span>
 %% @reference <span style="padding:0.1em 0.4em;background-color:#eef;display:inline-block;width:47em"><span style="display:inline-block;width:18em">This library is released under the</span><a href="http://scutil.com/license.html">MIT License</a></span>
-%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date$</tt></span>
+%% @reference <span style="padding:0.1em 0.4em;background-color:#efe;display:inline-block;width:47em"><span style="display:inline-block;width:18em">This build was released</span><tt style="text-decoration:underline;background-color:#eee">$Date: 2009-04-05 16:16:32 -0600 (Sun, 05 Apr 2009) $</tt></span>
 
 %% @todo add @see cross-references between related functions
 %% @todo add thanks tables and cross-references
@@ -26,7 +26,7 @@
 
 
 
--module(sc.convert).
+-module(sc_convert).
 
 -author("John Haugeland <stonecypher@gmail.com>").
 -webpage("http://scutil.com/").
@@ -35,9 +35,9 @@
 -publicsvn("svn://crunchyd.com/scutil/").
 -currentsource("http://crunchyd.com/release/scutil.zip").
 
--svn_id("$Id$").
--svn_head("$HeadURL$").
--svn_revision("$Revision$").
+-svn_id("$Id: convert.erl 317 2009-04-05 22:16:32Z john $").
+-svn_head("$HeadURL: svn://crunchyd.com/scutil/erl/src/sc/convert.erl $").
+-svn_revision("$Revision: 317 $").
 
 -description("Conversion utilities, each between types, between units and representations.").
 
@@ -75,16 +75,18 @@
     f32_iolist_to_int/2,
     f32_iolist_to_int/4,
     f32_iolist_to_int/5,
-    
+
   list_to_number/1,
-  
+
   hex_to_int/1,
     hex_to_int/2,
-    
+
+  integer_to_radix/2,
+
   byte_to_hex/1,
   nybble_to_hex/1,
   io_list_to_hex/1,
-  
+
   list_to_term/1
 
 ] ).
@@ -426,3 +428,47 @@ list_to_term(List) ->
         Error -> { error, Error }
 
     end.
+
+
+
+
+
+%% @internal
+%% @since Version 434
+
+downshift_radix(InStep, 0,      _) ->
+    InStep;
+
+downshift_radix(InStep, Number, Radix) ->
+    downshift_radix([Number rem Radix]++InStep, trunc((Number-(Number rem Radix)) / Radix), Radix ).
+
+
+
+
+
+%% @spec integer_to_radix(Number::number(), Radix::tuple()) -> list()
+
+%% @doc {@section Utility} Convert a number to a radix string using a radix list of your specification and any size.  When appropriate, prefer the system provided `erlang:integer_to_list/2'.  Lists are accepted, but converted to tuples before use, so are inefficient.  ```1> sc_convert:integer_to_radix(1111, "0123456789abcdef").
+%% "457"
+%% 2> sc_convert:integer_to_radix(1111, "0123456789").
+%% "1111"
+%% 3> sc_convert:integer_to_radix(1234567890, "abcdefghij").
+%% "bcdefghija"
+%% 4> sc_convert:integer_to_radix(12648430, {$0, $1, $2, $3, $4, $5, $6, $7, $8, $9, $a, $b, $C, $d, $e, $f}).
+%% "C0ffee"'''
+%% 5> sc_convert:integer_to_radix(1234567890, [alpha, beta, gamma, delta, epsilon, zeta, eta, theta, kappa, lambda]).
+%% [beta,gamma,delta,epsilon,zeta,eta,theta,kappa,lambda,alpha]'''
+
+%% @since Version 434
+
+integer_to_radix(Number, RadixItems) when is_tuple(RadixItems) ->
+
+    Radix = size(RadixItems),
+    [ element(Ch+1, RadixItems) || Ch <- downshift_radix([], Number, Radix) ];
+
+
+
+
+integer_to_radix(Number, RadixList) when is_list(RadixList) ->
+
+    integer_to_radix(Number, list_to_tuple(RadixList)).
