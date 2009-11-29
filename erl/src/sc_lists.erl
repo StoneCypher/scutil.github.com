@@ -318,14 +318,14 @@ minmax( [_ThsItem|RestOfList], Min, Max) ->
 %% @since Version 126
 
 every_flag_representation([]) ->
-    
+
     [[]];
 
 
 
 
 every_flag_representation([Flag|RemFlags]) ->
-    
+
     [ MaybeFlag ++ Reps ||
         MaybeFlag <- [[],[Flag]],
         Reps      <- every_flag_representation(RemFlags)
@@ -337,7 +337,7 @@ every_flag_representation([Flag|RemFlags]) ->
 
 %% @equiv every_member_representation(Memberships, no_absence)
 
-every_member_representation(Memberships) -> 
+every_member_representation(Memberships) ->
 
     every_member_representation(Memberships, no_absence).
 
@@ -384,16 +384,16 @@ every_member_representation(Memberships) ->
 every_member_representation([], _) ->
 
     [[]];
-    
 
 
-every_member_representation( [Membership|RemMemberships], no_absence   ) -> 
 
-    [ [Member] ++ RemRep || 
-        Member <- Membership,       
-        RemRep <- every_member_representation(RemMemberships, no_absence) 
+every_member_representation( [Membership|RemMemberships], no_absence   ) ->
+
+    [ [Member] ++ RemRep ||
+        Member <- Membership,
+        RemRep <- every_member_representation(RemMemberships, no_absence)
     ];
-    
+
 
 
 every_member_representation( [Membership|RemMemberships], allow_absence) ->
@@ -625,15 +625,23 @@ zip_n_foldn(Fun, Acc0, Ls, Ret) ->
 
 %% @since Version 89
 
-combinations(Items, 1) when is_list(Items) -> 
+combinations(Items, 1) when is_list(Items) ->
 
-    Items;
+    [ [I] || I <- Items ];
 
 
 
 combinations([], _N) ->
 
    [];
+
+
+
+
+combinations(L, 0) when is_list(L) ->
+
+    [];
+
 
 
 
@@ -1193,7 +1201,7 @@ split_at(N, BN, [Item|Rem], Current, Work) ->
 %
 % 1> sc_lists:first_pos([a,b,c,d,2,f],fun erlang:is_integer/1).
 % 5
-% 
+%
 % 2> sc_lists:first_pos([a,b,c,d,e,f],fun erlang:is_integer/1).
 % false
 
