@@ -58,7 +58,8 @@
 
 
 -export( [
-    receive_one/0
+    receive_one/0,
+    send_receive/3
 ] ).
 
 
@@ -86,5 +87,36 @@ receive_one() ->
     receive (X) ->
         { item, X }
     after 0 ->
+        nothing_there
+    end.
+
+
+
+
+
+%% @equiv send_receive(ToWhom, What, infinity)
+
+send_receive(ToWhom, What) ->
+
+    send_receive(ToWhom, What, infinity).
+
+
+
+
+
+%% @spec send_receive(ToWhom::pid()|atom(), What::any(), HowLong::non_negative_integer()|infinity) -> { item, any() } | nothing_there
+
+%% @doc {@section Utility} First send a message to an entity.  Then pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block.  ```1> scutil:send_receive(self(), message).
+%% {item,message}'''
+
+%% @since Version 434
+
+send_receive(ToWhom, What, HowLong) ->
+
+    ToWhom ! What,
+
+    receive (X) ->
+        { item, X }
+    after HowLong ->
         nothing_there
     end.
