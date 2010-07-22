@@ -71,20 +71,32 @@
 
 
 
-%% since Version 
+%% since Version 438
 
 factorize(N) when is_integer(N), N > 1 ->
 
-    factorize(N, 2, []).
+    factorize(N, 2, []);
 
 factorize(1) -> [1];
-factorize(0( -> []/
+factorize(0) -> [].
 
 
+
+%% since Version 439
 
 factorize(N, Current, Work) ->
 
-    Work.
+    io:format("N       ~p~nCurrent ~p~nWork    ~p~n~n", [N, Current, Work]),
+
+    case Current > math:sqrt(N) of
+
+        true  -> lists:reverse([N] ++ Work);
+        false ->
+            case N rem Current of
+                0 -> factorize(N div Current, Current,   [Current] ++ Work);
+                _ -> factorize(N,             Current+1, Work)
+            end
+    end.
 
 
 
