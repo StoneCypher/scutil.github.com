@@ -24,6 +24,8 @@
 % matrix should take, for length, either a positive integer or a function which takes the current
 % length, the current letter queue and the length histo and returns a length to matrix over
 
+% modify chain to take a terminator item, instead of just terminating on space, so that sentences work on period
+
 
 
 

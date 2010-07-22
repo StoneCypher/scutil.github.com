@@ -121,6 +121,7 @@
 
 
 
+
 %% @since Version 221
 
 % was `scutil:extrema_of/1'
@@ -255,7 +256,7 @@ rotate_to_last(Item, List) ->
 
 
 %% @since Version 129
-%% @todo is this the same as extrma?
+%% @todo is this the same as extrema?
 
 minmax( [FirstItem | RestOfList] ) ->
 
@@ -527,7 +528,7 @@ intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head > L2Head ->
 
 
 
-%% @spec zip_n(Ls::list()) -> list_of_tuples()
+%% @spec (Ls::list()) -> list_of_tuples()
 %% @equiv zip_n(Ls, to_tuple)
 
 zip_n(Ls) ->

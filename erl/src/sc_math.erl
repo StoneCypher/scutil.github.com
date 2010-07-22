@@ -62,9 +62,29 @@
     mod/2,                       % needs tests
     root_sum_square/1,           % needs tests
     root_mean_square/1,          % needs tests
-    absolute_difference/2        % needs tests
+    absolute_difference/2,       % needs tests
+    factorize/1
 
 ] ).
+
+
+
+
+
+%% since Version 
+
+factorize(N) when is_integer(N), N > 1 ->
+
+    factorize(N, 2, []).
+
+factorize(1) -> [1];
+factorize(0( -> []/
+
+
+
+factorize(N, Current, Work) ->
+
+    Work.
 
 
 

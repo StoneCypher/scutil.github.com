@@ -8,10 +8,10 @@
 -export([
 
     power_set/1,
-    
+
     union/1,
       union/2,
-      
+
     intersection/2
 
 ]).
@@ -44,6 +44,8 @@ union(L) ->
 union(L1, L2) ->
 
     union([L1,L2]).
+
+% todo test require that sort(union(powerset(A))) == sort(A)
 
 
 
