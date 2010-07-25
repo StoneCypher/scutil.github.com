@@ -100,6 +100,20 @@ diff({AM,AS,AU}, {BM, BS, BU}) ->
 
 
 
+%% @since Version 440
+
+benchmark(BareLambda) ->
+
+    Start  = now(),
+    Result = BareLambda(),
+    End    = now(),
+
+    { diff(Start,End), Result }.
+
+
+
+
+
 %% @since Version 38
 
 benchmark(Fun, Args) ->
