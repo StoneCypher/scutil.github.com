@@ -54,7 +54,8 @@
 
     diff/2,
 
-    benchmark/2,
+    benchmark/1,
+      benchmark/2,
       benchmark/3,
 
     call_after/2,
