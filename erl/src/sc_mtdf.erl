@@ -2,7 +2,14 @@
 -module(sc_mtdf).
 
 -export([
-    mtdf/3
+
+    mtdf/3,
+    
+    lmin/2,
+      lmax/2,
+
+    alphabeta_wm/7
+
 ]).
 
 
@@ -11,11 +18,13 @@
 
 % Since 445
 
-alphabeta_wm(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) -> todo.
+alphabeta_wm(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) -> 
 
     case get(Node) of
 
         undefined ->
+
+           alphabeta_wm_2(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother);
 
         { cached, Lower, Upper, Last } -> if
 
@@ -23,8 +32,36 @@ alphabeta_wm(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) -> todo.
             Upper =< Alpha -> Upper;
 
             true ->
-                alphabeta_wm_2(Node, max(Alpha, Lower), min(Beta, Upper), Depth, Eval, FirstChild, NextBrother);
+                alphabeta_wm_2(Node, max(Alpha, Lower), min(Beta, Upper), Depth, Eval, FirstChild, NextBrother)
 
+        end
+
+    end.
+
+
+
+
+
+%% Since 451
+
+lmin(A,B) ->
+
+    case less_than(A,B) of
+        true  -> A;
+        false -> B
+    end.
+
+
+
+
+
+%% Since 452
+
+lmax(A,B) ->
+
+    case less_than(A,B) of
+        true  -> B;
+        false -> A
     end.
 
 
