@@ -3,7 +3,7 @@
 
 -export([
 
-    mtdf/7,
+    mtdf/8,
 
     lmin/2,
       lmax/2
@@ -171,9 +171,9 @@ less_than(A,            B)            -> A < B.
 
 % Starting with a traditional version in pseudocode, will refine in SVN passes
 
-mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother) ->
+mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother, LastSought) ->
 
-    mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother, pos_infinity, neg_infinity, F).
+    mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother, pos_infinity, neg_infinity, F, LastSought).
 
 
 
@@ -181,7 +181,7 @@ mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother) ->
 
 %% Since 443
 
-mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother, LowerBound, UpperBound, G) ->
+mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother, LowerBound, UpperBound, G, LastSought) ->
 
     case less_than(LowerBound, UpperBound) of
 
@@ -192,14 +192,14 @@ mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother, LowerBound, UpperBoun
                 false -> G
             end,
 
-            NewG = alphabeta_wm(Root, Beta-1, Beta, D, Eval, IsMaxNode, FirstChild, NextBrother),
+            NewG = alphabeta_wm(Root, Beta-1, Beta, D, Eval, IsMaxNode, FirstChild, NextBrother, LastSought),
 
             { NewUB, NewLB } = case NewG < Beta of
                 true  -> { NewG,       LowerBound };
                 false -> { UpperBound, NewG       }
             end,
 
-            mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother, NewLB, NewUB, NewG);
+            mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother, NewLB, NewUB, NewG, LastSought);
 
         false ->
             G
