@@ -6,7 +6,18 @@
     mtdf/9,
 
     lmin/2,
-      lmax/2
+      lmax/2,
+
+    create_memory_pid/0,
+      destroy_memory_pid/0,
+
+
+
+
+
+    % Private, do not use
+
+    new_memory_pid/0
 
 ]).
 
@@ -167,14 +178,58 @@ less_than(A,            B)            -> A < B.
 
 
 
+% Since 457
+
+create_memory_pid() ->
+
+    { sc_mtdf_memory_pid, spawn(?MODULE, new_memory_pid, []) }.
+
+
+
+
+
+% Since 457
+
+new_memory_pid() ->
+
+    memory_pid_loop().
+
+
+
+
+
+% Since 457
+
+memory_pid_loop() ->
+
+    receive
+
+        terminate ->
+            ok;
+
+        { ping, PID } ->
+            PID ! { pong, self() },
+            memory_pid_loop();
+
+        { mtdf, PID, Root, MaxDepth, EvalFunc, IsMaxNodeFunc, FirstChildFunc, NextBrotherFunc, pos_infinity, neg_infinity, FirstGuessForG, LastSoughtAt } ->
+            MtdfVal = mtdf_step(Root, MaxDepth, EvalFunc, IsMaxNodeFunc, FirstChildFunc, NextBrotherFunc, pos_infinity, neg_infinity, FirstGuessForG, LastSoughtAt),
+            PID ! { mtdf_val, MtdfVal },
+            memory_pid_loop()
+
+    end.
+
+
+
+
+
 %% Since 442
 
 % Starting with a traditional version in pseudocode, will refine in SVN passes
 
 mtdf(Root, FirstGuessForG, MaxDepth, EvalFunc, LastSoughtAt, IsMaxNodeFunc, FirstChildFunc, NextBrotherFunc, MemoryPid) ->
 
-    MemoryPid ! { mtdf, Root, MaxDepth, EvalFunc, IsMaxNodeFunc, FirstChildFunc, NextBrotherFunc, pos_infinity, neg_infinity, FirstGuessForG, LastSoughtAt },
-    
+    MemoryPid ! { mtdf, self(), Root, MaxDepth, EvalFunc, IsMaxNodeFunc, FirstChildFunc, NextBrotherFunc, pos_infinity, neg_infinity, FirstGuessForG, LastSoughtAt },
+
     receive
         { mtdf_val, X } -> X
     end.
