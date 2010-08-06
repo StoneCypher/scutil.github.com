@@ -3,8 +3,8 @@
 
 -export([
 
-    mtdf/3,
-    
+    mtdf/6,
+
     lmin/2,
       lmax/2,
 
@@ -26,13 +26,13 @@ alphabeta_wm(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
 
            alphabeta_wm_2(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother);
 
-        { cached, Lower, Upper, Last } -> if
+        { cached, Id, Lower, Upper, Last } -> if
 
             Lower >= Beta  -> Lower;
             Upper =< Alpha -> Upper;
 
             true ->
-                alphabeta_wm_2(Node, max(Alpha, Lower), min(Beta, Upper), Depth, Eval, FirstChild, NextBrother)
+                alphabeta_wm_2(Node, lmax(Alpha, Lower), lmin(Beta, Upper), Depth, Eval, FirstChild, NextBrother)
 
         end
 
@@ -81,7 +81,7 @@ whittle_down_2(G, A,  no_child, _Node, _Alpha, _Beta, _Depth, _Eval, _FirstChild
 whittle_down_2(G, A,  C,         Node,  Alpha,  Beta,  Depth,  Eval,  FirstChild,  NextBrother)               ->
 
     NewG = lmax(G, alphabeta_wm(C, A, Beta, Depth-1, Eval, FirstChild, NextBrother)),
-    whittle_down_2(G2, lmax(A,G), NextBrother(C), Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother).
+    whittle_down_2(NewG, lmax(A,G), NextBrother(C), Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother).
 
 
 
@@ -96,7 +96,7 @@ whittle_up(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
 
 %% Since 449
 
-whittle_up_2(G, _B, _C,        _Node, _Alpha, _Beta, _Depth, _Eval, _FirstChild, _NextBrother) when G > Alpha -> G;
+whittle_up_2(G, _B, _C,        _Node,  Alpha, _Beta, _Depth, _Eval, _FirstChild, _NextBrother) when G > Alpha -> G;
 whittle_up_2(G, _B,  no_child, _Node, _Alpha, _Beta, _Depth, _Eval, _FirstChild, _NextBrother)                -> G;
 whittle_up_2(G,  B,  C,         Node,  Alpha,  Beta,  Depth,  Eval,  FirstChild,  NextBrother)                ->
 
@@ -111,7 +111,7 @@ whittle_up_2(G,  B,  C,         Node,  Alpha,  Beta,  Depth,  Eval,  FirstChild,
 
 alphabeta_wm_2(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
 
-    G = case D of
+    G = case Depth of
         0 -> Eval(Node);
         _ -> case is_maxnode(Node) of
             true  -> whittle_down(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother);
@@ -120,24 +120,28 @@ alphabeta_wm_2(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
     end,
 
     % Traditional transposition table storing of bounds */
-    % Fail low result implies an upper bound */
-    if g <= alpha then 
-        Node.upperbound := g; 
-        store Node.upperbound;
 
-    % Found an accurate minimax value - will not occur if called with zero window */
-    if g > alpha and g < beta then
-        Node.lowerbound := g;
-        Node.upperbound := g; 
-        store Node.lowerbound;
-        store Node.upperbound;
+    if
+        % Fail low result implies an upper bound */
+        G =< Alpha ->
+            { cached, Id, Lower, _Upper, _Last } = Node,
+            put(Id, { cached, Id, Lower, G, LastSought });
 
-    % Fail high result implies a lower bound */
-    if g >= beta then 
-        Node.lowerbound := g; 
-        store Node.lowerbound;
-        
-    return g;
+        % Found an accurate minimax value - will not occur if called with zero window */
+        ((G > Alpha) and (G < Beta)) ->
+            { cached, Id, _Lower, _Upper, _Last } = Node,
+            put(Id, { cached, Id, G, G, LastSought });
+
+        % Fail high result implies a lower bound */
+        G >= Beta ->
+           { cached, Id, _Lower, Upper, _Last } = Node,
+           put(Id, { cached, Id, G, Upper, LastSought })
+
+        % no default action
+
+    end,
+
+    G.
 
 
 
@@ -159,9 +163,9 @@ less_than(A,            B)            -> A < B.
 
 % Starting with a traditional version in pseudocode, will refine in SVN passes
 
-mtdf(Root, F, D, Eval) ->
+mtdf(Root, F, D, Eval, FirstChild, NextBrother) ->
 
-    mtdf(Root, F, D, pos_infinity, neg_infinity, F).
+    mtdf(Root, F, D, Eval, FirstChild, NextBrother, pos_infinity, neg_infinity, F).
 
 
 
@@ -169,7 +173,7 @@ mtdf(Root, F, D, Eval) ->
 
 %% Since 443
 
-mtdf(Root, F, D, Eval, LowerBound, UpperBound, G) ->
+mtdf(Root, F, D, Eval, FirstChild, NextBrother, LowerBound, UpperBound, G) ->
 
     case less_than(LowerBound, UpperBound) of
 
@@ -180,7 +184,7 @@ mtdf(Root, F, D, Eval, LowerBound, UpperBound, G) ->
                 false -> G
             end,
 
-            NewG = alphabeta_wm(Root, Beta-1, Beta, D, Eval)
+            NewG = alphabeta_wm(Root, Beta-1, Beta, D, Eval),
 
             { NewUB, NewLB } = case NewG < Beta of
                 true  -> { NewG,       LowerBound };
