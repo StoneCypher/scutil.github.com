@@ -3,12 +3,10 @@
 
 -export([
 
-    mtdf/6,
+    mtdf/7,
 
     lmin/2,
-      lmax/2,
-
-    alphabeta_wm/7
+      lmax/2
 
 ]).
 
@@ -16,23 +14,33 @@
 
 
 
+%% Since 453
+
+undefined_node(LastSought) ->
+
+    { neg_infinity, pos_infinity, LastSought }.
+
+
+
+
+
 % Since 445
 
-alphabeta_wm(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
+alphabeta_wm(Id, Alpha, Beta, Depth, Eval, IsMaxNode, FirstChild, NextBrother, LastSought) ->
 
-    case get(Node) of
+    case get({board, Id}) of
 
         undefined ->
 
-           alphabeta_wm_2(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother);
+           alphabeta_wm_2(Id, undefined_node(LastSought), Alpha, Beta, Depth, Eval, IsMaxNode, FirstChild, NextBrother, LastSought);
 
-        { cached, Id, Lower, Upper, Last } -> if
+        { Lower, Upper, Last } -> if
 
             Lower >= Beta  -> Lower;
             Upper =< Alpha -> Upper;
 
             true ->
-                alphabeta_wm_2(Node, lmax(Alpha, Lower), lmin(Beta, Upper), Depth, Eval, FirstChild, NextBrother)
+                alphabeta_wm_2(Id, {Lower, Upper, Last}, lmax(Alpha, Lower), lmin(Beta, Upper), Depth, Eval, IsMaxNode, FirstChild, NextBrother, LastSought)
 
         end
 
@@ -70,38 +78,38 @@ lmax(A,B) ->
 
 %% Since 447
 
-whittle_down(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
+whittle_down(Node, Alpha, Beta, Depth, Eval, IsMaxNode, FirstChild, NextBrother, LastSought) ->
 
-    whittle_down_2(neg_infinity, Alpha, FirstChild(Node), Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother).
-
-%% Since 448
-
-whittle_down_2(G, A, _C,        _Node, _Alpha,  Beta, _Depth, _Eval, _FirstChild, _NextBrother) when G < Beta -> G;
-whittle_down_2(G, A,  no_child, _Node, _Alpha, _Beta, _Depth, _Eval, _FirstChild, _NextBrother)               -> G;
-whittle_down_2(G, A,  C,         Node,  Alpha,  Beta,  Depth,  Eval,  FirstChild,  NextBrother)               ->
-
-    NewG = lmax(G, alphabeta_wm(C, A, Beta, Depth-1, Eval, FirstChild, NextBrother)),
-    whittle_down_2(NewG, lmax(A,G), NextBrother(C), Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother).
-
-
-
-
-
+    whittle_down_2(neg_infinity, Alpha, FirstChild(Node), Node, Alpha, Beta, Depth, Eval, IsMaxNode, FirstChild, NextBrother, LastSought).
 
 %% Since 448
 
-whittle_up(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
+whittle_down_2(G, _A, _C,        _Node, _Alpha,  Beta, _Depth, _Eval, _IsMaxNode, _FirstChild, _NextBrother, _LastSought) when G < Beta -> G;
+whittle_down_2(G, _A,  no_child, _Node, _Alpha, _Beta, _Depth, _Eval, _IsMaxNode, _FirstChild, _NextBrother, _LastSought)               -> G;
+whittle_down_2(G,  A,  C,         Node,  Alpha,  Beta,  Depth,  Eval,  IsMaxNode,  FirstChild,  NextBrother,  LastSought)               ->
 
-    whittle_up_2(pos_infinity, Beta, FirstChild(Node), Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother).
+    NewG = lmax(G, alphabeta_wm(C, A, Beta, Depth-1, Eval, IsMaxNode, FirstChild, NextBrother, LastSought)),
+    whittle_down_2(NewG, lmax(A,G), NextBrother(C), Node, Alpha, Beta, Depth, Eval, IsMaxNode, FirstChild, NextBrother, LastSought).
+
+
+
+
+
+
+%% Since 448
+
+whittle_up(Node, Alpha, Beta, Depth, Eval, IsMaxNode, FirstChild, NextBrother, LastSought) ->
+
+    whittle_up_2(pos_infinity, Beta, FirstChild(Node), Node, Alpha, Beta, Depth, Eval, IsMaxNode, FirstChild, NextBrother, LastSought).
 
 %% Since 449
 
-whittle_up_2(G, _B, _C,        _Node,  Alpha, _Beta, _Depth, _Eval, _FirstChild, _NextBrother) when G > Alpha -> G;
-whittle_up_2(G, _B,  no_child, _Node, _Alpha, _Beta, _Depth, _Eval, _FirstChild, _NextBrother)                -> G;
-whittle_up_2(G,  B,  C,         Node,  Alpha,  Beta,  Depth,  Eval,  FirstChild,  NextBrother)                ->
+whittle_up_2(G, _B, _C,        _Node,  Alpha, _Beta, _Depth, _Eval, _IsMaxNode, _FirstChild, _NextBrother, _LastSought) when G > Alpha -> G;
+whittle_up_2(G, _B,  no_child, _Node, _Alpha, _Beta, _Depth, _Eval, _IsMaxNode, _FirstChild, _NextBrother, _LastSought)                -> G;
+whittle_up_2(G,  B,  C,         Node,  Alpha,  Beta,  Depth,  Eval,  IsMaxNode,  FirstChild,  NextBrother,  LastSought)                ->
 
-    NewG = lmin(g, alphabeta_wm(C, Alpha, B, Depth-1, Eval, FirstChild, NextBrother)),
-    whittle_up_2(NewG, lmin(B,G), NextBrother(C), Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother).
+    NewG = lmin(g, alphabeta_wm(C, Alpha, B, Depth-1, Eval, IsMaxNode, FirstChild, NextBrother, LastSought)),
+    whittle_up_2(NewG, lmin(B,G), NextBrother(C), Node, Alpha, Beta, Depth, Eval, IsMaxNode, FirstChild, NextBrother, LastSought).
 
 
 
@@ -109,13 +117,13 @@ whittle_up_2(G,  B,  C,         Node,  Alpha,  Beta,  Depth,  Eval,  FirstChild,
 
 %% Since 446
 
-alphabeta_wm_2(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
+alphabeta_wm_2(Id, Node, Alpha, Beta, Depth, Eval, IsMaxNode, FirstChild, NextBrother, LastSought) ->
 
     G = case Depth of
         0 -> Eval(Node);
-        _ -> case is_maxnode(Node) of
-            true  -> whittle_down(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother);
-            false -> whittle_up(  Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother)
+        _ -> case IsMaxNode(Node) of
+            true  -> whittle_down(Node, Alpha, Beta, Depth, Eval, IsMaxNode, FirstChild, NextBrother, LastSought);
+            false -> whittle_up(  Node, Alpha, Beta, Depth, Eval, IsMaxNode, FirstChild, NextBrother, LastSought)
         end
     end,
 
@@ -124,18 +132,18 @@ alphabeta_wm_2(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
     if
         % Fail low result implies an upper bound */
         G =< Alpha ->
-            { cached, Id, Lower, _Upper, _Last } = Node,
-            put(Id, { cached, Id, Lower, G, LastSought });
+            { Lower, _Upper, _Last } = Node,
+            put({board,Id}, { Lower, G, LastSought });
 
         % Found an accurate minimax value - will not occur if called with zero window */
         ((G > Alpha) and (G < Beta)) ->
-            { cached, Id, _Lower, _Upper, _Last } = Node,
-            put(Id, { cached, Id, G, G, LastSought });
+            { _Lower, _Upper, _Last } = Node,
+            put({board,Id}, { G, G, LastSought });
 
         % Fail high result implies a lower bound */
         G >= Beta ->
-           { cached, Id, _Lower, Upper, _Last } = Node,
-           put(Id, { cached, Id, G, Upper, LastSought })
+           { _Lower, Upper, _Last } = Node,
+           put({board,Id}, { G, Upper, LastSought })
 
         % no default action
 
@@ -163,9 +171,9 @@ less_than(A,            B)            -> A < B.
 
 % Starting with a traditional version in pseudocode, will refine in SVN passes
 
-mtdf(Root, F, D, Eval, FirstChild, NextBrother) ->
+mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother) ->
 
-    mtdf(Root, F, D, Eval, FirstChild, NextBrother, pos_infinity, neg_infinity, F).
+    mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother, pos_infinity, neg_infinity, F).
 
 
 
@@ -173,7 +181,7 @@ mtdf(Root, F, D, Eval, FirstChild, NextBrother) ->
 
 %% Since 443
 
-mtdf(Root, F, D, Eval, FirstChild, NextBrother, LowerBound, UpperBound, G) ->
+mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother, LowerBound, UpperBound, G) ->
 
     case less_than(LowerBound, UpperBound) of
 
@@ -184,14 +192,14 @@ mtdf(Root, F, D, Eval, FirstChild, NextBrother, LowerBound, UpperBound, G) ->
                 false -> G
             end,
 
-            NewG = alphabeta_wm(Root, Beta-1, Beta, D, Eval),
+            NewG = alphabeta_wm(Root, Beta-1, Beta, D, Eval, IsMaxNode, FirstChild, NextBrother),
 
             { NewUB, NewLB } = case NewG < Beta of
                 true  -> { NewG,       LowerBound };
                 false -> { UpperBound, NewG       }
             end,
 
-            mtdf(Root, F, D, Eval, NewLB, NewUB, NewG);
+            mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother, NewLB, NewUB, NewG);
 
         false ->
             G
