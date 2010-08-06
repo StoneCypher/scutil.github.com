@@ -35,9 +35,9 @@ alphabeta_wm(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) -> todo.
 
 whittle_down(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
 
-    whittle_down_2(neg_infinity, Alpha, FirstChild(Node), Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
+    whittle_down_2(neg_infinity, Alpha, FirstChild(Node), Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother).
 
-
+%% Since 448
 
 whittle_down_2(G, A, C, _Node, _Alpha, Beta, _Depth, _Eval, _FirstChild, _NextBrother) when G < Beta ->
     {G,A,C};
@@ -55,14 +55,16 @@ whittle_down_2(G, A, C, Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother)
 
 
 
-%% Sinve 447
+%% Since 448
 
-whittle_down(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
+whittle_up(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
 
-    g := +INFINITY;
-    b := beta; % save original beta value */
+    whittle_up_2(pos_infinity, Beta, FirstChild(Node), Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother).
 
-    c := firstchild(Node);
+%% Since 449
+
+whittle_up_2(G, B, C, Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
+
     while (g > alpha) and (c != NOCHILD) do
           g := min(g, AlphaBetaWithMemory(c, alpha, b, d - 1));
           b := min(b, g);
