@@ -11,7 +11,7 @@
 
 % Since 445
 
-alphabeta_wm(Node, Alpha, Beta, Depth, Eval) -> todo.
+alphabeta_wm(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) -> todo.
 
     case get(Node) of
 
@@ -23,7 +23,7 @@ alphabeta_wm(Node, Alpha, Beta, Depth, Eval) -> todo.
             Upper =< Alpha -> Upper;
 
             true ->
-                alphabeta_wm_2(Node, max(Alpha, Lower), min(Beta, Upper), Depth, Eval);
+                alphabeta_wm_2(Node, max(Alpha, Lower), min(Beta, Upper), Depth, Eval, FirstChild, NextBrother);
 
     end.
 
@@ -31,36 +31,58 @@ alphabeta_wm(Node, Alpha, Beta, Depth, Eval) -> todo.
 
 
 
+%% Since 447
+
+whittle_down(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
+
+    whittle_down_2(neg_infinity, Alpha, FirstChild(Node), Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
+
+
+
+whittle_down_2(G, A, C, _Node, _Alpha, Beta, _Depth, _Eval, _FirstChild, _NextBrother) when G < Beta ->
+    {G,A,C};
+
+whittle_down_2(G, A, C, _Node, _Alpha, Beta, _Depth, _Eval, _FirstChild, nochild) ->
+    {G,A,C};
+
+whittle_down_2(G, A, C, Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
+
+    NewG = lmax(G, AlphaBetaWithMemory(C, A, Beta, Depth-1, Eval, FirstChild, NextBrother)),
+    whittle_down_2(G2, lmax(A,G), NextBrother(C), Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother).
+
+
+
+
+
+
+%% Sinve 447
+
+whittle_down(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
+
+    g := +INFINITY;
+    b := beta; % save original beta value */
+
+    c := firstchild(Node);
+    while (g > alpha) and (c != NOCHILD) do
+          g := min(g, AlphaBetaWithMemory(c, alpha, b, d - 1));
+          b := min(b, g);
+          c := nextbrother(c);
+
+
+
+
+
 %% Since 446
 
-alphabeta_wm_2(Node, Alpha, Beta, Depth, Eval) -> todo.
+alphabeta_wm_2(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) -> todo.
 
     G = case D of
         0 -> Eval(Node);
         _ -> case is_maxnode(Node) of
-            true  -> whittle_down(Node, Alpha, Beta, Depth);
-            false -> whittle_up(  Node, Alpha, Beta, Depth)
+            true  -> whittle_down(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother);
+            false -> whittle_up(  Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother)
         end
     end,
-
-    if d == 0 then g := evaluate(n); % leaf node
-    else if Node == MAXNODE then
-
-          g := -INFINITY; a := alpha; % save original alpha value */
-          c := firstchild(Node);
-          while (g < beta) and (c != NOCHILD) do
-                g := max(g, AlphaBetaWithMemory(c, a, beta, d - 1));
-                a := max(a, g);
-                c := nextbrother(c);
-
-    else % n is a MINNODE */
-
-          g := +INFINITY; b := beta; % save original beta value */
-          c := firstchild(Node);
-          while (g > alpha) and (c != NOCHILD) do
-                g := min(g, AlphaBetaWithMemory(c, alpha, b, d - 1));
-                b := min(b, g);
-                c := nextbrother(c);
 
     % Traditional transposition table storing of bounds */
     % Fail low result implies an upper bound */
