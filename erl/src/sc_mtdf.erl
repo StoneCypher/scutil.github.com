@@ -39,13 +39,9 @@ whittle_down(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
 
 %% Since 448
 
-whittle_down_2(G, A, _C,       _Node, _Alpha,  Beta, _Depth, _Eval, _FirstChild, _NextBrother) when G < Beta ->
-    {G,A};
-
-whittle_down_2(G, A, no_child, _Node, _Alpha, _Beta, _Depth, _Eval, _FirstChild, _NextBrother) ->
-    {G,A};
-
-whittle_down_2(G, A, C,         Node,  Alpha,  Beta,  Depth,  Eval,  FirstChild,  NextBrother) ->
+whittle_down_2(G, A, _C,        _Node, _Alpha,  Beta, _Depth, _Eval, _FirstChild, _NextBrother) when G < Beta -> G;
+whittle_down_2(G, A,  no_child, _Node, _Alpha, _Beta, _Depth, _Eval, _FirstChild, _NextBrother)               -> G;
+whittle_down_2(G, A,  C,         Node,  Alpha,  Beta,  Depth,  Eval,  FirstChild,  NextBrother)               ->
 
     NewG = lmax(G, alphabeta_wm(C, A, Beta, Depth-1, Eval, FirstChild, NextBrother)),
     whittle_down_2(G2, lmax(A,G), NextBrother(C), Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother).
@@ -63,13 +59,9 @@ whittle_up(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
 
 %% Since 449
 
-whittle_up_2(G, B, _C,       _Node, _Alpha, _Beta, _Depth, _Eval, _FirstChild, _NextBrother) when G > Alpha ->
-    {G,B};
-
-whittle_up_2(G, B, no_child, _Node, _Alpha, _Beta, _Depth, _Eval, _FirstChild, _NextBrother) ->
-    {G,B};
-
-whittle_up_2(G, B,  C,        Node,  Alpha,  Beta,  Depth,  Eval,  FirstChild,  NextBrother) ->
+whittle_up_2(G, _B, _C,        _Node, _Alpha, _Beta, _Depth, _Eval, _FirstChild, _NextBrother) when G > Alpha -> G;
+whittle_up_2(G, _B,  no_child, _Node, _Alpha, _Beta, _Depth, _Eval, _FirstChild, _NextBrother)                -> G;
+whittle_up_2(G,  B,  C,         Node,  Alpha,  Beta,  Depth,  Eval,  FirstChild,  NextBrother)                ->
 
     NewG = lmin(g, alphabeta_wm(C, Alpha, B, Depth-1, Eval, FirstChild, NextBrother)),
     whittle_up_2(NewG, lmin(B,G), NextBrother(C), Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother).
