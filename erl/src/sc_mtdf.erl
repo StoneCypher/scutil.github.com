@@ -3,7 +3,7 @@
 
 -export([
 
-    mtdf/8,
+    mtdf/9,
 
     lmin/2,
       lmax/2
@@ -171,9 +171,13 @@ less_than(A,            B)            -> A < B.
 
 % Starting with a traditional version in pseudocode, will refine in SVN passes
 
-mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother, LastSought) ->
+mtdf(Root, FirstGuessForG, MaxDepth, EvalFunc, LastSoughtAt, IsMaxNodeFunc, FirstChildFunc, NextBrotherFunc, MemoryPid) ->
 
-    mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother, pos_infinity, neg_infinity, F, LastSought).
+    MemoryPid ! { mtdf, Root, MaxDepth, EvalFunc, IsMaxNodeFunc, FirstChildFunc, NextBrotherFunc, pos_infinity, neg_infinity, FirstGuessForG, LastSoughtAt },
+    
+    receive
+        { mtdf_val, X } -> X
+    end.
 
 
 
@@ -181,7 +185,7 @@ mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother, LastSought) ->
 
 %% Since 443
 
-mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother, LowerBound, UpperBound, G, LastSought) ->
+mtdf_step(Root, D, Eval, IsMaxNode, FirstChild, NextBrother, LowerBound, UpperBound, G, LastSought) ->
 
     case less_than(LowerBound, UpperBound) of
 
@@ -199,7 +203,7 @@ mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother, LowerBound, UpperBoun
                 false -> { UpperBound, NewG       }
             end,
 
-            mtdf(Root, F, D, Eval, IsMaxNode, FirstChild, NextBrother, NewLB, NewUB, NewG, LastSought);
+            mtdf_step(Root, D, Eval, IsMaxNode, FirstChild, NextBrother, NewLB, NewUB, NewG, LastSought);
 
         false ->
             G
