@@ -15,24 +15,33 @@
 
 mtdf(Root, F, D) ->
 
-    FirstG     = F,
-    UpperBound = pos_infinity,
-    LowerBound = neg_infinity,
+    mtdf(Root, F, D, pos_infinity, neg_infinity, F).
 
-    while LowerBound < UpperBound
-    
-        if g = lowerBound then
-            beta = g+1
-        else
-            beta = g
-        
-        g = alphabeta_wm(root, beta-1, beta, d)
 
-        if g < b then
-            upperbound = g
-        else
-            lowerbound = g
-        
-    end while
+
+
+
+%% Since 444
+
+mtdf(Root, F, D, LowerBound, UpperBound, G) ->
+
+    case less_than(LowerBound, UpperBound) of
+
+        true ->
+
+            if G = lowerBound then
+                Beta = G + 1
+            else
+                Beta = G
     
-    return g
+            G = alphabeta_wm(Root, Beta-1, Beta, D)
+    
+            if G < Beta then
+                UpperBound = G
+            else
+                LowerBound = G
+
+        false ->
+            G
+
+    end.
