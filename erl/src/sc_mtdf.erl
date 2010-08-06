@@ -18,7 +18,7 @@
 
 % Since 445
 
-alphabeta_wm(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) -> 
+alphabeta_wm(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
 
     case get(Node) of
 
@@ -109,7 +109,7 @@ whittle_up_2(G,  B,  C,         Node,  Alpha,  Beta,  Depth,  Eval,  FirstChild,
 
 %% Since 446
 
-alphabeta_wm_2(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) -> todo.
+alphabeta_wm_2(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) ->
 
     G = case D of
         0 -> Eval(Node);
@@ -121,14 +121,22 @@ alphabeta_wm_2(Node, Alpha, Beta, Depth, Eval, FirstChild, NextBrother) -> todo.
 
     % Traditional transposition table storing of bounds */
     % Fail low result implies an upper bound */
-    if g <= alpha then Node.upperbound := g; store Node.upperbound;
-    % Found an accurate minimax value - will not occur if called with zero window */
-    if g >  alpha and g < beta then
+    if g <= alpha then 
+        Node.upperbound := g; 
+        store Node.upperbound;
 
-          Node.lowerbound := g; Node.upperbound := g; store Node.lowerbound, Node.upperbound;
+    % Found an accurate minimax value - will not occur if called with zero window */
+    if g > alpha and g < beta then
+        Node.lowerbound := g;
+        Node.upperbound := g; 
+        store Node.lowerbound;
+        store Node.upperbound;
 
     % Fail high result implies a lower bound */
-    if g >= beta then Node.lowerbound := g; store Node.lowerbound;
+    if g >= beta then 
+        Node.lowerbound := g; 
+        store Node.lowerbound;
+        
     return g;
 
 
