@@ -29,7 +29,7 @@
 
 %% @author John Haugeland <stonecypher@gmail.com>
 %% @copyright 2007 - current John Haugeland, All Rights Reserved
-%% @version $Revision: 367 $
+%% @version $Revision$
 %% @since September 14, 2007
 
 
@@ -62,6 +62,9 @@
 
 
 -export([
+
+    test/0,
+      test/1,
 
     gen_docs/0,
       gen_docs/2
@@ -101,4 +104,48 @@ gen_docs() ->
 gen_docs(WhereIsSrc, WhereToPutDocs) ->
 
     filelib:ensure_dir(WhereToPutDocs),
-    edoc:files([WhereIsSrc++"/sc.erl", WhereIsSrc++"/sc_proto.erl", WhereIsSrc++"/sc_tests.erl", WhereIsSrc++"/sc_proto_tests.erl"], [{dir, WhereToPutDocs}, {new,true}]).
+    edoc:files([WhereIsSrc++"/sc.erl", WhereIsSrc++"/sc_tests.erl"], [{dir, WhereToPutDocs}, {new,true}]).
+%   edoc:files([WhereIsSrc++"/sc.erl", WhereIsSrc++"/sc_proto.erl", WhereIsSrc++"/sc_tests.erl", WhereIsSrc++"/sc_proto_tests.erl"], [{dir, WhereToPutDocs}, {new,true}]).
+
+
+
+
+
+%% @spec test() -> ok|error
+%% @doc Runs the test suite in terse form. ```1> sc:test().
+%%   All 9 tests passed.
+%% ok'''
+%% @since Pre-8
+
+test() ->
+
+    eunit:test(sc).
+
+
+
+
+
+%% @spec test(verbose) -> ok|error
+%% @doc Runs the test suite in verbose form. ```1> sc:test(verbose).
+%% ======================== EUnit ========================
+%% module 'sc'
+%%   module 'sc_tests'
+%%     sc_tests:43: cull_test_...ok
+%%     sc_tests:44: cull_test_...ok
+%%     sc_tests:45: cull_test_...ok
+%%     sc_tests:46: cull_test_...ok
+%%     sc_tests:33: score_population_test_...ok
+%%     sc_tests:34: score_population_test_...ok
+%%     sc_tests:35: score_population_test_...ok
+%%     sc_tests:24: strip_scores_test_...ok
+%%     sc_tests:25: strip_scores_test_...ok
+%%     [done in 0.141 s]
+%%   [done in 0.141 s]
+%% =======================================================
+%%   All 9 tests passed.
+%% ok'''
+%% @since Pre-8
+
+test(verbose=_Style) ->
+
+    eunit:test(sc, [verbose]).
