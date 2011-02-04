@@ -65,8 +65,11 @@
 
     extrema/1,
     key_duplicate/1,
-    rotate_list/2,
     index_of_first/2,
+
+    rotate_list/2,
+      rotate_to_first/2,
+      rotate_to_last/2,
 
     test/0,
       test/1,
@@ -310,7 +313,7 @@ rotate_list(By, List) ->
 %%
 %% 2> sc:rotate_list(j, [a,b,c,d,e]).
 %% undefined'''
-%% @since Version 464
+%% @since Version 463
 
 index_of_first(Item, List) ->
 
@@ -333,3 +336,30 @@ index_of_first(Item, [Item|_ListRem], Pos) ->
 index_of_first(Item, [_OtherItem|ListRem], Pos) ->
 
     index_of_first(Item, ListRem, Pos+1).
+
+
+
+
+
+
+%% @spec rotate_to_first(Item, List) -> list()
+%% @doc Rotates the list to the first instance of Item.  ```1> sc:index_of_first(c, [a,b,c,d,e]).
+%% 3
+%%
+%% 2> sc:rotate_list(j, [a,b,c,d,e]).
+%% undefined'''
+%% @since Version 464
+
+rotate_to_first(Item, List) ->
+
+    rotate_list(index_of_first(Item, List)-1, List).
+
+
+
+
+
+%% @since Version 464
+
+rotate_to_last(Item, List) ->
+
+    rotate_list(index_of_first(Item, List), List).

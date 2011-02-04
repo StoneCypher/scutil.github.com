@@ -23,7 +23,7 @@ extrema_test_() ->
         {"1,a,{}",     ?_assert( {1,{}}     =:= sc:extrema( [1,a,{}]   ) ) },
         {"1",          ?_assert( {1,1}      =:= sc:extrema( [1]        ) ) },
 
-        {"[] error",   ?_assertError(badarg, sc:extrema([]) ) }
+        {"[] error badarg", ?_assertError(badarg, sc:extrema([]) ) }
 
     ] }.
 
@@ -73,5 +73,37 @@ index_of_first_test_() ->
         {"0,  [ ]",       ?_assert( undefined =:= sc:index_of_first(0, [ ])       ) },
         {"b,  [ a,b,c ]", ?_assert( 2         =:= sc:index_of_first(b, [ a,b,c ]) ) },
         {"g,  [ a,b,c ]", ?_assert( undefined =:= sc:index_of_first(g, [ a,b,c ]) ) }
+
+    ] }.
+
+
+
+
+
+rotate_to_first_test_() ->
+
+    { "Rotate to first tests", [
+
+        {"3, [1,2,3,4]", ?_assert( [3,4,1,2] =:= sc:rotate_to_first( 3, [1,2,3,4]  ) ) },
+        {"4, [1,2,3,4]", ?_assert( [4,1,2,3] =:= sc:rotate_to_first( 4, [1,2,3,4]  ) ) },
+        {"1, [1,2,3,4]", ?_assert( [1,2,3,4] =:= sc:rotate_to_first( 1, [1,2,3,4]  ) ) },
+
+        {"f, [1,2,3,4] error badarith", ?_assertError(badarith, sc:rotate_to_first(f, [1,2,3,4]) ) }
+
+    ] }.
+
+
+
+
+
+rotate_to_last_test_() ->
+
+    { "Rotate to last tests", [
+
+        {"3, [1,2,3,4]", ?_assert( [4,1,2,3] =:= sc:rotate_to_last( 3, [1,2,3,4]  ) ) },
+        {"1, [1,2,3,4]", ?_assert( [2,3,4,1] =:= sc:rotate_to_last( 1, [1,2,3,4]  ) ) },
+        {"4, [1,2,3,4]", ?_assert( [1,2,3,4] =:= sc:rotate_to_last( 4, [1,2,3,4]  ) ) },
+
+        {"f, [1,2,3,4] error badarith", ?_assertError(badarith, sc:rotate_to_last(f, [1,2,3,4]) ) }
 
     ] }.
