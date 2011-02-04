@@ -66,7 +66,10 @@
     extrema/1,
     key_duplicate/1,
     index_of_first/2,
+
     flag_sets/1,
+    member_sets/1,
+      member_sets/2,
 
     rotate_list/2,
       rotate_to_first/2,
@@ -420,7 +423,7 @@ rotate_to_last(Item, List) ->
 %%  [magic,technology,evil],         % pre-crisis Sinestro
 %%  [magic,technology,evil,alien]]   % Granny Goodness'''
 
-%% @since Version 126
+%% @since Version 465
 
 flag_sets([]) ->
 
@@ -434,4 +437,106 @@ flag_sets([Flag|RemFlags]) ->
     [ MaybeFlag ++ Reps ||
         MaybeFlag <- [[],[Flag]],
         Reps      <- flag_sets(RemFlags)
+    ].
+
+
+
+
+
+%% @equiv member_sets(Memberships, no_absence)
+
+member_sets(Memberships) ->
+
+    member_sets(Memberships, no_absence).
+
+
+
+%% @spec member_sets(Memberships::list_of_lists(), AllowAbsence::atom()) -> list_of_lists()
+
+%% @doc For a list of memberships, return every possible combination of one representative member from each list.
+%% The parameter `AllowAbsence' controls whether memberships may be unrepresented; if unrepresented memberships are possible, then
+%% one possible representation becomes the empty list. ```1> sc:member_sets([ [a,b],[1,2,3],[i,ii,iii] ], no_absence).
+%% [[a,1,i], [a,1,ii], [a,1,iii], [a,2,i], [a,2,ii], [a,2,iii], [a,3,i], [a,3,ii], [a,3,iii],
+%%   [b,1,i], [b,1,ii], [b,1,iii], [b,2,i], [b,2,ii], [b,2,iii], [b,3,i], [b,3,ii], [b,3,iii]]
+%%
+%% 2> sc:member_sets([ [a,b],[1,2],[i,ii] ], allow_absence).
+%% [ [], [i], [ii], [1], [1,i], [1,ii], [2], [2,i], [2,ii], [a], [a,i], [a,ii], [a,1], [a,1,i],
+%%   [a,1,ii], [a,2], [a,2,i], [a,2,ii], [b], [b,i], [b,ii], [b,1], [b,1,i], [b,1,ii], [b,2],
+%%   [b,2,i], [b,2,ii] ]
+%%
+%% 3> sc:member_sets([ [toast,pancakes], [sausage,bacon] ] ).
+%% [[toast,sausage],
+%%  [toast,bacon],
+%%  [pancakes,sausage],
+%%  [pancakes,bacon]]
+%%
+%% 4> sc:member_sets([ [toast,pancakes], [sausage,bacon] ], no_absence ).
+%% [[toast,sausage],
+%%  [toast,bacon],
+%%  [pancakes,sausage],
+%%  [pancakes,bacon]]
+%%
+%% 5> sc:member_sets([ [toast,pancakes], [sausage,bacon] ], allow_absence).
+%%  [[],
+%%  [sausage],
+%%  [bacon],
+%%  [toast],
+%%  [toast,sausage],
+%%  [toast,bacon],
+%%  [pancakes],
+%%  [pancakes,sausage],
+%%  [pancakes,bacon]]
+%%
+%% 6> Format = fun(Person, Place, Weapon) -> "It was " ++ Person ++ " in the " ++ Place ++ " with the " ++ Weapon ++ "!" end.
+%% #Fun<erl_eval.18.105910772>
+%%
+%% 7> [ Format(Pe,Pl,WW) || [Pe,Pl,WW] <- sc:member_sets( [ ["Col. Mustard", "Ms. Scarlett"], ["conservatory", "hallway", "kitchen"], ["lead pipe"] ] ) ].
+%% ["It was Col. Mustard in the conservatory with the lead pipe!",
+%%  "It was Col. Mustard in the hallway with the lead pipe!",
+%%  "It was Col. Mustard in the kitchen with the lead pipe!",
+%%  "It was Ms. Scarlett in the conservatory with the lead pipe!",
+%%  "It was Ms. Scarlett in the hallway with the lead pipe!",
+%%  "It was Ms. Scarlett in the kitchen with the lead pipe!"]'''
+%% @since Version 126
+
+member_sets([], _) ->
+
+    [[]];
+
+
+
+member_sets([[]], _) ->
+
+    [[]];
+
+
+
+member_sets( [Membership|RemMemberships], no_absence   ) ->
+
+    [ [Member] ++ RemRep ||
+        Member <- Membership,
+        RemRep <- member_sets(RemMemberships, no_absence)
+    ];
+
+
+
+member_sets( [Membership|RemMemberships], allow_absence) ->
+
+    Compact = fun(Member, RemRep) ->
+
+        case Member of
+
+            empty ->
+                RemRep;
+
+            {item,X} ->
+                [X] ++ RemRep
+
+        end
+
+    end,
+
+    [ Compact(Member, RemRep) ||
+        Member <- [empty] ++ [{item,X}||X<-Membership],
+        RemRep <- member_sets(RemMemberships, allow_absence)
     ].
