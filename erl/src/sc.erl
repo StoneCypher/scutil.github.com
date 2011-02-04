@@ -117,7 +117,7 @@ gen_docs(WhereIsSrc, WhereToPutDocs) ->
 %% @doc Runs the test suite in terse form. ```1> sc:test().
 %%   All 9 tests passed.
 %% ok'''
-%% @since Pre-8
+%% @since 458
 
 test() ->
 
@@ -146,7 +146,7 @@ test() ->
 %% =======================================================
 %%   All 7 tests passed.
 %% ok'''
-%% @since Pre-8
+%% @since 460
 
 test(verbose=_Style) ->
 
@@ -157,6 +157,12 @@ test(verbose=_Style) ->
 
 
 
+%% @spec extrema(List::non_empty_list()) -> {Low::any(),Hi::any()}
+%% @doc Returns the lowest and highest values in a list of one or more member in the form `{Lo,Hi}'.  `error()'s `badarg' for empty lists.  Mixed-type safe; sorts according to type order rules.  ```1> sc:extrema([1,2,3,4]).
+%% {1,4}
+%%
+%% 2> sc:extrema([1,2,3,a,b,c]).
+%% {1,c}'''
 %% @since Version 460
 
 extrema([]) ->
