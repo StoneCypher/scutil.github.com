@@ -1,6 +1,8 @@
 Stonecypher's Erlang Utility Library - reboot 2011
 Written by John Haugeland, http://fullof.bs/
 
+Last changed in version $Revision$ .
+
 To skip to code, which is hundreds of lines down, search for "-module("
 without quotes.
 

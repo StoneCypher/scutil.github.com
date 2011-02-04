@@ -63,6 +63,8 @@
 
 -export([
 
+    extrema/1,
+
     test/0,
       test/1,
 
@@ -130,22 +132,59 @@ test() ->
 %% ======================== EUnit ========================
 %% module 'sc'
 %%   module 'sc_tests'
-%%     sc_tests:43: cull_test_...ok
-%%     sc_tests:44: cull_test_...ok
-%%     sc_tests:45: cull_test_...ok
-%%     sc_tests:46: cull_test_...ok
-%%     sc_tests:33: score_population_test_...ok
-%%     sc_tests:34: score_population_test_...ok
-%%     sc_tests:35: score_population_test_...ok
-%%     sc_tests:24: strip_scores_test_...ok
-%%     sc_tests:25: strip_scores_test_...ok
-%%     [done in 0.141 s]
-%%   [done in 0.141 s]
+%%     Extrema tests
+%%       sc_tests:18: extrema_test_ (1,2,3,4)...ok
+%%       sc_tests:19: extrema_test_ (-1,-2,-3)...ok
+%%       sc_tests:20: extrema_test_ (-1.1,0,1.1)...ok
+%%       sc_tests:21: extrema_test_ (a,b,c)...ok
+%%       sc_tests:22: extrema_test_ (1,a,{})...ok
+%%       sc_tests:23: extrema_test_ (1)...ok
+%%       sc_tests:25: extrema_test_ ([] error)...ok
+%%       [done in 0.109 s]
+%%     [done in 0.109 s]
+%%   [done in 0.109 s]
 %% =======================================================
-%%   All 9 tests passed.
+%%   All 7 tests passed.
 %% ok'''
 %% @since Pre-8
 
 test(verbose=_Style) ->
 
     eunit:test(sc, [verbose]).
+
+
+
+
+
+
+%% @since Version 460
+
+extrema([]) ->
+
+    error(badarg);
+
+
+
+extrema(List) ->
+
+    [First | _] = List,
+
+    Next = fun(Next,T) ->
+
+               {Lo, Hi} = T,
+
+               Lo2 = if
+                   Next < Lo -> Next;
+                   true      -> Lo
+               end,
+
+               Hi2 = if
+                   Next > Hi -> Next;
+                   true      -> Hi
+               end,
+
+               {Lo2, Hi2}
+
+           end,
+
+    lists:foldl(Next, {First,First}, List).
