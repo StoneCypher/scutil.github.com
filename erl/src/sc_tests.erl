@@ -88,7 +88,7 @@ rotate_to_first_test_() ->
         {"4, [1,2,3,4]", ?_assert( [4,1,2,3] =:= sc:rotate_to_first( 4, [1,2,3,4]  ) ) },
         {"1, [1,2,3,4]", ?_assert( [1,2,3,4] =:= sc:rotate_to_first( 1, [1,2,3,4]  ) ) },
 
-        {"f, [1,2,3,4] error badarith", ?_assertError(badarith, sc:rotate_to_first(f, [1,2,3,4]) ) }
+        {"f, [1,2,3,4]", ?_assert( no_such_element =:= sc:rotate_to_first( f, [1,2,3,4]  ) ) }
 
     ] }.
 
@@ -104,6 +104,26 @@ rotate_to_last_test_() ->
         {"1, [1,2,3,4]", ?_assert( [2,3,4,1] =:= sc:rotate_to_last( 1, [1,2,3,4]  ) ) },
         {"4, [1,2,3,4]", ?_assert( [1,2,3,4] =:= sc:rotate_to_last( 4, [1,2,3,4]  ) ) },
 
-        {"f, [1,2,3,4] error badarith", ?_assertError(badarith, sc:rotate_to_last(f, [1,2,3,4]) ) }
+        {"f, [1,2,3,4]", ?_assert( no_such_element =:= sc:rotate_to_last( f, [1,2,3,4]  ) ) }
 
     ] }.
+
+
+
+
+
+flag_sets_test_() ->
+
+    { "Flag sets tests", [
+
+        {"[1,2,3]",  ?_assert( [[],[3],[2],[2,3],[1],[1,3],[1,2],[1,2,3]]  =:= sc:flag_sets( [1,2,3] )  ) },
+        {"[1]",      ?_assert( [[],[1]]                                    =:= sc:flag_sets( [1] )      ) },
+        {"[]",       ?_assert( [[]]                                        =:= sc:flag_sets( [] )       ) },
+        {"[{[{}]}]", ?_assert( [[],[{[{}]}]]                               =:= sc:flag_sets( [{[{}]}] ) ) }
+
+    ] }.
+
+
+
+
+

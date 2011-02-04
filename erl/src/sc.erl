@@ -66,6 +66,7 @@
     extrema/1,
     key_duplicate/1,
     index_of_first/2,
+    flag_sets/1,
 
     rotate_list/2,
       rotate_to_first/2,
@@ -311,7 +312,7 @@ rotate_list(By, List) ->
 %% @doc Returns the index of the first instance of `Item' in the `List', or `undefined' if `Item' is not present.  ```1> sc:index_of_first(c, [a,b,c,d,e]).
 %% 3
 %%
-%% 2> sc:rotate_list(j, [a,b,c,d,e]).
+%% 2> sc:index_of_first(j, [a,b,c,d,e]).
 %% undefined'''
 %% @since Version 463
 
@@ -343,23 +344,94 @@ index_of_first(Item, [_OtherItem|ListRem], Pos) ->
 
 
 %% @spec rotate_to_first(Item, List) -> list()
-%% @doc Rotates the list to the first instance of Item.  ```1> sc:index_of_first(c, [a,b,c,d,e]).
-%% 3
+%% @doc Rotates the list to the first instance of Item.  ```1> sc:rotate_to_first(c, [a,b,c,d,e]).
+%% [c,d,e,a,b]
 %%
-%% 2> sc:rotate_list(j, [a,b,c,d,e]).
-%% undefined'''
+%% 2> sc:rotate_to_first(j, [a,b,c,d,e]).
+%% no_such_element'''
 %% @since Version 464
 
 rotate_to_first(Item, List) ->
 
-    rotate_list(index_of_first(Item, List)-1, List).
+    case index_of_first(Item, List) of
+
+        undefined ->
+            no_such_element;
+
+        IoF ->
+            rotate_list(IoF-1, List)
+
+    end.
 
 
 
 
 
+%% @spec rotate_to_last(Item, List) -> list()
+%% @doc Rotates the list so that the first instance of Item becomes the last element in the list.  ```1> sc:rotate_to_last(c, [a,b,c,d,e]).
+%% [d,e,a,b,c]
+%%
+%% 2> sc:rotate_list(j, [a,b,c,d,e]).
+%% no_such_element'''
 %% @since Version 464
 
 rotate_to_last(Item, List) ->
 
-    rotate_list(index_of_first(Item, List), List).
+    case index_of_first(Item, List) of
+
+        undefined ->
+            no_such_element;
+
+        IoF ->
+            rotate_list(IoF, List)
+
+    end.
+
+
+
+
+
+%% @spec flag_sets(Flags::list()) -> list_of_lists()
+
+%% @doc Returns every interpretation of the list as a set of boolean flags, including all-off and all-on. ```1> sc:flag_sets([1,2,3,4]).
+%% [ [], [4], [3], [3,4], [2], [2,4], [2,3], [2,3,4], [1], [1,4], [1,3], [1,3,4], [1,2], [1,2,4], [1,2,3], [1,2,3,4] ]
+%%
+%% 2> length(sc:flag_sets(lists:seq(1,16))).
+%% 65536
+%%
+%% 3> sc:flag_sets([]).
+%% [ [] ]
+%%
+%% 4> SourceOfPowers = sc:flag_sets([magic,technology,evil,alien]).
+%% [[],                              % Batman
+%%  [alien],                         % Superman
+%%  [evil],                          % Darkseid
+%%  [evil,alien],                    % Sinestro
+%%  [technology],                    % Mister Terrific (Michael Holt)
+%%  [technology,alien],              % The Blue Beetle
+%%  [technology,evil],               % The OMACs
+%%  [technology,evil,alien],         % Braniac
+%%  [magic],                         % Shazam
+%%  [magic,alien],                   % Green Lantern (Alan Scott)
+%%  [magic,evil],                    % Lucifer Morningstar
+%%  [magic,evil,alien],              % pre-crisis Star Sapphire
+%%  [magic,technology],              % Alexander Luthor Jr.
+%%  [magic,technology,alien],        % Mister Miracle
+%%  [magic,technology,evil],         % pre-crisis Sinestro
+%%  [magic,technology,evil,alien]]   % Granny Goodness'''
+
+%% @since Version 126
+
+flag_sets([]) ->
+
+    [[]];
+
+
+
+
+flag_sets([Flag|RemFlags]) ->
+
+    [ MaybeFlag ++ Reps ||
+        MaybeFlag <- [[],[Flag]],
+        Reps      <- flag_sets(RemFlags)
+    ].
