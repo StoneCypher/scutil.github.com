@@ -15,6 +15,7 @@
 extrema_test_() ->
 
     { "Extrema tests", [
+
         {"1,2,3,4",    ?_assert( {1,4}      =:= sc:extrema( [1,2,3,4]  ) ) },
         {"-1,-2,-3",   ?_assert( {-3,-1}    =:= sc:extrema( [-1,-2,-3] ) ) },
         {"-1.1,0,1.1", ?_assert( {-1.1,1.1} =:= sc:extrema( [-1.1,1.1] ) ) },
@@ -26,3 +27,16 @@ extrema_test_() ->
 
     ] }.
 
+
+
+
+
+key_duplicate_test_() ->
+
+    { "Key duplicate tests", [
+
+        {"[ ]",             ?_assert( []          =:= sc:key_duplicate([ ])             ) },
+        {"[ {2,a} ]",       ?_assert( [a,a]       =:= sc:key_duplicate([ {2,a} ])       ) },
+        {"[ {2,a},{3,b} ]", ?_assert( [a,a,b,b,b] =:= sc:key_duplicate([ {2,a},{3,b} ]) ) }
+
+    ] }.

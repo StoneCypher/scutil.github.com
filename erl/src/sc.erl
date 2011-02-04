@@ -65,6 +65,8 @@
 
     extrema/1,
 
+    key_duplicate/1,
+
     test/0,
       test/1,
 
@@ -194,3 +196,19 @@ extrema(List) ->
            end,
 
     lists:foldl(Next, {First,First}, List).
+
+
+
+
+
+%% @spec key_duplicate(CvList::list()) -> [any()]
+%% @doc Iterates a list of `{Count,Term}', producing a list of `[Term,Term,...]'.  ```1> sc:key_duplicate([ {3,bork} ]).
+%% [bork,bork,bork]
+%%
+%% 2> sc:key_duplicate([ {3,sunday}, {2,monster}, {2,truck}, {1,'MADNESS'} ]).
+%% [sunday,sunday,sunday,monster,monster,truck,truck,'MADNESS']'''
+%% @since Version 462
+
+key_duplicate(KeyList) ->
+
+    lists:flatten( [ lists:duplicate(Key, Value) || {Key,Value} <- KeyList ] ).
