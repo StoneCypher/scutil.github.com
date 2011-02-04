@@ -64,8 +64,9 @@
 -export([
 
     extrema/1,
-
     key_duplicate/1,
+    rotate_list/2,
+    index_of_first/2,
 
     test/0,
       test/1,
@@ -130,27 +131,54 @@ test() ->
 
 
 %% @spec test(verbose) -> ok|error
-%% @doc Runs the test suite in verbose form. ```1> sc:test(verbose).
+%% @doc Runs the test suite in verbose form.  Also responds to [verbose] to be more familiar to eunit devs. ```1> sc:test(verbose).
 %% ======================== EUnit ========================
 %% module 'sc'
 %%   module 'sc_tests'
+%%     Index of first tests
+%%       sc_tests:73: index_of_first_test_ (0,  [ ])...ok
+%%       sc_tests:74: index_of_first_test_ (b,  [ a,b,c ])...ok
+%%       sc_tests:75: index_of_first_test_ (g,  [ a,b,c ])...ok
+%%       [done in 0.046 s]
+%%     Rotate list tests
+%%       sc_tests:52: rotate_list_test_ (0,  [ ])...ok
+%%       sc_tests:53: rotate_list_test_ (1,  [ ])...ok
+%%       sc_tests:54: rotate_list_test_ (-1, [ ])...ok
+%%       sc_tests:56: rotate_list_test_ (0,  [ a,b,c ])...ok
+%%       sc_tests:57: rotate_list_test_ (1,  [ a,b,c ])...ok
+%%       sc_tests:58: rotate_list_test_ (-1, [ a,b,c ])...ok
+%%       sc_tests:59: rotate_list_test_ (3,  [ a,b,c ])...ok
+%%       sc_tests:60: rotate_list_test_ (-3, [ a,b,c ])...ok
+%%       sc_tests:61: rotate_list_test_ (9,  [ a,b,c ])...ok
+%%       [done in 0.141 s]
+%%     Key duplicate tests
+%%       sc_tests:38: key_duplicate_test_ ([ ])...ok
+%%       sc_tests:39: key_duplicate_test_ ([ {2,a} ])...ok
+%%       sc_tests:40: key_duplicate_test_ ([ {2,a},{3,b} ])...ok
+%%       [done in 0.047 s]
 %%     Extrema tests
-%%       sc_tests:18: extrema_test_ (1,2,3,4)...ok
-%%       sc_tests:19: extrema_test_ (-1,-2,-3)...ok
-%%       sc_tests:20: extrema_test_ (-1.1,0,1.1)...ok
-%%       sc_tests:21: extrema_test_ (a,b,c)...ok
-%%       sc_tests:22: extrema_test_ (1,a,{})...ok
-%%       sc_tests:23: extrema_test_ (1)...ok
-%%       sc_tests:25: extrema_test_ ([] error)...ok
+%%       sc_tests:19: extrema_test_ (1,2,3,4)...ok
+%%       sc_tests:20: extrema_test_ (-1,-2,-3)...ok
+%%       sc_tests:21: extrema_test_ (-1.1,0,1.1)...ok
+%%       sc_tests:22: extrema_test_ (a,b,c)...ok
+%%       sc_tests:23: extrema_test_ (1,a,{})...ok
+%%       sc_tests:24: extrema_test_ (1)...ok
+%%       sc_tests:26: extrema_test_ ([] error)...ok
 %%       [done in 0.109 s]
-%%     [done in 0.109 s]
-%%   [done in 0.109 s]
+%%     [done in 0.343 s]
+%%   [done in 0.343 s]
 %% =======================================================
-%%   All 7 tests passed.
+%%   All 22 tests passed.
 %% ok'''
 %% @since 460
 
 test(verbose=_Style) ->
+
+    eunit:test(sc, [verbose]);
+
+
+
+test([verbose]=_Style) ->
 
     eunit:test(sc, [verbose]).
 
@@ -212,3 +240,96 @@ extrema(List) ->
 key_duplicate(KeyList) ->
 
     lists:flatten( [ lists:duplicate(Key, Value) || {Key,Value} <- KeyList ] ).
+
+
+
+
+
+%% @spec rotate_list(Distance::integer(), ListData::list()) -> list()
+%% @doc Rotates the front `Distance' elements of a list to the back, in order.  Negative distances rotate the back towards the front.  Distances over the length of
+%% the list wrap in modulus.  ```1> sc:rotate_list(2, [1,2,3,4,5,6,7,8]).
+%% [3,4,5,6,7,8,1,2]
+%%
+%% 2> sc:rotate_list(-2, [1,2,3,4,5,6,7,8]).
+%% [7,8,1,2,3,4,5,6]
+%%
+%% 3> sc:rotate_list(0, [1,2,3,4,5,6,7,8]).
+%% [1,2,3,4,5,6,7,8]
+%%
+%% 4> sc:rotate_list(16, [1,2,3,4,5,6,7,8]).
+%% [1,2,3,4,5,6,7,8]'''
+%% @since Version 463
+
+rotate_list(_, []) ->
+
+    [];
+
+
+
+rotate_list(0, List) ->
+
+    List;
+
+
+
+rotate_list(By, List) when By =< (-(length(List))) ->
+
+    rotate_list(By rem length(List), List);
+
+
+
+rotate_list(By, List) when By < 0 ->
+
+    rotate_list(length(List) + By, List);
+
+
+
+rotate_list(By, List) when By >= length(List) ->
+
+    rotate_list(By rem length(List), List);
+
+
+
+rotate_list(By, List) ->
+
+    { Front, Rear } = lists:split(By, List),
+    Rear ++ Front.
+
+
+
+
+
+
+
+
+
+
+%% @spec index_of_first(Item, List) -> integer()|undefined
+%% @doc Returns the index of the first instance of `Item' in the `List', or `undefined' if `Item' is not present.  ```1> sc:index_of_first(c, [a,b,c,d,e]).
+%% 3
+%%
+%% 2> sc:rotate_list(j, [a,b,c,d,e]).
+%% undefined'''
+%% @since Version 464
+
+index_of_first(Item, List) ->
+
+    index_of_first(Item, List, 1).
+
+
+
+index_of_first(_Item, [], _Pos) ->
+
+    undefined;
+
+
+
+index_of_first(Item, [Item|_ListRem], Pos) ->
+
+    Pos;
+
+
+
+index_of_first(Item, [_OtherItem|ListRem], Pos) ->
+
+    index_of_first(Item, ListRem, Pos+1).

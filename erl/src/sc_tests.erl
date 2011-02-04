@@ -40,3 +40,38 @@ key_duplicate_test_() ->
         {"[ {2,a},{3,b} ]", ?_assert( [a,a,b,b,b] =:= sc:key_duplicate([ {2,a},{3,b} ]) ) }
 
     ] }.
+
+
+
+
+
+rotate_list_test_() ->
+
+    { "Rotate list tests", [
+
+        {"0,  [ ]",       ?_assert( []      =:= sc:rotate_list(0,  [ ])       ) },
+        {"1,  [ ]",       ?_assert( []      =:= sc:rotate_list(1,  [ ])       ) },
+        {"-1, [ ]",       ?_assert( []      =:= sc:rotate_list(-1, [ ])       ) },
+
+        {"0,  [ a,b,c ]", ?_assert( [a,b,c] =:= sc:rotate_list(0,  [ a,b,c ]) ) },
+        {"1,  [ a,b,c ]", ?_assert( [b,c,a] =:= sc:rotate_list(1,  [ a,b,c ]) ) },
+        {"-1, [ a,b,c ]", ?_assert( [c,a,b] =:= sc:rotate_list(-1, [ a,b,c ]) ) },
+        {"3,  [ a,b,c ]", ?_assert( [a,b,c] =:= sc:rotate_list(3,  [ a,b,c ]) ) },
+        {"-3, [ a,b,c ]", ?_assert( [a,b,c] =:= sc:rotate_list(-3, [ a,b,c ]) ) },
+        {"9,  [ a,b,c ]", ?_assert( [a,b,c] =:= sc:rotate_list(9,  [ a,b,c ]) ) }
+
+    ] }.
+
+
+
+
+
+index_of_first_test_() ->
+
+    { "Index of first tests", [
+
+        {"0,  [ ]",       ?_assert( undefined =:= sc:index_of_first(0, [ ])       ) },
+        {"b,  [ a,b,c ]", ?_assert( 2         =:= sc:index_of_first(b, [ a,b,c ]) ) },
+        {"g,  [ a,b,c ]", ?_assert( undefined =:= sc:index_of_first(g, [ a,b,c ]) ) }
+
+    ] }.
