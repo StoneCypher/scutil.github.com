@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 467 $</p>
+<p><b>Version:</b> $Revision: 470 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -47,6 +47,9 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#gen_docs-2">gen_docs/2</a></td><td>Generates library documentation from and to the specified paths <code>WhereIsSrc</code> and <code>WhereToPutDocs</code> respectively.</td></tr>
 <tr><td valign="top"><a href="#index_of_first-2">index_of_first/2</a></td><td>Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.</td></tr>
 <tr><td valign="top"><a href="#key_duplicate-1">key_duplicate/1</a></td><td>Iterates a list of <code>{Count,Term}</code>, producing a list of <code>[Term,Term,...]</code>.</td></tr>
+<tr><td valign="top"><a href="#list_intersection-2">list_intersection/2</a></td><td>Equivalent to <a href="#list_intersection-3"><tt>list_intersection(List1, List2, unsorted)</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#list_intersection-3">list_intersection/3</a></td><td>Efficiently computes the intersection of two lists.</td></tr>
 <tr><td valign="top"><a href="#member_sets-1">member_sets/1</a></td><td>Equivalent to <a href="#member_sets-2"><tt>member_sets(Memberships, no_absence)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#member_sets-2">member_sets/2</a></td><td>For a list of memberships, return every possible combination of one representative member from each list.</td></tr>
@@ -55,6 +58,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#rotate_to_last-2">rotate_to_last/2</a></td><td>Rotates the list so that the first instance of Item becomes the last element in the list.</td></tr>
 <tr><td valign="top"><a href="#test-0">test/0</a></td><td>Runs the test suite in terse form.</td></tr>
 <tr><td valign="top"><a href="#test-1">test/1</a></td><td>Runs the test suite in verbose form.</td></tr>
+<tr><td valign="top"><a href="#zip_n-1">zip_n/1</a></td><td>Equivalent to <a href="#zip_n-2"><tt>zip_n(Ls, to_tuple)</tt></a>.
+</td></tr>
 </table>
 
 <h2><a name="functions">Function Details</a></h2>
@@ -146,6 +151,22 @@ presenting the actual volume of functionality present here.  We can get the cove
   2&gt; sc:key_duplicate([ {3,sunday}, {2,monster}, {2,truck}, {1,'MADNESS'} ]).
   [sunday,sunday,sunday,monster,monster,truck,truck,'MADNESS']</pre></p>
 <p><b>Introduced in:</b> Version 462</p>
+
+<h3 class="function"><a name="list_intersection-2">list_intersection/2</a></h3>
+<div class="spec">
+<p><tt>list_intersection(List1, List2) -&gt; any()</tt></p>
+</div><p>Equivalent to <a href="#list_intersection-3"><tt>list_intersection(List1, List2, unsorted)</tt></a>.</p>
+
+
+<h3 class="function"><a name="list_intersection-3">list_intersection/3</a></h3>
+<div class="spec">
+<p><tt>list_intersection(List1::list(), List2::list(), IsSorted::atom()) -&gt; list()</tt></p>
+</div><p>Efficiently computes the intersection of two lists.  The third parameter, which is optional and defaults to <code>unsorted</code>, is either the atom <code>sorted</code> or <code>unsorted</code>.  If <code>sorted</code> is used, the function will sort both inputs before proceeding, as it requires sorted lists; as such, if you already know your lists to be sorted, passing <code>unsorted</code> will save some time.  The return list will be reverse sorted. <pre>  1&gt; scutil:list_intersection([1,2,3,4,5,2,3,10,15,25,30,40,45,55],[1,3,5,5,5,15,20,30,35,40,50,55]).
+  [55,40,30,15,5,3,1]
+ 
+  2&gt; scutil:list_intersection([1],[2]).
+  []</pre> <a href="#Thanks">Thanks</a> to Ayrnieu for catching a defect in the initial implementation.</p>
+<p><b>Introduced in:</b> Version 471</p>
 
 <h3 class="function"><a name="member_sets-1">member_sets/1</a></h3>
 <div class="spec">
@@ -290,9 +311,15 @@ presenting the actual volume of functionality present here.  We can get the cove
     All 22 tests passed.
   ok</pre></p>
 <p><b>Introduced in:</b> 460</p>
+
+<h3 class="function"><a name="zip_n-1">zip_n/1</a></h3>
+<div class="spec">
+<p><tt>zip_n(Ls::list()) -&gt; <a href="#type-list_of_tuples">list_of_tuples()</a></tt></p>
+</div><p>Equivalent to <a href="#zip_n-2"><tt>zip_n(Ls, to_tuple)</tt></a>.</p>
+
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Feb 6 2011, 15:08:57.</i></p>
+<p><i>Generated by EDoc, Feb 6 2011, 16:07:50.</i></p>
 </body>
 </html>

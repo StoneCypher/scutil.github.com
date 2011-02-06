@@ -169,3 +169,18 @@ list_intersection_test_() ->
         {"[3,a,4],[a,5,3]", ?_assert( [a,3]   =:= sc:list_intersection([3,a,4],[a,5,3]) )}
 
     ] }.
+
+
+
+
+
+zip_n_test_() ->
+
+    { "Zip N test", [
+
+        {"", ?_assert( [{1,a},  {2,b},  {3,c}]         =:= sc:zip_n([ [1,2,3],[a,b,c] ])                 )},
+        {"", ?_assert( [{1,a,x},{2,b,y},{3,c,z}]       =:= sc:zip_n([ [1,2,3],[a,b,c],[x,y,z] ])         )},
+        {"", ?_assert( [{1,a,x,d},{2,b,y,e},{3,c,z,f}] =:= sc:zip_n([ [1,2,3],[a,b,c],[x,y,z],[d,e,f] ]) )},
+        {"", ?_assert( []                              =:= sc:zip_n([ ])                                 )}
+
+    ] }.

@@ -71,6 +71,7 @@
     key_duplicate/1,
     index_of_first/2,
     count_x/2,
+    zip_n/1,
 
     flag_sets/1,
     member_sets/1,
@@ -651,3 +652,92 @@ intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head < L2Head ->
 intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head > L2Head ->
 
     intersect_walk( [L1Head|L1Rem], L2Rem, Work).
+
+
+
+
+
+%% @spec (Ls::list()) -> list_of_tuples()
+%% @equiv zip_n(Ls, to_tuple)
+
+zip_n(Ls) ->
+
+    zip_n(Ls, to_tuple).
+
+
+
+%% @spec zip_n(Ls::list(), ResultType::atom()) -> list_of_tuples()
+
+%% @doc {@section List} Computes a zip on any sized group of lists, rather than just two or three as offered by the lists module.```1> sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii] ]).
+%% [{1,a,i},{2,b,ii},{3,c,iii}]
+%%
+%% 2> sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii], [x,y,z], [red,blue,green], [april,may,june] ]).
+%% [{1,a,i,x,red,april},
+%%  {2,b,ii,y,blue,may},
+%%  {3,c,iii,z,green,june}]
+%%
+%% This is actually more efficient than one might expect at first glance.  I ran a benchmark of 100,000 transformations of a list of lists into a list of tuples using {@link benchmark/3} and {@link multi_do/4} against both zip_n and the library function zip3; the library function won at 150 seconds to 175, which is a far smaller difference than I expected.```3> Testy = [ [1,2,3], [1,2,3], [1,2,3] ].
+%% [[1,2,3],[1,2,3],[1,2,3]]
+%%
+%% 4> scutil:benchmark(scutil, multi_do, [100000, scutil, zip_n, [Testy]]).
+%% {174.95563, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }
+%%
+%% 5> scutil:benchmark(scutil, multi_do, [100000, lists, zip3, Testy]).
+%% {149.605, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }'''
+%%
+%% {@section Thanks} Thanks to Vladimir Sessikov for contributing this to and thus allowing conscription from <a href="http://www.erlang.org/ml-archive/erlang-questions/200207/msg00066.html">the mailing list</a>.
+
+%% @since Version 472
+
+zip_n(Ls, to_tuple) ->
+
+    [ list_to_tuple(L) ||
+        L <- zip_n_listn(Ls)
+    ];
+
+
+
+zip_n(Ls, to_list) ->
+
+    zip_n_listn(Ls).
+
+
+
+%% @private
+
+zip_n_listn(Ls) ->
+
+    [ lists:reverse(L) ||
+        L <- zip_n_foldn(fun (A, Acc) -> [A|Acc] end, [], Ls)
+    ].
+
+
+
+%% @private
+
+zip_n_foldn(_, _, []) -> 
+
+    [];
+    
+
+
+zip_n_foldn(Fun, Acc0, Ls) -> 
+
+    zip_n_foldn(Fun, Acc0, Ls, []).
+    
+
+
+zip_n_foldn(_, _, [ [] | _ ], Ret) -> 
+
+    lists:reverse(Ret);
+    
+    
+
+zip_n_foldn(Fun, Acc0, Ls, Ret) -> 
+
+    zip_n_foldn(
+        Fun, 
+        Acc0, 
+        [ tl(L) || L <- Ls ],
+        [ lists:foldl(Fun, Acc0, [hd(L) || L <- Ls] ) | Ret ]
+    ).
