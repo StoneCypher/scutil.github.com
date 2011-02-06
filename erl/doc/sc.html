@@ -1,0 +1,281 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Module sc</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module sc</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
+<p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
+
+<p><b>Version:</b> $Revision: 467 $</p>
+<p><b>Introduced in:</b> September 14, 2007</p>
+<p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
+
+<h2><a name="description">Description</a></h2><p>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.</p>
+ 
+  <p><a href="http://fullof.bs/">I'm</a> modernizing my library.  Originally it got too big, so I split it up.  However, that's proven more trouble than it's worth - I often found myself asking whether the thing I wanted was
+  in <code>_math</code>, <code>_correlate</code>, <code>_statistics</code>, <code>_lists</code>, <code>_operators</code>, etc.  No more.  It's all getting dumped into <code>sc.erl</code> and <code>sc_tests.erl</code>.  Prototypes are pushed into <code>sc_prototype.erl</code>; that is  
+code which is either insufficiently tested or unfinished.  It's moving to eunit; sc_test is being dumped.  I'm taking a lot of the customization stuff out of the generated docs, too.  
+There was always an emphasis on testing, but it's getting taken much more seriously this time.  I am also no longer a language novice; I can replace at least some of the naive implementations  
+with marginally less naive ones, break fewer conventions, replicate fewer extant library functions, choose better naming and a more appropriate argument order, et cetera.</p>
+ 
+  <p>This also means I can completely ditch all the remnants of the botched move to packages, provide radically less automation which is radically more effective, and generally do a better job of  
+presenting the actual volume of functionality present here.  We can get the coverage tools out.  We can run prototypical work in a single separate file, to distinguish quality.  Etc.</p>
+ 
+  <p>Generally, this is intended to just be an all around improvement and replacement for the library I was pretty happy with, but which was showing strain.</p>
+ 
+  <p>As always, this work remains open source under the MIT license, because free isn't real unless it's free for everyone.  <a href="http://scutil.com/license/">http://scutil.com/license/</a></p>
+ 
+  ScUtil is free.  However, I'd like to know where it's ended up.  Therefore, please consider mail to stonecypher@gmail.com with text saying where this went a form of "registration."  This is not required.
+ 
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#extrema-1">extrema/1</a></td><td>Returns the lowest and highest values in a list of one or more member in the form <code>{Lo,Hi}</code>.</td></tr>
+<tr><td valign="top"><a href="#flag_sets-1">flag_sets/1</a></td><td>Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
+<tr><td valign="top"><a href="#gen_docs-0">gen_docs/0</a></td><td>Generates library documentation using the paths appropriate for the author's PC; you almost certainly want <a href="#gen_docs-2"><code>gen_docs/2</code></a> instead.</td></tr>
+<tr><td valign="top"><a href="#gen_docs-2">gen_docs/2</a></td><td>Generates library documentation from and to the specified paths <code>WhereIsSrc</code> and <code>WhereToPutDocs</code> respectively.</td></tr>
+<tr><td valign="top"><a href="#index_of_first-2">index_of_first/2</a></td><td>Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.</td></tr>
+<tr><td valign="top"><a href="#key_duplicate-1">key_duplicate/1</a></td><td>Iterates a list of <code>{Count,Term}</code>, producing a list of <code>[Term,Term,...]</code>.</td></tr>
+<tr><td valign="top"><a href="#member_sets-1">member_sets/1</a></td><td>Equivalent to <a href="#member_sets-2"><tt>member_sets(Memberships, no_absence)</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#member_sets-2">member_sets/2</a></td><td>For a list of memberships, return every possible combination of one representative member from each list.</td></tr>
+<tr><td valign="top"><a href="#rotate_list-2">rotate_list/2</a></td><td>Rotates the front <code>Distance</code> elements of a list to the back, in order.</td></tr>
+<tr><td valign="top"><a href="#rotate_to_first-2">rotate_to_first/2</a></td><td>Rotates the list to the first instance of Item.</td></tr>
+<tr><td valign="top"><a href="#rotate_to_last-2">rotate_to_last/2</a></td><td>Rotates the list so that the first instance of Item becomes the last element in the list.</td></tr>
+<tr><td valign="top"><a href="#test-0">test/0</a></td><td>Runs the test suite in terse form.</td></tr>
+<tr><td valign="top"><a href="#test-1">test/1</a></td><td>Runs the test suite in verbose form.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="extrema-1">extrema/1</a></h3>
+<div class="spec">
+<p><tt>extrema(List::<a href="#type-non_empty_list">non_empty_list()</a>) -&gt; {Low::any(), Hi::any()}</tt></p>
+</div><p>Returns the lowest and highest values in a list of one or more member in the form <code>{Lo,Hi}</code>.  <code>error()</code>s <code>badarg</code> for empty lists.  Mixed-type safe; sorts according to type order rules.  <pre>  1&gt; sc:extrema([1,2,3,4]).
+  {1,4}
+ 
+  2&gt; sc:extrema([1,2,3,a,b,c]).
+  {1,c}</pre></p>
+<p><b>Introduced in:</b> Version 460</p>
+
+<h3 class="function"><a name="flag_sets-1">flag_sets/1</a></h3>
+<div class="spec">
+<p><tt>flag_sets(Flags::list()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt></p>
+</div><p>Returns every interpretation of the list as a set of boolean flags, including all-off and all-on. <pre>  1&gt; sc:flag_sets([1,2,3,4]).
+  [ [], [4], [3], [3,4], [2], [2,4], [2,3], [2,3,4], [1], [1,4], [1,3], [1,3,4], [1,2], [1,2,4], [1,2,3], [1,2,3,4] ]
+ 
+  2&gt; length(sc:flag_sets(lists:seq(1,16))).
+  65536
+ 
+  3&gt; sc:flag_sets([]).
+  [ [] ]
+ 
+  4&gt; SourceOfPowers = sc:flag_sets([magic,technology,evil,alien]).
+  [[],                              % Batman
+   [alien],                         % Superman
+   [evil],                          % Darkseid
+   [evil,alien],                    % Sinestro
+   [technology],                    % Mister Terrific (Michael Holt)
+   [technology,alien],              % The Blue Beetle
+   [technology,evil],               % The OMACs
+   [technology,evil,alien],         % Braniac
+   [magic],                         % Shazam
+   [magic,alien],                   % Green Lantern (Alan Scott)
+   [magic,evil],                    % Lucifer Morningstar
+   [magic,evil,alien],              % pre-crisis Star Sapphire
+   [magic,technology],              % Alexander Luthor Jr.
+   [magic,technology,alien],        % Mister Miracle
+   [magic,technology,evil],         % pre-crisis Sinestro
+   [magic,technology,evil,alien]]   % Granny Goodness</pre></p>
+<p><b>Introduced in:</b> Version 465</p>
+
+<h3 class="function"><a name="gen_docs-0">gen_docs/0</a></h3>
+<div class="spec">
+<p><tt>gen_docs() -&gt; ok | {'EXIT', any()}</tt></p>
+</div><p>Equivalent to <a href="#gen_docs-2"><tt>gen_docs("/projects/scutil/erl/src",
+	 "/projects/scutil/erl/src/docs")</tt></a>.</p>
+<p>Generates library documentation using the paths appropriate for the author's PC; you almost certainly want <a href="#gen_docs-2"><code>gen_docs/2</code></a> instead.  <pre>  1&gt; sc:gen_docs().
+  ok</pre></p>
+<p><b>Introduced in:</b> 458</p>
+
+<h3 class="function"><a name="gen_docs-2">gen_docs/2</a></h3>
+<div class="spec">
+<p><tt>gen_docs(WhereIsSrc::string(), WhereToPutDocs::string()) -&gt; ok | {'EXIT', any()}</tt></p>
+</div><p>Generates library documentation from and to the specified paths <code>WhereIsSrc</code> and <code>WhereToPutDocs</code> respectively.  Do not use trailing slashes.  Windows paths are okay; remember to double your
+  backslashes, as backslashes in strings need to be quoted.  <pre>  1&gt; sc:gen_docs("/projects/scutil/erl/src", "/projects/scutil/erl/src/docs").
+  ok</pre></p>
+<p><b>Introduced in:</b> 458</p>
+
+<h3 class="function"><a name="index_of_first-2">index_of_first/2</a></h3>
+<div class="spec">
+<p><tt>index_of_first(Item, List) -&gt; integer() | undefined</tt></p>
+</div><p>Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.  <pre>  1&gt; sc:index_of_first(c, [a,b,c,d,e]).
+  3
+ 
+  2&gt; sc:index_of_first(j, [a,b,c,d,e]).
+  undefined</pre></p>
+<p><b>Introduced in:</b> Version 463</p>
+
+<h3 class="function"><a name="key_duplicate-1">key_duplicate/1</a></h3>
+<div class="spec">
+<p><tt>key_duplicate(CvList::list()) -&gt; [any()]</tt></p>
+</div><p>Iterates a list of <code>{Count,Term}</code>, producing a list of <code>[Term,Term,...]</code>.  <pre>  1&gt; sc:key_duplicate([ {3,bork} ]).
+  [bork,bork,bork]
+ 
+  2&gt; sc:key_duplicate([ {3,sunday}, {2,monster}, {2,truck}, {1,'MADNESS'} ]).
+  [sunday,sunday,sunday,monster,monster,truck,truck,'MADNESS']</pre></p>
+<p><b>Introduced in:</b> Version 462</p>
+
+<h3 class="function"><a name="member_sets-1">member_sets/1</a></h3>
+<div class="spec">
+<p><tt>member_sets(Memberships) -&gt; any()</tt></p>
+</div><p>Equivalent to <a href="#member_sets-2"><tt>member_sets(Memberships, no_absence)</tt></a>.</p>
+
+
+<h3 class="function"><a name="member_sets-2">member_sets/2</a></h3>
+<div class="spec">
+<p><tt>member_sets(Memberships::<a href="#type-list_of_lists">list_of_lists()</a>, AllowAbsence::atom()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt></p>
+</div><p>For a list of memberships, return every possible combination of one representative member from each list.
+  The parameter <code>AllowAbsence</code> controls whether memberships may be unrepresented; if unrepresented memberships are possible, then
+  one possible representation becomes the empty list. <pre>  1&gt; sc:member_sets([ [a,b],[1,2,3],[i,ii,iii] ], no_absence).
+  [[a,1,i], [a,1,ii], [a,1,iii], [a,2,i], [a,2,ii], [a,2,iii], [a,3,i], [a,3,ii], [a,3,iii],
+    [b,1,i], [b,1,ii], [b,1,iii], [b,2,i], [b,2,ii], [b,2,iii], [b,3,i], [b,3,ii], [b,3,iii]]
+ 
+  2&gt; sc:member_sets([ [a,b],[1,2],[i,ii] ], allow_absence).
+  [ [], [i], [ii], [1], [1,i], [1,ii], [2], [2,i], [2,ii], [a], [a,i], [a,ii], [a,1], [a,1,i],
+    [a,1,ii], [a,2], [a,2,i], [a,2,ii], [b], [b,i], [b,ii], [b,1], [b,1,i], [b,1,ii], [b,2],
+    [b,2,i], [b,2,ii] ]
+ 
+  3&gt; sc:member_sets([ [toast,pancakes], [sausage,bacon] ] ).
+  [[toast,sausage],
+   [toast,bacon],
+   [pancakes,sausage],
+   [pancakes,bacon]]
+ 
+  4&gt; sc:member_sets([ [toast,pancakes], [sausage,bacon] ], no_absence ).
+  [[toast,sausage],
+   [toast,bacon],
+   [pancakes,sausage],
+   [pancakes,bacon]]
+ 
+  5&gt; sc:member_sets([ [toast,pancakes], [sausage,bacon] ], allow_absence).
+   [[],
+   [sausage],
+   [bacon],
+   [toast],
+   [toast,sausage],
+   [toast,bacon],
+   [pancakes],
+   [pancakes,sausage],
+   [pancakes,bacon]]
+ 
+  6&gt; Format = fun(Person, Place, Weapon) -&gt; "It was " ++ Person ++ " in the " ++ Place ++ " with the " ++ Weapon ++ "!" end.
+  #Fun&lt;erl_eval.18.105910772&gt;
+ 
+  7&gt; [ Format(Pe,Pl,WW) || [Pe,Pl,WW] &lt;- sc:member_sets( [ ["Col. Mustard", "Ms. Scarlett"], ["conservatory", "hallway", "kitchen"], ["lead pipe"] ] ) ].
+  ["It was Col. Mustard in the conservatory with the lead pipe!",
+   "It was Col. Mustard in the hallway with the lead pipe!",
+   "It was Col. Mustard in the kitchen with the lead pipe!",
+   "It was Ms. Scarlett in the conservatory with the lead pipe!",
+   "It was Ms. Scarlett in the hallway with the lead pipe!",
+   "It was Ms. Scarlett in the kitchen with the lead pipe!"]</pre></p>
+<p><b>Introduced in:</b> Version 466</p>
+
+<h3 class="function"><a name="rotate_list-2">rotate_list/2</a></h3>
+<div class="spec">
+<p><tt>rotate_list(Distance::integer(), ListData::list()) -&gt; list()</tt></p>
+</div><p>Rotates the front <code>Distance</code> elements of a list to the back, in order.  Negative distances rotate the back towards the front.  Distances over the length of
+  the list wrap in modulus.  <pre>  1&gt; sc:rotate_list(2, [1,2,3,4,5,6,7,8]).
+  [3,4,5,6,7,8,1,2]
+ 
+  2&gt; sc:rotate_list(-2, [1,2,3,4,5,6,7,8]).
+  [7,8,1,2,3,4,5,6]
+ 
+  3&gt; sc:rotate_list(0, [1,2,3,4,5,6,7,8]).
+  [1,2,3,4,5,6,7,8]
+ 
+  4&gt; sc:rotate_list(16, [1,2,3,4,5,6,7,8]).
+  [1,2,3,4,5,6,7,8]</pre></p>
+<p><b>Introduced in:</b> Version 463</p>
+
+<h3 class="function"><a name="rotate_to_first-2">rotate_to_first/2</a></h3>
+<div class="spec">
+<p><tt>rotate_to_first(Item, List) -&gt; list()</tt></p>
+</div><p>Rotates the list to the first instance of Item.  <pre>  1&gt; sc:rotate_to_first(c, [a,b,c,d,e]).
+  [c,d,e,a,b]
+ 
+  2&gt; sc:rotate_to_first(j, [a,b,c,d,e]).
+  no_such_element</pre></p>
+<p><b>Introduced in:</b> Version 464</p>
+
+<h3 class="function"><a name="rotate_to_last-2">rotate_to_last/2</a></h3>
+<div class="spec">
+<p><tt>rotate_to_last(Item, List) -&gt; list()</tt></p>
+</div><p>Rotates the list so that the first instance of Item becomes the last element in the list.  <pre>  1&gt; sc:rotate_to_last(c, [a,b,c,d,e]).
+  [d,e,a,b,c]
+ 
+  2&gt; sc:rotate_list(j, [a,b,c,d,e]).
+  no_such_element</pre></p>
+<p><b>Introduced in:</b> Version 464</p>
+
+<h3 class="function"><a name="test-0">test/0</a></h3>
+<div class="spec">
+<p><tt>test() -&gt; ok | error</tt></p>
+</div><p>Runs the test suite in terse form. <pre>  1&gt; sc:test().
+    All 9 tests passed.
+  ok</pre></p>
+<p><b>Introduced in:</b> 458</p>
+
+<h3 class="function"><a name="test-1">test/1</a></h3>
+<div class="spec">
+<p><tt>test(Style::verbose) -&gt; ok | error</tt></p>
+</div><p>Runs the test suite in verbose form.  Also responds to [verbose] to be more familiar to eunit devs. <pre>  1&gt; sc:test(verbose).
+  ======================== EUnit ========================
+  module 'sc'
+    module 'sc_tests'
+      Index of first tests
+        sc_tests:73: index_of_first_test_ (0,  [ ])...ok
+        sc_tests:74: index_of_first_test_ (b,  [ a,b,c ])...ok
+        sc_tests:75: index_of_first_test_ (g,  [ a,b,c ])...ok
+        [done in 0.046 s]
+      Rotate list tests
+        sc_tests:52: rotate_list_test_ (0,  [ ])...ok
+        sc_tests:53: rotate_list_test_ (1,  [ ])...ok
+        sc_tests:54: rotate_list_test_ (-1, [ ])...ok
+        sc_tests:56: rotate_list_test_ (0,  [ a,b,c ])...ok
+        sc_tests:57: rotate_list_test_ (1,  [ a,b,c ])...ok
+        sc_tests:58: rotate_list_test_ (-1, [ a,b,c ])...ok
+        sc_tests:59: rotate_list_test_ (3,  [ a,b,c ])...ok
+        sc_tests:60: rotate_list_test_ (-3, [ a,b,c ])...ok
+        sc_tests:61: rotate_list_test_ (9,  [ a,b,c ])...ok
+        [done in 0.141 s]
+      Key duplicate tests
+        sc_tests:38: key_duplicate_test_ ([ ])...ok
+        sc_tests:39: key_duplicate_test_ ([ {2,a} ])...ok
+        sc_tests:40: key_duplicate_test_ ([ {2,a},{3,b} ])...ok
+        [done in 0.047 s]
+      Extrema tests
+        sc_tests:19: extrema_test_ (1,2,3,4)...ok
+        sc_tests:20: extrema_test_ (-1,-2,-3)...ok
+        sc_tests:21: extrema_test_ (-1.1,0,1.1)...ok
+        sc_tests:22: extrema_test_ (a,b,c)...ok
+        sc_tests:23: extrema_test_ (1,a,{})...ok
+        sc_tests:24: extrema_test_ (1)...ok
+        sc_tests:26: extrema_test_ ([] error)...ok
+        [done in 0.109 s]
+      [done in 0.343 s]
+    [done in 0.343 s]
+  =======================================================
+    All 22 tests passed.
+  ok</pre></p>
+<p><b>Introduced in:</b> 460</p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Feb 6 2011, 14:58:35.</i></p>
+</body>
+</html>
