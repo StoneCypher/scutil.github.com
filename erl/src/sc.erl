@@ -21,6 +21,10 @@
 %%  backslash.  Automatic documentation generation via edoc will then
 %%  generate HTML docs.
 %%
+%%  For example, if you have this source in /projects/scutil or 
+%%  c:\projects\scutil, and you wanted the documentation in
+%%  /project/scutil/erl/src/docs or c:\projects\scutil\docs
+%%
 %%  Past here, documentation should be generally be read in the HTML format.
 
 
@@ -101,7 +105,7 @@
 
 gen_docs() ->
 
-    gen_docs("/projects/scutil/erl/src", "/projects/scutil/erl/src/docs").
+    gen_docs("/projects/scutil/erl/src", "/projects/scutil/erl/doc").
 
 
 
@@ -497,7 +501,7 @@ member_sets(Memberships) ->
 %%  "It was Ms. Scarlett in the conservatory with the lead pipe!",
 %%  "It was Ms. Scarlett in the hallway with the lead pipe!",
 %%  "It was Ms. Scarlett in the kitchen with the lead pipe!"]'''
-%% @since Version 126
+%% @since Version 466
 
 member_sets([], _) ->
 
