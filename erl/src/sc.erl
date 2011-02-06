@@ -70,6 +70,7 @@
     extrema/1,
     key_duplicate/1,
     index_of_first/2,
+    count_x/2,
 
     flag_sets/1,
     member_sets/1,
@@ -544,3 +545,47 @@ member_sets( [Membership|RemMemberships], allow_absence) ->
         Member <- [empty] ++ [{item,X}||X<-Membership],
         RemRep <- member_sets(RemMemberships, allow_absence)
     ].
+
+
+
+
+
+%% @type non_negative_integer() = integer().  A {@type non_negative_integer()} must be equal to or greater than zero.
+
+%% @spec count_x(Item::any(), List::list()) -> non_negative_integer()
+
+%% @doc Counts the number of instances of Item in List.  ```1> sc:count_x(alpha, [alpha, beta, gamma, beta, alpha]).
+%% 2
+%% 
+%% 2> sc:count_x(3, [1,2,4,5,6,7]).
+%% 0'''
+
+%% @since Version 468
+
+count_x(Item, List) ->
+
+    lists:foldl(
+
+        fun(X, Counter) ->
+
+            case X of
+
+                Item ->
+                    Counter+1;
+
+                _ ->
+                    Counter
+
+            end
+
+        end,
+
+        0,
+        List
+
+    ).
+
+
+
+
+
