@@ -131,11 +131,11 @@ member_sets_test_() ->
 
     { "Member sets tests", [
 
-        {"[]",                           ?_assert( [[]]                         =:= sc:flag_sets( [] )                           ) },
-        {"[ [] ]",                       ?_assert( [[]]                         =:= sc:flag_sets( [ [] ] )                       ) },
-        {"[ [1],[2,3] ]",                ?_assert( [[1,2],[1,3]]                =:= sc:flag_sets( [ [1],[2,3] ] )                ) },
-        {"[ [1],[2,3] ], no_absence",    ?_assert( [[1,2],[1,3]]                =:= sc:flag_sets( [ [1],[2,3] ], no_absence )    ) },
-        {"[ [1],[2,3] ], allow_absence", ?_assert( [[],[2],[3],[1],[1,2],[1,3]] =:= sc:flag_sets( [ [1],[2,3] ], allow_absence ) ) }
+        {"[]",                           ?_assert( [[]]                         =:= sc:member_sets( [] )                           ) },
+        {"[ [] ]",                       ?_assert( [[]]                         =:= sc:member_sets( [ [] ] )                       ) },
+        {"[ [1],[2,3] ]",                ?_assert( [[1,2],[1,3]]                =:= sc:member_sets( [ [1],[2,3] ] )                ) },
+        {"[ [1],[2,3] ], no_absence",    ?_assert( [[1,2],[1,3]]                =:= sc:member_sets( [ [1],[2,3] ], no_absence )    ) },
+        {"[ [1],[2,3] ], allow_absence", ?_assert( [[],[2],[3],[1],[1,2],[1,3]] =:= sc:member_sets( [ [1],[2,3] ], allow_absence ) ) }
 
     ] }.
 
