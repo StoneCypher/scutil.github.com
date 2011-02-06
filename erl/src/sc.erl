@@ -72,6 +72,7 @@
     index_of_first/2,
     count_x/2,
     zip_n/1,
+    expand_labels/1,
 
     flag_sets/1,
     member_sets/1,
@@ -751,7 +752,7 @@ zip_n_foldn(Fun, Acc0, Ls, Ret) ->
 
 %% @spec combinations(OutputItemSize::positive_integer(), Items::list()) -> list_of_lists()
 
-%% @doc {@section List} Provides a list of every unique combination of input terms, order-ignorant; contrast {@link permute/2}.  Permutations are all unique combinations of a set of tokens; the 2-permutations of `[a,b,c]' for example are `[a,b]', `[a,c]' and `[b,c]'.  Note the absence of other orderings, such as `[b,a]', which are provided by {@link permute/2}.  Combinations are taken of a smaller count of tokens than the main set.  Combinations are not ordered, but this implementation happens to provide answers in the same order as the input list.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> scutil:combinations(2, [a,b,c,d]).
+%% @doc Provides a list of every unique combination of input terms, order-ignorant; contrast {@link permute/2}.  Permutations are all unique combinations of a set of tokens; the 2-permutations of `[a,b,c]' for example are `[a,b]', `[a,c]' and `[b,c]'.  Note the absence of other orderings, such as `[b,a]', which are provided by {@link permute/2}.  Combinations are taken of a smaller count of tokens than the main set.  Combinations are not ordered, but this implementation happens to provide answers in the same order as the input list.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> scutil:combinations(2, [a,b,c,d]).
 %% [[a,b],[a,c],[a,d],[b,c],[b,d],[c,d]]
 %%
 %% 2> scutil:combinations(2, ["dave","kate","pat"]).
@@ -760,7 +761,7 @@ zip_n_foldn(Fun, Acc0, Ls, Ret) ->
 %% 3> scutil:combinations(2, [fast, strong, smart, lucky]).
 %% [[fast,strong], [fast,smart], [fast,lucky], [strong,smart], [strong,lucky], [smart,lucky]]''' {@section Thanks} to Alisdair Sullivan for this implementation, which has been slightly but not significantly modified since receipt.
 
-%% @since Version 89
+%% @since Version 473
 
 combinations(1, Items) when is_list(Items) ->
 
@@ -788,3 +789,34 @@ combinations(N, Items) when is_list(Items), is_integer(N), N > 0 ->
       I <- lists:seq(1, length(Items)),
       J <- combinations( (N-1), lists:nthtail(I, Items) )
     ].
+
+
+
+
+
+%% @spec expand_labels([{Label::any(),List::list()}]) -> list_of_lists()
+
+%% @doc Expands a series of labels over lists to create a cartesian 2-ary tuple expansion.  ```1> sc:expand_labels([{villain,[lex_luthor,sinistar,gargamel]}]).
+%% [{villain,lex_luthor},{villain,sinistar},{villain,gargamel}]
+%%
+%% 2> sc:expand_labels([ {hero,[superman,tinyship,papa_smurf]}, {villain,[lex_luthor,sinistar,gargamel]} ]).
+%% [{hero,superman},
+%%  {hero,tinyship},
+%%  {hero,papa_smurf},
+%%  {villain,lex_luthor},
+%%  {villain,sinistar},
+%%  {villain,gargamel}]'''
+
+%% @since Version 474
+
+expand_labels(List) when is_list(List) ->
+
+    lists:flatten( [ expand_label(X) || X <- List ] ).
+
+
+
+%% @private
+
+expand_label({Label,List}) when is_list(List) ->
+
+     [ {Label,L} || L<-List ].

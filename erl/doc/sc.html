@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 472 $</p>
+<p><b>Version:</b> $Revision: 473 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -44,8 +44,9 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p>A <code><a href="#type-non_negative_integer">non_negative_integer()</a></code> must be equal to or greater than zero.</p>
 
 <h2><a name="index">Function Index</a></h2>
-<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#combinations-2">combinations/2</a></td><td><a href="#List">List</a> Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.</td></tr>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#combinations-2">combinations/2</a></td><td>Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#count_x-2">count_x/2</a></td><td>Counts the number of instances of Item in List.</td></tr>
+<tr><td valign="top"><a href="#expand_labels-1">expand_labels/1</a></td><td>Expands a series of labels over lists to create a cartesian 2-ary tuple expansion.</td></tr>
 <tr><td valign="top"><a href="#extrema-1">extrema/1</a></td><td>Returns the lowest and highest values in a list of one or more member in the form <code>{Lo,Hi}</code>.</td></tr>
 <tr><td valign="top"><a href="#flag_sets-1">flag_sets/1</a></td><td>Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
 <tr><td valign="top"><a href="#gen_docs-0">gen_docs/0</a></td><td>Generates library documentation using the paths appropriate for the author's PC; you almost certainly want <a href="#gen_docs-2"><code>gen_docs/2</code></a> instead.</td></tr>
@@ -72,7 +73,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="combinations-2">combinations/2</a></h3>
 <div class="spec">
 <p><tt>combinations(OutputItemSize::<a href="#type-positive_integer">positive_integer()</a>, Items::list()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt></p>
-</div><p><a href="#List">List</a> Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.  Permutations are all unique combinations of a set of tokens; the 2-permutations of <code>[a,b,c]</code> for example are <code>[a,b]</code>, <code>[a,c]</code> and <code>[b,c]</code>.  Note the absence of other orderings, such as <code>[b,a]</code>, which are provided by <a href="#permute-2"><code>permute/2</code></a>.  Combinations are taken of a smaller count of tokens than the main set.  Combinations are not ordered, but this implementation happens to provide answers in the same order as the input list.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. <pre>  1&gt; scutil:combinations(2, [a,b,c,d]).
+</div><p>Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.  Permutations are all unique combinations of a set of tokens; the 2-permutations of <code>[a,b,c]</code> for example are <code>[a,b]</code>, <code>[a,c]</code> and <code>[b,c]</code>.  Note the absence of other orderings, such as <code>[b,a]</code>, which are provided by <a href="#permute-2"><code>permute/2</code></a>.  Combinations are taken of a smaller count of tokens than the main set.  Combinations are not ordered, but this implementation happens to provide answers in the same order as the input list.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. <pre>  1&gt; scutil:combinations(2, [a,b,c,d]).
   [[a,b],[a,c],[a,d],[b,c],[b,d],[c,d]]
  
   2&gt; scutil:combinations(2, ["dave","kate","pat"]).
@@ -80,7 +81,7 @@ presenting the actual volume of functionality present here.  We can get the cove
  
   3&gt; scutil:combinations(2, [fast, strong, smart, lucky]).
   [[fast,strong], [fast,smart], [fast,lucky], [strong,smart], [strong,lucky], [smart,lucky]]</pre> <a href="#Thanks">Thanks</a> to Alisdair Sullivan for this implementation, which has been slightly but not significantly modified since receipt.</p>
-<p><b>Introduced in:</b> Version 89</p>
+<p><b>Introduced in:</b> Version 473</p>
 
 <h3 class="function"><a name="count_x-2">count_x/2</a></h3>
 <div class="spec">
@@ -91,6 +92,21 @@ presenting the actual volume of functionality present here.  We can get the cove
   2&gt; sc:count_x(3, [1,2,4,5,6,7]).
   0</pre></p>
 <p><b>Introduced in:</b> Version 468</p>
+
+<h3 class="function"><a name="expand_labels-1">expand_labels/1</a></h3>
+<div class="spec">
+<p><tt>expand_labels(List::[{Label::any(), List::list()}]) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt></p>
+</div><p>Expands a series of labels over lists to create a cartesian 2-ary tuple expansion.  <pre>  1&gt; sc:expand_labels([{villain,[lex_luthor,sinistar,gargamel]}]).
+  [{villain,lex_luthor},{villain,sinistar},{villain,gargamel}]
+ 
+  2&gt; sc:expand_labels([ {hero,[superman,tinyship,papa_smurf]}, {villain,[lex_luthor,sinistar,gargamel]} ]).
+  [{hero,superman},
+   {hero,tinyship},
+   {hero,papa_smurf},
+   {villain,lex_luthor},
+   {villain,sinistar},
+   {villain,gargamel}]</pre></p>
+<p><b>Introduced in:</b> Version 474</p>
 
 <h3 class="function"><a name="extrema-1">extrema/1</a></h3>
 <div class="spec">
@@ -338,6 +354,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Feb 6 2011, 16:32:58.</i></p>
+<p><i>Generated by EDoc, Feb 6 2011, 16:46:41.</i></p>
 </body>
 </html>

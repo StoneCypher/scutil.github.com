@@ -201,3 +201,17 @@ combinations_test_() ->
         {"5, [a,b,c,d]", ?_assert( []                                    =:= sc:combinations(5, [a,b,c,d]) )}
 
     ] }.
+
+
+
+
+
+expand_labels_test_() ->
+
+    { "Expand labels test", [
+
+        {"[]",                    ?_assert( []                        =:= sc:expand_labels([])                    )},
+        {"[{1,[a,b]}]",           ?_assert( [{1,a},{1,b}]             =:= sc:expand_labels([{1,[a,b]}])           )},
+        {"[{1,[a,b]},{2,[c,d]}]", ?_assert( [{1,a},{1,b},{2,c},{2,d}] =:= sc:expand_labels([{1,[a,b]},{2,[c,d]}]) )}
+
+    ] }.
