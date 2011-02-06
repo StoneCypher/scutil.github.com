@@ -76,6 +76,7 @@
     flag_sets/1,
     member_sets/1,
       member_sets/2,
+    combinations/2,
 
     list_intersection/2,
       list_intersection/3,
@@ -560,7 +561,7 @@ member_sets( [Membership|RemMemberships], allow_absence) ->
 
 %% @doc Counts the number of instances of Item in List.  ```1> sc:count_x(alpha, [alpha, beta, gamma, beta, alpha]).
 %% 2
-%% 
+%%
 %% 2> sc:count_x(3, [1,2,4,5,6,7]).
 %% 0'''
 
@@ -736,8 +737,54 @@ zip_n_foldn(_, _, [ [] | _ ], Ret) ->
 zip_n_foldn(Fun, Acc0, Ls, Ret) -> 
 
     zip_n_foldn(
-        Fun, 
-        Acc0, 
+        Fun,
+        Acc0,
         [ tl(L) || L <- Ls ],
         [ lists:foldl(Fun, Acc0, [hd(L) || L <- Ls] ) | Ret ]
     ).
+
+
+
+
+
+%% @type list_of_lists() = list().  Every member of a {@type list_of_lists()} is a {@type list()}.
+
+%% @spec combinations(OutputItemSize::positive_integer(), Items::list()) -> list_of_lists()
+
+%% @doc {@section List} Provides a list of every unique combination of input terms, order-ignorant; contrast {@link permute/2}.  Permutations are all unique combinations of a set of tokens; the 2-permutations of `[a,b,c]' for example are `[a,b]', `[a,c]' and `[b,c]'.  Note the absence of other orderings, such as `[b,a]', which are provided by {@link permute/2}.  Combinations are taken of a smaller count of tokens than the main set.  Combinations are not ordered, but this implementation happens to provide answers in the same order as the input list.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> scutil:combinations(2, [a,b,c,d]).
+%% [[a,b],[a,c],[a,d],[b,c],[b,d],[c,d]]
+%%
+%% 2> scutil:combinations(2, ["dave","kate","pat"]).
+%% [["dave","kate"],["dave","pat"],["kate","pat"]]
+%%
+%% 3> scutil:combinations(2, [fast, strong, smart, lucky]).
+%% [[fast,strong], [fast,smart], [fast,lucky], [strong,smart], [strong,lucky], [smart,lucky]]''' {@section Thanks} to Alisdair Sullivan for this implementation, which has been slightly but not significantly modified since receipt.
+
+%% @since Version 89
+
+combinations(1, Items) when is_list(Items) ->
+
+    [ [I] || I <- Items ];
+
+
+
+combinations(_N, []) ->
+
+   [];
+
+
+
+
+combinations(0, L) when is_list(L) ->
+
+    [];
+
+
+
+
+combinations(N, Items) when is_list(Items), is_integer(N), N > 0 ->
+
+    [ lists:flatten(lists:append( [lists:nth(I, Items)], [J] )) ||
+      I <- lists:seq(1, length(Items)),
+      J <- combinations( (N-1), lists:nthtail(I, Items) )
+    ].
