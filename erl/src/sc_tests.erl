@@ -153,3 +153,19 @@ count_x_test_() ->
         {"b, [1,a,2,b,3]", ?_assert( 1 =:= sc:count_x(b, [1,a,2,b,3]) )}
 
     ] }.
+
+
+
+
+
+list_intersection_test_() ->
+
+    { "List intersection tests", [
+
+        {"[3,1,4],[1,5,9]", ?_assert( [1]     =:= sc:list_intersection([3,1,4],[1,5,9]) )},
+        {"[3,1,4],[2,5,9]", ?_assert( []      =:= sc:list_intersection([3,1,4],[2,5,9]) )},
+        {"[3,1,4],[1,4,3]", ?_assert( [4,3,1] =:= sc:list_intersection([3,1,4],[1,4,3]) )},
+        {"[3,1,4],[3,1,4]", ?_assert( [4,3,1] =:= sc:list_intersection([3,1,4],[3,1,4]) )},
+        {"[3,a,4],[a,5,3]", ?_assert( [a,3]   =:= sc:list_intersection([3,a,4],[a,5,3]) )}
+
+    ] }.

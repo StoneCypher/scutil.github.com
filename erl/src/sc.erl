@@ -76,6 +76,9 @@
     member_sets/1,
       member_sets/2,
 
+    list_intersection/2,
+      list_intersection/3,
+
     rotate_list/2,
       rotate_to_first/2,
       rotate_to_last/2,
@@ -589,3 +592,62 @@ count_x(Item, List) ->
 
 
 
+%% @equiv list_intersection(List1, List2, unsorted)
+
+list_intersection(List1, List2) ->
+
+    list_intersection(List1, List2, unsorted).
+
+
+
+%% @spec list_intersection(List1::list(), List2::list(), IsSorted::atom()) -> list()
+
+%% @doc Efficiently computes the intersection of two lists.  The third parameter, which is optional and defaults to `unsorted', is either the atom `sorted' or `unsorted'.  If `sorted' is used, the function will sort both inputs before proceeding, as it requires sorted lists; as such, if you already know your lists to be sorted, passing `unsorted' will save some time.  The return list will be reverse sorted. ```1> scutil:list_intersection([1,2,3,4,5,2,3,10,15,25,30,40,45,55],[1,3,5,5,5,15,20,30,35,40,50,55]).
+%% [55,40,30,15,5,3,1]
+%%
+%% 2> scutil:list_intersection([1],[2]).
+%% []''' {@section Thanks} to Ayrnieu for catching a defect in the initial implementation.
+
+%% @since Version 471
+
+list_intersection(List1, List2, unsorted) ->
+
+    list_intersection(lists:sort(List1), lists:sort(List2), sorted);
+
+
+
+list_intersection(List1, List2, sorted) ->
+
+    intersect_walk(List1, List2, []).
+
+
+
+%% @private
+
+intersect_walk( [], _L2, Work ) ->
+
+    Work;
+
+
+
+intersect_walk( _L1, [], Work) ->
+
+    Work;
+
+
+
+intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head == L2Head ->
+
+    intersect_walk(L1Rem, L2Rem, [L1Head]++Work);
+
+
+
+intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head < L2Head ->
+
+    intersect_walk(L1Rem, [L2Head|L2Rem], Work);
+
+
+
+intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head > L2Head ->
+
+    intersect_walk( [L1Head|L1Rem], L2Rem, Work).
