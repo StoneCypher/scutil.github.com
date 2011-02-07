@@ -86,6 +86,9 @@
       rotate_to_first/2,
       rotate_to_last/2,
 
+    permute/1,
+      permute/2,
+
     test/0,
       test/1,
 
@@ -605,10 +608,10 @@ list_intersection(List1, List2) ->
 
 %% @spec list_intersection(List1::list(), List2::list(), IsSorted::atom()) -> list()
 
-%% @doc Efficiently computes the intersection of two lists.  The third parameter, which is optional and defaults to `unsorted', is either the atom `sorted' or `unsorted'.  If `sorted' is used, the function will sort both inputs before proceeding, as it requires sorted lists; as such, if you already know your lists to be sorted, passing `unsorted' will save some time.  The return list will be reverse sorted. ```1> scutil:list_intersection([1,2,3,4,5,2,3,10,15,25,30,40,45,55],[1,3,5,5,5,15,20,30,35,40,50,55]).
+%% @doc Efficiently computes the intersection of two lists.  The third parameter, which is optional and defaults to `unsorted', is either the atom `sorted' or `unsorted'.  If `sorted' is used, the function will sort both inputs before proceeding, as it requires sorted lists; as such, if you already know your lists to be sorted, passing `unsorted' will save some time.  The return list will be reverse sorted. ```1> sc:list_intersection([1,2,3,4,5,2,3,10,15,25,30,40,45,55],[1,3,5,5,5,15,20,30,35,40,50,55]).
 %% [55,40,30,15,5,3,1]
 %%
-%% 2> scutil:list_intersection([1],[2]).
+%% 2> sc:list_intersection([1],[2]).
 %% []''' {@section Thanks} to Ayrnieu for catching a defect in the initial implementation.
 
 %% @since Version 471
@@ -681,10 +684,10 @@ zip_n(Ls) ->
 %% This is actually more efficient than one might expect at first glance.  I ran a benchmark of 100,000 transformations of a list of lists into a list of tuples using {@link benchmark/3} and {@link multi_do/4} against both zip_n and the library function zip3; the library function won at 150 seconds to 175, which is a far smaller difference than I expected.```3> Testy = [ [1,2,3], [1,2,3], [1,2,3] ].
 %% [[1,2,3],[1,2,3],[1,2,3]]
 %%
-%% 4> scutil:benchmark(scutil, multi_do, [100000, scutil, zip_n, [Testy]]).
+%% 4> sc:benchmark(sc, multi_do, [100000, sc, zip_n, [Testy]]).
 %% {174.95563, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }
 %%
-%% 5> scutil:benchmark(scutil, multi_do, [100000, lists, zip3, Testy]).
+%% 5> sc:benchmark(sc, multi_do, [100000, lists, zip3, Testy]).
 %% {149.605, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }'''
 %%
 %% {@section Thanks} Thanks to Vladimir Sessikov for contributing this to and thus allowing conscription from <a href="http://www.erlang.org/ml-archive/erlang-questions/200207/msg00066.html">the mailing list</a>.
@@ -752,13 +755,13 @@ zip_n_foldn(Fun, Acc0, Ls, Ret) ->
 
 %% @spec combinations(OutputItemSize::positive_integer(), Items::list()) -> list_of_lists()
 
-%% @doc Provides a list of every unique combination of input terms, order-ignorant; contrast {@link permute/2}.  Permutations are all unique combinations of a set of tokens; the 2-permutations of `[a,b,c]' for example are `[a,b]', `[a,c]' and `[b,c]'.  Note the absence of other orderings, such as `[b,a]', which are provided by {@link permute/2}.  Combinations are taken of a smaller count of tokens than the main set.  Combinations are not ordered, but this implementation happens to provide answers in the same order as the input list.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> scutil:combinations(2, [a,b,c,d]).
+%% @doc Provides a list of every unique combination of input terms, order-ignorant; contrast {@link permute/2}.  Permutations are all unique combinations of a set of tokens; the 2-permutations of `[a,b,c]' for example are `[a,b]', `[a,c]' and `[b,c]'.  Note the absence of other orderings, such as `[b,a]', which are provided by {@link permute/2}.  Combinations are taken of a smaller count of tokens than the main set.  Combinations are not ordered, but this implementation happens to provide answers in the same order as the input list.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> sc:combinations(2, [a,b,c,d]).
 %% [[a,b],[a,c],[a,d],[b,c],[b,d],[c,d]]
 %%
-%% 2> scutil:combinations(2, ["dave","kate","pat"]).
+%% 2> sc:combinations(2, ["dave","kate","pat"]).
 %% [["dave","kate"],["dave","pat"],["kate","pat"]]
 %%
-%% 3> scutil:combinations(2, [fast, strong, smart, lucky]).
+%% 3> sc:combinations(2, [fast, strong, smart, lucky]).
 %% [[fast,strong], [fast,smart], [fast,lucky], [strong,smart], [strong,lucky], [smart,lucky]]''' {@section Thanks} to Alisdair Sullivan for this implementation, which has been slightly but not significantly modified since receipt.
 
 %% @since Version 473
@@ -820,3 +823,42 @@ expand_labels(List) when is_list(List) ->
 expand_label({Label,List}) when is_list(List) ->
 
      [ {Label,L} || L<-List ].
+
+
+
+
+
+%% @equiv permute(List, length(List))
+
+permute(List) ->
+
+    permute(List, length(List)).
+
+
+
+%% @type positive_integer() = integer().  Positive integer must be greater than zero.
+
+%% @spec permute(List::list(), Depth::positive_integer()) -> list()
+
+%% @doc {@section Utility} Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast {@link combinations/2}.  Permutations are all valid orderings of a set of tokens; the permutations of `[a,b]' for example are `[a,b]' and `[b,a]'.  Depth limitation means the permutations of a smaller count of tokens from the main set; the 2-limited permutations of `[a,b,c]' for example are `[a,b]', `[a,c]', `[b,a]', `[b,c]', `[c,a]' and `[c,b]'.  Permutations are not ordered.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> sc:permute(["dave","kate","pat"]).
+%% [{"pat","kate","dave"}, {"kate","pat","dave"}, {"pat","dave","kate"}, {"dave","pat","kate"}, {"kate","dave","pat"}, {"dave","kate","pat"}]
+%%
+%% 2> sc:permute([fast, strong, smart, lucky], 2).
+%% [{strong,fast}, {smart,fast}, {lucky,fast}, {fast,strong}, {smart,strong}, {lucky,strong}, {fast,smart}, {strong,smart}, {lucky,smart}, {fast,lucky}, {strong,lucky}, {smart,lucky}]'''
+
+%% @since Version 17
+
+permute(List, 1) when is_list(List) ->
+
+    [ [T] ||
+        T <- List
+    ];
+
+
+
+permute(List, Depth) when is_list(List), is_integer(Depth) ->
+
+    [ [T]++R ||
+        T <- List,
+        R <- permute(List--[T], Depth-1)
+    ].
