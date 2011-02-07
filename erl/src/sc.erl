@@ -73,14 +73,19 @@
     count_x/2,
     zip_n/1,
     expand_labels/1,
-
+    combinations/2,
     flag_sets/1,
+    list_product/1,
+
     member_sets/1,
       member_sets/2,
-    combinations/2,
 
     list_intersection/2,
       list_intersection/3,
+
+    shared_keys/1,
+      shared_keys/2,
+      shared_keys/3,
 
     rotate_list/2,
       rotate_to_first/2,
@@ -846,7 +851,7 @@ permute(List) ->
 %% 2> sc:permute([fast, strong, smart, lucky], 2).
 %% [{strong,fast}, {smart,fast}, {lucky,fast}, {fast,strong}, {smart,strong}, {lucky,strong}, {fast,smart}, {strong,smart}, {lucky,smart}, {fast,lucky}, {strong,lucky}, {smart,lucky}]'''
 
-%% @since Version 17
+%% @since Version 474
 
 permute(List, 1) when is_list(List) ->
 
@@ -862,3 +867,118 @@ permute(List, Depth) when is_list(List), is_integer(Depth) ->
         T <- List,
         R <- permute(List--[T], Depth-1)
     ].
+
+
+
+
+
+%% @spec shared_keys(TupleList::sorted_keylist()) -> sorted_keylist()
+
+%% @doc Create sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples, where key K appears in both A and B. ```1> sc:shared_keys([{1,a},{2,a},{3,a}],[{1,b},{3,b},{4,b}]).
+%% [{1,a,b},{3,a,b}]
+%%
+%% 2>sc:shared_keys([{1,a},{2,a}],[{3,b},{4,b}]).
+%% []'''
+
+%% @since Version 475
+
+shared_keys(TupleList) when is_list(TupleList) ->
+
+    {A,B} = lists:unzip(TupleList),
+    shared_keys(lists:sort(A),lists:sort(B)).
+
+
+
+%% @type keylist() = keylist().  All members of keylists are tuples of two-or-greater arity, and the first element is considered their key in the list.  List keys are unique; therefore `[{a,1},{b,1}]' is a keylist, but `[{a,1},{a,1}]' is not.
+%% @type sorted_keylist() = keylist().  A sorted keylist is a keylist in the order provided by {@link lists:sort/1}.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.
+
+%% @equiv shared_keys(lists:zip(lists:sort(A), lists:sort(B)))
+%% @spec shared_keys(TupleList::sorted_keylist(), Presorted::presorted) -> sorted_keylist()
+%% @doc Equivalent to {@link shared_keys/1}, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.
+
+shared_keys(TupleList, presorted) when is_list(TupleList) ->
+
+    {A,B} = lists:unzip(TupleList),
+    shared_keys(A,B);
+
+
+
+%% @doc Create sorted list X of 3-ary tuples `{K,Ai,Bi}' from sorted lists A, B of 2ary `{K,Ai}'/`{K,Bi}' tuples, where key `K' appears in both `A' and `B'.
+
+shared_keys(A,B) when is_list(A), is_list(B) ->
+
+    both_lists_next_item(lists:sort(A),lists:sort(B),[]).
+
+
+
+%% @equiv shared_keys(lists:sort(A),lists:sort(B))
+%% @spec shared_keys(A::sorted_keylist(), B::sorted_keylist(), Presorted::presorted) -> sorted_keylist()
+%% @doc Equivalent to {@link shared_keys/2}, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.
+
+shared_keys(A,B,presorted) when is_list(A), is_list(B) ->
+
+    both_lists_next_item(A,B,[]).
+
+
+
+both_lists_next_item([], _, Work) ->
+
+    lists:reverse(Work);
+
+
+
+%% @private
+
+both_lists_next_item(_, [], Work) ->
+
+    lists:reverse(Work);
+
+
+
+both_lists_next_item([ {K,Ai} | Ar], [ {K,Bi} | Br], Work) ->
+
+    both_lists_next_item(Ar, Br, [{K,Ai,Bi}]++Work);
+
+
+
+both_lists_next_item(IA, IB, Work) ->
+
+    [{Ka,_}|Ar] = IA,
+    [{Kb,_}|Br] = IB,
+
+    if
+
+        Ka < Kb ->
+            both_lists_next_item(Ar, IB, Work);
+
+        true ->
+            both_lists_next_item(IA, Br, Work)
+
+    end.
+
+
+
+
+
+%% @spec list_product(A::numericlist()) -> number()
+
+%% @doc {@section Math} Takes the product of all numbers in the list.  Offered mostly to make dependant code clearer. ```1> sc:list_product([1,2,5.4]).
+%% 10.8'''
+
+%% @since Version 476
+
+list_product(List) when is_list(List) ->
+
+    list_product(List, 1).
+
+
+
+list_product([], Counter) ->
+
+    Counter;
+
+
+
+list_product([Head|Tail], Counter) ->
+
+    list_product(Tail, Counter*Head).

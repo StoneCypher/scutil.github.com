@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 474 $</p>
+<p><b>Version:</b> $Revision: 475 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -35,6 +35,10 @@ presenting the actual volume of functionality present here.  We can get the cove
  
 <h2><a name="types">Data Types</a></h2>
 
+<h3 class="typedecl"><a name="type-keylist">keylist()</a></h3>
+<p><tt>keylist() = <a href="#type-keylist">keylist()</a></tt></p>
+<p>All members of keylists are tuples of two-or-greater arity, and the first element is considered their key in the list.  List keys are unique; therefore <code>[{a,1},{b,1}]</code> is a keylist, but <code>[{a,1},{a,1}]</code> is not.</p>
+
 <h3 class="typedecl"><a name="type-list_of_lists">list_of_lists()</a></h3>
 <p><tt>list_of_lists() = list()</tt></p>
 <p>Every member of a <code><a href="#type-list_of_lists">list_of_lists()</a></code> is a <code>list()</code>.</p>
@@ -46,6 +50,10 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="typedecl"><a name="type-positive_integer">positive_integer()</a></h3>
 <p><tt>positive_integer() = integer()</tt></p>
 <p>Positive integer must be greater than zero.</p>
+
+<h3 class="typedecl"><a name="type-sorted_keylist">sorted_keylist()</a></h3>
+<p><tt>sorted_keylist() = <a href="#type-keylist">keylist()</a></tt></p>
+<p>A sorted keylist is a keylist in the order provided by <a href="lists.html#sort-1"><code>lists:sort/1</code></a>.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.</p>
 
 <h2><a name="index">Function Index</a></h2>
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#combinations-2">combinations/2</a></td><td>Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.</td></tr>
@@ -69,6 +77,9 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#rotate_list-2">rotate_list/2</a></td><td>Rotates the front <code>Distance</code> elements of a list to the back, in order.</td></tr>
 <tr><td valign="top"><a href="#rotate_to_first-2">rotate_to_first/2</a></td><td>Rotates the list to the first instance of Item.</td></tr>
 <tr><td valign="top"><a href="#rotate_to_last-2">rotate_to_last/2</a></td><td>Rotates the list so that the first instance of Item becomes the last element in the list.</td></tr>
+<tr><td valign="top"><a href="#shared_keys-1">shared_keys/1</a></td><td>Create sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples, where key K appears in both A and B.</td></tr>
+<tr><td valign="top"><a href="#shared_keys-2">shared_keys/2</a></td><td>Equivalent to <a href="#shared_keys-1"><code>shared_keys/1</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
+<tr><td valign="top"><a href="#shared_keys-3">shared_keys/3</a></td><td>Equivalent to <a href="#shared_keys-2"><code>shared_keys/2</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
 <tr><td valign="top"><a href="#test-0">test/0</a></td><td>Runs the test suite in terse form.</td></tr>
 <tr><td valign="top"><a href="#test-1">test/1</a></td><td>Runs the test suite in verbose form.</td></tr>
 <tr><td valign="top"><a href="#zip_n-1">zip_n/1</a></td><td>Equivalent to <a href="#zip_n-2"><tt>zip_n(Ls, to_tuple)</tt></a>.
@@ -278,7 +289,7 @@ presenting the actual volume of functionality present here.  We can get the cove
  
   2&gt; sc:permute([fast, strong, smart, lucky], 2).
   [{strong,fast}, {smart,fast}, {lucky,fast}, {fast,strong}, {smart,strong}, {lucky,strong}, {fast,smart}, {strong,smart}, {lucky,smart}, {fast,lucky}, {strong,lucky}, {smart,lucky}]</pre></p>
-<p><b>Introduced in:</b> Version 17</p>
+<p><b>Introduced in:</b> Version 474</p>
 
 <h3 class="function"><a name="rotate_list-2">rotate_list/2</a></h3>
 <div class="spec">
@@ -316,6 +327,28 @@ presenting the actual volume of functionality present here.  We can get the cove
   2&gt; sc:rotate_list(j, [a,b,c,d,e]).
   no_such_element</pre></p>
 <p><b>Introduced in:</b> Version 464</p>
+
+<h3 class="function"><a name="shared_keys-1">shared_keys/1</a></h3>
+<div class="spec">
+<p><tt>shared_keys(TupleList::<a href="#type-sorted_keylist">sorted_keylist()</a>) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt></p>
+</div><p>Create sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples, where key K appears in both A and B. <pre>  1&gt; sc:shared_keys([{1,a},{2,a},{3,a}],[{1,b},{3,b},{4,b}]).
+  [{1,a,b},{3,a,b}]
+ 
+  2&gt;sc:shared_keys([{1,a},{2,a}],[{3,b},{4,b}]).
+  []</pre></p>
+<p><b>Introduced in:</b> Version 475</p>
+
+<h3 class="function"><a name="shared_keys-2">shared_keys/2</a></h3>
+<div class="spec">
+<p><tt>shared_keys(TupleList::<a href="#type-sorted_keylist">sorted_keylist()</a>, Presorted::presorted) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt></p>
+</div><p>Equivalent to <a href="#shared_keys-1"><tt>shared_keys(lists:zip(lists:sort(A), lists:sort(B)))</tt></a>.</p>
+<p>Equivalent to <a href="#shared_keys-1"><code>shared_keys/1</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</p>
+
+<h3 class="function"><a name="shared_keys-3">shared_keys/3</a></h3>
+<div class="spec">
+<p><tt>shared_keys(A::<a href="#type-sorted_keylist">sorted_keylist()</a>, B::<a href="#type-sorted_keylist">sorted_keylist()</a>, Presorted::presorted) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt></p>
+</div><p>Equivalent to <a href="#shared_keys-2"><tt>shared_keys(lists:sort(A), lists:sort(B))</tt></a>.</p>
+<p>Equivalent to <a href="#shared_keys-2"><code>shared_keys/2</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</p>
 
 <h3 class="function"><a name="test-0">test/0</a></h3>
 <div class="spec">
@@ -377,6 +410,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Feb 6 2011, 21:00:32.</i></p>
+<p><i>Generated by EDoc, Feb 6 2011, 21:33:53.</i></p>
 </body>
 </html>

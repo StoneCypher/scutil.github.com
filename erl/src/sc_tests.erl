@@ -229,3 +229,33 @@ permute_test_() ->
         {"[]",        ?_assert([]                                                =:= sc:permute([])        )}
 
     ] }.
+
+
+
+
+
+shared_keys_test_() ->
+
+    { "Shared keys tests", [
+
+        {"[],[]",                                   ?_assert([]                =:= sc:shared_keys([],[])                                   )},
+        {"[{1,a},{2,a},{3,a}],[{1,b},{3,b},{4,b}]", ?_assert([{1,a,b},{3,a,b}] =:= sc:shared_keys([{1,a},{2,a},{3,a}],[{1,b},{3,b},{4,b}]) )},
+        {"[{1,a},{2,a}],[{3,b},{4,b}]",             ?_assert([]                =:= sc:shared_keys([{1,a},{2,a}],[{3,b},{4,b}])             )}
+
+    ] }.
+
+
+
+
+
+list_product_test_() ->
+
+    { "List product tests", [
+
+        {"[1,2,3]",   ?_assert(6    =:= sc:list_product([1,2,3]))},
+        {"[1,2,5.4]", ?_assert(10.8 =:= sc:list_product([1,2,5.4]))},
+        {"[1]",       ?_assert(1    =:= sc:list_product([1]))},
+        {"[]",        ?_assert(1    =:= sc:list_product([]))}
+
+    ] }.
+    
