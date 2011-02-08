@@ -76,6 +76,7 @@
     combinations/2,
     flag_sets/1,
     list_product/1,
+    sanitize_tokens/2,
 
     member_sets/1,
       member_sets/2,
@@ -982,3 +983,49 @@ list_product([], Counter) ->
 list_product([Head|Tail], Counter) ->
 
     list_product(Tail, Counter*Head).
+
+
+
+
+
+%% @type filterfunction() = function().  Filter functions are 1ary binary predicates - they accept an argument and return either true or false.
+%% @type sanitizer() = list() | filterfunction().  Sanitizers are used by {@link sanitize_tokens/2} for input sanitization; they define what parts of an input list are valid, and the remainder are removed.  Sanitizers may either be a list of acceptable elements or a filter function.
+
+%% @spec sanitize_tokens(InputList::list(), Allowed::sanitizer()) -> list()
+
+%% @doc {@section List} Remove unacceptable elements from an input list, as defined by another list or a filter function.  Common reasons for sanitization include reducing arbitrary or bulk data to key format (such as using an original filename and new size to generate a new filename or database key) and removing malformed items from a list before processing. ```1> scutil:sanitize_tokens("ae0z4nb'wc-04bn ze0e 0;4ci ;e0o5rn;", "ace").
+%% "aeceece"
+%%
+%% 2> Classifier = fun(apple) -> true; (banana) -> true; (cherry) -> true; (date) -> true; (elderberry) -> true; (_) -> false end.
+%% #Fun<erl_eval.6.13229925>
+%%
+%% 3> scutil:sanitize_tokens([apple, boat, cherry, dog, elderberry], Classifier).
+%% [apple,cherry,elderberry]
+%%
+%% 4> Vowels = fun($a)->true; ($e)->true; ($i)->true; ($o)->true; ($u)->true; ($A)->true; ($E)->true; ($I)->true; ($O)->true; ($U)->true; (_)->false end.
+%% #Fun<erl_eval.6.13229925>
+%%
+%% 5> sc:sanitize_tokens("A quick brown fox jumped over the lazy dog", Vowels).
+%% "Auiooueoeeao"
+%%
+%% 6> sc:sanitize_tokens("A quick brown fox jumped over the lazy dog", "aeiouAEIOU").
+%% "Auiooueoeeao"
+%%
+%% @see sanitize_filename/1
+
+%% @since Version 477
+
+sanitize_tokens(List, Allowed) when is_list(List), is_function(Allowed) ->
+
+    lists:filter(Allowed, List);
+
+
+
+sanitize_tokens(List, Allowed) when is_list(List), is_list(Allowed) ->
+
+    lists:filter(fun(X) -> lists:member(X,Allowed) end, List).
+
+
+
+    
+
