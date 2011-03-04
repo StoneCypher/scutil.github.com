@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 477 $</p>
+<p><b>Version:</b> $Revision: 478 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -75,6 +75,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#bandwidth_calc-1">bandwidth_calc/1</a></td><td>Equivalent to <a href="#bandwidth_calc-2"><tt>bandwidth_calc(Data, all)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#bandwidth_calc-2">bandwidth_calc/2</a></td><td>Calculates digital line bandwidth over timescales in converted units.</td></tr>
+<tr><td valign="top"><a href="#caspers_jones_estimate-1">caspers_jones_estimate/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#combinations-2">combinations/2</a></td><td>Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#count_x-2">count_x/2</a></td><td>Counts the number of instances of Item in List.</td></tr>
 <tr><td valign="top"><a href="#expand_labels-1">expand_labels/1</a></td><td>Expands a series of labels over lists to create a cartesian 2-ary tuple expansion.</td></tr>
@@ -87,13 +88,16 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#list_intersection-2">list_intersection/2</a></td><td>Equivalent to <a href="#list_intersection-3"><tt>list_intersection(List1, List2, unsorted)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#list_intersection-3">list_intersection/3</a></td><td>Efficiently computes the intersection of two lists.</td></tr>
-<tr><td valign="top"><a href="#list_product-1">list_product/1</a></td><td><a href="#Math">Math</a> Takes the product of all numbers in the list.</td></tr>
+<tr><td valign="top"><a href="#list_product-1">list_product/1</a></td><td>Takes the product of all numbers in the list.</td></tr>
 <tr><td valign="top"><a href="#member_sets-1">member_sets/1</a></td><td>Equivalent to <a href="#member_sets-2"><tt>member_sets(Memberships, no_absence)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#member_sets-2">member_sets/2</a></td><td>For a list of memberships, return every possible combination of one representative member from each list.</td></tr>
+<tr><td valign="top"><a href="#naive_bayes_likelihood-4">naive_bayes_likelihood/4</a></td><td>Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
+  by the naive Bayes likelihood method.</td></tr>
 <tr><td valign="top"><a href="#permute-1">permute/1</a></td><td>Equivalent to <a href="#permute-2"><tt>permute(List, length(List))</tt></a>.
 </td></tr>
-<tr><td valign="top"><a href="#permute-2">permute/2</a></td><td><a href="#Utility">Utility</a> Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast <a href="#combinations-2"><code>combinations/2</code></a>.</td></tr>
+<tr><td valign="top"><a href="#permute-2">permute/2</a></td><td>Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast <a href="#combinations-2"><code>combinations/2</code></a>.</td></tr>
+<tr><td valign="top"><a href="#range_scale-1">range_scale/1</a></td><td>Get the scale of a same-sign numeric range.</td></tr>
 <tr><td valign="top"><a href="#rotate_list-2">rotate_list/2</a></td><td>Rotates the front <code>Distance</code> elements of a list to the back, in order.</td></tr>
 <tr><td valign="top"><a href="#rotate_to_first-2">rotate_to_first/2</a></td><td>Rotates the list to the first instance of Item.</td></tr>
 <tr><td valign="top"><a href="#rotate_to_last-2">rotate_to_last/2</a></td><td>Rotates the list so that the first instance of Item becomes the last element in the list.</td></tr>
@@ -119,7 +123,15 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="bandwidth_calc-2">bandwidth_calc/2</a></h3>
 <div class="spec">
 <p><tt>bandwidth_calc(BitsPerSecond::Data, Scale::bw_scale | all) -&gt; <a href="#type-bw_rate">bw_rate()</a> | [<a href="#type-bw_rate">bw_rate()</a>]</tt></p>
-</div><p>Calculates digital line bandwidth over timescales in converted units.</p>
+</div><p>Calculates digital line bandwidth over timescales in converted units. <pre>  1&gt;</pre>
+  Also knows the shorthand notations <code>{X,meg}</code>, <code>{X,gig}</code> and <code>{X,t}</code> for input only in base-10 only. <pre>  5&gt; sc:bandwidth_calc({10,meg}, {gigabits,day}).
+  {{gigabits,day},864.0}</pre></p>
+<p><b>Introduced in:</b> Version 478</p>
+
+<h3 class="function"><a name="caspers_jones_estimate-1">caspers_jones_estimate/1</a></h3>
+<div class="spec">
+<p><tt>caspers_jones_estimate(FunctionPoints) -&gt; any()</tt></p>
+</div>
 <p><b>Introduced in:</b> Version 478</p>
 
 <h3 class="function"><a name="combinations-2">combinations/2</a></h3>
@@ -257,7 +269,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="list_product-1">list_product/1</a></h3>
 <div class="spec">
 <p><tt>list_product(A::<a href="#type-numericlist">numericlist()</a>) -&gt; number()</tt></p>
-</div><p><a href="#Math">Math</a> Takes the product of all numbers in the list.  Offered mostly to make dependant code clearer. <pre>  1&gt; sc:list_product([1,2,5.4]).
+</div><p>Takes the product of all numbers in the list.  Offered mostly to make dependant code clearer. <pre>  1&gt; sc:list_product([1,2,5.4]).
   10.8</pre></p>
 <p><b>Introduced in:</b> Version 476</p>
 
@@ -316,6 +328,13 @@ presenting the actual volume of functionality present here.  We can get the cove
    "It was Ms. Scarlett in the kitchen with the lead pipe!"]</pre></p>
 <p><b>Introduced in:</b> Version 466</p>
 
+<h3 class="function"><a name="naive_bayes_likelihood-4">naive_bayes_likelihood/4</a></h3>
+<div class="spec">
+<p><tt>naive_bayes_likelihood(FeatureEvident::<a href="#type-non_negative_integer">non_negative_integer()</a>, FeatureTotal::<a href="#type-positive_integer">positive_integer()</a>, NonFeatureEvident::<a href="#type-non_negative_integer">non_negative_integer()</a>, NonFeatureTotal::<a href="#type-positive_integer">positive_integer()</a>) -&gt; Result::list()</tt></p>
+</div><p>Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
+  by the naive Bayes likelihood method.</p>
+<p><b>Introduced in:</b> Version 478</p>
+
 <h3 class="function"><a name="permute-1">permute/1</a></h3>
 <div class="spec">
 <p><tt>permute(List) -&gt; any()</tt></p>
@@ -325,12 +344,29 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="permute-2">permute/2</a></h3>
 <div class="spec">
 <p><tt>permute(List::list(), Depth::<a href="#type-positive_integer">positive_integer()</a>) -&gt; list()</tt></p>
-</div><p><a href="#Utility">Utility</a> Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast <a href="#combinations-2"><code>combinations/2</code></a>.  Permutations are all valid orderings of a set of tokens; the permutations of <code>[a,b]</code> for example are <code>[a,b]</code> and <code>[b,a]</code>.  Depth limitation means the permutations of a smaller count of tokens from the main set; the 2-limited permutations of <code>[a,b,c]</code> for example are <code>[a,b]</code>, <code>[a,c]</code>, <code>[b,a]</code>, <code>[b,c]</code>, <code>[c,a]</code> and <code>[c,b]</code>.  Permutations are not ordered.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. <pre>  1&gt; sc:permute(["dave","kate","pat"]).
+</div><p>Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast <a href="#combinations-2"><code>combinations/2</code></a>.  Permutations are all valid orderings of a set of tokens; the permutations of <code>[a,b]</code> for example are <code>[a,b]</code> and <code>[b,a]</code>.  Depth limitation means the permutations of a smaller count of tokens from the main set; the 2-limited permutations of <code>[a,b,c]</code> for example are <code>[a,b]</code>, <code>[a,c]</code>, <code>[b,a]</code>, <code>[b,c]</code>, <code>[c,a]</code> and <code>[c,b]</code>.  Permutations are not ordered.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. <pre>  1&gt; sc:permute(["dave","kate","pat"]).
   [{"pat","kate","dave"}, {"kate","pat","dave"}, {"pat","dave","kate"}, {"dave","pat","kate"}, {"kate","dave","pat"}, {"dave","kate","pat"}]
  
   2&gt; sc:permute([fast, strong, smart, lucky], 2).
   [{strong,fast}, {smart,fast}, {lucky,fast}, {fast,strong}, {smart,strong}, {lucky,strong}, {fast,smart}, {strong,smart}, {lucky,smart}, {fast,lucky}, {strong,lucky}, {smart,lucky}]</pre></p>
 <p><b>Introduced in:</b> Version 474</p>
+
+<h3 class="function"><a name="range_scale-1">range_scale/1</a></h3>
+<div class="spec">
+<p><tt>range_scale(NumList::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt></p>
+</div><p>Get the scale of a same-sign numeric range.  Gives nonsense results for non-numeric lists, or for lists which have both positive and negative members.  For a numeric list [4,5,6,12], the scale of the range 4..12 is 3:1, which is represented as 3.0 . <pre>  1&gt; sc:range_scale([3, 4, 5, 6]).
+  2.0
+  2&gt; sc:range_scale([3, 6]).
+  2.0
+  3&gt; sc:range_scale([6, 3]).
+  2.0
+  4&gt; sc:range_scale([3, 7.5]).
+  2.5
+  5&gt; sc:range_scale([3, 99]).
+  33.0
+  6&gt; sc:range_scale([3, 3]).
+  1.0</pre></p>
+<p><b>Introduced in:</b> Version 479</p>
 
 <h3 class="function"><a name="rotate_list-2">rotate_list/2</a></h3>
 <div class="spec">
@@ -387,7 +423,13 @@ presenting the actual volume of functionality present here.  We can get the cove
   5&gt; sc:sanitize_tokens("A quick brown fox jumped over the lazy dog", Vowels).
   "Auiooueoeeao"
  
-  6&gt; sc:sanitize_tokens("A quick brown fox jumped over the lazy dog", "aeiouAEIOU").
+  6&gt; sc:sanitize_tokens("A quick brown fox jumped over the lazy dog", "abcdefABCDEF").
+  "Acbfedeead"
+ 
+  7&gt; BobcatGoldthwait = fun(X) -&gt; sc:sanitize_tokens(X, "aeiouAEIOU") end.
+  #Fun&lt;erl_eval.6.13229925&gt;
+ 
+  8&gt; BobcatGoldthwait("A quick brown fox jumped over the lazy dog").
   "Auiooueoeeao"</pre>
  </p>
 <p><b>Introduced in:</b> Version 477</p>
@@ -475,6 +517,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Feb 7 2011, 19:52:49.</i></p>
+<p><i>Generated by EDoc, Mar 3 2011, 23:20:16.</i></p>
 </body>
 </html>

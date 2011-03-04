@@ -79,6 +79,7 @@
     sanitize_tokens/2,
     naive_bayes_likelihood/4,
     caspers_jones_estimate/1,
+    range_scale/1,
 
     bandwidth_calc/1,
       bandwidth_calc/2,
@@ -1185,7 +1186,7 @@ caspers_jones_estimate(FunctionPoints) when
 
 
 
-%% @spec naive_bayes_likelihood(FeatureEvident::non_negative_integer(), FeatureTotal::positive_integer(), NonFeatureEvident::non_negative_integer(), NonFeatureTotal::positive_integer()) -> [{contributing_difference,float()},{likelihood_featured,float()},{likelihood_nonfeatured,float()}]
+%% @spec naive_bayes_likelihood(FeatureEvident::non_negative_integer(), FeatureTotal::positive_integer(), NonFeatureEvident::non_negative_integer(), NonFeatureTotal::positive_integer()) -> Result::list()
 
 %% @doc Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
 %% by the naive Bayes likelihood method.
@@ -1210,3 +1211,29 @@ naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatu
     CD = LF - NF,
 
     [ {contributing_difference, CD}, {likelihood_featured, LF}, {likelihood_nonfeatured, NF} ].
+
+
+
+
+
+%% @spec range_scale(NumList::numeric_list()) -> number()
+
+%% @doc Get the scale of a same-sign numeric range.  Gives nonsense results for non-numeric lists, or for lists which have both positive and negative members.  For a numeric list [4,5,6,12], the scale of the range 4..12 is 3:1, which is represented as 3.0 . ```1> sc:range_scale([3, 4, 5, 6]).
+%% 2.0
+%% 2> sc:range_scale([3, 6]).
+%% 2.0
+%% 3> sc:range_scale([6, 3]).
+%% 2.0
+%% 4> sc:range_scale([3, 7.5]).
+%% 2.5
+%% 5> sc:range_scale([3, 99]).
+%% 33.0
+%% 6> sc:range_scale([3, 3]).
+%% 1.0'''
+
+%% @since Version 479
+
+range_scale(Nums) when is_list(Nums) ->
+
+    {Lo, Hi} = sc:extrema(Nums),
+    Hi/Lo.
