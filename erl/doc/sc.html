@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 475 $</p>
+<p><b>Version:</b> $Revision: 477 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -35,6 +35,18 @@ presenting the actual volume of functionality present here.  We can get the cove
  
 <h2><a name="types">Data Types</a></h2>
 
+<h3 class="typedecl"><a name="type-bw_rate">bw_rate()</a></h3>
+<p><tt>bw_rate() = {Scale::<a href="#type-bw_scale">bw_scale()</a>, Rate::float()}</tt></p>
+<p><code>bw_rate</code> - Bandwidth rate - is a rate-in-units-per-time notation for bandwidth measurement, eg <code>{{megabits,day},10.5}</code>.</p>
+
+<h3 class="typedecl"><a name="type-bw_scale">bw_scale()</a></h3>
+<p><tt>bw_scale() = {Unit::atom(), Timescale::atom()}</tt></p>
+<p><code>bw_scale</code> - Bandwidth scale - is a units-per-time notation for bandwidth measurement, eg <code>{megabits,day}</code>.</p>
+
+<h3 class="typedecl"><a name="type-filterfunction">filterfunction()</a></h3>
+<p><tt>filterfunction() = function()</tt></p>
+<p>Filter functions are 1ary binary predicates - they accept an argument and return either true or false.</p>
+
 <h3 class="typedecl"><a name="type-keylist">keylist()</a></h3>
 <p><tt>keylist() = <a href="#type-keylist">keylist()</a></tt></p>
 <p>All members of keylists are tuples of two-or-greater arity, and the first element is considered their key in the list.  List keys are unique; therefore <code>[{a,1},{b,1}]</code> is a keylist, but <code>[{a,1},{a,1}]</code> is not.</p>
@@ -51,12 +63,19 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>positive_integer() = integer()</tt></p>
 <p>Positive integer must be greater than zero.</p>
 
+<h3 class="typedecl"><a name="type-sanitizer">sanitizer()</a></h3>
+<p><tt>sanitizer() = list() | <a href="#type-filterfunction">filterfunction()</a></tt></p>
+<p>Sanitizers are used by <a href="#sanitize_tokens-2"><code>sanitize_tokens/2</code></a> for input sanitization; they define what parts of an input list are valid, and the remainder are removed.  Sanitizers may either be a list of acceptable elements or a filter function.</p>
+
 <h3 class="typedecl"><a name="type-sorted_keylist">sorted_keylist()</a></h3>
 <p><tt>sorted_keylist() = <a href="#type-keylist">keylist()</a></tt></p>
 <p>A sorted keylist is a keylist in the order provided by <a href="lists.html#sort-1"><code>lists:sort/1</code></a>.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.</p>
 
 <h2><a name="index">Function Index</a></h2>
-<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#combinations-2">combinations/2</a></td><td>Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.</td></tr>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#bandwidth_calc-1">bandwidth_calc/1</a></td><td>Equivalent to <a href="#bandwidth_calc-2"><tt>bandwidth_calc(Data, all)</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#bandwidth_calc-2">bandwidth_calc/2</a></td><td>Calculates digital line bandwidth over timescales in converted units.</td></tr>
+<tr><td valign="top"><a href="#combinations-2">combinations/2</a></td><td>Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#count_x-2">count_x/2</a></td><td>Counts the number of instances of Item in List.</td></tr>
 <tr><td valign="top"><a href="#expand_labels-1">expand_labels/1</a></td><td>Expands a series of labels over lists to create a cartesian 2-ary tuple expansion.</td></tr>
 <tr><td valign="top"><a href="#extrema-1">extrema/1</a></td><td>Returns the lowest and highest values in a list of one or more member in the form <code>{Lo,Hi}</code>.</td></tr>
@@ -68,6 +87,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#list_intersection-2">list_intersection/2</a></td><td>Equivalent to <a href="#list_intersection-3"><tt>list_intersection(List1, List2, unsorted)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#list_intersection-3">list_intersection/3</a></td><td>Efficiently computes the intersection of two lists.</td></tr>
+<tr><td valign="top"><a href="#list_product-1">list_product/1</a></td><td><a href="#Math">Math</a> Takes the product of all numbers in the list.</td></tr>
 <tr><td valign="top"><a href="#member_sets-1">member_sets/1</a></td><td>Equivalent to <a href="#member_sets-2"><tt>member_sets(Memberships, no_absence)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#member_sets-2">member_sets/2</a></td><td>For a list of memberships, return every possible combination of one representative member from each list.</td></tr>
@@ -77,6 +97,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#rotate_list-2">rotate_list/2</a></td><td>Rotates the front <code>Distance</code> elements of a list to the back, in order.</td></tr>
 <tr><td valign="top"><a href="#rotate_to_first-2">rotate_to_first/2</a></td><td>Rotates the list to the first instance of Item.</td></tr>
 <tr><td valign="top"><a href="#rotate_to_last-2">rotate_to_last/2</a></td><td>Rotates the list so that the first instance of Item becomes the last element in the list.</td></tr>
+<tr><td valign="top"><a href="#sanitize_tokens-2">sanitize_tokens/2</a></td><td>Remove unacceptable elements from an input list, as defined by another list or a filter function.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-1">shared_keys/1</a></td><td>Create sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples, where key K appears in both A and B.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-2">shared_keys/2</a></td><td>Equivalent to <a href="#shared_keys-1"><code>shared_keys/1</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-3">shared_keys/3</a></td><td>Equivalent to <a href="#shared_keys-2"><code>shared_keys/2</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
@@ -87,6 +108,19 @@ presenting the actual volume of functionality present here.  We can get the cove
 </table>
 
 <h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="bandwidth_calc-1">bandwidth_calc/1</a></h3>
+<div class="spec">
+<p><tt>bandwidth_calc(Data) -&gt; <a href="#type-list_of_2ary_tuples">list_of_2ary_tuples()</a></tt></p>
+</div><p>Equivalent to <a href="#bandwidth_calc-2"><tt>bandwidth_calc(Data, all)</tt></a>.</p>
+
+<p><b>Introduced in:</b> Version 478</p>
+
+<h3 class="function"><a name="bandwidth_calc-2">bandwidth_calc/2</a></h3>
+<div class="spec">
+<p><tt>bandwidth_calc(BitsPerSecond::Data, Scale::bw_scale | all) -&gt; <a href="#type-bw_rate">bw_rate()</a> | [<a href="#type-bw_rate">bw_rate()</a>]</tt></p>
+</div><p>Calculates digital line bandwidth over timescales in converted units.</p>
+<p><b>Introduced in:</b> Version 478</p>
 
 <h3 class="function"><a name="combinations-2">combinations/2</a></h3>
 <div class="spec">
@@ -220,6 +254,13 @@ presenting the actual volume of functionality present here.  We can get the cove
   []</pre> <a href="#Thanks">Thanks</a> to Ayrnieu for catching a defect in the initial implementation.</p>
 <p><b>Introduced in:</b> Version 471</p>
 
+<h3 class="function"><a name="list_product-1">list_product/1</a></h3>
+<div class="spec">
+<p><tt>list_product(A::<a href="#type-numericlist">numericlist()</a>) -&gt; number()</tt></p>
+</div><p><a href="#Math">Math</a> Takes the product of all numbers in the list.  Offered mostly to make dependant code clearer. <pre>  1&gt; sc:list_product([1,2,5.4]).
+  10.8</pre></p>
+<p><b>Introduced in:</b> Version 476</p>
+
 <h3 class="function"><a name="member_sets-1">member_sets/1</a></h3>
 <div class="spec">
 <p><tt>member_sets(Memberships) -&gt; any()</tt></p>
@@ -328,6 +369,30 @@ presenting the actual volume of functionality present here.  We can get the cove
   no_such_element</pre></p>
 <p><b>Introduced in:</b> Version 464</p>
 
+<h3 class="function"><a name="sanitize_tokens-2">sanitize_tokens/2</a></h3>
+<div class="spec">
+<p><tt>sanitize_tokens(InputList::list(), Allowed::<a href="#type-sanitizer">sanitizer()</a>) -&gt; list()</tt></p>
+</div><p>Remove unacceptable elements from an input list, as defined by another list or a filter function.  Common reasons for sanitization include reducing arbitrary or bulk data to key format (such as using an original filename and new size to generate a new filename or database key) and removing malformed items from a list before processing. <pre>  1&gt; scutil:sanitize_tokens("ae0z4nb'wc-04bn ze0e 0;4ci ;e0o5rn;", "ace").
+  "aeceece"
+ 
+  2&gt; Classifier = fun(apple) -&gt; true; (banana) -&gt; true; (cherry) -&gt; true; (date) -&gt; true; (elderberry) -&gt; true; (_) -&gt; false end.
+  #Fun&lt;erl_eval.6.13229925&gt;
+ 
+  3&gt; scutil:sanitize_tokens([apple, boat, cherry, dog, elderberry], Classifier).
+  [apple,cherry,elderberry]
+ 
+  4&gt; Vowels = fun($a)-&gt;true; ($e)-&gt;true; ($i)-&gt;true; ($o)-&gt;true; ($u)-&gt;true; ($A)-&gt;true; ($E)-&gt;true; ($I)-&gt;true; ($O)-&gt;true; ($U)-&gt;true; (_)-&gt;false end.
+  #Fun&lt;erl_eval.6.13229925&gt;
+ 
+  5&gt; sc:sanitize_tokens("A quick brown fox jumped over the lazy dog", Vowels).
+  "Auiooueoeeao"
+ 
+  6&gt; sc:sanitize_tokens("A quick brown fox jumped over the lazy dog", "aeiouAEIOU").
+  "Auiooueoeeao"</pre>
+ </p>
+<p><b>Introduced in:</b> Version 477</p>
+<p><b>See also:</b> <a href="#sanitize_filename-1">sanitize_filename/1</a>.</p>
+
 <h3 class="function"><a name="shared_keys-1">shared_keys/1</a></h3>
 <div class="spec">
 <p><tt>shared_keys(TupleList::<a href="#type-sorted_keylist">sorted_keylist()</a>) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt></p>
@@ -410,6 +475,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Feb 6 2011, 21:33:53.</i></p>
+<p><i>Generated by EDoc, Feb 7 2011, 19:52:49.</i></p>
 </body>
 </html>

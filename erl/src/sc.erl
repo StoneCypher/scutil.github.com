@@ -77,6 +77,11 @@
     flag_sets/1,
     list_product/1,
     sanitize_tokens/2,
+    naive_bayes_likelihood/4,
+    caspers_jones_estimate/1,
+
+    bandwidth_calc/1,
+      bandwidth_calc/2,
 
     member_sets/1,
       member_sets/2,
@@ -679,7 +684,7 @@ zip_n(Ls) ->
 
 %% @spec zip_n(Ls::list(), ResultType::atom()) -> list_of_tuples()
 
-%% @doc {@section List} Computes a zip on any sized group of lists, rather than just two or three as offered by the lists module.```1> sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii] ]).
+%% @doc Computes a zip on any sized group of lists, rather than just two or three as offered by the lists module.```1> sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii] ]).
 %% [{1,a,i},{2,b,ii},{3,c,iii}]
 %%
 %% 2> sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii], [x,y,z], [red,blue,green], [april,may,june] ]).
@@ -729,7 +734,7 @@ zip_n_listn(Ls) ->
 zip_n_foldn(_, _, []) -> 
 
     [];
-    
+
 
 
 zip_n_foldn(Fun, Acc0, Ls) -> 
@@ -846,7 +851,7 @@ permute(List) ->
 
 %% @spec permute(List::list(), Depth::positive_integer()) -> list()
 
-%% @doc {@section Utility} Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast {@link combinations/2}.  Permutations are all valid orderings of a set of tokens; the permutations of `[a,b]' for example are `[a,b]' and `[b,a]'.  Depth limitation means the permutations of a smaller count of tokens from the main set; the 2-limited permutations of `[a,b,c]' for example are `[a,b]', `[a,c]', `[b,a]', `[b,c]', `[c,a]' and `[c,b]'.  Permutations are not ordered.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> sc:permute(["dave","kate","pat"]).
+%% @doc Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast {@link combinations/2}.  Permutations are all valid orderings of a set of tokens; the permutations of `[a,b]' for example are `[a,b]' and `[b,a]'.  Depth limitation means the permutations of a smaller count of tokens from the main set; the 2-limited permutations of `[a,b,c]' for example are `[a,b]', `[a,c]', `[b,a]', `[b,c]', `[c,a]' and `[c,b]'.  Permutations are not ordered.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> sc:permute(["dave","kate","pat"]).
 %% [{"pat","kate","dave"}, {"kate","pat","dave"}, {"pat","dave","kate"}, {"dave","pat","kate"}, {"kate","dave","pat"}, {"dave","kate","pat"}]
 %%
 %% 2> sc:permute([fast, strong, smart, lucky], 2).
@@ -963,7 +968,7 @@ both_lists_next_item(IA, IB, Work) ->
 
 %% @spec list_product(A::numericlist()) -> number()
 
-%% @doc {@section Math} Takes the product of all numbers in the list.  Offered mostly to make dependant code clearer. ```1> sc:list_product([1,2,5.4]).
+%% @doc Takes the product of all numbers in the list.  Offered mostly to make dependant code clearer. ```1> sc:list_product([1,2,5.4]).
 %% 10.8'''
 
 %% @since Version 476
@@ -993,7 +998,7 @@ list_product([Head|Tail], Counter) ->
 
 %% @spec sanitize_tokens(InputList::list(), Allowed::sanitizer()) -> list()
 
-%% @doc {@section List} Remove unacceptable elements from an input list, as defined by another list or a filter function.  Common reasons for sanitization include reducing arbitrary or bulk data to key format (such as using an original filename and new size to generate a new filename or database key) and removing malformed items from a list before processing. ```1> scutil:sanitize_tokens("ae0z4nb'wc-04bn ze0e 0;4ci ;e0o5rn;", "ace").
+%% @doc Remove unacceptable elements from an input list, as defined by another list or a filter function.  Common reasons for sanitization include reducing arbitrary or bulk data to key format (such as using an original filename and new size to generate a new filename or database key) and removing malformed items from a list before processing. ```1> scutil:sanitize_tokens("ae0z4nb'wc-04bn ze0e 0;4ci ;e0o5rn;", "ace").
 %% "aeceece"
 %%
 %% 2> Classifier = fun(apple) -> true; (banana) -> true; (cherry) -> true; (date) -> true; (elderberry) -> true; (_) -> false end.
@@ -1008,8 +1013,14 @@ list_product([Head|Tail], Counter) ->
 %% 5> sc:sanitize_tokens("A quick brown fox jumped over the lazy dog", Vowels).
 %% "Auiooueoeeao"
 %%
-%% 6> sc:sanitize_tokens("A quick brown fox jumped over the lazy dog", "aeiouAEIOU").
-%% "Auiooueoeeao"
+%% 6> sc:sanitize_tokens("A quick brown fox jumped over the lazy dog", "abcdefABCDEF").
+%% "Acbfedeead"
+%%
+%% 7> BobcatGoldthwait = fun(X) -> sc:sanitize_tokens(X, "aeiouAEIOU") end.
+%% #Fun<erl_eval.6.13229925>
+%%
+%% 8> BobcatGoldthwait("A quick brown fox jumped over the lazy dog").
+%% "Auiooueoeeao"'''
 %%
 %% @see sanitize_filename/1
 
@@ -1027,5 +1038,175 @@ sanitize_tokens(List, Allowed) when is_list(List), is_list(Allowed) ->
 
 
 
-    
 
+
+%% @spec  bandwidth_calc(Data) -> list_of_2ary_tuples()
+%% @equiv bandwidth_calc(Data,all)
+
+%% @since Version 478
+
+bandwidth_calc(Data) ->
+
+    bandwidth_calc(Data, all).
+
+
+
+
+
+%% @type bw_scale() = { Unit::atom(),      Timescale::atom() }.  `bw_scale' - Bandwidth scale - is a units-per-time notation for bandwidth measurement, eg `{megabits,day}'.
+%% @type bw_rate()  = { Scale::bw_scale(), Rate::float() }.      `bw_rate' - Bandwidth rate - is a rate-in-units-per-time notation for bandwidth measurement, eg `{{megabits,day},10.5}'.
+
+%% @spec bandwidth_calc(Data, Scale::bw_scale|all) -> bw_rate()|[bw_rate()]
+
+%% @doc Calculates digital line bandwidth over timescales in converted units. ```1>'''
+%% Also knows the shorthand notations `{X,meg}', `{X,gig}' and `{X,t}' for input only in base-10 only. ```5> sc:bandwidth_calc({10,meg}, {gigabits,day}).
+%% {{gigabits,day},864.0}'''
+
+%% @since Version 478
+
+%% @todo That return type specification is wrong.  It needs to self-recurse.  Figure out how to at-spec that later.
+
+bandwidth_calc({bits_per_second, BitsPerSecond}, To) ->
+
+    bandwidth_calc(BitsPerSecond, To);
+
+
+
+
+
+bandwidth_calc({megabits_per_second, MbpS}, To) ->
+
+    bandwidth_calc(MbpS * 1000000, To);
+
+
+
+
+
+bandwidth_calc({MbpS, meg}, To) ->
+
+    bandwidth_calc(MbpS * 1000000, To);
+
+
+
+
+
+bandwidth_calc({MbpS, gig}, To) ->
+
+    bandwidth_calc(MbpS * 1000000000, To);
+
+
+
+
+
+bandwidth_calc({MbpS, t}, To) ->
+
+    bandwidth_calc(MbpS * 1000000000000, To);
+
+
+
+
+
+bandwidth_calc(BitsPerSecond, all) when is_integer(BitsPerSecond) ->
+
+    [
+        bandwidth_calc(BitsPerSecond, {Unit, Timeframe})
+    ||
+        Unit      <- [bits, megabits, mebibits, gigabits, gibibits, terabits, tebibits],
+        Timeframe <- [second, minute, hour, day, week, month_28, month_29, month_30, month_31]
+    ];
+
+
+
+
+
+bandwidth_calc(BitsPerSecond, {Unit, Timeframe}) when is_integer(BitsPerSecond) ->
+
+    Divisor = scale_i(bits, Unit),
+
+    Timescale = case Timeframe of
+        second   -> 1;
+        minute   -> 60;
+        hour     -> 60*60;
+        day      -> 60*60*24;
+        week     -> 60*60*24*7;
+        month_28 -> 60*60*24*28;
+        month_29 -> 60*60*24*29;
+        month_30 -> 60*60*24*30;
+        month_31 -> 60*60*24*31;
+        year_365 -> 60*60*24*365;
+        year_366 -> 60*60*24*366
+    end,
+
+    { {Unit, Timeframe}, (BitsPerSecond / Divisor) * Timescale }.
+
+
+
+
+
+scale_i(X,X)            -> 1;
+
+scale_i(inches, feet)   -> 12;
+scale_i(inches, yards)  -> 36;
+
+scale_i(bits, kilobits) -> 1000;
+scale_i(bits, kibibits) -> 1024;
+scale_i(bits, megabits) -> 1000*1000;
+scale_i(bits, mebibits) -> 1024*1024;
+scale_i(bits, gigabits) -> 1000*1000*1000;
+scale_i(bits, gibibits) -> 1024*1024*1024;
+scale_i(bits, terabits) -> 1000*1000*1000*1000;
+scale_i(bits, tebibits) -> 1024*1024*1024*1024;
+scale_i(bits, petabits) -> 1000*1000*1000*1000*1000;
+scale_i(bits, pebibits) -> 1024*1024*1024*1024*1024;
+scale_i(bits, exabits)  -> 1000*1000*1000*1000*1000*1000;
+scale_i(bits, exbibits) -> 1024*1024*1024*1024*1024*1024.
+
+
+
+
+
+% http://www.drdobbs.com/architecture-and-design/225701139?pgno=1
+
+%% @since Version 478
+
+caspers_jones_estimate(FunctionPoints) when
+
+    is_integer(FunctionPoints),
+    FunctionPoints >= 0 ->
+
+
+    [   { estimated_defects,   math:pow(FunctionPoints, 1.25) },
+        { unit_test_baseline,  math:pow(FunctionPoints, 1.2)  },
+        { months_to_implement, math:pow(FunctionPoints, 0.4)  },
+        { staff_to_implement,  FunctionPoints/150             }
+    ].
+
+
+
+
+
+%% @spec naive_bayes_likelihood(FeatureEvident::non_negative_integer(), FeatureTotal::positive_integer(), NonFeatureEvident::non_negative_integer(), NonFeatureTotal::positive_integer()) -> [{contributing_difference,float()},{likelihood_featured,float()},{likelihood_nonfeatured,float()}]
+
+%% @doc Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
+%% by the naive Bayes likelihood method.
+
+%% @since Version 478
+
+naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatureTotal) when
+
+    is_integer(FeatureEvident),
+    is_integer(FeatureTotal),
+    is_integer(NonFeatureEvident),
+    is_integer(NonFeatureTotal),
+
+    FeatureEvident    >= 0,
+    FeatureTotal      >  0,
+    NonFeatureEvident >= 0,
+    NonFeatureTotal   >  0 ->
+
+
+    LF = FeatureEvident / FeatureTotal,
+    NF = NonFeatureEvident / NonFeatureTotal,
+    CD = LF - NF,
+
+    [ {contributing_difference, CD}, {likelihood_featured, LF}, {likelihood_nonfeatured, NF} ].

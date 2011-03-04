@@ -16,12 +16,13 @@ extrema_test_() ->
 
     { "Extrema tests", [
 
-        {"1,2,3,4",    ?_assert( {1,4}      =:= sc:extrema( [1,2,3,4]  ) ) },
-        {"-1,-2,-3",   ?_assert( {-3,-1}    =:= sc:extrema( [-1,-2,-3] ) ) },
-        {"-1.1,0,1.1", ?_assert( {-1.1,1.1} =:= sc:extrema( [-1.1,1.1] ) ) },
-        {"a,b,c",      ?_assert( {a,c}      =:= sc:extrema( [a,b,c]    ) ) },
-        {"1,a,{}",     ?_assert( {1,{}}     =:= sc:extrema( [1,a,{}]   ) ) },
-        {"1",          ?_assert( {1,1}      =:= sc:extrema( [1]        ) ) },
+        {"8,6,7,5,3,0,9", ?_assert( {0,9}      =:= sc:extrema( [8,6,7,5,3,0,9] ) ) },
+        {"1,2,3,4",       ?_assert( {1,4}      =:= sc:extrema( [1,2,3,4]       ) ) },
+        {"-1,-2,-3",      ?_assert( {-3,-1}    =:= sc:extrema( [-1,-2,-3]      ) ) },
+        {"-1.1,0,1.1",    ?_assert( {-1.1,1.1} =:= sc:extrema( [-1.1,1.1]      ) ) },
+        {"a,b,c",         ?_assert( {a,c}      =:= sc:extrema( [a,b,c]         ) ) },
+        {"1,a,{}",        ?_assert( {1,{}}     =:= sc:extrema( [1,a,{}]        ) ) },
+        {"1",             ?_assert( {1,1}      =:= sc:extrema( [1]             ) ) },
 
         {"[] error badarg", ?_assertError(badarg, sc:extrema([]) ) }
 
@@ -70,9 +71,9 @@ index_of_first_test_() ->
 
     { "Index of first tests", [
 
-        {"0,  [ ]",       ?_assert( undefined =:= sc:index_of_first(0, [ ])       ) },
-        {"b,  [ a,b,c ]", ?_assert( 2         =:= sc:index_of_first(b, [ a,b,c ]) ) },
-        {"g,  [ a,b,c ]", ?_assert( undefined =:= sc:index_of_first(g, [ a,b,c ]) ) }
+        {"0, [ ]",       ?_assert( undefined =:= sc:index_of_first(0, [ ])       ) },
+        {"b, [ a,b,c ]", ?_assert( 2         =:= sc:index_of_first(b, [ a,b,c ]) ) },
+        {"g, [ a,b,c ]", ?_assert( undefined =:= sc:index_of_first(g, [ a,b,c ]) ) }
 
     ] }.
 
@@ -259,3 +260,10 @@ list_product_test_() ->
 
     ] }.
     
+    
+    
+    
+    
+sanitize_tokens_test_() ->
+
+    { "SANITIZE TOKENS TESTS NOT WRITTEN", [ {"FAIL", ?_assert(false =:= true) }] }.
