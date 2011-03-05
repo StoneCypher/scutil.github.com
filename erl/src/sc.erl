@@ -1305,3 +1305,30 @@ zipf_nearness_walk_strengths([_|Rem]=ZD, Work) ->
     AMean    = arithmetic_mean(ZD),
 
     zipf_nearness_walk_strengths(Rem, [[{strength,Strength}, {center,AMean}]] ++ Work).
+
+
+
+
+
+%% @type numericlist() = list().  All members of a numeric list must be number()s.
+%% @spec arithmetic_mean(InputList::numericlist()) -> float()
+
+%% @doc Take the arithmetic mean (often called the average) of a list of numbers. ```1> sc:arithmetic_mean([1,2,3,4,5]).
+%% 3.0'''
+
+%% @see geometric_mean/1
+%% @see harmonic_mean/1
+%% @see weighted_arithmetic_mean/1
+%% @see amean_vector_normal/1
+
+%% @since Version 481
+
+arithmetic_mean([]) ->
+
+    0.0;
+
+
+
+arithmetic_mean(List) when is_list(List) ->
+
+    lists:sum(List) / length(List).
