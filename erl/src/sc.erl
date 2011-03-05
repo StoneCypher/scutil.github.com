@@ -80,6 +80,12 @@
     naive_bayes_likelihood/4,
     caspers_jones_estimate/1,
     range_scale/1,
+    
+    arithmetic_mean/1,
+
+    zipf_nearness/1,
+      zipf_estimate_list/1,
+      zipf_position_estimate/2,
 
     bandwidth_calc/1,
       bandwidth_calc/2,
@@ -1237,3 +1243,65 @@ range_scale(Nums) when is_list(Nums) ->
 
     {Lo, Hi} = sc:extrema(Nums),
     Hi/Lo.
+
+
+
+
+
+%% @spec zipf_position_estimate(Score::number(), Rank::positive_integer()) -> number()
+
+%% @doc todo ```1> sc:range_scale([3, 4, 5, 6]).'''
+
+%% @since Version 480
+
+zipf_position_estimate(Score, Rank) ->
+
+    Score * Rank.
+
+
+
+
+
+%% @spec zipf_position_estimate(Score::number(), Rank::positive_integer()) -> number()
+
+%% @doc todo ```1> sc:range_scale([3, 4, 5, 6]).'''
+
+%% @since Version 480
+
+zipf_estimate_list(PosNumericList) ->
+
+    [ zipf_position_estimate(Li, I) || {Li,I} <- lists:zip(PosNumericList, lists:seq(1, length(PosNumericList)) ) ].
+
+
+
+
+
+%% @spec zipf_position_estimate(Score::number(), Rank::positive_integer()) -> number()
+
+%% @doc todo ```1> sc:range_scale([3, 4, 5, 6]).'''
+
+%% @since Version 480
+
+zipf_nearness(PosNumericList) ->
+
+    ZD = zipf_estimate_list(PosNumericList),
+    zipf_nearness_walk_strengths(ZD, []).
+
+
+
+
+
+zipf_nearness_walk_strengths([], Work) ->
+
+    lists:reverse(Work);
+
+
+
+
+
+zipf_nearness_walk_strengths([_|Rem]=ZD, Work) ->
+
+    Strength = 1 / (range_scale(ZD)),
+    AMean    = arithmetic_mean(ZD),
+
+    zipf_nearness_walk_strengths(Rem, [[{strength,Strength}, {center,AMean}]] ++ Work).
