@@ -1332,3 +1332,28 @@ arithmetic_mean([]) ->
 arithmetic_mean(List) when is_list(List) ->
 
     lists:sum(List) / length(List).
+
+
+
+
+
+%% @spec geometric_mean(InputList::numericlist()) -> float()
+
+%% @doc {@section Statistics} Take the geometric mean of a list of numbers. ```1> scutil:geometric_mean([1,2,3,4,5]).
+%% 2.6051710846973517''' The naive approach ```geometric_mean(List) -> math:pow(scutil:list_product(List), 1/length(List)).''' is not used because it accumulates error very quickly, and is as such unsuited to huge lists.
+
+%% @see arithmetic_mean/1
+%% @see harmonic_mean/1
+%% @see gmean_vector_normal/1
+
+%% @since Version 482
+
+geometric_mean([]) ->
+
+    0.0;
+
+
+
+geometric_mean(List) when is_list(List) ->
+
+    math:exp(scutil:arithmetic_mean([math:log(X)||X<-List])).
