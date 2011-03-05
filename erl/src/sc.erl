@@ -1382,3 +1382,33 @@ harmonic_mean([]) ->
 harmonic_mean(List) when is_list(List) ->
 
     length(List) / lists:sum([ 1/X || X<-List ]).
+
+
+
+
+
+%% @spec weighted_arithmetic_mean(InputList::weightlist()) -> float()
+
+%% @doc {@section Statistics} Take the weighted arithmetic mean of the input values. ```1> scutil:weighted_arithmetic_mean([ {8,1}, {3,4}, {16,1} ]).
+%% 6.0'''
+
+%% @see arithmetic_mean/1
+%% @see amean_vector_normal/1
+
+%% @since Version 484
+
+weighted_arithmetic_mean(List) when is_list(List) ->
+
+    weighted_arithmetic_mean(List, 0, 0).
+
+
+
+weighted_arithmetic_mean([], Num, Denom) ->
+
+    Num/Denom;
+
+
+
+weighted_arithmetic_mean( [{V,W} | Tail], Num, Denom) ->
+
+    weighted_arithmetic_mean(Tail, Num+(W*V), Denom+W).
