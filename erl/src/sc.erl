@@ -1357,3 +1357,28 @@ geometric_mean([]) ->
 geometric_mean(List) when is_list(List) ->
 
     math:exp(scutil:arithmetic_mean([math:log(X)||X<-List])).
+
+
+
+
+
+%% @spec harmonic_mean(InputList::numericlist()) -> float()
+
+%% @doc {@section Statistics} Take the harmonic mean of a list of numbers. ```1> scutil:harmonic_mean([1,2,3,4,5]).
+%% 2.18978102189781'''
+
+%% @see arithmetic_mean/1
+%% @see geometric_mean/1
+%% @see hmean_vector_normal/1
+
+%% @since Version 483
+
+harmonic_mean([]) ->
+
+    0.0;
+
+
+
+harmonic_mean(List) when is_list(List) ->
+
+    length(List) / lists:sum([ 1/X || X<-List ]).
