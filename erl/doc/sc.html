@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 478 $</p>
+<p><b>Version:</b> $Revision: 484 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -59,6 +59,10 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>non_negative_integer() = integer()</tt></p>
 <p>A <code><a href="#type-non_negative_integer">non_negative_integer()</a></code> must be equal to or greater than zero.</p>
 
+<h3 class="typedecl"><a name="type-numericlist">numericlist()</a></h3>
+<p><tt>numericlist() = list()</tt></p>
+<p>All members of a numeric list must be number()s.</p>
+
 <h3 class="typedecl"><a name="type-positive_integer">positive_integer()</a></h3>
 <p><tt>positive_integer() = integer()</tt></p>
 <p>Positive integer must be greater than zero.</p>
@@ -72,7 +76,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p>A sorted keylist is a keylist in the order provided by <a href="lists.html#sort-1"><code>lists:sort/1</code></a>.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.</p>
 
 <h2><a name="index">Function Index</a></h2>
-<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#bandwidth_calc-1">bandwidth_calc/1</a></td><td>Equivalent to <a href="#bandwidth_calc-2"><tt>bandwidth_calc(Data, all)</tt></a>.
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#arithmetic_mean-1">arithmetic_mean/1</a></td><td>Take the arithmetic mean (often called the average) of a list of numbers.</td></tr>
+<tr><td valign="top"><a href="#bandwidth_calc-1">bandwidth_calc/1</a></td><td>Equivalent to <a href="#bandwidth_calc-2"><tt>bandwidth_calc(Data, all)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#bandwidth_calc-2">bandwidth_calc/2</a></td><td>Calculates digital line bandwidth over timescales in converted units.</td></tr>
 <tr><td valign="top"><a href="#caspers_jones_estimate-1">caspers_jones_estimate/1</a></td><td></td></tr>
@@ -83,6 +88,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#flag_sets-1">flag_sets/1</a></td><td>Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
 <tr><td valign="top"><a href="#gen_docs-0">gen_docs/0</a></td><td>Generates library documentation using the paths appropriate for the author's PC; you almost certainly want <a href="#gen_docs-2"><code>gen_docs/2</code></a> instead.</td></tr>
 <tr><td valign="top"><a href="#gen_docs-2">gen_docs/2</a></td><td>Generates library documentation from and to the specified paths <code>WhereIsSrc</code> and <code>WhereToPutDocs</code> respectively.</td></tr>
+<tr><td valign="top"><a href="#geometric_mean-1">geometric_mean/1</a></td><td>Take the geometric mean of a list of numbers.</td></tr>
+<tr><td valign="top"><a href="#harmonic_mean-1">harmonic_mean/1</a></td><td>Take the harmonic mean of a list of numbers.</td></tr>
 <tr><td valign="top"><a href="#index_of_first-2">index_of_first/2</a></td><td>Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.</td></tr>
 <tr><td valign="top"><a href="#key_duplicate-1">key_duplicate/1</a></td><td>Iterates a list of <code>{Count,Term}</code>, producing a list of <code>[Term,Term,...]</code>.</td></tr>
 <tr><td valign="top"><a href="#list_intersection-2">list_intersection/2</a></td><td>Equivalent to <a href="#list_intersection-3"><tt>list_intersection(List1, List2, unsorted)</tt></a>.
@@ -107,11 +114,43 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#shared_keys-3">shared_keys/3</a></td><td>Equivalent to <a href="#shared_keys-2"><code>shared_keys/2</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
 <tr><td valign="top"><a href="#test-0">test/0</a></td><td>Runs the test suite in terse form.</td></tr>
 <tr><td valign="top"><a href="#test-1">test/1</a></td><td>Runs the test suite in verbose form.</td></tr>
+<tr><td valign="top"><a href="#weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a></td><td>Take the weighted arithmetic mean of the input values.</td></tr>
 <tr><td valign="top"><a href="#zip_n-1">zip_n/1</a></td><td>Equivalent to <a href="#zip_n-2"><tt>zip_n(Ls, to_tuple)</tt></a>.
 </td></tr>
+<tr><td valign="top"><a href="#zipf_estimate_list-1">zipf_estimate_list/1</a></td><td>Estimates the zipf baseline from each number in a numeric list.</td></tr>
+<tr><td valign="top"><a href="#zipf_nearness-1">zipf_nearness/1</a></td><td>todo <pre>  1&gt; sc:zipf_nearness([ 120, 60, 40, 30, 24, 20 ]).
+  [[ {strength,1.0}, {center,120.0} ],
+   [ {strength,1.0}, {center,120.0} ],
+   [ {strength,1.0}, {center,120.0} ],
+   [ {strength,1.0}, {center,120.0} ],
+   [ {strength,1.0}, {center,120.0} ],
+   [ {strength,1.0}, {center,120.0} ]]
+ 
+  2&gt; sc:zipf_nearness([ 411, 198, 135, 101, 82 ]).
+  [[{strength,0.9635036496350365}, {center,405.2}],
+   [{strength,0.9658536585365854}, {center,403.75}],
+   [{strength,0.9853658536585366}, {center,406.3333333333333}],
+   [{strength,0.9853658536585366}, {center,407.0}],
+   [{strength,1.0},                {center,410.0}]]
+ 
+  3&gt; sc:zipf_nearness([640,244,231,180,148]).
+  [[{strength, 0.6594594594594595}, {center,656.2}],
+   [{strength, 0.6594594594594595}, {center,660.25}],
+   [{strength, 0.9364864864864865}, {center,717.6666666666666}],
+   [{strength, 0.972972972972973},  {center,730.0}],
+   [{strength, 1.0},                {center,740.0}]]</pre></td></tr>
+<tr><td valign="top"><a href="#zipf_position_estimate-2">zipf_position_estimate/2</a></td><td>Estimates the zipf baseline from a score and a rank position.</td></tr>
 </table>
 
 <h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="arithmetic_mean-1">arithmetic_mean/1</a></h3>
+<div class="spec">
+<p><tt>arithmetic_mean(InputList::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt></p>
+</div><p>Take the arithmetic mean (often called the average) of a list of numbers. <pre>  1&gt; sc:arithmetic_mean([1,2,3,4,5]).
+  3.0</pre></p>
+<p><b>Introduced in:</b> Version 481</p>
+<p><b>See also:</b> <a href="#amean_vector_normal-1">amean_vector_normal/1</a>, <a href="#geometric_mean-1">geometric_mean/1</a>, <a href="#harmonic_mean-1">harmonic_mean/1</a>, <a href="#weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a>.</p>
 
 <h3 class="function"><a name="bandwidth_calc-1">bandwidth_calc/1</a></h3>
 <div class="spec">
@@ -229,6 +268,22 @@ presenting the actual volume of functionality present here.  We can get the cove
   backslashes, as backslashes in strings need to be quoted.  <pre>  1&gt; sc:gen_docs("/projects/scutil/erl/src", "/projects/scutil/erl/src/docs").
   ok</pre></p>
 <p><b>Introduced in:</b> 458</p>
+
+<h3 class="function"><a name="geometric_mean-1">geometric_mean/1</a></h3>
+<div class="spec">
+<p><tt>geometric_mean(InputList::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt></p>
+</div><p>Take the geometric mean of a list of numbers. <pre>  1&gt; scutil:geometric_mean([1,2,3,4,5]).
+  2.6051710846973517</pre> The naive approach <pre>  geometric_mean(List) -&gt; math:pow(scutil:list_product(List), 1/length(List)).</pre> is not used because it accumulates error very quickly, and is as such unsuited to huge lists.</p>
+<p><b>Introduced in:</b> Version 482</p>
+<p><b>See also:</b> <a href="#arithmetic_mean-1">arithmetic_mean/1</a>, <a href="#gmean_vector_normal-1">gmean_vector_normal/1</a>, <a href="#harmonic_mean-1">harmonic_mean/1</a>.</p>
+
+<h3 class="function"><a name="harmonic_mean-1">harmonic_mean/1</a></h3>
+<div class="spec">
+<p><tt>harmonic_mean(InputList::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt></p>
+</div><p>Take the harmonic mean of a list of numbers. <pre>  1&gt; scutil:harmonic_mean([1,2,3,4,5]).
+  2.18978102189781</pre></p>
+<p><b>Introduced in:</b> Version 483</p>
+<p><b>See also:</b> <a href="#arithmetic_mean-1">arithmetic_mean/1</a>, <a href="#geometric_mean-1">geometric_mean/1</a>, <a href="#hmean_vector_normal-1">hmean_vector_normal/1</a>.</p>
 
 <h3 class="function"><a name="index_of_first-2">index_of_first/2</a></h3>
 <div class="spec">
@@ -509,14 +564,68 @@ presenting the actual volume of functionality present here.  We can get the cove
   ok</pre></p>
 <p><b>Introduced in:</b> 460</p>
 
+<h3 class="function"><a name="weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a></h3>
+<div class="spec">
+<p><tt>weighted_arithmetic_mean(InputList::<a href="#type-weightlist">weightlist()</a>) -&gt; float()</tt></p>
+</div><p>Take the weighted arithmetic mean of the input values. <pre>  1&gt; scutil:weighted_arithmetic_mean([ {8,1}, {3,4}, {16,1} ]).
+  6.0</pre></p>
+<p><b>Introduced in:</b> Version 484</p>
+<p><b>See also:</b> <a href="#amean_vector_normal-1">amean_vector_normal/1</a>, <a href="#arithmetic_mean-1">arithmetic_mean/1</a>.</p>
+
 <h3 class="function"><a name="zip_n-1">zip_n/1</a></h3>
 <div class="spec">
 <p><tt>zip_n(Ls::list()) -&gt; <a href="#type-list_of_tuples">list_of_tuples()</a></tt></p>
 </div><p>Equivalent to <a href="#zip_n-2"><tt>zip_n(Ls, to_tuple)</tt></a>.</p>
 
+
+<h3 class="function"><a name="zipf_estimate_list-1">zipf_estimate_list/1</a></h3>
+<div class="spec">
+<p><tt>zipf_estimate_list(PosNumericList::<a href="#type-positive_numeric_list">positive_numeric_list()</a>) -&gt; <a href="#type-positive_numeric_list">positive_numeric_list()</a></tt></p>
+</div><p>Estimates the zipf baseline from each number in a numeric list. <pre>  1&gt; sc:zipf_estimate_list([ 120, 60, 40, 30, 24, 20 ]).
+  [120, 120, 120, 120, 120, 120]
+ 
+  2&gt; sc:zipf_estimate_list([411,198,135,101,82]).
+  [411, 396, 405, 404, 410]
+ 
+  3&gt; sc:zipf_estimate_list([630,298,231,180,118]).
+  [630, 596, 693, 720, 590]</pre></p>
+<p><b>Introduced in:</b> Version 480</p>
+
+<h3 class="function"><a name="zipf_nearness-1">zipf_nearness/1</a></h3>
+<div class="spec">
+<p><tt>zipf_nearness(PosNumericList::<a href="#type-positive_numeric_list">positive_numeric_list()</a>) -&gt; number()</tt></p>
+</div><p>todo <pre>  1&gt; sc:zipf_nearness([ 120, 60, 40, 30, 24, 20 ]).
+  [[ {strength,1.0}, {center,120.0} ],
+   [ {strength,1.0}, {center,120.0} ],
+   [ {strength,1.0}, {center,120.0} ],
+   [ {strength,1.0}, {center,120.0} ],
+   [ {strength,1.0}, {center,120.0} ],
+   [ {strength,1.0}, {center,120.0} ]]
+ 
+  2&gt; sc:zipf_nearness([ 411, 198, 135, 101, 82 ]).
+  [[{strength,0.9635036496350365}, {center,405.2}],
+   [{strength,0.9658536585365854}, {center,403.75}],
+   [{strength,0.9853658536585366}, {center,406.3333333333333}],
+   [{strength,0.9853658536585366}, {center,407.0}],
+   [{strength,1.0},                {center,410.0}]]
+ 
+  3&gt; sc:zipf_nearness([640,244,231,180,148]).
+  [[{strength, 0.6594594594594595}, {center,656.2}],
+   [{strength, 0.6594594594594595}, {center,660.25}],
+   [{strength, 0.9364864864864865}, {center,717.6666666666666}],
+   [{strength, 0.972972972972973},  {center,730.0}],
+   [{strength, 1.0},                {center,740.0}]]</pre></p>
+<p><b>Introduced in:</b> Version 480</p>
+
+<h3 class="function"><a name="zipf_position_estimate-2">zipf_position_estimate/2</a></h3>
+<div class="spec">
+<p><tt>zipf_position_estimate(Score::number(), Rank::<a href="#type-positive_integer">positive_integer()</a>) -&gt; number()</tt></p>
+</div><p>Estimates the zipf baseline from a score and a rank position. <pre>  1&gt; sc:zipf_position_estimate(120, 3).
+  360</pre></p>
+<p><b>Introduced in:</b> Version 480</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 3 2011, 23:20:16.</i></p>
+<p><i>Generated by EDoc, Mar 5 2011, 19:10:07.</i></p>
 </body>
 </html>

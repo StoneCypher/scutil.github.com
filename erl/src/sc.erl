@@ -82,6 +82,9 @@
     range_scale/1,
     
     arithmetic_mean/1,
+      geometric_mean/1,
+      harmonic_mean/1,
+      weighted_arithmetic_mean/1,
 
     zipf_nearness/1,
       zipf_estimate_list/1,
@@ -753,7 +756,7 @@ zip_n_foldn(Fun, Acc0, Ls) ->
 zip_n_foldn(_, _, [ [] | _ ], Ret) -> 
 
     lists:reverse(Ret);
-    
+
     
 
 zip_n_foldn(Fun, Acc0, Ls, Ret) -> 
@@ -1250,7 +1253,8 @@ range_scale(Nums) when is_list(Nums) ->
 
 %% @spec zipf_position_estimate(Score::number(), Rank::positive_integer()) -> number()
 
-%% @doc todo ```1> sc:range_scale([3, 4, 5, 6]).'''
+%% @doc Estimates the zipf baseline from a score and a rank position. ```1> sc:zipf_position_estimate(120, 3).
+%% 360'''
 
 %% @since Version 480
 
@@ -1262,9 +1266,16 @@ zipf_position_estimate(Score, Rank) ->
 
 
 
-%% @spec zipf_position_estimate(Score::number(), Rank::positive_integer()) -> number()
+%% @spec zipf_estimate_list(PosNumericList::positive_numeric_list()) -> positive_numeric_list()
 
-%% @doc todo ```1> sc:range_scale([3, 4, 5, 6]).'''
+%% @doc Estimates the zipf baseline from each number in a numeric list. ```1> sc:zipf_estimate_list([ 120, 60, 40, 30, 24, 20 ]).
+%% [120, 120, 120, 120, 120, 120]
+%%
+%% 2> sc:zipf_estimate_list([411,198,135,101,82]).
+%% [411, 396, 405, 404, 410]
+%%
+%% 3> sc:zipf_estimate_list([630,298,231,180,118]).
+%% [630, 596, 693, 720, 590]'''
 
 %% @since Version 480
 
@@ -1276,9 +1287,29 @@ zipf_estimate_list(PosNumericList) ->
 
 
 
-%% @spec zipf_position_estimate(Score::number(), Rank::positive_integer()) -> number()
+%% @spec zipf_nearness(PosNumericList::positive_numeric_list()) -> number()
 
-%% @doc todo ```1> sc:range_scale([3, 4, 5, 6]).'''
+%% @doc todo ```1> sc:zipf_nearness([ 120, 60, 40, 30, 24, 20 ]).
+%% [[ {strength,1.0}, {center,120.0} ],
+%%  [ {strength,1.0}, {center,120.0} ],
+%%  [ {strength,1.0}, {center,120.0} ],
+%%  [ {strength,1.0}, {center,120.0} ],
+%%  [ {strength,1.0}, {center,120.0} ],
+%%  [ {strength,1.0}, {center,120.0} ]]
+%%
+%% 2> sc:zipf_nearness([ 411, 198, 135, 101, 82 ]).
+%% [[{strength,0.9635036496350365}, {center,405.2}],
+%%  [{strength,0.9658536585365854}, {center,403.75}],
+%%  [{strength,0.9853658536585366}, {center,406.3333333333333}],
+%%  [{strength,0.9853658536585366}, {center,407.0}],
+%%  [{strength,1.0},                {center,410.0}]]
+%%
+%% 3> sc:zipf_nearness([640,244,231,180,148]).
+%% [[{strength, 0.6594594594594595}, {center,656.2}],
+%%  [{strength, 0.6594594594594595}, {center,660.25}],
+%%  [{strength, 0.9364864864864865}, {center,717.6666666666666}],
+%%  [{strength, 0.972972972972973},  {center,730.0}],
+%%  [{strength, 1.0},                {center,740.0}]]'''
 
 %% @since Version 480
 
@@ -1339,7 +1370,7 @@ arithmetic_mean(List) when is_list(List) ->
 
 %% @spec geometric_mean(InputList::numericlist()) -> float()
 
-%% @doc {@section Statistics} Take the geometric mean of a list of numbers. ```1> scutil:geometric_mean([1,2,3,4,5]).
+%% @doc Take the geometric mean of a list of numbers. ```1> scutil:geometric_mean([1,2,3,4,5]).
 %% 2.6051710846973517''' The naive approach ```geometric_mean(List) -> math:pow(scutil:list_product(List), 1/length(List)).''' is not used because it accumulates error very quickly, and is as such unsuited to huge lists.
 
 %% @see arithmetic_mean/1
@@ -1364,7 +1395,7 @@ geometric_mean(List) when is_list(List) ->
 
 %% @spec harmonic_mean(InputList::numericlist()) -> float()
 
-%% @doc {@section Statistics} Take the harmonic mean of a list of numbers. ```1> scutil:harmonic_mean([1,2,3,4,5]).
+%% @doc Take the harmonic mean of a list of numbers. ```1> scutil:harmonic_mean([1,2,3,4,5]).
 %% 2.18978102189781'''
 
 %% @see arithmetic_mean/1
@@ -1389,7 +1420,7 @@ harmonic_mean(List) when is_list(List) ->
 
 %% @spec weighted_arithmetic_mean(InputList::weightlist()) -> float()
 
-%% @doc {@section Statistics} Take the weighted arithmetic mean of the input values. ```1> scutil:weighted_arithmetic_mean([ {8,1}, {3,4}, {16,1} ]).
+%% @doc Take the weighted arithmetic mean of the input values. ```1> scutil:weighted_arithmetic_mean([ {8,1}, {3,4}, {16,1} ]).
 %% 6.0'''
 
 %% @see arithmetic_mean/1
