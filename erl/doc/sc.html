@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 499 $</p>
+<p><b>Version:</b> $Revision: 501 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -92,6 +92,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#dstat-2">dstat/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#even_or_odd-1">even_or_odd/1</a></td><td>Documentary convenience function that returns the atoms <code>even</code> or <code>odd</code> for any integer.</td></tr>
 <tr><td valign="top"><a href="#expand_labels-1">expand_labels/1</a></td><td>Expands a series of labels over lists to create a cartesian 2-ary tuple expansion.</td></tr>
+<tr><td valign="top"><a href="#expected_value-1">expected_value/1</a></td><td><a href="#Probability">Probability</a> Returns the expected value of infinite selection from a weighted numeric list.</td></tr>
 <tr><td valign="top"><a href="#extended_dstat-2">extended_dstat/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#extrema-1">extrema/1</a></td><td>Returns the lowest and highest values in a list of one or more member in the form <code>{Lo,Hi}</code>.</td></tr>
 <tr><td valign="top"><a href="#flag_sets-1">flag_sets/1</a></td><td>Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
@@ -112,6 +113,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#list_intersection-3">list_intersection/3</a></td><td>Efficiently computes the intersection of two lists.</td></tr>
 <tr><td valign="top"><a href="#list_product-1">list_product/1</a></td><td>Takes the product of all numbers in the list.</td></tr>
 <tr><td valign="top"><a href="#median-1">median/1</a></td><td>Takes the median (central) value of a list.</td></tr>
+<tr><td valign="top"><a href="#median_absolute_deviation-1">median_absolute_deviation/1</a></td><td>Calculate the median absolute deviation of a <code><a href="#type-numericlist">numericlist()</a></code>.</td></tr>
 <tr><td valign="top"><a href="#member_sets-1">member_sets/1</a></td><td>Equivalent to <a href="#member_sets-2"><tt>member_sets(Memberships, no_absence)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#member_sets-2">member_sets/2</a></td><td>For a list of memberships, return every possible combination of one representative member from each list.</td></tr>
@@ -285,6 +287,16 @@ presenting the actual volume of functionality present here.  We can get the cove
    {villain,sinistar},
    {villain,gargamel}]</pre></p>
 <p><b>Introduced in:</b> Version 474</p>
+
+<h3 class="function"><a name="expected_value-1">expected_value/1</a></h3>
+<div class="spec">
+<p><tt>expected_value(List::<a href="#type-mixed_weight_list">mixed_weight_list()</a>) -&gt; number()</tt></p>
+</div><p><a href="#Probability">Probability</a> Returns the expected value of infinite selection from a weighted numeric list.  <pre>  1&gt; sc:expected_value([1,2,3,4,5,6]).
+  3.50000
+ 
+  2&gt; sc:expected_value([ {-1,37}, {35,1} ]).
+  -5.26316e-2</pre></p>
+<p><b>Introduced in:</b> Version 502</p>
 
 <h3 class="function"><a name="extended_dstat-2">extended_dstat/2</a></h3>
 <div class="spec">
@@ -465,6 +477,13 @@ presenting the actual volume of functionality present here.  We can get the cove
   2</pre></p>
 <p><b>Introduced in:</b> Version 488</p>
 <p><b>See also:</b> <a href="#arithmetic_mean-1">arithmetic_mean/1</a>, <a href="#mode-1">mode/1</a>.</p>
+
+<h3 class="function"><a name="median_absolute_deviation-1">median_absolute_deviation/1</a></h3>
+<div class="spec">
+<p><tt>median_absolute_deviation(List::<a href="#type-numericlist">numericlist()</a>) -&gt; number()</tt></p>
+</div><p>Calculate the median absolute deviation of a <code><a href="#type-numericlist">numericlist()</a></code>. <pre>  1&gt; sc:median_absolute_deviation([1,1,2,2,4,6,9]).
+  1</pre></p>
+<p><b>Introduced in:</b> Version 501</p>
 
 <h3 class="function"><a name="member_sets-1">member_sets/1</a></h3>
 <div class="spec">
@@ -820,6 +839,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 20 2011, 22:22:01.</i></p>
+<p><i>Generated by EDoc, Mar 20 2011, 22:27:40.</i></p>
 </body>
 </html>

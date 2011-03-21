@@ -103,6 +103,11 @@
     median/1,
       mode/1,
 
+    expected_value/1,
+
+    median_absolute_deviation/1,
+%     median_absolute_value/1,    comeback todo
+
     arithmetic_mean/1,
       geometric_mean/1,
       harmonic_mean/1,
@@ -1932,7 +1937,6 @@ hmean_vector_normal(VX) ->
 
 % Thanks for some math help on erl-b, erl-c and engset, Vat and Wintermute
 
-%% @private
 % todo incomplete comeback
 
 % erlang_b_distribution(N,A) ->
@@ -1946,12 +1950,11 @@ hmean_vector_normal(VX) ->
 
 
 
-%% @private
 % todo incomplete comeback
 
 % erlang_c_distribution(N,A) ->
 %
-%    Num   = (math:pow(A,N) / scutil:factorial(N)) * (N/(N-A)),
+%    Num   = (math:pow(A,N) / sc:factorial(N)) * (N/(N-A)),
 %
 %    Denom = lists:sum([ math:pow(A,I) / factorial(I) || I <- lists:seq(0,N-1) ])
 %          + ((math:pow(A,N)/factorial(N))*(N/(N-A))),
@@ -1973,3 +1976,39 @@ median_absolute_deviation(List) when is_list(List) ->
 
     ListMedian = median(List),
     median( [ abs(ListItem - ListMedian) || ListItem <- List ] ).
+
+
+
+
+
+%% @spec expected_value(List::mixed_weight_list()) -> number()
+
+%% @doc {@section Probability} Returns the expected value of infinite selection from a weighted numeric list.  ```1> sc:expected_value([1,2,3,4,5,6]).
+%% 3.50000
+%%
+%% 2> sc:expected_value([ {-1,37}, {35,1} ]).
+%% -5.26316e-2'''
+
+%% @since Version 502
+
+expected_value(List) ->
+
+    expected_value(List, 0, 0).
+
+
+
+expected_value([], Sum, Range) ->
+
+    Sum/Range;
+
+
+
+expected_value( [ {Value,Probability} | Remainder], Sum, Range) ->
+
+    expected_value(Remainder, Sum+(Value*Probability), Range+Probability);
+
+
+
+expected_value( [ UnweightedItem | Remainder], Sum, Range) ->
+
+    expected_value([{UnweightedItem,1}] ++ Remainder, Sum, Range).
