@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 541 $</p>
+<p><b>Version:</b> $Revision: 544 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -104,6 +104,9 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#distinct_neighbor_pairs-1">distinct_neighbor_pairs/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#distinct_neighbor_pairs-2">distinct_neighbor_pairs/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#dstat-2">dstat/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#elements-2">elements/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#elements-3">elements/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#elements-4">elements/4</a></td><td></td></tr>
 <tr><td valign="top"><a href="#even_or_odd-1">even_or_odd/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Documentary convenience function that returns the atoms <code>even</code> or <code>odd</code> for any integer.</td></tr>
 <tr><td valign="top"><a href="#expand_labels-1">expand_labels/1</a></td><td>Expands a series of labels over lists to create a cartesian 2-ary tuple expansion.</td></tr>
 <tr><td valign="top"><a href="#expected_value-1">expected_value/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the expected value of infinite selection from a weighted numeric list.</td></tr>
@@ -129,6 +132,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#hmean_vector_normal-1">hmean_vector_normal/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the harmonic mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#index_of_first-2">index_of_first/2</a></td><td>Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.</td></tr>
 <tr><td valign="top"><a href="#instant_runoff_vote-1">instant_runoff_vote/1</a></td><td><span style="color:orange;font-style:italic">Untested</span>  Performs an instant runoff vote.</td></tr>
+<tr><td valign="top"><a href="#is_postfix-2">is_postfix/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#is_sorted_list-1">is_sorted_list/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns true if the list is sorted; false otherwise.</td></tr>
 <tr><td valign="top"><a href="#is_unique_list-1">is_unique_list/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns true if the list is unique; false otherwise.</td></tr>
 <tr><td valign="top"><a href="#key_cluster-2">key_cluster/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
@@ -164,6 +168,9 @@ presenting the actual volume of functionality present here.  We can get the cove
 </td></tr>
 <tr><td valign="top"><a href="#permute-2">permute/2</a></td><td>Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast <a href="#combinations-2"><code>combinations/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#range_scale-1">range_scale/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Get the scale of a same-sign numeric range.</td></tr>
+<tr><td valign="top"><a href="#reverse_filter-2">reverse_filter/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#reverse_map-2">reverse_map/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#reverse_map_filter-3">reverse_map_filter/3</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#root_mean_square-1">root_mean_square/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculates the root mean square of the values in the list.</td></tr>
 <tr><td valign="top"><a href="#root_sum_square-1">root_sum_square/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculate the magnitude (also known as the root sum square) of a vector.</td></tr>
 <tr><td valign="top"><a href="#rotate_list-2">rotate_list/2</a></td><td>Rotates the front <code>Distance</code> elements of a list to the back, in order.</td></tr>
@@ -407,6 +414,21 @@ presenting the actual volume of functionality present here.  We can get the cove
 </div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 487</p>
 
+<h3 class="function"><a name="elements-2">elements/2</a></h3>
+<div class="spec">
+<p><tt>elements(Config, Requested) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+
+<h3 class="function"><a name="elements-3">elements/3</a></h3>
+<div class="spec">
+<p><tt>elements(Config, Requested, KeyIdx) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="elements-4">elements/4</a></h3>
+<div class="spec">
+<p><tt>elements(Config, Requested, KeyIdx, X4) -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="even_or_odd-1">even_or_odd/1</a></h3>
 <div class="spec">
 <p><tt>even_or_odd(Num::integer()) -&gt; even | odd</tt></p>
@@ -609,6 +631,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>instant_runoff_vote(ListOfVoteLists::<a href="#type-list_of_lists">list_of_lists()</a>) -&gt; any()</tt></p>
 </div><p><span style="color:orange;font-style:italic">Untested</span>  Performs an instant runoff vote.  http://en.wikipedia.org/wiki/Instant-runoff_voting <pre>  1&gt;</pre></p>
 <p><b>Introduced in:</b> Version 485</p>
+
+<h3 class="function"><a name="is_postfix-2">is_postfix/2</a></h3>
+<div class="spec">
+<p><tt>is_postfix(Postfix, String) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 543</p>
 
 <h3 class="function"><a name="is_sorted_list-1">is_sorted_list/1</a></h3>
 <div class="spec">
@@ -835,8 +863,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 541 2011-03-21 12:19:18Z john $"},
-   {svn_revision,"$Revision: 541 $"},
+   {svn_id,"$Id: sc.erl 544 2011-03-21 22:06:55Z john $"},
+   {svn_revision,"$Revision: 544 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -944,6 +972,24 @@ presenting the actual volume of functionality present here.  We can get the cove
   6&gt; sc:range_scale([3, 3]).
   1.0</pre></p>
 <p><b>Introduced in:</b> Version 479</p>
+
+<h3 class="function"><a name="reverse_filter-2">reverse_filter/2</a></h3>
+<div class="spec">
+<p><tt>reverse_filter(Workload, Fun) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 545</p>
+
+<h3 class="function"><a name="reverse_map-2">reverse_map/2</a></h3>
+<div class="spec">
+<p><tt>reverse_map(Workload, Fun) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 546</p>
+
+<h3 class="function"><a name="reverse_map_filter-3">reverse_map_filter/3</a></h3>
+<div class="spec">
+<p><tt>reverse_map_filter(Workload, MapFun, FilterFun) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 544</p>
 
 <h3 class="function"><a name="root_mean_square-1">root_mean_square/1</a></h3>
 <div class="spec">
@@ -1201,6 +1247,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 21 2011, 18:02:01.</i></p>
+<p><i>Generated by EDoc, Mar 21 2011, 18:13:54.</i></p>
 </body>
 </html>

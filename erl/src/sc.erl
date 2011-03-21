@@ -96,6 +96,14 @@
     split_at/2,
     is_postfix/2,
 
+    elements/2,
+      elements/3,
+      elements/4,
+
+    reverse_map/2,
+      reverse_filter/2,
+      reverse_map_filter/3,
+
     keygroup/2,
       keygroup/3,
 
@@ -3366,11 +3374,15 @@ reverse_map_filter(Workload, MapFun, FilterFun) ->
 
 
 
+
+
 %% @since Version 544
 
 reverse_map_filter([], Work, _MapFun, _FilterFun) ->
 
     Work;
+
+
 
 
 
@@ -3383,4 +3395,134 @@ reverse_map_filter([Item|Rem], Work, MapFun, FilterFun) ->
     case FilterFun(Res) of
         true  -> reverse_map_filter(Rem, [Res]++Work, MapFun, FilterFun);
         false -> reverse_map_filter(Rem, Work,        MapFun, FilterFun)
+    end.
+
+
+
+
+
+%% @since Version 545
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+reverse_filter(Workload, Fun) ->
+
+    reverse_filter(Workload, [], Fun).
+
+
+
+
+
+%% @since Version 545
+
+reverse_filter([], Work, _Fun) ->
+
+    Work;
+
+
+
+
+
+%% @since Version 545
+
+reverse_filter([Item|Rem], Work, Fun) ->
+
+    case Fun(Item) of
+        true  -> reverse_filter(Rem, [Item]++Work, Fun);
+        false -> reverse_filter(Rem, Work,         Fun)
+    end.
+
+
+
+
+
+%% @since Version 546
+
+reverse_map(Workload, Fun) ->
+
+    reverse_map(Workload, [], Fun).
+
+
+
+
+
+%% @since Version 546
+
+reverse_map([], Work, _Fun) ->
+
+    Work;
+
+
+
+
+
+%% @since Version 546
+
+reverse_map([Item|Rem], Work, Fun) ->
+
+    reverse_map(Rem, [Fun(Item)]++Work, Fun).
+
+
+
+
+
+% todo implement catching tuple { key, reqtype } from list, to auto-convert before return
+% todo There may be a crashing bug here for repeated attributes, which are apparently legal, see http://fullof.bs/reading-module-attributes-in-erlang#comment-466
+% todo It may help to re-implement this using proplists instead of doing it manually, profile
+%% @todo document this
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+% interface
+
+elements(Config, Requested)                when is_list(Config), is_list(Requested)                     -> elements_worker([], Config, Requested, 1).
+elements(Config, Requested, KeyIdx)        when is_list(Config), is_list(Requested), is_integer(KeyIdx) -> elements_worker([], Config, Requested, KeyIdx);
+
+elements(Config, Requested, strip)         when is_list(Config), is_list(Requested)                     -> elements_worker([], Config, Requested, 1,      strip).
+elements(Config, Requested, KeyIdx, strip) when is_list(Config), is_list(Requested), is_integer(KeyIdx) -> elements_worker([], Config, Requested, KeyIdx, strip).
+
+
+
+
+
+% implementation
+
+elements_worker(Retlist, _,      [],        _)      -> Retlist;
+elements_worker(Retlist, Config, Requested, KeyIdx) ->
+
+    [ ThisRequest | RemainingRequests ] = Requested,
+
+    case lists:keysearch(ThisRequest, KeyIdx, Config) of
+
+        false ->
+            elements_worker(Retlist ++ [undefined], Config, RemainingRequests, KeyIdx);
+
+        { value, Tuple } ->
+            elements_worker(Retlist ++ [Tuple],     Config, RemainingRequests, KeyIdx);
+
+        AnythingElse ->
+            { error, response_not_understood, { for, lists, keysearch, { ThisRequest, Config } }, { got, AnythingElse } }
+
+    end.
+
+
+
+
+
+elements_worker(Retlist, _,      [],        _,      strip) -> Retlist;
+elements_worker(Retlist, Config, Requested, KeyIdx, strip) ->
+
+    [ ThisRequest | RemainingRequests ] = Requested,
+
+    case lists:keysearch(ThisRequest, KeyIdx, Config) of
+
+        false ->
+            elements_worker(Retlist ++ [undefined], Config, RemainingRequests, KeyIdx, strip);
+
+        { value, {_,Tuple} } ->
+            elements_worker(Retlist ++ [Tuple],     Config, RemainingRequests, KeyIdx, strip);
+
+        AnythingElse ->
+            { error, response_not_understood, { for, lists, keysearch, { ThisRequest, Config } }, { got, AnythingElse } }
+
     end.
