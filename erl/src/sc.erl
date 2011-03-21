@@ -89,6 +89,7 @@
     factorize/1,
     centroid/1,
     nearest_to/2,
+    has_function/2,
 
     module_attribute/1,
       module_attribute/2,
@@ -2662,3 +2663,18 @@ module_feature(Module, Feature) ->
             { error, no_such_module }
 
     end.
+
+
+
+
+
+%% @spec has_function(Module::atom(), Function::atom()) -> boolean()
+
+%% @doc TODO
+
+%% @since Version 522
+
+has_function(Module, Function) ->
+
+    scutil:deprecate("module_has_function() is deprecated in favor of erlang:function_exported/3"),
+    lists:keymember(Function, 1, apply(Module, module_info, [exports])).
