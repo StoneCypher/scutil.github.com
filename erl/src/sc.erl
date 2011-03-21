@@ -93,12 +93,13 @@
     svn_revision/1,
     atoms/1,
     key_cluster/2,
+    split_at/2,
 
     keygroup/2,
       keygroup/3,
 
     first_pos/2,
-      first_pos/3,    
+      first_pos/3,
 
     last_while_pos/2,
       last_while_pos/3,
@@ -3231,3 +3232,37 @@ first_pos(N, [Head|Tail], Pred, Default) ->
         true  -> N;
         false -> first_pos(N+1, Tail, Pred, Default)
     end.
+
+
+
+
+
+%% @since Version 541 TODO
+
+split_at(N, List) ->
+
+    split_at(N, N, List, [], []).
+
+
+
+
+
+split_at(_N, _BlockN, [], Current, Work) ->
+
+    lists:reverse([lists:reverse(Current)] ++ Work);
+
+
+
+
+
+split_at(N, 0, Workload, Current, Work) ->
+
+    split_at(N, N, Workload, [], [lists:reverse(Current)] ++ Work);
+
+
+
+
+
+split_at(N, BN, [Item|Rem], Current, Work) ->
+
+    split_at(N, BN-1, Rem, [Item]++Current, Work).
