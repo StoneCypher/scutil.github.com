@@ -2767,3 +2767,19 @@ function_labels(Module) ->
             {_,L,_,_} <- sc_code:abstract_functions(Module)
         ]
     ).
+
+
+
+
+
+% todo comeback docs
+
+%% @since Version 529
+
+function_points(Module) ->
+
+    lists:usort(
+        [ {L,A} ||
+            {_,L,A,_} <- sc_code:abstract_functions(Module)
+        ]
+    ).
