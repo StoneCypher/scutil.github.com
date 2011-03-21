@@ -94,6 +94,14 @@
     atoms/1,
     key_cluster/2,
 
+    keygroup/2,
+      keygroup/3,
+
+    last_while_pos/2,
+      last_while_pos/3,
+
+    partition_by_residue/2,
+
     all_neighbor_pairs/1,
       all_neighbor_pairs/2,
 
@@ -3065,7 +3073,7 @@ all_neighbor_pairs([A,B|Rem], Work, make_tuples) ->
 
 % @Since Version 537
 
-partition_n(Data, Function) ->
+partition_by_residue(Data, Function) ->
 
     [
         { GroupId, [   GDatum
@@ -3119,4 +3127,65 @@ last_while_pos(N, [Head|Tail], Pred, Last) ->
     case Pred(Head) of
         true  -> last_while_pos(N+1, Tail, Pred, N);
         false -> Last
+    end.
+
+
+
+
+
+%% @since Version 538
+
+keygroup(Pos, List) ->
+
+    keygroup(Pos, List, unsorted).
+
+
+
+
+
+%% @since Version 538
+
+keygroup(Pos, List, unsorted) when is_list(List) ->
+
+    SList = lists:keysort(Pos,List),
+    [F|_] = SList,
+
+    keygroup(Pos, SList, element(Pos,F), [], []);
+
+
+
+
+
+%% @since Version 538
+
+keygroup(Pos, List, sorted) when is_list(List) ->
+
+    [F|_] = List,
+
+    keygroup(Pos, List, element(Pos,F), [], []).
+
+
+
+
+
+keygroup(_Pos, [], WorkKey, Work, Output) ->
+
+    [{WorkKey, Work}] ++ Output;
+
+
+
+
+
+keygroup(Pos, [Item|Rem], WorkKey, Work, Output) ->
+
+    NewKey = element(Pos, Item),
+
+    case NewKey == WorkKey of
+
+        true  ->
+            keygroup(Pos, Rem, WorkKey, [Item]++Work, Output);
+
+        false ->
+            keygroup(Pos, Rem, NewKey,  [Item],       [{WorkKey,Work}]++Output)
+
     end.
