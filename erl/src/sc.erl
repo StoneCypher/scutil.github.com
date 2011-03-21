@@ -90,6 +90,7 @@
     centroid/1,
     nearest_to/2,
     has_function/2,
+    svn_revision/1,
 
     module_attribute/1,
       module_attribute/2,
@@ -2678,3 +2679,21 @@ has_function(Module, Function) ->
 
     scutil:deprecate("module_has_function() is deprecated in favor of erlang:function_exported/3"),
     lists:keymember(Function, 1, apply(Module, module_info, [exports])).
+
+
+
+
+
+%% @spec scan_svn_revision(ModuleName::atom()) -> integer()
+
+%% @doc {@section Utility} Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.  To use, add a module attribute to your module as follows: `-svn_revision("$+Revision$).', after removing the plus (if the plus wasn't there, the example would get corrupted when I updated the module `;)').  Then set the svn keyword "Revision" on the file, and check it in.  After that, your version is magically updated every time you check in!  `:D'  The sole argument to this function is the name of the module to be scanned, as an atom. ```1> scutil:scan_svn_revision(testerl).
+%% 16'''
+
+%% @since Version 44
+
+svn_revision(Module) ->
+
+    "$Revision: " ++ X = attribute(Module, svn_revision),
+    [ Head | _Rem ]    = string:tokens(X, " "),
+
+    list_to_integer(Head).
