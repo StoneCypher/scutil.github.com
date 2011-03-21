@@ -136,14 +136,17 @@
     distinct_neighbor_pairs/1,
       distinct_neighbor_pairs/2,
 
-%     entrypoints/1,
-%       entrypoints/2,
+    abstract/1,
+      abstract/2,
 
-%     abstract_function/2,
-%       abstract_functions/1,
+    entrypoints/1,
+      entrypoints/2,
 
-%     function_stats/1,
-%       function_point_count/1,
+    abstract_function/2,
+      abstract_functions/1,
+
+    function_stats/1,
+      function_point_count/1,
 
     module_attribute/1,
       module_attribute/2,
@@ -3816,3 +3819,45 @@ every_flag_representation([Flag|RemFlags]) ->
         MaybeFlag <- [[],[Flag]],
         Reps      <- every_flag_representation(RemFlags)
     ].
+
+
+
+
+
+%% @since Version 553
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+abstract(Module) ->
+
+    abstract(Module, unstripped).
+
+
+
+
+
+%% @since Version 553
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+abstract(Module, DoStrip) ->
+
+    case module_feature(Module, abstract_code) of
+
+        { raw_abstract_v1, ACode } ->
+
+            case DoStrip of
+
+                stripped ->
+                    ACode;
+
+                unstripped ->
+                    { raw_abstract_v1, ACode }
+
+            end;
+
+        no_abstract_code ->
+
+            { error, "ScUtil's abstract code functions require that a module be compiled with debug_info enabled, eg 'c(" ++ atom_to_list(Module) ++ ",[debug_info]).'" }
+
+    end.
