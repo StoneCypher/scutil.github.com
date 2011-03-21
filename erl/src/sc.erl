@@ -91,7 +91,9 @@
     nearest_to/2,
     has_function/2,
     svn_revision/1,
+
     function_stats/1,
+      function_point_count/1,
 
     module_attribute/1,
       module_attribute/2,
@@ -2713,3 +2715,13 @@ function_stats(Module) ->
       { function_labels, function_label_count(Module) },
       { function_points, function_point_count(Module) }
     ].
+
+
+
+
+
+%% @since Version 525
+
+function_point_count(Module) ->
+
+    length(function_points(Module)).
