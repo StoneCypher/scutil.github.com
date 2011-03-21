@@ -1496,6 +1496,9 @@ weighted_arithmetic_mean( [{V,W} | Tail], Num, Denom) ->
 
 %% @since Version 485
 
+%% not complete todo comeback
+%% also do other voting types
+
 instant_runoff_vote(ListOfVoteLists) ->
 
     instant_runoff_vote(ListOfVoteLists, []).
@@ -1540,6 +1543,8 @@ dstat(NumericList, PopulationOrSample) ->
 % herp derp
 
 % J seems to be assuming sample for statistics.  I do not like assumptions.
+
+% moar todo comeback
 
 %% @since Version 487
 
@@ -1762,7 +1767,7 @@ skewness(List) ->
 
 %% @since Version 494
 
-%% Wrong!
+%% Wrong! todo comeback
 
 kurtosis(List) ->
 
@@ -1771,6 +1776,8 @@ kurtosis(List) ->
 
 
 
+
+% todo comeback
 
 % excess_kurtosis(List) ->
 
@@ -1930,8 +1937,8 @@ hmean_vector_normal(VX) ->
 
 % erlang_b_distribution(N,A) ->
 %
-%    Num   = math:pow(A,N) / scutil:factorial(N),
-%    Denom = lists:sum([ math:pow(A,I) / scutil:factorial(I) || I <- lists:seq(0,N) ]),
+%    Num   = math:pow(A,N) / factorial(N),
+%    Denom = lists:sum([ math:pow(A,I) / factorial(I) || I <- lists:seq(0,N) ]),
 %
 %    Num / Denom.
 
@@ -1946,7 +1953,23 @@ hmean_vector_normal(VX) ->
 %
 %    Num   = (math:pow(A,N) / scutil:factorial(N)) * (N/(N-A)),
 %
-%    Denom = lists:sum([ math:pow(A,I) / scutil:factorial(I) || I <- lists:seq(0,N-1) ])
-%          + ((math:pow(A,N)/scutil:factorial(N))*(N/(N-A))),
+%    Denom = lists:sum([ math:pow(A,I) / factorial(I) || I <- lists:seq(0,N-1) ])
+%          + ((math:pow(A,N)/factorial(N))*(N/(N-A))),
 %
 %    {wait_probability, Num / Denom}.
+
+
+
+
+
+%% @spec median_absolute_deviation(List::numericlist()) -> number()
+
+%% @doc Calculate the median absolute deviation of a {@type numericlist()}. ```1> sc:median_absolute_deviation([1,1,2,2,4,6,9]).
+%% 1'''
+
+%% @since Version 501
+
+median_absolute_deviation(List) when is_list(List) ->
+
+    ListMedian = median(List),
+    median( [ abs(ListItem - ListMedian) || ListItem <- List ] ).
