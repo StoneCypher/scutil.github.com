@@ -2926,3 +2926,67 @@ key_cluster(Index, [WorkItem|Rem], Current, Work, Storage) ->
         Current -> key_cluster(Index, Rem, Current, [WorkItem]++Work, Storage);
         Other   -> key_cluster(Index, Rem, Other,   [WorkItem],       [Work]++Storage)
     end.
+
+
+
+
+
+% todo comeback docs
+
+% @since Version 535
+
+distinct_neighbor_pairs(List) ->
+
+    distinct_neighbor_pairs(List, [], make_tuples).
+
+
+
+
+
+% todo comeback docs
+
+% @since Version 535
+
+distinct_neighbor_pairs(List, MakeType) ->
+
+    distinct_neighbor_pairs(List, [], MakeType).
+
+
+
+
+
+distinct_neighbor_pairs([], Work, _Make_type) ->
+
+    lists:reverse(Work);  % should actually only ever be an empty list anyway
+
+
+
+
+
+distinct_neighbor_pairs([[_LastItemIsNotInAPairByItself]], Work, _Make_type) ->
+
+    lists:reverse(Work);
+
+
+
+
+
+distinct_neighbor_pairs([[]], Work, _Make_type) ->
+
+    lists:reverse(Work);
+
+
+
+
+
+distinct_neighbor_pairs([A,B|Rem], Work, make_tuples) ->
+
+    distinct_neighbor_pairs(Rem, [{A,B}] ++ Work, make_tuples);
+
+
+
+
+
+distinct_neighbor_pairs([A,B|Rem], Work, make_lists) ->
+
+    distinct_neighbor_pairs(Rem, [[A,B]] ++ Work, make_lists).
