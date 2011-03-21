@@ -89,8 +89,9 @@
     factorize/1,
     centroid/1,
     nearest_to/2,
-    
-    by_distance_raw/2,
+
+    by_distance/2,
+      by_distance_raw/2,
 
     alarm_set/3,
       alarm_terminate/1,
@@ -2534,3 +2535,22 @@ nearest_to(Centers, Point) ->
 by_distance_raw(Centers, Points) when is_list(Centers), is_list(Points) ->
 
     [ {Key, [NV || {_NC,NV} <- Near]} || {Key, Near} <- sc_lists:keygroup(1, [ { nearest_to(Centers, Point), Point } || Point <- Points ]) ].
+
+
+
+
+
+%% @since Version 519
+
+by_distance(Centers, Points) when is_list(Centers), is_list(Points) ->
+
+    Work = by_distance_raw(Centers, Points),
+
+    Grab = fun(Center) ->
+        case lists:keysearch(Center, 1, Work) of
+            {value, {Center, Matches}} -> Matches;
+            false                      -> []
+        end
+    end,
+
+    [ Grab(Center) || Center <- Centers ].
