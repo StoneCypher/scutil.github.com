@@ -87,6 +87,9 @@
     mersenne_prime/1,
     factorize/1,
 
+    is_sorted_list/1,
+      is_unique_list/1,
+
     floor/1,
       ceil/1,
       ceiling/1,
@@ -2299,3 +2302,80 @@ factorize(N, Current, Work) ->
                 _ -> factorize(N,             Current+1, Work)
             end
     end.
+
+
+
+
+
+%% @spec is_unique_list(List::list()) -> true | false
+
+%% @doc Returns true if the list is unique; false otherwise.  List uniqueness is defined as whether any member of the list compares equally to any other member; deep list inspection is not performed.  Comparison is type-safe. ```2> sc:is_unique_list([1,2,3]).
+%% true
+%%
+%% 2> sc:is_unique_list([1,2,3,1]).
+%% false
+%%
+%% 3> sc:is_unique_list([1,2,3,{1}]).
+%% true
+%%
+%% 4> sc:is_unique_list([1,2,3,[1]]).
+%% true
+%%
+%% 5> sc:is_unique_list([1,2,3,[1],[1]]).
+%% false'''
+
+%% @since Version 514
+
+is_unique_list(List) ->
+
+    length(lists:usort(List)) == length(List).
+
+
+
+
+
+%% @spec is_sorted_list(List::list()) -> true | false
+
+%% @doc Returns true if the list is sorted; false otherwise.  List sortedness is typesafe, and defined equivalently to how defined by the language and `lists:sort()'. ```1> sc:is_sorted_list([1,2,3]).
+%% true
+%%
+%% 2> sc:is_sorted_list([1,2,3,1]).
+%% false
+%%
+%% 3> sc:is_sorted_list([1,2,3,false]).
+%% true
+%%
+%% 4> sc:is_sorted_list([false,1,2,3]).
+%% false'''
+
+%% @since Version 372
+
+is_sorted_list([]) ->
+
+    true;
+
+
+
+is_sorted_list([Head|Rem]) ->
+
+    is_sorted_list_worker(Rem, Head).
+
+
+
+
+
+is_sorted_list_worker([], _Last) ->
+
+    true;
+
+
+
+is_sorted_list_worker([Cur|Rem], Last) when Cur >= Last ->
+
+    is_sorted_list_worker(Rem, Cur);
+
+
+
+is_sorted_list_worker([_Cur|_Rem], _Last) ->
+
+    false.
