@@ -70,7 +70,7 @@
 
     extrema/1,
     key_duplicate/1,
-    index_of_first/2,
+    index_of_first/2,  %% todo needs index of last then too, no?
     count_x/2,
     combinations/2,
     flag_sets/1,
