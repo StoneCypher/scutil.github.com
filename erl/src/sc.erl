@@ -72,7 +72,6 @@
     key_duplicate/1,
     index_of_first/2,
     count_x/2,
-    zip_n/1,
     combinations/2,
     flag_sets/1,
     list_product/1,
@@ -95,6 +94,9 @@
     split_at/2,
     is_postfix/2,
     walk_unique_pairings/2,
+
+    zip_n/1,
+      zip_n/2,
 
     expand_label/1,
       expand_labels/1,

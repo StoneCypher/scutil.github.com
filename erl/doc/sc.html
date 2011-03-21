@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 547 $</p>
+<p><b>Version:</b> $Revision: 548 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -52,10 +52,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>keylist() = <a href="#type-keylist">keylist()</a></tt></p>
 <p>All members of keylists are tuples of two-or-greater arity, and the first element is considered their key in the list.  List keys are unique; therefore <code>[{a,1},{b,1}]</code> is a keylist, but <code>[{a,1},{a,1}]</code> is not.</p>
 
-<h3 class="typedecl"><a name="type-keylist">keylist()</a></h3>
-<p><tt>keylist() = <a href="#type-keylist">keylist()</a></tt></p>
-<p>All members of keylists are tuples of two-or-greater arity, and the first element is considered their key in the list.  List keys are unique; therefore <code>[{a,1},{b,1}]</code> is a keylist, but <code>[{a,1},{a,1}]</code> is not.</p>
-
 <h3 class="typedecl"><a name="type-list_of_lists">list_of_lists()</a></h3>
 <p><tt>list_of_lists() = list()</tt></p>
 <p>Every member of a <code><a href="#type-list_of_lists">list_of_lists()</a></code> is a <code>list()</code>.</p>
@@ -75,10 +71,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="typedecl"><a name="type-sanitizer">sanitizer()</a></h3>
 <p><tt>sanitizer() = list() | <a href="#type-filterfunction">filterfunction()</a></tt></p>
 <p>Sanitizers are used by <a href="#sanitize_tokens-2"><code>sanitize_tokens/2</code></a> for input sanitization; they define what parts of an input list are valid, and the remainder are removed.  Sanitizers may either be a list of acceptable elements or a filter function.</p>
-
-<h3 class="typedecl"><a name="type-sorted_keylist">sorted_keylist()</a></h3>
-<p><tt>sorted_keylist() = <a href="#type-keylist">keylist()</a></tt></p>
-<p>A sorted keylist is a keylist in the order provided by <a href="lists.html#sort-1"><code>lists:sort/1</code></a>.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.</p>
 
 <h3 class="typedecl"><a name="type-sorted_keylist">sorted_keylist()</a></h3>
 <p><tt>sorted_keylist() = <a href="#type-keylist">keylist()</a></tt></p>
@@ -190,11 +182,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#sanitize_tokens-2">sanitize_tokens/2</a></td><td>Remove unacceptable elements from an input list, as defined by another list or a filter function.</td></tr>
 <tr><td valign="top"><a href="#second_difference-1">second_difference/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#shared_keys-1">shared_keys/1</a></td><td>Create sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples, where key K appears in both A and B.</td></tr>
-<tr><td valign="top"><a href="#shared_keys-1">shared_keys/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#shared_keys-2">shared_keys/2</a></td><td>Equivalent to <a href="#shared_keys-1"><code>shared_keys/1</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
-<tr><td valign="top"><a href="#shared_keys-2">shared_keys/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Equivalent to <a href="#shared_keys-1"><code>shared_keys/1</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-3">shared_keys/3</a></td><td>Equivalent to <a href="#shared_keys-2"><code>shared_keys/2</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
-<tr><td valign="top"><a href="#shared_keys-3">shared_keys/3</a></td><td><span style="color:orange;font-style:italic">Untested</span> Equivalent to <a href="#shared_keys-2"><code>shared_keys/2</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
 <tr><td valign="top"><a href="#skewness-1">skewness/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#split_at-2">split_at/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#square-1">square/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Squares the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
@@ -208,6 +197,24 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Take the weighted arithmetic mean of the input values.</td></tr>
 <tr><td valign="top"><a href="#zip_n-1">zip_n/1</a></td><td>Equivalent to <a href="#zip_n-2"><tt>zip_n(Ls, to_tuple)</tt></a>.
 </td></tr>
+<tr><td valign="top"><a href="#zip_n-2">zip_n/2</a></td><td>Computes a zip on any sized group of lists, rather than just two or three as offered by the lists module.<pre>  1&gt; sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii] ]).
+  [{1,a,i},{2,b,ii},{3,c,iii}]
+ 
+  2&gt; sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii], [x,y,z], [red,blue,green], [april,may,june] ]).
+  [{1,a,i,x,red,april},
+   {2,b,ii,y,blue,may},
+   {3,c,iii,z,green,june}]
+ 
+  This is actually more efficient than one might expect at first glance.  I ran a benchmark of 100,000 transformations of a list of lists into a list of tuples using &lt;a href="#benchmark-3"&gt;&lt;code&gt;benchmark/3&lt;/code&gt;&lt;/a&gt; and &lt;a href="#multi_do-4"&gt;&lt;code&gt;multi_do/4&lt;/code&gt;&lt;/a&gt; against both zip_n and the library function zip3; the library function won at 150 seconds to 175, which is a far smaller difference than I expected.```3&gt; Testy = [ [1,2,3], [1,2,3], [1,2,3] ].
+  [[1,2,3],[1,2,3],[1,2,3]]
+ 
+  4&gt; sc:benchmark(sc, multi_do, [100000, sc, zip_n, [Testy]]).
+  {174.95563, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }
+ 
+  5&gt; sc:benchmark(sc, multi_do, [100000, lists, zip3, Testy]).
+  {149.605, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }</pre>
+ 
+  <a href="#Thanks">Thanks</a> Thanks to Vladimir Sessikov for contributing this to and thus allowing conscription from <a href="http://www.erlang.org/ml-archive/erlang-questions/200207/msg00066.html">the mailing list</a>.</td></tr>
 <tr><td valign="top"><a href="#zipf_estimate_list-1">zipf_estimate_list/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Estimates the zipf baseline from each number in a numeric list.</td></tr>
 <tr><td valign="top"><a href="#zipf_nearness-1">zipf_nearness/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> todo <pre>  1&gt; sc:zipf_nearness([ 120, 60, 40, 30, 24, 20 ]).
   [[ {strength,1.0}, {center,120.0} ],
@@ -893,8 +900,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 547 2011-03-21 23:23:02Z john $"},
-   {svn_revision,"$Revision: 547 $"},
+   {svn_id,"$Id: sc.erl 548 2011-03-21 23:31:46Z john $"},
+   {svn_revision,"$Revision: 548 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1126,34 +1133,17 @@ presenting the actual volume of functionality present here.  We can get the cove
   []</pre></p>
 <p><b>Introduced in:</b> Version 475</p>
 
-<h3 class="function"><a name="shared_keys-1">shared_keys/1</a></h3>
-<div class="spec">
-<p><tt>shared_keys(TupleList) -&gt; any()</tt></p>
-</div><p><span style="color:orange;font-style:italic">Untested</span></p>
-
 <h3 class="function"><a name="shared_keys-2">shared_keys/2</a></h3>
 <div class="spec">
 <p><tt>shared_keys(TupleList::<a href="#type-sorted_keylist">sorted_keylist()</a>, Presorted::presorted) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt></p>
 </div><p>Equivalent to <a href="#shared_keys-1"><tt>shared_keys(lists:zip(lists:sort(A), lists:sort(B)))</tt></a>.</p>
 <p>Equivalent to <a href="#shared_keys-1"><code>shared_keys/1</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</p>
 
-<h3 class="function"><a name="shared_keys-2">shared_keys/2</a></h3>
-<div class="spec">
-<p><tt>shared_keys(TupleList::<a href="#type-sorted_keylist">sorted_keylist()</a>, Presorted::presorted) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt></p>
-</div><p>Equivalent to <a href="#shared_keys-1"><tt>shared_keys(lists:zip(lists:sort(A), lists:sort(B)))</tt></a>.</p>
-<p><span style="color:orange;font-style:italic">Untested</span> Equivalent to <a href="#shared_keys-1"><code>shared_keys/1</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</p>
-
 <h3 class="function"><a name="shared_keys-3">shared_keys/3</a></h3>
 <div class="spec">
 <p><tt>shared_keys(A::<a href="#type-sorted_keylist">sorted_keylist()</a>, B::<a href="#type-sorted_keylist">sorted_keylist()</a>, Presorted::presorted) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt></p>
 </div><p>Equivalent to <a href="#shared_keys-2"><tt>shared_keys(lists:sort(A), lists:sort(B))</tt></a>.</p>
 <p>Equivalent to <a href="#shared_keys-2"><code>shared_keys/2</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</p>
-
-<h3 class="function"><a name="shared_keys-3">shared_keys/3</a></h3>
-<div class="spec">
-<p><tt>shared_keys(A::<a href="#type-sorted_keylist">sorted_keylist()</a>, B::<a href="#type-sorted_keylist">sorted_keylist()</a>, Presorted::presorted) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt></p>
-</div><p>Equivalent to <a href="#shared_keys-2"><tt>shared_keys(lists:sort(A), lists:sort(B))</tt></a>.</p>
-<p><span style="color:orange;font-style:italic">Untested</span> Equivalent to <a href="#shared_keys-2"><code>shared_keys/2</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</p>
 
 <h3 class="function"><a name="skewness-1">skewness/1</a></h3>
 <div class="spec">
@@ -1270,6 +1260,29 @@ presenting the actual volume of functionality present here.  We can get the cove
 </div><p>Equivalent to <a href="#zip_n-2"><tt>zip_n(Ls, to_tuple)</tt></a>.</p>
 
 
+<h3 class="function"><a name="zip_n-2">zip_n/2</a></h3>
+<div class="spec">
+<p><tt>zip_n(Ls::list(), ResultType::atom()) -&gt; <a href="#type-list_of_tuples">list_of_tuples()</a></tt></p>
+</div><p>Computes a zip on any sized group of lists, rather than just two or three as offered by the lists module.<pre>  1&gt; sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii] ]).
+  [{1,a,i},{2,b,ii},{3,c,iii}]
+ 
+  2&gt; sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii], [x,y,z], [red,blue,green], [april,may,june] ]).
+  [{1,a,i,x,red,april},
+   {2,b,ii,y,blue,may},
+   {3,c,iii,z,green,june}]
+ 
+  This is actually more efficient than one might expect at first glance.  I ran a benchmark of 100,000 transformations of a list of lists into a list of tuples using &lt;a href="#benchmark-3"&gt;&lt;code&gt;benchmark/3&lt;/code&gt;&lt;/a&gt; and &lt;a href="#multi_do-4"&gt;&lt;code&gt;multi_do/4&lt;/code&gt;&lt;/a&gt; against both zip_n and the library function zip3; the library function won at 150 seconds to 175, which is a far smaller difference than I expected.```3&gt; Testy = [ [1,2,3], [1,2,3], [1,2,3] ].
+  [[1,2,3],[1,2,3],[1,2,3]]
+ 
+  4&gt; sc:benchmark(sc, multi_do, [100000, sc, zip_n, [Testy]]).
+  {174.95563, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }
+ 
+  5&gt; sc:benchmark(sc, multi_do, [100000, lists, zip3, Testy]).
+  {149.605, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }</pre>
+ 
+  <a href="#Thanks">Thanks</a> Thanks to Vladimir Sessikov for contributing this to and thus allowing conscription from <a href="http://www.erlang.org/ml-archive/erlang-questions/200207/msg00066.html">the mailing list</a>.</p>
+<p><b>Introduced in:</b> Version 472</p>
+
 <h3 class="function"><a name="zipf_estimate_list-1">zipf_estimate_list/1</a></h3>
 <div class="spec">
 <p><tt>zipf_estimate_list(PosNumericList::<a href="#type-positive_numeric_list">positive_numeric_list()</a>) -&gt; <a href="#type-positive_numeric_list">positive_numeric_list()</a></tt></p>
@@ -1318,6 +1331,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 21 2011, 19:30:07.</i></p>
+<p><i>Generated by EDoc, Mar 21 2011, 19:34:54.</i></p>
 </body>
 </html>
