@@ -42,6 +42,7 @@
 
 %% @doc This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 %%
+%% <!-- google analytics --><script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script><script type="text/javascript">var pageTracker = _gat._getTracker("UA-4903191-10");pageTracker._trackPageview();</script>
 %% <a href="http://fullof.bs/">I'm</a> modernizing my library.  Originally it got too big, so I split it up.  However, that's proven more trouble than it's worth - I often found myself asking whether the thing I wanted was
 %% in `_math', `_correlate', `_statistics', `_lists', `_operators', etc.  No more.  It's all getting dumped into `sc.erl' and `sc_tests.erl'.  Prototypes are pushed into `sc_prototype.erl'; that is
 %% code which is either insufficiently tested or unfinished.  It's moving to eunit; sc_test is being dumped.  I'm taking a lot of the customization stuff out of the generated docs, too.
@@ -86,6 +87,9 @@
     factorial/1,
     mersenne_prime/1,
     factorize/1,
+
+    alarm_set/3,
+    alarm_terminate/1,
 
     is_sorted_list/1,
       is_unique_list/1,
@@ -2379,3 +2383,91 @@ is_sorted_list_worker([Cur|Rem], Last) when Cur >= Last ->
 is_sorted_list_worker([_Cur|_Rem], _Last) ->
 
     false.
+
+
+
+
+
+% todo comeback docs
+
+alarm_set(Time, Lambda, Repeat) ->
+
+    { alarm_actor_pid, spawn( fun() -> alarm_head(Time, Lambda, Repeat, construct) end ) }.
+
+
+
+
+
+% todo comeback docs
+
+alarm_terminate( { alarm_actor_pid, Pid } ) ->
+
+    Pid ! terminate,
+    ok.
+
+
+
+
+
+alarm_head(Time, Lambda, Repeat, construct) ->
+
+    Head = self(),
+    alarm_head(Time, Lambda, Repeat, spawn( fun() -> alarm_trigger(Time, Repeat, Head) end ));
+
+
+
+alarm_head(Time, Lambda, Repeat, TriggerPid) ->
+
+    receive
+
+        terminate ->
+            TriggerPid ! terminate,
+            ok;
+
+        trigger ->
+            NextLambda = case is_list(Lambda) of
+                true ->
+                    [ThisLambda | RemLambda] = Lambda,
+                    ThisLambda(),
+                    RemLambda;
+                false ->
+                    Lambda(),
+                    Lambda
+            end,
+            alarm_head(Time, NextLambda, Repeat, TriggerPid);
+
+        UnknownMessage ->
+            io:format("Warning: alarm head ~p took unexpected message.  Discarded:~n  ~w~n~n", [self(), UnknownMessage]),
+            alarm_head(Time, Lambda, Repeat, TriggerPid)
+
+    end.
+
+
+
+
+
+alarm_trigger(Time, Repeat, Head) ->
+
+    receive
+
+        terminate ->
+            Head ! terminate,
+            ok;
+
+        UnknownMessage ->
+            io:format("Warning: alarm trigger ~p took unexpected message; this screws with its timing cycle.  Discarded:~n  ~w~n~n", [self(), UnknownMessage]),
+            alarm_trigger(Time, Repeat, Head)
+
+    after Time ->
+
+        Head ! trigger,
+
+        case Repeat of
+            1         -> Head ! terminate, ok;
+            0         -> Head ! terminate, ok;
+            no_repeat -> Head ! terminate, ok;
+            forever   -> alarm_trigger(Time, forever, Head);
+            Count     -> alarm_trigger(Time, Count-1, Head)
+        end
+
+    end.
