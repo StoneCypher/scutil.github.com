@@ -94,6 +94,7 @@
     atoms/1,
     key_cluster/2,
     split_at/2,
+    is_postfix/2,
 
     keygroup/2,
       keygroup/3,
@@ -3338,3 +3339,15 @@ split_at(N, 0, Workload, Current, Work) ->
 split_at(N, BN, [Item|Rem], Current, Work) ->
 
     split_at(N, BN-1, Rem, [Item]++Current, Work).
+
+
+
+
+
+%% @since Version 543
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+is_postfix(Postfix, String) ->
+
+    lists:prefix(lists:reverse(Postfix), lists:reverse(String)).
