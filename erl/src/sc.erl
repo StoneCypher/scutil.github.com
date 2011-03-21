@@ -108,6 +108,10 @@
       harmonic_mean/1,
       weighted_arithmetic_mean/1,
 
+    amean_vector_normal/1,
+      gmean_vector_normal/1,
+      hmean_vector_normal/1,
+
     zipf_nearness/1,
       zipf_estimate_list/1,
       zipf_position_estimate/2,
@@ -1914,3 +1918,35 @@ gmean_vector_normal(VX) ->
 hmean_vector_normal(VX) ->
 
     harmonic_mean(sc_vector:normalize(VX)).
+
+
+
+
+
+% Thanks for some math help on erl-b, erl-c and engset, Vat and Wintermute
+
+%% @private
+% todo incomplete comeback
+
+% erlang_b_distribution(N,A) ->
+%
+%    Num   = math:pow(A,N) / scutil:factorial(N),
+%    Denom = lists:sum([ math:pow(A,I) / scutil:factorial(I) || I <- lists:seq(0,N) ]),
+%
+%    Num / Denom.
+
+
+
+
+
+%% @private
+% todo incomplete comeback
+
+% erlang_c_distribution(N,A) ->
+%
+%    Num   = (math:pow(A,N) / scutil:factorial(N)) * (N/(N-A)),
+%
+%    Denom = lists:sum([ math:pow(A,I) / scutil:factorial(I) || I <- lists:seq(0,N-1) ])
+%          + ((math:pow(A,N)/scutil:factorial(N))*(N/(N-A))),
+%
+%    {wait_probability, Num / Denom}.

@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 496 $</p>
+<p><b>Version:</b> $Revision: 499 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -76,7 +76,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p>A sorted keylist is a keylist in the order provided by <a href="lists.html#sort-1"><code>lists:sort/1</code></a>.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.</p>
 
 <h2><a name="index">Function Index</a></h2>
-<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#arithmetic_mean-1">arithmetic_mean/1</a></td><td>Take the arithmetic mean (often called the average) of a list of numbers.</td></tr>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#amean_vector_normal-1">amean_vector_normal/1</a></td><td><a href="#Statistics">Statistics</a> Returns the arithmetic mean of the elements of the unit vector for the vector provided.</td></tr>
+<tr><td valign="top"><a href="#arithmetic_mean-1">arithmetic_mean/1</a></td><td>Take the arithmetic mean (often called the average) of a list of numbers.</td></tr>
 <tr><td valign="top"><a href="#bandwidth_calc-1">bandwidth_calc/1</a></td><td>Equivalent to <a href="#bandwidth_calc-2"><tt>bandwidth_calc(Data, all)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#bandwidth_calc-2">bandwidth_calc/2</a></td><td>Calculates digital line bandwidth over timescales in converted units.</td></tr>
@@ -97,8 +98,10 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#gen_docs-0">gen_docs/0</a></td><td>Generates library documentation using the paths appropriate for the author's PC; you almost certainly want <a href="#gen_docs-2"><code>gen_docs/2</code></a> instead.</td></tr>
 <tr><td valign="top"><a href="#gen_docs-2">gen_docs/2</a></td><td>Generates library documentation from and to the specified paths <code>WhereIsSrc</code> and <code>WhereToPutDocs</code> respectively.</td></tr>
 <tr><td valign="top"><a href="#geometric_mean-1">geometric_mean/1</a></td><td>Take the geometric mean of a list of numbers.</td></tr>
+<tr><td valign="top"><a href="#gmean_vector_normal-1">gmean_vector_normal/1</a></td><td><a href="#Statistics">Statistics</a> Returns the geometric mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#harmonic_mean-1">harmonic_mean/1</a></td><td>Take the harmonic mean of a list of numbers.</td></tr>
 <tr><td valign="top"><a href="#histograph-1">histograph/1</a></td><td><a href="#Statistics">Statistics</a> Takes a histograph count of the items in the list.</td></tr>
+<tr><td valign="top"><a href="#hmean_vector_normal-1">hmean_vector_normal/1</a></td><td><a href="#Statistics">Statistics</a> Returns the harmonic mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#index_of_first-2">index_of_first/2</a></td><td>Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.</td></tr>
 <tr><td valign="top"><a href="#instant_runoff_vote-1">instant_runoff_vote/1</a></td><td>Performs an instant runoff vote.</td></tr>
 <tr><td valign="top"><a href="#key_duplicate-1">key_duplicate/1</a></td><td>Iterates a list of <code>{Count,Term}</code>, producing a list of <code>[Term,Term,...]</code>.</td></tr>
@@ -164,6 +167,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 </table>
 
 <h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="amean_vector_normal-1">amean_vector_normal/1</a></h3>
+<div class="spec">
+<p><tt>amean_vector_normal(VX::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt></p>
+</div><p><a href="#Statistics">Statistics</a> Returns the arithmetic mean of the elements of the unit vector for the vector provided.</p>
+<p><b>Introduced in:</b> Version 497</p>
 
 <h3 class="function"><a name="arithmetic_mean-1">arithmetic_mean/1</a></h3>
 <div class="spec">
@@ -357,6 +366,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><b>Introduced in:</b> Version 482</p>
 <p><b>See also:</b> <a href="#arithmetic_mean-1">arithmetic_mean/1</a>, <a href="#gmean_vector_normal-1">gmean_vector_normal/1</a>, <a href="#harmonic_mean-1">harmonic_mean/1</a>.</p>
 
+<h3 class="function"><a name="gmean_vector_normal-1">gmean_vector_normal/1</a></h3>
+<div class="spec">
+<p><tt>gmean_vector_normal(VX::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt></p>
+</div><p><a href="#Statistics">Statistics</a> Returns the geometric mean of the elements of the unit vector for the vector provided.</p>
+<p><b>Introduced in:</b> Version 498</p>
+
 <h3 class="function"><a name="harmonic_mean-1">harmonic_mean/1</a></h3>
 <div class="spec">
 <p><tt>harmonic_mean(InputList::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt></p>
@@ -380,6 +395,12 @@ presenting the actual volume of functionality present here.  We can get the cove
   2&gt; sc:histograph([ sc:rand(10) || X &lt;- lists:seq(1,100000) ]).
   [{0,10044}, {1,9892}, {2,10009}, {3,10016}, {4,10050}, {5,10113}, {6,9990}, {7,9994}, {8,10004}, {9,9888}]</pre></p>
 <p><b>Introduced in:</b> Version 496</p>
+
+<h3 class="function"><a name="hmean_vector_normal-1">hmean_vector_normal/1</a></h3>
+<div class="spec">
+<p><tt>hmean_vector_normal(VX::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt></p>
+</div><p><a href="#Statistics">Statistics</a> Returns the harmonic mean of the elements of the unit vector for the vector provided.</p>
+<p><b>Introduced in:</b> Version 499</p>
 
 <h3 class="function"><a name="index_of_first-2">index_of_first/2</a></h3>
 <div class="spec">
@@ -799,6 +820,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 20 2011, 22:18:53.</i></p>
+<p><i>Generated by EDoc, Mar 20 2011, 22:22:01.</i></p>
 </body>
 </html>
