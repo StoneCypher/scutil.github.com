@@ -79,8 +79,10 @@
     sanitize_tokens/2,
     naive_bayes_likelihood/4,
     caspers_jones_estimate/1,
-    range_scale/1,
-    
+    range_scale/1,               
+
+    instant_runoff_vote/1,
+
     arithmetic_mean/1,
       geometric_mean/1,
       harmonic_mean/1,
@@ -1443,3 +1445,24 @@ weighted_arithmetic_mean([], Num, Denom) ->
 weighted_arithmetic_mean( [{V,W} | Tail], Num, Denom) ->
 
     weighted_arithmetic_mean(Tail, Num+(W*V), Denom+W).
+
+
+
+
+
+%% @spec instant_runoff_vote(ListOfVoteLists::list_of_lists()) -> any()
+
+%% @doc Performs an instant runoff vote.  http://en.wikipedia.org/wiki/Instant-runoff_voting ```1>'''
+
+%% @since Version 485
+
+instant_runoff_vote(ListOfVoteLists) ->
+
+    instant_runoff_vote(ListOfVoteLists, []).
+
+
+
+instant_runoff_vote(ListOfVoteLists, Exclude) ->
+
+    FilteredVotes = [ VoteList || VoteList <- ListOfVoteLists, VoteList =/= [] ],
+    FilteredVotes.
