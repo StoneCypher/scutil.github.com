@@ -87,6 +87,8 @@
     factorial/1,
     mersenne_prime/1,
     factorize/1,
+    centroid/1,
+    nearest_to/2,
 
     alarm_set/3,
     alarm_terminate/1,
@@ -2505,3 +2507,16 @@ centroid(CoordList) when is_list(CoordList) ->
     [ sc_stats:arithmetic_mean(X) ||
         X <- sc_lists:zip_n(CoordList, to_list)
     ].
+
+
+
+
+
+% comeback todo docs
+
+%% @since Version 517
+
+nearest_to(Centers, Point) ->
+
+    { C, _ } = sc_tuple:keymin(2, [ { Center, sc_distance:euclidean(Center, Point) } || Center <- Centers ]),
+    C.

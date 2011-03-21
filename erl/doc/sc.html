@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 514 $</p>
+<p><b>Version:</b> $Revision: 516 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -94,6 +94,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 </td></tr>
 <tr><td valign="top"><a href="#central_moments-2">central_moments/2</a></td><td>Equivalent to <tt>[central_moment(List, N) || N &lt;- Moments]</tt>.
 </td></tr>
+<tr><td valign="top"><a href="#centroid-1">centroid/1</a></td><td>Calculates the coordinate which represents the per-axis arithmetic mean of a set of points.</td></tr>
 <tr><td valign="top"><a href="#combinations-2">combinations/2</a></td><td>Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#count_x-2">count_x/2</a></td><td>Counts the number of instances of Item in List.</td></tr>
 <tr><td valign="top"><a href="#cube-1">cube/1</a></td><td>Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
@@ -140,6 +141,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 </td></tr>
 <tr><td valign="top"><a href="#naive_bayes_likelihood-4">naive_bayes_likelihood/4</a></td><td>Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
   by the naive Bayes likelihood method.</td></tr>
+<tr><td valign="top"><a href="#nearest_to-2">nearest_to/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#permute-1">permute/1</a></td><td>Equivalent to <a href="#permute-2"><tt>permute(List, length(List))</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#permute-2">permute/2</a></td><td>Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast <a href="#combinations-2"><code>combinations/2</code></a>.</td></tr>
@@ -206,6 +208,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <div class="spec">
 <p><tt>alarm_terminate(X1) -&gt; any()</tt></p>
 </div>
+<p><b>Introduced in:</b> Version 515</p>
 
 <h3 class="function"><a name="amean_vector_normal-1">amean_vector_normal/1</a></h3>
 <div class="spec">
@@ -286,6 +289,22 @@ presenting the actual volume of functionality present here.  We can get the cove
 </div><p>Equivalent to <tt>[central_moment(List, N) || N &lt;- Moments]</tt>.</p>
 
 <p><b>Introduced in:</b> Version 492</p>
+
+<h3 class="function"><a name="centroid-1">centroid/1</a></h3>
+<div class="spec">
+<p><tt>centroid(InputList::<a href="#type-coord_list">coord_list()</a>) -&gt; <a href="#type-coord">coord()</a></tt></p>
+</div><p>Calculates the coordinate which represents the per-axis arithmetic mean of a set of points.  Convenient in list comprehensions.  To calculate the centroid of <code>[1,1]</code>, <code>[2,3]</code>, you gather the X coordinates <code>[1,2]</code>, then use their mean <code>1.5</code>; then do the same for the Y, <code>[1,3]</code> to <code>2</code>.  The centroid would thus be <code>[1.5,2]</code>.  You may pass any number of coordinates to this function, of any axis count, but they must all be the same axis count.  The return value will be a coordinate with the same axis count.  Negative and real values are fine; imaginary math is not implemented. <pre>  1&gt; sc:centroid([[1]]).
+  [1.0]
+ 
+  2&gt; sc:centroid([[1,1],[2,2]]).
+  [1.5,1.5]
+ 
+  3&gt; sc:centroid([[1,1,1],[2,2,2],[3,3,3]]).
+  [2.0,2.0,2.0]
+ 
+  4&gt; sc:centroid([[1,-1,1.0],[-2,-2,-2],[3,3,3],[4,4,4],[5,5,5]]).
+  [2.2,1.8,2.2]</pre></p>
+<p><b>Introduced in:</b> Version 516</p>
 
 <h3 class="function"><a name="combinations-2">combinations/2</a></h3>
 <div class="spec">
@@ -521,7 +540,7 @@ presenting the actual volume of functionality present here.  We can get the cove
  
   4&gt; sc:is_sorted_list([false,1,2,3]).
   false</pre></p>
-<p><b>Introduced in:</b> Version 372</p>
+<p><b>Introduced in:</b> Version 514</p>
 
 <h3 class="function"><a name="is_unique_list-1">is_unique_list/1</a></h3>
 <div class="spec">
@@ -724,6 +743,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 </div><p>Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
   by the naive Bayes likelihood method.</p>
 <p><b>Introduced in:</b> Version 478</p>
+
+<h3 class="function"><a name="nearest_to-2">nearest_to/2</a></h3>
+<div class="spec">
+<p><tt>nearest_to(Centers, Point) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 517</p>
 
 <h3 class="function"><a name="permute-1">permute/1</a></h3>
 <div class="spec">
@@ -1001,6 +1026,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 20 2011, 22:59:48.</i></p>
+<p><i>Generated by EDoc, Mar 20 2011, 23:07:03.</i></p>
 </body>
 </html>
