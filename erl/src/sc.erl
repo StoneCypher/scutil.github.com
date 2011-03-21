@@ -2352,7 +2352,7 @@ is_unique_list(List) ->
 %% 4> sc:is_sorted_list([false,1,2,3]).
 %% false'''
 
-%% @since Version 372
+%% @since Version 514
 
 is_sorted_list([]) ->
 
@@ -2400,6 +2400,8 @@ alarm_set(Time, Lambda, Repeat) ->
 
 % todo comeback docs
 
+%% @since Version 515
+
 alarm_terminate( { alarm_actor_pid, Pid } ) ->
 
     Pid ! terminate,
@@ -2409,10 +2411,14 @@ alarm_terminate( { alarm_actor_pid, Pid } ) ->
 
 
 
+%% @since Version 515
+
 alarm_head(Time, Lambda, Repeat, construct) ->
 
     Head = self(),
     alarm_head(Time, Lambda, Repeat, spawn( fun() -> alarm_trigger(Time, Repeat, Head) end ));
+
+
 
 
 
@@ -2446,6 +2452,8 @@ alarm_head(Time, Lambda, Repeat, TriggerPid) ->
 
 
 
+%% @since Version 515
+
 alarm_trigger(Time, Repeat, Head) ->
 
     receive
@@ -2471,3 +2479,29 @@ alarm_trigger(Time, Repeat, Head) ->
         end
 
     end.
+
+
+
+
+
+%% @spec centroid(InputList::coord_list()) -> coord()
+
+%% @doc Calculates the coordinate which represents the per-axis arithmetic mean of a set of points.  Convenient in list comprehensions.  To calculate the centroid of `[1,1]', `[2,3]', you gather the X coordinates `[1,2]', then use their mean `1.5'; then do the same for the Y, `[1,3]' to `2'.  The centroid would thus be `[1.5,2]'.  You may pass any number of coordinates to this function, of any axis count, but they must all be the same axis count.  The return value will be a coordinate with the same axis count.  Negative and real values are fine; imaginary math is not implemented. ```1> sc:centroid([[1]]).
+%% [1.0]
+%%
+%% 2> sc:centroid([[1,1],[2,2]]).
+%% [1.5,1.5]
+%%
+%% 3> sc:centroid([[1,1,1],[2,2,2],[3,3,3]]).
+%% [2.0,2.0,2.0]
+%%
+%% 4> sc:centroid([[1,-1,1.0],[-2,-2,-2],[3,3,3],[4,4,4],[5,5,5]]).
+%% [2.2,1.8,2.2]'''
+
+%% @since Version 516
+
+centroid(CoordList) when is_list(CoordList) ->
+
+    [ sc_stats:arithmetic_mean(X) ||
+        X <- sc_lists:zip_n(CoordList, to_list)
+    ].
