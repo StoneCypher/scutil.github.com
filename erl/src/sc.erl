@@ -81,6 +81,7 @@
     caspers_jones_estimate/1,
     range_scale/1,
     even_or_odd/1,
+    absolute_difference/2,
 
     instant_runoff_vote/1,
 
@@ -2012,3 +2013,18 @@ expected_value( [ {Value,Probability} | Remainder], Sum, Range) ->
 expected_value( [ UnweightedItem | Remainder], Sum, Range) ->
 
     expected_value([{UnweightedItem,1}] ++ Remainder, Sum, Range).
+
+
+
+
+
+%% @spec absolute_difference(A::number(), B::number()) -> number()
+
+%% @doc Takes the absolute value of the difference between the two arguments.  Offered mostly to make dependant code clearer. ```1> sc:absolute_difference(1.25, 1).
+%% 0.25'''
+
+%% @since Version 504
+
+absolute_difference(A,B) ->
+
+    abs(A-B).
