@@ -1571,3 +1571,50 @@ standard_deviation(Values, sample) when is_list(Values) ->
 
     Mean = arithmetic_mean(Values),
     math:sqrt( lists:sum([ sc_math:square(Val-Mean) || Val <- Values ]) / (length(Values)-1) ).
+
+
+
+
+
+% thanks to Chile and Kraln for straightening me out on moments and central moments
+
+%% @spec moment(List::list(), N::number()) -> float()
+
+%% @doc Takes the Nth moment of a list.  The Nth moment of a list is the arithmetic mean of the list items, each taken to the Nth power.  Fractional Ns are well defined
+%% and have obscure uses, though most will only ever use this with integer values of N; this function is valid for both.  Not to be confused with {@link central_moment/2}.  {@section Thanks}
+%% to Kraln and Chile for straightening me out on moments and central moments.  ```1> sc:moment([1,1,1], 2).
+%% 1.0
+%%
+%% 2> sc:moment([2,2,2], 2).
+%% 4.0
+%%
+%% 3> sc:moment([1,2,3], 2).
+%% 4.666666666666667
+%%
+%% 4> sc:moment([1,2,3], 3).
+%% 12.0
+%%
+%% 5> sc:moment([1,2,3], 3.5).
+%% 19.693026767781483'''
+
+%% @since Version 491
+
+moment(List, N) when is_list(List), is_number(N) ->
+
+    scutil:arithmetic_mean( [ math:pow(Item, N) || Item <- List ] ).
+
+
+
+%% @equiv [ moment(List, N) || N <- [2,3,4] ]
+
+moments(List) ->
+
+    moments(List, [2,3,4]).
+
+
+
+%% @equiv [ moment(List, N) || N <- Moments ]
+
+moments(List, Moments) when is_list(Moments) ->
+
+    [ moment(List, M) || M <- Moments ].
