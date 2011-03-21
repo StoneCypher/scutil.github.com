@@ -84,8 +84,9 @@
     absolute_difference/2,
     mod/2,
     factorial/1,
+    mersenne_prime/1,
 
-    floor/1, 
+    floor/1,
       ceil/1,
       ceiling/1,
 
@@ -2236,3 +2237,31 @@ floor(X) ->
 floor_t(T, Td) when Td < 0 -> T;
 floor_t(T, Td) when Td > 0 -> T-1;
 floor_t(T,_Td)             -> T.
+
+
+
+
+
+%% @since Version 512
+
+mersenne_prime(Which) -> mersenne_prime_worker(Which, 1).
+
+
+
+%% @private
+
+mersenne_prime_worker(0, Current) ->
+
+    Current - 1;
+
+
+
+mersenne_prime_worker(Remain, Current) when Remain > 30 ->
+
+    mersenne_prime_worker(Remain-30, Current*1073741824);
+
+
+
+mersenne_prime_worker(Remain, Current) ->
+
+    mersenne_prime_worker(Remain-1, Current*2).
