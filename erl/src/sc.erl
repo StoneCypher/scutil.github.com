@@ -87,7 +87,6 @@
     factorize/1,
     centroid/1,
     nearest_to/2,
-    has_function/2,
     svn_revision/1,
     atoms/1,
     key_cluster/2,
@@ -2768,21 +2767,6 @@ module_feature(Module, Feature) ->
 
 
 
-%% @spec has_function(Module::atom(), Function::atom()) -> boolean()
-
-%% @doc <span style="color:orange;font-style:italic">Untested</span>
-
-%% @since Version 522
-
-has_function(Module, Function) ->
-
-    scutil:deprecate("module_has_function() is deprecated in favor of erlang:function_exported/3"),
-    lists:keymember(Function, 1, apply(Module, module_info, [exports])).
-
-
-
-
-
 %% @spec svn_revision(ModuleName::atom()) -> integer()
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span> Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.  To use, add a module attribute to your module as follows: `-svn_revision("$+Revision$).', after removing the plus (if the plus wasn't there, the example would get corrupted when I updated the module `;)').  Then set the svn keyword "Revision" on the file, and check it in.  After that, your version is magically updated every time you check in!  `:D'  The sole argument to this function is the name of the module to be scanned, as an atom. ```1> scutil:scan_svn_revision(testerl).
@@ -3650,3 +3634,40 @@ walk_unique_pairings( A, [Rh|Rr], F) ->
 
 
 
+%% @type non_negative_integer() = integer().  A {@type non_negative_integer()} must be equal to or greater than zero.
+
+%% @spec count_of(Item::any(), List::list()) -> non_negative_integer()
+
+%% @doc Counts the number of instances of Item in List.  ```1> TestData = lists:duplicate(40,[healthy,nonsmoker]) ++ lists:duplicate(10,[healthy,smoker]) ++ lists:duplicate(7,[cancer,nonsmoker]) ++ lists:duplicate(3,[cancer,smoker]).
+%% [[healthy,nonsmoker], [healthy,nonsmoker], [healthy|...], [...]|...]
+%%
+%% 2> sc:count_of([healthy,smoker], TestData).
+%% 10
+%%
+%% 3> sc:count_of([healthy,nonsmoker], TestData).
+%% 40'''
+
+%% @since Version 550
+
+count_of(Item, List) ->
+
+    lists:foldl(
+
+        fun(X, Counter) ->
+
+            case X of
+
+                Item ->
+                    Counter+1;
+
+                _ ->
+                    Counter
+
+            end
+
+        end,
+
+        0,
+        List
+
+    ).
