@@ -88,6 +88,14 @@
 
     median/1,
 
+    moment/2,
+      moments/1,
+      moments/2,
+
+    central_moment/2,
+      central_moments/1,
+      central_moments/2,
+
     arithmetic_mean/1,
       geometric_mean/1,
       harmonic_mean/1,
@@ -1607,6 +1615,8 @@ moment(List, N) when is_list(List), is_number(N) ->
 
 %% @equiv [ moment(List, N) || N <- [2,3,4] ]
 
+%% @since Version 491
+
 moments(List) ->
 
     moments(List, [2,3,4]).
@@ -1615,6 +1625,57 @@ moments(List) ->
 
 %% @equiv [ moment(List, N) || N <- Moments ]
 
+%% @since Version 491
+
 moments(List, Moments) when is_list(Moments) ->
 
     [ moment(List, M) || M <- Moments ].
+
+
+
+
+
+% thanks to Chile and Kraln for straightening me out on moments and central moments
+
+%% @spec central_moment(List::list(), N::integer()) -> float()
+
+%% @doc Takes the Nth cetral moment of a list.  The Nth central moment of a list is the arithmetic mean of (the list items each minus the mean of the list, each
+%% taken to the Nth power).  In a sense, this is the "normalized" moment.  Fractional Ns are not defined.  Not to be confused with {@link moment/2}.  {@section Thanks} to Kraln and
+%% Chile for straightening me out on moments and central moments.  ```1> sc:central_moment([1,1,1], 2).
+%% 0.0
+%%
+%% 2> sc:central_moment([2,2,2], 2).
+%% 0.0
+%%
+%% 3> sc:central_moment([1,2,3], 2).
+%% 0.666666666666666
+%%
+%% 4> sc:central_moment([1,2,3], 3).
+%% 0.0'''
+
+%% @since Version 492
+
+central_moment(List, N) when is_list(List), is_integer(N) ->
+
+    ListAMean = scutil:arithmetic_mean(List),
+    scutil:arithmetic_mean( [ math:pow(Item-ListAMean, N) || Item <- List ] ).
+
+
+
+%% @equiv [ central_moment(List, N) || N <- [2,3,4] ]
+
+%% @since Version 492
+
+central_moments(List) ->
+
+    central_moments(List, [2,3,4]).
+
+
+
+%% @equiv [ central_moment(List, N) || N <- Moments ]
+
+%% @since Version 492
+
+central_moments(List, Moments) when is_list(Moments) ->
+
+    [ central_moment(List, M) || M <- Moments ].
