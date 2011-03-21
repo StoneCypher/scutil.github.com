@@ -90,6 +90,9 @@
     centroid/1,
     nearest_to/2,
 
+    module_attribute/1,
+      module_attribute/2,
+
     by_distance/2,
       by_distance_raw/2,
 
@@ -2554,3 +2557,86 @@ by_distance(Centers, Points) when is_list(Centers), is_list(Points) ->
     end,
 
     [ Grab(Center) || Center <- Centers ].
+
+
+
+
+
+% comeback todo to implement
+
+% k_means(KCount, ItemList) when is_integer(KCount), is_list(CoordList) ->
+
+
+
+
+
+%% @spec module_attribute(Module::atom()) -> AttributeList | { error, no_such_module }
+
+%% @doc Look up all attributes of a given module.  ```1> sc:get_module_attribute(scutil).
+%% [{author,"John Haugeland <stonecypher@gmail.com>"},
+%%  {bugtracker,"http://crunchyd.com/forum/project.php?projectid=7"},
+%%  {currentsource,"http://crunchyd.com/release/scutil.zip"},
+%%  {description,"StoneCypher's utility library."},
+%%  {library_requirements,[{testerl,16}]},
+%%  {license,[{mit_license,"http://scutil.com/license.html"}]},
+%%  {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
+%%  {publicsvn,"svn://crunchyd.com/scutil/"},
+%%  {svn_head,"$HeadURL$"},
+%%  {svn_id,"$Id$"},
+%%  {svn_revision,"$Revision$"},
+%%  {testerl_export,[{[],scutil_testsuite}]},
+%%  {vsn,[134633400955530778836494569152232539093]},
+%%  {webpage,"http://scutil.com/"}]'''
+
+%% @since Version 129
+
+module_attribute(Module) ->
+
+    case beam_lib:chunks(Module, [attributes]) of
+
+        { ok, { _, [ {attributes,Attributes} ] } } ->
+            Attributes;
+
+        { error, beam_lib, { file_error, _, enoent} } ->
+            { error, no_such_module }
+
+    end.
+
+
+
+
+
+%% @spec module_attribute(Module::atom(), Attribute::atom()) -> { value, {Attribute, Value} } | { error, no_such_attribute } | { error, no_such_module }
+
+%% @doc {@section Utility} <span style="color:red">Buggy</span> Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  ```1> sc:get_module_attribute(scutil, author).
+%% "John Haugeland <stonecypher@gmail.com>"
+%%
+%% 2> sc:get_module_attribute(scutil, license).
+%% [{mit_license,"http://scutil.com/license.html"}]'''{@section Thanks} to Alain O'Dea for pointing out defects in this routine regarding repeated module elements, and available improvements to the provided API.  <a href="http://fullof.bs/reading-module-attributes-in-erlang#comment-475" target="_blank">Mr. O'Dea's insightful advice</a> will be implemented, but that time has not yet come.
+
+%% @since Version 23
+
+module_attribute(Module,Attribute) ->
+
+    % Found at http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html
+    % Reformatted for clarity, removed unnessecary framing list
+    % Added error handling behavior
+
+    case beam_lib:chunks(Module, [attributes]) of
+
+        { ok, { _, [ {attributes,Attributes} ] } } ->
+
+            case lists:keysearch(Attribute, 1, Attributes) of
+
+                { value, {Attribute,Value} } ->
+                    Value;
+
+                false ->
+                    { error, no_such_attribute }
+
+            end;
+
+        { error, beam_lib, { file_error, _, enoent} } ->
+            { error, no_such_module }
+
+    end.

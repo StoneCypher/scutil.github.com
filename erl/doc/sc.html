@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 517 $</p>
+<p><b>Version:</b> $Revision: 519 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -85,6 +85,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#bandwidth_calc-1">bandwidth_calc/1</a></td><td>Equivalent to <a href="#bandwidth_calc-2"><tt>bandwidth_calc(Data, all)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#bandwidth_calc-2">bandwidth_calc/2</a></td><td>Calculates digital line bandwidth over timescales in converted units.</td></tr>
+<tr><td valign="top"><a href="#by_distance-2">by_distance/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#by_distance_raw-2">by_distance_raw/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#caspers_jones_estimate-1">caspers_jones_estimate/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ceil-1">ceil/1</a></td><td>Equivalent to <a href="#ceiling-1"><tt>ceiling(X)</tt></a>.
@@ -135,6 +136,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#mersenne_prime-1">mersenne_prime/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#mod-2">mod/2</a></td><td><a href="#Math">Math</a> Takes the modulus of an integer by another integer.</td></tr>
 <tr><td valign="top"><a href="#mode-1">mode/1</a></td><td>Takes the mode (most common) value(s) of a list, as a list.</td></tr>
+<tr><td valign="top"><a href="#module_attribute-1">module_attribute/1</a></td><td>Look up all attributes of a given module.</td></tr>
+<tr><td valign="top"><a href="#module_attribute-2">module_attribute/2</a></td><td><a href="#Utility">Utility</a> <span style="color:red">Buggy</span> Look up an Erlang module attribute value by title.</td></tr>
 <tr><td valign="top"><a href="#moment-2">moment/2</a></td><td>Takes the Nth moment of a list.</td></tr>
 <tr><td valign="top"><a href="#moments-1">moments/1</a></td><td>Equivalent to <tt>[moment(List, N) || N &lt;- [2, 3, 4]]</tt>.
 </td></tr>
@@ -239,6 +242,12 @@ presenting the actual volume of functionality present here.  We can get the cove
   Also knows the shorthand notations <code>{X,meg}</code>, <code>{X,gig}</code> and <code>{X,t}</code> for input only in base-10 only. <pre>  5&gt; sc:bandwidth_calc({10,meg}, {gigabits,day}).
   {{gigabits,day},864.0}</pre></p>
 <p><b>Introduced in:</b> Version 478</p>
+
+<h3 class="function"><a name="by_distance-2">by_distance/2</a></h3>
+<div class="spec">
+<p><tt>by_distance(Centers, Points) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 519</p>
 
 <h3 class="function"><a name="by_distance_raw-2">by_distance_raw/2</a></h3>
 <div class="spec">
@@ -709,6 +718,36 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><b>Introduced in:</b> Version 497</p>
 <p><b>See also:</b> <a href="#arithmetic_mean-1">arithmetic_mean/1</a>, <a href="#median-1">median/1</a>.</p>
 
+<h3 class="function"><a name="module_attribute-1">module_attribute/1</a></h3>
+<div class="spec">
+<p><tt>module_attribute(Module::atom()) -&gt; AttributeList | {error, no_such_module}</tt></p>
+</div><p>Look up all attributes of a given module.  <pre>  1&gt; sc:get_module_attribute(scutil).
+  [{author,"John Haugeland &lt;stonecypher@gmail.com&gt;"},
+   {bugtracker,"http://crunchyd.com/forum/project.php?projectid=7"},
+   {currentsource,"http://crunchyd.com/release/scutil.zip"},
+   {description,"StoneCypher's utility library."},
+   {library_requirements,[{testerl,16}]},
+   {license,[{mit_license,"http://scutil.com/license.html"}]},
+   {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
+   {publicsvn,"svn://crunchyd.com/scutil/"},
+   {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc_module.erl $"},
+   {svn_id,"$Id: sc_module.erl 375 2009-05-11 00:11:53Z john $"},
+   {svn_revision,"$Revision: 375 $"},
+   {testerl_export,[{[],scutil_testsuite}]},
+   {vsn,[134633400955530778836494569152232539093]},
+   {webpage,"http://scutil.com/"}]</pre></p>
+<p><b>Introduced in:</b> Version 129</p>
+
+<h3 class="function"><a name="module_attribute-2">module_attribute/2</a></h3>
+<div class="spec">
+<p><tt>module_attribute(Module::atom(), Attribute::atom()) -&gt; {value, {Attribute, Value}} | {error, no_such_attribute} | {error, no_such_module}</tt></p>
+</div><p><a href="#Utility">Utility</a> <span style="color:red">Buggy</span> Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  <pre>  1&gt; sc:get_module_attribute(scutil, author).
+  "John Haugeland &lt;stonecypher@gmail.com&gt;"
+ 
+  2&gt; sc:get_module_attribute(scutil, license).
+  [{mit_license,"http://scutil.com/license.html"}]</pre><a href="#Thanks">Thanks</a> to Alain O'Dea for pointing out defects in this routine regarding repeated module elements, and available improvements to the provided API.  <a href="http://fullof.bs/reading-module-attributes-in-erlang#comment-475" target="_blank">Mr. O'Dea's insightful advice</a> will be implemented, but that time has not yet come.</p>
+<p><b>Introduced in:</b> Version 23</p>
+
 <h3 class="function"><a name="moment-2">moment/2</a></h3>
 <div class="spec">
 <p><tt>moment(List::list(), N::number()) -&gt; float()</tt></p>
@@ -1033,6 +1072,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 20 2011, 23:08:33.</i></p>
+<p><i>Generated by EDoc, Mar 20 2011, 23:14:03.</i></p>
 </body>
 </html>
