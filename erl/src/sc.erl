@@ -2822,9 +2822,10 @@ entrypoints(Module, FName) ->
 
 
 
-%% @since version 138
+% todo comeback docs
 
-% was `scutil:abstract_functions/1'
+%% @since version 531
+
 abstract_functions(Module) ->
 
     [ {Id, Name, Arity, Code} ||
@@ -2835,12 +2836,27 @@ abstract_functions(Module) ->
 
 
 
-%% @since version 138
+% todo comeback docs
 
-% was `scutil:abstract_function/2'
+%% @since version 531
+
 abstract_function(Module, FName) ->
 
     [ {Id, Name, Arity, Code} ||
         {function, Id, Name, Arity, Code} <- sc_code:abstract(Module, stripped),
         Name == FName
+    ].
+
+
+
+
+
+% todo comeback docs
+
+%% @since version 532
+
+abstract_attributes(Module) ->
+
+    [ {Id, Name, Value} ||
+        {attribute, Id, Name, Value} <- sc_code:abstract(Module, stripped)
     ].
