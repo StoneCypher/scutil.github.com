@@ -96,6 +96,9 @@
       central_moments/1,
       central_moments/2,
 
+    skewness/1,
+      kurtosis/1,
+
     arithmetic_mean/1,
       geometric_mean/1,
       harmonic_mean/1,
@@ -1679,3 +1682,15 @@ central_moments(List) ->
 central_moments(List, Moments) when is_list(Moments) ->
 
     [ central_moment(List, M) || M <- Moments ].
+
+
+
+
+
+%% @equiv central_moment(List, 3)
+
+%% @since Version 493
+
+skewness(List) ->
+
+    central_moment(List, 3).
