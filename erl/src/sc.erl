@@ -93,6 +93,10 @@
     split_at/2,
     is_postfix/2,
     walk_unique_pairings/2,
+    count_of/2,
+
+    every_member_representation/1,
+      every_member_representation/2,
 
     zip_n/1,
       zip_n/2,
@@ -3638,7 +3642,7 @@ walk_unique_pairings( A, [Rh|Rr], F) ->
 
 %% @spec count_of(Item::any(), List::list()) -> non_negative_integer()
 
-%% @doc Counts the number of instances of Item in List.  ```1> TestData = lists:duplicate(40,[healthy,nonsmoker]) ++ lists:duplicate(10,[healthy,smoker]) ++ lists:duplicate(7,[cancer,nonsmoker]) ++ lists:duplicate(3,[cancer,smoker]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Counts the number of instances of Item in List.  ```1> TestData = lists:duplicate(40,[healthy,nonsmoker]) ++ lists:duplicate(10,[healthy,smoker]) ++ lists:duplicate(7,[cancer,nonsmoker]) ++ lists:duplicate(3,[cancer,smoker]).
 %% [[healthy,nonsmoker], [healthy,nonsmoker], [healthy|...], [...]|...]
 %%
 %% 2> sc:count_of([healthy,smoker], TestData).
@@ -3671,3 +3675,97 @@ count_of(Item, List) ->
         List
 
     ).
+
+
+
+
+
+%% @equiv every_member_representation(Memberships, no_absence)
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+every_member_representation(Memberships) ->
+
+    every_member_representation(Memberships, no_absence).
+
+
+
+
+
+%% @spec every_member_representation(Memberships::list_of_lists(), AllowAbsence::atom()) -> list_of_lists()
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span> For a list of memberships, return every possible combination of one representative member from each list.  The parameter `AllowAbsence' controls whether memberships may be unrepresented; if unrepresented memberships are possible, then one possible representation becomes the empty list. ```1> scutil:every_member_representation([ [a,b],[1,2,3],[i,ii,iii] ], no_absence).
+%% [[a,1,i], [a,1,ii], [a,1,iii], [a,2,i], [a,2,ii], [a,2,iii], [a,3,i], [a,3,ii], [a,3,iii], [b,1,i], [b,1,ii], [b,1,iii], [b,2,i], [b,2,ii], [b,2,iii], [b,3,i], [b,3,ii], [b,3,iii]]
+%%
+%% 2> scutil:every_member_representation([ [a,b],[1,2],[i,ii] ], allow_absence).
+%% [ [], [i], [ii], [1], [1,i], [1,ii], [2], [2,i], [2,ii], [a], [a,i], [a,ii], [a,1], [a,1,i], [a,1,ii], [a,2], [a,2,i], [a,2,ii], [b], [b,i], [b,ii], [b,1], [b,1,i], [b,1,ii], [b,2], [b,2,i], [b,2,ii] ]
+%%
+%% 3> Format = fun(Person, Place, Weapon) -> "It was " ++ Person ++ " in the " ++ Place ++ " with the " ++ Weapon ++ "!" end.
+%% #Fun<erl_eval.18.105910772>
+%%
+%% 4> { People, Places, Weapons } = { ["Col. Mustard", "Mr. Green"], ["the billiards room", "the kitchen"], ["a lead pipe", "a knife", "a gun"] }.
+%% {["Col. Mustard","Mr. Green"],
+%%  ["the billiards room","the kitchen"],
+%%  ["a lead pipe","a knife","a gun"]}
+%%
+%% 5> Places.
+%% ["the billiards room","the kitchen"]
+%%
+%% 6> Format("Mrs. Scarlett", "the observatory", "a noose").
+%% "It was Mrs. Scarlett in the the observatory with the a noose!"
+%%
+%% 7> EveryClueOutcome = [ Format(ThisPerson, ThisPlace, ThisWeapon) || ThisPerson <- People, ThisPlace <- Places, ThisWeapon <- Weapons ].
+%% ["It was Col. Mustard in the the billiards room with the a lead pipe!",
+%%  "It was Col. Mustard in the the billiards room with the a knife!",
+%%  "It was Col. Mustard in the the billiards room with the a gun!",
+%%  "It was Col. Mustard in the the kitchen with the a lead pipe!",
+%%  "It was Col. Mustard in the the kitchen with the a knife!",
+%%  "It was Col. Mustard in the the kitchen with the a gun!",
+%%  "It was Mr. Green in the the billiards room with the a lead pipe!",
+%%  "It was Mr. Green in the the billiards room with the a knife!",
+%%  "It was Mr. Green in the the billiards room with the a gun!",
+%%  "It was Mr. Green in the the kitchen with the a lead pipe!",
+%%  "It was Mr. Green in the the kitchen with the a knife!",
+%%  "It was Mr. Green in the the kitchen with the a gun!"]'''
+%%
+%% @since Version 551
+
+every_member_representation([], _) ->
+
+    [[]];
+
+
+
+
+
+every_member_representation( [Membership|RemMemberships], no_absence   ) ->
+
+    [ [Member] ++ RemRep ||
+        Member <- Membership,
+        RemRep <- every_member_representation(RemMemberships, no_absence)
+    ];
+
+
+
+
+
+every_member_representation( [Membership|RemMemberships], allow_absence) ->
+
+    Compact = fun(Member, RemRep) ->
+
+        case Member of
+
+            empty ->
+                RemRep;
+
+            {item,X} ->
+                [X] ++ RemRep
+
+        end
+
+    end,
+
+    [ Compact(Member, RemRep) ||
+        Member <- [empty] ++ [{item,X}||X<-Membership],
+        RemRep <- every_member_representation(RemMemberships, allow_absence)
+    ].

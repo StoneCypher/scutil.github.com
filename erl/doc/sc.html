@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 548 $</p>
+<p><b>Version:</b> $Revision: 550 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -60,6 +60,10 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>non_negative_integer() = integer()</tt></p>
 <p>A <code><a href="#type-non_negative_integer">non_negative_integer()</a></code> must be equal to or greater than zero.</p>
 
+<h3 class="typedecl"><a name="type-non_negative_integer">non_negative_integer()</a></h3>
+<p><tt>non_negative_integer() = integer()</tt></p>
+<p>A <code><a href="#type-non_negative_integer">non_negative_integer()</a></code> must be equal to or greater than zero.</p>
+
 <h3 class="typedecl"><a name="type-numericlist">numericlist()</a></h3>
 <p><tt>numericlist() = list()</tt></p>
 <p>All members of a numeric list must be number()s.</p>
@@ -99,6 +103,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#central_moments-2">central_moments/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#centroid-1">centroid/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculates the coordinate which represents the per-axis arithmetic mean of a set of points.</td></tr>
 <tr><td valign="top"><a href="#combinations-2">combinations/2</a></td><td>Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.</td></tr>
+<tr><td valign="top"><a href="#count_of-2">count_of/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Counts the number of instances of Item in List.</td></tr>
 <tr><td valign="top"><a href="#count_x-2">count_x/2</a></td><td>Counts the number of instances of Item in List.</td></tr>
 <tr><td valign="top"><a href="#cube-1">cube/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
 <tr><td valign="top"><a href="#differences-1">differences/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
@@ -109,6 +114,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#elements-3">elements/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#elements-4">elements/4</a></td><td></td></tr>
 <tr><td valign="top"><a href="#even_or_odd-1">even_or_odd/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Documentary convenience function that returns the atoms <code>even</code> or <code>odd</code> for any integer.</td></tr>
+<tr><td valign="top"><a href="#every_member_representation-1">every_member_representation/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#every_member_representation-2">every_member_representation/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> For a list of memberships, return every possible combination of one representative member from each list.</td></tr>
 <tr><td valign="top"><a href="#expand_labels-1">expand_labels/1</a></td><td>Expands a series of labels over lists to create a cartesian 2-ary tuple expansion.</td></tr>
 <tr><td valign="top"><a href="#expected_value-1">expected_value/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the expected value of infinite selection from a weighted numeric list.</td></tr>
 <tr><td valign="top"><a href="#extended_dstat-2">extended_dstat/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
@@ -129,7 +136,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#geometric_mean-1">geometric_mean/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Take the geometric mean of a list of numbers.</td></tr>
 <tr><td valign="top"><a href="#gmean_vector_normal-1">gmean_vector_normal/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the geometric mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#harmonic_mean-1">harmonic_mean/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Take the harmonic mean of a list of numbers.</td></tr>
-<tr><td valign="top"><a href="#has_function-2">has_function/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#histograph-1">histograph/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes a histograph count of the items in the list.</td></tr>
 <tr><td valign="top"><a href="#hmean_vector_normal-1">hmean_vector_normal/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the harmonic mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#index_of_first-2">index_of_first/2</a></td><td>Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.</td></tr>
@@ -400,6 +406,19 @@ presenting the actual volume of functionality present here.  We can get the cove
   [[fast,strong], [fast,smart], [fast,lucky], [strong,smart], [strong,lucky], [smart,lucky]]</pre> <a href="#Thanks">Thanks</a> to Alisdair Sullivan for this implementation, which has been slightly but not significantly modified since receipt.</p>
 <p><b>Introduced in:</b> Version 473</p>
 
+<h3 class="function"><a name="count_of-2">count_of/2</a></h3>
+<div class="spec">
+<p><tt>count_of(Item::any(), List::list()) -&gt; <a href="#type-non_negative_integer">non_negative_integer()</a></tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span> Counts the number of instances of Item in List.  <pre>  1&gt; TestData = lists:duplicate(40,[healthy,nonsmoker]) ++ lists:duplicate(10,[healthy,smoker]) ++ lists:duplicate(7,[cancer,nonsmoker]) ++ lists:duplicate(3,[cancer,smoker]).
+  [[healthy,nonsmoker], [healthy,nonsmoker], [healthy|...], [...]|...]
+ 
+  2&gt; sc:count_of([healthy,smoker], TestData).
+  10
+ 
+  3&gt; sc:count_of([healthy,nonsmoker], TestData).
+  40</pre></p>
+<p><b>Introduced in:</b> Version 550</p>
+
 <h3 class="function"><a name="count_x-2">count_x/2</a></h3>
 <div class="spec">
 <p><tt>count_x(Item::any(), List::list()) -&gt; <a href="#type-non_negative_integer">non_negative_integer()</a></tt></p>
@@ -466,6 +485,51 @@ presenting the actual volume of functionality present here.  We can get the cove
 </div><p><span style="color:orange;font-style:italic">Untested</span> Documentary convenience function that returns the atoms <code>even</code> or <code>odd</code> for any integer. <pre>  1&gt; sc:even_or_odd(3).
   odd</pre></p>
 <p><b>Introduced in:</b> Version 489</p>
+
+<h3 class="function"><a name="every_member_representation-1">every_member_representation/1</a></h3>
+<div class="spec">
+<p><tt>every_member_representation(Memberships) -&gt; any()</tt></p>
+</div><p>Equivalent to <a href="#every_member_representation-2"><tt>every_member_representation(Memberships, no_absence)</tt></a>.</p>
+<p><span style="color:orange;font-style:italic">Untested</span></p>
+
+<h3 class="function"><a name="every_member_representation-2">every_member_representation/2</a></h3>
+<div class="spec">
+<p><tt>every_member_representation(Memberships::<a href="#type-list_of_lists">list_of_lists()</a>, AllowAbsence::atom()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span> For a list of memberships, return every possible combination of one representative member from each list.  The parameter <code>AllowAbsence</code> controls whether memberships may be unrepresented; if unrepresented memberships are possible, then one possible representation becomes the empty list. <pre>  1&gt; scutil:every_member_representation([ [a,b],[1,2,3],[i,ii,iii] ], no_absence).
+  [[a,1,i], [a,1,ii], [a,1,iii], [a,2,i], [a,2,ii], [a,2,iii], [a,3,i], [a,3,ii], [a,3,iii], [b,1,i], [b,1,ii], [b,1,iii], [b,2,i], [b,2,ii], [b,2,iii], [b,3,i], [b,3,ii], [b,3,iii]]
+ 
+  2&gt; scutil:every_member_representation([ [a,b],[1,2],[i,ii] ], allow_absence).
+  [ [], [i], [ii], [1], [1,i], [1,ii], [2], [2,i], [2,ii], [a], [a,i], [a,ii], [a,1], [a,1,i], [a,1,ii], [a,2], [a,2,i], [a,2,ii], [b], [b,i], [b,ii], [b,1], [b,1,i], [b,1,ii], [b,2], [b,2,i], [b,2,ii] ]
+ 
+  3&gt; Format = fun(Person, Place, Weapon) -&gt; "It was " ++ Person ++ " in the " ++ Place ++ " with the " ++ Weapon ++ "!" end.
+  #Fun&lt;erl_eval.18.105910772&gt;
+ 
+  4&gt; { People, Places, Weapons } = { ["Col. Mustard", "Mr. Green"], ["the billiards room", "the kitchen"], ["a lead pipe", "a knife", "a gun"] }.
+  {["Col. Mustard","Mr. Green"],
+   ["the billiards room","the kitchen"],
+   ["a lead pipe","a knife","a gun"]}
+ 
+  5&gt; Places.
+  ["the billiards room","the kitchen"]
+ 
+  6&gt; Format("Mrs. Scarlett", "the observatory", "a noose").
+  "It was Mrs. Scarlett in the the observatory with the a noose!"
+ 
+  7&gt; EveryClueOutcome = [ Format(ThisPerson, ThisPlace, ThisWeapon) || ThisPerson &lt;- People, ThisPlace &lt;- Places, ThisWeapon &lt;- Weapons ].
+  ["It was Col. Mustard in the the billiards room with the a lead pipe!",
+   "It was Col. Mustard in the the billiards room with the a knife!",
+   "It was Col. Mustard in the the billiards room with the a gun!",
+   "It was Col. Mustard in the the kitchen with the a lead pipe!",
+   "It was Col. Mustard in the the kitchen with the a knife!",
+   "It was Col. Mustard in the the kitchen with the a gun!",
+   "It was Mr. Green in the the billiards room with the a lead pipe!",
+   "It was Mr. Green in the the billiards room with the a knife!",
+   "It was Mr. Green in the the billiards room with the a gun!",
+   "It was Mr. Green in the the kitchen with the a lead pipe!",
+   "It was Mr. Green in the the kitchen with the a knife!",
+   "It was Mr. Green in the the kitchen with the a gun!"]</pre>
+ </p>
+<p><b>Introduced in:</b> Version 551</p>
 
 <h3 class="function"><a name="expand_labels-1">expand_labels/1</a></h3>
 <div class="spec">
@@ -630,12 +694,6 @@ presenting the actual volume of functionality present here.  We can get the cove
   Thanks to Forest (anonymous by choice) for help resolving 0-correctness.</p>
 <p><b>Introduced in:</b> Version 483</p>
 <p><b>See also:</b> <a href="#arithmetic_mean-1">arithmetic_mean/1</a>, <a href="#geometric_mean-1">geometric_mean/1</a>, <a href="#hmean_vector_normal-1">hmean_vector_normal/1</a>.</p>
-
-<h3 class="function"><a name="has_function-2">has_function/2</a></h3>
-<div class="spec">
-<p><tt>has_function(Module::atom(), Function::atom()) -&gt; <a href="#type-boolean">boolean()</a></tt></p>
-</div><p><span style="color:orange;font-style:italic">Untested</span></p>
-<p><b>Introduced in:</b> Version 522</p>
 
 <h3 class="function"><a name="histograph-1">histograph/1</a></h3>
 <div class="spec">
@@ -900,8 +958,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 548 2011-03-21 23:31:46Z john $"},
-   {svn_revision,"$Revision: 548 $"},
+   {svn_id,"$Id: sc.erl 550 2011-03-21 23:37:52Z john $"},
+   {svn_revision,"$Revision: 550 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1331,6 +1389,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 21 2011, 19:34:54.</i></p>
+<p><i>Generated by EDoc, Mar 21 2011, 19:42:21.</i></p>
 </body>
 </html>
