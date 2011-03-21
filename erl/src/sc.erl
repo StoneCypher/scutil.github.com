@@ -1900,3 +1900,17 @@ amean_vector_normal(VX) ->
 gmean_vector_normal(VX) ->
 
     geometric_mean(sc_vector:normalize(VX)).
+
+
+
+
+
+%% @spec hmean_vector_normal(VX::numeric_list()) -> number()
+
+%% @doc {@section Statistics} Returns the harmonic mean of the elements of the unit vector for the vector provided.
+
+%% @since Version 499
+
+hmean_vector_normal(VX) ->
+
+    harmonic_mean(sc_vector:normalize(VX)).
