@@ -92,6 +92,9 @@
     has_function/2,
     svn_revision/1,
 
+    entrypoints/1,
+      entrypoints/2,
+
     function_stats/1,
       function_point_count/1,
 
@@ -2782,4 +2785,32 @@ function_points(Module) ->
         [ {L,A} ||
             {_,L,A,_} <- sc_code:abstract_functions(Module)
         ]
+    ).
+
+
+
+
+
+% todo comeback docs
+
+%% @since Version 530
+
+entrypoints(Module) ->
+
+    .lists:flatten(
+        [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- sc_code:abstract_functions(Module) ]
+    ).
+
+
+
+
+
+% todo comeback docs
+
+%% @since Version 530
+
+entrypoints(Module, FName) ->
+
+    lists:flatten(
+        [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- sc_code:abstract_functions(Module), L==FName ]
     ).
