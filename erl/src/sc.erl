@@ -3078,3 +3078,45 @@ partition_n(Data, Function) ->
                                                ]
                                           )
     ].
+
+
+
+
+
+% comeback todo docs
+
+%% @Version Since 538
+%%
+%% @doc Returns the last element of the initial sequence where all items pass the predicate function.  ```1> sc_lists:last_while_pos(fun erlang:is_atom/1, [a,b,c,d,2,f]).
+%% 4
+%%
+%% 2> sc_lists:last_while_pos(fun erlang:is_atom/1, [a,b,c,d,r,f]).
+%% 6
+%%
+%% 3> sc_lists:last_while_pos(fun erlang:is_atom/1, [1,a,b,c,d,r,f]).
+%% false'''
+
+last_while_pos(Predicate, List) ->
+
+    last_while_pos(1, Predicate, List, false).
+
+
+
+last_while_pos(Predicate, List, Default) ->
+
+    last_while_pos(1, Predicate, List, Default).
+
+
+
+last_while_pos(_N, [],  _Pred, Last) ->
+
+    Last;
+
+
+
+last_while_pos(N, [Head|Tail], Pred, Last) ->
+
+    case Pred(Head) of
+        true  -> last_while_pos(N+1, Tail, Pred, N);
+        false -> Last
+    end.
