@@ -85,6 +85,7 @@
     instant_runoff_vote/1,
 
     dstat/2,
+      extended_dstat/2,
 
     median/1,
 
@@ -1490,7 +1491,7 @@ instant_runoff_vote(ListOfVoteLists, Exclude) ->
 % inspired by J dstat from some blog, http://bbot.org/blog/archives/2011/03/17/on_being_surprised_by_a_programming_language/
 % herp derp
 
-% Hilariously, J seems to be assuming pop or sample.
+% J seems to be assuming sample for statistics.  I do not like assumptions.
 
 %% @since Version 487
 
@@ -1498,15 +1499,44 @@ dstat(NumericList, PopulationOrSample) ->
 
     { Min, Max } = extrema(NumericList),
 
-    {   { sample_size,        length(NumericList)                                 },
+    [   { sample_size,        length(NumericList)                                 },
         { minimum,            Min                                                 },
         { maximum,            Max                                                 },
         { median,             median(NumericList)                                 },
-        { mean,               arithmetic_mean(NumericList)                        },
+        { arithmetic_mean,    arithmetic_mean(NumericList)                        },
         { standard_deviation, standard_deviation(NumericList, PopulationOrSample) },
         { skewness,           skewness(NumericList)                               },
         { kurtosis,           kurtosis(NumericList)                               }
-    }.
+    ].
+
+
+
+
+
+% inspired by J dstat from some blog, http://bbot.org/blog/archives/2011/03/17/on_being_surprised_by_a_programming_language/
+% herp derp
+
+% J seems to be assuming sample for statistics.  I do not like assumptions.
+
+%% @since Version 487
+
+extended_dstat(NumericList, PopulationOrSample) ->
+
+    { Min, Max } = extrema(NumericList),
+
+    [   { sample_size,        length(NumericList)                                 },
+        { minimum,            Min                                                 },
+        { maximum,            Max                                                 },
+        { median,             median(NumericList)                                 },
+        { mode,               mode(NumericList)                                   },
+        { arithmetic_mean,    arithmetic_mean(NumericList)                        },
+        { geometric_mean,     geometric_mean(NumericList)                         },
+        { harmonic_mean,      harmonic_mean(NumericList)                          },
+        { standard_deviation, standard_deviation(NumericList, PopulationOrSample) },
+        { skewness,           skewness(NumericList)                               },
+        { kurtosis,           kurtosis(NumericList)                               }
+    ].
+
 
 
 
@@ -1612,7 +1642,7 @@ standard_deviation(Values, sample) when is_list(Values) ->
 
 moment(List, N) when is_list(List), is_number(N) ->
 
-    scutil:arithmetic_mean( [ math:pow(Item, N) || Item <- List ] ).
+    arithmetic_mean( [ math:pow(Item, N) || Item <- List ] ).
 
 
 
@@ -1658,10 +1688,14 @@ moments(List, Moments) when is_list(Moments) ->
 
 %% @since Version 492
 
+%% Wrong!
+
 central_moment(List, N) when is_list(List), is_integer(N) ->
 
-    ListAMean = scutil:arithmetic_mean(List),
-    scutil:arithmetic_mean( [ math:pow(Item-ListAMean, N) || Item <- List ] ).
+    ListAMean = arithmetic_mean(List),
+    arithmetic_mean( [ math:pow(Item-ListAMean, N) || Item <- List ] ).
+
+
 
 
 
@@ -1672,6 +1706,8 @@ central_moment(List, N) when is_list(List), is_integer(N) ->
 central_moments(List) ->
 
     central_moments(List, [2,3,4]).
+
+
 
 
 
@@ -1701,6 +1737,16 @@ skewness(List) ->
 
 %% @equiv central_moment(List, 4)
 
+%% @since Version 494
+
+%% Wrong!
+
 kurtosis(List) ->
 
     central_moment(List, 4).
+
+
+
+
+
+% excess_kurtosis(List) ->
