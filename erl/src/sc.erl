@@ -85,6 +85,8 @@
 
     dstat/1,
 
+    median/1,
+
     arithmetic_mean/1,
       geometric_mean/1,
       harmonic_mean/1,
@@ -1491,3 +1493,32 @@ dstat(NumericList) ->
         { skewness,           sc:skewness(NumericList)           },
         { kurtosis,           sc:kurtosis(NumericList)           }
     }.
+
+
+
+
+%% @spec median(List::numericlist()) -> number()
+
+%% @doc Takes the median (central) value of a list.  Sorts the input list, then finds and returns the middle value.  ```1> scutil:median([1,2,999]).
+%% 2'''
+
+%% @see arithmetic_mean/1
+%% @see mode/1
+
+%% @since Version 488
+
+median(List) when is_list(List) ->
+
+    SList = lists:sort(List),
+    Length = length(SList),
+
+    case sc_is:even_or_odd(Length) of
+
+        even ->
+            [A,B] = lists:sublist(SList, round(Length/2), 2),
+            (A+B)/2;
+
+        odd ->
+            lists:nth( round((Length+1)/2), SList )
+
+    end.
