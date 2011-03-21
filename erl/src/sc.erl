@@ -96,6 +96,8 @@
     split_at/2,
     is_postfix/2,
 
+    walk_unique_pairings/2,
+
     differences/1,
       first_difference/1,
       second_difference/1,
@@ -3479,6 +3481,8 @@ reverse_map([Item|Rem], Work, Fun) ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
+%% @since Version 546
+
 % interface
 
 elements(Config, Requested)                when is_list(Config), is_list(Requested)                     -> elements_worker([], Config, Requested, 1).
@@ -3602,3 +3606,39 @@ nth_difference(0, List) ->
 nth_difference(N, List) when is_list(List), length(List) > (N+1), N > 0 ->
 
     nth_difference(N-1, differences(List)).
+
+
+
+
+
+% used for side effects, doesn't gather results; appropriate for enormous lists
+
+% comeback
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+%% @since Version 547
+
+walk_unique_pairings([], _) ->
+
+    ok;
+
+
+
+walk_unique_pairings([A|R], F) when is_function(F) ->
+
+    walk_unique_pairings(A, R, F),
+    walk_unique_pairings(R, F).
+
+
+
+walk_unique_pairings(_A, [],     _F) ->
+
+    ok;
+
+
+
+walk_unique_pairings( A, [Rh|Rr], F) ->
+
+    F(A,Rh),
+    walk_unique_pairings(A, Rr, F).
