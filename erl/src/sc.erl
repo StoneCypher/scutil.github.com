@@ -97,6 +97,9 @@
     keygroup/2,
       keygroup/3,
 
+    first_pos/2,
+      first_pos/3,    
+
     last_while_pos/2,
       last_while_pos/3,
 
@@ -3071,7 +3074,7 @@ all_neighbor_pairs([A,B|Rem], Work, make_tuples) ->
 
 
 
-% @Since Version 537
+%% @since Version 537
 
 partition_by_residue(Data, Function) ->
 
@@ -3093,7 +3096,7 @@ partition_by_residue(Data, Function) ->
 
 % comeback todo docs
 
-%% @Version Since 538
+%% @since Version 538
 %%
 %% @doc Returns the last element of the initial sequence where all items pass the predicate function.  ```1> sc_lists:last_while_pos(fun erlang:is_atom/1, [a,b,c,d,2,f]).
 %% 4
@@ -3196,7 +3199,7 @@ keygroup(Pos, [Item|Rem], WorkKey, Work, Output) ->
 
 % @todo swap argument order
 
-%% @version Since 539
+%% @since Version 539
 %%
 %% @doc ```1> sc_lists:first_pos([a,b,c,d,2,f],fun erlang:is_integer/1).
 %% 5

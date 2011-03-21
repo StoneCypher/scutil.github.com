@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 536 $</p>
+<p><b>Version:</b> $Revision: 539 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -129,7 +129,11 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#is_unique_list-1">is_unique_list/1</a></td><td>Returns true if the list is unique; false otherwise.</td></tr>
 <tr><td valign="top"><a href="#key_cluster-2">key_cluster/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#key_duplicate-1">key_duplicate/1</a></td><td>Iterates a list of <code>{Count,Term}</code>, producing a list of <code>[Term,Term,...]</code>.</td></tr>
+<tr><td valign="top"><a href="#keygroup-2">keygroup/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#keygroup-3">keygroup/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#kurtosis-1">kurtosis/1</a></td><td><span style="color:red">Buggy</span></td></tr>
+<tr><td valign="top"><a href="#last_while_pos-2">last_while_pos/2</a></td><td>Returns the last element of the initial sequence where all items pass the predicate function.</td></tr>
+<tr><td valign="top"><a href="#last_while_pos-3">last_while_pos/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#list_intersection-2">list_intersection/2</a></td><td>Equivalent to <a href="#list_intersection-3"><tt>list_intersection(List1, List2, unsorted)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#list_intersection-3">list_intersection/3</a></td><td>Efficiently computes the intersection of two lists.</td></tr>
@@ -153,6 +157,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#naive_bayes_likelihood-4">naive_bayes_likelihood/4</a></td><td>Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
   by the naive Bayes likelihood method.</td></tr>
 <tr><td valign="top"><a href="#nearest_to-2">nearest_to/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#partition_by_residue-2">partition_by_residue/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#permute-1">permute/1</a></td><td>Equivalent to <a href="#permute-2"><tt>permute(List, length(List))</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#permute-2">permute/2</a></td><td>Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast <a href="#combinations-2"><code>combinations/2</code></a>.</td></tr>
@@ -636,12 +641,43 @@ presenting the actual volume of functionality present here.  We can get the cove
   [sunday,sunday,sunday,monster,monster,truck,truck,'MADNESS']</pre></p>
 <p><b>Introduced in:</b> Version 462</p>
 
+<h3 class="function"><a name="keygroup-2">keygroup/2</a></h3>
+<div class="spec">
+<p><tt>keygroup(Pos, List) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 538</p>
+
+<h3 class="function"><a name="keygroup-3">keygroup/3</a></h3>
+<div class="spec">
+<p><tt>keygroup(Pos, List, X3) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 538</p>
+
 <h3 class="function"><a name="kurtosis-1">kurtosis/1</a></h3>
 <div class="spec">
 <p><tt>kurtosis(List) -&gt; any()</tt></p>
 </div><p>Equivalent to <a href="#central_moment-2"><tt>central_moment(List, 4)</tt></a>.</p>
 <p><span style="color:red">Buggy</span></p>
 <p><b>Introduced in:</b> Version 494</p>
+
+<h3 class="function"><a name="last_while_pos-2">last_while_pos/2</a></h3>
+<div class="spec">
+<p><tt>last_while_pos(Predicate, List) -&gt; any()</tt></p>
+</div><p>Returns the last element of the initial sequence where all items pass the predicate function.  <pre>  1&gt; sc_lists:last_while_pos(fun erlang:is_atom/1, [a,b,c,d,2,f]).
+  4
+ 
+  2&gt; sc_lists:last_while_pos(fun erlang:is_atom/1, [a,b,c,d,r,f]).
+  6
+ 
+  3&gt; sc_lists:last_while_pos(fun erlang:is_atom/1, [1,a,b,c,d,r,f]).
+  false</pre></p>
+<p><b>Introduced in:</b> Version 538
+ </p>
+
+<h3 class="function"><a name="last_while_pos-3">last_while_pos/3</a></h3>
+<div class="spec">
+<p><tt>last_while_pos(Predicate, List, Default) -&gt; any()</tt></p>
+</div>
 
 <h3 class="function"><a name="list_intersection-2">list_intersection/2</a></h3>
 <div class="spec">
@@ -780,8 +816,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 536 2011-03-21 12:06:16Z john $"},
-   {svn_revision,"$Revision: 536 $"},
+   {svn_id,"$Id: sc.erl 539 2011-03-21 12:15:55Z john $"},
+   {svn_revision,"$Revision: 539 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -850,6 +886,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>nearest_to(Centers, Point) -&gt; any()</tt></p>
 </div>
 <p><b>Introduced in:</b> Version 517</p>
+
+<h3 class="function"><a name="partition_by_residue-2">partition_by_residue/2</a></h3>
+<div class="spec">
+<p><tt>partition_by_residue(Data, Function) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 537</p>
 
 <h3 class="function"><a name="permute-1">permute/1</a></h3>
 <div class="spec">
@@ -1134,6 +1176,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 21 2011, 08:08:33.</i></p>
+<p><i>Generated by EDoc, Mar 21 2011, 08:17:31.</i></p>
 </body>
 </html>
