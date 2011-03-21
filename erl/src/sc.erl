@@ -92,6 +92,7 @@
     has_function/2,
     svn_revision/1,
     atoms/1,
+    key_cluster/2,
 
 %     entrypoints/1,
 %       entrypoints/2,
@@ -2866,10 +2867,62 @@ svn_revision(Module) ->
 
 
 
-% @since Version 533
+%% @since Version 533
 
 % was scutil:module_atoms/1
 
 atoms(Module) ->
 
     module_feature(Module, atoms).
+
+
+
+
+
+% todo comeback docs
+
+%% since Version 534
+
+key_cluster(_Index, []) ->
+
+    [];
+
+
+% 177> sc:key_cluster(1,[{1,a},{1,aa},{2,a}]).
+% [{1,[{1,a},{1,aa}]},{2,[{2,a}]}]
+
+key_cluster(Index, List) ->
+
+    SortedList = lists:keysort(Index, List),
+    [First|_]  = List,
+    Current    = element(Index, First),
+
+    key_cluster(Index, SortedList, Current, [], []).
+
+
+
+key_cluster(Index, [], _Current, Work, Storage) ->
+
+    % Not happy about this, but too lazy to fix it.
+
+    PossibleResult = lists:reverse([ lists:reverse(Sublist) || Sublist <- ([Work] ++ Storage) ]),
+
+    [RemoveEmptyHeadCons|FixedResult] = PossibleResult,
+
+    FinalResult = case RemoveEmptyHeadCons of
+        [] -> FixedResult;
+        _  -> PossibleResult
+    end,
+
+    LabelItem = fun(Item) -> [X|_] = Item, Label = element(Index, X), { Label, Item } end,
+
+    [ LabelItem(Item) || Item <- FinalResult ];
+
+
+
+key_cluster(Index, [WorkItem|Rem], Current, Work, Storage) ->
+
+    case element(Index, WorkItem) of
+        Current -> key_cluster(Index, Rem, Current, [WorkItem]++Work, Storage);
+        Other   -> key_cluster(Index, Rem, Other,   [WorkItem],       [Work]++Storage)
+    end.
