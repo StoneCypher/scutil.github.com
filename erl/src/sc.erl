@@ -84,8 +84,9 @@
     absolute_difference/2,
     mod/2,
     factorial/1,
-    
-    ceil/1,
+
+    floor/1, 
+      ceil/1,
       ceiling/1,
 
     square/1,
@@ -2215,3 +2216,23 @@ ceiling(X) ->
 ceiling_t(T, Td) when Td < 0 -> T+1;
 ceiling_t(T, Td) when Td > 0 -> T;
 ceiling_t(T,_Td)             -> T.
+
+
+
+
+
+% todo comeback docs; point out this isn't erlang:floor because of negative number behavior
+
+%% @since Version 511
+
+floor(X) ->
+
+     floor_t(trunc(X), trunc(X)-X).
+
+
+
+%% @private
+
+floor_t(T, Td) when Td < 0 -> T;
+floor_t(T, Td) when Td > 0 -> T-1;
+floor_t(T,_Td)             -> T.
