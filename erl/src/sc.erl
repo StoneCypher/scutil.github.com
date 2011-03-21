@@ -2028,3 +2028,21 @@ expected_value( [ UnweightedItem | Remainder], Sum, Range) ->
 absolute_difference(A,B) ->
 
     abs(A-B).
+
+
+
+
+
+%% @spec root_mean_square(Values::numericlist()) -> float()
+
+%% @doc Calculates the root mean square of the values in the list.  ```1> sc:root_mean_square([1,2,3,4,5]).
+%% 3.3166247903554
+%%
+%% 2> sc:root_mean_square([2,2,2]).
+%% 2.0'''
+
+%% @since Version 505
+
+root_mean_square(List) when is_list(List) ->
+
+    math:sqrt(arithmetic_mean([ Val*Val || Val <- List ])).
