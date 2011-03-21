@@ -80,6 +80,7 @@
     naive_bayes_likelihood/4,
     caspers_jones_estimate/1,
     range_scale/1,
+    even_or_odd/1,
 
     instant_runoff_vote/1,
 
@@ -1482,16 +1483,16 @@ instant_runoff_vote(ListOfVoteLists, Exclude) ->
 
 dstat(NumericList) ->
 
-    { Min, Max } = sc:extrema(NumericList),
+    { Min, Max } = extrema(NumericList),
 
-    {   { sample_size,        length(NumericList)                },
-        { minimum,            Min                                },
-        { maximum,            Max                                },
-        { median,             sc:median(NumericList)             },
-        { mean,               sc:arithmetic_mean(NumericList)    },
-        { standard_deviation, sc:standard_deviation(NumericList) },
-        { skewness,           sc:skewness(NumericList)           },
-        { kurtosis,           sc:kurtosis(NumericList)           }
+    {   { sample_size,        length(NumericList)             },
+        { minimum,            Min                             },
+        { maximum,            Max                             },
+        { median,             median(NumericList)             },
+        { mean,               arithmetic_mean(NumericList)    },
+        { standard_deviation, standard_deviation(NumericList) },
+        { skewness,           skewness(NumericList)           },
+        { kurtosis,           kurtosis(NumericList)           }
     }.
 
 
@@ -1509,10 +1510,10 @@ dstat(NumericList) ->
 
 median(List) when is_list(List) ->
 
-    SList = lists:sort(List),
+    SList  = lists:sort(List),
     Length = length(SList),
 
-    case sc_is:even_or_odd(Length) of
+    case even_or_odd(Length) of
 
         even ->
             [A,B] = lists:sublist(SList, round(Length/2), 2),
@@ -1522,3 +1523,17 @@ median(List) when is_list(List) ->
             lists:nth( round((Length+1)/2), SList )
 
     end.
+
+
+
+
+
+%% @spec even_or_odd(Num::integer()) -> even | odd
+
+%% @doc Documentary convenience function that returns the atoms `even' or `odd' for any integer. ```1> scutil:even_or_odd(3).
+%% odd'''
+
+%% @since Version 489
+
+even_or_odd(Num) when is_integer(Num), Num band 1 == 0 -> even;
+even_or_odd(Num) when is_integer(Num)                  -> odd.
