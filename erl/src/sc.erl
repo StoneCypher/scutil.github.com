@@ -94,6 +94,12 @@
     atoms/1,
     key_cluster/2,
 
+    all_neighbor_pairs/1,
+      all_neighbor_pairs/2,
+
+    distinct_neighbor_pairs/1,
+      distinct_neighbor_pairs/2,
+
 %     entrypoints/1,
 %       entrypoints/2,
 
@@ -2990,3 +2996,85 @@ distinct_neighbor_pairs([A,B|Rem], Work, make_tuples) ->
 distinct_neighbor_pairs([A,B|Rem], Work, make_lists) ->
 
     distinct_neighbor_pairs(Rem, [[A,B]] ++ Work, make_lists).
+
+
+
+
+
+% todo comeback docs
+
+% @since Version 536
+
+all_neighbor_pairs(List) ->
+
+    all_neighbor_pairs(List, make_tuples).
+
+
+
+% todo comeback docs
+
+% @since Version 536
+
+all_neighbor_pairs(List, WorkType) ->
+
+    all_neighbor_pairs(List, [], WorkType).
+
+
+
+
+
+all_neighbor_pairs([], Work, _Work_type) ->
+
+    lists:reverse(Work);  % should actually only ever be an empty list anyway
+
+
+
+
+
+all_neighbor_pairs([[]], Work, _Work_type) ->
+
+    lists:reverse(Work);
+
+
+
+
+
+all_neighbor_pairs([_LastItemIsNotInAPairByItself], Work, _Work_type) ->
+
+    lists:reverse(Work);
+
+
+
+
+
+all_neighbor_pairs([A,B|Rem], Work, make_lists) ->
+
+    all_neighbor_pairs([B]++Rem, [[A,B]] ++ Work, make_lists);
+
+
+
+
+
+all_neighbor_pairs([A,B|Rem], Work, make_tuples) ->
+
+    all_neighbor_pairs([B]++Rem, [{A,B}] ++ Work, make_tuples).
+
+
+
+
+
+% @Since Version 537
+
+partition_n(Data, Function) ->
+
+    [
+        { GroupId, [   GDatum
+                   ||  { _H, GDatum } <- GroupData
+                   ]
+        }
+    ||
+        { GroupId, GroupData } <- keygroup( 1, [   { Function(Datum), Datum }
+                                               ||  Datum <- Data
+                                               ]
+                                          )
+    ].
