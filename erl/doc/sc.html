@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 530 $</p>
+<p><b>Version:</b> $Revision: 532 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -78,12 +78,11 @@ presenting the actual volume of functionality present here.  We can get the cove
 
 <h2><a name="index">Function Index</a></h2>
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#absolute_difference-2">absolute_difference/2</a></td><td>Takes the absolute value of the difference between the two arguments.</td></tr>
-<tr><td valign="top"><a href="#abstract_function-2">abstract_function/2</a></td><td></td></tr>
-<tr><td valign="top"><a href="#abstract_functions-1">abstract_functions/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#alarm_set-3">alarm_set/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#alarm_terminate-1">alarm_terminate/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#amean_vector_normal-1">amean_vector_normal/1</a></td><td><a href="#Statistics">Statistics</a> Returns the arithmetic mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#arithmetic_mean-1">arithmetic_mean/1</a></td><td>Take the arithmetic mean (often called the average) of a list of numbers.</td></tr>
+<tr><td valign="top"><a href="#atoms-1">atoms/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#bandwidth_calc-1">bandwidth_calc/1</a></td><td>Equivalent to <a href="#bandwidth_calc-2"><tt>bandwidth_calc(Data, all)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#bandwidth_calc-2">bandwidth_calc/2</a></td><td>Calculates digital line bandwidth over timescales in converted units.</td></tr>
@@ -103,8 +102,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#count_x-2">count_x/2</a></td><td>Counts the number of instances of Item in List.</td></tr>
 <tr><td valign="top"><a href="#cube-1">cube/1</a></td><td>Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
 <tr><td valign="top"><a href="#dstat-2">dstat/2</a></td><td></td></tr>
-<tr><td valign="top"><a href="#entrypoints-1">entrypoints/1</a></td><td></td></tr>
-<tr><td valign="top"><a href="#entrypoints-2">entrypoints/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#even_or_odd-1">even_or_odd/1</a></td><td>Documentary convenience function that returns the atoms <code>even</code> or <code>odd</code> for any integer.</td></tr>
 <tr><td valign="top"><a href="#expand_labels-1">expand_labels/1</a></td><td>Expands a series of labels over lists to create a cartesian 2-ary tuple expansion.</td></tr>
 <tr><td valign="top"><a href="#expected_value-1">expected_value/1</a></td><td><a href="#Probability">Probability</a> Returns the expected value of infinite selection from a weighted numeric list.</td></tr>
@@ -114,8 +111,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#factorize-1">factorize/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#flag_sets-1">flag_sets/1</a></td><td>Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
 <tr><td valign="top"><a href="#floor-1">floor/1</a></td><td></td></tr>
-<tr><td valign="top"><a href="#function_point_count-1">function_point_count/1</a></td><td></td></tr>
-<tr><td valign="top"><a href="#function_stats-1">function_stats/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#gen_docs-0">gen_docs/0</a></td><td>Generates library documentation using the paths appropriate for the author's PC; you almost certainly want <a href="#gen_docs-2"><code>gen_docs/2</code></a> instead.</td></tr>
 <tr><td valign="top"><a href="#gen_docs-2">gen_docs/2</a></td><td>Generates library documentation from and to the specified paths <code>WhereIsSrc</code> and <code>WhereToPutDocs</code> respectively.</td></tr>
 <tr><td valign="top"><a href="#geometric_mean-1">geometric_mean/1</a></td><td>Take the geometric mean of a list of numbers.</td></tr>
@@ -211,18 +206,6 @@ presenting the actual volume of functionality present here.  We can get the cove
   0.25</pre></p>
 <p><b>Introduced in:</b> Version 504</p>
 
-<h3 class="function"><a name="abstract_function-2">abstract_function/2</a></h3>
-<div class="spec">
-<p><tt>abstract_function(Module, FName) -&gt; any()</tt></p>
-</div>
-<p><b>Introduced in:</b> version 138</p>
-
-<h3 class="function"><a name="abstract_functions-1">abstract_functions/1</a></h3>
-<div class="spec">
-<p><tt>abstract_functions(Module) -&gt; any()</tt></p>
-</div>
-<p><b>Introduced in:</b> version 138</p>
-
 <h3 class="function"><a name="alarm_set-3">alarm_set/3</a></h3>
 <div class="spec">
 <p><tt>alarm_set(Time, Lambda, Repeat) -&gt; any()</tt></p>
@@ -247,6 +230,12 @@ presenting the actual volume of functionality present here.  We can get the cove
   3.0</pre></p>
 <p><b>Introduced in:</b> Version 481</p>
 <p><b>See also:</b> <a href="#amean_vector_normal-1">amean_vector_normal/1</a>, <a href="#geometric_mean-1">geometric_mean/1</a>, <a href="#harmonic_mean-1">harmonic_mean/1</a>, <a href="#weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a>.</p>
+
+<h3 class="function"><a name="atoms-1">atoms/1</a></h3>
+<div class="spec">
+<p><tt>atoms(Module) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 533</p>
 
 <h3 class="function"><a name="bandwidth_calc-1">bandwidth_calc/1</a></h3>
 <div class="spec">
@@ -381,18 +370,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 </div>
 <p><b>Introduced in:</b> Version 487</p>
 
-<h3 class="function"><a name="entrypoints-1">entrypoints/1</a></h3>
-<div class="spec">
-<p><tt>entrypoints(Module) -&gt; any()</tt></p>
-</div>
-<p><b>Introduced in:</b> Version 530</p>
-
-<h3 class="function"><a name="entrypoints-2">entrypoints/2</a></h3>
-<div class="spec">
-<p><tt>entrypoints(Module, FName) -&gt; any()</tt></p>
-</div>
-<p><b>Introduced in:</b> Version 530</p>
-
 <h3 class="function"><a name="even_or_odd-1">even_or_odd/1</a></h3>
 <div class="spec">
 <p><tt>even_or_odd(Num::integer()) -&gt; even | odd</tt></p>
@@ -488,18 +465,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>floor(X) -&gt; any()</tt></p>
 </div>
 <p><b>Introduced in:</b> Version 511</p>
-
-<h3 class="function"><a name="function_point_count-1">function_point_count/1</a></h3>
-<div class="spec">
-<p><tt>function_point_count(Module) -&gt; any()</tt></p>
-</div>
-<p><b>Introduced in:</b> Version 525</p>
-
-<h3 class="function"><a name="function_stats-1">function_stats/1</a></h3>
-<div class="spec">
-<p><tt>function_stats(Module) -&gt; any()</tt></p>
-</div>
-<p><b>Introduced in:</b> Version 524</p>
 
 <h3 class="function"><a name="gen_docs-0">gen_docs/0</a></h3>
 <div class="spec">
@@ -781,8 +746,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 530 2011-03-21 03:29:04Z john $"},
-   {svn_revision,"$Revision: 530 $"},
+   {svn_id,"$Id: sc.erl 532 2011-03-21 03:31:51Z john $"},
+   {svn_revision,"$Revision: 532 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1135,6 +1100,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 20 2011, 23:30:24.</i></p>
+<p><i>Generated by EDoc, Mar 20 2011, 23:41:23.</i></p>
 </body>
 </html>

@@ -91,15 +91,16 @@
     nearest_to/2,
     has_function/2,
     svn_revision/1,
+    atoms/1,
 
-    entrypoints/1,
-      entrypoints/2,
+%     entrypoints/1,
+%       entrypoints/2,
 
-    abstract_function/2,
-      abstract_functions/1,
+%     abstract_function/2,
+%       abstract_functions/1,
 
-    function_stats/1,
-      function_point_count/1,
+%     function_stats/1,
+%       function_point_count/1,
 
     module_attribute/1,
       module_attribute/2,
@@ -2713,26 +2714,14 @@ svn_revision(Module) ->
 
 % todo comeback docs
 
-%% @since Version 524
+% @ since Version 524
 
-function_stats(Module) ->
-
-    [ { entrypoints,     entrypoint_count(Module)     },
-      { function_labels, function_label_count(Module) },
-      { function_points, function_point_count(Module) }
-    ].
-
-
-
-
-
-% todo comeback docs
-
-%% @since Version 525
-
-function_point_count(Module) ->
-
-    length(function_points(Module)).
+% function_stats(Module) ->
+%
+%     [ { entrypoints,     entrypoint_count(Module)     },
+%       { function_labels, function_label_count(Module) },
+%       { function_points, function_point_count(Module) }
+%     ].
 
 
 
@@ -2740,23 +2729,11 @@ function_point_count(Module) ->
 
 % todo comeback docs
 
-%% @since Version 526
+% @ since Version 525
 
-function_label_count(Module) ->
-
-    length(function_labels(Module)).
-
-
-
-
-
-% todo comeback docs
-
-%% @since version 527
-
-entrypoint_count(Module) ->
-
-    length(entrypoints(Module)).
+% function_point_count(Module) ->
+%
+%     length(function_points(Module)).
 
 
 
@@ -2764,15 +2741,11 @@ entrypoint_count(Module) ->
 
 % todo comeback docs
 
-%% @since Version 528
+% @ since Version 526
 
-function_labels(Module) ->
-
-    lists:usort(
-        [ L ||
-            {_,L,_,_} <- sc_code:abstract_functions(Module)
-        ]
-    ).
+% function_label_count(Module) ->
+%
+%     length(function_labels(Module)).
 
 
 
@@ -2780,15 +2753,11 @@ function_labels(Module) ->
 
 % todo comeback docs
 
-%% @since Version 529
+% @ since version 527
 
-function_points(Module) ->
-
-    lists:usort(
-        [ {L,A} ||
-            {_,L,A,_} <- sc_code:abstract_functions(Module)
-        ]
-    ).
+% entrypoint_count(Module) ->
+%
+%     length(entrypoints(Module)).
 
 
 
@@ -2796,27 +2765,15 @@ function_points(Module) ->
 
 % todo comeback docs
 
-%% @since Version 530
+% @ since Version 528
 
-entrypoints(Module) ->
-
-    .lists:flatten(
-        [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- sc_code:abstract_functions(Module) ]
-    ).
-
-
-
-
-
-% todo comeback docs
-
-%% @since Version 530
-
-entrypoints(Module, FName) ->
-
-    lists:flatten(
-        [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- sc_code:abstract_functions(Module), L==FName ]
-    ).
+% function_labels(Module) ->
+%
+%     lists:usort(
+%         [ L ||
+%             {_,L,_,_} <- abstract_functions(Module)
+%         ]
+%     ).
 
 
 
@@ -2824,28 +2781,15 @@ entrypoints(Module, FName) ->
 
 % todo comeback docs
 
-%% @since version 531
+% @ since Version 529
 
-abstract_functions(Module) ->
-
-    [ {Id, Name, Arity, Code} ||
-        {function, Id, Name, Arity, Code} <- sc_code:abstract(Module, stripped)
-    ].
-
-
-
-
-
-% todo comeback docs
-
-%% @since version 531
-
-abstract_function(Module, FName) ->
-
-    [ {Id, Name, Arity, Code} ||
-        {function, Id, Name, Arity, Code} <- sc_code:abstract(Module, stripped),
-        Name == FName
-    ].
+% function_points(Module) ->
+%
+%     lists:usort(
+%         [ {L,A} ||
+%             {_,L,A,_} <- abstract_functions(Module)
+%         ]
+%     ).
 
 
 
@@ -2853,10 +2797,79 @@ abstract_function(Module, FName) ->
 
 % todo comeback docs
 
-%% @since version 532
+% @ since Version 530
 
-abstract_attributes(Module) ->
+% entrypoints(Module) ->
+%
+%     lists:flatten(
+%         [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- sc_code:abstract_functions(Module) ]
+%     ).
 
-    [ {Id, Name, Value} ||
-        {attribute, Id, Name, Value} <- sc_code:abstract(Module, stripped)
-    ].
+
+
+
+
+% todo comeback docs
+
+% @ since Version 530
+
+% entrypoints(Module, FName) ->
+%
+%     lists:flatten(
+%         [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- abstract_functions(Module), L==FName ]
+%     ).
+
+
+
+
+
+% todo comeback docs
+
+% @ since version 531
+
+% abstract_functions(Module) ->
+%
+%     [ {Id, Name, Arity, Code} ||
+%         {function, Id, Name, Arity, Code} <- abstract(Module, stripped)
+%     ].
+
+
+
+
+
+% todo comeback docs
+
+% @ since version 531
+
+% abstract_function(Module, FName) ->
+%
+%     [ {Id, Name, Arity, Code} ||
+%         {function, Id, Name, Arity, Code} <- abstract(Module, stripped),
+%         Name == FName
+%     ].
+
+
+
+
+
+% todo comeback docs
+
+% @ since version 532
+
+% abstract_attributes(Module) ->
+%
+%      [ {Id, Name, Value} ||
+%         {attribute, Id, Name, Value} <- abstract(Module, stripped)
+%     ].
+
+
+
+
+
+% @since Version 533
+
+% was scutil:module_atoms/1
+
+atoms(Module) ->
+
+    module_feature(Module, atoms).
