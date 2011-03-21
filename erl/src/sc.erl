@@ -89,9 +89,11 @@
     factorize/1,
     centroid/1,
     nearest_to/2,
+    
+    by_distance_raw/2,
 
     alarm_set/3,
-    alarm_terminate/1,
+      alarm_terminate/1,
 
     is_sorted_list/1,
       is_unique_list/1,
@@ -2520,3 +2522,15 @@ nearest_to(Centers, Point) ->
 
     { C, _ } = sc_tuple:keymin(2, [ { Center, sc_distance:euclidean(Center, Point) } || Center <- Centers ]),
     C.
+
+
+
+
+
+% comeback todo docs
+
+%% @since Version 518
+
+by_distance_raw(Centers, Points) when is_list(Centers), is_list(Points) ->
+
+    [ {Key, [NV || {_NC,NV} <- Near]} || {Key, Near} <- sc_lists:keygroup(1, [ { nearest_to(Centers, Point), Point } || Point <- Points ]) ].
