@@ -83,6 +83,7 @@
     even_or_odd/1,
     absolute_difference/2,
     mod/2,
+    factorial/1,
 
     square/1,
       cube/1,
@@ -2153,3 +2154,30 @@ cube(X) ->
 
 
 
+% comeback todo documentation
+
+%% @since Version 509
+
+factorial(X) ->
+
+    factorial(X, 1).
+
+
+
+%% @private
+
+factorial(0, _Counter) ->
+
+    0;
+
+
+
+factorial(1, Counter) ->
+
+    Counter;
+
+
+
+factorial(X, Counter) when is_integer(X), X > 1 ->
+
+    factorial(X-1, Counter*X).
