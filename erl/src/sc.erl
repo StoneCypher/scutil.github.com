@@ -1164,7 +1164,7 @@ bandwidth_calc(Data) ->
 
 %% @spec bandwidth_calc(Data, Scale::bw_scale|all) -> bw_rate()|[bw_rate()]
 
-%% @doc Calculates digital line bandwidth over timescales in converted units. ```1>'''
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Calculates digital line bandwidth over timescales in converted units. ```1>'''
 %% Also knows the shorthand notations `{X,meg}', `{X,gig}' and `{X,t}' for input only in base-10 only. ```5> sc:bandwidth_calc({10,meg}, {gigabits,day}).
 %% {{gigabits,day},864.0}'''
 
@@ -1249,6 +1249,10 @@ bandwidth_calc(BitsPerSecond, {Unit, Timeframe}) when is_integer(BitsPerSecond) 
 
 
 
+% todo comeback Expose?
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 scale_i(X,X)            -> 1;
 
 scale_i(inches, feet)   -> 12;
@@ -1275,6 +1279,8 @@ scale_i(bits, exbibits) -> 1024*1024*1024*1024*1024*1024.
 
 %% @since Version 478
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 caspers_jones_estimate(FunctionPoints) when
 
     is_integer(FunctionPoints),
@@ -1293,7 +1299,7 @@ caspers_jones_estimate(FunctionPoints) when
 
 %% @spec naive_bayes_likelihood(FeatureEvident::non_negative_integer(), FeatureTotal::positive_integer(), NonFeatureEvident::non_negative_integer(), NonFeatureTotal::positive_integer()) -> Result::list()
 
-%% @doc Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
 %% by the naive Bayes likelihood method.
 
 %% @since Version 478
@@ -1323,7 +1329,7 @@ naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatu
 
 %% @spec range_scale(NumList::numeric_list()) -> number()
 
-%% @doc Get the scale of a same-sign numeric range.  Gives nonsense results for non-numeric lists, or for lists which have both positive and negative members.  For a numeric list [4,5,6,12], the scale of the range 4..12 is 3:1, which is represented as 3.0 . ```1> sc:range_scale([3, 4, 5, 6]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Get the scale of a same-sign numeric range.  Gives nonsense results for non-numeric lists, or for lists which have both positive and negative members.  For a numeric list [4,5,6,12], the scale of the range 4..12 is 3:1, which is represented as 3.0 . ```1> sc:range_scale([3, 4, 5, 6]).
 %% 2.0
 %% 2> sc:range_scale([3, 6]).
 %% 2.0
@@ -1349,7 +1355,7 @@ range_scale(Nums) when is_list(Nums) ->
 
 %% @spec zipf_position_estimate(Score::number(), Rank::positive_integer()) -> number()
 
-%% @doc Estimates the zipf baseline from a score and a rank position. ```1> sc:zipf_position_estimate(120, 3).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Estimates the zipf baseline from a score and a rank position. ```1> sc:zipf_position_estimate(120, 3).
 %% 360'''
 
 %% @since Version 480
@@ -1364,7 +1370,7 @@ zipf_position_estimate(Score, Rank) ->
 
 %% @spec zipf_estimate_list(PosNumericList::positive_numeric_list()) -> positive_numeric_list()
 
-%% @doc Estimates the zipf baseline from each number in a numeric list. ```1> sc:zipf_estimate_list([ 120, 60, 40, 30, 24, 20 ]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Estimates the zipf baseline from each number in a numeric list. ```1> sc:zipf_estimate_list([ 120, 60, 40, 30, 24, 20 ]).
 %% [120, 120, 120, 120, 120, 120]
 %%
 %% 2> sc:zipf_estimate_list([411,198,135,101,82]).
@@ -1385,7 +1391,7 @@ zipf_estimate_list(PosNumericList) ->
 
 %% @spec zipf_nearness(PosNumericList::positive_numeric_list()) -> number()
 
-%% @doc todo ```1> sc:zipf_nearness([ 120, 60, 40, 30, 24, 20 ]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> todo ```1> sc:zipf_nearness([ 120, 60, 40, 30, 24, 20 ]).
 %% [[ {strength,1.0}, {center,120.0} ],
 %%  [ {strength,1.0}, {center,120.0} ],
 %%  [ {strength,1.0}, {center,120.0} ],
@@ -1440,7 +1446,7 @@ zipf_nearness_walk_strengths([_|Rem]=ZD, Work) ->
 %% @type numericlist() = list().  All members of a numeric list must be number()s.
 %% @spec arithmetic_mean(InputList::numericlist()) -> float()
 
-%% @doc Take the arithmetic mean (often called the average) of a list of numbers. ```1> sc:arithmetic_mean([1,2,3,4,5]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Take the arithmetic mean (often called the average) of a list of numbers. ```1> sc:arithmetic_mean([1,2,3,4,5]).
 %% 3.0'''
 
 %% @see geometric_mean/1
@@ -1466,7 +1472,7 @@ arithmetic_mean(List) when is_list(List) ->
 
 %% @spec geometric_mean(InputList::numericlist()) -> float()
 
-%% @doc Take the geometric mean of a list of numbers. ```1> sc:geometric_mean([1,2,3,4,5]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Take the geometric mean of a list of numbers. ```1> sc:geometric_mean([1,2,3,4,5]).
 %% 2.6051710846973517'''
 %%
 %% <a href="http://www.wolframalpha.com/input/?i=geometric+mean+{1%2C2%2C3%2C4%2C5}">WolframAlpha Confirms</a>
@@ -1501,7 +1507,7 @@ geometric_mean(List) when is_list(List) ->
 
 %% @spec harmonic_mean(InputList::numericlist()) -> float()
 
-%% @doc Take the harmonic mean of a list of numbers. ```1> sc:harmonic_mean([1,2,3,4,5]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Take the harmonic mean of a list of numbers. ```1> sc:harmonic_mean([1,2,3,4,5]).
 %% 2.18978102189781'''
 %%
 %% <a href="http://www.wolframalpha.com/input/?i=harmonic+mean+{1%2C2%2C3%2C4%2C5}">WolframAlpha Confirms</a>
@@ -1532,7 +1538,7 @@ harmonic_mean(List) when is_list(List) ->
 
 %% @spec weighted_arithmetic_mean(InputList::weightlist()) -> float()
 
-%% @doc Take the weighted arithmetic mean of the input values. ```1> sc:weighted_arithmetic_mean([ {8,1}, {3,4}, {16,1} ]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Take the weighted arithmetic mean of the input values. ```1> sc:weighted_arithmetic_mean([ {8,1}, {3,4}, {16,1} ]).
 %% 6.0'''
 
 %% @see arithmetic_mean/1
@@ -1562,7 +1568,7 @@ weighted_arithmetic_mean( [{V,W} | Tail], Num, Denom) ->
 
 %% @spec instant_runoff_vote(ListOfVoteLists::list_of_lists()) -> any()
 
-%% @doc Performs an instant runoff vote.  http://en.wikipedia.org/wiki/Instant-runoff_voting ```1>'''
+%% @doc <span style="color:orange;font-style:italic">Untested</span>  Performs an instant runoff vote.  http://en.wikipedia.org/wiki/Instant-runoff_voting ```1>'''
 
 %% @since Version 485
 
@@ -1591,6 +1597,8 @@ instant_runoff_vote(ListOfVoteLists, Exclude) ->
 
 %% @since Version 487
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 dstat(NumericList, PopulationOrSample) ->
 
     { Min, Max } = extrema(NumericList),
@@ -1618,6 +1626,8 @@ dstat(NumericList, PopulationOrSample) ->
 
 %% @since Version 487
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 extended_dstat(NumericList, PopulationOrSample) ->
 
     { Min, Max } = extrema(NumericList),
@@ -1641,7 +1651,7 @@ extended_dstat(NumericList, PopulationOrSample) ->
 
 %% @spec median(List::numericlist()) -> number()
 
-%% @doc Takes the median (central) value of a list.  Sorts the input list, then finds and returns the middle value.  ```1> sc:median([1,2,999]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Takes the median (central) value of a list.  Sorts the input list, then finds and returns the middle value.  ```1> sc:median([1,2,999]).
 %% 2'''
 
 %% @see arithmetic_mean/1
@@ -1671,7 +1681,7 @@ median(List) when is_list(List) ->
 
 %% @spec even_or_odd(Num::integer()) -> even | odd
 
-%% @doc Documentary convenience function that returns the atoms `even' or `odd' for any integer. ```1> sc:even_or_odd(3).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Documentary convenience function that returns the atoms `even' or `odd' for any integer. ```1> sc:even_or_odd(3).
 %% odd'''
 
 %% @since Version 489
@@ -1685,7 +1695,7 @@ even_or_odd(Num) when is_integer(Num)                  -> odd.
 
 %% @spec standard_deviation(Values::numericlist(), Kind::population|sample) -> float()
 
-%% @doc Measures the standard deviation of the values in the list.  ```1> sc:standard_deviation([1,2,3,4,5],population).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Measures the standard deviation of the values in the list.  ```1> sc:standard_deviation([1,2,3,4,5],population).
 %% 1.4142135623730951
 %%
 %% 2> sc:standard_deviation([1,2,3,4,5],sample).
@@ -1719,7 +1729,7 @@ standard_deviation(Values, sample) when is_list(Values) ->
 
 %% @spec moment(List::list(), N::number()) -> float()
 
-%% @doc Takes the Nth moment of a list.  The Nth moment of a list is the arithmetic mean of the list items, each taken to the Nth power.  Fractional Ns are well defined
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Takes the Nth moment of a list.  The Nth moment of a list is the arithmetic mean of the list items, each taken to the Nth power.  Fractional Ns are well defined
 %% and have obscure uses, though most will only ever use this with integer values of N; this function is valid for both.  Not to be confused with {@link central_moment/2}.  {@section Thanks}
 %% to Kraln and Chile for straightening me out on moments and central moments.  ```1> sc:moment([1,1,1], 2).
 %% 1.0
@@ -1748,6 +1758,8 @@ moment(List, N) when is_list(List), is_number(N) ->
 
 %% @since Version 491
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 moments(List) ->
 
     moments(List, [2,3,4]).
@@ -1757,6 +1769,8 @@ moments(List) ->
 %% @equiv [ moment(List, N) || N <- Moments ]
 
 %% @since Version 491
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 moments(List, Moments) when is_list(Moments) ->
 
@@ -1770,7 +1784,7 @@ moments(List, Moments) when is_list(Moments) ->
 
 %% @spec central_moment(List::list(), N::integer()) -> float()
 
-%% @doc <span style="color:red">Buggy</span> Takes the Nth cetral moment of a list.  The Nth central moment of a list is the arithmetic mean of (the list items each minus the mean of the list, each
+%% @doc <span style="color:red">Buggy</span> <span style="color:orange;font-style:italic">Untested</span> Takes the Nth cetral moment of a list.  The Nth central moment of a list is the arithmetic mean of (the list items each minus the mean of the list, each
 %% taken to the Nth power).  In a sense, this is the "normalized" moment.  Fractional Ns are not defined.  Not to be confused with {@link moment/2}.  {@section Thanks} to Kraln and
 %% Chile for straightening me out on moments and central moments.  ```1> sc:central_moment([1,1,1], 2).
 %% 0.0
@@ -1799,6 +1813,8 @@ central_moment(List, N) when is_list(List), is_integer(N) ->
 
 %% @since Version 492
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 central_moments(List) ->
 
     central_moments(List, [2,3,4]).
@@ -1810,6 +1826,8 @@ central_moments(List) ->
 %% @equiv [ central_moment(List, N) || N <- Moments ]
 
 %% @since Version 492
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 central_moments(List, Moments) when is_list(Moments) ->
 
@@ -1823,6 +1841,8 @@ central_moments(List, Moments) when is_list(Moments) ->
 
 %% @since Version 493
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 skewness(List) ->
 
     central_moment(List, 3).
@@ -1835,7 +1855,7 @@ skewness(List) ->
 
 %% @since Version 494
 
-%% @doc <span style="color:red">Buggy</span> 
+%% @doc <span style="color:red">Buggy</span> <span style="color:orange;font-style:italic">Untested</span>
 
 %% Wrong! todo comeback
 
@@ -1857,7 +1877,7 @@ kurtosis(List) ->
 
 %% @spec histograph(List::list()) -> weightlist()
 
-%% @doc {@section Statistics} Takes a histograph count of the items in the list.  Mixed type lists are safe.  Input lists do not need to be sorted.  The histograph is shallow - that is, the histograph of `[ [1,2], [1,2], [2,2] ]' is `[ {[1,2],2}, {[2,2],1} ]', not `[ {1,2}, {2,4} ]'. ```1> sc:histograph([1,2,a,2,b,1,b,1,b,2,a,2,2,1]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Takes a histograph count of the items in the list.  Mixed type lists are safe.  Input lists do not need to be sorted.  The histograph is shallow - that is, the histograph of `[ [1,2], [1,2], [2,2] ]' is `[ {[1,2],2}, {[2,2],1} ]', not `[ {1,2}, {2,4} ]'. ```1> sc:histograph([1,2,a,2,b,1,b,1,b,2,a,2,2,1]).
 %% [{1,4},{2,5},{a,2},{b,3}]
 %%
 %% 2> sc:histograph([ sc:rand(10) || X <- lists:seq(1,100000) ]).
@@ -1906,7 +1926,7 @@ histo_count( [New|Tail], Current, Count, Work) ->
 
 %% @spec mode(List::numericlist()) -> any()
 
-%% @doc Takes the mode (most common) value(s) of a list, as a list.  If there are more than one value tied for most common, all tied will be returned.  This function is safe for mixed-type lists, and does not perform deep traversal (that is, the mode of `[ [2,2] ]' is `[2,2]', not `2'). ```sc:mode([1,2,1,3,1,4]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Takes the mode (most common) value(s) of a list, as a list.  If there are more than one value tied for most common, all tied will be returned.  This function is safe for mixed-type lists, and does not perform deep traversal (that is, the mode of `[ [2,2] ]' is `[2,2]', not `2'). ```sc:mode([1,2,1,3,1,4]).
 %% [1]
 %%
 %% 2> sc:mode([ [1,2,3], [2,3,4], [3,4,5], [2,3,4] ]).
@@ -1960,7 +1980,7 @@ mode_front( [], _Freq, Results) ->
 
 %% @spec amean_vector_normal(VX::numeric_list()) -> number()
 
-%% @doc {@section Statistics} Returns the arithmetic mean of the elements of the unit vector for the vector provided.
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Returns the arithmetic mean of the elements of the unit vector for the vector provided.
 
 %% @since Version 497
 
@@ -1974,7 +1994,7 @@ amean_vector_normal(VX) ->
 
 %% @spec gmean_vector_normal(VX::numeric_list()) -> number()
 
-%% @doc {@section Statistics} Returns the geometric mean of the elements of the unit vector for the vector provided.
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Returns the geometric mean of the elements of the unit vector for the vector provided.
 
 %% @since Version 498
 
@@ -1988,7 +2008,7 @@ gmean_vector_normal(VX) ->
 
 %% @spec hmean_vector_normal(VX::numeric_list()) -> number()
 
-%% @doc {@section Statistics} Returns the harmonic mean of the elements of the unit vector for the vector provided.
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Returns the harmonic mean of the elements of the unit vector for the vector provided.
 
 %% @since Version 499
 
@@ -2032,7 +2052,7 @@ hmean_vector_normal(VX) ->
 
 %% @spec median_absolute_deviation(List::numericlist()) -> number()
 
-%% @doc Calculate the median absolute deviation of a {@type numericlist()}. ```1> sc:median_absolute_deviation([1,1,2,2,4,6,9]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Calculate the median absolute deviation of a {@type numericlist()}. ```1> sc:median_absolute_deviation([1,1,2,2,4,6,9]).
 %% 1'''
 
 %% @since Version 501
@@ -2048,7 +2068,7 @@ median_absolute_deviation(List) when is_list(List) ->
 
 %% @spec expected_value(List::mixed_weight_list()) -> number()
 
-%% @doc {@section Probability} Returns the expected value of infinite selection from a weighted numeric list.  ```1> sc:expected_value([1,2,3,4,5,6]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Returns the expected value of infinite selection from a weighted numeric list.  ```1> sc:expected_value([1,2,3,4,5,6]).
 %% 3.50000
 %%
 %% 2> sc:expected_value([ {-1,37}, {35,1} ]).
@@ -2084,7 +2104,7 @@ expected_value( [ UnweightedItem | Remainder], Sum, Range) ->
 
 %% @spec absolute_difference(A::number(), B::number()) -> number()
 
-%% @doc Takes the absolute value of the difference between the two arguments.  Offered mostly to make dependant code clearer. ```1> sc:absolute_difference(1.25, 1).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Takes the absolute value of the difference between the two arguments.  Offered mostly to make dependant code clearer. ```1> sc:absolute_difference(1.25, 1).
 %% 0.25'''
 
 %% @since Version 504
@@ -2099,7 +2119,7 @@ absolute_difference(A,B) ->
 
 %% @spec root_mean_square(Values::numericlist()) -> float()
 
-%% @doc Calculates the root mean square of the values in the list.  ```1> sc:root_mean_square([1,2,3,4,5]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Calculates the root mean square of the values in the list.  ```1> sc:root_mean_square([1,2,3,4,5]).
 %% 3.3166247903554
 %%
 %% 2> sc:root_mean_square([2,2,2]).
@@ -2117,7 +2137,7 @@ root_mean_square(List) when is_list(List) ->
 
 %% @spec root_sum_square(VX::vector()) -> number()
 
-%% @doc Calculate the magnitude (also known as the root sum square) of a vector.
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Calculate the magnitude (also known as the root sum square) of a vector.
 
 %% @since Version 506
 
@@ -2148,7 +2168,7 @@ vector_magnitude(VX) ->
 
 %% @spec mod(Base::integer(), Range::integer()) -> integer()
 
-%% @doc {@section Math} Takes the modulus of an integer by another integer.  Luckily, erlang calls what most languages refer to as modulus by its correct name, remainder (c's `%', erlang's `rem').  Modulus is implemented incorrectly in nearly every language, because chip vendors implement remainder and the wrong name stuck.  The difference is in how the operator reacts to a negative `Base': -10 modulo 3 is 2, whereas -10 rem 3 is -1.  Remainder takes the residue of dividing the base by the lowest (nearest negative infinity) integer N adjacent the real valued divisor; modulo returns the highest, which is less CPU efficient but always provides an answer on [0..Range-1]. ```1> sc:mod(10,3).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Takes the modulus of an integer by another integer.  Luckily, erlang calls what most languages refer to as modulus by its correct name, remainder (c's `%', erlang's `rem').  Modulus is implemented incorrectly in nearly every language, because chip vendors implement remainder and the wrong name stuck.  The difference is in how the operator reacts to a negative `Base': -10 modulo 3 is 2, whereas -10 rem 3 is -1.  Remainder takes the residue of dividing the base by the lowest (nearest negative infinity) integer N adjacent the real valued divisor; modulo returns the highest, which is less CPU efficient but always provides an answer on [0..Range-1]. ```1> sc:mod(10,3).
 %% 1
 %%
 %% 2> [ sc:mod(X,4) || X <- lists:seq(-10,10) ].
@@ -2174,7 +2194,7 @@ mod(Base, Range) when is_integer(Base), is_integer(Range) ->
 
 %% @spec square(Input::number()) -> number()
 
-%% @doc Squares the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions. ```1> sc:square(2).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Squares the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions. ```1> sc:square(2).
 %% 4
 %%
 %% 2> sc:square(2.5).
@@ -2192,7 +2212,7 @@ square(X) ->
 
 %% @spec cube(Input::number()) -> number()
 
-%% @doc Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions. ```1> sc:cube(2).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions. ```1> sc:cube(2).
 %% 8
 %%
 %% 2> sc:cube(2.5).
@@ -2211,6 +2231,8 @@ cube(X) ->
 % comeback todo documentation
 
 %% @since Version 509
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 factorial(X) ->
 
@@ -2255,6 +2277,8 @@ ceil(X) ->
 
 %% @since Version 510
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 ceiling(X) ->
 
      ceiling_t(trunc(X), trunc(X)-X).
@@ -2275,6 +2299,8 @@ ceiling_t(T,_Td)             -> T.
 
 %% @since Version 511
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 floor(X) ->
 
      floor_t(trunc(X), trunc(X)-X).
@@ -2294,6 +2320,8 @@ floor_t(T,_Td)             -> T.
 % comeback todo docs
 
 %% @since Version 512
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 mersenne_prime(Which) -> mersenne_prime_worker(Which, 1).
 
@@ -2325,6 +2353,8 @@ mersenne_prime_worker(Remain, Current) ->
 
 %% since Version 513
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 factorize(N) when is_integer(N), N > 1 ->
 
     factorize(N, 2, []);
@@ -2354,7 +2384,7 @@ factorize(N, Current, Work) ->
 
 %% @spec is_unique_list(List::list()) -> true | false
 
-%% @doc Returns true if the list is unique; false otherwise.  List uniqueness is defined as whether any member of the list compares equally to any other member; deep list inspection is not performed.  Comparison is type-safe. ```2> sc:is_unique_list([1,2,3]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Returns true if the list is unique; false otherwise.  List uniqueness is defined as whether any member of the list compares equally to any other member; deep list inspection is not performed.  Comparison is type-safe. ```2> sc:is_unique_list([1,2,3]).
 %% true
 %%
 %% 2> sc:is_unique_list([1,2,3,1]).
@@ -2381,7 +2411,7 @@ is_unique_list(List) ->
 
 %% @spec is_sorted_list(List::list()) -> true | false
 
-%% @doc Returns true if the list is sorted; false otherwise.  List sortedness is typesafe, and defined equivalently to how defined by the language and `lists:sort()'. ```1> sc:is_sorted_list([1,2,3]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Returns true if the list is sorted; false otherwise.  List sortedness is typesafe, and defined equivalently to how defined by the language and `lists:sort()'. ```1> sc:is_sorted_list([1,2,3]).
 %% true
 %%
 %% 2> sc:is_sorted_list([1,2,3,1]).
@@ -2401,6 +2431,8 @@ is_sorted_list([]) ->
 
 
 
+
+
 is_sorted_list([Head|Rem]) ->
 
     is_sorted_list_worker(Rem, Head).
@@ -2415,9 +2447,13 @@ is_sorted_list_worker([], _Last) ->
 
 
 
+
+
 is_sorted_list_worker([Cur|Rem], Last) when Cur >= Last ->
 
     is_sorted_list_worker(Rem, Cur);
+
+
 
 
 
@@ -2431,6 +2467,10 @@ is_sorted_list_worker([_Cur|_Rem], _Last) ->
 
 % todo comeback docs
 
+%% @since Version 515
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 alarm_set(Time, Lambda, Repeat) ->
 
     { alarm_actor_pid, spawn( fun() -> alarm_head(Time, Lambda, Repeat, construct) end ) }.
@@ -2442,6 +2482,8 @@ alarm_set(Time, Lambda, Repeat) ->
 % todo comeback docs
 
 %% @since Version 515
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 alarm_terminate( { alarm_actor_pid, Pid } ) ->
 
@@ -2527,7 +2569,7 @@ alarm_trigger(Time, Repeat, Head) ->
 
 %% @spec centroid(InputList::coord_list()) -> coord()
 
-%% @doc Calculates the coordinate which represents the per-axis arithmetic mean of a set of points.  Convenient in list comprehensions.  To calculate the centroid of `[1,1]', `[2,3]', you gather the X coordinates `[1,2]', then use their mean `1.5'; then do the same for the Y, `[1,3]' to `2'.  The centroid would thus be `[1.5,2]'.  You may pass any number of coordinates to this function, of any axis count, but they must all be the same axis count.  The return value will be a coordinate with the same axis count.  Negative and real values are fine; imaginary math is not implemented. ```1> sc:centroid([[1]]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Calculates the coordinate which represents the per-axis arithmetic mean of a set of points.  Convenient in list comprehensions.  To calculate the centroid of `[1,1]', `[2,3]', you gather the X coordinates `[1,2]', then use their mean `1.5'; then do the same for the Y, `[1,3]' to `2'.  The centroid would thus be `[1.5,2]'.  You may pass any number of coordinates to this function, of any axis count, but they must all be the same axis count.  The return value will be a coordinate with the same axis count.  Negative and real values are fine; imaginary math is not implemented. ```1> sc:centroid([[1]]).
 %% [1.0]
 %%
 %% 2> sc:centroid([[1,1],[2,2]]).
@@ -2555,6 +2597,8 @@ centroid(CoordList) when is_list(CoordList) ->
 
 %% @since Version 517
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 nearest_to(Centers, Point) ->
 
     { C, _ } = sc_tuple:keymin(2, [ { Center, sc_distance:euclidean(Center, Point) } || Center <- Centers ]),
@@ -2568,6 +2612,8 @@ nearest_to(Centers, Point) ->
 
 %% @since Version 518
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 by_distance_raw(Centers, Points) when is_list(Centers), is_list(Points) ->
 
     [ {Key, [NV || {_NC,NV} <- Near]} || {Key, Near} <- sc_lists:keygroup(1, [ { nearest_to(Centers, Point), Point } || Point <- Points ]) ].
@@ -2577,6 +2623,8 @@ by_distance_raw(Centers, Points) when is_list(Centers), is_list(Points) ->
 
 
 %% @since Version 519
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 by_distance(Centers, Points) when is_list(Centers), is_list(Points) ->
 
@@ -2605,7 +2653,7 @@ by_distance(Centers, Points) when is_list(Centers), is_list(Points) ->
 
 %% @spec module_attribute(Module::atom()) -> AttributeList | { error, no_such_module }
 
-%% @doc Look up all attributes of a given module.  ```1> sc:get_module_attribute(scutil).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Look up all attributes of a given module.  ```1> sc:get_module_attribute(scutil).
 %% [{author,"John Haugeland <stonecypher@gmail.com>"},
 %%  {bugtracker,"http://crunchyd.com/forum/project.php?projectid=7"},
 %%  {currentsource,"http://crunchyd.com/release/scutil.zip"},
@@ -2641,7 +2689,7 @@ module_attribute(Module) ->
 
 %% @spec module_attribute(Module::atom(), Attribute::atom()) -> { value, {Attribute, Value} } | { error, no_such_attribute } | { error, no_such_module }
 
-%% @doc <span style="color:red">Buggy</span> Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  ```1> sc:module_attribute(scutil, author).
+%% @doc <span style="color:red">Buggy</span> <span style="color:orange;font-style:italic">Untested</span> Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  ```1> sc:module_attribute(scutil, author).
 %% "John Haugeland <stonecypher@gmail.com>"
 %%
 %% 2> sc:module_attribute(scutil, license).
@@ -2682,6 +2730,8 @@ module_attribute(Module,Attribute) ->
 
 %% @since Version 521
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 module_feature(Module, Feature) ->
 
     case beam_lib:chunks(Module, [Feature]) of
@@ -2700,7 +2750,7 @@ module_feature(Module, Feature) ->
 
 %% @spec has_function(Module::atom(), Function::atom()) -> boolean()
 
-%% @doc TODO
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 %% @since Version 522
 
@@ -2715,7 +2765,7 @@ has_function(Module, Function) ->
 
 %% @spec svn_revision(ModuleName::atom()) -> integer()
 
-%% @doc Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.  To use, add a module attribute to your module as follows: `-svn_revision("$+Revision$).', after removing the plus (if the plus wasn't there, the example would get corrupted when I updated the module `;)').  Then set the svn keyword "Revision" on the file, and check it in.  After that, your version is magically updated every time you check in!  `:D'  The sole argument to this function is the name of the module to be scanned, as an atom. ```1> scutil:scan_svn_revision(testerl).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.  To use, add a module attribute to your module as follows: `-svn_revision("$+Revision$).', after removing the plus (if the plus wasn't there, the example would get corrupted when I updated the module `;)').  Then set the svn keyword "Revision" on the file, and check it in.  After that, your version is magically updated every time you check in!  `:D'  The sole argument to this function is the name of the module to be scanned, as an atom. ```1> scutil:scan_svn_revision(testerl).
 %% 16'''
 
 %% @since Version 523
@@ -2889,6 +2939,8 @@ svn_revision(Module) ->
 
 % was scutil:module_atoms/1
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 atoms(Module) ->
 
     module_feature(Module, atoms).
@@ -2900,6 +2952,8 @@ atoms(Module) ->
 % todo comeback docs
 
 %% since Version 534
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 key_cluster(_Index, []) ->
 
@@ -2953,6 +3007,8 @@ key_cluster(Index, [WorkItem|Rem], Current, Work, Storage) ->
 
 % @since Version 535
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 distinct_neighbor_pairs(List) ->
 
     distinct_neighbor_pairs(List, [], make_tuples).
@@ -2964,6 +3020,8 @@ distinct_neighbor_pairs(List) ->
 % todo comeback docs
 
 % @since Version 535
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 distinct_neighbor_pairs(List, MakeType) ->
 
@@ -3015,7 +3073,9 @@ distinct_neighbor_pairs([A,B|Rem], Work, make_lists) ->
 
 % todo comeback docs
 
-% @since Version 536
+%% @since Version 536
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 all_neighbor_pairs(List) ->
 
@@ -3025,7 +3085,9 @@ all_neighbor_pairs(List) ->
 
 % todo comeback docs
 
-% @since Version 536
+%% @since Version 536
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 all_neighbor_pairs(List, WorkType) ->
 
@@ -3077,6 +3139,8 @@ all_neighbor_pairs([A,B|Rem], Work, make_tuples) ->
 
 %% @since Version 537
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 partition_by_residue(Data, Function) ->
 
     [
@@ -3099,7 +3163,7 @@ partition_by_residue(Data, Function) ->
 
 %% @since Version 538
 %%
-%% @doc Returns the last element of the initial sequence where all items pass the predicate function.  ```1> sc_lists:last_while_pos(fun erlang:is_atom/1, [a,b,c,d,2,f]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Returns the last element of the initial sequence where all items pass the predicate function.  ```1> sc_lists:last_while_pos(fun erlang:is_atom/1, [a,b,c,d,2,f]).
 %% 4
 %%
 %% 2> sc_lists:last_while_pos(fun erlang:is_atom/1, [a,b,c,d,r,f]).
@@ -3139,6 +3203,8 @@ last_while_pos(N, [Head|Tail], Pred, Last) ->
 
 %% @since Version 538
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 keygroup(Pos, List) ->
 
     keygroup(Pos, List, unsorted).
@@ -3148,6 +3214,8 @@ keygroup(Pos, List) ->
 
 
 %% @since Version 538
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 keygroup(Pos, List, unsorted) when is_list(List) ->
 
@@ -3161,6 +3229,8 @@ keygroup(Pos, List, unsorted) when is_list(List) ->
 
 
 %% @since Version 538
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 keygroup(Pos, List, sorted) when is_list(List) ->
 
@@ -3202,7 +3272,7 @@ keygroup(Pos, [Item|Rem], WorkKey, Work, Output) ->
 
 %% @since Version 539
 %%
-%% @doc ```1> sc_lists:first_pos([a,b,c,d,2,f],fun erlang:is_integer/1).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> ```1> sc_lists:first_pos([a,b,c,d,2,f],fun erlang:is_integer/1).
 %% 5
 %%
 %% 2> sc_lists:first_pos([a,b,c,d,e,f],fun erlang:is_integer/1).
@@ -3238,6 +3308,8 @@ first_pos(N, [Head|Tail], Pred, Default) ->
 
 
 %% @since Version 541 TODO
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 split_at(N, List) ->
 

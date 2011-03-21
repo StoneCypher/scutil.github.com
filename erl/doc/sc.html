@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 539 $</p>
+<p><b>Version:</b> $Revision: 541 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -77,93 +77,95 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p>A sorted keylist is a keylist in the order provided by <a href="lists.html#sort-1"><code>lists:sort/1</code></a>.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.</p>
 
 <h2><a name="index">Function Index</a></h2>
-<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#absolute_difference-2">absolute_difference/2</a></td><td>Takes the absolute value of the difference between the two arguments.</td></tr>
-<tr><td valign="top"><a href="#alarm_set-3">alarm_set/3</a></td><td></td></tr>
-<tr><td valign="top"><a href="#alarm_terminate-1">alarm_terminate/1</a></td><td></td></tr>
-<tr><td valign="top"><a href="#all_neighbor_pairs-1">all_neighbor_pairs/1</a></td><td></td></tr>
-<tr><td valign="top"><a href="#all_neighbor_pairs-2">all_neighbor_pairs/2</a></td><td></td></tr>
-<tr><td valign="top"><a href="#amean_vector_normal-1">amean_vector_normal/1</a></td><td><a href="#Statistics">Statistics</a> Returns the arithmetic mean of the elements of the unit vector for the vector provided.</td></tr>
-<tr><td valign="top"><a href="#arithmetic_mean-1">arithmetic_mean/1</a></td><td>Take the arithmetic mean (often called the average) of a list of numbers.</td></tr>
-<tr><td valign="top"><a href="#atoms-1">atoms/1</a></td><td></td></tr>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#absolute_difference-2">absolute_difference/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes the absolute value of the difference between the two arguments.</td></tr>
+<tr><td valign="top"><a href="#alarm_set-3">alarm_set/3</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#alarm_terminate-1">alarm_terminate/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#all_neighbor_pairs-1">all_neighbor_pairs/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#all_neighbor_pairs-2">all_neighbor_pairs/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#amean_vector_normal-1">amean_vector_normal/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the arithmetic mean of the elements of the unit vector for the vector provided.</td></tr>
+<tr><td valign="top"><a href="#arithmetic_mean-1">arithmetic_mean/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Take the arithmetic mean (often called the average) of a list of numbers.</td></tr>
+<tr><td valign="top"><a href="#atoms-1">atoms/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#bandwidth_calc-1">bandwidth_calc/1</a></td><td>Equivalent to <a href="#bandwidth_calc-2"><tt>bandwidth_calc(Data, all)</tt></a>.
 </td></tr>
-<tr><td valign="top"><a href="#bandwidth_calc-2">bandwidth_calc/2</a></td><td>Calculates digital line bandwidth over timescales in converted units.</td></tr>
-<tr><td valign="top"><a href="#by_distance-2">by_distance/2</a></td><td></td></tr>
-<tr><td valign="top"><a href="#by_distance_raw-2">by_distance_raw/2</a></td><td></td></tr>
-<tr><td valign="top"><a href="#caspers_jones_estimate-1">caspers_jones_estimate/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#bandwidth_calc-2">bandwidth_calc/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculates digital line bandwidth over timescales in converted units.</td></tr>
+<tr><td valign="top"><a href="#by_distance-2">by_distance/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#by_distance_raw-2">by_distance_raw/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#caspers_jones_estimate-1">caspers_jones_estimate/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#ceil-1">ceil/1</a></td><td>Equivalent to <a href="#ceiling-1"><tt>ceiling(X)</tt></a>.
 </td></tr>
-<tr><td valign="top"><a href="#ceiling-1">ceiling/1</a></td><td></td></tr>
-<tr><td valign="top"><a href="#central_moment-2">central_moment/2</a></td><td><span style="color:red">Buggy</span> Takes the Nth cetral moment of a list.</td></tr>
-<tr><td valign="top"><a href="#central_moments-1">central_moments/1</a></td><td>Equivalent to <tt>[central_moment(List, N) || N &lt;- [2, 3, 4]]</tt>.
-</td></tr>
-<tr><td valign="top"><a href="#central_moments-2">central_moments/2</a></td><td>Equivalent to <tt>[central_moment(List, N) || N &lt;- Moments]</tt>.
-</td></tr>
-<tr><td valign="top"><a href="#centroid-1">centroid/1</a></td><td>Calculates the coordinate which represents the per-axis arithmetic mean of a set of points.</td></tr>
+<tr><td valign="top"><a href="#ceiling-1">ceiling/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#central_moment-2">central_moment/2</a></td><td><span style="color:red">Buggy</span> <span style="color:orange;font-style:italic">Untested</span> Takes the Nth cetral moment of a list.</td></tr>
+<tr><td valign="top"><a href="#central_moments-1">central_moments/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#central_moments-2">central_moments/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#centroid-1">centroid/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculates the coordinate which represents the per-axis arithmetic mean of a set of points.</td></tr>
 <tr><td valign="top"><a href="#combinations-2">combinations/2</a></td><td>Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#count_x-2">count_x/2</a></td><td>Counts the number of instances of Item in List.</td></tr>
-<tr><td valign="top"><a href="#cube-1">cube/1</a></td><td>Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
-<tr><td valign="top"><a href="#distinct_neighbor_pairs-1">distinct_neighbor_pairs/1</a></td><td></td></tr>
-<tr><td valign="top"><a href="#distinct_neighbor_pairs-2">distinct_neighbor_pairs/2</a></td><td></td></tr>
-<tr><td valign="top"><a href="#dstat-2">dstat/2</a></td><td></td></tr>
-<tr><td valign="top"><a href="#even_or_odd-1">even_or_odd/1</a></td><td>Documentary convenience function that returns the atoms <code>even</code> or <code>odd</code> for any integer.</td></tr>
+<tr><td valign="top"><a href="#cube-1">cube/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
+<tr><td valign="top"><a href="#distinct_neighbor_pairs-1">distinct_neighbor_pairs/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#distinct_neighbor_pairs-2">distinct_neighbor_pairs/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#dstat-2">dstat/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#even_or_odd-1">even_or_odd/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Documentary convenience function that returns the atoms <code>even</code> or <code>odd</code> for any integer.</td></tr>
 <tr><td valign="top"><a href="#expand_labels-1">expand_labels/1</a></td><td>Expands a series of labels over lists to create a cartesian 2-ary tuple expansion.</td></tr>
-<tr><td valign="top"><a href="#expected_value-1">expected_value/1</a></td><td><a href="#Probability">Probability</a> Returns the expected value of infinite selection from a weighted numeric list.</td></tr>
-<tr><td valign="top"><a href="#extended_dstat-2">extended_dstat/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#expected_value-1">expected_value/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the expected value of infinite selection from a weighted numeric list.</td></tr>
+<tr><td valign="top"><a href="#extended_dstat-2">extended_dstat/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#extrema-1">extrema/1</a></td><td>Returns the lowest and highest values in a list of one or more member in the form <code>{Lo,Hi}</code>.</td></tr>
-<tr><td valign="top"><a href="#factorial-1">factorial/1</a></td><td></td></tr>
-<tr><td valign="top"><a href="#factorize-1">factorize/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#factorial-1">factorial/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#factorize-1">factorize/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#first_pos-2">first_pos/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> <pre>  1&gt; sc_lists:first_pos([a,b,c,d,2,f],fun erlang:is_integer/1).
+  5
+ 
+  2&gt; sc_lists:first_pos([a,b,c,d,e,f],fun erlang:is_integer/1).
+  false</pre></td></tr>
+<tr><td valign="top"><a href="#first_pos-3">first_pos/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#flag_sets-1">flag_sets/1</a></td><td>Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
-<tr><td valign="top"><a href="#floor-1">floor/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#floor-1">floor/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#gen_docs-0">gen_docs/0</a></td><td>Generates library documentation using the paths appropriate for the author's PC; you almost certainly want <a href="#gen_docs-2"><code>gen_docs/2</code></a> instead.</td></tr>
 <tr><td valign="top"><a href="#gen_docs-2">gen_docs/2</a></td><td>Generates library documentation from and to the specified paths <code>WhereIsSrc</code> and <code>WhereToPutDocs</code> respectively.</td></tr>
-<tr><td valign="top"><a href="#geometric_mean-1">geometric_mean/1</a></td><td>Take the geometric mean of a list of numbers.</td></tr>
-<tr><td valign="top"><a href="#gmean_vector_normal-1">gmean_vector_normal/1</a></td><td><a href="#Statistics">Statistics</a> Returns the geometric mean of the elements of the unit vector for the vector provided.</td></tr>
-<tr><td valign="top"><a href="#harmonic_mean-1">harmonic_mean/1</a></td><td>Take the harmonic mean of a list of numbers.</td></tr>
-<tr><td valign="top"><a href="#has_function-2">has_function/2</a></td><td>TODO.</td></tr>
-<tr><td valign="top"><a href="#histograph-1">histograph/1</a></td><td><a href="#Statistics">Statistics</a> Takes a histograph count of the items in the list.</td></tr>
-<tr><td valign="top"><a href="#hmean_vector_normal-1">hmean_vector_normal/1</a></td><td><a href="#Statistics">Statistics</a> Returns the harmonic mean of the elements of the unit vector for the vector provided.</td></tr>
+<tr><td valign="top"><a href="#geometric_mean-1">geometric_mean/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Take the geometric mean of a list of numbers.</td></tr>
+<tr><td valign="top"><a href="#gmean_vector_normal-1">gmean_vector_normal/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the geometric mean of the elements of the unit vector for the vector provided.</td></tr>
+<tr><td valign="top"><a href="#harmonic_mean-1">harmonic_mean/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Take the harmonic mean of a list of numbers.</td></tr>
+<tr><td valign="top"><a href="#has_function-2">has_function/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#histograph-1">histograph/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes a histograph count of the items in the list.</td></tr>
+<tr><td valign="top"><a href="#hmean_vector_normal-1">hmean_vector_normal/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the harmonic mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#index_of_first-2">index_of_first/2</a></td><td>Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.</td></tr>
-<tr><td valign="top"><a href="#instant_runoff_vote-1">instant_runoff_vote/1</a></td><td>Performs an instant runoff vote.</td></tr>
-<tr><td valign="top"><a href="#is_sorted_list-1">is_sorted_list/1</a></td><td>Returns true if the list is sorted; false otherwise.</td></tr>
-<tr><td valign="top"><a href="#is_unique_list-1">is_unique_list/1</a></td><td>Returns true if the list is unique; false otherwise.</td></tr>
-<tr><td valign="top"><a href="#key_cluster-2">key_cluster/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#instant_runoff_vote-1">instant_runoff_vote/1</a></td><td><span style="color:orange;font-style:italic">Untested</span>  Performs an instant runoff vote.</td></tr>
+<tr><td valign="top"><a href="#is_sorted_list-1">is_sorted_list/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns true if the list is sorted; false otherwise.</td></tr>
+<tr><td valign="top"><a href="#is_unique_list-1">is_unique_list/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns true if the list is unique; false otherwise.</td></tr>
+<tr><td valign="top"><a href="#key_cluster-2">key_cluster/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#key_duplicate-1">key_duplicate/1</a></td><td>Iterates a list of <code>{Count,Term}</code>, producing a list of <code>[Term,Term,...]</code>.</td></tr>
-<tr><td valign="top"><a href="#keygroup-2">keygroup/2</a></td><td></td></tr>
-<tr><td valign="top"><a href="#keygroup-3">keygroup/3</a></td><td></td></tr>
-<tr><td valign="top"><a href="#kurtosis-1">kurtosis/1</a></td><td><span style="color:red">Buggy</span></td></tr>
-<tr><td valign="top"><a href="#last_while_pos-2">last_while_pos/2</a></td><td>Returns the last element of the initial sequence where all items pass the predicate function.</td></tr>
+<tr><td valign="top"><a href="#keygroup-2">keygroup/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#keygroup-3">keygroup/3</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#kurtosis-1">kurtosis/1</a></td><td><span style="color:red">Buggy</span> <span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#last_while_pos-2">last_while_pos/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the last element of the initial sequence where all items pass the predicate function.</td></tr>
 <tr><td valign="top"><a href="#last_while_pos-3">last_while_pos/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#list_intersection-2">list_intersection/2</a></td><td>Equivalent to <a href="#list_intersection-3"><tt>list_intersection(List1, List2, unsorted)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#list_intersection-3">list_intersection/3</a></td><td>Efficiently computes the intersection of two lists.</td></tr>
 <tr><td valign="top"><a href="#list_product-1">list_product/1</a></td><td>Takes the product of all numbers in the list.</td></tr>
-<tr><td valign="top"><a href="#median-1">median/1</a></td><td>Takes the median (central) value of a list.</td></tr>
-<tr><td valign="top"><a href="#median_absolute_deviation-1">median_absolute_deviation/1</a></td><td>Calculate the median absolute deviation of a <code><a href="#type-numericlist">numericlist()</a></code>.</td></tr>
+<tr><td valign="top"><a href="#median-1">median/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes the median (central) value of a list.</td></tr>
+<tr><td valign="top"><a href="#median_absolute_deviation-1">median_absolute_deviation/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculate the median absolute deviation of a <code><a href="#type-numericlist">numericlist()</a></code>.</td></tr>
 <tr><td valign="top"><a href="#member_sets-1">member_sets/1</a></td><td>Equivalent to <a href="#member_sets-2"><tt>member_sets(Memberships, no_absence)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#member_sets-2">member_sets/2</a></td><td>For a list of memberships, return every possible combination of one representative member from each list.</td></tr>
-<tr><td valign="top"><a href="#mersenne_prime-1">mersenne_prime/1</a></td><td></td></tr>
-<tr><td valign="top"><a href="#mod-2">mod/2</a></td><td><a href="#Math">Math</a> Takes the modulus of an integer by another integer.</td></tr>
-<tr><td valign="top"><a href="#mode-1">mode/1</a></td><td>Takes the mode (most common) value(s) of a list, as a list.</td></tr>
-<tr><td valign="top"><a href="#module_attribute-1">module_attribute/1</a></td><td>Look up all attributes of a given module.</td></tr>
-<tr><td valign="top"><a href="#module_attribute-2">module_attribute/2</a></td><td><span style="color:red">Buggy</span> Look up an Erlang module attribute value by title.</td></tr>
-<tr><td valign="top"><a href="#module_feature-2">module_feature/2</a></td><td></td></tr>
-<tr><td valign="top"><a href="#moment-2">moment/2</a></td><td>Takes the Nth moment of a list.</td></tr>
-<tr><td valign="top"><a href="#moments-1">moments/1</a></td><td>Equivalent to <tt>[moment(List, N) || N &lt;- [2, 3, 4]]</tt>.
-</td></tr>
-<tr><td valign="top"><a href="#moments-2">moments/2</a></td><td>Equivalent to <tt>[moment(List, N) || N &lt;- Moments]</tt>.
-</td></tr>
-<tr><td valign="top"><a href="#naive_bayes_likelihood-4">naive_bayes_likelihood/4</a></td><td>Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
+<tr><td valign="top"><a href="#mersenne_prime-1">mersenne_prime/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#mod-2">mod/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes the modulus of an integer by another integer.</td></tr>
+<tr><td valign="top"><a href="#mode-1">mode/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes the mode (most common) value(s) of a list, as a list.</td></tr>
+<tr><td valign="top"><a href="#module_attribute-1">module_attribute/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Look up all attributes of a given module.</td></tr>
+<tr><td valign="top"><a href="#module_attribute-2">module_attribute/2</a></td><td><span style="color:red">Buggy</span> <span style="color:orange;font-style:italic">Untested</span> Look up an Erlang module attribute value by title.</td></tr>
+<tr><td valign="top"><a href="#module_feature-2">module_feature/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#moment-2">moment/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes the Nth moment of a list.</td></tr>
+<tr><td valign="top"><a href="#moments-1">moments/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#moments-2">moments/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#naive_bayes_likelihood-4">naive_bayes_likelihood/4</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
   by the naive Bayes likelihood method.</td></tr>
-<tr><td valign="top"><a href="#nearest_to-2">nearest_to/2</a></td><td></td></tr>
-<tr><td valign="top"><a href="#partition_by_residue-2">partition_by_residue/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#nearest_to-2">nearest_to/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#partition_by_residue-2">partition_by_residue/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#permute-1">permute/1</a></td><td>Equivalent to <a href="#permute-2"><tt>permute(List, length(List))</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#permute-2">permute/2</a></td><td>Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast <a href="#combinations-2"><code>combinations/2</code></a>.</td></tr>
-<tr><td valign="top"><a href="#range_scale-1">range_scale/1</a></td><td>Get the scale of a same-sign numeric range.</td></tr>
-<tr><td valign="top"><a href="#root_mean_square-1">root_mean_square/1</a></td><td>Calculates the root mean square of the values in the list.</td></tr>
-<tr><td valign="top"><a href="#root_sum_square-1">root_sum_square/1</a></td><td>Calculate the magnitude (also known as the root sum square) of a vector.</td></tr>
+<tr><td valign="top"><a href="#range_scale-1">range_scale/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Get the scale of a same-sign numeric range.</td></tr>
+<tr><td valign="top"><a href="#root_mean_square-1">root_mean_square/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculates the root mean square of the values in the list.</td></tr>
+<tr><td valign="top"><a href="#root_sum_square-1">root_sum_square/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculate the magnitude (also known as the root sum square) of a vector.</td></tr>
 <tr><td valign="top"><a href="#rotate_list-2">rotate_list/2</a></td><td>Rotates the front <code>Distance</code> elements of a list to the back, in order.</td></tr>
 <tr><td valign="top"><a href="#rotate_to_first-2">rotate_to_first/2</a></td><td>Rotates the list to the first instance of Item.</td></tr>
 <tr><td valign="top"><a href="#rotate_to_last-2">rotate_to_last/2</a></td><td>Rotates the list so that the first instance of Item becomes the last element in the list.</td></tr>
@@ -171,19 +173,19 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#shared_keys-1">shared_keys/1</a></td><td>Create sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples, where key K appears in both A and B.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-2">shared_keys/2</a></td><td>Equivalent to <a href="#shared_keys-1"><code>shared_keys/1</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-3">shared_keys/3</a></td><td>Equivalent to <a href="#shared_keys-2"><code>shared_keys/2</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
-<tr><td valign="top"><a href="#skewness-1">skewness/1</a></td><td>Equivalent to <a href="#central_moment-2"><tt>central_moment(List, 3)</tt></a>.
-</td></tr>
-<tr><td valign="top"><a href="#square-1">square/1</a></td><td>Squares the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
-<tr><td valign="top"><a href="#svn_revision-1">svn_revision/1</a></td><td>Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.</td></tr>
+<tr><td valign="top"><a href="#skewness-1">skewness/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#split_at-2">split_at/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#square-1">square/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Squares the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
+<tr><td valign="top"><a href="#svn_revision-1">svn_revision/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.</td></tr>
 <tr><td valign="top"><a href="#test-0">test/0</a></td><td>Runs the test suite in terse form.</td></tr>
 <tr><td valign="top"><a href="#test-1">test/1</a></td><td>Runs the test suite in verbose form.</td></tr>
 <tr><td valign="top"><a href="#vector_magnitude-1">vector_magnitude/1</a></td><td>Equivalent to <a href="#root_sum_square-1"><tt>root_sum_square(VX)</tt></a>.
 </td></tr>
-<tr><td valign="top"><a href="#weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a></td><td>Take the weighted arithmetic mean of the input values.</td></tr>
+<tr><td valign="top"><a href="#weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Take the weighted arithmetic mean of the input values.</td></tr>
 <tr><td valign="top"><a href="#zip_n-1">zip_n/1</a></td><td>Equivalent to <a href="#zip_n-2"><tt>zip_n(Ls, to_tuple)</tt></a>.
 </td></tr>
-<tr><td valign="top"><a href="#zipf_estimate_list-1">zipf_estimate_list/1</a></td><td>Estimates the zipf baseline from each number in a numeric list.</td></tr>
-<tr><td valign="top"><a href="#zipf_nearness-1">zipf_nearness/1</a></td><td>todo <pre>  1&gt; sc:zipf_nearness([ 120, 60, 40, 30, 24, 20 ]).
+<tr><td valign="top"><a href="#zipf_estimate_list-1">zipf_estimate_list/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Estimates the zipf baseline from each number in a numeric list.</td></tr>
+<tr><td valign="top"><a href="#zipf_nearness-1">zipf_nearness/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> todo <pre>  1&gt; sc:zipf_nearness([ 120, 60, 40, 30, 24, 20 ]).
   [[ {strength,1.0}, {center,120.0} ],
    [ {strength,1.0}, {center,120.0} ],
    [ {strength,1.0}, {center,120.0} ],
@@ -204,7 +206,7 @@ presenting the actual volume of functionality present here.  We can get the cove
    [{strength, 0.9364864864864865}, {center,717.6666666666666}],
    [{strength, 0.972972972972973},  {center,730.0}],
    [{strength, 1.0},                {center,740.0}]]</pre></td></tr>
-<tr><td valign="top"><a href="#zipf_position_estimate-2">zipf_position_estimate/2</a></td><td>Estimates the zipf baseline from a score and a rank position.</td></tr>
+<tr><td valign="top"><a href="#zipf_position_estimate-2">zipf_position_estimate/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Estimates the zipf baseline from a score and a rank position.</td></tr>
 </table>
 
 <h2><a name="functions">Function Details</a></h2>
@@ -212,43 +214,44 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="absolute_difference-2">absolute_difference/2</a></h3>
 <div class="spec">
 <p><tt>absolute_difference(A::number(), B::number()) -&gt; number()</tt></p>
-</div><p>Takes the absolute value of the difference between the two arguments.  Offered mostly to make dependant code clearer. <pre>  1&gt; sc:absolute_difference(1.25, 1).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Takes the absolute value of the difference between the two arguments.  Offered mostly to make dependant code clearer. <pre>  1&gt; sc:absolute_difference(1.25, 1).
   0.25</pre></p>
 <p><b>Introduced in:</b> Version 504</p>
 
 <h3 class="function"><a name="alarm_set-3">alarm_set/3</a></h3>
 <div class="spec">
 <p><tt>alarm_set(Time, Lambda, Repeat) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 515</p>
 
 <h3 class="function"><a name="alarm_terminate-1">alarm_terminate/1</a></h3>
 <div class="spec">
 <p><tt>alarm_terminate(X1) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 515</p>
 
 <h3 class="function"><a name="all_neighbor_pairs-1">all_neighbor_pairs/1</a></h3>
 <div class="spec">
 <p><tt>all_neighbor_pairs(List) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 536</p>
 
 <h3 class="function"><a name="all_neighbor_pairs-2">all_neighbor_pairs/2</a></h3>
 <div class="spec">
 <p><tt>all_neighbor_pairs(List, WorkType) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 536</p>
 
 <h3 class="function"><a name="amean_vector_normal-1">amean_vector_normal/1</a></h3>
 <div class="spec">
 <p><tt>amean_vector_normal(VX::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt></p>
-</div><p><a href="#Statistics">Statistics</a> Returns the arithmetic mean of the elements of the unit vector for the vector provided.</p>
+</div><p><span style="color:orange;font-style:italic">Untested</span> Returns the arithmetic mean of the elements of the unit vector for the vector provided.</p>
 <p><b>Introduced in:</b> Version 497</p>
 
 <h3 class="function"><a name="arithmetic_mean-1">arithmetic_mean/1</a></h3>
 <div class="spec">
 <p><tt>arithmetic_mean(InputList::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt></p>
-</div><p>Take the arithmetic mean (often called the average) of a list of numbers. <pre>  1&gt; sc:arithmetic_mean([1,2,3,4,5]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Take the arithmetic mean (often called the average) of a list of numbers. <pre>  1&gt; sc:arithmetic_mean([1,2,3,4,5]).
   3.0</pre></p>
 <p><b>Introduced in:</b> Version 481</p>
 <p><b>See also:</b> <a href="#amean_vector_normal-1">amean_vector_normal/1</a>, <a href="#geometric_mean-1">geometric_mean/1</a>, <a href="#harmonic_mean-1">harmonic_mean/1</a>, <a href="#weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a>.</p>
@@ -256,7 +259,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="atoms-1">atoms/1</a></h3>
 <div class="spec">
 <p><tt>atoms(Module) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 533</p>
 
 <h3 class="function"><a name="bandwidth_calc-1">bandwidth_calc/1</a></h3>
@@ -269,7 +272,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="bandwidth_calc-2">bandwidth_calc/2</a></h3>
 <div class="spec">
 <p><tt>bandwidth_calc(BitsPerSecond::Data, Scale::bw_scale | all) -&gt; <a href="#type-bw_rate">bw_rate()</a> | [<a href="#type-bw_rate">bw_rate()</a>]</tt></p>
-</div><p>Calculates digital line bandwidth over timescales in converted units. <pre>  1&gt;</pre>
+</div><p><span style="color:orange;font-style:italic">Untested</span> Calculates digital line bandwidth over timescales in converted units. <pre>  1&gt;</pre>
   Also knows the shorthand notations <code>{X,meg}</code>, <code>{X,gig}</code> and <code>{X,t}</code> for input only in base-10 only. <pre>  5&gt; sc:bandwidth_calc({10,meg}, {gigabits,day}).
   {{gigabits,day},864.0}</pre></p>
 <p><b>Introduced in:</b> Version 478</p>
@@ -277,19 +280,19 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="by_distance-2">by_distance/2</a></h3>
 <div class="spec">
 <p><tt>by_distance(Centers, Points) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 519</p>
 
 <h3 class="function"><a name="by_distance_raw-2">by_distance_raw/2</a></h3>
 <div class="spec">
 <p><tt>by_distance_raw(Centers, Points) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 518</p>
 
 <h3 class="function"><a name="caspers_jones_estimate-1">caspers_jones_estimate/1</a></h3>
 <div class="spec">
 <p><tt>caspers_jones_estimate(FunctionPoints) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 478</p>
 
 <h3 class="function"><a name="ceil-1">ceil/1</a></h3>
@@ -302,13 +305,13 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="ceiling-1">ceiling/1</a></h3>
 <div class="spec">
 <p><tt>ceiling(X) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 510</p>
 
 <h3 class="function"><a name="central_moment-2">central_moment/2</a></h3>
 <div class="spec">
 <p><tt>central_moment(List::list(), N::integer()) -&gt; float()</tt></p>
-</div><p><span style="color:red">Buggy</span> Takes the Nth cetral moment of a list.  The Nth central moment of a list is the arithmetic mean of (the list items each minus the mean of the list, each
+</div><p><span style="color:red">Buggy</span> <span style="color:orange;font-style:italic">Untested</span> Takes the Nth cetral moment of a list.  The Nth central moment of a list is the arithmetic mean of (the list items each minus the mean of the list, each
   taken to the Nth power).  In a sense, this is the "normalized" moment.  Fractional Ns are not defined.  Not to be confused with <a href="#moment-2"><code>moment/2</code></a>.  <a href="#Thanks">Thanks</a> to Kraln and
   Chile for straightening me out on moments and central moments.  <pre>  1&gt; sc:central_moment([1,1,1], 2).
   0.0
@@ -327,20 +330,20 @@ presenting the actual volume of functionality present here.  We can get the cove
 <div class="spec">
 <p><tt>central_moments(List) -&gt; any()</tt></p>
 </div><p>Equivalent to <tt>[central_moment(List, N) || N &lt;- [2, 3, 4]]</tt>.</p>
-
+<p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 492</p>
 
 <h3 class="function"><a name="central_moments-2">central_moments/2</a></h3>
 <div class="spec">
 <p><tt>central_moments(List, Moments) -&gt; any()</tt></p>
 </div><p>Equivalent to <tt>[central_moment(List, N) || N &lt;- Moments]</tt>.</p>
-
+<p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 492</p>
 
 <h3 class="function"><a name="centroid-1">centroid/1</a></h3>
 <div class="spec">
 <p><tt>centroid(InputList::<a href="#type-coord_list">coord_list()</a>) -&gt; <a href="#type-coord">coord()</a></tt></p>
-</div><p>Calculates the coordinate which represents the per-axis arithmetic mean of a set of points.  Convenient in list comprehensions.  To calculate the centroid of <code>[1,1]</code>, <code>[2,3]</code>, you gather the X coordinates <code>[1,2]</code>, then use their mean <code>1.5</code>; then do the same for the Y, <code>[1,3]</code> to <code>2</code>.  The centroid would thus be <code>[1.5,2]</code>.  You may pass any number of coordinates to this function, of any axis count, but they must all be the same axis count.  The return value will be a coordinate with the same axis count.  Negative and real values are fine; imaginary math is not implemented. <pre>  1&gt; sc:centroid([[1]]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Calculates the coordinate which represents the per-axis arithmetic mean of a set of points.  Convenient in list comprehensions.  To calculate the centroid of <code>[1,1]</code>, <code>[2,3]</code>, you gather the X coordinates <code>[1,2]</code>, then use their mean <code>1.5</code>; then do the same for the Y, <code>[1,3]</code> to <code>2</code>.  The centroid would thus be <code>[1.5,2]</code>.  You may pass any number of coordinates to this function, of any axis count, but they must all be the same axis count.  The return value will be a coordinate with the same axis count.  Negative and real values are fine; imaginary math is not implemented. <pre>  1&gt; sc:centroid([[1]]).
   [1.0]
  
   2&gt; sc:centroid([[1,1],[2,2]]).
@@ -379,7 +382,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="cube-1">cube/1</a></h3>
 <div class="spec">
 <p><tt>cube(Input::number()) -&gt; number()</tt></p>
-</div><p>Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions. <pre>  1&gt; sc:cube(2).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions. <pre>  1&gt; sc:cube(2).
   8
  
   2&gt; sc:cube(2.5).
@@ -389,25 +392,25 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="distinct_neighbor_pairs-1">distinct_neighbor_pairs/1</a></h3>
 <div class="spec">
 <p><tt>distinct_neighbor_pairs(List) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 535</p>
 
 <h3 class="function"><a name="distinct_neighbor_pairs-2">distinct_neighbor_pairs/2</a></h3>
 <div class="spec">
 <p><tt>distinct_neighbor_pairs(List, MakeType) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 535</p>
 
 <h3 class="function"><a name="dstat-2">dstat/2</a></h3>
 <div class="spec">
 <p><tt>dstat(NumericList, PopulationOrSample) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 487</p>
 
 <h3 class="function"><a name="even_or_odd-1">even_or_odd/1</a></h3>
 <div class="spec">
 <p><tt>even_or_odd(Num::integer()) -&gt; even | odd</tt></p>
-</div><p>Documentary convenience function that returns the atoms <code>even</code> or <code>odd</code> for any integer. <pre>  1&gt; sc:even_or_odd(3).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Documentary convenience function that returns the atoms <code>even</code> or <code>odd</code> for any integer. <pre>  1&gt; sc:even_or_odd(3).
   odd</pre></p>
 <p><b>Introduced in:</b> Version 489</p>
 
@@ -429,7 +432,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="expected_value-1">expected_value/1</a></h3>
 <div class="spec">
 <p><tt>expected_value(List::<a href="#type-mixed_weight_list">mixed_weight_list()</a>) -&gt; number()</tt></p>
-</div><p><a href="#Probability">Probability</a> Returns the expected value of infinite selection from a weighted numeric list.  <pre>  1&gt; sc:expected_value([1,2,3,4,5,6]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Returns the expected value of infinite selection from a weighted numeric list.  <pre>  1&gt; sc:expected_value([1,2,3,4,5,6]).
   3.50000
  
   2&gt; sc:expected_value([ {-1,37}, {35,1} ]).
@@ -439,7 +442,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="extended_dstat-2">extended_dstat/2</a></h3>
 <div class="spec">
 <p><tt>extended_dstat(NumericList, PopulationOrSample) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 487</p>
 
 <h3 class="function"><a name="extrema-1">extrema/1</a></h3>
@@ -455,12 +458,28 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="factorial-1">factorial/1</a></h3>
 <div class="spec">
 <p><tt>factorial(X) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 509</p>
 
 <h3 class="function"><a name="factorize-1">factorize/1</a></h3>
 <div class="spec">
 <p><tt>factorize(N) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+
+<h3 class="function"><a name="first_pos-2">first_pos/2</a></h3>
+<div class="spec">
+<p><tt>first_pos(List, Predicate) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span> <pre>  1&gt; sc_lists:first_pos([a,b,c,d,2,f],fun erlang:is_integer/1).
+  5
+ 
+  2&gt; sc_lists:first_pos([a,b,c,d,e,f],fun erlang:is_integer/1).
+  false</pre></p>
+<p><b>Introduced in:</b> Version 539
+ </p>
+
+<h3 class="function"><a name="first_pos-3">first_pos/3</a></h3>
+<div class="spec">
+<p><tt>first_pos(List, Predicate, Default) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="flag_sets-1">flag_sets/1</a></h3>
@@ -497,7 +516,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="floor-1">floor/1</a></h3>
 <div class="spec">
 <p><tt>floor(X) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 511</p>
 
 <h3 class="function"><a name="gen_docs-0">gen_docs/0</a></h3>
@@ -520,7 +539,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="geometric_mean-1">geometric_mean/1</a></h3>
 <div class="spec">
 <p><tt>geometric_mean(InputList::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt></p>
-</div><p>Take the geometric mean of a list of numbers. <pre>  1&gt; sc:geometric_mean([1,2,3,4,5]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Take the geometric mean of a list of numbers. <pre>  1&gt; sc:geometric_mean([1,2,3,4,5]).
   2.6051710846973517</pre>
  
   <p><a href="http://www.wolframalpha.com/input/?i=geometric+mean+{1%2C2%2C3%2C4%2C5}">WolframAlpha Confirms</a></p>
@@ -536,13 +555,13 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="gmean_vector_normal-1">gmean_vector_normal/1</a></h3>
 <div class="spec">
 <p><tt>gmean_vector_normal(VX::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt></p>
-</div><p><a href="#Statistics">Statistics</a> Returns the geometric mean of the elements of the unit vector for the vector provided.</p>
+</div><p><span style="color:orange;font-style:italic">Untested</span> Returns the geometric mean of the elements of the unit vector for the vector provided.</p>
 <p><b>Introduced in:</b> Version 498</p>
 
 <h3 class="function"><a name="harmonic_mean-1">harmonic_mean/1</a></h3>
 <div class="spec">
 <p><tt>harmonic_mean(InputList::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt></p>
-</div><p>Take the harmonic mean of a list of numbers. <pre>  1&gt; sc:harmonic_mean([1,2,3,4,5]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Take the harmonic mean of a list of numbers. <pre>  1&gt; sc:harmonic_mean([1,2,3,4,5]).
   2.18978102189781</pre>
  
   <p><a href="http://www.wolframalpha.com/input/?i=harmonic+mean+{1%2C2%2C3%2C4%2C5}">WolframAlpha Confirms</a></p>
@@ -556,13 +575,13 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="has_function-2">has_function/2</a></h3>
 <div class="spec">
 <p><tt>has_function(Module::atom(), Function::atom()) -&gt; <a href="#type-boolean">boolean()</a></tt></p>
-</div><p>TODO</p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 522</p>
 
 <h3 class="function"><a name="histograph-1">histograph/1</a></h3>
 <div class="spec">
 <p><tt>histograph(List::list()) -&gt; <a href="#type-weightlist">weightlist()</a></tt></p>
-</div><p><a href="#Statistics">Statistics</a> Takes a histograph count of the items in the list.  Mixed type lists are safe.  Input lists do not need to be sorted.  The histograph is shallow - that is, the histograph of <code>[ [1,2], [1,2], [2,2] ]</code> is <code>[ {[1,2],2}, {[2,2],1} ]</code>, not <code>[ {1,2}, {2,4} ]</code>. <pre>  1&gt; sc:histograph([1,2,a,2,b,1,b,1,b,2,a,2,2,1]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Takes a histograph count of the items in the list.  Mixed type lists are safe.  Input lists do not need to be sorted.  The histograph is shallow - that is, the histograph of <code>[ [1,2], [1,2], [2,2] ]</code> is <code>[ {[1,2],2}, {[2,2],1} ]</code>, not <code>[ {1,2}, {2,4} ]</code>. <pre>  1&gt; sc:histograph([1,2,a,2,b,1,b,1,b,2,a,2,2,1]).
   [{1,4},{2,5},{a,2},{b,3}]
  
   2&gt; sc:histograph([ sc:rand(10) || X &lt;- lists:seq(1,100000) ]).
@@ -572,7 +591,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="hmean_vector_normal-1">hmean_vector_normal/1</a></h3>
 <div class="spec">
 <p><tt>hmean_vector_normal(VX::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt></p>
-</div><p><a href="#Statistics">Statistics</a> Returns the harmonic mean of the elements of the unit vector for the vector provided.</p>
+</div><p><span style="color:orange;font-style:italic">Untested</span> Returns the harmonic mean of the elements of the unit vector for the vector provided.</p>
 <p><b>Introduced in:</b> Version 499</p>
 
 <h3 class="function"><a name="index_of_first-2">index_of_first/2</a></h3>
@@ -588,13 +607,13 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="instant_runoff_vote-1">instant_runoff_vote/1</a></h3>
 <div class="spec">
 <p><tt>instant_runoff_vote(ListOfVoteLists::<a href="#type-list_of_lists">list_of_lists()</a>) -&gt; any()</tt></p>
-</div><p>Performs an instant runoff vote.  http://en.wikipedia.org/wiki/Instant-runoff_voting <pre>  1&gt;</pre></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span>  Performs an instant runoff vote.  http://en.wikipedia.org/wiki/Instant-runoff_voting <pre>  1&gt;</pre></p>
 <p><b>Introduced in:</b> Version 485</p>
 
 <h3 class="function"><a name="is_sorted_list-1">is_sorted_list/1</a></h3>
 <div class="spec">
 <p><tt>is_sorted_list(List::list()) -&gt; true | false</tt></p>
-</div><p>Returns true if the list is sorted; false otherwise.  List sortedness is typesafe, and defined equivalently to how defined by the language and <code>lists:sort()</code>. <pre>  1&gt; sc:is_sorted_list([1,2,3]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Returns true if the list is sorted; false otherwise.  List sortedness is typesafe, and defined equivalently to how defined by the language and <code>lists:sort()</code>. <pre>  1&gt; sc:is_sorted_list([1,2,3]).
   true
  
   2&gt; sc:is_sorted_list([1,2,3,1]).
@@ -610,7 +629,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="is_unique_list-1">is_unique_list/1</a></h3>
 <div class="spec">
 <p><tt>is_unique_list(List::list()) -&gt; true | false</tt></p>
-</div><p>Returns true if the list is unique; false otherwise.  List uniqueness is defined as whether any member of the list compares equally to any other member; deep list inspection is not performed.  Comparison is type-safe. <pre>  2&gt; sc:is_unique_list([1,2,3]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Returns true if the list is unique; false otherwise.  List uniqueness is defined as whether any member of the list compares equally to any other member; deep list inspection is not performed.  Comparison is type-safe. <pre>  2&gt; sc:is_unique_list([1,2,3]).
   true
  
   2&gt; sc:is_unique_list([1,2,3,1]).
@@ -629,7 +648,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="key_cluster-2">key_cluster/2</a></h3>
 <div class="spec">
 <p><tt>key_cluster(Index, List) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 
 <h3 class="function"><a name="key_duplicate-1">key_duplicate/1</a></h3>
 <div class="spec">
@@ -644,26 +663,26 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="keygroup-2">keygroup/2</a></h3>
 <div class="spec">
 <p><tt>keygroup(Pos, List) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 538</p>
 
 <h3 class="function"><a name="keygroup-3">keygroup/3</a></h3>
 <div class="spec">
 <p><tt>keygroup(Pos, List, X3) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 538</p>
 
 <h3 class="function"><a name="kurtosis-1">kurtosis/1</a></h3>
 <div class="spec">
 <p><tt>kurtosis(List) -&gt; any()</tt></p>
 </div><p>Equivalent to <a href="#central_moment-2"><tt>central_moment(List, 4)</tt></a>.</p>
-<p><span style="color:red">Buggy</span></p>
+<p><span style="color:red">Buggy</span> <span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 494</p>
 
 <h3 class="function"><a name="last_while_pos-2">last_while_pos/2</a></h3>
 <div class="spec">
 <p><tt>last_while_pos(Predicate, List) -&gt; any()</tt></p>
-</div><p>Returns the last element of the initial sequence where all items pass the predicate function.  <pre>  1&gt; sc_lists:last_while_pos(fun erlang:is_atom/1, [a,b,c,d,2,f]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Returns the last element of the initial sequence where all items pass the predicate function.  <pre>  1&gt; sc_lists:last_while_pos(fun erlang:is_atom/1, [a,b,c,d,2,f]).
   4
  
   2&gt; sc_lists:last_while_pos(fun erlang:is_atom/1, [a,b,c,d,r,f]).
@@ -705,7 +724,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="median-1">median/1</a></h3>
 <div class="spec">
 <p><tt>median(List::<a href="#type-numericlist">numericlist()</a>) -&gt; number()</tt></p>
-</div><p>Takes the median (central) value of a list.  Sorts the input list, then finds and returns the middle value.  <pre>  1&gt; sc:median([1,2,999]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Takes the median (central) value of a list.  Sorts the input list, then finds and returns the middle value.  <pre>  1&gt; sc:median([1,2,999]).
   2</pre></p>
 <p><b>Introduced in:</b> Version 488</p>
 <p><b>See also:</b> <a href="#arithmetic_mean-1">arithmetic_mean/1</a>, <a href="#mode-1">mode/1</a>.</p>
@@ -713,7 +732,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="median_absolute_deviation-1">median_absolute_deviation/1</a></h3>
 <div class="spec">
 <p><tt>median_absolute_deviation(List::<a href="#type-numericlist">numericlist()</a>) -&gt; number()</tt></p>
-</div><p>Calculate the median absolute deviation of a <code><a href="#type-numericlist">numericlist()</a></code>. <pre>  1&gt; sc:median_absolute_deviation([1,1,2,2,4,6,9]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Calculate the median absolute deviation of a <code><a href="#type-numericlist">numericlist()</a></code>. <pre>  1&gt; sc:median_absolute_deviation([1,1,2,2,4,6,9]).
   1</pre></p>
 <p><b>Introduced in:</b> Version 501</p>
 
@@ -775,13 +794,13 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="mersenne_prime-1">mersenne_prime/1</a></h3>
 <div class="spec">
 <p><tt>mersenne_prime(Which) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 512</p>
 
 <h3 class="function"><a name="mod-2">mod/2</a></h3>
 <div class="spec">
 <p><tt>mod(Base::integer(), Range::integer()) -&gt; integer()</tt></p>
-</div><p><a href="#Math">Math</a> Takes the modulus of an integer by another integer.  Luckily, erlang calls what most languages refer to as modulus by its correct name, remainder (c's <code>%</code>, erlang's <code>rem</code>).  Modulus is implemented incorrectly in nearly every language, because chip vendors implement remainder and the wrong name stuck.  The difference is in how the operator reacts to a negative <code>Base</code>: -10 modulo 3 is 2, whereas -10 rem 3 is -1.  Remainder takes the residue of dividing the base by the lowest (nearest negative infinity) integer N adjacent the real valued divisor; modulo returns the highest, which is less CPU efficient but always provides an answer on [0..Range-1]. <pre>  1&gt; sc:mod(10,3).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Takes the modulus of an integer by another integer.  Luckily, erlang calls what most languages refer to as modulus by its correct name, remainder (c's <code>%</code>, erlang's <code>rem</code>).  Modulus is implemented incorrectly in nearly every language, because chip vendors implement remainder and the wrong name stuck.  The difference is in how the operator reacts to a negative <code>Base</code>: -10 modulo 3 is 2, whereas -10 rem 3 is -1.  Remainder takes the residue of dividing the base by the lowest (nearest negative infinity) integer N adjacent the real valued divisor; modulo returns the highest, which is less CPU efficient but always provides an answer on [0..Range-1]. <pre>  1&gt; sc:mod(10,3).
   1
  
   2&gt; [ sc:mod(X,4) || X &lt;- lists:seq(-10,10) ].
@@ -792,7 +811,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="mode-1">mode/1</a></h3>
 <div class="spec">
 <p><tt>mode(List::<a href="#type-numericlist">numericlist()</a>) -&gt; any()</tt></p>
-</div><p>Takes the mode (most common) value(s) of a list, as a list.  If there are more than one value tied for most common, all tied will be returned.  This function is safe for mixed-type lists, and does not perform deep traversal (that is, the mode of <code>[ [2,2] ]</code> is <code>[2,2]</code>, not <code>2</code>). <pre>  sc:mode([1,2,1,3,1,4]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Takes the mode (most common) value(s) of a list, as a list.  If there are more than one value tied for most common, all tied will be returned.  This function is safe for mixed-type lists, and does not perform deep traversal (that is, the mode of <code>[ [2,2] ]</code> is <code>[2,2]</code>, not <code>2</code>). <pre>  sc:mode([1,2,1,3,1,4]).
   [1]
  
   2&gt; sc:mode([ [1,2,3], [2,3,4], [3,4,5], [2,3,4] ]).
@@ -806,7 +825,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="module_attribute-1">module_attribute/1</a></h3>
 <div class="spec">
 <p><tt>module_attribute(Module::atom()) -&gt; AttributeList | {error, no_such_module}</tt></p>
-</div><p>Look up all attributes of a given module.  <pre>  1&gt; sc:get_module_attribute(scutil).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Look up all attributes of a given module.  <pre>  1&gt; sc:get_module_attribute(scutil).
   [{author,"John Haugeland &lt;stonecypher@gmail.com&gt;"},
    {bugtracker,"http://crunchyd.com/forum/project.php?projectid=7"},
    {currentsource,"http://crunchyd.com/release/scutil.zip"},
@@ -816,8 +835,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 539 2011-03-21 12:15:55Z john $"},
-   {svn_revision,"$Revision: 539 $"},
+   {svn_id,"$Id: sc.erl 541 2011-03-21 12:19:18Z john $"},
+   {svn_revision,"$Revision: 541 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -826,7 +845,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="module_attribute-2">module_attribute/2</a></h3>
 <div class="spec">
 <p><tt>module_attribute(Module::atom(), Attribute::atom()) -&gt; {value, {Attribute, Value}} | {error, no_such_attribute} | {error, no_such_module}</tt></p>
-</div><p><span style="color:red">Buggy</span> Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  <pre>  1&gt; sc:module_attribute(scutil, author).
+</div><p><span style="color:red">Buggy</span> <span style="color:orange;font-style:italic">Untested</span> Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  <pre>  1&gt; sc:module_attribute(scutil, author).
   "John Haugeland &lt;stonecypher@gmail.com&gt;"
  
   2&gt; sc:module_attribute(scutil, license).
@@ -836,13 +855,13 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="module_feature-2">module_feature/2</a></h3>
 <div class="spec">
 <p><tt>module_feature(Module, Feature) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 521</p>
 
 <h3 class="function"><a name="moment-2">moment/2</a></h3>
 <div class="spec">
 <p><tt>moment(List::list(), N::number()) -&gt; float()</tt></p>
-</div><p>Takes the Nth moment of a list.  The Nth moment of a list is the arithmetic mean of the list items, each taken to the Nth power.  Fractional Ns are well defined
+</div><p><span style="color:orange;font-style:italic">Untested</span> Takes the Nth moment of a list.  The Nth moment of a list is the arithmetic mean of the list items, each taken to the Nth power.  Fractional Ns are well defined
   and have obscure uses, though most will only ever use this with integer values of N; this function is valid for both.  Not to be confused with <a href="#central_moment-2"><code>central_moment/2</code></a>.  <a href="#Thanks">Thanks</a>
   to Kraln and Chile for straightening me out on moments and central moments.  <pre>  1&gt; sc:moment([1,1,1], 2).
   1.0
@@ -864,33 +883,33 @@ presenting the actual volume of functionality present here.  We can get the cove
 <div class="spec">
 <p><tt>moments(List) -&gt; any()</tt></p>
 </div><p>Equivalent to <tt>[moment(List, N) || N &lt;- [2, 3, 4]]</tt>.</p>
-
+<p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 491</p>
 
 <h3 class="function"><a name="moments-2">moments/2</a></h3>
 <div class="spec">
 <p><tt>moments(List, Moments) -&gt; any()</tt></p>
 </div><p>Equivalent to <tt>[moment(List, N) || N &lt;- Moments]</tt>.</p>
-
+<p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 491</p>
 
 <h3 class="function"><a name="naive_bayes_likelihood-4">naive_bayes_likelihood/4</a></h3>
 <div class="spec">
 <p><tt>naive_bayes_likelihood(FeatureEvident::<a href="#type-non_negative_integer">non_negative_integer()</a>, FeatureTotal::<a href="#type-positive_integer">positive_integer()</a>, NonFeatureEvident::<a href="#type-non_negative_integer">non_negative_integer()</a>, NonFeatureTotal::<a href="#type-positive_integer">positive_integer()</a>) -&gt; Result::list()</tt></p>
-</div><p>Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
+</div><p><span style="color:orange;font-style:italic">Untested</span> Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
   by the naive Bayes likelihood method.</p>
 <p><b>Introduced in:</b> Version 478</p>
 
 <h3 class="function"><a name="nearest_to-2">nearest_to/2</a></h3>
 <div class="spec">
 <p><tt>nearest_to(Centers, Point) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 517</p>
 
 <h3 class="function"><a name="partition_by_residue-2">partition_by_residue/2</a></h3>
 <div class="spec">
 <p><tt>partition_by_residue(Data, Function) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 537</p>
 
 <h3 class="function"><a name="permute-1">permute/1</a></h3>
@@ -912,7 +931,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="range_scale-1">range_scale/1</a></h3>
 <div class="spec">
 <p><tt>range_scale(NumList::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt></p>
-</div><p>Get the scale of a same-sign numeric range.  Gives nonsense results for non-numeric lists, or for lists which have both positive and negative members.  For a numeric list [4,5,6,12], the scale of the range 4..12 is 3:1, which is represented as 3.0 . <pre>  1&gt; sc:range_scale([3, 4, 5, 6]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Get the scale of a same-sign numeric range.  Gives nonsense results for non-numeric lists, or for lists which have both positive and negative members.  For a numeric list [4,5,6,12], the scale of the range 4..12 is 3:1, which is represented as 3.0 . <pre>  1&gt; sc:range_scale([3, 4, 5, 6]).
   2.0
   2&gt; sc:range_scale([3, 6]).
   2.0
@@ -929,7 +948,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="root_mean_square-1">root_mean_square/1</a></h3>
 <div class="spec">
 <p><tt>root_mean_square(Values::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt></p>
-</div><p>Calculates the root mean square of the values in the list.  <pre>  1&gt; sc:root_mean_square([1,2,3,4,5]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Calculates the root mean square of the values in the list.  <pre>  1&gt; sc:root_mean_square([1,2,3,4,5]).
   3.3166247903554
  
   2&gt; sc:root_mean_square([2,2,2]).
@@ -939,7 +958,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="root_sum_square-1">root_sum_square/1</a></h3>
 <div class="spec">
 <p><tt>root_sum_square(VX::<a href="#type-vector">vector()</a>) -&gt; number()</tt></p>
-</div><p>Calculate the magnitude (also known as the root sum square) of a vector.</p>
+</div><p><span style="color:orange;font-style:italic">Untested</span> Calculate the magnitude (also known as the root sum square) of a vector.</p>
 <p><b>Introduced in:</b> Version 506</p>
 
 <h3 class="function"><a name="rotate_list-2">rotate_list/2</a></h3>
@@ -1035,13 +1054,19 @@ presenting the actual volume of functionality present here.  We can get the cove
 <div class="spec">
 <p><tt>skewness(List) -&gt; any()</tt></p>
 </div><p>Equivalent to <a href="#central_moment-2"><tt>central_moment(List, 3)</tt></a>.</p>
-
+<p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 493</p>
+
+<h3 class="function"><a name="split_at-2">split_at/2</a></h3>
+<div class="spec">
+<p><tt>split_at(N, List) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 541 TODO</p>
 
 <h3 class="function"><a name="square-1">square/1</a></h3>
 <div class="spec">
 <p><tt>square(Input::number()) -&gt; number()</tt></p>
-</div><p>Squares the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions. <pre>  1&gt; sc:square(2).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Squares the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions. <pre>  1&gt; sc:square(2).
   4
  
   2&gt; sc:square(2.5).
@@ -1051,7 +1076,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="svn_revision-1">svn_revision/1</a></h3>
 <div class="spec">
 <p><tt>svn_revision(ModuleName::atom()) -&gt; integer()</tt></p>
-</div><p>Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.  To use, add a module attribute to your module as follows: <code>-svn_revision("$+Revision$).</code>, after removing the plus (if the plus wasn't there, the example would get corrupted when I updated the module <code>;)</code>).  Then set the svn keyword "Revision" on the file, and check it in.  After that, your version is magically updated every time you check in!  <code>:D</code>  The sole argument to this function is the name of the module to be scanned, as an atom. <pre>  1&gt; scutil:scan_svn_revision(testerl).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.  To use, add a module attribute to your module as follows: <code>-svn_revision("$+Revision$).</code>, after removing the plus (if the plus wasn't there, the example would get corrupted when I updated the module <code>;)</code>).  Then set the svn keyword "Revision" on the file, and check it in.  After that, your version is magically updated every time you check in!  <code>:D</code>  The sole argument to this function is the name of the module to be scanned, as an atom. <pre>  1&gt; scutil:scan_svn_revision(testerl).
   16</pre></p>
 <p><b>Introduced in:</b> Version 523</p>
 
@@ -1117,7 +1142,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a></h3>
 <div class="spec">
 <p><tt>weighted_arithmetic_mean(InputList::<a href="#type-weightlist">weightlist()</a>) -&gt; float()</tt></p>
-</div><p>Take the weighted arithmetic mean of the input values. <pre>  1&gt; sc:weighted_arithmetic_mean([ {8,1}, {3,4}, {16,1} ]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Take the weighted arithmetic mean of the input values. <pre>  1&gt; sc:weighted_arithmetic_mean([ {8,1}, {3,4}, {16,1} ]).
   6.0</pre></p>
 <p><b>Introduced in:</b> Version 484</p>
 <p><b>See also:</b> <a href="#amean_vector_normal-1">amean_vector_normal/1</a>, <a href="#arithmetic_mean-1">arithmetic_mean/1</a>.</p>
@@ -1131,7 +1156,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="zipf_estimate_list-1">zipf_estimate_list/1</a></h3>
 <div class="spec">
 <p><tt>zipf_estimate_list(PosNumericList::<a href="#type-positive_numeric_list">positive_numeric_list()</a>) -&gt; <a href="#type-positive_numeric_list">positive_numeric_list()</a></tt></p>
-</div><p>Estimates the zipf baseline from each number in a numeric list. <pre>  1&gt; sc:zipf_estimate_list([ 120, 60, 40, 30, 24, 20 ]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Estimates the zipf baseline from each number in a numeric list. <pre>  1&gt; sc:zipf_estimate_list([ 120, 60, 40, 30, 24, 20 ]).
   [120, 120, 120, 120, 120, 120]
  
   2&gt; sc:zipf_estimate_list([411,198,135,101,82]).
@@ -1144,7 +1169,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="zipf_nearness-1">zipf_nearness/1</a></h3>
 <div class="spec">
 <p><tt>zipf_nearness(PosNumericList::<a href="#type-positive_numeric_list">positive_numeric_list()</a>) -&gt; number()</tt></p>
-</div><p>todo <pre>  1&gt; sc:zipf_nearness([ 120, 60, 40, 30, 24, 20 ]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> todo <pre>  1&gt; sc:zipf_nearness([ 120, 60, 40, 30, 24, 20 ]).
   [[ {strength,1.0}, {center,120.0} ],
    [ {strength,1.0}, {center,120.0} ],
    [ {strength,1.0}, {center,120.0} ],
@@ -1170,12 +1195,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="zipf_position_estimate-2">zipf_position_estimate/2</a></h3>
 <div class="spec">
 <p><tt>zipf_position_estimate(Score::number(), Rank::<a href="#type-positive_integer">positive_integer()</a>) -&gt; number()</tt></p>
-</div><p>Estimates the zipf baseline from a score and a rank position. <pre>  1&gt; sc:zipf_position_estimate(120, 3).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Estimates the zipf baseline from a score and a rank position. <pre>  1&gt; sc:zipf_position_estimate(120, 3).
   360</pre></p>
 <p><b>Introduced in:</b> Version 480</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 21 2011, 08:17:31.</i></p>
+<p><i>Generated by EDoc, Mar 21 2011, 18:02:01.</i></p>
 </body>
 </html>

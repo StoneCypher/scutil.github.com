@@ -505,7 +505,7 @@ intersect_walk( [], _L2, Work ) ->
 intersect_walk( _L1, [], Work) -> 
 
     Work;
-    
+
 
 
 intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head == L2Head -> 
@@ -763,7 +763,7 @@ both_lists_next_item([], _, Work) ->
 
     lists:reverse(Work);
     
-    
+
 
 %% @private
 
@@ -1159,37 +1159,3 @@ keygroup(Pos, [Item|Rem], WorkKey, Work, Output) ->
             keygroup(Pos, Rem, NewKey,  [Item],       [{WorkKey,Work}]++Output)
 
     end.
-
-
-
-
-
-%% @since Version 346 TODO
-
-split_at(N, List) ->
-
-    split_at(N, N, List, [], []).
-
-
-
-
-
-split_at(_N, _BlockN, [], Current, Work) ->
-
-    lists:reverse([lists:reverse(Current)] ++ Work);
-
-
-
-
-
-split_at(N, 0, Workload, Current, Work) ->
-
-    split_at(N, N, Workload, [], [lists:reverse(Current)] ++ Work);
-
-
-
-
-
-split_at(N, BN, [Item|Rem], Current, Work) ->
-
-    split_at(N, BN-1, Rem, [Item]++Current, Work).
