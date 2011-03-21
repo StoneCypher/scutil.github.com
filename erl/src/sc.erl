@@ -92,6 +92,10 @@
       moments/1,
       moments/2,
 
+    root_mean_square/1,
+      root_sum_square/1,
+      vector_magnitude/1,
+
     central_moment/2,
       central_moments/1,
       central_moments/2,
@@ -2046,3 +2050,34 @@ absolute_difference(A,B) ->
 root_mean_square(List) when is_list(List) ->
 
     math:sqrt(arithmetic_mean([ Val*Val || Val <- List ])).
+
+
+
+
+
+%% @spec root_sum_square(VX::vector()) -> number()
+
+%% @doc Calculate the magnitude (also known as the root sum square) of a vector.
+
+%% @since Version 506
+
+root_sum_square(VX) when is_list(VX) ->
+
+    math:sqrt(lists:sum([ X*X || X <- VX ]));
+
+
+
+root_sum_square(VX) when is_tuple(VX) ->
+
+    root_sum_square(tuple_to_list(VX)).
+
+
+
+
+%% @equiv root_sum_square(VX)
+
+%% @since Version 506
+
+vector_magnitude(VX) ->
+
+    root_sum_square(VX).
