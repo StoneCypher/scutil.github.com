@@ -73,7 +73,6 @@
     index_of_first/2,
     count_x/2,
     zip_n/1,
-    expand_labels/1,
     combinations/2,
     flag_sets/1,
     list_product/1,
@@ -95,8 +94,10 @@
     key_cluster/2,
     split_at/2,
     is_postfix/2,
-
     walk_unique_pairings/2,
+
+    expand_label/1,
+      expand_labels/1,
 
     differences/1,
       first_difference/1,
@@ -3642,3 +3643,8 @@ walk_unique_pairings( A, [Rh|Rr], F) ->
 
     F(A,Rh),
     walk_unique_pairings(A, Rr, F).
+
+
+
+
+
