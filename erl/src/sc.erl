@@ -2735,3 +2735,13 @@ function_point_count(Module) ->
 function_label_count(Module) ->
 
     length(function_labels(Module)).
+
+
+
+
+
+%% @since version 527
+
+entrypoint_count(Module) ->
+
+    length(entrypoints(Module)).
