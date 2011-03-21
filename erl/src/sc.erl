@@ -85,6 +85,7 @@
     mod/2,
     factorial/1,
     mersenne_prime/1,
+    factorize/1,
 
     floor/1,
       ceil/1,
@@ -2242,6 +2243,8 @@ floor_t(T,_Td)             -> T.
 
 
 
+% comeback todo docs
+
 %% @since Version 512
 
 mersenne_prime(Which) -> mersenne_prime_worker(Which, 1).
@@ -2265,3 +2268,34 @@ mersenne_prime_worker(Remain, Current) when Remain > 30 ->
 mersenne_prime_worker(Remain, Current) ->
 
     mersenne_prime_worker(Remain-1, Current*2).
+
+
+
+
+
+% comeback todo docs
+
+%% since Version 513
+
+factorize(N) when is_integer(N), N > 1 ->
+
+    factorize(N, 2, []);
+
+factorize(1) -> [1];
+factorize(0) -> [].
+
+
+
+
+
+factorize(N, Current, Work) ->
+
+    case Current > math:sqrt(N) of
+
+        true  -> lists:reverse([N] ++ Work);
+        false ->
+            case N rem Current of
+                0 -> factorize(N div Current, Current,   [Current] ++ Work);
+                _ -> factorize(N,             Current+1, Work)
+            end
+    end.
