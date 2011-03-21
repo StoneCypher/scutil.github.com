@@ -95,6 +95,8 @@
       central_moments/1,
       central_moments/2,
 
+    histograph/1,
+
     skewness/1,
       kurtosis/1,
 
@@ -193,7 +195,7 @@ test() ->
 
 
 %% @spec test(verbose) -> ok|error
-%% @doc Runs the test suite in verbose form.  Also responds to [verbose] to be more familiar to eunit devs. ```1> sc:test(verbose).
+%% @doc Runs the test suite in verbose form.  Also responds to [verbose] to be more familiar to eunit devs.  An (ancient) example of output: ```1> sc:test(verbose).
 %% ======================== EUnit ========================
 %% module 'sc'
 %%   module 'sc_tests'
@@ -1028,13 +1030,13 @@ list_product([Head|Tail], Counter) ->
 
 %% @spec sanitize_tokens(InputList::list(), Allowed::sanitizer()) -> list()
 
-%% @doc Remove unacceptable elements from an input list, as defined by another list or a filter function.  Common reasons for sanitization include reducing arbitrary or bulk data to key format (such as using an original filename and new size to generate a new filename or database key) and removing malformed items from a list before processing. ```1> scutil:sanitize_tokens("ae0z4nb'wc-04bn ze0e 0;4ci ;e0o5rn;", "ace").
+%% @doc Remove unacceptable elements from an input list, as defined by another list or a filter function.  Common reasons for sanitization include reducing arbitrary or bulk data to key format (such as using an original filename and new size to generate a new filename or database key) and removing malformed items from a list before processing. ```1> sc:sanitize_tokens("ae0z4nb'wc-04bn ze0e 0;4ci ;e0o5rn;", "ace").
 %% "aeceece"
 %%
 %% 2> Classifier = fun(apple) -> true; (banana) -> true; (cherry) -> true; (date) -> true; (elderberry) -> true; (_) -> false end.
 %% #Fun<erl_eval.6.13229925>
 %%
-%% 3> scutil:sanitize_tokens([apple, boat, cherry, dog, elderberry], Classifier).
+%% 3> sc:sanitize_tokens([apple, boat, cherry, dog, elderberry], Classifier).
 %% [apple,cherry,elderberry]
 %%
 %% 4> Vowels = fun($a)->true; ($e)->true; ($i)->true; ($o)->true; ($u)->true; ($A)->true; ($E)->true; ($I)->true; ($O)->true; ($U)->true; (_)->false end.
@@ -1390,8 +1392,16 @@ arithmetic_mean(List) when is_list(List) ->
 
 %% @spec geometric_mean(InputList::numericlist()) -> float()
 
-%% @doc Take the geometric mean of a list of numbers. ```1> scutil:geometric_mean([1,2,3,4,5]).
-%% 2.6051710846973517''' The naive approach ```geometric_mean(List) -> math:pow(scutil:list_product(List), 1/length(List)).''' is not used because it accumulates error very quickly, and is as such unsuited to huge lists.
+%% @doc Take the geometric mean of a list of numbers. ```1> sc:geometric_mean([1,2,3,4,5]).
+%% 2.6051710846973517'''
+%%
+%% <a href="http://www.wolframalpha.com/input/?i=geometric+mean+{1%2C2%2C3%2C4%2C5}">WolframAlpha Confirms</a>
+%%
+%% The geometric mean is not defined for lists including 0.
+%%
+%% The naive approach `geometric_mean(List) -> math:pow(sc:list_product(List), 1/length(List))' is not used because it accumulates error very quickly, and is as such unsuited to huge lists.  This is the same as the expected function nth-root(prod, 1/n), but calculated differently for machine reasons.'''
+%%
+%% Thanks to Forest (anonymous by choice) for help resolving 0-correctness.
 
 %% @see arithmetic_mean/1
 %% @see harmonic_mean/1
@@ -1405,9 +1415,11 @@ geometric_mean([]) ->
 
 
 
+
+
 geometric_mean(List) when is_list(List) ->
 
-    math:exp(scutil:arithmetic_mean([math:log(X)||X<-List])).
+    math:exp(arithmetic_mean([ math:log(X) || X<-List ])).
 
 
 
@@ -1415,8 +1427,14 @@ geometric_mean(List) when is_list(List) ->
 
 %% @spec harmonic_mean(InputList::numericlist()) -> float()
 
-%% @doc Take the harmonic mean of a list of numbers. ```1> scutil:harmonic_mean([1,2,3,4,5]).
+%% @doc Take the harmonic mean of a list of numbers. ```1> sc:harmonic_mean([1,2,3,4,5]).
 %% 2.18978102189781'''
+%%
+%% <a href="http://www.wolframalpha.com/input/?i=harmonic+mean+{1%2C2%2C3%2C4%2C5}">WolframAlpha Confirms</a>
+%%
+%% The harmonic mean is not defined for lists including 0.
+%%
+%% Thanks to Forest (anonymous by choice) for help resolving 0-correctness.
 
 %% @see arithmetic_mean/1
 %% @see geometric_mean/1
@@ -1440,7 +1458,7 @@ harmonic_mean(List) when is_list(List) ->
 
 %% @spec weighted_arithmetic_mean(InputList::weightlist()) -> float()
 
-%% @doc Take the weighted arithmetic mean of the input values. ```1> scutil:weighted_arithmetic_mean([ {8,1}, {3,4}, {16,1} ]).
+%% @doc Take the weighted arithmetic mean of the input values. ```1> sc:weighted_arithmetic_mean([ {8,1}, {3,4}, {16,1} ]).
 %% 6.0'''
 
 %% @see arithmetic_mean/1
@@ -1761,7 +1779,7 @@ kurtosis(List) ->
 %% @doc {@section Statistics} Takes a histograph count of the items in the list.  Mixed type lists are safe.  Input lists do not need to be sorted.  The histograph is shallow - that is, the histograph of `[ [1,2], [1,2], [2,2] ]' is `[ {[1,2],2}, {[2,2],1} ]', not `[ {1,2}, {2,4} ]'. ```1> sc:histograph([1,2,a,2,b,1,b,1,b,2,a,2,2,1]).
 %% [{1,4},{2,5},{a,2},{b,3}]
 %%
-%% 2> sc:histograph([ scutil:rand(10) || X <- lists:seq(1,100000) ]).
+%% 2> sc:histograph([ sc:rand(10) || X <- lists:seq(1,100000) ]).
 %% [{0,10044}, {1,9892}, {2,10009}, {3,10016}, {4,10050}, {5,10113}, {6,9990}, {7,9994}, {8,10004}, {9,9888}]'''
 
 %% @since Version 496
@@ -1800,3 +1818,71 @@ histo_count( [Current|Tail], Current, Count, Work) ->
 histo_count( [New|Tail], Current, Count, Work) ->
 
     histo_count(Tail, New, 1, [{Current,Count}] ++ Work).
+
+
+
+
+
+%% @spec mode(List::numericlist()) -> any()
+
+%% @doc Takes the mode (most common) value(s) of a list, as a list.  If there are more than one value tied for most common, all tied will be returned.  This function is safe for mixed-type lists, and does not perform deep traversal (that is, the mode of `[ [2,2] ]' is `[2,2]', not `2'). ```sc:mode([1,2,1,3,1,4]).
+%% [1]
+%%
+%% 2> sc:mode([ [1,2,3], [2,3,4], [3,4,5], [2,3,4] ]).
+%% [[2,3,4]]
+%%
+%% 3> sc:mode([ a,b, 1, a,b, 2, a,b, 3 ]).
+%% [a,b]'''
+
+%% @see arithmetic_mean/1
+%% @see median/1
+
+%% @since Version 497
+
+mode([]) ->
+
+    [];
+
+
+
+mode(List) when is_list(List) ->
+
+    mode_front(lists:reverse(lists:keysort(2, histograph(List)))).
+
+
+
+mode_front([{Item,Freq}|Tail]) ->
+
+    mode_front(Tail, Freq, [Item]).
+
+
+
+mode_front([ {Item, Freq} | Tail],  Freq,   Results) ->
+
+    mode_front(Tail, Freq, [Item]++Results);
+
+
+
+mode_front([ {_Item,_Freq} |_Tail], _Better, Results) ->
+
+    Results;
+
+
+
+mode_front( [], _Freq, Results) ->
+
+    Results.
+
+
+
+
+
+%% @spec amean_vector_normal(VX::numeric_list()) -> number()
+
+%% @doc {@section Statistics} Returns the arithmetic mean of the elements of the unit vector for the vector provided.
+
+%% @since Version 497
+
+amean_vector_normal(VX) ->
+
+    arithmetic_mean(sc_vector:normalize(VX)).
