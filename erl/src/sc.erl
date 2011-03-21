@@ -82,6 +82,7 @@
     range_scale/1,
     even_or_odd/1,
     absolute_difference/2,
+    mod/2,
 
     instant_runoff_vote/1,
 
@@ -2081,3 +2082,29 @@ root_sum_square(VX) when is_tuple(VX) ->
 vector_magnitude(VX) ->
 
     root_sum_square(VX).
+
+
+
+
+
+%% @spec mod(Base::integer(), Range::integer()) -> integer()
+
+%% @doc {@section Math} Takes the modulus of an integer by another integer.  Luckily, erlang calls what most languages refer to as modulus by its correct name, remainder (c's `%', erlang's `rem').  Modulus is implemented incorrectly in nearly every language, because chip vendors implement remainder and the wrong name stuck.  The difference is in how the operator reacts to a negative `Base': -10 modulo 3 is 2, whereas -10 rem 3 is -1.  Remainder takes the residue of dividing the base by the lowest (nearest negative infinity) integer N adjacent the real valued divisor; modulo returns the highest, which is less CPU efficient but always provides an answer on [0..Range-1]. ```1> sc:mod(10,3).
+%% 1
+%%
+%% 2> [ sc:mod(X,4) || X <- lists:seq(-10,10) ].
+%% [2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2]'''
+%%
+%% @since Version 507
+
+mod(Base, Range) when is_integer(Base), is_integer(Range) ->
+
+    case Base rem Range of
+
+        X when X < 0 ->
+            X + Range;
+
+        Z ->
+            Z
+
+    end.

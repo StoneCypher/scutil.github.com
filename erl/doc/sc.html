@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 501 $</p>
+<p><b>Version:</b> $Revision: 506 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -76,7 +76,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p>A sorted keylist is a keylist in the order provided by <a href="lists.html#sort-1"><code>lists:sort/1</code></a>.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.</p>
 
 <h2><a name="index">Function Index</a></h2>
-<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#amean_vector_normal-1">amean_vector_normal/1</a></td><td><a href="#Statistics">Statistics</a> Returns the arithmetic mean of the elements of the unit vector for the vector provided.</td></tr>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#absolute_difference-2">absolute_difference/2</a></td><td>Takes the absolute value of the difference between the two arguments.</td></tr>
+<tr><td valign="top"><a href="#amean_vector_normal-1">amean_vector_normal/1</a></td><td><a href="#Statistics">Statistics</a> Returns the arithmetic mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#arithmetic_mean-1">arithmetic_mean/1</a></td><td>Take the arithmetic mean (often called the average) of a list of numbers.</td></tr>
 <tr><td valign="top"><a href="#bandwidth_calc-1">bandwidth_calc/1</a></td><td>Equivalent to <a href="#bandwidth_calc-2"><tt>bandwidth_calc(Data, all)</tt></a>.
 </td></tr>
@@ -117,6 +118,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#member_sets-1">member_sets/1</a></td><td>Equivalent to <a href="#member_sets-2"><tt>member_sets(Memberships, no_absence)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#member_sets-2">member_sets/2</a></td><td>For a list of memberships, return every possible combination of one representative member from each list.</td></tr>
+<tr><td valign="top"><a href="#mod-2">mod/2</a></td><td><a href="#Math">Math</a> Takes the modulus of an integer by another integer.</td></tr>
 <tr><td valign="top"><a href="#mode-1">mode/1</a></td><td>Takes the mode (most common) value(s) of a list, as a list.</td></tr>
 <tr><td valign="top"><a href="#moment-2">moment/2</a></td><td>Takes the Nth moment of a list.</td></tr>
 <tr><td valign="top"><a href="#moments-1">moments/1</a></td><td>Equivalent to <tt>[moment(List, N) || N &lt;- [2, 3, 4]]</tt>.
@@ -129,6 +131,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 </td></tr>
 <tr><td valign="top"><a href="#permute-2">permute/2</a></td><td>Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast <a href="#combinations-2"><code>combinations/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#range_scale-1">range_scale/1</a></td><td>Get the scale of a same-sign numeric range.</td></tr>
+<tr><td valign="top"><a href="#root_mean_square-1">root_mean_square/1</a></td><td>Calculates the root mean square of the values in the list.</td></tr>
+<tr><td valign="top"><a href="#root_sum_square-1">root_sum_square/1</a></td><td>Calculate the magnitude (also known as the root sum square) of a vector.</td></tr>
 <tr><td valign="top"><a href="#rotate_list-2">rotate_list/2</a></td><td>Rotates the front <code>Distance</code> elements of a list to the back, in order.</td></tr>
 <tr><td valign="top"><a href="#rotate_to_first-2">rotate_to_first/2</a></td><td>Rotates the list to the first instance of Item.</td></tr>
 <tr><td valign="top"><a href="#rotate_to_last-2">rotate_to_last/2</a></td><td>Rotates the list so that the first instance of Item becomes the last element in the list.</td></tr>
@@ -140,6 +144,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 </td></tr>
 <tr><td valign="top"><a href="#test-0">test/0</a></td><td>Runs the test suite in terse form.</td></tr>
 <tr><td valign="top"><a href="#test-1">test/1</a></td><td>Runs the test suite in verbose form.</td></tr>
+<tr><td valign="top"><a href="#vector_magnitude-1">vector_magnitude/1</a></td><td>Equivalent to <a href="#root_sum_square-1"><tt>root_sum_square(VX)</tt></a>.
+</td></tr>
 <tr><td valign="top"><a href="#weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a></td><td>Take the weighted arithmetic mean of the input values.</td></tr>
 <tr><td valign="top"><a href="#zip_n-1">zip_n/1</a></td><td>Equivalent to <a href="#zip_n-2"><tt>zip_n(Ls, to_tuple)</tt></a>.
 </td></tr>
@@ -169,6 +175,13 @@ presenting the actual volume of functionality present here.  We can get the cove
 </table>
 
 <h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="absolute_difference-2">absolute_difference/2</a></h3>
+<div class="spec">
+<p><tt>absolute_difference(A::number(), B::number()) -&gt; number()</tt></p>
+</div><p>Takes the absolute value of the difference between the two arguments.  Offered mostly to make dependant code clearer. <pre>  1&gt; sc:absolute_difference(1.25, 1).
+  0.25</pre></p>
+<p><b>Introduced in:</b> Version 504</p>
 
 <h3 class="function"><a name="amean_vector_normal-1">amean_vector_normal/1</a></h3>
 <div class="spec">
@@ -540,6 +553,17 @@ presenting the actual volume of functionality present here.  We can get the cove
    "It was Ms. Scarlett in the kitchen with the lead pipe!"]</pre></p>
 <p><b>Introduced in:</b> Version 466</p>
 
+<h3 class="function"><a name="mod-2">mod/2</a></h3>
+<div class="spec">
+<p><tt>mod(Base::integer(), Range::integer()) -&gt; integer()</tt></p>
+</div><p><a href="#Math">Math</a> Takes the modulus of an integer by another integer.  Luckily, erlang calls what most languages refer to as modulus by its correct name, remainder (c's <code>%</code>, erlang's <code>rem</code>).  Modulus is implemented incorrectly in nearly every language, because chip vendors implement remainder and the wrong name stuck.  The difference is in how the operator reacts to a negative <code>Base</code>: -10 modulo 3 is 2, whereas -10 rem 3 is -1.  Remainder takes the residue of dividing the base by the lowest (nearest negative infinity) integer N adjacent the real valued divisor; modulo returns the highest, which is less CPU efficient but always provides an answer on [0..Range-1]. <pre>  1&gt; sc:mod(10,3).
+  1
+ 
+  2&gt; [ sc:mod(X,4) || X &lt;- lists:seq(-10,10) ].
+  [2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2]</pre>
+ </p>
+<p><b>Introduced in:</b> Version 507</p>
+
 <h3 class="function"><a name="mode-1">mode/1</a></h3>
 <div class="spec">
 <p><tt>mode(List::<a href="#type-numericlist">numericlist()</a>) -&gt; any()</tt></p>
@@ -628,6 +652,22 @@ presenting the actual volume of functionality present here.  We can get the cove
   6&gt; sc:range_scale([3, 3]).
   1.0</pre></p>
 <p><b>Introduced in:</b> Version 479</p>
+
+<h3 class="function"><a name="root_mean_square-1">root_mean_square/1</a></h3>
+<div class="spec">
+<p><tt>root_mean_square(Values::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt></p>
+</div><p>Calculates the root mean square of the values in the list.  <pre>  1&gt; sc:root_mean_square([1,2,3,4,5]).
+  3.3166247903554
+ 
+  2&gt; sc:root_mean_square([2,2,2]).
+  2.0</pre></p>
+<p><b>Introduced in:</b> Version 505</p>
+
+<h3 class="function"><a name="root_sum_square-1">root_sum_square/1</a></h3>
+<div class="spec">
+<p><tt>root_sum_square(VX::<a href="#type-vector">vector()</a>) -&gt; number()</tt></p>
+</div><p>Calculate the magnitude (also known as the root sum square) of a vector.</p>
+<p><b>Introduced in:</b> Version 506</p>
 
 <h3 class="function"><a name="rotate_list-2">rotate_list/2</a></h3>
 <div class="spec">
@@ -777,6 +817,13 @@ presenting the actual volume of functionality present here.  We can get the cove
   ok</pre></p>
 <p><b>Introduced in:</b> 460</p>
 
+<h3 class="function"><a name="vector_magnitude-1">vector_magnitude/1</a></h3>
+<div class="spec">
+<p><tt>vector_magnitude(VX) -&gt; any()</tt></p>
+</div><p>Equivalent to <a href="#root_sum_square-1"><tt>root_sum_square(VX)</tt></a>.</p>
+
+<p><b>Introduced in:</b> Version 506</p>
+
 <h3 class="function"><a name="weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a></h3>
 <div class="spec">
 <p><tt>weighted_arithmetic_mean(InputList::<a href="#type-weightlist">weightlist()</a>) -&gt; float()</tt></p>
@@ -839,6 +886,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 20 2011, 22:27:40.</i></p>
+<p><i>Generated by EDoc, Mar 20 2011, 22:38:54.</i></p>
 </body>
 </html>
