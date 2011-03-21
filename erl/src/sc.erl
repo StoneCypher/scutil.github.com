@@ -2725,3 +2725,13 @@ function_stats(Module) ->
 function_point_count(Module) ->
 
     length(function_points(Module)).
+
+
+
+
+
+%% @since Version 526
+
+function_label_count(Module) ->
+
+    length(function_labels(Module)).
