@@ -84,6 +84,10 @@
     absolute_difference/2,
     mod/2,
 
+    square/1,
+      cube/1,
+%     nth_root/2,    % comeback todo
+
     instant_runoff_vote/1,
 
     dstat/2,
@@ -2108,3 +2112,44 @@ mod(Base, Range) when is_integer(Base), is_integer(Range) ->
             Z
 
     end.
+
+
+
+
+
+%% @spec square(Input::number()) -> number()
+
+%% @doc Squares the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions. ```1> sc:square(2).
+%% 4
+%%
+%% 2> sc:square(2.5).
+%% 6.25'''
+
+%% @since Version 508
+
+square(X) ->
+
+    X*X.
+
+
+
+
+
+%% @spec cube(Input::number()) -> number()
+
+%% @doc Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions. ```1> sc:cube(2).
+%% 8
+%%
+%% 2> sc:cube(2.5).
+%% 6.25'''
+
+%% @since Version 508
+
+cube(X) ->
+
+    X*X*X.
+
+
+
+
+
