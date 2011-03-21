@@ -87,8 +87,6 @@
     dstat/2,
       extended_dstat/2,
 
-    median/1,
-
     moment/2,
       moments/1,
       moments/2,
@@ -99,6 +97,9 @@
 
     skewness/1,
       kurtosis/1,
+
+    median/1,
+      mode/1,
 
     arithmetic_mean/1,
       geometric_mean/1,
@@ -1750,3 +1751,52 @@ kurtosis(List) ->
 
 
 % excess_kurtosis(List) ->
+
+
+
+
+
+%% @spec histograph(List::list()) -> weightlist()
+
+%% @doc {@section Statistics} Takes a histograph count of the items in the list.  Mixed type lists are safe.  Input lists do not need to be sorted.  The histograph is shallow - that is, the histograph of `[ [1,2], [1,2], [2,2] ]' is `[ {[1,2],2}, {[2,2],1} ]', not `[ {1,2}, {2,4} ]'. ```1> sc:histograph([1,2,a,2,b,1,b,1,b,2,a,2,2,1]).
+%% [{1,4},{2,5},{a,2},{b,3}]
+%%
+%% 2> sc:histograph([ scutil:rand(10) || X <- lists:seq(1,100000) ]).
+%% [{0,10044}, {1,9892}, {2,10009}, {3,10016}, {4,10050}, {5,10113}, {6,9990}, {7,9994}, {8,10004}, {9,9888}]'''
+
+%% @since Version 496
+
+%% @todo add an argument presort to this and other functions to skip the sorting pass
+
+histograph([]) ->
+
+    [];
+
+
+
+histograph(List) when is_list(List) ->
+
+    [Head|Tail] = lists:sort(List),
+    histo_count(Tail, Head, 1, []).
+
+
+
+
+
+%% @private
+
+histo_count( [], Current, Count, Work) ->
+
+     lists:reverse([{Current,Count}]++Work);
+
+
+
+histo_count( [Current|Tail], Current, Count, Work) ->
+
+    histo_count(Tail, Current, Count+1, Work);
+
+
+
+histo_count( [New|Tail], Current, Count, Work) ->
+
+    histo_count(Tail, New, 1, [{Current,Count}] ++ Work).
