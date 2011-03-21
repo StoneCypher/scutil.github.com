@@ -93,6 +93,8 @@
     module_attribute/1,
       module_attribute/2,
 
+    module_feature/2,
+
     by_distance/2,
       by_distance_raw/2,
 
@@ -1737,7 +1739,7 @@ moments(List, Moments) when is_list(Moments) ->
 
 %% @spec central_moment(List::list(), N::integer()) -> float()
 
-%% @doc Takes the Nth cetral moment of a list.  The Nth central moment of a list is the arithmetic mean of (the list items each minus the mean of the list, each
+%% @doc <span style="color:red">Buggy</span> Takes the Nth cetral moment of a list.  The Nth central moment of a list is the arithmetic mean of (the list items each minus the mean of the list, each
 %% taken to the Nth power).  In a sense, this is the "normalized" moment.  Fractional Ns are not defined.  Not to be confused with {@link moment/2}.  {@section Thanks} to Kraln and
 %% Chile for straightening me out on moments and central moments.  ```1> sc:central_moment([1,1,1], 2).
 %% 0.0
@@ -1752,8 +1754,6 @@ moments(List, Moments) when is_list(Moments) ->
 %% 0.0'''
 
 %% @since Version 492
-
-%% Wrong!
 
 central_moment(List, N) when is_list(List), is_integer(N) ->
 
@@ -1803,6 +1803,8 @@ skewness(List) ->
 %% @equiv central_moment(List, 4)
 
 %% @since Version 494
+
+%% @doc <span style="color:red">Buggy</span> 
 
 %% Wrong! todo comeback
 
@@ -2588,7 +2590,7 @@ by_distance(Centers, Points) when is_list(Centers), is_list(Points) ->
 %%  {vsn,[134633400955530778836494569152232539093]},
 %%  {webpage,"http://scutil.com/"}]'''
 
-%% @since Version 129
+%% @since Version 520
 
 module_attribute(Module) ->
 
@@ -2608,13 +2610,13 @@ module_attribute(Module) ->
 
 %% @spec module_attribute(Module::atom(), Attribute::atom()) -> { value, {Attribute, Value} } | { error, no_such_attribute } | { error, no_such_module }
 
-%% @doc {@section Utility} <span style="color:red">Buggy</span> Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  ```1> sc:get_module_attribute(scutil, author).
+%% @doc <span style="color:red">Buggy</span> Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  ```1> sc:get_module_attribute(scutil, author).
 %% "John Haugeland <stonecypher@gmail.com>"
 %%
 %% 2> sc:get_module_attribute(scutil, license).
 %% [{mit_license,"http://scutil.com/license.html"}]'''{@section Thanks} to Alain O'Dea for pointing out defects in this routine regarding repeated module elements, and available improvements to the provided API.  <a href="http://fullof.bs/reading-module-attributes-in-erlang#comment-475" target="_blank">Mr. O'Dea's insightful advice</a> will be implemented, but that time has not yet come.
 
-%% @since Version 23
+%% @since Version 520
 
 module_attribute(Module,Attribute) ->
 
@@ -2635,6 +2637,26 @@ module_attribute(Module,Attribute) ->
                     { error, no_such_attribute }
 
             end;
+
+        { error, beam_lib, { file_error, _, enoent} } ->
+            { error, no_such_module }
+
+    end.
+
+
+
+
+
+% todo comeback docs
+
+%% @since Version 521
+
+module_feature(Module, Feature) ->
+
+    case beam_lib:chunks(Module, [Feature]) of
+
+        { ok, { Module, [ {Feature,Attributes} ] } } ->
+            Attributes;
 
         { error, beam_lib, { file_error, _, enoent} } ->
             { error, no_such_module }
