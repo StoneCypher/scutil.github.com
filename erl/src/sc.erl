@@ -1886,3 +1886,17 @@ mode_front( [], _Freq, Results) ->
 amean_vector_normal(VX) ->
 
     arithmetic_mean(sc_vector:normalize(VX)).
+
+
+
+
+
+%% @spec gmean_vector_normal(VX::numeric_list()) -> number()
+
+%% @doc {@section Statistics} Returns the geometric mean of the elements of the unit vector for the vector provided.
+
+%% @since Version 498
+
+gmean_vector_normal(VX) ->
+
+    geometric_mean(sc_vector:normalize(VX)).
