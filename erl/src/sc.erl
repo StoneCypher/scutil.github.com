@@ -95,6 +95,9 @@
     entrypoints/1,
       entrypoints/2,
 
+    abstract_function/2,
+      abstract_functions/1,
+
     function_stats/1,
       function_point_count/1,
 
@@ -2814,3 +2817,30 @@ entrypoints(Module, FName) ->
     lists:flatten(
         [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- sc_code:abstract_functions(Module), L==FName ]
     ).
+
+
+
+
+
+%% @since version 138
+
+% was `scutil:abstract_functions/1'
+abstract_functions(Module) ->
+
+    [ {Id, Name, Arity, Code} ||
+        {function, Id, Name, Arity, Code} <- sc_code:abstract(Module, stripped)
+    ].
+
+
+
+
+
+%% @since version 138
+
+% was `scutil:abstract_function/2'
+abstract_function(Module, FName) ->
+
+    [ {Id, Name, Arity, Code} ||
+        {function, Id, Name, Arity, Code} <- sc_code:abstract(Module, stripped),
+        Name == FName
+    ].
