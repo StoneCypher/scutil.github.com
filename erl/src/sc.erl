@@ -79,9 +79,11 @@
     sanitize_tokens/2,
     naive_bayes_likelihood/4,
     caspers_jones_estimate/1,
-    range_scale/1,               
+    range_scale/1,
 
     instant_runoff_vote/1,
+
+    dstat/1,
 
     arithmetic_mean/1,
       geometric_mean/1,
@@ -1466,3 +1468,26 @@ instant_runoff_vote(ListOfVoteLists, Exclude) ->
 
     FilteredVotes = [ VoteList || VoteList <- ListOfVoteLists, VoteList =/= [] ],
     FilteredVotes.
+
+
+
+
+
+% inspired by J dstat from some blog, http://bbot.org/blog/archives/2011/03/17/on_being_surprised_by_a_programming_language/
+% herp derp
+
+%% @since Version 487
+
+dstat(NumericList) ->
+
+    { Min, Max } = sc:extrema(NumericList),
+
+    {   { sample_size,        length(NumericList)                },
+        { minimum,            Min                                },
+        { maximum,            Max                                },
+        { median,             sc:median(NumericList)             },
+        { mean,               sc:arithmetic_mean(NumericList)    },
+        { standard_deviation, sc:standard_deviation(NumericList) },
+        { skewness,           sc:skewness(NumericList)           },
+        { kurtosis,           sc:kurtosis(NumericList)           }
+    }.
