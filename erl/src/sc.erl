@@ -1694,3 +1694,13 @@ central_moments(List, Moments) when is_list(Moments) ->
 skewness(List) ->
 
     central_moment(List, 3).
+
+
+
+
+
+%% @equiv central_moment(List, 4)
+
+kurtosis(List) ->
+
+    central_moment(List, 4).
