@@ -2720,6 +2720,8 @@ function_stats(Module) ->
 
 
 
+% todo comeback docs
+
 %% @since Version 525
 
 function_point_count(Module) ->
@@ -2729,6 +2731,8 @@ function_point_count(Module) ->
 
 
 
+
+% todo comeback docs
 
 %% @since Version 526
 
@@ -2740,8 +2744,26 @@ function_label_count(Module) ->
 
 
 
+% todo comeback docs
+
 %% @since version 527
 
 entrypoint_count(Module) ->
 
     length(entrypoints(Module)).
+
+
+
+
+
+% todo comeback docs
+
+%% @since Version 528
+
+function_labels(Module) ->
+
+    lists:usort(
+        [ L ||
+            {_,L,_,_} <- sc_code:abstract_functions(Module)
+        ]
+    ).
