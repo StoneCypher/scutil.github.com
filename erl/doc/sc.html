@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 520 $</p>
+<p><b>Version:</b> $Revision: 523 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -110,11 +110,13 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#factorize-1">factorize/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#flag_sets-1">flag_sets/1</a></td><td>Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
 <tr><td valign="top"><a href="#floor-1">floor/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#function_stats-1">function_stats/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#gen_docs-0">gen_docs/0</a></td><td>Generates library documentation using the paths appropriate for the author's PC; you almost certainly want <a href="#gen_docs-2"><code>gen_docs/2</code></a> instead.</td></tr>
 <tr><td valign="top"><a href="#gen_docs-2">gen_docs/2</a></td><td>Generates library documentation from and to the specified paths <code>WhereIsSrc</code> and <code>WhereToPutDocs</code> respectively.</td></tr>
 <tr><td valign="top"><a href="#geometric_mean-1">geometric_mean/1</a></td><td>Take the geometric mean of a list of numbers.</td></tr>
 <tr><td valign="top"><a href="#gmean_vector_normal-1">gmean_vector_normal/1</a></td><td><a href="#Statistics">Statistics</a> Returns the geometric mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#harmonic_mean-1">harmonic_mean/1</a></td><td>Take the harmonic mean of a list of numbers.</td></tr>
+<tr><td valign="top"><a href="#has_function-2">has_function/2</a></td><td>TODO.</td></tr>
 <tr><td valign="top"><a href="#histograph-1">histograph/1</a></td><td><a href="#Statistics">Statistics</a> Takes a histograph count of the items in the list.</td></tr>
 <tr><td valign="top"><a href="#hmean_vector_normal-1">hmean_vector_normal/1</a></td><td><a href="#Statistics">Statistics</a> Returns the harmonic mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#index_of_first-2">index_of_first/2</a></td><td>Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.</td></tr>
@@ -162,6 +164,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#skewness-1">skewness/1</a></td><td>Equivalent to <a href="#central_moment-2"><tt>central_moment(List, 3)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#square-1">square/1</a></td><td>Squares the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
+<tr><td valign="top"><a href="#svn_revision-1">svn_revision/1</a></td><td>Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.</td></tr>
 <tr><td valign="top"><a href="#test-0">test/0</a></td><td>Runs the test suite in terse form.</td></tr>
 <tr><td valign="top"><a href="#test-1">test/1</a></td><td>Runs the test suite in verbose form.</td></tr>
 <tr><td valign="top"><a href="#vector_magnitude-1">vector_magnitude/1</a></td><td>Equivalent to <a href="#root_sum_square-1"><tt>root_sum_square(VX)</tt></a>.
@@ -457,6 +460,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 </div>
 <p><b>Introduced in:</b> Version 511</p>
 
+<h3 class="function"><a name="function_stats-1">function_stats/1</a></h3>
+<div class="spec">
+<p><tt>function_stats(Module) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 524</p>
+
 <h3 class="function"><a name="gen_docs-0">gen_docs/0</a></h3>
 <div class="spec">
 <p><tt>gen_docs() -&gt; ok | {'EXIT', any()}</tt></p>
@@ -509,6 +518,12 @@ presenting the actual volume of functionality present here.  We can get the cove
   Thanks to Forest (anonymous by choice) for help resolving 0-correctness.</p>
 <p><b>Introduced in:</b> Version 483</p>
 <p><b>See also:</b> <a href="#arithmetic_mean-1">arithmetic_mean/1</a>, <a href="#geometric_mean-1">geometric_mean/1</a>, <a href="#hmean_vector_normal-1">hmean_vector_normal/1</a>.</p>
+
+<h3 class="function"><a name="has_function-2">has_function/2</a></h3>
+<div class="spec">
+<p><tt>has_function(Module::atom(), Function::atom()) -&gt; <a href="#type-boolean">boolean()</a></tt></p>
+</div><p>TODO</p>
+<p><b>Introduced in:</b> Version 522</p>
 
 <h3 class="function"><a name="histograph-1">histograph/1</a></h3>
 <div class="spec">
@@ -731,8 +746,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 520 2011-03-21 03:14:44Z john $"},
-   {svn_revision,"$Revision: 520 $"},
+   {svn_id,"$Id: sc.erl 523 2011-03-21 03:20:39Z john $"},
+   {svn_revision,"$Revision: 523 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -741,10 +756,10 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="module_attribute-2">module_attribute/2</a></h3>
 <div class="spec">
 <p><tt>module_attribute(Module::atom(), Attribute::atom()) -&gt; {value, {Attribute, Value}} | {error, no_such_attribute} | {error, no_such_module}</tt></p>
-</div><p><span style="color:red">Buggy</span> Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  <pre>  1&gt; sc:get_module_attribute(scutil, author).
+</div><p><span style="color:red">Buggy</span> Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  <pre>  1&gt; sc:module_attribute(scutil, author).
   "John Haugeland &lt;stonecypher@gmail.com&gt;"
  
-  2&gt; sc:get_module_attribute(scutil, license).
+  2&gt; sc:module_attribute(scutil, license).
   [{mit_license,"http://scutil.com/license.html"}]</pre><a href="#Thanks">Thanks</a> to Alain O'Dea for pointing out defects in this routine regarding repeated module elements, and available improvements to the provided API.  <a href="http://fullof.bs/reading-module-attributes-in-erlang#comment-475" target="_blank">Mr. O'Dea's insightful advice</a> will be implemented, but that time has not yet come.</p>
 <p><b>Introduced in:</b> Version 520</p>
 
@@ -957,6 +972,13 @@ presenting the actual volume of functionality present here.  We can get the cove
   6.25</pre></p>
 <p><b>Introduced in:</b> Version 508</p>
 
+<h3 class="function"><a name="svn_revision-1">svn_revision/1</a></h3>
+<div class="spec">
+<p><tt>svn_revision(ModuleName::atom()) -&gt; integer()</tt></p>
+</div><p>Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.  To use, add a module attribute to your module as follows: <code>-svn_revision("$+Revision$).</code>, after removing the plus (if the plus wasn't there, the example would get corrupted when I updated the module <code>;)</code>).  Then set the svn keyword "Revision" on the file, and check it in.  After that, your version is magically updated every time you check in!  <code>:D</code>  The sole argument to this function is the name of the module to be scanned, as an atom. <pre>  1&gt; scutil:scan_svn_revision(testerl).
+  16</pre></p>
+<p><b>Introduced in:</b> Version 523</p>
+
 <h3 class="function"><a name="test-0">test/0</a></h3>
 <div class="spec">
 <p><tt>test() -&gt; ok | error</tt></p>
@@ -1078,6 +1100,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 20 2011, 23:18:58.</i></p>
+<p><i>Generated by EDoc, Mar 20 2011, 23:22:56.</i></p>
 </body>
 </html>

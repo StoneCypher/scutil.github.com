@@ -91,6 +91,7 @@
     nearest_to/2,
     has_function/2,
     svn_revision/1,
+    function_stats/1,
 
     module_attribute/1,
       module_attribute/2,
@@ -2612,10 +2613,10 @@ module_attribute(Module) ->
 
 %% @spec module_attribute(Module::atom(), Attribute::atom()) -> { value, {Attribute, Value} } | { error, no_such_attribute } | { error, no_such_module }
 
-%% @doc <span style="color:red">Buggy</span> Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  ```1> sc:get_module_attribute(scutil, author).
+%% @doc <span style="color:red">Buggy</span> Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  ```1> sc:module_attribute(scutil, author).
 %% "John Haugeland <stonecypher@gmail.com>"
 %%
-%% 2> sc:get_module_attribute(scutil, license).
+%% 2> sc:module_attribute(scutil, license).
 %% [{mit_license,"http://scutil.com/license.html"}]'''{@section Thanks} to Alain O'Dea for pointing out defects in this routine regarding repeated module elements, and available improvements to the provided API.  <a href="http://fullof.bs/reading-module-attributes-in-erlang#comment-475" target="_blank">Mr. O'Dea's insightful advice</a> will be implemented, but that time has not yet come.
 
 %% @since Version 520
@@ -2684,16 +2685,31 @@ has_function(Module, Function) ->
 
 
 
-%% @spec scan_svn_revision(ModuleName::atom()) -> integer()
+%% @spec svn_revision(ModuleName::atom()) -> integer()
 
-%% @doc {@section Utility} Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.  To use, add a module attribute to your module as follows: `-svn_revision("$+Revision$).', after removing the plus (if the plus wasn't there, the example would get corrupted when I updated the module `;)').  Then set the svn keyword "Revision" on the file, and check it in.  After that, your version is magically updated every time you check in!  `:D'  The sole argument to this function is the name of the module to be scanned, as an atom. ```1> scutil:scan_svn_revision(testerl).
+%% @doc Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.  To use, add a module attribute to your module as follows: `-svn_revision("$+Revision$).', after removing the plus (if the plus wasn't there, the example would get corrupted when I updated the module `;)').  Then set the svn keyword "Revision" on the file, and check it in.  After that, your version is magically updated every time you check in!  `:D'  The sole argument to this function is the name of the module to be scanned, as an atom. ```1> scutil:scan_svn_revision(testerl).
 %% 16'''
 
-%% @since Version 44
+%% @since Version 523
 
 svn_revision(Module) ->
 
-    "$Revision: " ++ X = attribute(Module, svn_revision),
+    "$Revision: " ++ X = module_attribute(Module, svn_revision),
     [ Head | _Rem ]    = string:tokens(X, " "),
 
     list_to_integer(Head).
+
+
+
+
+
+% todo comeback docs
+
+%% @since Version 524
+
+function_stats(Module) ->
+
+    [ { entrypoints,     entrypoint_count(Module)     },
+      { function_labels, function_label_count(Module) },
+      { function_points, function_point_count(Module) }
+    ].
