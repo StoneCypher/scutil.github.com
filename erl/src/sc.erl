@@ -3351,3 +3351,36 @@ split_at(N, BN, [Item|Rem], Current, Work) ->
 is_postfix(Postfix, String) ->
 
     lists:prefix(lists:reverse(Postfix), lists:reverse(String)).
+
+
+
+
+
+%% @since Version 544
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+reverse_map_filter(Workload, MapFun, FilterFun) ->
+
+    reverse_map_filter(Workload, [], MapFun, FilterFun).
+
+
+
+%% @since Version 544
+
+reverse_map_filter([], Work, _MapFun, _FilterFun) ->
+
+    Work;
+
+
+
+%% @since Version 544
+
+reverse_map_filter([Item|Rem], Work, MapFun, FilterFun) ->
+
+    Res = MapFun(Item),
+
+    case FilterFun(Res) of
+        true  -> reverse_map_filter(Rem, [Res]++Work, MapFun, FilterFun);
+        false -> reverse_map_filter(Rem, Work,        MapFun, FilterFun)
+    end.
