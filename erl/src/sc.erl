@@ -84,6 +84,9 @@
     absolute_difference/2,
     mod/2,
     factorial/1,
+    
+    ceil/1,
+      ceiling/1,
 
     square/1,
       cube/1,
@@ -2181,3 +2184,34 @@ factorial(1, Counter) ->
 factorial(X, Counter) when is_integer(X), X > 1 ->
 
     factorial(X-1, Counter*X).
+
+
+
+
+
+%% @since Version 510
+%% @equiv ceiling(X)
+
+ceil(X) ->
+
+     ceiling(X).
+
+
+
+
+
+% todo comeback docs
+
+%% @since Version 510
+
+ceiling(X) ->
+
+     ceiling_t(trunc(X), trunc(X)-X).
+
+
+
+%% @private
+
+ceiling_t(T, Td) when Td < 0 -> T+1;
+ceiling_t(T, Td) when Td > 0 -> T;
+ceiling_t(T,_Td)             -> T.
