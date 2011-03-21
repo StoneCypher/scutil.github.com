@@ -96,6 +96,12 @@
     split_at/2,
     is_postfix/2,
 
+    differences/1,
+      first_difference/1,
+      second_difference/1,
+      third_difference/1,
+      nth_difference/2,
+
     elements/2,
       elements/3,
       elements/4,
@@ -3526,3 +3532,73 @@ elements_worker(Retlist, Config, Requested, KeyIdx, strip) ->
             { error, response_not_understood, { for, lists, keysearch, { ThisRequest, Config } }, { got, AnythingElse } }
 
     end.
+
+
+
+
+
+%% @since Version 547
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+differences(List) when is_list(List), length(List) > 2 ->
+
+    [ B-A || {A,B} <- all_neighbor_pairs(List) ].
+
+
+
+
+
+%% @since Version 547
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+first_difference(List) when is_list(List), length(List) > 2 ->
+
+    differences(List).
+
+
+
+
+
+%% @since Version 547
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+second_difference(List) when is_list(List), length(List) > 3 ->
+
+    differences(differences(List)).
+
+
+
+
+
+%% @since Version 547
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+third_difference(List) when is_list(List), length(List) > 4 ->
+
+    differences(differences(differences(List))).
+
+
+
+
+
+%% @since Version 547
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+% todo comeback implement the neato solver from http://www.y-maths.co.uk/sequen2.htm
+
+nth_difference(0, List) ->
+
+    List;
+
+
+
+
+
+nth_difference(N, List) when is_list(List), length(List) > (N+1), N > 0 ->
+
+    nth_difference(N-1, differences(List)).

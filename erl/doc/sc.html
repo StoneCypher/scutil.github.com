@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 544 $</p>
+<p><b>Version:</b> $Revision: 545 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -101,6 +101,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#combinations-2">combinations/2</a></td><td>Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#count_x-2">count_x/2</a></td><td>Counts the number of instances of Item in List.</td></tr>
 <tr><td valign="top"><a href="#cube-1">cube/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
+<tr><td valign="top"><a href="#differences-1">differences/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#distinct_neighbor_pairs-1">distinct_neighbor_pairs/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#distinct_neighbor_pairs-2">distinct_neighbor_pairs/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#dstat-2">dstat/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
@@ -114,6 +115,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#extrema-1">extrema/1</a></td><td>Returns the lowest and highest values in a list of one or more member in the form <code>{Lo,Hi}</code>.</td></tr>
 <tr><td valign="top"><a href="#factorial-1">factorial/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#factorize-1">factorize/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#first_difference-1">first_difference/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#first_pos-2">first_pos/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> <pre>  1&gt; sc_lists:first_pos([a,b,c,d,2,f],fun erlang:is_integer/1).
   5
  
@@ -163,6 +165,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#naive_bayes_likelihood-4">naive_bayes_likelihood/4</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
   by the naive Bayes likelihood method.</td></tr>
 <tr><td valign="top"><a href="#nearest_to-2">nearest_to/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#nth_difference-2">nth_difference/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#partition_by_residue-2">partition_by_residue/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#permute-1">permute/1</a></td><td>Equivalent to <a href="#permute-2"><tt>permute(List, length(List))</tt></a>.
 </td></tr>
@@ -177,6 +180,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#rotate_to_first-2">rotate_to_first/2</a></td><td>Rotates the list to the first instance of Item.</td></tr>
 <tr><td valign="top"><a href="#rotate_to_last-2">rotate_to_last/2</a></td><td>Rotates the list so that the first instance of Item becomes the last element in the list.</td></tr>
 <tr><td valign="top"><a href="#sanitize_tokens-2">sanitize_tokens/2</a></td><td>Remove unacceptable elements from an input list, as defined by another list or a filter function.</td></tr>
+<tr><td valign="top"><a href="#second_difference-1">second_difference/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#shared_keys-1">shared_keys/1</a></td><td>Create sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples, where key K appears in both A and B.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-2">shared_keys/2</a></td><td>Equivalent to <a href="#shared_keys-1"><code>shared_keys/1</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-3">shared_keys/3</a></td><td>Equivalent to <a href="#shared_keys-2"><code>shared_keys/2</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
@@ -186,6 +190,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#svn_revision-1">svn_revision/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.</td></tr>
 <tr><td valign="top"><a href="#test-0">test/0</a></td><td>Runs the test suite in terse form.</td></tr>
 <tr><td valign="top"><a href="#test-1">test/1</a></td><td>Runs the test suite in verbose form.</td></tr>
+<tr><td valign="top"><a href="#third_difference-1">third_difference/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#vector_magnitude-1">vector_magnitude/1</a></td><td>Equivalent to <a href="#root_sum_square-1"><tt>root_sum_square(VX)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Take the weighted arithmetic mean of the input values.</td></tr>
@@ -396,6 +401,12 @@ presenting the actual volume of functionality present here.  We can get the cove
   6.25</pre></p>
 <p><b>Introduced in:</b> Version 508</p>
 
+<h3 class="function"><a name="differences-1">differences/1</a></h3>
+<div class="spec">
+<p><tt>differences(List) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 547</p>
+
 <h3 class="function"><a name="distinct_neighbor_pairs-1">distinct_neighbor_pairs/1</a></h3>
 <div class="spec">
 <p><tt>distinct_neighbor_pairs(List) -&gt; any()</tt></p>
@@ -487,6 +498,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 <div class="spec">
 <p><tt>factorize(N) -&gt; any()</tt></p>
 </div><p><span style="color:orange;font-style:italic">Untested</span></p>
+
+<h3 class="function"><a name="first_difference-1">first_difference/1</a></h3>
+<div class="spec">
+<p><tt>first_difference(List) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 547</p>
 
 <h3 class="function"><a name="first_pos-2">first_pos/2</a></h3>
 <div class="spec">
@@ -863,8 +880,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 544 2011-03-21 22:06:55Z john $"},
-   {svn_revision,"$Revision: 544 $"},
+   {svn_id,"$Id: sc.erl 545 2011-03-21 22:43:48Z john $"},
+   {svn_revision,"$Revision: 545 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -933,6 +950,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>nearest_to(Centers, Point) -&gt; any()</tt></p>
 </div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 517</p>
+
+<h3 class="function"><a name="nth_difference-2">nth_difference/2</a></h3>
+<div class="spec">
+<p><tt>nth_difference(N, List) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 547</p>
 
 <h3 class="function"><a name="partition_by_residue-2">partition_by_residue/2</a></h3>
 <div class="spec">
@@ -1074,6 +1097,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><b>Introduced in:</b> Version 477</p>
 <p><b>See also:</b> <a href="#sanitize_filename-1">sanitize_filename/1</a>.</p>
 
+<h3 class="function"><a name="second_difference-1">second_difference/1</a></h3>
+<div class="spec">
+<p><tt>second_difference(List) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 547</p>
+
 <h3 class="function"><a name="shared_keys-1">shared_keys/1</a></h3>
 <div class="spec">
 <p><tt>shared_keys(TupleList::<a href="#type-sorted_keylist">sorted_keylist()</a>) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt></p>
@@ -1178,6 +1207,12 @@ presenting the actual volume of functionality present here.  We can get the cove
   ok</pre></p>
 <p><b>Introduced in:</b> 460</p>
 
+<h3 class="function"><a name="third_difference-1">third_difference/1</a></h3>
+<div class="spec">
+<p><tt>third_difference(List) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 547</p>
+
 <h3 class="function"><a name="vector_magnitude-1">vector_magnitude/1</a></h3>
 <div class="spec">
 <p><tt>vector_magnitude(VX) -&gt; any()</tt></p>
@@ -1247,6 +1282,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 21 2011, 18:13:54.</i></p>
+<p><i>Generated by EDoc, Mar 21 2011, 18:51:54.</i></p>
 </body>
 </html>
