@@ -3189,3 +3189,42 @@ keygroup(Pos, [Item|Rem], WorkKey, Work, Output) ->
             keygroup(Pos, Rem, NewKey,  [Item],       [{WorkKey,Work}]++Output)
 
     end.
+
+
+
+
+
+% @todo swap argument order
+
+%% @version Since 539
+%%
+%% @doc ```1> sc_lists:first_pos([a,b,c,d,2,f],fun erlang:is_integer/1).
+%% 5
+%%
+%% 2> sc_lists:first_pos([a,b,c,d,e,f],fun erlang:is_integer/1).
+%% false'''
+
+first_pos(List, Predicate) ->
+
+    first_pos(1, List, Predicate, false).
+
+
+
+first_pos(List, Predicate, Default) ->
+
+    first_pos(1, List, Predicate, Default).
+
+
+
+first_pos(_N, [],  _Pred, Default) ->
+
+    Default;
+
+
+
+first_pos(N, [Head|Tail], Pred, Default) ->
+
+    case Pred(Head) of
+        true  -> N;
+        false -> first_pos(N+1, Tail, Pred, Default)
+    end.
