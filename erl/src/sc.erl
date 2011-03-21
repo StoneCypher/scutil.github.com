@@ -84,7 +84,7 @@
 
     instant_runoff_vote/1,
 
-    dstat/1,
+    dstat/2,
 
     median/1,
 
@@ -1479,20 +1479,22 @@ instant_runoff_vote(ListOfVoteLists, Exclude) ->
 % inspired by J dstat from some blog, http://bbot.org/blog/archives/2011/03/17/on_being_surprised_by_a_programming_language/
 % herp derp
 
+% Hilariously, J seems to be assuming pop or sample.
+
 %% @since Version 487
 
-dstat(NumericList) ->
+dstat(NumericList, PopulationOrSample) ->
 
     { Min, Max } = extrema(NumericList),
 
-    {   { sample_size,        length(NumericList)             },
-        { minimum,            Min                             },
-        { maximum,            Max                             },
-        { median,             median(NumericList)             },
-        { mean,               arithmetic_mean(NumericList)    },
-        { standard_deviation, standard_deviation(NumericList) },
-        { skewness,           skewness(NumericList)           },
-        { kurtosis,           kurtosis(NumericList)           }
+    {   { sample_size,        length(NumericList)                                 },
+        { minimum,            Min                                                 },
+        { maximum,            Max                                                 },
+        { median,             median(NumericList)                                 },
+        { mean,               arithmetic_mean(NumericList)                        },
+        { standard_deviation, standard_deviation(NumericList, PopulationOrSample) },
+        { skewness,           skewness(NumericList)                               },
+        { kurtosis,           kurtosis(NumericList)                               }
     }.
 
 
@@ -1500,7 +1502,7 @@ dstat(NumericList) ->
 
 %% @spec median(List::numericlist()) -> number()
 
-%% @doc Takes the median (central) value of a list.  Sorts the input list, then finds and returns the middle value.  ```1> scutil:median([1,2,999]).
+%% @doc Takes the median (central) value of a list.  Sorts the input list, then finds and returns the middle value.  ```1> sc:median([1,2,999]).
 %% 2'''
 
 %% @see arithmetic_mean/1
@@ -1530,10 +1532,42 @@ median(List) when is_list(List) ->
 
 %% @spec even_or_odd(Num::integer()) -> even | odd
 
-%% @doc Documentary convenience function that returns the atoms `even' or `odd' for any integer. ```1> scutil:even_or_odd(3).
+%% @doc Documentary convenience function that returns the atoms `even' or `odd' for any integer. ```1> sc:even_or_odd(3).
 %% odd'''
 
 %% @since Version 489
 
 even_or_odd(Num) when is_integer(Num), Num band 1 == 0 -> even;
 even_or_odd(Num) when is_integer(Num)                  -> odd.
+
+
+
+
+
+%% @spec standard_deviation(Values::numericlist(), Kind::population|sample) -> float()
+
+%% @doc Measures the standard deviation of the values in the list.  ```1> sc:standard_deviation([1,2,3,4,5],population).
+%% 1.4142135623730951
+%%
+%% 2> sc:standard_deviation([1,2,3,4,5],sample).
+%% 1.5811388300841898
+%%
+%% 3> sc:standard_deviation([2,2,2,2],population).
+%% 0.0
+%%
+%% 4> sc:standard_deviation([2,2,2,2],sample).
+%% 0.0'''
+
+%% @since Version 490
+
+standard_deviation(Values, population) when is_list(Values) ->
+
+    Mean = arithmetic_mean(Values),
+    math:sqrt(arithmetic_mean([ sc_math:square(Val-Mean) || Val <- Values ]));
+
+
+
+standard_deviation(Values, sample) when is_list(Values) ->
+
+    Mean = arithmetic_mean(Values),
+    math:sqrt( lists:sum([ sc_math:square(Val-Mean) || Val <- Values ]) / (length(Values)-1) ).
