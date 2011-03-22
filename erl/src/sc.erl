@@ -36,6 +36,11 @@
 %% @version $Revision$
 %% @since September 14, 2007
 
+%% @todo burn out sc.
+%% @todo burn out scutil:
+%% @todo burn out @section
+%% @todo burn out was
+
 
 
 
@@ -95,6 +100,8 @@
     walk_unique_pairings/2,
     count_of/2,
     integer_to_radix_list/2,
+
+    euclidean_distance/2,  % todo 3d version?
 
     list_to_term/1,
       list_to_number/1,
@@ -4583,3 +4590,45 @@ list_to_number(X) ->
             Y
 
     end.
+
+
+
+
+
+%% @todo more distance types - manhattan, malahabanois, etc
+
+%% @spec euclidean_distance(Coordinate1::coord(), Coordinate2::coord()) -> number()
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Returns the distance between two coordinates in any N-space.  In two dimensions, this is known as the Pythagorean theorem.  The coordinates may be of any positive integer dimensionality (2d, 3d, but no -1d or 2.5d), but both coordinates must be of the same dimensionality.  The coordinates may have real-valued or negative components, but imaginary math is not implemented.  This function tolerates tuple coordinates by converting them to lists; list coordinates are thus slightly faster. ```1> sc:distance([0,0],[1,1]).
+%% 1.4142135623730951
+%%
+%% 2> sc:distance({0,0},[-1,1.0]).
+%% 1.4142135623730951
+%%
+%% 3> sc:distance([0,0,0,0],[1,-1,1,-1]).
+%% 2.0'''
+
+%% @since Version 575
+
+euclidean_distance(C1, C2) when is_tuple(C1) ->
+
+    euclidean_distance( tuple_to_list(C1), C2 );
+
+
+
+euclidean_distance(C1, C2) when is_tuple(C2) ->
+
+    euclidean_distance( C1, tuple_to_list(C2) );
+
+
+
+euclidean_distance(C1, C2) ->
+
+    % squaring makes taking the absolute value to get unsigned magnitude redundant; that's not an omission, it's an optimization
+    math:sqrt(
+        lists:sum(
+            [ sc_math:square(A-B) ||
+                {A,B} <- sc_lists:zip_n([C1,C2])
+            ]
+        )
+    ).
