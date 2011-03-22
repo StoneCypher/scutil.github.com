@@ -4356,7 +4356,7 @@ halstead_complexity(DistinctOperators, DistinctOperands, TotalOperators, TotalOp
 %% 5> sc_convert:integer_to_radix_list(1234567890, [alpha, beta, gamma, delta, epsilon, zeta, eta, theta, kappa, lambda]).
 %% [beta,gamma,delta,epsilon,zeta,eta,theta,kappa,lambda,alpha]'''
 
-%% @since Version 434
+%% @since Version 566
 
 integer_to_radix_list(Number, RadixItems) when is_tuple(RadixItems) ->
 
@@ -4369,3 +4369,16 @@ integer_to_radix_list(Number, RadixItems) when is_tuple(RadixItems) ->
 integer_to_radix_list(Number, RadixList) when is_list(RadixList) ->
 
     integer_to_radix_list(Number, list_to_tuple(RadixList)).
+
+
+
+
+
+%% @internal
+%% @since Version 567
+
+downshift_radix(InStep, 0, _Radix) ->
+    InStep;
+
+downshift_radix(InStep, Number, Radix) ->
+    downshift_radix([Number rem Radix]++InStep, trunc((Number-(Number rem Radix)) / Radix), Radix ).
