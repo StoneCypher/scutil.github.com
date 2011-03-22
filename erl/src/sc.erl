@@ -96,8 +96,10 @@
     count_of/2,
     integer_to_radix_list/2,
     list_to_term/1,
+
     io_list_to_hex_string/1,
-    nybble_to_hex/1,
+      nybble_to_hex/1,
+      byte_to_hex/1,
 
     halstead_complexity/4,
       halstead_complexity/5,
@@ -2120,9 +2122,14 @@ median_absolute_deviation(List) when is_list(List) ->
 %% @spec expected_value(List::mixed_weight_list()) -> number()
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span> Returns the expected value of infinite selection from a weighted numeric list.  ```1> sc:expected_value([1,2,3,4,5,6]).
-%% 3.50000
+%% 3.50000'''
 %%
-%% 2> sc:expected_value([ {-1,37}, {35,1} ]).
+%% <a href="http://www.wolframalpha.com/input/?i=ExpectedValue[+f%2C+{1%2C2%2C3%2C4%2C5%2C6}%2C+f+]">Wolfram Alpha confirms</a>
+%%
+%% ```2> sc:expected_value([ {1,5}, {10,1} ]).
+%% 2.5
+%%
+%% 3> sc:expected_value([ {-1,37}, {35,1} ]).
 %% -5.26316e-2'''
 
 %% @since Version 502
@@ -4495,3 +4502,23 @@ nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 0,  Nyb < 10 ->
 nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 10, Nyb < 16 ->
 
     $a + Nyb - 10.
+
+
+
+
+
+%% @type byte() = integer().  A byte must be an integer in the range 0-255, inclusive.  (Technically this is an octet, not a byte, but the word byte is extensively misused throughout the erlang documentation and standard library, which makes this an important concession, so we're when-in-Rome-ing.)
+
+%% @spec byte_to_hex(TheByte::byte()) -> hexstring()
+
+%% @doc {@section Conversion} Convert a byte() into a hexstring().  The hexstring() result will always be two characters (left padded with zero if necessary). ```1> scutil:byte_to_hex(7).
+%% "07"
+%%
+%% 2> scutil:byte_to_hex(255).
+%% "ff"'''
+
+%% @since Version 20
+
+byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 ->
+
+    [ nybble_to_hex(TheByte bsr 4), nybble_to_hex(TheByte band 15) ].

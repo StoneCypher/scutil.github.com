@@ -47,3 +47,6 @@ http://en.wikipedia.org/wiki/Arrow%27s_impossibility_theorem
 http://en.wikipedia.org/wiki/Later-no-harm_criterion
 http://en.wikipedia.org/wiki/Condorcet_winner
 http://en.wikipedia.org/wiki/Condorcet_loser
+
+http://reference.wolfram.com/mathematica/tutorial/DescriptiveStatistics.html
+http://reference.wolfram.com/mathematica/guide/ProbabilityAndStatistics.html

@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 569 $</p>
+<p><b>Version:</b> $Revision: 570 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -43,6 +43,10 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="typedecl"><a name="type-bw_scale">bw_scale()</a></h3>
 <p><tt>bw_scale() = {Unit::atom(), Timescale::atom()}</tt></p>
 <p><code>bw_scale</code> - Bandwidth scale - is a units-per-time notation for bandwidth measurement, eg <code>{megabits,day}</code>.</p>
+
+<h3 class="typedecl"><a name="type-byte">byte()</a></h3>
+<p><tt>byte() = integer()</tt></p>
+<p>A byte must be an integer in the range 0-255, inclusive.  (Technically this is an octet, not a byte, but the word byte is extensively misused throughout the erlang documentation and standard library, which makes this an important concession, so we're when-in-Rome-ing.)</p>
 
 <h3 class="typedecl"><a name="type-filterfunction">filterfunction()</a></h3>
 <p><tt>filterfunction() = function()</tt></p>
@@ -115,6 +119,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#bandwidth_calc-2">bandwidth_calc/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculates digital line bandwidth over timescales in converted units.</td></tr>
 <tr><td valign="top"><a href="#by_distance-2">by_distance/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#by_distance_raw-2">by_distance_raw/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#byte_to_hex-1">byte_to_hex/1</a></td><td><a href="#Conversion">Conversion</a> Convert a byte() into a hexstring().</td></tr>
 <tr><td valign="top"><a href="#caspers_jones_estimate-1">caspers_jones_estimate/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#ceil-1">ceil/1</a></td><td>Equivalent to <a href="#ceiling-1"><tt>ceiling(X)</tt></a>.
 </td></tr>
@@ -402,6 +407,16 @@ presenting the actual volume of functionality present here.  We can get the cove
 </div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 518</p>
 
+<h3 class="function"><a name="byte_to_hex-1">byte_to_hex/1</a></h3>
+<div class="spec">
+<p><tt>byte_to_hex(TheByte::<a href="#type-byte">byte()</a>) -&gt; <a href="#type-hexstring">hexstring()</a></tt></p>
+</div><p><a href="#Conversion">Conversion</a> Convert a byte() into a hexstring().  The hexstring() result will always be two characters (left padded with zero if necessary). <pre>  1&gt; scutil:byte_to_hex(7).
+  "07"
+ 
+  2&gt; scutil:byte_to_hex(255).
+  "ff"</pre></p>
+<p><b>Introduced in:</b> Version 20</p>
+
 <h3 class="function"><a name="caspers_jones_estimate-1">caspers_jones_estimate/1</a></h3>
 <div class="spec">
 <p><tt>caspers_jones_estimate(FunctionPoints) -&gt; any()</tt></p>
@@ -680,9 +695,11 @@ presenting the actual volume of functionality present here.  We can get the cove
 <div class="spec">
 <p><tt>expected_value(List::<a href="#type-mixed_weight_list">mixed_weight_list()</a>) -&gt; number()</tt></p>
 </div><p><span style="color:orange;font-style:italic">Untested</span> Returns the expected value of infinite selection from a weighted numeric list.  <pre>  1&gt; sc:expected_value([1,2,3,4,5,6]).
-  3.50000
+  3.50000</pre>
  
-  2&gt; sc:expected_value([ {-1,37}, {35,1} ]).
+  <p><a href="http://www.wolframalpha.com/input/?i=ExpectedValue[+f%2C+{1%2C2%2C3%2C4%2C5%2C6}%2C+f+]">Wolfram Alpha confirms</a></p>
+ 
+  <pre>     2&gt; sc:expected_value([ {-1,37}, {35,1} ]).
   -5.26316e-2</pre></p>
 <p><b>Introduced in:</b> Version 502</p>
 
@@ -1172,8 +1189,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 569 2011-03-22 01:04:49Z john $"},
-   {svn_revision,"$Revision: 569 $"},
+   {svn_id,"$Id: sc.erl 570 2011-03-22 01:17:07Z john $"},
+   {svn_revision,"$Revision: 570 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1694,6 +1711,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 21 2011, 21:16:50.</i></p>
+<p><i>Generated by EDoc, Mar 22 2011, 18:15:38.</i></p>
 </body>
 </html>
