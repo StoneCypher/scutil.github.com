@@ -94,6 +94,7 @@
     is_postfix/2,
     walk_unique_pairings/2,
     count_of/2,
+    integer_to_radix_list/2,
 
     halstead_complexity/4,
       halstead_complexity/5,
@@ -4333,3 +4334,38 @@ halstead_complexity(DistinctOperators, DistinctOperands, TotalOperators, TotalOp
     Effort            = Volume * Difficulty,
 
     { Effort, [{volume, Volume}, {difficulty, Difficulty}, {program_length, ProgramLength}, {program_vocabulary, ProgramVocabulary}] }.
+
+
+
+
+
+%% @spec integer_to_radix_list(Number::number(), Radix::tuple()) -> list()
+
+%% @doc {@section Utility} Convert a number to a radix string using a radix list of your specification and any size.  When appropriate, prefer the system provided `erlang:integer_to_list/2'.  Lists are accepted, but converted to tuples before use, so are inefficient.  ```1> sc_convert:integer_to_radix_list(1111, "0123456789abcdef").
+%% "457"
+%%
+%% 2> sc_convert:integer_to_radix_list(1111, "0123456789").
+%% "1111"
+%%
+%% 3> sc_convert:integer_to_radix_list(1234567890, "abcdefghij").
+%% "bcdefghija"
+%%
+%% 4> sc_convert:integer_to_radix_list(12648430, {$0, $1, $2, $3, $4, $5, $6, $7, $8, $9, $A, $B, $C, $D, $E, $F}).
+%% "C0FFEE"
+%%
+%% 5> sc_convert:integer_to_radix_list(1234567890, [alpha, beta, gamma, delta, epsilon, zeta, eta, theta, kappa, lambda]).
+%% [beta,gamma,delta,epsilon,zeta,eta,theta,kappa,lambda,alpha]'''
+
+%% @since Version 434
+
+integer_to_radix_list(Number, RadixItems) when is_tuple(RadixItems) ->
+
+    Radix = size(RadixItems),
+    [ element(Ch+1, RadixItems) || Ch <- downshift_radix([], Number, Radix) ];
+
+
+
+
+integer_to_radix_list(Number, RadixList) when is_list(RadixList) ->
+
+    integer_to_radix_list(Number, list_to_tuple(RadixList)).

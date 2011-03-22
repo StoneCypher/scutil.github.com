@@ -450,12 +450,16 @@ downshift_radix(InStep, Number, Radix) ->
 
 %% @doc {@section Utility} Convert a number to a radix string using a radix list of your specification and any size.  When appropriate, prefer the system provided `erlang:integer_to_list/2'.  Lists are accepted, but converted to tuples before use, so are inefficient.  ```1> sc_convert:integer_to_radix(1111, "0123456789abcdef").
 %% "457"
+%%
 %% 2> sc_convert:integer_to_radix(1111, "0123456789").
 %% "1111"
+%%
 %% 3> sc_convert:integer_to_radix(1234567890, "abcdefghij").
 %% "bcdefghija"
-%% 4> sc_convert:integer_to_radix(12648430, {$0, $1, $2, $3, $4, $5, $6, $7, $8, $9, $a, $b, $C, $d, $e, $f}).
-%% "C0ffee"'''
+%%
+%% 4> sc_convert:integer_to_radix(12648430, {$0, $1, $2, $3, $4, $5, $6, $7, $8, $9, $A, $B, $C, $D, $E, $F}).
+%% "C0FFEE"
+%%
 %% 5> sc_convert:integer_to_radix(1234567890, [alpha, beta, gamma, delta, epsilon, zeta, eta, theta, kappa, lambda]).
 %% [beta,gamma,delta,epsilon,zeta,eta,theta,kappa,lambda,alpha]'''
 
