@@ -21,7 +21,7 @@
 %%  backslash.  Automatic documentation generation via edoc will then
 %%  generate HTML docs.
 %%
-%%  For example, if you have this source in /projects/scutil or 
+%%  For example, if you have this source in /projects/scutil or
 %%  c:\projects\scutil, and you wanted the documentation in
 %%  /project/scutil/erl/src/docs or c:\projects\scutil\docs
 %%
@@ -94,6 +94,9 @@
     is_postfix/2,
     walk_unique_pairings/2,
     count_of/2,
+
+    eval/1,
+      eval/2,
 
     every_member_representation/1,
       every_member_representation/2,
@@ -3905,3 +3908,31 @@ abstract(Module, DoStrip) ->
             { error, "ScUtil's abstract code functions require that a module be compiled with debug_info enabled, eg 'c(" ++ atom_to_list(Module) ++ ",[debug_info]).'" }
 
     end.
+
+
+
+
+
+%% @since Version 556
+% modified from http://www.trapexit.org/String_Eval
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+eval(S) ->
+
+    eval(S,erl_eval:new_bindings()).
+
+
+
+
+
+%% @since Version 556
+% from http://www.trapexit.org/String_Eval
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+eval(S, Environ) ->
+
+    {ok, Scanned,_} = erl_scan:string(S),
+    {ok, Parsed}    = erl_parse:parse_exprs(Scanned),
+    erl_eval:exprs(Parsed,Environ).
