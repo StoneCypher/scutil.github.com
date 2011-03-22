@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 564 $</p>
+<p><b>Version:</b> $Revision: 567 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -162,7 +162,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#hmean_vector_normal-1">hmean_vector_normal/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the harmonic mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#index_of_first-2">index_of_first/2</a></td><td>Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.</td></tr>
 <tr><td valign="top"><a href="#instant_runoff_vote-1">instant_runoff_vote/1</a></td><td><span style="color:orange;font-style:italic">Untested</span>  Performs an instant runoff vote.</td></tr>
-<tr><td valign="top"><a href="#integer_to_radix_list-2">integer_to_radix_list/2</a></td><td><a href="#Utility">Utility</a> Convert a number to a radix string using a radix list of your specification and any size.</td></tr>
+<tr><td valign="top"><a href="#integer_to_radix_list-2">integer_to_radix_list/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Convert a number to a radix string using a radix list of your specification and any size.</td></tr>
 <tr><td valign="top"><a href="#is_postfix-2">is_postfix/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#is_sorted_list-1">is_sorted_list/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns true if the list is sorted; false otherwise.</td></tr>
 <tr><td valign="top"><a href="#is_unique_list-1">is_unique_list/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns true if the list is unique; false otherwise.</td></tr>
@@ -180,6 +180,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 </td></tr>
 <tr><td valign="top"><a href="#list_intersection-3">list_intersection/3</a></td><td>Efficiently computes the intersection of two lists.</td></tr>
 <tr><td valign="top"><a href="#list_product-1">list_product/1</a></td><td>Takes the product of all numbers in the list.</td></tr>
+<tr><td valign="top"><a href="#list_to_term-1">list_to_term/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#median-1">median/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes the median (central) value of a list.</td></tr>
 <tr><td valign="top"><a href="#median_absolute_deviation-1">median_absolute_deviation/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculate the median absolute deviation of a <code><a href="#type-numericlist">numericlist()</a></code>.</td></tr>
 <tr><td valign="top"><a href="#member_sets-1">member_sets/1</a></td><td>Equivalent to <a href="#member_sets-2"><tt>member_sets(Memberships, no_absence)</tt></a>.
@@ -873,7 +874,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="integer_to_radix_list-2">integer_to_radix_list/2</a></h3>
 <div class="spec">
 <p><tt>integer_to_radix_list(Number::number(), Radix::tuple()) -&gt; list()</tt></p>
-</div><p><a href="#Utility">Utility</a> Convert a number to a radix string using a radix list of your specification and any size.  When appropriate, prefer the system provided <code>erlang:integer_to_list/2</code>.  Lists are accepted, but converted to tuples before use, so are inefficient.  <pre>  1&gt; sc_convert:integer_to_radix_list(1111, "0123456789abcdef").
+</div><p><span style="color:orange;font-style:italic">Untested</span> Convert a number to a radix string using a radix list of your specification and any size.  When appropriate, prefer the system provided <code>erlang:integer_to_list/2</code>.  Lists are accepted, but converted to tuples before use, so are inefficient.  <pre>  1&gt; sc_convert:integer_to_radix_list(1111, "0123456789abcdef").
   "457"
  
   2&gt; sc_convert:integer_to_radix_list(1111, "0123456789").
@@ -887,7 +888,7 @@ presenting the actual volume of functionality present here.  We can get the cove
  
   5&gt; sc_convert:integer_to_radix_list(1234567890, [alpha, beta, gamma, delta, epsilon, zeta, eta, theta, kappa, lambda]).
   [beta,gamma,delta,epsilon,zeta,eta,theta,kappa,lambda,alpha]</pre></p>
-<p><b>Introduced in:</b> Version 434</p>
+<p><b>Introduced in:</b> Version 566</p>
 
 <h3 class="function"><a name="is_postfix-2">is_postfix/2</a></h3>
 <div class="spec">
@@ -1031,6 +1032,12 @@ presenting the actual volume of functionality present here.  We can get the cove
   10.8</pre></p>
 <p><b>Introduced in:</b> Version 476</p>
 
+<h3 class="function"><a name="list_to_term-1">list_to_term/1</a></h3>
+<div class="spec">
+<p><tt>list_to_term(List) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 216</p>
+
 <h3 class="function"><a name="median-1">median/1</a></h3>
 <div class="spec">
 <p><tt>median(List::<a href="#type-numericlist">numericlist()</a>) -&gt; number()</tt></p>
@@ -1145,8 +1152,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 564 2011-03-22 00:46:00Z john $"},
-   {svn_revision,"$Revision: 564 $"},
+   {svn_id,"$Id: sc.erl 567 2011-03-22 00:59:27Z john $"},
+   {svn_revision,"$Revision: 567 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1657,6 +1664,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 21 2011, 20:58:16.</i></p>
+<p><i>Generated by EDoc, Mar 21 2011, 21:01:11.</i></p>
 </body>
 </html>

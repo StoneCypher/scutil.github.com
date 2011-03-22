@@ -95,6 +95,7 @@
     walk_unique_pairings/2,
     count_of/2,
     integer_to_radix_list/2,
+    list_to_term/1,
 
     halstead_complexity/4,
       halstead_complexity/5,
@@ -4341,7 +4342,7 @@ halstead_complexity(DistinctOperators, DistinctOperands, TotalOperators, TotalOp
 
 %% @spec integer_to_radix_list(Number::number(), Radix::tuple()) -> list()
 
-%% @doc {@section Utility} Convert a number to a radix string using a radix list of your specification and any size.  When appropriate, prefer the system provided `erlang:integer_to_list/2'.  Lists are accepted, but converted to tuples before use, so are inefficient.  ```1> sc_convert:integer_to_radix_list(1111, "0123456789abcdef").
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Convert a number to a radix string using a radix list of your specification and any size.  When appropriate, prefer the system provided `erlang:integer_to_list/2'.  Lists are accepted, but converted to tuples before use, so are inefficient.  ```1> sc_convert:integer_to_radix_list(1111, "0123456789abcdef").
 %% "457"
 %%
 %% 2> sc_convert:integer_to_radix_list(1111, "0123456789").
@@ -4374,11 +4375,40 @@ integer_to_radix_list(Number, RadixList) when is_list(RadixList) ->
 
 
 
-%% @internal
 %% @since Version 567
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 downshift_radix(InStep, 0, _Radix) ->
     InStep;
 
 downshift_radix(InStep, Number, Radix) ->
     downshift_radix([Number rem Radix]++InStep, trunc((Number-(Number rem Radix)) / Radix), Radix ).
+
+
+
+
+
+% Like binary_to_term, but not so much for binaries
+% thanks dizzyd (modified for error reporting)
+
+
+
+%% @since Version 216
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+list_to_term(List) ->
+
+    case catch erl_scan:string(List) of
+
+        { ok, Tokens, _ } ->
+
+            case erl_parse:parse_term( Tokens ++ [{ dot, 1 }] ) of
+                { ok,Term } -> Term;
+                Error       -> { error, Error }
+            end;
+
+        Error -> { error, Error }
+
+    end.
