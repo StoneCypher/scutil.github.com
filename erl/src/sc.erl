@@ -97,6 +97,7 @@
     integer_to_radix_list/2,
     list_to_term/1,
     io_list_to_hex_string/1,
+    nybble_to_hex/1,
 
     halstead_complexity/4,
       halstead_complexity/5,
@@ -4468,3 +4469,29 @@ io_list_to_hex_string([Item|Remainder], Work) when is_integer(Item), Item >= 0, 
 io_list_to_hex_string(_, _) ->
 
     {error, not_an_io_list}.
+
+
+
+
+
+%% @type nybble() = integer().  A nybble must be an integer in the range 0-15, inclusive.
+
+%% @spec nybble_to_hex(Nyb::nybble()) -> integer()
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Convert a nybble() to a hexchar(). ```1> scutil:nybble_to_hex(7).
+%% 55
+%%
+%% 2> scutil:nybble_to_hex(15).
+%% 102'''
+
+%% @since Version 570
+
+nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 0,  Nyb < 10 ->
+
+    $0 + Nyb;
+
+
+
+nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 10, Nyb < 16 ->
+
+    $a + Nyb - 10.
