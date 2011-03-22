@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 571 $</p>
+<p><b>Version:</b> $Revision: 572 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -162,12 +162,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#factorial-1">factorial/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#factorize-1">factorize/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#first_difference-1">first_difference/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
-<tr><td valign="top"><a href="#first_pos-2">first_pos/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> <pre>  1&gt; sc_lists:first_pos([a,b,c,d,2,f],fun erlang:is_integer/1).
-  5
- 
-  2&gt; sc_lists:first_pos([a,b,c,d,e,f],fun erlang:is_integer/1).
-  false</pre></td></tr>
-<tr><td valign="top"><a href="#first_pos-3">first_pos/3</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#first_pos-2">first_pos/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns false if none pass.</td></tr>
+<tr><td valign="top"><a href="#first_pos-3">first_pos/3</a></td><td><span style="color:orange;font-style:italic">Untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns a default value if none is found.</td></tr>
 <tr><td valign="top"><a href="#flag_sets-1">flag_sets/1</a></td><td>Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
 <tr><td valign="top"><a href="#floor-1">floor/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#function_point_count-1">function_point_count/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
@@ -263,46 +259,9 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Take the weighted arithmetic mean of the input values.</td></tr>
 <tr><td valign="top"><a href="#zip_n-1">zip_n/1</a></td><td>Equivalent to <a href="#zip_n-2"><tt>zip_n(Ls, to_tuple)</tt></a>.
 </td></tr>
-<tr><td valign="top"><a href="#zip_n-2">zip_n/2</a></td><td>Computes a zip on any sized group of lists, rather than just two or three as offered by the lists module.<pre>  1&gt; sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii] ]).
-  [{1,a,i},{2,b,ii},{3,c,iii}]
- 
-  2&gt; sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii], [x,y,z], [red,blue,green], [april,may,june] ]).
-  [{1,a,i,x,red,april},
-   {2,b,ii,y,blue,may},
-   {3,c,iii,z,green,june}]
- 
-  This is actually more efficient than one might expect at first glance.  I ran a benchmark of 100,000 transformations of a list of lists into a list of tuples using &lt;a href="#benchmark-3"&gt;&lt;code&gt;benchmark/3&lt;/code&gt;&lt;/a&gt; and &lt;a href="#multi_do-4"&gt;&lt;code&gt;multi_do/4&lt;/code&gt;&lt;/a&gt; against both zip_n and the library function zip3; the library function won at 150 seconds to 175, which is a far smaller difference than I expected.```3&gt; Testy = [ [1,2,3], [1,2,3], [1,2,3] ].
-  [[1,2,3],[1,2,3],[1,2,3]]
- 
-  4&gt; sc:benchmark(sc, multi_do, [100000, sc, zip_n, [Testy]]).
-  {174.95563, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }
- 
-  5&gt; sc:benchmark(sc, multi_do, [100000, lists, zip3, Testy]).
-  {149.605, [[{1,1,1},{2,2,2},{3,3,3}], [{1,1,1},{2,2,2},{3,3,3}], ... }</pre>
- 
-  <a href="#Thanks">Thanks</a> Thanks to Vladimir Sessikov for contributing this to and thus allowing conscription from <a href="http://www.erlang.org/ml-archive/erlang-questions/200207/msg00066.html">the mailing list</a>.</td></tr>
+<tr><td valign="top"><a href="#zip_n-2">zip_n/2</a></td><td>Computes a zip on any sized group of lists, rather than just two or three as offered by the lists module.</td></tr>
 <tr><td valign="top"><a href="#zipf_estimate_list-1">zipf_estimate_list/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Estimates the zipf baseline from each number in a numeric list.</td></tr>
-<tr><td valign="top"><a href="#zipf_nearness-1">zipf_nearness/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> todo <pre>  1&gt; sc:zipf_nearness([ 120, 60, 40, 30, 24, 20 ]).
-  [[ {strength,1.0}, {center,120.0} ],
-   [ {strength,1.0}, {center,120.0} ],
-   [ {strength,1.0}, {center,120.0} ],
-   [ {strength,1.0}, {center,120.0} ],
-   [ {strength,1.0}, {center,120.0} ],
-   [ {strength,1.0}, {center,120.0} ]]
- 
-  2&gt; sc:zipf_nearness([ 411, 198, 135, 101, 82 ]).
-  [[{strength,0.9635036496350365}, {center,405.2}],
-   [{strength,0.9658536585365854}, {center,403.75}],
-   [{strength,0.9853658536585366}, {center,406.3333333333333}],
-   [{strength,0.9853658536585366}, {center,407.0}],
-   [{strength,1.0},                {center,410.0}]]
- 
-  3&gt; sc:zipf_nearness([640,244,231,180,148]).
-  [[{strength, 0.6594594594594595}, {center,656.2}],
-   [{strength, 0.6594594594594595}, {center,660.25}],
-   [{strength, 0.9364864864864865}, {center,717.6666666666666}],
-   [{strength, 0.972972972972973},  {center,730.0}],
-   [{strength, 1.0},                {center,740.0}]]</pre></td></tr>
+<tr><td valign="top"><a href="#zipf_nearness-1">zipf_nearness/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> todo.</td></tr>
 <tr><td valign="top"><a href="#zipf_position_estimate-2">zipf_position_estimate/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Estimates the zipf baseline from a score and a rank position.</td></tr>
 </table>
 
@@ -751,7 +710,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="first_pos-2">first_pos/2</a></h3>
 <div class="spec">
 <p><tt>first_pos(List, Predicate) -&gt; any()</tt></p>
-</div><p><span style="color:orange;font-style:italic">Untested</span> <pre>  1&gt; sc_lists:first_pos([a,b,c,d,2,f],fun erlang:is_integer/1).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns false if none pass. <pre>  1&gt; sc_lists:first_pos([a,b,c,d,2,f],fun erlang:is_integer/1).
   5
  
   2&gt; sc_lists:first_pos([a,b,c,d,e,f],fun erlang:is_integer/1).
@@ -762,7 +721,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="first_pos-3">first_pos/3</a></h3>
 <div class="spec">
 <p><tt>first_pos(List, Predicate, Default) -&gt; any()</tt></p>
-</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns a default value if none is found.  See <a href="#first_pos-2"><code>first_pos/2</code></a> for details.</p>
 
 <h3 class="function"><a name="flag_sets-1">flag_sets/1</a></h3>
 <div class="spec">
@@ -1214,8 +1173,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 571 2011-03-22 22:20:56Z john $"},
-   {svn_revision,"$Revision: 571 $"},
+   {svn_id,"$Id: sc.erl 572 2011-03-22 22:22:29Z john $"},
+   {svn_revision,"$Revision: 572 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1668,7 +1627,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="zip_n-2">zip_n/2</a></h3>
 <div class="spec">
 <p><tt>zip_n(Ls::list(), ResultType::atom()) -&gt; <a href="#type-list_of_tuples">list_of_tuples()</a></tt></p>
-</div><p>Computes a zip on any sized group of lists, rather than just two or three as offered by the lists module.<pre>  1&gt; sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii] ]).
+</div><p>Computes a zip on any sized group of lists, rather than just two or three as offered by the lists module. <pre>  1&gt; sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii] ]).
   [{1,a,i},{2,b,ii},{3,c,iii}]
  
   2&gt; sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii], [x,y,z], [red,blue,green], [april,may,june] ]).
@@ -1704,7 +1663,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="zipf_nearness-1">zipf_nearness/1</a></h3>
 <div class="spec">
 <p><tt>zipf_nearness(PosNumericList::<a href="#type-positive_numeric_list">positive_numeric_list()</a>) -&gt; number()</tt></p>
-</div><p><span style="color:orange;font-style:italic">Untested</span> todo <pre>  1&gt; sc:zipf_nearness([ 120, 60, 40, 30, 24, 20 ]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> todo. <pre>  1&gt; sc:zipf_nearness([ 120, 60, 40, 30, 24, 20 ]).
   [[ {strength,1.0}, {center,120.0} ],
    [ {strength,1.0}, {center,120.0} ],
    [ {strength,1.0}, {center,120.0} ],
@@ -1736,6 +1695,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 22 2011, 18:22:13.</i></p>
+<p><i>Generated by EDoc, Mar 22 2011, 18:28:24.</i></p>
 </body>
 </html>

@@ -844,7 +844,7 @@ zip_n(Ls) ->
 
 %% @spec zip_n(Ls::list(), ResultType::atom()) -> list_of_tuples()
 
-%% @doc Computes a zip on any sized group of lists, rather than just two or three as offered by the lists module.```1> sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii] ]).
+%% @doc Computes a zip on any sized group of lists, rather than just two or three as offered by the lists module. ```1> sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii] ]).
 %% [{1,a,i},{2,b,ii},{3,c,iii}]
 %%
 %% 2> sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii], [x,y,z], [red,blue,green], [april,may,june] ]).
@@ -1445,7 +1445,7 @@ zipf_estimate_list(PosNumericList) ->
 
 %% @spec zipf_nearness(PosNumericList::positive_numeric_list()) -> number()
 
-%% @doc <span style="color:orange;font-style:italic">Untested</span> todo ```1> sc:zipf_nearness([ 120, 60, 40, 30, 24, 20 ]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> todo. ```1> sc:zipf_nearness([ 120, 60, 40, 30, 24, 20 ]).
 %% [[ {strength,1.0}, {center,120.0} ],
 %%  [ {strength,1.0}, {center,120.0} ],
 %%  [ {strength,1.0}, {center,120.0} ],
@@ -3344,7 +3344,7 @@ keygroup(Pos, [Item|Rem], WorkKey, Work, Output) ->
 
 %% @since Version 539
 %%
-%% @doc <span style="color:orange;font-style:italic">Untested</span> ```1> sc_lists:first_pos([a,b,c,d,2,f],fun erlang:is_integer/1).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns false if none pass. ```1> sc_lists:first_pos([a,b,c,d,2,f],fun erlang:is_integer/1).
 %% 5
 %%
 %% 2> sc_lists:first_pos([a,b,c,d,e,f],fun erlang:is_integer/1).
@@ -3358,7 +3358,7 @@ first_pos(List, Predicate) ->
 
 
 
-%% @doc <span style="color:orange;font-style:italic">Untested</span>
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns a default value if none is found.  See {@link first_pos/2} for details.
 
 first_pos(List, Predicate, Default) ->
 
