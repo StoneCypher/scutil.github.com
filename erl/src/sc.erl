@@ -4209,7 +4209,7 @@ simple_ranking(List) when is_list(List) ->
 %% 2> scutil:tied([100,200,200,300]).
 %% [{1.0,300},{2.5,200},{2.5,200},{4.0,100}]'''
 
-%% @since Version 42
+%% @since Version 561
 
 tied_ranking(List) ->
 
@@ -4262,3 +4262,32 @@ tied_rank_worker([Item|Remainder], Work, PrevValue) ->
 
 
 
+%% @todo comeback make a tied/2 which takes a sorting predicate
+
+%% @spec tied_ordered_ranking(Values::numericlist()) -> rankinglist()
+
+%% @doc {@section Statistics} Returns a tied ranked ordering of the list, ordered according to the input ordering rather than the sorted ordering.  As with {@link tied/1}, all rankings are floats, and ties are represented as the centers of ranges. ```1> scutil:ordered([10,90,20,80,30,70,40,60,50]).
+%% [{9.0,10}, {1.0,90}, {8.0,20}, {2.0,80}, {7.0,30}, {3.0,70}, {6.0,40}, {4.0,60}, {5.0,50}]
+%%
+%% 2> scutil:ordered([100,200,200,300]).
+%% [{4.0,100},{2.5,200},{2.5,200},{1.0,300}]'''
+
+%% @since Version 562
+
+tied_ordered_ranking(List) when is_list(List) ->
+
+    tied_ordered_ranking(List, tied_ranking(List), []).
+
+
+
+tied_ordered_ranking([], [], Work) ->
+
+    lists:reverse(Work);
+
+
+
+tied_ordered_ranking([Front|Rem], Ranks, Work) ->
+
+    {value,Item}  = lists:keysearch(Front,2,Ranks),
+    {IRank,Front} = Item,
+    tied_ordered_ranking(Rem, Ranks--[Item], [{IRank,Front}]++Work).
