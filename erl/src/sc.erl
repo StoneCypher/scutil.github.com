@@ -95,6 +95,10 @@
     walk_unique_pairings/2,
     count_of/2,
 
+    simple_ranking/1,
+      tied_ranking/1,
+      tied_ordered_ranking/1,
+
     spearman_correlation/1,
       spearman_correlation/2,
 
@@ -3954,7 +3958,7 @@ eval(S, Environ) ->
 
 %% @spec kendall_correlation(TupleList::coordlist()) -> { tau, Correlation::number() }
 
-%% @doc {@section Statistics} Compute the Kendall Tau Rank Correlation Coefficient of a list of coordinate tuples. ```1> scutil:kendall([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Compute the Kendall Tau Rank Correlation Coefficient of a list of coordinate tuples. ```1> scutil:kendall([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
 %% {tau,1.0}
 %%
 %% 2> scutil:kendall([ {1,5}, {2,4}, {3,3}, {4,2}, {5,1} ]).
@@ -4000,8 +4004,8 @@ kendall_correlation(List1, List2) when length(List1) /= length(List2) ->
 
 kendall_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
-    {RA,_} = lists:unzip(ordered_ranks_of(List1)),
-    {RB,_} = lists:unzip(ordered_ranks_of(List2)),
+    {RA,_} = lists:unzip(tied_ordered_ranking(List1)),
+    {RB,_} = lists:unzip(tied_ordered_ranking(List2)),
 
     Ordering = lists:keysort(1, lists:zip(RA,RB)),
     {_,OrdB} = lists:unzip(Ordering),
@@ -4041,7 +4045,7 @@ kendall_right_of_item(B, Rem) ->
 
 %% @spec spearman_correlation(TupleList::coordlist()) -> { rsquared, Correlation::number() }
 
-%% @doc {@section Statistics} Compute the Spearman's Rank Correlation Coefficient of a list of coordinate tuples. ```1> scutil:spearman([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Compute the Spearman's Rank Correlation Coefficient of a list of coordinate tuples. ```1> scutil:spearman([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
 %% {rsquared,1.0}
 %%
 %% 2> scutil:spearman([ {1,5}, {2,4}, {3,3}, {4,2}, {5,1} ]).
@@ -4087,8 +4091,8 @@ spearman_correlation(List1, List2) when length(List1) /= length(List2) ->
 
 spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
-    {TR1,_} = lists:unzip(simple_rank(List1)),
-    {TR2,_} = lists:unzip(simple_rank(List2)),
+    {TR1,_} = lists:unzip(simple_ranking(List1)),
+    {TR2,_} = lists:unzip(simple_ranking(List2)),
 
     Numerator   = 6 * lists:sum([ square(D1-D2) || {D1,D2} <- lists:zip(TR1,TR2) ]),
     Denominator = math:pow(length(List1),3)-length(List1),
@@ -4103,7 +4107,7 @@ spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
 %% @spec pearson_correlation(TupleList::coordlist()) -> { r, Correlation::number() }
 
-%% @doc {@section Statistics} Compute the Pearson Correlation Coefficient of a list of coordinate tuples. ```1> sc_correlate:pearson([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Compute the Pearson Correlation Coefficient of a list of coordinate tuples. ```1> sc_correlate:pearson([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
 %% {r,1.0}
 %%
 %% 2> sc_correlate:pearson([ {1,5}, {2,4}, {3,3}, {4,2}, {5,1} ]).
@@ -4167,3 +4171,25 @@ pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
           {r, (Numer/Denom)}
 
     end.
+
+
+
+
+
+%% @type ranking() = { Ranking::number(), Value::any() }.  Values are usually {@type number()}s, but do not have to be with custom ranking predicates.
+%% @type rankinglist() = list().  Members of a {@type rankinglist()} must be {@type ranking()}s.
+
+%% @todo comeback make a simple/2 which takes a sorting predicate
+%% @spec simple_ranking(Values::numericlist()) -> rankinglist()
+
+%% @doc {@section Statistics} Returns a ranked ordering of the list without tie rankings.  ```1> sc_rank:simple([10,90,20,80,30,70,40,60,50]).
+%% [{1,90}, {2,80}, {3,70}, {4,60}, {5,50}, {6,40}, {7,30}, {8,20}, {9,10}]
+%%
+%% 2> sc_rank:simple([10,10,10,10]).
+%% [{1,10},{2,10},{3,10},{4,10}]'''
+
+%% @since Version 560
+
+simple_ranking(List) when is_list(List) ->
+
+    lists:zip(lists:seq(1,length(List)),lists:reverse(lists:sort(List))).
