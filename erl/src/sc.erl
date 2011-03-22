@@ -98,6 +98,9 @@
     spearman_correlation/1,
       spearman_correlation/2,
 
+    pearson_correlation/1,
+      pearson_correlation/2,
+
     kendall_correlation/1,
       kendall_correlation/2,
 
@@ -4087,7 +4090,80 @@ spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
     {TR1,_} = lists:unzip(simple_rank(List1)),
     {TR2,_} = lists:unzip(simple_rank(List2)),
 
-    Numerator   = 6 * lists:sum([ (D1-D2)*(D1-D2) || {D1,D2} <- lists:zip(TR1,TR2) ]),
+    Numerator   = 6 * lists:sum([ square(D1-D2) || {D1,D2} <- lists:zip(TR1,TR2) ]),
     Denominator = math:pow(length(List1),3)-length(List1),
 
     {rsquared, 1-(Numerator/Denominator) }.
+
+
+
+
+
+%% @todo use test data at http://changingminds.org/explanations/research/analysis/pearson.htm
+
+%% @spec pearson_correlation(TupleList::coordlist()) -> { r, Correlation::number() }
+
+%% @doc {@section Statistics} Compute the Pearson Correlation Coefficient of a list of coordinate tuples. ```1> sc_correlate:pearson([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
+%% {r,1.0}
+%%
+%% 2> sc_correlate:pearson([ {1,5}, {2,4}, {3,3}, {4,2}, {5,1} ]).
+%% {r,-1.0}
+%%
+%% 3> sc_correlate:pearson([ {1,3}, {2,3}, {3,3}, {4,3}, {5,3} ]).
+%% {r,0.0}
+%%
+%% 4> sc_correlate:pearson([ {1,2}, {2,2.5}, {3,3}, {4,3.5}, {5,4} ]).
+%% {r,1.0}
+%%
+%% 5> sc_correlate:pearson([ {1,2}, {2,2.4}, {3,3}, {4,3.6}, {5,4} ]).
+%% {r,0.9970544855015818}'''
+%%
+%% @since Version 559
+
+pearson_correlation(TupleList) when is_list(TupleList) ->
+
+    {A,B} = lists:unzip(TupleList),
+    pearson_correlation(A,B).
+
+
+
+%% @equiv pearson(lists:zip(List1, List2))
+
+pearson_correlation(List1, _) when length(List1) < 2 ->
+
+    {r, 0.0};
+
+
+
+pearson_correlation(List1, List2) when length(List1) /= length(List2) ->
+
+    {error, "For the Pearson correlation, the input lists must be the same length."};
+
+
+
+pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
+
+    SumXY = lists:sum([A*B || {A,B} <- lists:zip(List1,List2) ]),   % the sum of the products of each matched pair
+
+    SumX  = lists:sum(List1),
+    SumY  = lists:sum(List2),
+
+    SumXX = lists:sum([L*L || L<-List1]),                           % the sums of the squared items
+    SumYY = lists:sum([L*L || L<-List2]),
+
+    N     = length(List1),
+
+    case math:sqrt(   ( (N*SumXX)-(SumX*SumX) )   *   ( (N*SumYY)-(SumY*SumY) )   ) of
+
+        0 ->
+            {r, 0.0};  % some nasty value sets otherwise cause divide by zero
+
+
+        0.0 ->
+            {r, 0.0};  % eg [ [1,1,1,1,1], [1,1,2,1,2] ]
+
+        Denom ->
+          Numer = (N*SumXY) - (SumX * SumY),
+          {r, (Numer/Denom)}
+
+    end.
