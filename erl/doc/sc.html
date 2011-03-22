@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 570 $</p>
+<p><b>Version:</b> $Revision: 571 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -51,6 +51,14 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="typedecl"><a name="type-filterfunction">filterfunction()</a></h3>
 <p><tt>filterfunction() = function()</tt></p>
 <p>Filter functions are 1ary binary predicates - they accept an argument and return either true or false.</p>
+
+<h3 class="typedecl"><a name="type-hexchar">hexchar()</a></h3>
+<p><tt>hexchar() = integer()</tt></p>
+<p>Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.</p>
+
+<h3 class="typedecl"><a name="type-hexstring">hexstring()</a></h3>
+<p><tt>hexstring() = list()</tt></p>
+<p>All elements of the list must be of type <code><a href="#type-hexchar">hexchar()</a></code>.</p>
 
 <h3 class="typedecl"><a name="type-io_list">io_list()</a></h3>
 <p><tt>io_list() = list()</tt></p>
@@ -119,7 +127,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#bandwidth_calc-2">bandwidth_calc/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculates digital line bandwidth over timescales in converted units.</td></tr>
 <tr><td valign="top"><a href="#by_distance-2">by_distance/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#by_distance_raw-2">by_distance_raw/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
-<tr><td valign="top"><a href="#byte_to_hex-1">byte_to_hex/1</a></td><td><a href="#Conversion">Conversion</a> Convert a byte() into a hexstring().</td></tr>
+<tr><td valign="top"><a href="#byte_to_hex-1">byte_to_hex/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Convert a byte() into a hexstring().</td></tr>
 <tr><td valign="top"><a href="#caspers_jones_estimate-1">caspers_jones_estimate/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#ceil-1">ceil/1</a></td><td>Equivalent to <a href="#ceiling-1"><tt>ceiling(X)</tt></a>.
 </td></tr>
@@ -171,6 +179,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#halstead_complexity-4">halstead_complexity/4</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#halstead_complexity-5">halstead_complexity/5</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#harmonic_mean-1">harmonic_mean/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Take the harmonic mean of a list of numbers.</td></tr>
+<tr><td valign="top"><a href="#hex_to_int-1">hex_to_int/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Convert a hexstring() or hexchar() into its numeric value.</td></tr>
 <tr><td valign="top"><a href="#histograph-1">histograph/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes a histograph count of the items in the list.</td></tr>
 <tr><td valign="top"><a href="#hmean_vector_normal-1">hmean_vector_normal/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the harmonic mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#index_of_first-2">index_of_first/2</a></td><td>Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.</td></tr>
@@ -410,12 +419,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="byte_to_hex-1">byte_to_hex/1</a></h3>
 <div class="spec">
 <p><tt>byte_to_hex(TheByte::<a href="#type-byte">byte()</a>) -&gt; <a href="#type-hexstring">hexstring()</a></tt></p>
-</div><p><a href="#Conversion">Conversion</a> Convert a byte() into a hexstring().  The hexstring() result will always be two characters (left padded with zero if necessary). <pre>  1&gt; scutil:byte_to_hex(7).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Convert a byte() into a hexstring().  The hexstring() result will always be two characters (left padded with zero if necessary). <pre>  1&gt; scutil:byte_to_hex(7).
   "07"
  
   2&gt; scutil:byte_to_hex(255).
   "ff"</pre></p>
-<p><b>Introduced in:</b> Version 20</p>
+<p><b>Introduced in:</b> Version 571</p>
 
 <h3 class="function"><a name="caspers_jones_estimate-1">caspers_jones_estimate/1</a></h3>
 <div class="spec">
@@ -699,7 +708,10 @@ presenting the actual volume of functionality present here.  We can get the cove
  
   <p><a href="http://www.wolframalpha.com/input/?i=ExpectedValue[+f%2C+{1%2C2%2C3%2C4%2C5%2C6}%2C+f+]">Wolfram Alpha confirms</a></p>
  
-  <pre>     2&gt; sc:expected_value([ {-1,37}, {35,1} ]).
+  <pre>     2&gt; sc:expected_value([ {1,5}, {10,1} ]).
+  2.5
+ 
+  3&gt; sc:expected_value([ {-1,37}, {35,1} ]).
   -5.26316e-2</pre></p>
 <p><b>Introduced in:</b> Version 502</p>
 
@@ -865,6 +877,19 @@ presenting the actual volume of functionality present here.  We can get the cove
   Thanks to Forest (anonymous by choice) for help resolving 0-correctness.</p>
 <p><b>Introduced in:</b> Version 483</p>
 <p><b>See also:</b> <a href="#arithmetic_mean-1">arithmetic_mean/1</a>, <a href="#geometric_mean-1">geometric_mean/1</a>, <a href="#hmean_vector_normal-1">hmean_vector_normal/1</a>.</p>
+
+<h3 class="function"><a name="hex_to_int-1">hex_to_int/1</a></h3>
+<div class="spec">
+<p><tt>hex_to_int(HexChar::<a href="#type-hexstring">hexstring()</a> | <a href="#type-hexchar">hexchar()</a>) -&gt; integer()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span> Convert a hexstring() or hexchar() into its numeric value. <pre>  1&gt; scutil:hex_to_int("c0ffEE").
+  12648430
+ 
+  2&gt; scutil:hex_to_int($e).
+  14
+ 
+  3&gt; scutil:hex_to_int("100").
+  256</pre></p>
+<p><b>Introduced in:</b> Version 572</p>
 
 <h3 class="function"><a name="histograph-1">histograph/1</a></h3>
 <div class="spec">
@@ -1189,8 +1214,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 570 2011-03-22 01:17:07Z john $"},
-   {svn_revision,"$Revision: 570 $"},
+   {svn_id,"$Id: sc.erl 571 2011-03-22 22:20:56Z john $"},
+   {svn_revision,"$Revision: 571 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1711,6 +1736,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 22 2011, 18:15:38.</i></p>
+<p><i>Generated by EDoc, Mar 22 2011, 18:22:13.</i></p>
 </body>
 </html>

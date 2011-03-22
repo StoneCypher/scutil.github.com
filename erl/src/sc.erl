@@ -100,6 +100,7 @@
     io_list_to_hex_string/1,
       nybble_to_hex/1,
       byte_to_hex/1,
+      hex_to_int/1,
 
     halstead_complexity/4,
       halstead_complexity/5,
@@ -4511,14 +4512,43 @@ nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 10, Nyb < 16 ->
 
 %% @spec byte_to_hex(TheByte::byte()) -> hexstring()
 
-%% @doc {@section Conversion} Convert a byte() into a hexstring().  The hexstring() result will always be two characters (left padded with zero if necessary). ```1> scutil:byte_to_hex(7).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Convert a byte() into a hexstring().  The hexstring() result will always be two characters (left padded with zero if necessary). ```1> scutil:byte_to_hex(7).
 %% "07"
 %%
 %% 2> scutil:byte_to_hex(255).
 %% "ff"'''
 
-%% @since Version 20
+%% @since Version 571
 
 byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 ->
 
     [ nybble_to_hex(TheByte bsr 4), nybble_to_hex(TheByte band 15) ].
+
+
+
+
+
+%% @type hexchar() = integer().  Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.
+%% @type hexstring() = list().  All elements of the list must be of type {@type hexchar()}.
+
+%% @spec hex_to_int(HexChar::hexstring() | hexchar()) -> integer()
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Convert a hexstring() or hexchar() into its numeric value. ```1> scutil:hex_to_int("c0ffEE").
+%% 12648430
+%%
+%% 2> scutil:hex_to_int($e).
+%% 14
+%%
+%% 3> scutil:hex_to_int("100").
+%% 256'''
+
+%% @since Version 572
+
+hex_to_int(Hex) when is_integer(Hex), Hex >= $0, Hex =< $9 -> Hex - $0;
+hex_to_int(Hex) when is_integer(Hex), Hex >= $a, Hex =< $f -> Hex - $a + 10;
+hex_to_int(Hex) when is_integer(Hex), Hex >= $A, Hex =< $F -> Hex - $A + 10;
+
+hex_to_int(Hex) when is_list(Hex) ->
+    hex_to_int(Hex, 0).
+
+hex_to_int([],          Acc) -> Acc;
+hex_to_int([Digit|Rem], Acc) -> hex_to_int(Rem, (Acc bsl 4) + hex_to_int(Digit)).
