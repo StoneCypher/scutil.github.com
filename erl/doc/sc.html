@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 551 $</p>
+<p><b>Version:</b> $Revision: 554 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -82,6 +82,11 @@ presenting the actual volume of functionality present here.  We can get the cove
 
 <h2><a name="index">Function Index</a></h2>
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#absolute_difference-2">absolute_difference/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes the absolute value of the difference between the two arguments.</td></tr>
+<tr><td valign="top"><a href="#abstract-1">abstract/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#abstract-2">abstract/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#abstract_attributes-1">abstract_attributes/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#abstract_function-2">abstract_function/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#abstract_functions-1">abstract_functions/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#alarm_set-3">alarm_set/3</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#alarm_terminate-1">alarm_terminate/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#all_neighbor_pairs-1">all_neighbor_pairs/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
@@ -111,8 +116,10 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#distinct_neighbor_pairs-2">distinct_neighbor_pairs/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#dstat-2">dstat/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#elements-2">elements/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
-<tr><td valign="top"><a href="#elements-3">elements/3</a></td><td></td></tr>
-<tr><td valign="top"><a href="#elements-4">elements/4</a></td><td></td></tr>
+<tr><td valign="top"><a href="#elements-3">elements/3</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#elements-4">elements/4</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#entrypoints-1">entrypoints/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#entrypoints-2">entrypoints/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#even_or_odd-1">even_or_odd/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Documentary convenience function that returns the atoms <code>even</code> or <code>odd</code> for any integer.</td></tr>
 <tr><td valign="top"><a href="#every_flag_representation-1">every_flag_representation/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
 <tr><td valign="top"><a href="#every_member_representation-1">every_member_representation/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
@@ -129,9 +136,11 @@ presenting the actual volume of functionality present here.  We can get the cove
  
   2&gt; sc_lists:first_pos([a,b,c,d,e,f],fun erlang:is_integer/1).
   false</pre></td></tr>
-<tr><td valign="top"><a href="#first_pos-3">first_pos/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#first_pos-3">first_pos/3</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#flag_sets-1">flag_sets/1</a></td><td>Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
 <tr><td valign="top"><a href="#floor-1">floor/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#function_point_count-1">function_point_count/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#function_stats-1">function_stats/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#gen_docs-0">gen_docs/0</a></td><td>Generates library documentation using the paths appropriate for the author's PC; you almost certainly want <a href="#gen_docs-2"><code>gen_docs/2</code></a> instead.</td></tr>
 <tr><td valign="top"><a href="#gen_docs-2">gen_docs/2</a></td><td>Generates library documentation from and to the specified paths <code>WhereIsSrc</code> and <code>WhereToPutDocs</code> respectively.</td></tr>
 <tr><td valign="top"><a href="#geometric_mean-1">geometric_mean/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Take the geometric mean of a list of numbers.</td></tr>
@@ -150,7 +159,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#keygroup-3">keygroup/3</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#kurtosis-1">kurtosis/1</a></td><td><span style="color:red">Buggy</span> <span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#last_while_pos-2">last_while_pos/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the last element of the initial sequence where all items pass the predicate function.</td></tr>
-<tr><td valign="top"><a href="#last_while_pos-3">last_while_pos/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#last_while_pos-3">last_while_pos/3</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#list_intersection-2">list_intersection/2</a></td><td>Equivalent to <a href="#list_intersection-3"><tt>list_intersection(List1, List2, unsorted)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#list_intersection-3">list_intersection/3</a></td><td>Efficiently computes the intersection of two lists.</td></tr>
@@ -179,7 +188,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#permute-2">permute/2</a></td><td>Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast <a href="#combinations-2"><code>combinations/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#range_scale-1">range_scale/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Get the scale of a same-sign numeric range.</td></tr>
 <tr><td valign="top"><a href="#reverse_filter-2">reverse_filter/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
-<tr><td valign="top"><a href="#reverse_map-2">reverse_map/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#reverse_map-2">reverse_map/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#reverse_map_filter-3">reverse_map_filter/3</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#root_mean_square-1">root_mean_square/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculates the root mean square of the values in the list.</td></tr>
 <tr><td valign="top"><a href="#root_sum_square-1">root_sum_square/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculate the magnitude (also known as the root sum square) of a vector.</td></tr>
@@ -255,6 +264,36 @@ presenting the actual volume of functionality present here.  We can get the cove
 </div><p><span style="color:orange;font-style:italic">Untested</span> Takes the absolute value of the difference between the two arguments.  Offered mostly to make dependant code clearer. <pre>  1&gt; sc:absolute_difference(1.25, 1).
   0.25</pre></p>
 <p><b>Introduced in:</b> Version 504</p>
+
+<h3 class="function"><a name="abstract-1">abstract/1</a></h3>
+<div class="spec">
+<p><tt>abstract(Module) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 553</p>
+
+<h3 class="function"><a name="abstract-2">abstract/2</a></h3>
+<div class="spec">
+<p><tt>abstract(Module, DoStrip) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 553</p>
+
+<h3 class="function"><a name="abstract_attributes-1">abstract_attributes/1</a></h3>
+<div class="spec">
+<p><tt>abstract_attributes(Module) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> version 532</p>
+
+<h3 class="function"><a name="abstract_function-2">abstract_function/2</a></h3>
+<div class="spec">
+<p><tt>abstract_function(Module, FName) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> version 531</p>
+
+<h3 class="function"><a name="abstract_functions-1">abstract_functions/1</a></h3>
+<div class="spec">
+<p><tt>abstract_functions(Module) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> version 531</p>
 
 <h3 class="function"><a name="alarm_set-3">alarm_set/3</a></h3>
 <div class="spec">
@@ -473,12 +512,24 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="elements-3">elements/3</a></h3>
 <div class="spec">
 <p><tt>elements(Config, Requested, KeyIdx) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 
 <h3 class="function"><a name="elements-4">elements/4</a></h3>
 <div class="spec">
 <p><tt>elements(Config, Requested, KeyIdx, X4) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+
+<h3 class="function"><a name="entrypoints-1">entrypoints/1</a></h3>
+<div class="spec">
+<p><tt>entrypoints(Module) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 530</p>
+
+<h3 class="function"><a name="entrypoints-2">entrypoints/2</a></h3>
+<div class="spec">
+<p><tt>entrypoints(Module, FName) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 530</p>
 
 <h3 class="function"><a name="even_or_odd-1">even_or_odd/1</a></h3>
 <div class="spec">
@@ -632,7 +683,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="first_pos-3">first_pos/3</a></h3>
 <div class="spec">
 <p><tt>first_pos(List, Predicate, Default) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 
 <h3 class="function"><a name="flag_sets-1">flag_sets/1</a></h3>
 <div class="spec">
@@ -670,6 +721,18 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>floor(X) -&gt; any()</tt></p>
 </div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 511</p>
+
+<h3 class="function"><a name="function_point_count-1">function_point_count/1</a></h3>
+<div class="spec">
+<p><tt>function_point_count(Module) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 525</p>
+
+<h3 class="function"><a name="function_stats-1">function_stats/1</a></h3>
+<div class="spec">
+<p><tt>function_stats(Module) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 524</p>
 
 <h3 class="function"><a name="gen_docs-0">gen_docs/0</a></h3>
 <div class="spec">
@@ -848,7 +911,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="last_while_pos-3">last_while_pos/3</a></h3>
 <div class="spec">
 <p><tt>last_while_pos(Predicate, List, Default) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 
 <h3 class="function"><a name="list_intersection-2">list_intersection/2</a></h3>
 <div class="spec">
@@ -987,8 +1050,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 551 2011-03-21 23:43:02Z john $"},
-   {svn_revision,"$Revision: 551 $"},
+   {svn_id,"$Id: sc.erl 554 2011-03-21 23:58:30Z john $"},
+   {svn_revision,"$Revision: 554 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1112,7 +1175,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="reverse_map-2">reverse_map/2</a></h3>
 <div class="spec">
 <p><tt>reverse_map(Workload, Fun) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 546</p>
 
 <h3 class="function"><a name="reverse_map_filter-3">reverse_map_filter/3</a></h3>
@@ -1418,6 +1481,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 21 2011, 19:44:42.</i></p>
+<p><i>Generated by EDoc, Mar 21 2011, 20:04:37.</i></p>
 </body>
 </html>

@@ -138,6 +138,7 @@
 
     abstract/1,
       abstract/2,
+      abstract_attributes/1,
 
     entrypoints/1,
       entrypoints/2,
@@ -2795,26 +2796,16 @@ svn_revision(Module) ->
 
 % todo comeback docs
 
-% @ since Version 524
+%% @since Version 524
 
-% function_stats(Module) ->
-%
-%     [ { entrypoints,     entrypoint_count(Module)     },
-%       { function_labels, function_label_count(Module) },
-%       { function_points, function_point_count(Module) }
-%     ].
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
+function_stats(Module) ->
 
-
-
-
-% todo comeback docs
-
-% @ since Version 525
-
-% function_point_count(Module) ->
-%
-%     length(function_points(Module)).
+    [ { entrypoints,     entrypoint_count(Module)     },
+      { function_labels, function_label_count(Module) },
+      { function_points, function_point_count(Module) }
+    ].
 
 
 
@@ -2822,23 +2813,13 @@ svn_revision(Module) ->
 
 % todo comeback docs
 
-% @ since Version 526
+%% @since Version 525
 
-% function_label_count(Module) ->
-%
-%     length(function_labels(Module)).
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
+function_point_count(Module) ->
 
-
-
-
-% todo comeback docs
-
-% @ since version 527
-
-% entrypoint_count(Module) ->
-%
-%     length(entrypoints(Module)).
+    length(function_points(Module)).
 
 
 
@@ -2846,15 +2827,13 @@ svn_revision(Module) ->
 
 % todo comeback docs
 
-% @ since Version 528
+%% @since Version 526
 
-% function_labels(Module) ->
-%
-%     lists:usort(
-%         [ L ||
-%             {_,L,_,_} <- abstract_functions(Module)
-%         ]
-%     ).
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+function_label_count(Module) ->
+
+    length(function_labels(Module)).
 
 
 
@@ -2862,15 +2841,13 @@ svn_revision(Module) ->
 
 % todo comeback docs
 
-% @ since Version 529
+%% @since version 527
 
-% function_points(Module) ->
-%
-%     lists:usort(
-%         [ {L,A} ||
-%             {_,L,A,_} <- abstract_functions(Module)
-%         ]
-%     ).
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+entrypoint_count(Module) ->
+
+    length(entrypoints(Module)).
 
 
 
@@ -2878,27 +2855,17 @@ svn_revision(Module) ->
 
 % todo comeback docs
 
-% @ since Version 530
+%% @since Version 528
 
-% entrypoints(Module) ->
-%
-%     lists:flatten(
-%         [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- sc_code:abstract_functions(Module) ]
-%     ).
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
+function_labels(Module) ->
 
-
-
-
-% todo comeback docs
-
-% @ since Version 530
-
-% entrypoints(Module, FName) ->
-%
-%     lists:flatten(
-%         [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- abstract_functions(Module), L==FName ]
-%     ).
+    lists:usort(
+        [ L ||
+            {_,L,_,_} <- abstract_functions(Module)
+        ]
+    ).
 
 
 
@@ -2906,28 +2873,17 @@ svn_revision(Module) ->
 
 % todo comeback docs
 
-% @ since version 531
+%% @since Version 529
 
-% abstract_functions(Module) ->
-%
-%     [ {Id, Name, Arity, Code} ||
-%         {function, Id, Name, Arity, Code} <- abstract(Module, stripped)
-%     ].
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
+function_points(Module) ->
 
-
-
-
-% todo comeback docs
-
-% @ since version 531
-
-% abstract_function(Module, FName) ->
-%
-%     [ {Id, Name, Arity, Code} ||
-%         {function, Id, Name, Arity, Code} <- abstract(Module, stripped),
-%         Name == FName
-%     ].
+    lists:usort(
+        [ {L,A} ||
+            {_,L,A,_} <- abstract_functions(Module)
+        ]
+    ).
 
 
 
@@ -2935,21 +2891,86 @@ svn_revision(Module) ->
 
 % todo comeback docs
 
-% @ since version 532
+%% @since Version 530
 
-% abstract_attributes(Module) ->
-%
-%      [ {Id, Name, Value} ||
-%         {attribute, Id, Name, Value} <- abstract(Module, stripped)
-%     ].
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+entrypoints(Module) ->
+
+    lists:flatten(
+        [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- sc_code:abstract_functions(Module) ]
+    ).
+
+
+
+
+
+% todo comeback docs
+
+%% @since Version 530
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+entrypoints(Module, FName) ->
+
+    lists:flatten(
+        [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- abstract_functions(Module), L==FName ]
+    ).
+
+
+
+
+
+% todo comeback docs
+
+%% @since version 531
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+abstract_functions(Module) ->
+
+    [ {Id, Name, Arity, Code} ||
+        {function, Id, Name, Arity, Code} <- abstract(Module, stripped)
+    ].
+
+
+
+
+
+% todo comeback docs
+
+%% @since version 531
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+abstract_function(Module, FName) ->
+
+    [ {Id, Name, Arity, Code} ||
+        {function, Id, Name, Arity, Code} <- abstract(Module, stripped),
+        Name == FName
+    ].
+
+
+
+
+
+% todo comeback docs
+
+%% @since version 532
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+abstract_attributes(Module) ->
+
+    [ {Id, Name, Value} ||
+        {attribute, Id, Name, Value} <- abstract(Module, stripped)
+    ].
 
 
 
 
 
 %% @since Version 533
-
-% was scutil:module_atoms/1
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
@@ -3190,15 +3211,23 @@ last_while_pos(Predicate, List) ->
 
 
 
+
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 last_while_pos(Predicate, List, Default) ->
 
     last_while_pos(1, Predicate, List, Default).
 
 
 
+
+
 last_while_pos(_N, [],  _Pred, Last) ->
 
     Last;
+
+
 
 
 
@@ -3296,15 +3325,23 @@ first_pos(List, Predicate) ->
 
 
 
+
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 first_pos(List, Predicate, Default) ->
 
     first_pos(1, List, Predicate, Default).
 
 
 
+
+
 first_pos(_N, [],  _Pred, Default) ->
 
     Default;
+
+
 
 
 
@@ -3441,6 +3478,8 @@ reverse_filter([Item|Rem], Work, Fun) ->
 
 %% @since Version 546
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 reverse_map(Workload, Fun) ->
 
     reverse_map(Workload, [], Fun).
@@ -3481,9 +3520,14 @@ reverse_map([Item|Rem], Work, Fun) ->
 % interface
 
 elements(Config, Requested)                when is_list(Config), is_list(Requested)                     -> elements_worker([], Config, Requested, 1).
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 elements(Config, Requested, KeyIdx)        when is_list(Config), is_list(Requested), is_integer(KeyIdx) -> elements_worker([], Config, Requested, KeyIdx);
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 elements(Config, Requested, strip)         when is_list(Config), is_list(Requested)                     -> elements_worker([], Config, Requested, 1,      strip).
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 elements(Config, Requested, KeyIdx, strip) when is_list(Config), is_list(Requested), is_integer(KeyIdx) -> elements_worker([], Config, Requested, KeyIdx, strip).
 
 
