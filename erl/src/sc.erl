@@ -4193,3 +4193,72 @@ pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 simple_ranking(List) when is_list(List) ->
 
     lists:zip(lists:seq(1,length(List)),lists:reverse(lists:sort(List))).
+
+
+
+
+
+%% @todo comeback make a tied/2 which takes a sorting predicate
+% needs significant refactoring; work is being repeated
+
+%% @spec tied_ranking(Values::numericlist()) -> rankinglist()
+
+%% @doc {@section Statistics} Returns a ranked ordering of the list with tie rankings.  As such, for uniformity, all rankings are floats.  Ties are represented as the centers of ranges. ```1> scutil:tied([10,90,20,80,30,70,40,60,50]).
+%% [{1.0,90}, {2.0,80}, {3.0,70}, {4.0,60}, {5.0,50}, {6.0,40}, {7.0,30}, {8.0,20}, {9.0,10}]
+%%
+%% 2> scutil:tied([100,200,200,300]).
+%% [{1.0,300},{2.5,200},{2.5,200},{4.0,100}]'''
+
+%% @since Version 42
+
+tied_ranking(List) ->
+
+    tied_rank_worker(simple_ranking(List), [], no_prev_value).
+
+
+
+
+
+%% @private
+
+tied_add_prev(Work, {FoundAt, NewValue}) ->
+
+    lists:duplicate( length(FoundAt), {lists:sum(FoundAt)/length(FoundAt), NewValue} ) ++ Work.
+
+
+
+
+
+%% @private
+
+tied_rank_worker([], Work, PrevValue) ->
+
+    lists:reverse(tied_add_prev(Work, PrevValue));
+
+
+
+tied_rank_worker([Item|Remainder], Work, PrevValue) ->
+
+    case PrevValue of
+
+        no_prev_value ->
+            {BaseRank,BaseVal} = Item,
+            tied_rank_worker(Remainder, Work, {[BaseRank],BaseVal});
+
+        {FoundAt,OldVal} ->
+
+            case Item of
+
+                {Id,OldVal} ->
+                    tied_rank_worker(Remainder, Work,                           {[Id]++FoundAt,OldVal});
+
+                {Id,NewVal} ->
+                    tied_rank_worker(Remainder, tied_add_prev(Work, PrevValue), {[Id],NewVal})
+
+            end
+    end.
+
+
+
+
+
