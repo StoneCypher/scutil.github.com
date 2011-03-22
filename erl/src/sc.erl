@@ -95,6 +95,9 @@
     walk_unique_pairings/2,
     count_of/2,
 
+    spearman_correlation/1,
+      spearman_correlation/2,
+
     kendall_correlation/1,
       kendall_correlation/2,
 
@@ -3963,7 +3966,7 @@ eval(S, Environ) ->
 %% 5> scutil:kendall([ {1,2}, {2,2.4}, {3,3}, {4,3.6}, {5,4} ]).
 %% {tau,1.0}'''
 
-%% @since Version 51
+%% @since Version 557
 
 kendall_correlation(TupleList) when is_list(TupleList) ->
 
@@ -4026,3 +4029,65 @@ kendall_right_of([F|R], Work) ->
 kendall_right_of_item(B, Rem) ->
 
     length([R || R <- Rem, R < B]).
+
+
+
+
+
+%% @todo use test data at http://geographyfieldwork.com/SpearmansRank.htm
+
+%% @spec spearman_correlation(TupleList::coordlist()) -> { rsquared, Correlation::number() }
+
+%% @doc {@section Statistics} Compute the Spearman's Rank Correlation Coefficient of a list of coordinate tuples. ```1> scutil:spearman([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
+%% {rsquared,1.0}
+%%
+%% 2> scutil:spearman([ {1,5}, {2,4}, {3,3}, {4,2}, {5,1} ]).
+%% {rsquared,-1.0}
+%%
+%% 3> scutil:spearman([ {1,3}, {2,3}, {3,3}, {4,3}, {5,3} ]).
+%% {rsquared,0.5}
+%%
+%% 4> scutil:spearman([ {1,2}, {2,2.5}, {3,3}, {4,3.5}, {5,4} ]).
+%% {rsquared,1.0}
+%%
+%% 5> scutil:spearman([ {1,2}, {2,2.4}, {3,3}, {4,3.6}, {5,4} ]).
+%% {rsquared,1.0}'''
+
+%% @since Version 558
+
+spearman_correlation(TupleList) when is_list(TupleList) ->
+
+    {A,B} = lists:unzip(TupleList),
+    spearman_correlation(A,B).
+
+
+
+
+
+%% @equiv spearman_correlation(lists:zip(List1, List2))
+
+spearman_correlation(List1, _) when length(List1) < 2 ->
+
+    {rsquared, 0.0};
+
+
+
+
+
+spearman_correlation(List1, List2) when length(List1) /= length(List2) ->
+
+    {error, "For the Spearman correlation, the input lists must be the same length."};
+
+
+
+
+
+spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
+
+    {TR1,_} = lists:unzip(simple_rank(List1)),
+    {TR2,_} = lists:unzip(simple_rank(List2)),
+
+    Numerator   = 6 * lists:sum([ (D1-D2)*(D1-D2) || {D1,D2} <- lists:zip(TR1,TR2) ]),
+    Denominator = math:pow(length(List1),3)-length(List1),
+
+    {rsquared, 1-(Numerator/Denominator) }.
