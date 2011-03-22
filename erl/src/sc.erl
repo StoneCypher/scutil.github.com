@@ -95,7 +95,9 @@
     walk_unique_pairings/2,
     count_of/2,
     integer_to_radix_list/2,
+
     list_to_term/1,
+      list_to_number/1,
 
     io_list_to_hex_string/1,
       nybble_to_hex/1,
@@ -4552,3 +4554,32 @@ hex_to_int(Hex) when is_list(Hex) ->
 
 hex_to_int([],          Acc) -> Acc;
 hex_to_int([Digit|Rem], Acc) -> hex_to_int(Rem, (Acc bsl 4) + hex_to_int(Digit)).
+
+
+
+
+
+%% @spec list_to_number(X::list()) -> number()
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Converts a list into a number; integers will be returned if there is no mantissa in the list representation. ```1> scutil:list_to_number("2").
+%% 2
+%%
+%% 2> scutil:list_to_number("2.0").
+%% 2.0
+%%
+%% 3> scutil:list_to_number("2.1").
+%% 2.1'''
+
+%% @since Version 574
+
+list_to_number(X) ->
+
+    case catch list_to_float(X) of
+
+        {'EXIT',_} ->
+            list_to_integer(X);
+
+        Y ->
+            Y
+
+    end.
