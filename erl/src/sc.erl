@@ -95,6 +95,9 @@
     walk_unique_pairings/2,
     count_of/2,
 
+    halstead_complexity/4,
+      halstead_complexity/5,
+
     simple_ranking/1,
       tied_ranking/1,
       tied_ordered_ranking/1,
@@ -4291,3 +4294,42 @@ tied_ordered_ranking([Front|Rem], Ranks, Work) ->
     {value,Item}  = lists:keysearch(Front,2,Ranks),
     {IRank,Front} = Item,
     tied_ordered_ranking(Rem, Ranks--[Item], [{IRank,Front}]++Work).
+
+
+
+
+
+%% @since Version 564
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span> 
+
+halstead_complexity(DistinctOperators, DistinctOperands, TotalOperators, TotalOperands) ->
+
+    halstead_complexity(DistinctOperators, DistinctOperands, TotalOperators, TotalOperands, brief).
+
+
+
+%% @since Version 564
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+halstead_complexity(DistinctOperators, DistinctOperands, TotalOperators, TotalOperands, brief) ->
+
+    { Effort, _ } = halstead_complexity(DistinctOperators, DistinctOperands, TotalOperators, TotalOperands, complete),
+    Effort;
+
+
+
+%% @since Version 564
+
+halstead_complexity(DistinctOperators, DistinctOperands, TotalOperators, TotalOperands, complete) ->
+
+    ProgramLength     = TotalOperators    + TotalOperands,
+    ProgramVocabulary = DistinctOperators + DistinctOperands,
+
+    Volume            = ProgramLength         * (math:log(ProgramVocabulary)),
+    Difficulty        = (DistinctOperators/2) * (TotalOperands/DistinctOperands),
+
+    Effort            = Volume * Difficulty,
+
+    { Effort, [{volume, Volume}, {difficulty, Difficulty}, {program_length, ProgramLength}, {program_vocabulary, ProgramVocabulary}] }.
