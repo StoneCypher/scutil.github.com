@@ -96,6 +96,7 @@
     count_of/2,
     integer_to_radix_list/2,
     list_to_term/1,
+    io_list_to_hex_string/1,
 
     halstead_complexity/4,
       halstead_complexity/5,
@@ -4303,11 +4304,13 @@ tied_ordered_ranking([Front|Rem], Ranks, Work) ->
 
 %% @since Version 564
 
-%% @doc <span style="color:orange;font-style:italic">Untested</span> 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 halstead_complexity(DistinctOperators, DistinctOperands, TotalOperators, TotalOperands) ->
 
     halstead_complexity(DistinctOperators, DistinctOperands, TotalOperators, TotalOperands, brief).
+
+
 
 
 
@@ -4319,6 +4322,8 @@ halstead_complexity(DistinctOperators, DistinctOperands, TotalOperators, TotalOp
 
     { Effort, _ } = halstead_complexity(DistinctOperators, DistinctOperands, TotalOperators, TotalOperands, complete),
     Effort;
+
+
 
 
 
@@ -4380,9 +4385,15 @@ integer_to_radix_list(Number, RadixList) when is_list(RadixList) ->
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 downshift_radix(InStep, 0, _Radix) ->
+
     InStep;
 
+
+
+
+
 downshift_radix(InStep, Number, Radix) ->
+
     downshift_radix([Number rem Radix]++InStep, trunc((Number-(Number rem Radix)) / Radix), Radix ).
 
 
@@ -4394,7 +4405,7 @@ downshift_radix(InStep, Number, Radix) ->
 
 
 
-%% @since Version 216
+%% @since Version 568
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
@@ -4412,3 +4423,48 @@ list_to_term(List) ->
         Error -> { error, Error }
 
     end.
+
+
+
+
+
+%% @type io_list() = list().  Every list member of an {@type io_list()} must be a {@type byte()}.
+
+%% @spec io_list_to_hex_string(Input::io_list()) -> hexstring()
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Convert an io_list() to a hexstring().  ```1> scutil:io_list_to_hex_string("a").
+%% "61"
+%%
+%% 2> scutil:io_list_to_hex_string("a08n408nbqa").
+%% "6130386e3430386e627161"'''
+
+%% @since Version 569
+
+io_list_to_hex_string(Input) when is_list(Input) ->
+
+    io_list_to_hex_string(Input, []).
+
+
+
+
+
+io_list_to_hex_string([], Work) ->
+
+    lists:reverse(Work);
+
+
+
+
+
+io_list_to_hex_string([Item|Remainder], Work) when is_integer(Item), Item >= 0, Item =< 255 ->
+
+    [A,B] = byte_to_hex(Item),
+    io_list_to_hex_string(Remainder, [B,A]++Work);
+
+
+
+
+
+io_list_to_hex_string(_, _) ->
+
+    {error, not_an_io_list}.
