@@ -95,6 +95,9 @@
     walk_unique_pairings/2,
     count_of/2,
 
+    kendall_correlation/1,
+      kendall_correlation/2,
+
     eval/1,
       eval/2,
 
@@ -3936,3 +3939,90 @@ eval(S, Environ) ->
     {ok, Scanned,_} = erl_scan:string(S),
     {ok, Parsed}    = erl_parse:parse_exprs(Scanned),
     erl_eval:exprs(Parsed,Environ).
+
+
+
+
+
+%% @todo use test data at http://changingminds.org/explanations/research/analysis/kendall.htm
+
+%% @spec kendall_correlation(TupleList::coordlist()) -> { tau, Correlation::number() }
+
+%% @doc {@section Statistics} Compute the Kendall Tau Rank Correlation Coefficient of a list of coordinate tuples. ```1> scutil:kendall([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
+%% {tau,1.0}
+%%
+%% 2> scutil:kendall([ {1,5}, {2,4}, {3,3}, {4,2}, {5,1} ]).
+%% {tau,-1.0}
+%%
+%% 3> scutil:kendall([ {1,3}, {2,3}, {3,3}, {4,3}, {5,3} ]).
+%% {tau,1.0}
+%%
+%% 4> scutil:kendall([ {1,2}, {2,2.5}, {3,3}, {4,3.5}, {5,4} ]).
+%% {tau,1.0}
+%%
+%% 5> scutil:kendall([ {1,2}, {2,2.4}, {3,3}, {4,3.6}, {5,4} ]).
+%% {tau,1.0}'''
+
+%% @since Version 51
+
+kendall_correlation(TupleList) when is_list(TupleList) ->
+
+    {A,B} = lists:unzip(TupleList),
+    kendall_correlation(A,B).
+
+
+
+
+
+%% @equiv kendall(lists:zip(List1, List2))
+
+kendall_correlation(List1, _) when length(List1) < 2 ->
+
+    {tau, 0.0};
+
+
+
+
+
+kendall_correlation(List1, List2) when length(List1) /= length(List2) ->
+
+    {error, "For the Kendall correlation, the input lists must be same length."};
+
+
+
+
+
+kendall_correlation(List1, List2) when is_list(List1), is_list(List2) ->
+
+    {RA,_} = lists:unzip(ordered_ranks_of(List1)),
+    {RB,_} = lists:unzip(ordered_ranks_of(List2)),
+
+    Ordering = lists:keysort(1, lists:zip(RA,RB)),
+    {_,OrdB} = lists:unzip(Ordering),
+
+    N = length(List1),
+    P = lists:sum(kendall_right_of(OrdB, [])),
+
+    {tau, -(( (4*P) / (N * (N - 1))) - 1) }.
+
+
+
+
+
+%% @private
+
+kendall_right_of([], Work) ->
+
+    lists:reverse(Work);
+
+
+
+kendall_right_of([F|R], Work) ->
+
+    kendall_right_of(R, [kendall_right_of_item(F,R)]++Work).
+
+
+
+kendall_right_of_item(B, Rem) ->
+
+    length([R || R <- Rem, R < B]).
