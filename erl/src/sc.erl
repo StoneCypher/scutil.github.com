@@ -183,8 +183,8 @@
       reverse_filter/2,
       reverse_map_filter/3,
 
-    keygroup/2,
-      keygroup/3,
+    key_group/2,
+      key_group/3,
 
     first_pos/2,
       first_pos/3,
@@ -2998,7 +2998,7 @@ by_distance_raw(Centers, Points)
 
     when is_list(Centers), is_list(Points) ->
 
-    [ {Key, [NV || {_NC,NV} <- Near]} || {Key, Near} <- sc_lists:keygroup(1, [ { nearest_to(Centers, Point), Point } || Point <- Points ]) ].
+    [ {Key, [NV || {_NC,NV} <- Near]} || {Key, Near} <- sc_lists:key_group(1, [ { nearest_to(Centers, Point), Point } || Point <- Points ]) ].
 
 
 
@@ -3548,10 +3548,10 @@ partition_by_residue(Data, Function) ->
                    ]
         }
     ||
-        { GroupId, GroupData } <- keygroup( 1, [   { Function(Datum), Datum }
-                                               ||  Datum <- Data
-                                               ]
-                                          )
+        { GroupId, GroupData } <- key_group( 1, [   { Function(Datum), Datum }
+                                                ||  Datum <- Data
+                                                ]
+                                           )
     ].
 
 
@@ -3612,9 +3612,9 @@ last_while_pos(N, [Head|Tail], Pred, Last) ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-keygroup(Pos, List) ->
+key_group(Pos, List) ->
 
-    keygroup(Pos, List, unsorted).
+    key_group(Pos, List, unsorted).
 
 
 
@@ -3624,12 +3624,12 @@ keygroup(Pos, List) ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-keygroup(Pos, List, unsorted) when is_list(List) ->
+key_group(Pos, List, unsorted) when is_list(List) ->
 
     SList = lists:keysort(Pos,List),
     [F|_] = SList,
 
-    keygroup(Pos, SList, element(Pos,F), [], []);
+    key_group(Pos, SList, element(Pos,F), [], []);
 
 
 
@@ -3639,17 +3639,17 @@ keygroup(Pos, List, unsorted) when is_list(List) ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-keygroup(Pos, List, sorted) when is_list(List) ->
+key_group(Pos, List, sorted) when is_list(List) ->
 
     [F|_] = List,
 
-    keygroup(Pos, List, element(Pos,F), [], []).
+    key_group(Pos, List, element(Pos,F), [], []).
 
 
 
 
 
-keygroup(_Pos, [], WorkKey, Work, Output) ->
+key_group(_Pos, [], WorkKey, Work, Output) ->
 
     [{WorkKey, Work}] ++ Output;
 
@@ -3657,17 +3657,17 @@ keygroup(_Pos, [], WorkKey, Work, Output) ->
 
 
 
-keygroup(Pos, [Item|Rem], WorkKey, Work, Output) ->
+key_group(Pos, [Item|Rem], WorkKey, Work, Output) ->
 
     NewKey = element(Pos, Item),
 
     case NewKey == WorkKey of
 
         true  ->
-            keygroup(Pos, Rem, WorkKey, [Item]++Work, Output);
+            key_group(Pos, Rem, WorkKey, [Item]++Work, Output);
 
         false ->
-            keygroup(Pos, Rem, NewKey,  [Item],       [{WorkKey,Work}]++Output)
+            key_group(Pos, Rem, NewKey,  [Item],       [{WorkKey,Work}]++Output)
 
     end.
 
