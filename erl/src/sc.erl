@@ -1030,7 +1030,7 @@ zip_n_foldn(Fun, Acc0, Ls, Ret) ->
 
 %% @since Version 473
 
-combinations(1, Items) 
+combinations(1, Items)
 
     when is_list(Items) ->
 
@@ -1802,7 +1802,7 @@ weighted_arithmetic_mean( [{V,W} | Tail], Num, Denom) ->
 
 %% @spec instant_runoff_vote(ListOfVoteLists::list_of_lists()) -> any()
 
-%% @doc <span style="color:orange;font-style:italic">Untested</span>  Performs an instant runoff vote.  http://en.wikipedia.org/wiki/Instant-runoff_voting ```1>'''
+%% @doc <span style="color:red;font-style:italic">INCOMPLETE</span> <span style="color:orange;font-style:italic">Untested</span> Performs an instant runoff vote.  http://en.wikipedia.org/wiki/Instant-runoff_voting ```1>'''
 
 %% @since Version 485
 
@@ -1895,7 +1895,7 @@ extended_dstat(NumericList, PopulationOrSample) ->
 
 %% @since Version 488
 
-median(List) 
+median(List)
 
     when is_list(List) ->
 
@@ -1924,14 +1924,14 @@ median(List)
 
 %% @since Version 489
 
-even_or_odd(Num) 
+even_or_odd(Num)
 
-    when is_integer(Num), 
-         Num band 1 == 0 -> 
-         
+    when is_integer(Num),
+         Num band 1 == 0 ->
+
     even;
-    
-    
+
+
 
 
 

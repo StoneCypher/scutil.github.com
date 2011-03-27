@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 589 $</p>
+<p><b>Version:</b> $Revision: 594 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -108,6 +108,14 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>sorted_keylist() = <a href="#type-keylist">keylist()</a></tt></p>
 <p>A sorted keylist is a keylist in the order provided by <a href="lists.html#sort-1"><code>lists:sort/1</code></a>.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.</p>
 
+<h3 class="typedecl"><a name="type-weightedvalue">weightedvalue()</a></h3>
+<p><tt>weightedvalue() = {Value::any(), Weight::number()}</tt></p>
+<p>Used by functions like weighted_arithmetic_mean/1 and from_weighted/1, weightedvalue()s represent a value with an associated importance or "weight".</p>
+
+<h3 class="typedecl"><a name="type-weightlist">weightlist()</a></h3>
+<p><tt>weightlist() = list()</tt></p>
+<p>All members of weightlists must be weightedvalue()s.</p>
+
 <h2><a name="index">Function Index</a></h2>
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#absolute_difference-2">absolute_difference/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes the absolute value of the difference between the two arguments.</td></tr>
 <tr><td valign="top"><a href="#abstract-1">abstract/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
@@ -179,7 +187,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#histograph-1">histograph/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes a histograph count of the items in the list.</td></tr>
 <tr><td valign="top"><a href="#hmean_vector_normal-1">hmean_vector_normal/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the harmonic mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#index_of_first-2">index_of_first/2</a></td><td>Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.</td></tr>
-<tr><td valign="top"><a href="#instant_runoff_vote-1">instant_runoff_vote/1</a></td><td><span style="color:orange;font-style:italic">Untested</span>  Performs an instant runoff vote.</td></tr>
+<tr><td valign="top"><a href="#instant_runoff_vote-1">instant_runoff_vote/1</a></td><td><span style="color:red;font-style:italic">INCOMPLETE</span> <span style="color:orange;font-style:italic">Untested</span> Performs an instant runoff vote.</td></tr>
 <tr><td valign="top"><a href="#integer_to_radix_list-2">integer_to_radix_list/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Convert a number to a radix string using a radix list of your specification and any size.</td></tr>
 <tr><td valign="top"><a href="#io_list_to_hex_string-1">io_list_to_hex_string/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Convert an io_list() to a hexstring().</td></tr>
 <tr><td valign="top"><a href="#is_postfix-2">is_postfix/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
@@ -229,6 +237,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 </td></tr>
 <tr><td valign="top"><a href="#permute-2">permute/2</a></td><td>Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast <a href="#combinations-2"><code>combinations/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#power_set-1">power_set/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#random_from-1">random_from/1</a></td><td>Equivalent to <a href="#from-3"><tt>from(1, List, no_remainder)</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#random_from-2">random_from/2</a></td><td>Equivalent to <a href="#from-3"><tt>from(N, List, no_remainder)</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#random_from-3">random_from/3</a></td><td>Take N non-repeating random elements from a list in undefined order.</td></tr>
+<tr><td valign="top"><a href="#random_from_weighted-1">random_from_weighted/1</a></td><td><a href="#Random">Random</a> Take a random single item from a list with weighted probabilities.</td></tr>
 <tr><td valign="top"><a href="#range_scale-1">range_scale/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Get the scale of a same-sign numeric range.</td></tr>
 <tr><td valign="top"><a href="#receive_one-0">receive_one/0</a></td><td><span style="color:orange;font-style:italic">Untested</span> Pop the front of the message queue and return it as <code>{item,X}</code>, or return nothing_there for empty queues; do not block.</td></tr>
 <tr><td valign="top"><a href="#reverse_filter-2">reverse_filter/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
@@ -899,7 +913,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="instant_runoff_vote-1">instant_runoff_vote/1</a></h3>
 <div class="spec">
 <p><tt>instant_runoff_vote(ListOfVoteLists::<a href="#type-list_of_lists">list_of_lists()</a>) -&gt; any()</tt></p>
-</div><p><span style="color:orange;font-style:italic">Untested</span>  Performs an instant runoff vote.  http://en.wikipedia.org/wiki/Instant-runoff_voting <pre>  1&gt;</pre></p>
+</div><p><span style="color:red;font-style:italic">INCOMPLETE</span> <span style="color:orange;font-style:italic">Untested</span> Performs an instant runoff vote.  http://en.wikipedia.org/wiki/Instant-runoff_voting <pre>  1&gt;</pre></p>
 <p><b>Introduced in:</b> Version 485</p>
 
 <h3 class="function"><a name="integer_to_radix_list-2">integer_to_radix_list/2</a></h3>
@@ -1212,8 +1226,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 589 2011-03-27 21:45:09Z john $"},
-   {svn_revision,"$Revision: 589 $"},
+   {svn_id,"$Id: sc.erl 594 2011-03-27 21:56:04Z john $"},
+   {svn_revision,"$Revision: 594 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1352,6 +1366,61 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>power_set(L) -&gt; any()</tt></p>
 </div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 589</p>
+
+<h3 class="function"><a name="random_from-1">random_from/1</a></h3>
+<div class="spec">
+<p><tt>random_from(List) -&gt; any()</tt></p>
+</div><p>Equivalent to <a href="#from-3"><tt>from(1, List, no_remainder)</tt></a>.</p>
+
+<p><b>Introduced in:</b> Version 593</p>
+
+<h3 class="function"><a name="random_from-2">random_from/2</a></h3>
+<div class="spec">
+<p><tt>random_from(N, List) -&gt; any()</tt></p>
+</div><p>Equivalent to <a href="#from-3"><tt>from(N, List, no_remainder)</tt></a>.</p>
+
+<p><b>Introduced in:</b> Version 593</p>
+
+<h3 class="function"><a name="random_from-3">random_from/3</a></h3>
+<div class="spec">
+<p><tt>random_from(N::integer(), List::list(), WantRemainder::<a href="#type-want_remainder">want_remainder()</a>) -&gt; list()</tt></p>
+</div><p>Take N non-repeating random elements from a list in undefined order.  If the atom <code>remainder</code> is passed in as the third argument, the unused portion of the source list will be returned as the second member of a 2ary tuple with the results; the default is no_remainder, which only returns the result set.  Mixed type input lists are perfectly safe, and membership for random selection is shallow (ie, <code>[ [1,2], [3,4] ]</code> as an input list would only generate outputs of lists, never integers.)<pre>  1&gt; sc:random_from([monday,tuesday,wednesday,thursday,friday]).
+  friday
+ 
+  2&gt; sc:random_from(4, lists:seq(1,20)).
+  [6,3,15,12]
+ 
+  3&gt; sc:random_from(3, [warrior, mage, cleric, thief, paladin, ranger, bard]).
+  [cleric,warrior,ranger]
+ 
+  4&gt; sc:random_from(6, [mixed, [1,2,3], 4, {five,5}, 3, 67.2, &lt;&lt;"Hello"&gt;&gt;, 8]).
+  [[1,2,3],{five,5},4,mixed,&lt;&lt;"Hello"&gt;&gt;,67.2]
+ 
+  5&gt; {Team1, Team2} = sc:random_from(3, [alice,bob,cathy,dave,edward,fawn], remainder).
+  {[cathy,fawn,dave],[bob,edward,alice]}
+ 
+  6&gt; Team1.
+  [cathy,fawn,dave]
+ 
+  7&gt; Where_Food = fun() -&gt; sc:random_from([deli, fastfood, chinese, mexican, steakhouse, bistro, greek, indian, thai, sushi]) end.
+  #Fun&lt;erl_eval.20.67289768&gt;
+ 
+  8&gt; Where_Food().
+  thai</pre></p>
+<p><b>Introduced in:</b> Version 593</p>
+
+<h3 class="function"><a name="random_from_weighted-1">random_from_weighted/1</a></h3>
+<div class="spec">
+<p><tt>random_from_weighted(InputList::<a href="#type-weightlist">weightlist()</a>) -&gt; any()</tt></p>
+</div><p><a href="#Random">Random</a> Take a random single item from a list with weighted probabilities.  Probabilities may be any numeric type, and may be any non-negative value (items with zero probability will be omitted).  Input is a <code>weightlist()</code>, which is a list in the form <code>[{Item,Probability}, {I2,P2}, ...]</code>. There is no requirement to normalize probabilities to any range, though probabilities normalized to ranges will still work as expected. <pre>  1&gt; scutil:from([ {quad,4}, {double,2}, {single,1} ]).
+  quad
+ 
+  2&gt; [ scutil:from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X &lt;- lists:seq(1,10) ].
+  [single,quad,quad,double,quad,double,quad,quad,quad,double]
+ 
+  3&gt; scutil:histograph([ scutil:from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X &lt;- lists:seq(1,777777) ]).
+  [{double,222200},{quad,444165},{single,111412}]</pre></p>
+<p><b>Introduced in:</b> Version 592</p>
 
 <h3 class="function"><a name="range_scale-1">range_scale/1</a></h3>
 <div class="spec">
@@ -1830,6 +1899,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 27 2011, 17:48:04.</i></p>
+<p><i>Generated by EDoc, Mar 27 2011, 18:05:12.</i></p>
 </body>
 </html>
