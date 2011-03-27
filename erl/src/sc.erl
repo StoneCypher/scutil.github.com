@@ -67,7 +67,7 @@
 
 -module(sc).
 
--svn_revision($Revision$).
+-svn_revision("$Revision$").
 
 
 
@@ -392,6 +392,8 @@ test(verbose=_Style) ->
 
 
 
+
+
 test([verbose]=_Style) ->
 
     eunit:test(sc, [verbose]).
@@ -412,6 +414,8 @@ test([verbose]=_Style) ->
 extrema([]) ->
 
     error(badarg);
+
+
 
 
 
@@ -480,25 +484,39 @@ rotate_list(_, []) ->
 
 
 
+
+
 rotate_list(0, List) ->
 
     List;
 
 
 
-rotate_list(By, List) when By =< (-(length(List))) ->
+
+
+rotate_list(By, List) 
+
+    when By =< (-(length(List))) ->
 
     rotate_list(By rem length(List), List);
 
 
 
-rotate_list(By, List) when By < 0 ->
+
+
+rotate_list(By, List) 
+
+    when By < 0 ->
 
     rotate_list(length(List) + By, List);
 
 
 
-rotate_list(By, List) when By >= length(List) ->
+
+
+rotate_list(By, List) 
+
+    when By >= length(List) ->
 
     rotate_list(By rem length(List), List);
 
@@ -507,12 +525,8 @@ rotate_list(By, List) when By >= length(List) ->
 rotate_list(By, List) ->
 
     { Front, Rear } = lists:split(By, List),
+    
     Rear ++ Front.
-
-
-
-
-
 
 
 
@@ -532,15 +546,21 @@ index_of_first(Item, List) ->
 
 
 
+
+
 index_of_first(_Item, [], _Pos) ->
 
     undefined;
 
 
 
+
+
 index_of_first(Item, [Item|_ListRem], Pos) ->
 
     Pos;
+
+
 
 
 
@@ -639,6 +659,7 @@ flag_sets([]) ->
 
 
 
+
 flag_sets([Flag|RemFlags]) ->
 
     [ MaybeFlag ++ Reps ||
@@ -655,6 +676,8 @@ flag_sets([Flag|RemFlags]) ->
 member_sets(Memberships) ->
 
     member_sets(Memberships, no_absence).
+
+
 
 
 
@@ -712,9 +735,13 @@ member_sets([], _) ->
 
 
 
+
+
 member_sets([[]], _) ->
 
     [[]];
+
+
 
 
 
@@ -724,6 +751,8 @@ member_sets( [Membership|RemMemberships], no_absence   ) ->
         Member <- Membership,
         RemRep <- member_sets(RemMemberships, no_absence)
     ];
+
+
 
 
 
@@ -799,6 +828,8 @@ list_intersection(List1, List2) ->
 
 
 
+
+
 %% @spec list_intersection(List1::list(), List2::list(), IsSorted::atom()) -> list()
 
 %% @doc Efficiently computes the intersection of two lists.  The third parameter, which is optional and defaults to `unsorted', is either the atom `sorted' or `unsorted'.  If `sorted' is used, the function will sort both inputs before proceeding, as it requires sorted lists; as such, if you already know your lists to be sorted, passing `unsorted' will save some time.  The return list will be reverse sorted. ```1> sc:list_intersection([1,2,3,4,5,2,3,10,15,25,30,40,45,55],[1,3,5,5,5,15,20,30,35,40,50,55]).
@@ -815,9 +846,13 @@ list_intersection(List1, List2, unsorted) ->
 
 
 
+
+
 list_intersection(List1, List2, sorted) ->
 
     intersect_walk(List1, List2, []).
+
+
 
 
 
@@ -829,25 +864,39 @@ intersect_walk( [], _L2, Work ) ->
 
 
 
+
+
 intersect_walk( _L1, [], Work) ->
 
     Work;
 
 
 
-intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head == L2Head ->
+
+
+intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) 
+
+    when L1Head == L2Head ->
 
     intersect_walk(L1Rem, L2Rem, [L1Head]++Work);
 
 
 
-intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head < L2Head ->
+
+
+intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) 
+
+    when L1Head < L2Head ->
 
     intersect_walk(L1Rem, [L2Head|L2Rem], Work);
 
 
 
-intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head > L2Head ->
+
+
+intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) 
+
+    when L1Head > L2Head ->
 
     intersect_walk( [L1Head|L1Rem], L2Rem, Work).
 
@@ -861,6 +910,8 @@ intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) when L1Head > L2Head ->
 zip_n(Ls) ->
 
     zip_n(Ls, to_tuple).
+
+
 
 
 
@@ -895,9 +946,13 @@ zip_n(Ls, to_tuple) ->
 
 
 
+
+
 zip_n(Ls, to_list) ->
 
     zip_n_listn(Ls).
+
+
 
 
 
@@ -911,27 +966,35 @@ zip_n_listn(Ls) ->
 
 
 
+
+
 %% @private
 
-zip_n_foldn(_, _, []) -> 
+zip_n_foldn(_, _, []) ->
 
     [];
 
 
 
-zip_n_foldn(Fun, Acc0, Ls) -> 
+
+
+zip_n_foldn(Fun, Acc0, Ls) ->
 
     zip_n_foldn(Fun, Acc0, Ls, []).
-    
 
 
-zip_n_foldn(_, _, [ [] | _ ], Ret) -> 
+
+
+
+zip_n_foldn(_, _, [ [] | _ ], Ret) ->
 
     lists:reverse(Ret);
 
 
 
-zip_n_foldn(Fun, Acc0, Ls, Ret) -> 
+
+
+zip_n_foldn(Fun, Acc0, Ls, Ret) ->
 
     zip_n_foldn(
         Fun,
@@ -959,9 +1022,13 @@ zip_n_foldn(Fun, Acc0, Ls, Ret) ->
 
 %% @since Version 473
 
-combinations(1, Items) when is_list(Items) ->
+combinations(1, Items) 
+
+    when is_list(Items) ->
 
     [ [I] || I <- Items ];
+
+
 
 
 
@@ -972,14 +1039,22 @@ combinations(_N, []) ->
 
 
 
-combinations(0, L) when is_list(L) ->
+
+combinations(0, L) 
+
+    when is_list(L) ->
 
     [];
 
 
 
 
-combinations(N, Items) when is_list(Items), is_integer(N), N > 0 ->
+
+combinations(N, Items) 
+
+    when is_list(Items), 
+         is_integer(N), 
+         N > 0         ->
 
     [ lists:flatten(lists:append( [lists:nth(I, Items)], [J] )) ||
       I <- lists:seq(1, length(Items)),
@@ -1005,17 +1080,23 @@ combinations(N, Items) when is_list(Items), is_integer(N), N > 0 ->
 
 %% @since Version 474
 
-expand_labels(List) when is_list(List) ->
+expand_labels(List) 
+ 
+    when is_list(List) ->
 
     lists:flatten( [ expand_label(X) || X <- List ] ).
 
 
 
+
+
 %% @private
 
-expand_label({Label,List}) when is_list(List) ->
+expand_label({Label,List}) 
 
-     [ {Label,L} || L<-List ].
+    when is_list(List) ->
+
+    [ {Label,L} || L<-List ].
 
 
 
@@ -1026,6 +1107,8 @@ expand_label({Label,List}) when is_list(List) ->
 permute(List) ->
 
     permute(List, length(List)).
+
+
 
 
 
@@ -1041,7 +1124,9 @@ permute(List) ->
 
 %% @since Version 474
 
-permute(List, 1) when is_list(List) ->
+permute(List, 1) 
+
+    when is_list(List) ->
 
     [ [T] ||
         T <- List
@@ -1049,7 +1134,12 @@ permute(List, 1) when is_list(List) ->
 
 
 
-permute(List, Depth) when is_list(List), is_integer(Depth) ->
+
+
+permute(List, Depth) 
+
+    when is_list(List), 
+         is_integer(Depth) ->
 
     [ [T]++R ||
         T <- List,
@@ -1070,10 +1160,14 @@ permute(List, Depth) when is_list(List), is_integer(Depth) ->
 
 %% @since Version 475
 
-shared_keys(TupleList) when is_list(TupleList) ->
+shared_keys(TupleList) 
+
+    when is_list(TupleList) ->
 
     {A,B} = lists:unzip(TupleList),
     shared_keys(lists:sort(A),lists:sort(B)).
+
+
 
 
 
@@ -1084,18 +1178,27 @@ shared_keys(TupleList) when is_list(TupleList) ->
 %% @spec shared_keys(TupleList::sorted_keylist(), Presorted::presorted) -> sorted_keylist()
 %% @doc Equivalent to {@link shared_keys/1}, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.
 
-shared_keys(TupleList, presorted) when is_list(TupleList) ->
+shared_keys(TupleList, presorted) 
+
+    when is_list(TupleList) ->
 
     {A,B} = lists:unzip(TupleList),
     shared_keys(A,B);
 
 
 
+
+
 %% @doc Create sorted list X of 3-ary tuples `{K,Ai,Bi}' from sorted lists A, B of 2ary `{K,Ai}'/`{K,Bi}' tuples, where key `K' appears in both `A' and `B'.
 
-shared_keys(A,B) when is_list(A), is_list(B) ->
+shared_keys(A,B) 
+
+    when is_list(A), 
+         is_list(B) ->
 
     both_lists_next_item(lists:sort(A),lists:sort(B),[]).
+
+
 
 
 
@@ -1103,15 +1206,22 @@ shared_keys(A,B) when is_list(A), is_list(B) ->
 %% @spec shared_keys(A::sorted_keylist(), B::sorted_keylist(), Presorted::presorted) -> sorted_keylist()
 %% @doc Equivalent to {@link shared_keys/2}, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.
 
-shared_keys(A,B,presorted) when is_list(A), is_list(B) ->
+shared_keys(A,B,presorted) 
+
+    when is_list(A), 
+         is_list(B) ->
 
     both_lists_next_item(A,B,[]).
+
+
 
 
 
 both_lists_next_item([], _, Work) ->
 
     lists:reverse(Work);
+
+
 
 
 
@@ -1123,9 +1233,13 @@ both_lists_next_item(_, [], Work) ->
 
 
 
+
+
 both_lists_next_item([ {K,Ai} | Ar], [ {K,Bi} | Br], Work) ->
 
     both_lists_next_item(Ar, Br, [{K,Ai,Bi}]++Work);
+
+
 
 
 
@@ -1155,15 +1269,21 @@ both_lists_next_item(IA, IB, Work) ->
 
 %% @since Version 476
 
-list_product(List) when is_list(List) ->
+list_product(List) 
+
+    when is_list(List) ->
 
     list_product(List, 1).
+
+
 
 
 
 list_product([], Counter) ->
 
     Counter;
+
+
 
 
 
@@ -1208,13 +1328,21 @@ list_product([Head|Tail], Counter) ->
 
 %% @since Version 477
 
-sanitize_tokens(List, Allowed) when is_list(List), is_function(Allowed) ->
+sanitize_tokens(List, Allowed) 
+
+    when is_list(List),
+         is_function(Allowed) ->
 
     lists:filter(Allowed, List);
 
 
 
-sanitize_tokens(List, Allowed) when is_list(List), is_list(Allowed) ->
+
+
+sanitize_tokens(List, Allowed) 
+
+    when is_list(List), 
+         is_list(Allowed) ->
 
     lists:filter(fun(X) -> lists:member(X,Allowed) end, List).
 
@@ -1288,7 +1416,9 @@ bandwidth_calc({MbpS, t}, To) ->
 
 
 
-bandwidth_calc(BitsPerSecond, all) when is_integer(BitsPerSecond) ->
+bandwidth_calc(BitsPerSecond, all) 
+
+    when is_integer(BitsPerSecond) ->
 
     [
         bandwidth_calc(BitsPerSecond, {Unit, Timeframe})
@@ -1301,7 +1431,9 @@ bandwidth_calc(BitsPerSecond, all) when is_integer(BitsPerSecond) ->
 
 
 
-bandwidth_calc(BitsPerSecond, {Unit, Timeframe}) when is_integer(BitsPerSecond) ->
+bandwidth_calc(BitsPerSecond, {Unit, Timeframe}) 
+
+    when is_integer(BitsPerSecond) ->
 
     Divisor = scale_i(bits, Unit),
 
@@ -1357,10 +1489,10 @@ scale_i(bits, exbibits) -> 1024*1024*1024*1024*1024*1024.
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-caspers_jones_estimate(FunctionPoints) when
+caspers_jones_estimate(FunctionPoints) 
 
-    is_integer(FunctionPoints),
-    FunctionPoints >= 0 ->
+    when is_integer(FunctionPoints),
+         FunctionPoints >= 0       ->
 
 
     [   { estimated_defects,   math:pow(FunctionPoints, 1.25) },
@@ -1380,17 +1512,17 @@ caspers_jones_estimate(FunctionPoints) when
 
 %% @since Version 478
 
-naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatureTotal) when
+naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatureTotal) 
 
-    is_integer(FeatureEvident),
-    is_integer(FeatureTotal),
-    is_integer(NonFeatureEvident),
-    is_integer(NonFeatureTotal),
+    when is_integer(FeatureEvident),
+         is_integer(FeatureTotal),
+         is_integer(NonFeatureEvident),
+         is_integer(NonFeatureTotal),
 
-    FeatureEvident    >= 0,
-    FeatureTotal      >  0,
-    NonFeatureEvident >= 0,
-    NonFeatureTotal   >  0 ->
+         FeatureEvident    >= 0,
+         FeatureTotal      >  0,
+         NonFeatureEvident >= 0,
+         NonFeatureTotal   >  0       ->
 
 
     LF = FeatureEvident / FeatureTotal,
@@ -1420,7 +1552,9 @@ naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatu
 
 %% @since Version 479
 
-range_scale(Nums) when is_list(Nums) ->
+range_scale(Nums) 
+
+    when is_list(Nums) ->
 
     {Lo, Hi} = sc:extrema(Nums),
     Hi/Lo.
@@ -1538,7 +1672,11 @@ arithmetic_mean([]) ->
 
 
 
-arithmetic_mean(List) when is_list(List) ->
+
+
+arithmetic_mean(List) 
+
+    when is_list(List) ->
 
     lists:sum(List) / length(List).
 
@@ -1573,7 +1711,9 @@ geometric_mean([]) ->
 
 
 
-geometric_mean(List) when is_list(List) ->
+geometric_mean(List) 
+
+    when is_list(List) ->
 
     math:exp(arithmetic_mean([ math:log(X) || X<-List ])).
 
@@ -1604,7 +1744,11 @@ harmonic_mean([]) ->
 
 
 
-harmonic_mean(List) when is_list(List) ->
+
+
+harmonic_mean(List) 
+
+    when is_list(List) ->
 
     length(List) / lists:sum([ 1/X || X<-List ]).
 
@@ -1622,15 +1766,21 @@ harmonic_mean(List) when is_list(List) ->
 
 %% @since Version 484
 
-weighted_arithmetic_mean(List) when is_list(List) ->
+weighted_arithmetic_mean(List) 
+
+    when is_list(List) ->
 
     weighted_arithmetic_mean(List, 0, 0).
+
+
 
 
 
 weighted_arithmetic_mean([], Num, Denom) ->
 
     Num/Denom;
+
+
 
 
 
@@ -1654,6 +1804,8 @@ weighted_arithmetic_mean( [{V,W} | Tail], Num, Denom) ->
 instant_runoff_vote(ListOfVoteLists) ->
 
     instant_runoff_vote(ListOfVoteLists, []).
+
+
 
 
 
@@ -1735,7 +1887,9 @@ extended_dstat(NumericList, PopulationOrSample) ->
 
 %% @since Version 488
 
-median(List) when is_list(List) ->
+median(List) 
+
+    when is_list(List) ->
 
     SList  = lists:sort(List),
     Length = length(SList),
@@ -1762,8 +1916,22 @@ median(List) when is_list(List) ->
 
 %% @since Version 489
 
-even_or_odd(Num) when is_integer(Num), Num band 1 == 0 -> even;
-even_or_odd(Num) when is_integer(Num)                  -> odd.
+even_or_odd(Num) 
+
+    when is_integer(Num), 
+         Num band 1 == 0 -> 
+         
+    even;
+    
+    
+
+
+
+even_or_odd(Num) 
+
+    when is_integer(Num) -> 
+    
+    odd.
 
 
 
@@ -1785,14 +1953,20 @@ even_or_odd(Num) when is_integer(Num)                  -> odd.
 
 %% @since Version 490
 
-standard_deviation(Values, population) when is_list(Values) ->
+standard_deviation(Values, population) 
+
+    when is_list(Values) ->
 
     Mean = arithmetic_mean(Values),
     math:sqrt(arithmetic_mean([ sc_math:square(Val-Mean) || Val <- Values ]));
 
 
 
-standard_deviation(Values, sample) when is_list(Values) ->
+
+
+standard_deviation(Values, sample) 
+
+    when is_list(Values) ->
 
     Mean = arithmetic_mean(Values),
     math:sqrt( lists:sum([ sc_math:square(Val-Mean) || Val <- Values ]) / (length(Values)-1) ).
@@ -1824,9 +1998,14 @@ standard_deviation(Values, sample) when is_list(Values) ->
 
 %% @since Version 491
 
-moment(List, N) when is_list(List), is_number(N) ->
+moment(List, N) 
+
+    when is_list(List), 
+         is_number(N) ->
 
     arithmetic_mean( [ math:pow(Item, N) || Item <- List ] ).
+
+
 
 
 
@@ -1842,13 +2021,17 @@ moments(List) ->
 
 
 
+
+
 %% @equiv [ moment(List, N) || N <- Moments ]
 
 %% @since Version 491
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-moments(List, Moments) when is_list(Moments) ->
+moments(List, Moments) 
+
+    when is_list(Moments) ->
 
     [ moment(List, M) || M <- Moments ].
 
@@ -1876,7 +2059,10 @@ moments(List, Moments) when is_list(Moments) ->
 
 %% @since Version 492
 
-central_moment(List, N) when is_list(List), is_integer(N) ->
+central_moment(List, N) 
+
+    when is_list(List), 
+         is_integer(N) ->
 
     ListAMean = arithmetic_mean(List),
     arithmetic_mean( [ math:pow(Item-ListAMean, N) || Item <- List ] ).
@@ -1905,7 +2091,9 @@ central_moments(List) ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-central_moments(List, Moments) when is_list(Moments) ->
+central_moments(List, Moments) 
+
+    when is_list(Moments) ->
 
     [ central_moment(List, M) || M <- Moments ].
 
@@ -1969,7 +2157,11 @@ histograph([]) ->
 
 
 
-histograph(List) when is_list(List) ->
+
+
+histograph(List) 
+
+    when is_list(List) ->
 
     [Head|Tail] = lists:sort(List),
     histo_count(Tail, Head, 1, []).
@@ -1986,9 +2178,13 @@ histo_count( [], Current, Count, Work) ->
 
 
 
+
+
 histo_count( [Current|Tail], Current, Count, Work) ->
 
     histo_count(Tail, Current, Count+1, Work);
+
+
 
 
 
@@ -2022,9 +2218,15 @@ mode([]) ->
 
 
 
-mode(List) when is_list(List) ->
+
+
+mode(List) 
+
+    when is_list(List) ->
 
     mode_front(lists:reverse(lists:keysort(2, histograph(List)))).
+
+
 
 
 
@@ -2034,15 +2236,21 @@ mode_front([{Item,Freq}|Tail]) ->
 
 
 
+
+
 mode_front([ {Item, Freq} | Tail],  Freq,   Results) ->
 
     mode_front(Tail, Freq, [Item]++Results);
 
 
 
+
+
 mode_front([ {_Item,_Freq} |_Tail], _Better, Results) ->
 
     Results;
+
+
 
 
 
@@ -2133,7 +2341,9 @@ hmean_vector_normal(VX) ->
 
 %% @since Version 501
 
-median_absolute_deviation(List) when is_list(List) ->
+median_absolute_deviation(List) 
+
+    when is_list(List) ->
 
     ListMedian = median(List),
     median( [ abs(ListItem - ListMedian) || ListItem <- List ] ).
@@ -2163,15 +2373,21 @@ expected_value(List) ->
 
 
 
+
+
 expected_value([], Sum, Range) ->
 
     Sum/Range;
 
 
 
+
+
 expected_value( [ {Value,Probability} | Remainder], Sum, Range) ->
 
     expected_value(Remainder, Sum+(Value*Probability), Range+Probability);
+
+
 
 
 
@@ -2208,7 +2424,9 @@ absolute_difference(A,B) ->
 
 %% @since Version 505
 
-root_mean_square(List) when is_list(List) ->
+root_mean_square(List) 
+
+    when is_list(List) ->
 
     math:sqrt(arithmetic_mean([ Val*Val || Val <- List ])).
 
@@ -2222,13 +2440,19 @@ root_mean_square(List) when is_list(List) ->
 
 %% @since Version 506
 
-root_sum_square(VX) when is_list(VX) ->
+root_sum_square(VX) 
+
+    when is_list(VX) ->
 
     math:sqrt(lists:sum([ X*X || X <- VX ]));
 
 
 
-root_sum_square(VX) when is_tuple(VX) ->
+
+
+root_sum_square(VX) 
+
+    when is_tuple(VX) ->
 
     root_sum_square(tuple_to_list(VX)).
 
@@ -2257,7 +2481,10 @@ vector_magnitude(VX) ->
 %%
 %% @since Version 507
 
-mod(Base, Range) when is_integer(Base), is_integer(Range) ->
+mod(Base, Range) 
+
+    when is_integer(Base), 
+         is_integer(Range) ->
 
     case Base rem Range of
 
@@ -2321,11 +2548,15 @@ factorial(X) ->
 
 
 
+
+
 %% @private
 
 factorial(0, _Counter) ->
 
     0;
+
+
 
 
 
@@ -2335,7 +2566,12 @@ factorial(1, Counter) ->
 
 
 
-factorial(X, Counter) when is_integer(X), X > 1 ->
+
+
+factorial(X, Counter) 
+
+    when is_integer(X), 
+         X > 1 ->
 
     factorial(X-1, Counter*X).
 
@@ -2366,11 +2602,32 @@ ceiling(X) ->
 
 
 
+
+
 %% @private
 
-ceiling_t(T, Td) when Td < 0 -> T+1;
-ceiling_t(T, Td) when Td > 0 -> T;
-ceiling_t(T,_Td)             -> T.
+ceiling_t(T, Td) 
+
+    when Td < 0 ->
+
+    T+1;
+    
+    
+    
+
+ceiling_t(T, Td) 
+
+    when Td > 0 -> 
+
+    T;
+    
+    
+
+
+
+ceiling_t(T,_Td) ->
+
+    T.
 
 
 
@@ -2388,11 +2645,33 @@ floor(X) ->
 
 
 
+
+
 %% @private
 
-floor_t(T, Td) when Td < 0 -> T;
-floor_t(T, Td) when Td > 0 -> T-1;
-floor_t(T,_Td)             -> T.
+floor_t(T, Td) 
+
+    when Td < 0 -> 
+    
+    T;
+    
+    
+
+
+
+floor_t(T, Td) 
+
+    when Td > 0 -> 
+    
+    T-1;
+    
+    
+
+
+
+floor_t(T,_Td) -> 
+
+    T.
 
 
 
@@ -2404,7 +2683,11 @@ floor_t(T,_Td)             -> T.
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-mersenne_prime(Which) -> mersenne_prime_worker(Which, 1).
+mersenne_prime(Which) -> 
+
+    mersenne_prime_worker(Which, 1).
+
+
 
 
 
@@ -2416,9 +2699,15 @@ mersenne_prime_worker(0, Current) ->
 
 
 
-mersenne_prime_worker(Remain, Current) when Remain > 30 ->
+
+
+mersenne_prime_worker(Remain, Current) 
+
+    when Remain > 30 ->
 
     mersenne_prime_worker(Remain-30, Current*1073741824);
+
+
 
 
 
@@ -2436,12 +2725,27 @@ mersenne_prime_worker(Remain, Current) ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-factorize(N) when is_integer(N), N > 1 ->
+factorize(N) 
+
+    when is_integer(N), N > 1 ->
 
     factorize(N, 2, []);
 
-factorize(1) -> [1];
-factorize(0) -> [].
+
+
+
+
+factorize(1) -> 
+
+    [1];
+    
+    
+
+
+
+factorize(0) -> 
+
+    [].
 
 
 
@@ -2451,12 +2755,15 @@ factorize(N, Current, Work) ->
 
     case Current > math:sqrt(N) of
 
-        true  -> lists:reverse([N] ++ Work);
+        true ->
+            lists:reverse([N] ++ Work);
+
         false ->
             case N rem Current of
                 0 -> factorize(N div Current, Current,   [Current] ++ Work);
                 _ -> factorize(N,             Current+1, Work)
             end
+
     end.
 
 
@@ -2530,7 +2837,9 @@ is_sorted_list_worker([], _Last) ->
 
 
 
-is_sorted_list_worker([Cur|Rem], Last) when Cur >= Last ->
+is_sorted_list_worker([Cur|Rem], Last) 
+
+    when Cur >= Last ->
 
     is_sorted_list_worker(Rem, Cur);
 
@@ -2554,7 +2863,9 @@ is_sorted_list_worker([_Cur|_Rem], _Last) ->
 
 alarm_set(Time, Lambda, Repeat) ->
 
-    { alarm_actor_pid, spawn( fun() -> alarm_head(Time, Lambda, Repeat, construct) end ) }.
+    { alarm_actor_pid, 
+      spawn( fun() -> alarm_head(Time, Lambda, Repeat, construct) end ) 
+    }.
 
 
 
@@ -2664,7 +2975,9 @@ alarm_trigger(Time, Repeat, Head) ->
 
 %% @since Version 516
 
-centroid(CoordList) when is_list(CoordList) ->
+centroid(CoordList) 
+
+    when is_list(CoordList) ->
 
     [ sc_stats:arithmetic_mean(X) ||
         X <- sc_lists:zip_n(CoordList, to_list)
@@ -2695,7 +3008,9 @@ nearest_to(Centers, Point) ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-by_distance_raw(Centers, Points) when is_list(Centers), is_list(Points) ->
+by_distance_raw(Centers, Points) 
+
+    when is_list(Centers), is_list(Points) ->
 
     [ {Key, [NV || {_NC,NV} <- Near]} || {Key, Near} <- sc_lists:keygroup(1, [ { nearest_to(Centers, Point), Point } || Point <- Points ]) ].
 
@@ -2707,7 +3022,10 @@ by_distance_raw(Centers, Points) when is_list(Centers), is_list(Points) ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-by_distance(Centers, Points) when is_list(Centers), is_list(Points) ->
+by_distance(Centers, Points) 
+
+    when is_list(Centers), 
+         is_list(Points)  ->
 
     Work = by_distance_raw(Centers, Points),
 
@@ -2734,7 +3052,7 @@ by_distance(Centers, Points) when is_list(Centers), is_list(Points) ->
 
 %% @spec module_attribute(Module::atom()) -> AttributeList | { error, no_such_module }
 
-%% @doc <span style="color:orange;font-style:italic">Untested</span> Look up all attributes of a given module.  ```1> sc:get_module_attribute(scutil).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Look up all attributes of a given module.  ```1> sc:module_attribute(sc).
 %% [{author,"John Haugeland <stonecypher@gmail.com>"},
 %%  {bugtracker,"http://crunchyd.com/forum/project.php?projectid=7"},
 %%  {currentsource,"http://crunchyd.com/release/scutil.zip"},
@@ -3046,6 +3364,9 @@ key_cluster(_Index, []) ->
     [];
 
 
+
+
+
 % 177> sc:key_cluster(1,[{1,a},{1,aa},{2,a}]).
 % [{1,[{1,a},{1,aa}]},{2,[{2,a}]}]
 
@@ -3056,6 +3377,8 @@ key_cluster(Index, List) ->
     Current    = element(Index, First),
 
     key_cluster(Index, SortedList, Current, [], []).
+
+
 
 
 
@@ -3075,6 +3398,8 @@ key_cluster(Index, [], _Current, Work, Storage) ->
     LabelItem = fun(Item) -> [X|_] = Item, Label = element(Index, X), { Label, Item } end,
 
     [ LabelItem(Item) || Item <- FinalResult ];
+
+
 
 
 
@@ -3166,6 +3491,8 @@ distinct_neighbor_pairs([A,B|Rem], Work, make_lists) ->
 all_neighbor_pairs(List) ->
 
     all_neighbor_pairs(List, make_tuples).
+
+
 
 
 
@@ -3572,16 +3899,47 @@ reverse_map([Item|Rem], Work, Fun) ->
 
 % interface
 
-elements(Config, Requested)                when is_list(Config), is_list(Requested)                     -> elements_worker([], Config, Requested, 1).
+elements(Config, Requested)                
+
+    when is_list(Config), is_list(Requested) -> 
+    
+    elements_worker([], Config, Requested, 1).
+
+
+
+
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
-elements(Config, Requested, KeyIdx)        when is_list(Config), is_list(Requested), is_integer(KeyIdx) -> elements_worker([], Config, Requested, KeyIdx);
+
+elements(Config, Requested, KeyIdx)
+
+    when is_list(Config), is_list(Requested), is_integer(KeyIdx) ->
+
+    elements_worker([], Config, Requested, KeyIdx);
+
+
+
+
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
-elements(Config, Requested, strip)         when is_list(Config), is_list(Requested)                     -> elements_worker([], Config, Requested, 1,      strip).
+
+elements(Config, Requested, strip)
+
+    when is_list(Config), is_list(Requested) ->
+
+    elements_worker([], Config, Requested, 1, strip).
+
+
+
+
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
-elements(Config, Requested, KeyIdx, strip) when is_list(Config), is_list(Requested), is_integer(KeyIdx) -> elements_worker([], Config, Requested, KeyIdx, strip).
+
+elements(Config, Requested, KeyIdx, strip)
+
+    when is_list(Config), is_list(Requested), is_integer(KeyIdx) ->
+
+    elements_worker([], Config, Requested, KeyIdx, strip).
 
 
 
@@ -3589,7 +3947,14 @@ elements(Config, Requested, KeyIdx, strip) when is_list(Config), is_list(Request
 
 % implementation
 
-elements_worker(Retlist, _,      [],        _)      -> Retlist;
+elements_worker(Retlist, _, [], _) ->
+
+    Retlist;
+
+
+
+
+
 elements_worker(Retlist, Config, Requested, KeyIdx) ->
 
     [ ThisRequest | RemainingRequests ] = Requested,
@@ -3611,7 +3976,14 @@ elements_worker(Retlist, Config, Requested, KeyIdx) ->
 
 
 
-elements_worker(Retlist, _,      [],        _,      strip) -> Retlist;
+elements_worker(Retlist, _, [], _, strip) -> 
+
+    Retlist;
+    
+    
+
+
+
 elements_worker(Retlist, Config, Requested, KeyIdx, strip) ->
 
     [ ThisRequest | RemainingRequests ] = Requested,
@@ -3717,6 +4089,8 @@ walk_unique_pairings([], _) ->
 
 
 
+
+
 walk_unique_pairings([A|R], F) when is_function(F) ->
 
     walk_unique_pairings(A, R, F),
@@ -3724,9 +4098,13 @@ walk_unique_pairings([A|R], F) when is_function(F) ->
 
 
 
+
+
 walk_unique_pairings(_A, [],     _F) ->
 
     ok;
+
+
 
 
 
@@ -3910,6 +4288,7 @@ every_flag_representation([]) ->
 
 
 
+
 every_flag_representation([Flag|RemFlags]) ->
 
     [ MaybeFlag ++ Reps ||
@@ -4064,9 +4443,13 @@ kendall_right_of([], Work) ->
 
 
 
+
+
 kendall_right_of([F|R], Work) ->
 
     kendall_right_of(R, [kendall_right_of_item(F,R)]++Work).
+
+
 
 
 
@@ -4168,6 +4551,8 @@ pearson_correlation(TupleList) when is_list(TupleList) ->
 
 
 
+
+
 %% @equiv pearson(lists:zip(List1, List2))
 
 pearson_correlation(List1, _) when length(List1) < 2 ->
@@ -4176,9 +4561,13 @@ pearson_correlation(List1, _) when length(List1) < 2 ->
 
 
 
+
+
 pearson_correlation(List1, List2) when length(List1) /= length(List2) ->
 
     {error, "For the Pearson correlation, the input lists must be the same length."};
+
+
 
 
 
@@ -4274,6 +4663,8 @@ tied_rank_worker([], Work, PrevValue) ->
 
 
 
+
+
 tied_rank_worker([Item|Remainder], Work, PrevValue) ->
 
     case PrevValue of
@@ -4317,9 +4708,13 @@ tied_ordered_ranking(List) when is_list(List) ->
 
 
 
+
+
 tied_ordered_ranking([], [], Work) ->
 
     lists:reverse(Work);
+
+
 
 
 
@@ -4399,6 +4794,7 @@ integer_to_radix_list(Number, RadixItems) when is_tuple(RadixItems) ->
 
     Radix = size(RadixItems),
     [ element(Ch+1, RadixItems) || Ch <- downshift_radix([], Number, Radix) ];
+
 
 
 
@@ -4522,6 +4918,8 @@ nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 0,  Nyb < 10 ->
 
 
 
+
+
 nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 10, Nyb < 16 ->
 
     $a + Nyb - 10.
@@ -4542,7 +4940,11 @@ nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 10, Nyb < 16 ->
 
 %% @since Version 571
 
-byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 ->
+byte_to_hex(TheByte) 
+
+    when is_integer(TheByte), 
+         TheByte >= 0, 
+         TheByte =< 255     ->
 
     [ nybble_to_hex(TheByte bsr 4), nybble_to_hex(TheByte band 15) ].
 
@@ -4565,15 +4967,63 @@ byte_to_hex(TheByte) when is_integer(TheByte), TheByte >= 0, TheByte =< 255 ->
 
 %% @since Version 572
 
-hex_to_int(Hex) when is_integer(Hex), Hex >= $0, Hex =< $9 -> Hex - $0;
-hex_to_int(Hex) when is_integer(Hex), Hex >= $a, Hex =< $f -> Hex - $a + 10;
-hex_to_int(Hex) when is_integer(Hex), Hex >= $A, Hex =< $F -> Hex - $A + 10;
+hex_to_int(Hex) 
 
-hex_to_int(Hex) when is_list(Hex) ->
+    when is_integer(Hex), 
+         Hex >= $0, 
+         Hex =< $9      -> 
+         
+    Hex - $0;
+    
+    
+
+
+
+hex_to_int(Hex) 
+
+    when is_integer(Hex), 
+         Hex >= $a, 
+         Hex =< $f      -> 
+         
+    Hex - $a + 10;
+    
+    
+    
+    
+
+hex_to_int(Hex) 
+
+    when is_integer(Hex), 
+         Hex >= $A, 
+         Hex =< $F      -> 
+         
+    Hex - $A + 10;
+    
+    
+
+
+
+hex_to_int(Hex) 
+
+    when is_list(Hex) ->
+
     hex_to_int(Hex, 0).
 
-hex_to_int([],          Acc) -> Acc;
-hex_to_int([Digit|Rem], Acc) -> hex_to_int(Rem, (Acc bsl 4) + hex_to_int(Digit)).
+
+
+
+
+hex_to_int([], Acc) -> 
+
+    Acc;
+    
+    
+    
+    
+
+hex_to_int([Digit|Rem], Acc) -> 
+
+    hex_to_int(Rem, (Acc bsl 4) + hex_to_int(Digit)).
 
 
 
@@ -4629,9 +5079,13 @@ euclidean_distance(C1, C2) when is_tuple(C1) ->
 
 
 
+
+
 euclidean_distance(C1, C2) when is_tuple(C2) ->
 
     euclidean_distance( C1, tuple_to_list(C2) );
+
+
 
 
 
@@ -4820,3 +5274,10 @@ union(L1, L2, L3) ->
 union(L1, L2, L3, L4) ->
 
     union([L1,L2,L3,L4]).
+
+% todo test require that sort(union(powerset(A))) == sort(A)
+
+
+
+
+
