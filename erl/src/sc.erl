@@ -117,6 +117,8 @@
 
     random_from_weighted/1,
 
+    grid_scatter/2,
+
     union/1,
       union/2,
       union/3,
@@ -793,8 +795,6 @@ member_sets( [Membership|RemMemberships], allow_absence) ->
 
 
 
-
-%% @type non_negative_integer() = integer().  A {@type non_negative_integer()} must be equal to or greater than zero.
 
 %% @spec count_x(Item::any(), List::list()) -> non_negative_integer()
 
@@ -1825,7 +1825,7 @@ instant_runoff_vote(ListOfVoteLists) ->
 instant_runoff_vote(ListOfVoteLists, Exclude) ->
 
     FilteredVotes = [ VoteList || VoteList <- ListOfVoteLists, VoteList =/= [] ],
-    FilteredVotes.
+    { Exclude, FilteredVotes }.
 
 
 
@@ -5351,7 +5351,7 @@ shuffle(List)
 
 %% @spec random_from_weighted(InputList::weightlist()) -> any()
 
-%% @doc {@section Random} Take a random single item from a list with weighted probabilities.  Probabilities may be any numeric type, and may be any non-negative value (items with zero probability will be omitted).  Input is a `weightlist()', which is a list in the form `[{Item,Probability}, {I2,P2}, ...]'. There is no requirement to normalize probabilities to any range, though probabilities normalized to ranges will still work as expected. ```1> scutil:from([ {quad,4}, {double,2}, {single,1} ]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Take a random single item from a list with weighted probabilities.  Probabilities may be any numeric type, and may be any non-negative value (items with zero probability will be omitted).  Input is a `weightlist()', which is a list in the form `[{Item,Probability}, {I2,P2}, ...]'. There is no requirement to normalize probabilities to any range, though probabilities normalized to ranges will still work as expected. ```1> scutil:from([ {quad,4}, {double,2}, {single,1} ]).
 %% quad
 %%
 %% 2> [ scutil:from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X <- lists:seq(1,10) ].
@@ -5438,7 +5438,7 @@ random_from(N, List) ->
 
 %% @spec random_from(N::integer(), List::list(), WantRemainder::want_remainder()) -> list()
 
-%% @doc Take N non-repeating random elements from a list in undefined order.  If the atom `remainder' is passed in as the third argument, the unused portion of the source list will be returned as the second member of a 2ary tuple with the results; the default is no_remainder, which only returns the result set.  Mixed type input lists are perfectly safe, and membership for random selection is shallow (ie, `[ [1,2], [3,4] ]' as an input list would only generate outputs of lists, never integers.)```1> sc:random_from([monday,tuesday,wednesday,thursday,friday]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Take N non-repeating random elements from a list in undefined order.  If the atom `remainder' is passed in as the third argument, the unused portion of the source list will be returned as the second member of a 2ary tuple with the results; the default is no_remainder, which only returns the result set.  Mixed type input lists are perfectly safe, and membership for random selection is shallow (ie, `[ [1,2], [3,4] ]' as an input list would only generate outputs of lists, never integers.)```1> sc:random_from([monday,tuesday,wednesday,thursday,friday]).
 %% friday
 %%
 %% 2> sc:random_from(4, lists:seq(1,20)).
@@ -5482,7 +5482,7 @@ random_from(N, List, remainder) ->
 
 %% @spec rand(Range::integer()) -> integer()
 
-%% @doc Returns a pseudorandom integer on the range `[0 - (Range-1)]' inclusive. ```1> scutil:rand(100).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Returns a pseudorandom integer on the range `[0 - (Range-1)]' inclusive. ```1> scutil:rand(100).
 %% 9
 %%
 %% 2> [ scutil:rand(100) || X <- lists:seq(1,10) ].
@@ -5494,7 +5494,7 @@ random_from(N, List, remainder) ->
 %% 4> scutil:histograph([ scutil:rand(10) || X <- lists:seq(1,10000) ]).
 %% [{0,1028}, {1,979}, {2,934}, {3,970}, {4,1035}, {5,1007}, {6,986}, {7,1012}, {8,1052}, {9,997}]'''
 
-%% @since Version 5
+%% @since Version 595
 
 rand(Range) ->
 
@@ -5554,7 +5554,7 @@ random_generator() ->
 
 %% @spec srand() -> { ok, { seeded, Seed } }
 
-%% @doc <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want to know what seed was used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> scutil:srand().
+%% @doc <span style="color:orange;font-style:italic">Untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want to know what seed was used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> scutil:srand().
 %% {ok,{seeded,{1227,902172,685000}}}
 %%
 %% 2> scutil:srand().
@@ -5573,7 +5573,7 @@ srand() ->
 
 
 %% @spec srand(A::integer(), B::integer(), C::integer()) -> { ok, { seeded, Seed } }
-%% @doc <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want set what seed is used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> scutil:srand(1,2,3).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want set what seed is used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> scutil:srand(1,2,3).
 %% {ok,{seeded,{1,2,3}}}
 %%
 %% 2> scutil:srand().
@@ -5601,3 +5601,49 @@ srand(A,B,C) ->
 
     register(scutil_rand_source, RandomGeneratorPid),
     { ok, { seeded, {A,B,C} } }.
+
+
+
+
+
+%% @type gridsize() = coord2() | integer().  Coordinates are the width and height of a (1,1) originated grid; as such, coordinates are of the range [1,X] , [1,Y] inclusive, and returned in the form {A,B}.  The integer form implies a square grid.
+%% @type coord() = tuple().  Every member of a {@type coord()} is a {@type number()}.  Represents a coordinate, which may imply a sized cartesian space.  Many functions expect integer coordinates; the type does not require them.  This type does not define member count.  If your function requires a specific count of members, name it, as in a {@type coord2()} or {@type coord3()}.
+%% @type coordlist() = list().  All members of a {@type coordlist()} must be {@type coord()}s.  All member coordinates must be of the same size, though this type does not define what that size is.  If your function requires a specific count of members, name it, as in a {@type coord2list()} or {@type coord3list()}.
+%% @type coord2() = { number(), number() }.  Represents a coordinate, which may imply a sized rectangle.  Many functions expect integer coordinates; the type does not require them.
+%% @type coord2list() = list().  All members of a {@type coord2list()} must be {@type coord2()}s.
+%% @type coord3() = { number(), number(), number() }.  Represents a coordinate, which may imply a sized 3d box region.  Many functions expect integer coordinates; the type does not require them.
+%% @type coord3list() = list().  All members of a {@type coord3list()} must be {@type coord3()}s.
+
+%% @spec grid_scatter(Count::integer(), Size::gridsize()) -> coordlist()
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Return a Count-length list of non-repeating coordinates in a grid of specified size; useful for feature generation.
+
+%% @todo @comeback give code examples (edoc was failing here?)
+
+%% @since Version 599
+
+grid_scatter(0, []) ->
+
+    []; % skips a lot of work
+
+
+
+
+
+grid_scatter(Count, {SizeX, SizeY}) ->
+
+    sc_random:from(
+        Count,
+        [ {X,Y} ||
+            X <- lists:seq(1,SizeX),
+            Y <- lists:seq(1,SizeY)
+        ]
+    );
+
+
+
+
+
+grid_scatter(Count, Size) ->
+
+    grid_scatter(Count, {Size, Size}).
