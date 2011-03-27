@@ -209,8 +209,8 @@
     distinct_neighbor_pairs/1,
       distinct_neighbor_pairs/2,
 
-    abstract/1,
-      abstract/2,
+    module_abstract_representation/1,
+      module_abstract_representation/2,
       abstract_attributes/1,
 
     entrypoints/1,
@@ -858,7 +858,7 @@ intersect_walk( _L1, [], Work) ->
 
 
 
-intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) 
+intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work)
 
     when L1Head == L2Head ->
 
@@ -1018,7 +1018,7 @@ combinations(1, Items)
 
 combinations(_N, []) ->
 
-   [];
+    [];
 
 
 
@@ -3227,7 +3227,15 @@ function_points(Module) ->
 entrypoints(Module) ->
 
     lists:flatten(
-        [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- sc:abstract_functions(Module) ]
+        [ 
+            [
+                { L, A, [ {Kind,Name} || {Kind,_LineNum,Name}<-ThisAcArg ], When }
+            ||
+                { _, _, ThisAcArg, When, _ } <- AbstractClauseList
+            ]
+        ||
+            { _, L, A, AbstractClauseList } <- sc:abstract_functions(Module)
+        ]
     ).
 
 
@@ -3243,7 +3251,15 @@ entrypoints(Module) ->
 entrypoints(Module, FName) ->
 
     lists:flatten(
-        [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- abstract_functions(Module), L==FName ]
+        [
+            [
+                { L, A, [ {Kind,Name} || {Kind,_LineNum,Name}<-ThisAcArg ], When }
+            ||
+                { _, _, ThisAcArg, When, _ } <- AbstractClauseList
+            ]
+        ||
+            { _, L, A, AbstractClauseList } <- abstract_functions(Module), L==FName
+        ]
     ).
 
 
@@ -3258,7 +3274,7 @@ entrypoints(Module, FName) ->
 
 abstract_functions(Module) ->
 
-    [ {Id, Name, Arity, Code} ||
+    [ { Id, Name, Arity, Code } ||
         {function, Id, Name, Arity, Code} <- abstract(Module, stripped)
     ].
 
@@ -3596,7 +3612,9 @@ key_group(Pos, List) ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-key_group(Pos, List, unsorted) when is_list(List) ->
+key_group(Pos, List, unsorted) 
+
+    when is_list(List) ->
 
     SList = lists:keysort(Pos,List),
     [F|_] = SList,
@@ -3611,7 +3629,9 @@ key_group(Pos, List, unsorted) when is_list(List) ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-key_group(Pos, List, sorted) when is_list(List) ->
+key_group(Pos, List, sorted) 
+
+    when is_list(List) ->
 
     [F|_] = List,
 
@@ -3967,7 +3987,10 @@ elements_worker(Retlist, Config, Requested, KeyIdx, strip) ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-differences(List) when is_list(List), length(List) > 2 ->
+differences(List) 
+
+    when is_list(List), 
+         length(List) > 2 ->
 
     [ B-A || {A,B} <- all_neighbor_pairs(List) ].
 
@@ -3979,7 +4002,10 @@ differences(List) when is_list(List), length(List) > 2 ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-first_difference(List) when is_list(List), length(List) > 2 ->
+first_difference(List) 
+
+    when is_list(List), 
+         length(List) > 2 ->
 
     differences(List).
 
@@ -3991,7 +4017,10 @@ first_difference(List) when is_list(List), length(List) > 2 ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-second_difference(List) when is_list(List), length(List) > 3 ->
+second_difference(List) 
+
+    when is_list(List), 
+         length(List) > 3 ->
 
     differences(differences(List)).
 
@@ -4003,7 +4032,10 @@ second_difference(List) when is_list(List), length(List) > 3 ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-third_difference(List) when is_list(List), length(List) > 4 ->
+third_difference(List) 
+
+    when is_list(List), 
+         length(List) > 4 ->
 
     differences(differences(differences(List))).
 
@@ -4025,7 +4057,11 @@ nth_difference(0, List) ->
 
 
 
-nth_difference(N, List) when is_list(List), length(List) > (N+1), N > 0 ->
+nth_difference(N, List) 
+
+    when is_list(List), 
+         length(List) > (N+1), 
+         N > 0               ->
 
     nth_difference(N-1, differences(List)).
 
@@ -4049,7 +4085,9 @@ walk_unique_pairings([], _) ->
 
 
 
-walk_unique_pairings([A|R], F) when is_function(F) ->
+walk_unique_pairings([A|R], F) 
+
+    when is_function(F) ->
 
     walk_unique_pairings(A, R, F),
     walk_unique_pairings(R, F).
@@ -4349,7 +4387,9 @@ eval(S, Environ) ->
 
 %% @since Version 557
 
-kendall_correlation(TupleList) when is_list(TupleList) ->
+kendall_correlation(TupleList) 
+
+    when is_list(TupleList) ->
 
     {A,B} = lists:unzip(TupleList),
     kendall_correlation(A,B).
@@ -4360,7 +4400,9 @@ kendall_correlation(TupleList) when is_list(TupleList) ->
 
 %% @equiv kendall(lists:zip(List1, List2))
 
-kendall_correlation(List1, _) when length(List1) < 2 ->
+kendall_correlation(List1, _) 
+
+    when length(List1) < 2 ->
 
     {tau, 0.0};
 
@@ -4368,7 +4410,9 @@ kendall_correlation(List1, _) when length(List1) < 2 ->
 
 
 
-kendall_correlation(List1, List2) when length(List1) /= length(List2) ->
+kendall_correlation(List1, List2) 
+
+    when length(List1) /= length(List2) ->
 
     {error, "For the Kendall correlation, the input lists must be same length."};
 
@@ -4376,7 +4420,10 @@ kendall_correlation(List1, List2) when length(List1) /= length(List2) ->
 
 
 
-kendall_correlation(List1, List2) when is_list(List1), is_list(List2) ->
+kendall_correlation(List1, List2) 
+
+    when is_list(List1), 
+         is_list(List2) ->
 
     {RA,_} = lists:unzip(tied_ordered_ranking(List1)),
     {RB,_} = lists:unzip(tied_ordered_ranking(List2)),
@@ -4440,7 +4487,9 @@ kendall_right_of_item(B, Rem) ->
 
 %% @since Version 558
 
-spearman_correlation(TupleList) when is_list(TupleList) ->
+spearman_correlation(TupleList) 
+
+    when is_list(TupleList) ->
 
     {A,B} = lists:unzip(TupleList),
     spearman_correlation(A,B).
@@ -4451,7 +4500,9 @@ spearman_correlation(TupleList) when is_list(TupleList) ->
 
 %% @equiv spearman_correlation(lists:zip(List1, List2))
 
-spearman_correlation(List1, _) when length(List1) < 2 ->
+spearman_correlation(List1, _) 
+
+    when length(List1) < 2 ->
 
     {rsquared, 0.0};
 
@@ -4459,7 +4510,9 @@ spearman_correlation(List1, _) when length(List1) < 2 ->
 
 
 
-spearman_correlation(List1, List2) when length(List1) /= length(List2) ->
+spearman_correlation(List1, List2) 
+
+    when length(List1) /= length(List2) ->
 
     {error, "For the Spearman correlation, the input lists must be the same length."};
 
@@ -4467,7 +4520,10 @@ spearman_correlation(List1, List2) when length(List1) /= length(List2) ->
 
 
 
-spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
+spearman_correlation(List1, List2) 
+
+    when is_list(List1), 
+         is_list(List2) ->
 
     {TR1,_} = lists:unzip(simple_ranking(List1)),
     {TR2,_} = lists:unzip(simple_ranking(List2)),
@@ -4502,7 +4558,9 @@ spearman_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 %%
 %% @since Version 559
 
-pearson_correlation(TupleList) when is_list(TupleList) ->
+pearson_correlation(TupleList) 
+
+    when is_list(TupleList) ->
 
     {A,B} = lists:unzip(TupleList),
     pearson_correlation(A,B).
@@ -4513,7 +4571,9 @@ pearson_correlation(TupleList) when is_list(TupleList) ->
 
 %% @equiv pearson(lists:zip(List1, List2))
 
-pearson_correlation(List1, _) when length(List1) < 2 ->
+pearson_correlation(List1, _) 
+
+    when length(List1) < 2 ->
 
     {r, 0.0};
 
@@ -4521,7 +4581,9 @@ pearson_correlation(List1, _) when length(List1) < 2 ->
 
 
 
-pearson_correlation(List1, List2) when length(List1) /= length(List2) ->
+pearson_correlation(List1, List2) 
+
+    when length(List1) /= length(List2) ->
 
     {error, "For the Pearson correlation, the input lists must be the same length."};
 
@@ -4529,7 +4591,10 @@ pearson_correlation(List1, List2) when length(List1) /= length(List2) ->
 
 
 
-pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
+pearson_correlation(List1, List2) 
+
+    when is_list(List1), 
+         is_list(List2) ->
 
     SumXY = lists:sum([A*B || {A,B} <- lists:zip(List1,List2) ]),   % the sum of the products of each matched pair
 
@@ -4574,7 +4639,9 @@ pearson_correlation(List1, List2) when is_list(List1), is_list(List2) ->
 
 %% @since Version 560
 
-simple_ranking(List) when is_list(List) ->
+simple_ranking(List) 
+
+    when is_list(List) ->
 
     lists:zip(lists:seq(1,length(List)),lists:reverse(lists:sort(List))).
 
@@ -4660,7 +4727,9 @@ tied_rank_worker([Item|Remainder], Work, PrevValue) ->
 
 %% @since Version 562
 
-tied_ordered_ranking(List) when is_list(List) ->
+tied_ordered_ranking(List) 
+
+    when is_list(List) ->
 
     tied_ordered_ranking(List, tied_ranking(List), []).
 
@@ -4748,7 +4817,9 @@ halstead_complexity(DistinctOperators, DistinctOperands, TotalOperators, TotalOp
 
 %% @since Version 566
 
-integer_to_radix_list(Number, RadixItems) when is_tuple(RadixItems) ->
+integer_to_radix_list(Number, RadixItems) 
+
+    when is_tuple(RadixItems) ->
 
     Radix = size(RadixItems),
     [ element(Ch+1, RadixItems) || Ch <- downshift_radix([], Number, Radix) ];
@@ -4757,7 +4828,9 @@ integer_to_radix_list(Number, RadixItems) when is_tuple(RadixItems) ->
 
 
 
-integer_to_radix_list(Number, RadixList) when is_list(RadixList) ->
+integer_to_radix_list(Number, RadixList) 
+
+    when is_list(RadixList) ->
 
     integer_to_radix_list(Number, list_to_tuple(RadixList)).
 
@@ -4825,7 +4898,9 @@ list_to_term(List) ->
 
 %% @since Version 569
 
-io_list_to_hex_string(Input) when is_list(Input) ->
+io_list_to_hex_string(Input) 
+
+    when is_list(Input) ->
 
     io_list_to_hex_string(Input, []).
 
@@ -4841,7 +4916,11 @@ io_list_to_hex_string([], Work) ->
 
 
 
-io_list_to_hex_string([Item|Remainder], Work) when is_integer(Item), Item >= 0, Item =< 255 ->
+io_list_to_hex_string([Item|Remainder], Work) 
+
+    when is_integer(Item), 
+         Item >= 0, 
+         Item =< 255     ->
 
     [A,B] = byte_to_hex(Item),
     io_list_to_hex_string(Remainder, [B,A]++Work);
@@ -4870,7 +4949,11 @@ io_list_to_hex_string(_, _) ->
 
 %% @since Version 570
 
-nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 0,  Nyb < 10 ->
+nybble_to_hex(Nyb) 
+
+    when is_integer(Nyb), 
+         Nyb >= 0,  
+         Nyb < 10       ->
 
     $0 + Nyb;
 
@@ -4878,7 +4961,11 @@ nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 0,  Nyb < 10 ->
 
 
 
-nybble_to_hex(Nyb) when is_integer(Nyb), Nyb >= 10, Nyb < 16 ->
+nybble_to_hex(Nyb)
+
+    when is_integer(Nyb),
+         Nyb >= 10,
+         Nyb < 16       ->
 
     $a + Nyb - 10.
 
@@ -5031,7 +5118,9 @@ list_to_number(X) ->
 
 %% @since Version 575
 
-euclidean_distance(C1, C2) when is_tuple(C1) ->
+euclidean_distance(C1, C2) 
+
+    when is_tuple(C1) ->
 
     euclidean_distance( tuple_to_list(C1), C2 );
 
@@ -5039,7 +5128,9 @@ euclidean_distance(C1, C2) when is_tuple(C1) ->
 
 
 
-euclidean_distance(C1, C2) when is_tuple(C2) ->
+euclidean_distance(C1, C2) 
+
+    when is_tuple(C2) ->
 
     euclidean_distance( C1, tuple_to_list(C2) );
 
@@ -5243,7 +5334,9 @@ union(L1, L2, L3, L4) ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-power_set(L) when is_list(L) ->
+power_set(L) 
+
+    when is_list(L) ->
 
     Size = length(L),
     lists:append( [[[]]] ++ [ sc_lists:combinations(L,Sz) || Sz <- lists:seq(1,Size) ] ).
@@ -5273,19 +5366,19 @@ power_set(L) when is_list(L) ->
 
 shuffle(List)
 
-   when is_list(List) ->
+    when is_list(List) ->
 
-   {A1,A2,A3} = now(),
-   random:seed(A1, A2, A3),
+    {A1,A2,A3} = now(),
+    random:seed(A1, A2, A3),
 
-   WeightedAndShuffled = lists:map(
-       fun(Item) -> { random:uniform(), Item } end,
-       List
-   ),
+    WeightedAndShuffled = lists:map(
+        fun(Item) -> { random:uniform(), Item } end,
+        List
+    ),
 
-   { _, SortedAndDeweighted } = lists:unzip(lists:keysort(1, WeightedAndShuffled)),
+    { _, SortedAndDeweighted } = lists:unzip(lists:keysort(1, WeightedAndShuffled)),
 
-   SortedAndDeweighted.
+    SortedAndDeweighted.
 
 
 
@@ -5785,13 +5878,17 @@ key_min(Pos, [Cur|Rem], Item) ->
 
 %% @since Version 609
 
-tuple_sum(T) when is_tuple(T) ->
+tuple_sum(T) 
+
+    when is_tuple(T) ->
 
     tuple_sum(T, 1, size(T), 0).
 
 
 
-tuple_sum(_T, Which, Max, Work) when Which > Max ->
+tuple_sum(_T, Which, Max, Work) 
+
+    when Which > Max ->
 
     Work;
 
