@@ -107,6 +107,9 @@
     shuffle/1,
 
     random_from/1,
+      random_from/2,
+      random_from/3,
+
     random_from_weighted/1,
 
     union/1,
