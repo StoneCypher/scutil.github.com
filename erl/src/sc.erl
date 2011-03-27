@@ -5935,7 +5935,7 @@ tuple_sort(T)
 
 %% @spec tuple_member(E::any(), T::tuple()) -> true | false
 
-%% @doc @doc <span style="color:orange;font-style:italic">Untested</span> Checks whether E is a member element of tuple T, analogous to `lists::member(E, L)'. ```1> sc:tuple_member(b, {a,b,c}).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Checks whether E is a member element of tuple T, analogous to `lists::member(E, L)'. ```1> sc:tuple_member(b, {a,b,c}).
 %% true
 %%
 %% 2> sc:tuple_member(d, {a,b,c}).
