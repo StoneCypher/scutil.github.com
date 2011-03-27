@@ -259,3 +259,20 @@ list_product_test_() ->
         {"[]",        ?_assert(1    =:= sc:list_product([]))}
 
     ] }.
+
+
+
+
+
+even_or_odd_test_() ->
+
+    { "Even or odd tests", [
+
+        {"-2", ?_assert(even =:= sc:even_or_odd(-2))},
+        {"-1", ?_assert(odd  =:= sc:even_or_odd(-1))},
+        {"0",  ?_assert(even =:= sc:even_or_odd(0) )},
+        {"1",  ?_assert(odd  =:= sc:even_or_odd(1) )},
+        {"2",  ?_assert(even =:= sc:even_or_odd(2) )}
+
+    ] }.
+

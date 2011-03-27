@@ -1750,7 +1750,7 @@ median(List) when is_list(List) ->
 
 %% @spec even_or_odd(Num::integer()) -> even | odd
 
-%% @doc <span style="color:orange;font-style:italic">Untested</span> Documentary convenience function that returns the atoms `even' or `odd' for any integer. ```1> sc:even_or_odd(3).
+%% @doc Documentary convenience function that returns the atoms `even' or `odd' for any integer. ```1> sc:even_or_odd(3).
 %% odd'''
 
 %% @since Version 489
