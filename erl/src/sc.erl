@@ -105,6 +105,7 @@
     power_set/1,
     shuffle/1,
     tuple_sum/1,
+    tuple_sort/1,
 
     key_max/1,
       key_max/2,
@@ -5782,7 +5783,7 @@ key_min(Pos, [Cur|Rem], Item) ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span> Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero. ```1>'''
 
-%% @since Version 86
+%% @since Version 609
 
 tuple_sum(T) when is_tuple(T) ->
 
@@ -5799,3 +5800,19 @@ tuple_sum(_T, Which, Max, Work) when Which > Max ->
 tuple_sum( T, Which, Max, Work) ->
 
      tuple_sum(T, Which+1, Max, Work+element(Which, T)).
+
+
+
+
+
+% huhu dirty
+
+%% @since 610
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+tuple_sort(T)
+
+    when is_tuple(T) ->
+
+    list_to_tuple(lists:sort(tuple_to_list(T))).
