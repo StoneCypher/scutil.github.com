@@ -3275,7 +3275,7 @@ entrypoints(Module, FName) ->
 abstract_functions(Module) ->
 
     [ { Id, Name, Arity, Code } ||
-        {function, Id, Name, Arity, Code} <- abstract(Module, stripped)
+        {function, Id, Name, Arity, Code} <- module_abstract_representation(Module, stripped)
     ].
 
 
@@ -3291,7 +3291,7 @@ abstract_functions(Module) ->
 abstract_function(Module, FName) ->
 
     [ {Id, Name, Arity, Code} ||
-        {function, Id, Name, Arity, Code} <- abstract(Module, stripped),
+        {function, Id, Name, Arity, Code} <- module_abstract_representation(Module, stripped),
         Name == FName
     ].
 
@@ -3308,7 +3308,7 @@ abstract_function(Module, FName) ->
 abstract_attributes(Module) ->
 
     [ {Id, Name, Value} ||
-        {attribute, Id, Name, Value} <- abstract(Module, stripped)
+        {attribute, Id, Name, Value} <- module_abstract_representation(Module, stripped)
     ].
 
 
@@ -4300,9 +4300,9 @@ every_flag_representation([Flag|RemFlags]) ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-abstract(Module) ->
+module_abstract_representation(Module) ->
 
-    abstract(Module, unstripped).
+    module_abstract_representation(Module, unstripped).
 
 
 
@@ -4312,7 +4312,7 @@ abstract(Module) ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-abstract(Module, DoStrip) ->
+module_abstract_representation(Module, DoStrip) ->
 
     case module_feature(Module, abstract_code) of
 

@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 609 $</p>
+<p><b>Version:</b> $Revision: 611 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -150,8 +150,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 
 <h2><a name="index">Function Index</a></h2>
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#absolute_difference-2">absolute_difference/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes the absolute value of the difference between the two arguments.</td></tr>
-<tr><td valign="top"><a href="#abstract-1">abstract/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
-<tr><td valign="top"><a href="#abstract-2">abstract/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#abstract_attributes-1">abstract_attributes/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#abstract_function-2">abstract_function/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#abstract_functions-1">abstract_functions/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
@@ -254,6 +252,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#mersenne_prime-1">mersenne_prime/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#mod-2">mod/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes the modulus of an integer by another integer.</td></tr>
 <tr><td valign="top"><a href="#mode-1">mode/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes the mode (most common) value(s) of a list, as a list.</td></tr>
+<tr><td valign="top"><a href="#module_abstract_representation-1">module_abstract_representation/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#module_abstract_representation-2">module_abstract_representation/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#module_atoms-1">module_atoms/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#module_attribute-1">module_attribute/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Look up all attributes of a given module.</td></tr>
 <tr><td valign="top"><a href="#module_attribute-2">module_attribute/2</a></td><td><span style="color:red">Buggy</span> <span style="color:orange;font-style:italic">Untested</span> Look up an Erlang module attribute value by title.</td></tr>
@@ -342,18 +342,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 </div><p><span style="color:orange;font-style:italic">Untested</span> Takes the absolute value of the difference between the two arguments.  Offered mostly to make dependant code clearer. <pre>  1&gt; sc:absolute_difference(1.25, 1).
   0.25</pre></p>
 <p><b>Introduced in:</b> Version 504</p>
-
-<h3 class="function"><a name="abstract-1">abstract/1</a></h3>
-<div class="spec">
-<p><tt>abstract(Module) -&gt; any()</tt></p>
-</div><p><span style="color:orange;font-style:italic">Untested</span></p>
-<p><b>Introduced in:</b> Version 553</p>
-
-<h3 class="function"><a name="abstract-2">abstract/2</a></h3>
-<div class="spec">
-<p><tt>abstract(Module, DoStrip) -&gt; any()</tt></p>
-</div><p><span style="color:orange;font-style:italic">Untested</span></p>
-<p><b>Introduced in:</b> Version 553</p>
 
 <h3 class="function"><a name="abstract_attributes-1">abstract_attributes/1</a></h3>
 <div class="spec">
@@ -1278,6 +1266,18 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><b>Introduced in:</b> Version 497</p>
 <p><b>See also:</b> <a href="#arithmetic_mean-1">arithmetic_mean/1</a>, <a href="#median-1">median/1</a>.</p>
 
+<h3 class="function"><a name="module_abstract_representation-1">module_abstract_representation/1</a></h3>
+<div class="spec">
+<p><tt>module_abstract_representation(Module) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 553</p>
+
+<h3 class="function"><a name="module_abstract_representation-2">module_abstract_representation/2</a></h3>
+<div class="spec">
+<p><tt>module_abstract_representation(Module, DoStrip) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 553</p>
+
 <h3 class="function"><a name="module_atoms-1">module_atoms/1</a></h3>
 <div class="spec">
 <p><tt>module_atoms(Module) -&gt; any()</tt></p>
@@ -1297,8 +1297,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 609 2011-03-27 23:08:56Z john $"},
-   {svn_revision,"$Revision: 609 $"},
+   {svn_id,"$Id: sc.erl 611 2011-03-27 23:35:54Z john $"},
+   {svn_revision,"$Revision: 611 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -2021,6 +2021,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 27 2011, 19:11:00.</i></p>
+<p><i>Generated by EDoc, Mar 27 2011, 19:37:22.</i></p>
 </body>
 </html>
