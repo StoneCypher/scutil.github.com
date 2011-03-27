@@ -3253,7 +3253,15 @@ entrypoints(Module, FName) ->
     lists:flatten(
         [
             [
-                { L, A, [ {Kind,Name} || {Kind,_LineNum,Name}<-ThisAcArg ], When }
+                { L, 
+                  A, 
+                  [ 
+                      { Kind, Name }
+                  ||
+                      { Kind, _LineNum, Name } <- ThisAcArg
+                  ],
+                  When
+                }
             ||
                 { _, _, ThisAcArg, When, _ } <- AbstractClauseList
             ]
@@ -3274,7 +3282,9 @@ entrypoints(Module, FName) ->
 
 abstract_functions(Module) ->
 
-    [ { Id, Name, Arity, Code } ||
+    [
+        { Id, Name, Arity, Code }
+    ||
         {function, Id, Name, Arity, Code} <- module_abstract_representation(Module, stripped)
     ].
 
@@ -3290,7 +3300,9 @@ abstract_functions(Module) ->
 
 abstract_function(Module, FName) ->
 
-    [ {Id, Name, Arity, Code} ||
+    [
+        {Id, Name, Arity, Code}
+    ||
         {function, Id, Name, Arity, Code} <- module_abstract_representation(Module, stripped),
         Name == FName
     ].
@@ -3307,7 +3319,9 @@ abstract_function(Module, FName) ->
 
 abstract_attributes(Module) ->
 
-    [ {Id, Name, Value} ||
+    [
+        {Id, Name, Value}
+    ||
         {attribute, Id, Name, Value} <- module_abstract_representation(Module, stripped)
     ].
 
