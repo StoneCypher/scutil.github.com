@@ -104,6 +104,7 @@
     integer_to_radix_list/2,
     receive_one/0,
     power_set/1,
+    shuffle/1,
 
     union/1,
       union/2,
@@ -5290,3 +5291,42 @@ power_set(L) when is_list(L) ->
 
     Size = length(L),
     lists:append( [[[]]] ++ [ sc_lists:combinations(L,Sz) || Sz <- lists:seq(1,Size) ] ).
+
+
+
+
+
+%% @spec shuffle(List::list()) -> list()
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Return a list with the original list's shallow members in a random order.  Deep lists are not shuffled; `[ [a,b,c], [d,e,f], [g,h,i] ]' will never produce sublist reorderings (`[b,c,a]') or list mixing (`[b,g,e]'), only reordering of the three top level lists.  The output list will always be the same length as the input list.  Repeated items and mixed types in input lists are safe. ```1> scutil:shuffle(lists:seq(1,9)).
+%% [8,4,7,9,5,2,6,1,3]
+%%
+%% 2> {TheFaces, TheSuits} = {  [ace] ++ lists:seq(2,10) ++ [jack,queen,king],  [hearts,spades,clubs,diamonds]  }
+%% {[ace,jack,queen,king,2,3,4,5,6,7,8,9,10],
+%%  [hearts,spades,clubs,diamonds]}
+%%
+%% 3> Deck = scutil:shuffle([ {Face,Suit} || Face <- TheFaces, Suit <- TheSuits ]).
+%% [ {6,spades}, {7,hearts}, {8,clubs}, {queen,spades}, {6,diamonds}, {ace,...}, {...} | ...]
+%%
+%% 4> scutil:shuffle([ duck,duck,duck,duck, goose ]).
+%% [duck,goose,duck,duck,duck]'''
+%%
+%% <i>Originally found at <a href="http://wiki.trapexit.org/index.php/RandomShuffle">http://wiki.trapexit.org/index.php/RandomShuffle</a>; refactored for clarity, and unnecessary repeat nesting behavior removed.</i>
+
+%% @since Version 590
+
+shuffle(List)
+
+   when is_list(List) ->
+
+   {A1,A2,A3} = now(),
+   random:seed(A1, A2, A3),
+
+   WeightedAndShuffled = lists:map(
+       fun(Item) -> { random:uniform(), Item } end,
+       List
+   ),
+
+   { _, SortedAndDeweighted } = lists:unzip(lists:keysort(1, WeightedAndShuffled)),
+
+   SortedAndDeweighted.

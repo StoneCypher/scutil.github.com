@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 587 $</p>
+<p><b>Version:</b> $Revision: 589 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -228,6 +228,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#permute-1">permute/1</a></td><td>Equivalent to <a href="#permute-2"><tt>permute(List, length(List))</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#permute-2">permute/2</a></td><td>Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast <a href="#combinations-2"><code>combinations/2</code></a>.</td></tr>
+<tr><td valign="top"><a href="#power_set-1">power_set/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#range_scale-1">range_scale/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Get the scale of a same-sign numeric range.</td></tr>
 <tr><td valign="top"><a href="#receive_one-0">receive_one/0</a></td><td><span style="color:orange;font-style:italic">Untested</span> Pop the front of the message queue and return it as <code>{item,X}</code>, or return nothing_there for empty queues; do not block.</td></tr>
 <tr><td valign="top"><a href="#reverse_filter-2">reverse_filter/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
@@ -247,6 +248,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#shared_keys-1">shared_keys/1</a></td><td>Create sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples, where key K appears in both A and B.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-2">shared_keys/2</a></td><td>Equivalent to <a href="#shared_keys-1"><code>shared_keys/1</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-3">shared_keys/3</a></td><td>Equivalent to <a href="#shared_keys-2"><code>shared_keys/2</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
+<tr><td valign="top"><a href="#shuffle-1">shuffle/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Return a list with the original list's shallow members in a random order.</td></tr>
 <tr><td valign="top"><a href="#simple_ranking-1">simple_ranking/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns a ranked ordering of the list without tie rankings.</td></tr>
 <tr><td valign="top"><a href="#skewness-1">skewness/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#spearman_correlation-1">spearman_correlation/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Compute the Spearman's Rank Correlation Coefficient of a list of coordinate tuples.</td></tr>
@@ -1210,8 +1212,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 587 2011-03-27 20:56:17Z john $"},
-   {svn_revision,"$Revision: 587 $"},
+   {svn_id,"$Id: sc.erl 589 2011-03-27 21:45:09Z john $"},
+   {svn_revision,"$Revision: 589 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1344,6 +1346,12 @@ presenting the actual volume of functionality present here.  We can get the cove
   2&gt; sc:permute([fast, strong, smart, lucky], 2).
   [{strong,fast}, {smart,fast}, {lucky,fast}, {fast,strong}, {smart,strong}, {lucky,strong}, {fast,smart}, {strong,smart}, {lucky,smart}, {fast,lucky}, {strong,lucky}, {smart,lucky}]</pre></p>
 <p><b>Introduced in:</b> Version 474</p>
+
+<h3 class="function"><a name="power_set-1">power_set/1</a></h3>
+<div class="spec">
+<p><tt>power_set(L) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 589</p>
 
 <h3 class="function"><a name="range_scale-1">range_scale/1</a></h3>
 <div class="spec">
@@ -1534,6 +1542,25 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>shared_keys(A::<a href="#type-sorted_keylist">sorted_keylist()</a>, B::<a href="#type-sorted_keylist">sorted_keylist()</a>, Presorted::presorted) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt></p>
 </div><p>Equivalent to <a href="#shared_keys-2"><tt>shared_keys(lists:sort(A), lists:sort(B))</tt></a>.</p>
 <p>Equivalent to <a href="#shared_keys-2"><code>shared_keys/2</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</p>
+
+<h3 class="function"><a name="shuffle-1">shuffle/1</a></h3>
+<div class="spec">
+<p><tt>shuffle(List::list()) -&gt; list()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span> Return a list with the original list's shallow members in a random order.  Deep lists are not shuffled; <code>[ [a,b,c], [d,e,f], [g,h,i] ]</code> will never produce sublist reorderings (<code>[b,c,a]</code>) or list mixing (<code>[b,g,e]</code>), only reordering of the three top level lists.  The output list will always be the same length as the input list.  Repeated items and mixed types in input lists are safe. <pre>  1&gt; scutil:shuffle(lists:seq(1,9)).
+  [8,4,7,9,5,2,6,1,3]
+ 
+  2&gt; {TheFaces, TheSuits} = {  [ace] ++ lists:seq(2,10) ++ [jack,queen,king],  [hearts,spades,clubs,diamonds]  }
+  {[ace,jack,queen,king,2,3,4,5,6,7,8,9,10],
+   [hearts,spades,clubs,diamonds]}
+ 
+  3&gt; Deck = scutil:shuffle([ {Face,Suit} || Face &lt;- TheFaces, Suit &lt;- TheSuits ]).
+  [ {6,spades}, {7,hearts}, {8,clubs}, {queen,spades}, {6,diamonds}, {ace,...}, {...} | ...]
+ 
+  4&gt; scutil:shuffle([ duck,duck,duck,duck, goose ]).
+  [duck,goose,duck,duck,duck]</pre>
+ 
+  <i>Originally found at <a href="http://wiki.trapexit.org/index.php/RandomShuffle">http://wiki.trapexit.org/index.php/RandomShuffle</a>; refactored for clarity, and unnecessary repeat nesting behavior removed.</i></p>
+<p><b>Introduced in:</b> Version 590</p>
 
 <h3 class="function"><a name="simple_ranking-1">simple_ranking/1</a></h3>
 <div class="spec">
@@ -1803,6 +1830,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 27 2011, 17:00:10.</i></p>
+<p><i>Generated by EDoc, Mar 27 2011, 17:48:04.</i></p>
 </body>
 </html>
