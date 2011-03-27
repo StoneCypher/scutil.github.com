@@ -101,6 +101,8 @@
     count_of/2,
     integer_to_radix_list/2,
 
+    send_receive/2,
+
     euclidean_distance/2,  % todo 3d version?
 
     list_to_term/1,
@@ -4639,7 +4641,7 @@ euclidean_distance(C1, C2) ->
 
 %% @todo docs
 
-%% @since Version 576
+% % @ s ince Version 576
 
 % merge_settings(S1, S2) when
 
@@ -4647,3 +4649,20 @@ euclidean_distance(C1, C2) ->
 %     is_list(S2) ->
 
 
+
+
+
+%% @spec send_receive(ToWhom::pid()|atom(), What::any()) -> { item, any() } 
+
+%% @doc First send a message to an entity.  Then pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block.  ```1> scutil:send_receive(self(), message).
+%% {item,message}'''
+
+%% @since Version 578
+
+send_receive(ToWhom, What) ->
+
+    ToWhom ! What,
+
+    receive X ->
+        { item, X }
+    end.
