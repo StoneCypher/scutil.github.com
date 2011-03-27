@@ -105,7 +105,9 @@
     power_set/1,
     shuffle/1,
 
-    key_max/2,
+    key_max/1,
+      key_max/2,
+
     key_extrema/2,
 
     srand/0,
