@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 580 $</p>
+<p><b>Version:</b> $Revision: 581 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -229,6 +229,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 </td></tr>
 <tr><td valign="top"><a href="#permute-2">permute/2</a></td><td>Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast <a href="#combinations-2"><code>combinations/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#range_scale-1">range_scale/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Get the scale of a same-sign numeric range.</td></tr>
+<tr><td valign="top"><a href="#receive_one-0">receive_one/0</a></td><td><span style="color:orange;font-style:italic">Untested</span> Pop the front of the message queue and return it as <code>{item,X}</code>, or return nothing_there for empty queues; do not block.</td></tr>
 <tr><td valign="top"><a href="#reverse_filter-2">reverse_filter/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#reverse_map-2">reverse_map/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#reverse_map_filter-3">reverse_map_filter/3</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
@@ -239,10 +240,10 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#rotate_to_last-2">rotate_to_last/2</a></td><td>Rotates the list so that the first instance of Item becomes the last element in the list.</td></tr>
 <tr><td valign="top"><a href="#sanitize_tokens-2">sanitize_tokens/2</a></td><td>Remove unacceptable elements from an input list, as defined by another list or a filter function.</td></tr>
 <tr><td valign="top"><a href="#second_difference-1">second_difference/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
-<tr><td valign="top"><a href="#send_receive-2">send_receive/2</a></td><td>(Blocking) First send a message to an entity.</td></tr>
-<tr><td valign="top"><a href="#send_receive-3">send_receive/3</a></td><td>(Non-Blocking) First send a message to an entity.</td></tr>
-<tr><td valign="top"><a href="#send_receive_masked-3">send_receive_masked/3</a></td><td>(Blocking) First send a message to an entity.</td></tr>
-<tr><td valign="top"><a href="#send_receive_masked-4">send_receive_masked/4</a></td><td>(Non-Blocking) First send a message to an entity.</td></tr>
+<tr><td valign="top"><a href="#send_receive-2">send_receive/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> (Blocking) First send a message to an entity.</td></tr>
+<tr><td valign="top"><a href="#send_receive-3">send_receive/3</a></td><td><span style="color:orange;font-style:italic">Untested</span> (Non-Blocking) First send a message to an entity.</td></tr>
+<tr><td valign="top"><a href="#send_receive_masked-3">send_receive_masked/3</a></td><td><span style="color:orange;font-style:italic">Untested</span> (Blocking) First send a message to an entity.</td></tr>
+<tr><td valign="top"><a href="#send_receive_masked-4">send_receive_masked/4</a></td><td><span style="color:orange;font-style:italic">Untested</span> (Non-Blocking) First send a message to an entity.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-1">shared_keys/1</a></td><td>Create sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples, where key K appears in both A and B.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-2">shared_keys/2</a></td><td>Equivalent to <a href="#shared_keys-1"><code>shared_keys/1</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-3">shared_keys/3</a></td><td>Equivalent to <a href="#shared_keys-2"><code>shared_keys/2</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
@@ -1205,8 +1206,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 580 2011-03-27 19:35:31Z john $"},
-   {svn_revision,"$Revision: 580 $"},
+   {svn_id,"$Id: sc.erl 581 2011-03-27 19:37:02Z john $"},
+   {svn_revision,"$Revision: 581 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1357,6 +1358,22 @@ presenting the actual volume of functionality present here.  We can get the cove
   1.0</pre></p>
 <p><b>Introduced in:</b> Version 479</p>
 
+<h3 class="function"><a name="receive_one-0">receive_one/0</a></h3>
+<div class="spec">
+<p><tt>receive_one() -&gt; {item, any()} | nothing_there</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span> Pop the front of the message queue and return it as <code>{item,X}</code>, or return nothing_there for empty queues; do not block.  <pre>  1&gt; scutil:receive_one().
+  nothing_there
+ 
+  2&gt; self() ! message.
+  message
+ 
+  3&gt; scutil:receive_one().
+  {item,message}
+ 
+  4&gt; scutil:receive_one().
+  nothing_there</pre></p>
+<p><b>Introduced in:</b> Version 582</p>
+
 <h3 class="function"><a name="reverse_filter-2">reverse_filter/2</a></h3>
 <div class="spec">
 <p><tt>reverse_filter(Workload, Fun) -&gt; any()</tt></p>
@@ -1467,28 +1484,28 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="send_receive-2">send_receive/2</a></h3>
 <div class="spec">
 <p><tt>send_receive(ToWhom::pid() | atom(), What::any()) -&gt; {item, any()}</tt></p>
-</div><p>(Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as <code>{item,X}</code>; block.  <pre>  1&gt; scutil:send_receive(self(), message).
+</div><p><span style="color:orange;font-style:italic">Untested</span> (Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as <code>{item,X}</code>; block.  <pre>  1&gt; scutil:send_receive(self(), message).
   {item,message}</pre></p>
 <p><b>Introduced in:</b> Version 578</p>
 
 <h3 class="function"><a name="send_receive-3">send_receive/3</a></h3>
 <div class="spec">
 <p><tt>send_receive(ToWhom::pid() | atom(), What::any(), HowLong::<a href="#type-non_negative_integer">non_negative_integer()</a> | infinity) -&gt; {item, any()} | nothing_there</tt></p>
-</div><p>(Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as <code>{item,X}</code>, or return nothing_there for empty queues; do not block.  <pre>  1&gt; scutil:send_receive(self(), message).
+</div><p><span style="color:orange;font-style:italic">Untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as <code>{item,X}</code>, or return nothing_there for empty queues; do not block.  <pre>  1&gt; scutil:send_receive(self(), message).
   {item,message}</pre></p>
 <p><b>Introduced in:</b> Version 579</p>
 
 <h3 class="function"><a name="send_receive_masked-3">send_receive_masked/3</a></h3>
 <div class="spec">
 <p><tt>send_receive_masked(Mask::any(), ToWhom::pid() | atom(), What::any()) -&gt; {Mask, any()}</tt></p>
-</div><p>(Blocking) First send a message to an entity.  Then pop the first message queue item matching the mask as a 2-tuple, and return it as <code>{Mask,X}</code>; block.  <pre>  1&gt; scutil:send_receive(self(), message).
+</div><p><span style="color:orange;font-style:italic">Untested</span> (Blocking) First send a message to an entity.  Then pop the first message queue item matching the mask as a 2-tuple, and return it as <code>{Mask,X}</code>; block.  <pre>  1&gt; scutil:send_receive(self(), message).
   {item,message}</pre></p>
 <p><b>Introduced in:</b> Version 580</p>
 
 <h3 class="function"><a name="send_receive_masked-4">send_receive_masked/4</a></h3>
 <div class="spec">
 <p><tt>send_receive_masked(Mask::any(), ToWhom::pid() | atom(), What::any(), HowLong::<a href="#type-non_negative_integer">non_negative_integer()</a> | infinity) -&gt; {item, any()} | nothing_there</tt></p>
-</div><p>(Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as <code>{Mask,X}</code>, or return nothing_there for empty queues; do not block.  <pre>  1&gt; scutil:send_receive(self(), message).
+</div><p><span style="color:orange;font-style:italic">Untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as <code>{Mask,X}</code>, or return nothing_there for empty queues; do not block.  <pre>  1&gt; scutil:send_receive(self(), message).
   {item,message}</pre></p>
 <p><b>Introduced in:</b> Version 581</p>
 
@@ -1755,6 +1772,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 27 2011, 15:36:54.</i></p>
+<p><i>Generated by EDoc, Mar 27 2011, 15:41:42.</i></p>
 </body>
 </html>

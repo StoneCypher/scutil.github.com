@@ -100,6 +100,7 @@
     walk_unique_pairings/2,
     count_of/2,
     integer_to_radix_list/2,
+    receive_one/0,
 
     send_receive/2,
       send_receive/3,
@@ -921,7 +922,7 @@ zip_n_foldn(_, _, [ [] | _ ], Ret) ->
 
     lists:reverse(Ret);
 
-    
+
 
 zip_n_foldn(Fun, Acc0, Ls, Ret) -> 
 
@@ -4657,7 +4658,7 @@ euclidean_distance(C1, C2) ->
 
 %% @spec send_receive(ToWhom::pid()|atom(), What::any()) -> { item, any() }
 
-%% @doc (Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{item,X}'; block.  ```1> scutil:send_receive(self(), message).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> (Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{item,X}'; block.  ```1> scutil:send_receive(self(), message).
 %% {item,message}'''
 
 %% @since Version 578
@@ -4676,7 +4677,7 @@ send_receive(ToWhom, What) ->
 
 %% @spec send_receive(ToWhom::pid()|atom(), What::any(), HowLong::non_negative_integer()|infinity) -> { item, any() } | nothing_there
 
-%% @doc (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block.  ```1> scutil:send_receive(self(), message).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block.  ```1> scutil:send_receive(self(), message).
 %% {item,message}'''
 
 %% @since Version 579
@@ -4697,7 +4698,7 @@ send_receive(ToWhom, What, HowLong) ->
 
 %% @spec send_receive_masked(Mask::any(), ToWhom::pid()|atom(), What::any()) -> { Mask, any() }
 
-%% @doc (Blocking) First send a message to an entity.  Then pop the first message queue item matching the mask as a 2-tuple, and return it as `{Mask,X}'; block.  ```1> scutil:send_receive(self(), message).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> (Blocking) First send a message to an entity.  Then pop the first message queue item matching the mask as a 2-tuple, and return it as `{Mask,X}'; block.  ```1> scutil:send_receive(self(), message).
 %% {item,message}'''
 
 %% @since Version 580
@@ -4716,7 +4717,7 @@ send_receive_masked(Mask, ToWhom, What) ->
 
 %% @spec send_receive_masked(Mask::any(), ToWhom::pid()|atom(), What::any(), HowLong::non_negative_integer()|infinity) -> { item, any() } | nothing_there
 
-%% @doc (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{Mask,X}', or return nothing_there for empty queues; do not block.  ```1> scutil:send_receive(self(), message).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{Mask,X}', or return nothing_there for empty queues; do not block.  ```1> scutil:send_receive(self(), message).
 %% {item,message}'''
 
 %% @since Version 581
@@ -4728,5 +4729,33 @@ send_receive_masked(Mask, ToWhom, What, HowLong) ->
     receive { Mask, X } ->
         { Mask, X }
     after HowLong ->
+        nothing_there
+    end.
+
+
+
+
+
+%% @spec receive_one() -> { item, any() } | nothing_there
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block.  ```1> scutil:receive_one().
+%% nothing_there
+%%
+%% 2> self() ! message.
+%% message
+%%
+%% 3> scutil:receive_one().
+%% {item,message}
+%%
+%% 4> scutil:receive_one().
+%% nothing_there'''
+
+%% @since Version 582
+
+receive_one() ->
+
+    receive (X) ->
+        { item, X }
+    after 0 ->
         nothing_there
     end.
