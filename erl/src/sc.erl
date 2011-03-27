@@ -2938,7 +2938,7 @@ function_points(Module) ->
 entrypoints(Module) ->
 
     lists:flatten(
-        [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- sc_code:abstract_functions(Module) ]
+        [ [{L,A,[{Kind,Name}||{Kind,_LineNum,Name}<-ThisAcArg],When} || {_,_,ThisAcArg,When,_} <- AbstractClauseList ] || {_,L,A,AbstractClauseList} <- sc:abstract_functions(Module) ]
     ).
 
 
@@ -4632,3 +4632,18 @@ euclidean_distance(C1, C2) ->
             ]
         )
     ).
+
+
+
+
+
+%% @todo docs
+
+%% @since Version 576
+
+% merge_settings(S1, S2) when
+
+%     is_list(S1),
+%     is_list(S2) ->
+
+

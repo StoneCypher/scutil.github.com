@@ -259,11 +259,3 @@ list_product_test_() ->
         {"[]",        ?_assert(1    =:= sc:list_product([]))}
 
     ] }.
-    
-    
-    
-    
-    
-sanitize_tokens_test_() ->
-
-    { "SANITIZE TOKENS TESTS NOT WRITTEN", [ {"FAIL", ?_assert(false =:= true) }] }.
