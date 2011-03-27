@@ -106,6 +106,8 @@
     power_set/1,
     shuffle/1,
 
+    rand/1,
+
     random_from/1,
       random_from/2,
       random_from/3,
@@ -5470,3 +5472,41 @@ random_from(N, List, no_remainder) ->
 random_from(N, List, remainder) ->
 
     lists:split(N, shuffle(List)).
+
+
+
+
+
+%% @spec rand(Range::integer()) -> integer()
+
+%% @doc Returns a pseudorandom integer on the range `[0 - (Range-1)]' inclusive. ```1> scutil:rand(100).
+%% 9
+%%
+%% 2> [ scutil:rand(100) || X <- lists:seq(1,10) ].
+%% [12,27,99,86,20,96,28,36,28,15]
+%%
+%% 3> scutil:histograph([ scutil:rand(10) || X <- lists:seq(1,10000) ]).
+%% [{0,992}, {1,990}, {2,992}, {3,1033}, {4,1017}, {5,1003}, {6,996}, {7,1024}, {8,969}, {9,984}]
+%%
+%% 4> scutil:histograph([ scutil:rand(10) || X <- lists:seq(1,10000) ]).
+%% [{0,1028}, {1,979}, {2,934}, {3,970}, {4,1035}, {5,1007}, {6,986}, {7,1012}, {8,1052}, {9,997}]'''
+
+%% @since Version 5
+
+rand(Range) ->
+
+    case whereis(scutil_rand_source) of
+
+        undefined ->
+            srand(),
+            rand(Range);
+
+        _ ->
+
+            scutil_rand_source ! [ self(), Range ],
+            receive
+                RandVal ->
+                    RandVal - 1
+            end
+
+    end.
