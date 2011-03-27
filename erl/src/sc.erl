@@ -103,6 +103,7 @@
     count_of/2,
     integer_to_radix_list/2,
     receive_one/0,
+    power_set/1,
 
     union/1,
       union/2,
@@ -2606,7 +2607,7 @@ ceiling(X) ->
 
 %% @private
 
-ceiling_t(T, Td) 
+ceiling_t(T, Td)
 
     when Td < 0 ->
 
@@ -5281,3 +5282,11 @@ union(L1, L2, L3, L4) ->
 
 
 
+%% @since Version 589
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+power_set(L) when is_list(L) ->
+
+    Size = length(L),
+    lists:append( [[[]]] ++ [ sc_lists:combinations(L,Sz) || Sz <- lists:seq(1,Size) ] ).
