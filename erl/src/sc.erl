@@ -104,6 +104,8 @@
     receive_one/0,
     power_set/1,
     shuffle/1,
+
+    key_max/2,
     key_extrema/2,
 
     srand/0,
@@ -5628,4 +5630,63 @@ key_extrema(Pos, [Cur|Rem], Lowest, Highest) ->
         true ->
             key_extrema(Pos, Rem, Lowest, Highest)
 
+    end.
+
+
+
+
+
+%% @since Version 605
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+%% @equiv key_max(1, List)
+
+key_max(List) ->
+
+    key_max(1, List).
+
+
+
+
+
+%% @since Version 604
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+key_max(Pos, [L|_] = List) ->
+
+    key_max(Pos, List, L).
+
+
+
+
+
+%% @since Version 604
+
+key_max(_Pos, [], Best) ->
+
+    Best;
+
+
+
+
+
+%% @since Version 604
+
+key_max(Pos, [Cur|Rem], false) ->
+
+    key_max(Pos, Rem, Cur);
+
+
+
+
+
+%% @since Version 604
+
+key_max(Pos, [Cur|Rem], Item) ->
+
+    case element(Pos, Cur) > element(Pos, Item) of
+        true  -> key_max(Pos, Rem, Cur);
+        false -> key_max(Pos, Rem, Item)
     end.
