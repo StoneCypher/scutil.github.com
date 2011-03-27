@@ -102,6 +102,11 @@
     integer_to_radix_list/2,
     receive_one/0,
 
+    union/1,
+      union/2,
+      union/3,
+      union/4,
+
     send_receive/2,
       send_receive/3,
       send_receive_masked/3,
@@ -4759,3 +4764,57 @@ receive_one() ->
     after 0 ->
         nothing_there
     end.
+
+
+
+
+
+%% @since Version 586
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+union(L) ->
+
+    lists:usort(lists:append(L)).
+
+
+
+
+
+%% @since Version 586
+
+%% @equiv union( [L1, L2] )
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+union(L1, L2) ->
+
+    union([L1,L2]).
+
+
+
+
+
+%% @since Version 586
+
+%% @equiv union( [L1, L2, L3] )
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+union(L1, L2, L3) ->
+
+    union([L1,L2,L3]).
+
+
+
+
+
+%% @since Version 586
+
+%% @equiv union( [L1, L2, L3, L4] )
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+union(L1, L2, L3, L4) ->
+
+    union([L1,L2,L3,L4]).
