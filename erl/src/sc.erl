@@ -106,6 +106,8 @@
     power_set/1,
     shuffle/1,
 
+    random_from_weighted/1,
+
     union/1,
       union/2,
       union/3,
@@ -5330,3 +5332,71 @@ shuffle(List)
    { _, SortedAndDeweighted } = lists:unzip(lists:keysort(1, WeightedAndShuffled)),
 
    SortedAndDeweighted.
+
+
+
+
+
+%% @type weightedvalue() = { Value::any(), Weight::number() }.  Used by functions like weighted_arithmetic_mean/1 and from_weighted/1, weightedvalue()s represent a value with an associated importance or "weight".
+%% @type weightlist() = list().  All members of weightlists must be weightedvalue()s.
+
+%% @spec random_from_weighted(InputList::weightlist()) -> any()
+
+%% @doc {@section Random} Take a random single item from a list with weighted probabilities.  Probabilities may be any numeric type, and may be any non-negative value (items with zero probability will be omitted).  Input is a `weightlist()', which is a list in the form `[{Item,Probability}, {I2,P2}, ...]'. There is no requirement to normalize probabilities to any range, though probabilities normalized to ranges will still work as expected. ```1> scutil:from([ {quad,4}, {double,2}, {single,1} ]).
+%% quad
+%%
+%% 2> [ scutil:from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X <- lists:seq(1,10) ].
+%% [single,quad,quad,double,quad,double,quad,quad,quad,double]
+%%
+%% 3> scutil:histograph([ scutil:from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X <- lists:seq(1,777777) ]).
+%% [{double,222200},{quad,444165},{single,111412}]'''
+%% @since Version 592
+
+% InputList is [ {Item,Weight}, {Item,Weight}, ... ]
+
+random_from_weighted(InputList)
+
+    when is_list(InputList) ->
+
+    RandomLimit = rand(
+        lists:sum(
+            [ Weight ||
+                {_,Weight} <- InputList ]                                   % the random cap is equal to the sum of all the weights
+            )
+        ),
+
+    random_from_weighted_worker(InputList, RandomLimit).                    % call the worker with the original list and the cap
+
+
+
+
+
+% if the list is empty, the cap for randomness was calculated wrongly, and as such the random point is too high
+
+random_from_weighted_worker([], _) ->
+
+    { error, limit_miscalculation };
+
+
+
+
+
+% but if the list has reasonable contents and the limit is a pos-or-0 integer
+
+random_from_weighted_worker(InputList, Limit)
+
+    when is_list(InputList),
+         is_integer(Limit),
+         Limit >= 0        ->
+
+    [ {Item,Weight} | Remainder ] = InputList,                          % break off the input list's head as {I,W} and keep the rest as Remainder
+
+    case Weight =< Limit of                                             % if the weight is less than or equal to the limit,
+
+        true  ->
+            random_from_weighted_worker(Remainder, Limit-Weight);       % recurse the next item with a decremented weight
+
+        false ->
+            Item                                                        % if not, this item is the one we want
+
+    end.
