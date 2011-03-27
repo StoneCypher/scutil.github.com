@@ -108,7 +108,8 @@
     key_max/1,
       key_max/2,
 
-    key_extrema/2,
+    key_extrema/1,
+      key_extrema/2,
 
     srand/0,
       srand/3,
@@ -5586,6 +5587,20 @@ grid_scatter(Count, {SizeX, SizeY}) ->
 grid_scatter(Count, Size) ->
 
     grid_scatter(Count, {Size, Size}).
+
+
+
+
+
+%% @since Version 606
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+%% @equiv key_extrema(1, List)
+
+key_extrema(List) ->
+
+    key_extrema(1, List).
 
 
 
