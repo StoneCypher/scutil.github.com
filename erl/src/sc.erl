@@ -106,6 +106,7 @@
     shuffle/1,
     tuple_sum/1,
     tuple_sort/1,
+    tuple_member/2,
 
     key_max/1,
       key_max/2,
@@ -4355,7 +4356,7 @@ module_abstract_representation(Module, DoStrip) ->
 %% @since Version 556
 % modified from http://www.trapexit.org/String_Eval
 
-%% @doc <span style="color:orange;font-style:italic">Untested</span>
+%% @doc <span style="color:red;font-style:italic;font-weight:bold">DANGEROUS</span> <span style="color:orange;font-style:italic">Untested</span>
 
 eval(S) ->
 
@@ -4368,7 +4369,7 @@ eval(S) ->
 %% @since Version 556
 % from http://www.trapexit.org/String_Eval
 
-%% @doc <span style="color:orange;font-style:italic">Untested</span>
+%% @doc <span style="color:red;font-style:italic;font-weight:bold">DANGEROUS</span> <span style="color:orange;font-style:italic">Untested</span>
 
 eval(S, Environ) ->
 
@@ -5927,3 +5928,44 @@ tuple_sort(T)
     when is_tuple(T) ->
 
     list_to_tuple(lists:sort(tuple_to_list(T))).
+
+
+
+
+
+%% @spec tuple_member(E::any(), T::tuple()) -> true | false
+
+%% @doc @doc <span style="color:orange;font-style:italic">Untested</span> Checks whether E is a member element of tuple T, analogous to `lists::member(E, L)'. ```1> sc:tuple_member(b, {a,b,c}).
+%% true
+%%
+%% 2> sc:tuple_member(d, {a,b,c}).
+%% false
+%%
+%% 3> sc:tuple_member([1,2], {[1,2]}).
+%% true'''
+
+%% @since Version 123
+
+tuple_member(E, T) ->
+
+    tuple_member(E, T, 1, size(T)).
+
+
+
+tuple_member(_E,_T, I, Sz)
+
+    when I > Sz -> false;
+
+
+
+tuple_member(E, T, I, Sz) ->
+
+    case element(I, T) == E of
+
+        true  ->
+            true;
+
+        false ->
+            tuple_member(E, T, I+1, Sz)
+
+    end.

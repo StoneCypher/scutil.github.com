@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 612 $</p>
+<p><b>Version:</b> $Revision: 613 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -186,8 +186,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#entrypoints-1">entrypoints/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#entrypoints-2">entrypoints/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#euclidean_distance-2">euclidean_distance/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the distance between two coordinates in any N-space.</td></tr>
-<tr><td valign="top"><a href="#eval-1">eval/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
-<tr><td valign="top"><a href="#eval-2">eval/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#eval-1">eval/1</a></td><td><span style="color:red;font-style:italic;font-weight:bold">DANGEROUS</span> <span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#eval-2">eval/2</a></td><td><span style="color:red;font-style:italic;font-weight:bold">DANGEROUS</span> <span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#even_or_odd-1">even_or_odd/1</a></td><td>Documentary convenience function that returns the atoms <code>even</code> or <code>odd</code> for any integer.</td></tr>
 <tr><td valign="top"><a href="#every_flag_representation-1">every_flag_representation/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
 <tr><td valign="top"><a href="#every_member_representation-1">every_member_representation/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
@@ -316,6 +316,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#third_difference-1">third_difference/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#tied_ordered_ranking-1">tied_ordered_ranking/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns a tied ranked ordering of the list, ordered according to the input ordering rather than the sorted ordering.</td></tr>
 <tr><td valign="top"><a href="#tied_ranking-1">tied_ranking/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns a ranked ordering of the list with tie rankings.</td></tr>
+<tr><td valign="top"><a href="#tuple_member-2">tuple_member/2</a></td><td>@doc <span style="color:orange;font-style:italic">Untested</span> Checks whether E is a member element of tuple T, analogous to <code>lists::member(E, L)</code>.</td></tr>
 <tr><td valign="top"><a href="#tuple_sort-1">tuple_sort/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#tuple_sum-1">tuple_sum/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero.</td></tr>
 <tr><td valign="top"><a href="#union-1">union/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
@@ -607,14 +608,14 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="eval-1">eval/1</a></h3>
 <div class="spec">
 <p><tt>eval(S) -&gt; any()</tt></p>
-</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+</div><p><span style="color:red;font-style:italic;font-weight:bold">DANGEROUS</span> <span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 556
  modified from http://www.trapexit.org/String_Eval</p>
 
 <h3 class="function"><a name="eval-2">eval/2</a></h3>
 <div class="spec">
 <p><tt>eval(S, Environ) -&gt; any()</tt></p>
-</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+</div><p><span style="color:red;font-style:italic;font-weight:bold">DANGEROUS</span> <span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 556
  from http://www.trapexit.org/String_Eval</p>
 
@@ -1297,8 +1298,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 612 2011-03-27 23:37:42Z john $"},
-   {svn_revision,"$Revision: 612 $"},
+   {svn_id,"$Id: sc.erl 613 2011-03-27 23:40:19Z john $"},
+   {svn_revision,"$Revision: 613 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1884,6 +1885,19 @@ presenting the actual volume of functionality present here.  We can get the cove
   [{1.0,300},{2.5,200},{2.5,200},{4.0,100}]</pre></p>
 <p><b>Introduced in:</b> Version 561</p>
 
+<h3 class="function"><a name="tuple_member-2">tuple_member/2</a></h3>
+<div class="spec">
+<p><tt>tuple_member(E::any(), T::tuple()) -&gt; true | false</tt></p>
+</div><p>@doc <span style="color:orange;font-style:italic">Untested</span> Checks whether E is a member element of tuple T, analogous to <code>lists::member(E, L)</code>. <pre>  1&gt; sc:tuple_member(b, {a,b,c}).
+  true
+ 
+  2&gt; sc:tuple_member(d, {a,b,c}).
+  false
+ 
+  3&gt; sc:tuple_member([1,2], {[1,2]}).
+  true</pre></p>
+<p><b>Introduced in:</b> Version 123</p>
+
 <h3 class="function"><a name="tuple_sort-1">tuple_sort/1</a></h3>
 <div class="spec">
 <p><tt>tuple_sort(T) -&gt; any()</tt></p>
@@ -2021,6 +2035,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 27 2011, 19:39:58.</i></p>
+<p><i>Generated by EDoc, Mar 27 2011, 19:53:49.</i></p>
 </body>
 </html>
