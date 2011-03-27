@@ -104,6 +104,7 @@
     receive_one/0,
     power_set/1,
     shuffle/1,
+    tuple_sum/1,
 
     key_max/1,
       key_max/2,
@@ -5717,6 +5718,10 @@ key_max(Pos, [Cur|Rem], Item) ->
 
 %% @since Version 607
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+%% @equiv key_min(1, List)
+
 key_min(List) ->
 
     key_min(1, List).
@@ -5726,6 +5731,8 @@ key_min(List) ->
 
 
 %% @since Version 607
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 key_min(Pos, [L|_]=List) ->
 
@@ -5763,3 +5770,32 @@ key_min(Pos, [Cur|Rem], Item) ->
         true  -> key_min(Pos, Rem, Cur);
         false -> key_min(Pos, Rem, Item)
     end.
+
+
+
+
+
+%% @type numeric_tuple() = tuple().  Every member of a {@type numeric_tuple()} must be a {@type number()}.
+%% @type relaxed_numeric_tuple() = numeric_tuple().  Relaxed numeric tuples are allowed to contain non-numeric elements, which are treated as zero for purposes of computation.
+
+%% @spec tuple_sum(T::relaxed_numeric_tuple()) -> number()
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero. ```1>'''
+
+%% @since Version 86
+
+tuple_sum(T) when is_tuple(T) ->
+
+    tuple_sum(T, 1, size(T), 0).
+
+
+
+tuple_sum(_T, Which, Max, Work) when Which > Max ->
+
+    Work;
+
+
+
+tuple_sum( T, Which, Max, Work) ->
+
+     tuple_sum(T, Which+1, Max, Work+element(Which, T)).
