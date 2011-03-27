@@ -103,6 +103,7 @@
 
     send_receive/2,
       send_receive/3,
+      send_receive_masked/3,
 
     euclidean_distance/2,  % todo 3d version?
 
@@ -4655,7 +4656,7 @@ euclidean_distance(C1, C2) ->
 
 %% @spec send_receive(ToWhom::pid()|atom(), What::any()) -> { item, any() }
 
-%% @doc First send a message to an entity.  Then pop the front of the message queue and return it as `{item,X}'; block.  ```1> scutil:send_receive(self(), message).
+%% @doc (Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{item,X}'; block.  ```1> scutil:send_receive(self(), message).
 %% {item,message}'''
 
 %% @since Version 578
@@ -4674,7 +4675,7 @@ send_receive(ToWhom, What) ->
 
 %% @spec send_receive(ToWhom::pid()|atom(), What::any(), HowLong::non_negative_integer()|infinity) -> { item, any() } | nothing_there
 
-%% @doc First send a message to an entity.  Then pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block.  ```1> scutil:send_receive(self(), message).
+%% @doc (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block.  ```1> scutil:send_receive(self(), message).
 %% {item,message}'''
 
 %% @since Version 579
@@ -4687,4 +4688,23 @@ send_receive(ToWhom, What, HowLong) ->
         { item, X }
     after HowLong ->
         nothing_there
+    end.
+
+
+
+
+
+%% @spec send_receive_masked(Mask::any(), ToWhom::pid()|atom(), What::any()) -> { Mask, any() }
+
+%% @doc (Blocking) First send a message to an entity.  Then pop the first message queue item matching the mask as a 2-tuple, and return it as `{Mask,X}'; block.  ```1> scutil:send_receive(self(), message).
+%% {item,message}'''
+
+%% @since Version 580
+
+send_receive_masked(Mask, ToWhom, What) ->
+
+    ToWhom ! What,
+
+    receive { Mask, X } ->
+        { Mask, X }
     end.
