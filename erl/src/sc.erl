@@ -108,6 +108,8 @@
     key_max/1,
       key_max/2,
 
+    key_min/2,
+
     key_extrema/1,
       key_extrema/2,
 
@@ -5706,4 +5708,47 @@ key_max(Pos, [Cur|Rem], Item) ->
     case element(Pos, Cur) > element(Pos, Item) of
         true  -> key_max(Pos, Rem, Cur);
         false -> key_max(Pos, Rem, Item)
+    end.
+
+
+
+
+
+%% @since Version 607
+
+key_min(Pos, List) ->
+
+    key_min(Pos, List, false).
+
+
+
+
+
+%% @since Version 607
+
+key_min(_Pos, [], Best) ->
+
+    Best;
+
+
+
+
+
+%% @since Version 607
+
+key_min(Pos, [Cur|Rem], false) ->
+
+    key_min(Pos, Rem, Cur);
+
+
+
+
+
+%% @since Version 607
+
+key_min(Pos, [Cur|Rem], Item) ->
+
+    case element(Pos, Cur) < element(Pos, Item) of
+        true  -> key_min(Pos, Rem, Cur);
+        false -> key_min(Pos, Rem, Item)
     end.
