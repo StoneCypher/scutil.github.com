@@ -1805,32 +1805,6 @@ weighted_arithmetic_mean( [{V,W} | Tail], Num, Denom) ->
 
 
 
-%% @spec instant_runoff_vote(ListOfVoteLists::list_of_lists()) -> any()
-
-%% @doc <span style="color:red;font-style:italic">INCOMPLETE</span> <span style="color:orange;font-style:italic">Untested</span> Performs an instant runoff vote.  http://en.wikipedia.org/wiki/Instant-runoff_voting ```1>'''
-
-%% @since Version 485
-
-%% not complete todo comeback
-%% also do other voting types
-
-instant_runoff_vote(ListOfVoteLists) ->
-
-    instant_runoff_vote(ListOfVoteLists, []).
-
-
-
-
-
-instant_runoff_vote(ListOfVoteLists, Exclude) ->
-
-    FilteredVotes = [ VoteList || VoteList <- ListOfVoteLists, VoteList =/= [] ],
-    { Exclude, FilteredVotes }.
-
-
-
-
-
 % inspired by J dstat from some blog, http://bbot.org/blog/archives/2011/03/17/on_being_surprised_by_a_programming_language/
 % herp derp
 
