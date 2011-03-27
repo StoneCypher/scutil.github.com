@@ -108,7 +108,8 @@
     key_max/1,
       key_max/2,
 
-    key_min/2,
+    key_min/1,
+      key_min/2,
 
     key_extrema/1,
       key_extrema/2,
@@ -5716,9 +5717,19 @@ key_max(Pos, [Cur|Rem], Item) ->
 
 %% @since Version 607
 
-key_min(Pos, List) ->
+key_min(List) ->
 
-    key_min(Pos, List, false).
+    key_min(1, List).
+
+
+
+
+
+%% @since Version 607
+
+key_min(Pos, [L|_]=List) ->
+
+    key_min(Pos, List, L).
 
 
 
