@@ -5510,3 +5510,37 @@ rand(Range) ->
             end
 
     end.
+
+
+
+
+
+%% @private
+
+random_generator(SeedA, SeedB, SeedC) ->
+
+    random:seed(SeedA, SeedB, SeedC),
+    random_generator().
+
+
+
+
+
+%% @private
+
+random_generator() ->
+
+    receive
+
+        terminate ->
+            { ok, terminated };
+
+        [Return, Range] ->
+            Val = random:uniform(Range),
+            Return ! Val,
+            random_generator();
+
+        _  ->
+            random_generator()
+
+    end.
