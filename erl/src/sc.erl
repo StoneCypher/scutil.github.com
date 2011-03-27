@@ -105,6 +105,7 @@
     receive_one/0,
     power_set/1,
     shuffle/1,
+    key_extrema/2,
 
     srand/0,
       srand/3,
@@ -233,8 +234,6 @@
     square/1,
       cube/1,
 %     nth_root/2,    % comeback todo
-
-    instant_runoff_vote/1,
 
     dstat/2,
       extended_dstat/2,
@@ -5621,3 +5620,50 @@ grid_scatter(Count, {SizeX, SizeY}) ->
 grid_scatter(Count, Size) ->
 
     grid_scatter(Count, {Size, Size}).
+
+
+
+
+
+%% @since Version 601
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+key_extrema(Pos, [L|_] = List) ->
+
+    key_extrema(Pos, List, L, L).
+
+
+
+
+
+key_extrema(_Pos, [], Lowest, Highest) ->
+
+    {Lowest, Highest};
+
+
+
+
+
+key_extrema(Pos, [Cur|Rem], false, false) ->
+
+    key_extrema(Pos, Rem, Cur, Cur);
+
+
+
+
+
+key_extrema(Pos, [Cur|Rem], Lowest, Highest) ->
+
+    if
+
+        element(Pos, Cur) < element(Pos, Lowest) ->
+            key_extrema(Pos, Rem, Cur,    Highest);
+
+        element(Pos, Cur) > element(Pos, Highest) ->
+            key_extrema(Pos, Rem, Lowest, Cur);
+
+        true ->
+            key_extrema(Pos, Rem, Lowest, Highest)
+
+    end.
