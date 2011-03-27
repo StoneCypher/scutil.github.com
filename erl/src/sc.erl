@@ -106,6 +106,7 @@
     power_set/1,
     shuffle/1,
 
+    random_from/1,
     random_from_weighted/1,
 
     union/1,
@@ -5400,3 +5401,69 @@ random_from_weighted_worker(InputList, Limit)
             Item                                                        % if not, this item is the one we want
 
     end.
+
+
+
+
+
+%% @equiv from(1, List, no_remainder)
+%% @since Version 593
+
+random_from(List) ->
+
+    [X] = random_from(1, List, no_remainder), X.
+
+
+
+
+
+%% @equiv from(N, List, no_remainder)
+%% @since Version 593
+
+random_from(N, List) ->
+
+    random_from(N, List, no_remainder).
+
+
+
+
+
+%% @spec random_from(N::integer(), List::list(), WantRemainder::want_remainder()) -> list()
+
+%% @doc Take N non-repeating random elements from a list in undefined order.  If the atom `remainder' is passed in as the third argument, the unused portion of the source list will be returned as the second member of a 2ary tuple with the results; the default is no_remainder, which only returns the result set.  Mixed type input lists are perfectly safe, and membership for random selection is shallow (ie, `[ [1,2], [3,4] ]' as an input list would only generate outputs of lists, never integers.)```1> sc:random_from([monday,tuesday,wednesday,thursday,friday]).
+%% friday
+%%
+%% 2> sc:random_from(4, lists:seq(1,20)).
+%% [6,3,15,12]
+%%
+%% 3> sc:random_from(3, [warrior, mage, cleric, thief, paladin, ranger, bard]).
+%% [cleric,warrior,ranger]
+%%
+%% 4> sc:random_from(6, [mixed, [1,2,3], 4, {five,5}, 3, 67.2, <<"Hello">>, 8]).
+%% [[1,2,3],{five,5},4,mixed,<<"Hello">>,67.2]
+%%
+%% 5> {Team1, Team2} = sc:random_from(3, [alice,bob,cathy,dave,edward,fawn], remainder).
+%% {[cathy,fawn,dave],[bob,edward,alice]}
+%%
+%% 6> Team1.
+%% [cathy,fawn,dave]
+%%
+%% 7> Where_Food = fun() -> sc:random_from([deli, fastfood, chinese, mexican, steakhouse, bistro, greek, indian, thai, sushi]) end.
+%% #Fun<erl_eval.20.67289768>
+%%
+%% 8> Where_Food().
+%% thai'''
+
+%% @since Version 593
+
+random_from(N, List, no_remainder) ->
+
+    {R,_} = random_from(N,List,remainder), R;
+
+
+
+
+
+random_from(N, List, remainder) ->
+
+    lists:split(N, shuffle(List)).
