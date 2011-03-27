@@ -144,14 +144,14 @@ member_sets_test_() ->
 
 
 
-count_x_test_() ->
+count_of_test_() ->
 
-    { "Count X tests", [
-    
-        {"3, [1,2,3,4,5]", ?_assert( 1 =:= sc:count_x(3, [1,2,3,4,5]) )},
-        {"6, [1,2,3,4,5]", ?_assert( 0 =:= sc:count_x(6, [1,2,3,4,5]) )},
-        {"2, [1,2,3,2,1]", ?_assert( 2 =:= sc:count_x(2, [1,2,3,2,1]) )},
-        {"b, [1,a,2,b,3]", ?_assert( 1 =:= sc:count_x(b, [1,a,2,b,3]) )}
+    { "Count of tests", [
+
+        {"3, [1,2,3,4,5]", ?_assert( 1 =:= sc:count_of(3, [1,2,3,4,5]) )},
+        {"6, [1,2,3,4,5]", ?_assert( 0 =:= sc:count_of(6, [1,2,3,4,5]) )},
+        {"2, [1,2,3,2,1]", ?_assert( 2 =:= sc:count_of(2, [1,2,3,2,1]) )},
+        {"b, [1,a,2,b,3]", ?_assert( 1 =:= sc:count_of(b, [1,a,2,b,3]) )}
 
     ] }.
 
