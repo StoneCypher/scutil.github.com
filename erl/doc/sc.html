@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 594 $</p>
+<p><b>Version:</b> $Revision: 597 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -237,6 +237,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 </td></tr>
 <tr><td valign="top"><a href="#permute-2">permute/2</a></td><td>Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast <a href="#combinations-2"><code>combinations/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#power_set-1">power_set/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#rand-1">rand/1</a></td><td>Returns a pseudorandom integer on the range <code>[0 - (Range-1)]</code> inclusive.</td></tr>
 <tr><td valign="top"><a href="#random_from-1">random_from/1</a></td><td>Equivalent to <a href="#from-3"><tt>from(1, List, no_remainder)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#random_from-2">random_from/2</a></td><td>Equivalent to <a href="#from-3"><tt>from(N, List, no_remainder)</tt></a>.
@@ -270,6 +271,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 </td></tr>
 <tr><td valign="top"><a href="#split_at-2">split_at/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#square-1">square/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Squares the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
+<tr><td valign="top"><a href="#srand-0">srand/0</a></td><td><i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.</td></tr>
+<tr><td valign="top"><a href="#srand-3">srand/3</a></td><td><i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.</td></tr>
 <tr><td valign="top"><a href="#svn_revision-1">svn_revision/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.</td></tr>
 <tr><td valign="top"><a href="#test-0">test/0</a></td><td>Runs the test suite in terse form.</td></tr>
 <tr><td valign="top"><a href="#test-1">test/1</a></td><td>Runs the test suite in verbose form.</td></tr>
@@ -1226,8 +1229,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 594 2011-03-27 21:56:04Z john $"},
-   {svn_revision,"$Revision: 594 $"},
+   {svn_id,"$Id: sc.erl 597 2011-03-27 22:10:44Z john $"},
+   {svn_revision,"$Revision: 597 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1366,6 +1369,22 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>power_set(L) -&gt; any()</tt></p>
 </div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 589</p>
+
+<h3 class="function"><a name="rand-1">rand/1</a></h3>
+<div class="spec">
+<p><tt>rand(Range::integer()) -&gt; integer()</tt></p>
+</div><p>Returns a pseudorandom integer on the range <code>[0 - (Range-1)]</code> inclusive. <pre>  1&gt; scutil:rand(100).
+  9
+ 
+  2&gt; [ scutil:rand(100) || X &lt;- lists:seq(1,10) ].
+  [12,27,99,86,20,96,28,36,28,15]
+ 
+  3&gt; scutil:histograph([ scutil:rand(10) || X &lt;- lists:seq(1,10000) ]).
+  [{0,992}, {1,990}, {2,992}, {3,1033}, {4,1017}, {5,1003}, {6,996}, {7,1024}, {8,969}, {9,984}]
+ 
+  4&gt; scutil:histograph([ scutil:rand(10) || X &lt;- lists:seq(1,10000) ]).
+  [{0,1028}, {1,979}, {2,934}, {3,970}, {4,1035}, {5,1007}, {6,986}, {7,1012}, {8,1052}, {9,997}]</pre></p>
+<p><b>Introduced in:</b> Version 5</p>
 
 <h3 class="function"><a name="random_from-1">random_from/1</a></h3>
 <div class="spec">
@@ -1689,6 +1708,29 @@ presenting the actual volume of functionality present here.  We can get the cove
   6.25</pre></p>
 <p><b>Introduced in:</b> Version 508</p>
 
+<h3 class="function"><a name="srand-0">srand/0</a></h3>
+<div class="spec">
+<p><tt>srand() -&gt; {ok, {seeded, Seed}}</tt></p>
+</div><p><i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want to know what seed was used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) <pre>  1&gt; scutil:srand().
+  {ok,{seeded,{1227,902172,685000}}}
+ 
+  2&gt; scutil:srand().
+  {ok,{seeded,{1227,902173,231000}}}</pre></p>
+<p><b>Introduced in:</b> Version 5</p>
+
+<h3 class="function"><a name="srand-3">srand/3</a></h3>
+<div class="spec">
+<p><tt>srand(A::integer(), B::integer(), C::integer()) -&gt; {ok, {seeded, Seed}}</tt></p>
+</div><p><i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want set what seed is used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) <pre>  1&gt; scutil:srand(1,2,3).
+  {ok,{seeded,{1,2,3}}}
+ 
+  2&gt; scutil:srand().
+  {ok,{seeded,{1227,902568,604600}}}
+ 
+  3&gt; scutil:srand(1,2,3).
+  {ok,{seeded,{1,2,3}}}</pre></p>
+<p><b>Introduced in:</b> Version 5</p>
+
 <h3 class="function"><a name="svn_revision-1">svn_revision/1</a></h3>
 <div class="spec">
 <p><tt>svn_revision(ModuleName::atom()) -&gt; integer()</tt></p>
@@ -1899,6 +1941,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 27 2011, 18:05:12.</i></p>
+<p><i>Generated by EDoc, Mar 27 2011, 18:13:17.</i></p>
 </body>
 </html>

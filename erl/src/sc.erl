@@ -106,6 +106,9 @@
     power_set/1,
     shuffle/1,
 
+    srand/0,
+      srand/3,
+
     rand/1,
 
     random_from/1,
@@ -5544,3 +5547,57 @@ random_generator() ->
             random_generator()
 
     end.
+
+
+
+
+
+%% @spec srand() -> { ok, { seeded, Seed } }
+
+%% @doc <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want to know what seed was used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> scutil:srand().
+%% {ok,{seeded,{1227,902172,685000}}}
+%%
+%% 2> scutil:srand().
+%% {ok,{seeded,{1227,902173,231000}}}'''
+
+%% @since Version 598
+%% @todo migrate to labelled random generators, so that concurrent generators do not necessarily interfere with one another
+
+srand() ->
+
+    {A,B,C} = erlang:now(),
+    srand(A,B,C).
+
+
+
+
+
+%% @spec srand(A::integer(), B::integer(), C::integer()) -> { ok, { seeded, Seed } }
+%% @doc <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want set what seed is used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> scutil:srand(1,2,3).
+%% {ok,{seeded,{1,2,3}}}
+%%
+%% 2> scutil:srand().
+%% {ok,{seeded,{1227,902568,604600}}}
+%%
+%% 3> scutil:srand(1,2,3).
+%% {ok,{seeded,{1,2,3}}}'''
+
+%% @since Version 598
+%% @todo migrate to labelled random generators, so that concurrent generators do not necessarily interfere with one another
+
+srand(A,B,C) ->
+
+    RandomGeneratorPid = spawn(fun() -> random_generator(A,B,C) end),
+
+    case whereis(scutil_rand_source) of
+
+        undefined ->
+            ok;
+
+        _Defined ->
+            unregister(scutil_rand_source)  % todo fixme leak : this should notify the old rand_source that it is being discarded
+
+    end,
+
+    register(scutil_rand_source, RandomGeneratorPid),
+    { ok, { seeded, {A,B,C} } }.
