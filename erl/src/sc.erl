@@ -104,6 +104,7 @@
     send_receive/2,
       send_receive/3,
       send_receive_masked/3,
+      send_receive_masked/4,
 
     euclidean_distance/2,  % todo 3d version?
 
@@ -4707,4 +4708,25 @@ send_receive_masked(Mask, ToWhom, What) ->
 
     receive { Mask, X } ->
         { Mask, X }
+    end.
+
+
+
+
+
+%% @spec send_receive_masked(Mask::any(), ToWhom::pid()|atom(), What::any(), HowLong::non_negative_integer()|infinity) -> { item, any() } | nothing_there
+
+%% @doc (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{Mask,X}', or return nothing_there for empty queues; do not block.  ```1> scutil:send_receive(self(), message).
+%% {item,message}'''
+
+%% @since Version 581
+
+send_receive_masked(Mask, ToWhom, What, HowLong) ->
+
+    ToWhom ! What,
+
+    receive { Mask, X } ->
+        { Mask, X }
+    after HowLong ->
+        nothing_there
     end.
