@@ -93,7 +93,7 @@
     centroid/1,
     nearest_to/2,
     svn_revision/1,
-    atoms/1,
+    module_atoms/1,
     key_cluster/2,
     split_at/2,
     is_postfix/2,
@@ -3020,7 +3020,7 @@ abstract_attributes(Module) ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-atoms(Module) ->
+module_atoms(Module) ->
 
     module_feature(Module, atoms).
 

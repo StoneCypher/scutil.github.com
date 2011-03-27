@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 582 $</p>
+<p><b>Version:</b> $Revision: 584 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -121,7 +121,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#all_neighbor_pairs-2">all_neighbor_pairs/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#amean_vector_normal-1">amean_vector_normal/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the arithmetic mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#arithmetic_mean-1">arithmetic_mean/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Take the arithmetic mean (often called the average) of a list of numbers.</td></tr>
-<tr><td valign="top"><a href="#atoms-1">atoms/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#bandwidth_calc-1">bandwidth_calc/1</a></td><td>Equivalent to <a href="#bandwidth_calc-2"><tt>bandwidth_calc(Data, all)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#bandwidth_calc-2">bandwidth_calc/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculates digital line bandwidth over timescales in converted units.</td></tr>
@@ -210,6 +209,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#mersenne_prime-1">mersenne_prime/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#mod-2">mod/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes the modulus of an integer by another integer.</td></tr>
 <tr><td valign="top"><a href="#mode-1">mode/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes the mode (most common) value(s) of a list, as a list.</td></tr>
+<tr><td valign="top"><a href="#module_atoms-1">module_atoms/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#module_attribute-1">module_attribute/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Look up all attributes of a given module.</td></tr>
 <tr><td valign="top"><a href="#module_attribute-2">module_attribute/2</a></td><td><span style="color:red">Buggy</span> <span style="color:orange;font-style:italic">Untested</span> Look up an Erlang module attribute value by title.</td></tr>
 <tr><td valign="top"><a href="#module_feature-2">module_feature/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
@@ -348,12 +348,6 @@ presenting the actual volume of functionality present here.  We can get the cove
   3.0</pre></p>
 <p><b>Introduced in:</b> Version 481</p>
 <p><b>See also:</b> <a href="#amean_vector_normal-1">amean_vector_normal/1</a>, <a href="#geometric_mean-1">geometric_mean/1</a>, <a href="#harmonic_mean-1">harmonic_mean/1</a>, <a href="#weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a>.</p>
-
-<h3 class="function"><a name="atoms-1">atoms/1</a></h3>
-<div class="spec">
-<p><tt>atoms(Module) -&gt; any()</tt></p>
-</div><p><span style="color:orange;font-style:italic">Untested</span></p>
-<p><b>Introduced in:</b> Version 533</p>
 
 <h3 class="function"><a name="bandwidth_calc-1">bandwidth_calc/1</a></h3>
 <div class="spec">
@@ -1193,6 +1187,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><b>Introduced in:</b> Version 497</p>
 <p><b>See also:</b> <a href="#arithmetic_mean-1">arithmetic_mean/1</a>, <a href="#median-1">median/1</a>.</p>
 
+<h3 class="function"><a name="module_atoms-1">module_atoms/1</a></h3>
+<div class="spec">
+<p><tt>module_atoms(Module) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 533</p>
+
 <h3 class="function"><a name="module_attribute-1">module_attribute/1</a></h3>
 <div class="spec">
 <p><tt>module_attribute(Module::atom()) -&gt; AttributeList | {error, no_such_module}</tt></p>
@@ -1206,8 +1206,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 582 2011-03-27 19:41:48Z john $"},
-   {svn_revision,"$Revision: 582 $"},
+   {svn_id,"$Id: sc.erl 584 2011-03-27 20:35:27Z john $"},
+   {svn_revision,"$Revision: 584 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1772,6 +1772,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 27 2011, 16:35:02.</i></p>
+<p><i>Generated by EDoc, Mar 27 2011, 16:37:49.</i></p>
 </body>
 </html>
