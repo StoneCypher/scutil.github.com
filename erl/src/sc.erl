@@ -105,9 +105,11 @@
     power_set/1,
     shuffle/1,
     record_member/2,
+    get_linked_processes/0,
+
     tuple_sum/1,
-    tuple_sort/1,
-    tuple_member/2,
+      tuple_sort/1,
+      tuple_member/2,
 
     key_max/1,
       key_max/2,
@@ -5894,7 +5896,7 @@ key_min(Pos, [Cur|Rem], Item) ->
 
 %% @since Version 609
 
-tuple_sum(T) 
+tuple_sum(T)
 
     when is_tuple(T) ->
 
@@ -5902,11 +5904,15 @@ tuple_sum(T)
 
 
 
-tuple_sum(_T, Which, Max, Work) 
+
+
+tuple_sum(_T, Which, Max, Work)
 
     when Which > Max ->
 
     Work;
+
+
 
 
 
@@ -5953,9 +5959,13 @@ tuple_member(E, T) ->
 
 
 
+
+
 tuple_member(_E,_T, I, Sz)
 
     when I > Sz -> false;
+
+
 
 
 
@@ -5984,3 +5994,21 @@ tuple_member(E, T, I, Sz) ->
 record_member(E, R) ->
 
     tuple_member(E, R, 2, size(R)).  % just skip the 1st elem
+
+
+
+
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span> 
+
+%% @since Version 617
+
+get_linked_processes() ->
+
+    [U] = [
+              V
+          ||
+              {links,V} <- process_info(self())
+          ],
+
+    U.
