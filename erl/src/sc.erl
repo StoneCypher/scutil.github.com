@@ -106,6 +106,7 @@
     shuffle/1,
     record_member/2,
     get_linked_processes/0,
+    starts_with/2,
 
     explode/2,
       explode/3,
@@ -6250,5 +6251,39 @@ explode(Separator, Remainder, Pass, Out, Max, Cur) -> % check cap
                     explode(Separator, LeftOver, [], Out ++ [Pass], Max, Cur+1)
 
             end
+
+    end.
+
+
+
+
+
+%% @since Version 624
+
+starts_with(Remain, []) -> 
+
+    { true, Remain };
+    
+    
+    
+    
+
+starts_with([], _) -> 
+
+    false;
+    
+    
+    
+
+
+starts_with([ MHead | MRemain ], [ PHead | PRemain ]) ->
+
+    if
+
+        PHead /= MHead ->
+            false;
+
+        true ->
+            starts_with(MRemain, PRemain)
 
     end.
