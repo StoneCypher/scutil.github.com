@@ -108,6 +108,9 @@
     get_linked_processes/0,
     starts_with/2,
 
+    is_numeric_string/1,
+      is_numeric_string/2,
+
     explode/2,
       explode/3,
       implode/2,
@@ -6185,6 +6188,8 @@ implode(Separator, Data)
 
 %% @since Version 622
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 explode(Separator, Term) ->
 
     explode(Separator, Term, [], [], -1,  0).
@@ -6192,6 +6197,8 @@ explode(Separator, Term) ->
 
 
 %% @since Version 622
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 explode(Separator, Term, Max) ->
 
@@ -6260,20 +6267,22 @@ explode(Separator, Remainder, Pass, Out, Max, Cur) -> % check cap
 
 %% @since Version 624
 
-starts_with(Remain, []) -> 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+starts_with(Remain, []) ->
 
     { true, Remain };
-    
-    
-    
-    
 
-starts_with([], _) -> 
+
+
+
+
+starts_with([], _) ->
 
     false;
-    
-    
-    
+
+
+
 
 
 starts_with([ MHead | MRemain ], [ PHead | PRemain ]) ->
@@ -6287,3 +6296,23 @@ starts_with([ MHead | MRemain ], [ PHead | PRemain ]) ->
             starts_with(MRemain, PRemain)
 
     end.
+
+
+
+
+
+%% @since Version 625
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+is_numeric_string(Str) ->
+
+    is_numeric_string(Str, decimal).
+
+
+
+
+
+is_numeric_string(Str, decimal) ->
+
+    lists:all({scutil,is_numeric_char}, Str).
