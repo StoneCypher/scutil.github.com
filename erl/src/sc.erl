@@ -104,6 +104,7 @@
     receive_one/0,
     power_set/1,
     shuffle/1,
+    record_member/2,
     tuple_sum/1,
     tuple_sort/1,
     tuple_member/2,
@@ -5944,7 +5945,7 @@ tuple_sort(T)
 %% 3> sc:tuple_member([1,2], {[1,2]}).
 %% true'''
 
-%% @since Version 123
+%% @since Version 615
 
 tuple_member(E, T) ->
 
@@ -5969,3 +5970,17 @@ tuple_member(E, T, I, Sz) ->
             tuple_member(E, T, I+1, Sz)
 
     end.
+
+
+
+
+
+%% @spec record_member(E::any(), R::record()) -> true | false
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span> <span style="color:red">TODO: Needs Example</span> Checks whether E is a member element of record R, analogous to `lists::member(E, L)'.  This function does not have examples because the shell does not correctly handle records; <span style="color:red">todo: add examples later</span>
+
+%% @since Version 616
+
+record_member(E, R) ->
+
+    tuple_member(E, R, 2, size(R)).  % just skip the 1st elem
