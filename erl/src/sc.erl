@@ -107,6 +107,8 @@
     record_member/2,
     get_linked_processes/0,
 
+    implode/2,
+
     multi_do/3,
       multi_do/4,
 
@@ -6147,3 +6149,29 @@ multi_do(0,_Module,_Func,_Args, Work) ->
 multi_do(I, Module, Func, Args, Work) ->
 
     multi_do(I-1, Module, Func, Args, Work ++ [apply(Module, Func, Args)]).
+
+
+
+
+
+% thanks for a much better implementation, etnt todo comeback add this to thanks table
+
+%% @since Version 621
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+implode(Separator, Data)
+
+    when is_list(Data),
+         is_list(Separator) ->
+
+    lists:foldr(
+
+        fun(Item, [])  -> [Item];
+           (Item, Acc) -> [Item] ++ Separator ++ Acc
+        end,
+
+        "",
+        Data
+
+    ).
