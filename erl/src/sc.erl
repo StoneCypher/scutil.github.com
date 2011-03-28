@@ -107,7 +107,9 @@
     record_member/2,
     get_linked_processes/0,
 
-    implode/2,
+    explode/2,
+      explode/3,
+      implode/2,
 
     multi_do/3,
       multi_do/4,
@@ -6175,3 +6177,78 @@ implode(Separator, Data)
         Data
 
     ).
+
+
+
+
+
+%% @since Version 622
+
+explode(Separator, Term) ->
+
+    explode(Separator, Term, [], [], -1,  0).
+
+
+
+%% @since Version 622
+
+explode(Separator, Term, Max) ->
+
+    explode(Separator, Term, [], [], Max, 0).
+
+
+
+%% @private
+%% @since Version 622
+
+explode(_Separator, [], Pass, Out, _Max, _Cur) ->
+
+    Out ++ [Pass];
+
+
+
+%% @private
+%% @since Version 622
+
+explode(Separator, Remainder, Pass, Out, -1, _Cur) -> % ignore cap
+
+    case starts_with(Remainder, Separator) of
+
+        false ->
+
+            [ThisChar | Following] = Remainder,
+            explode(Separator, Following, Pass ++ [ThisChar], Out, -1, 0);
+
+        { true, LeftOver } ->
+
+            explode(Separator, LeftOver, [], Out ++ [Pass], -1, 0)
+
+    end;
+
+
+
+%% @private
+%% @since Version 622
+
+explode(Separator, Remainder, Pass, Out, Max, Cur) -> % check cap
+
+    if
+        Cur+1 >= Max ->
+            Out ++ [Remainder];
+
+        true ->
+
+            case starts_with(Remainder, Separator) of
+
+                false ->
+
+                    [ThisChar | Following] = Remainder,
+                    explode(Separator, Following, Pass ++ [ThisChar], Out, Max, Cur);
+
+                { true, LeftOver } ->
+
+                    explode(Separator, LeftOver, [], Out ++ [Pass], Max, Cur+1)
+
+            end
+
+    end.
