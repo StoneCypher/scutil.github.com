@@ -107,6 +107,9 @@
     record_member/2,
     get_linked_processes/0,
 
+    multi_do/3,
+      multi_do/4,
+
     start_register_if_not_running/3,
       start_register_if_not_running/4,
       start_register_if_not_running/5,
@@ -6095,3 +6098,52 @@ start_register_if_not_running(Node, Name, Module, Function, Args)
             ok
 
     end.
+
+
+
+
+
+%% @equiv multi_do(C,M,F,[])
+%% @since Version 620
+
+multi_do(C, Module, Func) ->
+
+    multi_do(C, Module, Func, [],   []).
+
+
+
+
+
+%% @spec multi_do(Count::integer(), Module::atom(), Function::atom(), Args::list()) -> list()
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Take an iteration count, a module name, a function name and an argument list, and repeatedly apply the argument list to the module/function, count times.  This is primarily useful with nondeterministic functions whose result might change despite identical arguments, such as functions with random behavior; for example, this function is invoked to implement stochastic testing in <a href="http://testerl.com/">TestErl</a>. ```1> scutil:multi_do(10, scutil, rand, [100]).
+%% [9,94,4,82,77,44,89,19,45,92]
+%%
+%% 2> scutil:multi_do(10, scutil, rand, [10000]).
+%% [2377,2559,1713,8489,4468,3261,3344,3751,380,2525]'''
+
+%% @since Version 620
+
+multi_do(C, Module, Func, Args) ->
+
+    multi_do(C, Module, Func, Args, []).
+
+
+
+
+
+%% @private
+
+multi_do(0,_Module,_Func,_Args, Work) ->
+
+    Work;
+
+
+
+
+
+%% @private
+
+multi_do(I, Module, Func, Args, Work) ->
+
+    multi_do(I-1, Module, Func, Args, Work ++ [apply(Module, Func, Args)]).
