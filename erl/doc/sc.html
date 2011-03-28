@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 616 $</p>
+<p><b>Version:</b> $Revision: 618 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -312,6 +312,9 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#square-1">square/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Squares the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
 <tr><td valign="top"><a href="#srand-0">srand/0</a></td><td><span style="color:orange;font-style:italic">Untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.</td></tr>
 <tr><td valign="top"><a href="#srand-3">srand/3</a></td><td><span style="color:orange;font-style:italic">Untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.</td></tr>
+<tr><td valign="top"><a href="#start_register_if_not_running-3">start_register_if_not_running/3</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#start_register_if_not_running-4">start_register_if_not_running/4</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#start_register_if_not_running-5">start_register_if_not_running/5</a></td><td><span style="color:orange;font-style:italic">Untested</span> Check whether a process is registered locally, and if not, spawn it with a give function and arguments.</td></tr>
 <tr><td valign="top"><a href="#svn_revision-1">svn_revision/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.</td></tr>
 <tr><td valign="top"><a href="#test-0">test/0</a></td><td>Runs the test suite in terse form.</td></tr>
 <tr><td valign="top"><a href="#test-1">test/1</a></td><td>Runs the test suite in verbose form.</td></tr>
@@ -1306,8 +1309,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 616 2011-03-28 00:01:29Z john $"},
-   {svn_revision,"$Revision: 616 $"},
+   {svn_id,"$Id: sc.erl 618 2011-03-28 00:04:59Z john $"},
+   {svn_revision,"$Revision: 618 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1814,6 +1817,52 @@ presenting the actual volume of functionality present here.  We can get the cove
   {ok,{seeded,{1,2,3}}}</pre></p>
 <p><b>Introduced in:</b> Version 598</p>
 
+<h3 class="function"><a name="start_register_if_not_running-3">start_register_if_not_running/3</a></h3>
+<div class="spec">
+<p><tt>start_register_if_not_running(Name, Module, Function) -&gt; any()</tt></p>
+</div><p>Equivalent to <a href="#start_register_if_not_running-5"><tt>start_register_if_not_running(node(), Name, Module,
+			      Function, [])</tt></a>.</p>
+<p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 618</p>
+
+<h3 class="function"><a name="start_register_if_not_running-4">start_register_if_not_running/4</a></h3>
+<div class="spec">
+<p><tt>start_register_if_not_running(Name, Module, Function, Args) -&gt; any()</tt></p>
+</div><p>Equivalent to <a href="#start_register_if_not_running-5"><tt>start_register_if_not_running(node(), Name, Module,
+			      Function, Args)</tt></a>.</p>
+<p><span style="color:orange;font-style:italic">Untested</span></p>
+
+<h3 class="function"><a name="start_register_if_not_running-5">start_register_if_not_running/5</a></h3>
+<div class="spec">
+<p><tt>start_register_if_not_running(Node::atom(), Name::atom(), Module::atom(), Function::atom(), Args::list()) -&gt; pid() | ok</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span> Check whether a process is registered locally, and if not, spawn it with a give function and arguments.  <pre>  1&gt; whereis(test).
+  undefined
+ 
+  2&gt; scutil:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
+  ok
+ 
+  3&gt; whereis(test).
+  &lt;0.726.0&gt;
+ 
+  4&gt; test ! terminate.
+  terminate
+ 
+  5&gt; whereis(test).
+  undefined
+ 
+  6&gt; scutil:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
+  true
+ 
+  7&gt; whereis(test).
+  &lt;0.731.0&gt;
+ 
+  8&gt; scutil:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
+  ok
+ 
+  9&gt; whereis(test).
+  &lt;0.731.0&gt;</pre></p>
+<p><b>Introduced in:</b> Version 618</p>
+
 <h3 class="function"><a name="svn_revision-1">svn_revision/1</a></h3>
 <div class="spec">
 <p><tt>svn_revision(ModuleName::atom()) -&gt; integer()</tt></p>
@@ -2049,6 +2098,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 27 2011, 20:04:48.</i></p>
+<p><i>Generated by EDoc, Mar 27 2011, 20:08:04.</i></p>
 </body>
 </html>
