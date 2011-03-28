@@ -108,6 +108,9 @@
     get_linked_processes/0,
     starts_with/2,
 
+    map_scanline/2,
+      map_scanline/3,
+
     is_numeric_string/1,
       is_numeric_string/2,
 
@@ -6313,6 +6316,55 @@ is_numeric_string(Str) ->
 
 
 
+%% @since Version 625
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 is_numeric_string(Str, decimal) ->
 
     lists:all({scutil,is_numeric_char}, Str).
+
+
+
+
+
+% parses a string on all three newline types, discarding any empty lines; applies F as a functor to each line,
+% and returns the tuple of the remainder and then a list of all results from the functor(s) issued
+% thanks ayrnieu
+
+%% @since Version 626
+
+map_scanline(F,L) ->
+
+    {R,M} = lists:foldl(
+        fun
+            ( C, R = {[],_} ) when C == $\r orelse C == $\n -> R;
+            ( C, {S,M}      ) when C == $\r orelse C == $\n -> { [], [ F(lists:reverse(S)) | M ] };
+            ( C, {S,M}      )                               -> { [C|S], M }
+        end,
+        {[],[]}, L
+    ),
+
+    {lists:reverse(R), lists:reverse(M)}.
+
+
+
+
+
+% third argument passes argument list as secondary argument to the functor, useful for passing ancillary state
+% modified from map_scaline/2 by ayrnieu
+
+%% @since Version 626
+
+map_scanline(F,L,A) ->
+
+    {R,M} = lists:foldl(
+        fun
+            ( C, R = {[],_} ) when C == $\r orelse C == $\n -> R;
+            ( C, {S,M}      ) when C == $\r orelse C == $\n -> { [], [ F(lists:reverse(S), A) | M ] };
+            ( C, {S,M}      )                               -> { [C|S], M }
+        end,
+        {[],[]}, L
+    ),
+
+    {lists:reverse(R), lists:reverse(M)}.
