@@ -458,9 +458,11 @@ test([verbose]=_Style) ->
 %% {1,c}'''
 %% @since Version 460
 
-extrema([]) ->
+% todo comeback
 
-    error(badarg);
+% extrema([]) ->
+
+%     error(badarg);
 
 
 
@@ -1940,7 +1942,7 @@ standard_deviation(Values, population)
     when is_list(Values) ->
 
     Mean = arithmetic_mean(Values),
-    math:sqrt(arithmetic_mean([ sc_math:square(Val-Mean) || Val <- Values ]));
+    math:sqrt(arithmetic_mean([ sc:square(Val-Mean) || Val <- Values ]));
 
 
 
@@ -1951,7 +1953,7 @@ standard_deviation(Values, sample)
     when is_list(Values) ->
 
     Mean = arithmetic_mean(Values),
-    math:sqrt( lists:sum([ sc_math:square(Val-Mean) || Val <- Values ]) / (length(Values)-1) ).
+    math:sqrt( lists:sum([ sc:square(Val-Mean) || Val <- Values ]) / (length(Values)-1) ).
 
 
 
@@ -5181,8 +5183,8 @@ euclidean_distance(C1, C2) ->
     % squaring makes taking the absolute value to get unsigned magnitude redundant; that's not an omission, it's an optimization
     math:sqrt(
         lists:sum(
-            [ sc_math:square(A-B) ||
-                {A,B} <- sc_lists:zip_n([C1,C2])
+            [ sc:square(A-B) ||
+                {A,B} <- sc:zip_n([C1,C2])
             ]
         )
     ).
@@ -6474,3 +6476,13 @@ sanitize_filename(Filename) ->
          lists:seq($0,$9) ++
          "-_()[]"
     ).
+
+
+
+
+
+% todo comeback
+
+circ_within_origin_circ(OX, OY, OR, CX, CY, CR) ->
+
+    (sc:euclidean_distance({OX,OY}, {CX,CY}) + CR) <= OR.
