@@ -109,6 +109,8 @@
     starts_with/2,
     levenshtein/2,
     sanitize_filename/1,
+    circ_within_origin_circ/6,
+    circles_overlap/6,
 
     map_scanline/2,
       map_scanline/3,
@@ -6485,4 +6487,20 @@ sanitize_filename(Filename) ->
 
 circ_within_origin_circ(OX, OY, OR, CX, CY, CR) ->
 
-    (sc:euclidean_distance({OX,OY}, {CX,CY}) + CR) <= OR.
+    (sc:euclidean_distance({OX,OY}, {CX,CY}) + CR) =< OR.
+
+
+
+
+
+circles_overlap(AX, AY, AR, BX, BY, BR) ->
+
+    sc:euclidean_distance({AX,AY}, {BX,BY}) < (AR+BR).
+
+
+
+
+
+circles_contact(AX, AY, AR, BX, BY, BR) ->
+
+    sc:euclidean_distance({AX,AY}, {BX,BY}) =< (AR+BR).
