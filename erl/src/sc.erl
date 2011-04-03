@@ -6611,3 +6611,37 @@ triangle_index(LX, LY)
 paper_3d_basic_depth(X, Z, SliderPos, DepthConstant) when Z > 0 ->
 
     (X + (SliderPos * DepthConstant) )/Z.
+
+
+
+
+
+%% @since Version 634
+
+paper_3d_render(Bitmap3dList, DepthConstant) ->
+
+    paper_3d_render(Bitmap3dList, 1.0, DepthConstant, fun paper_3d_basic_depth/4).
+
+
+
+
+
+%% @since Version 634
+
+paper_3d_render(Bitmap3dList, SliderPos, DepthConstant) ->
+
+    paper_3d_render(Bitmap3dList, SliderPos, DepthConstant, fun paper_3d_basic_depth/4).
+
+
+
+
+
+%% @since Version 634
+
+paper_3d_render(Bitmap3dList, SliderPos, DepthConstant, DepthFun) ->
+
+     lists:flatten([
+         { DepthFun(X, Z, SliderPos, DepthConstant), Y }
+     ||
+         { X, Y, Z } <- lists:keysort(3, Bitmap3dList)
+     ]).
