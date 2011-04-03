@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 627 $</p>
+<p><b>Version:</b> $Revision: 632 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -173,6 +173,9 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#central_moments-1">central_moments/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#central_moments-2">central_moments/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#centroid-1">centroid/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculates the coordinate which represents the per-axis arithmetic mean of a set of points.</td></tr>
+<tr><td valign="top"><a href="#circ_within_origin_circ-2">circ_within_origin_circ/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#circles_contact-2">circles_contact/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#circles_overlap-2">circles_overlap/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#combinations-2">combinations/2</a></td><td>Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#count_of-2">count_of/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Counts the number of instances of Item in List.</td></tr>
 <tr><td valign="top"><a href="#cube-1">cube/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
@@ -278,6 +281,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#nearest_to-2">nearest_to/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#nth_difference-2">nth_difference/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#nybble_to_hex-1">nybble_to_hex/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Convert a nybble() to a hexchar().</td></tr>
+<tr><td valign="top"><a href="#paper_3d_basic_depth-4">paper_3d_basic_depth/4</a></td><td></td></tr>
 <tr><td valign="top"><a href="#partition_by_residue-2">partition_by_residue/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#pearson_correlation-1">pearson_correlation/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Compute the Pearson Correlation Coefficient of a list of coordinate tuples.</td></tr>
 <tr><td valign="top"><a href="#pearson_correlation-2">pearson_correlation/2</a></td><td>Equivalent to <a href="#pearson-1"><tt>pearson(lists:zip(List1, List2))</tt></a>.
@@ -334,6 +338,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#third_difference-1">third_difference/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#tied_ordered_ranking-1">tied_ordered_ranking/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns a tied ranked ordering of the list, ordered according to the input ordering rather than the sorted ordering.</td></tr>
 <tr><td valign="top"><a href="#tied_ranking-1">tied_ranking/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns a ranked ordering of the list with tie rankings.</td></tr>
+<tr><td valign="top"><a href="#triangle_index-1">triangle_index/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#triangle_index-2">triangle_index/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#tuple_member-2">tuple_member/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Checks whether E is a member element of tuple T, analogous to <code>lists::member(E, L)</code>.</td></tr>
 <tr><td valign="top"><a href="#tuple_sort-1">tuple_sort/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#tuple_sum-1">tuple_sum/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero.</td></tr>
@@ -521,6 +527,21 @@ presenting the actual volume of functionality present here.  We can get the cove
   4&gt; sc:centroid([[1,-1,1.0],[-2,-2,-2],[3,3,3],[4,4,4],[5,5,5]]).
   [2.2,1.8,2.2]</pre></p>
 <p><b>Introduced in:</b> Version 516</p>
+
+<h3 class="function"><a name="circ_within_origin_circ-2">circ_within_origin_circ/2</a></h3>
+<div class="spec">
+<p><tt>circ_within_origin_circ(X1, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="circles_contact-2">circles_contact/2</a></h3>
+<div class="spec">
+<p><tt>circles_contact(X1, X2) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="circles_overlap-2">circles_overlap/2</a></h3>
+<div class="spec">
+<p><tt>circles_overlap(X1, X2) -&gt; any()</tt></p>
+</div>
 
 <h3 class="function"><a name="combinations-2">combinations/2</a></h3>
 <div class="spec">
@@ -1370,8 +1391,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 627 2011-03-28 01:50:02Z john $"},
-   {svn_revision,"$Revision: 627 $"},
+   {svn_id,"$Id: sc.erl 632 2011-04-03 20:21:37Z john $"},
+   {svn_revision,"$Revision: 632 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1473,6 +1494,12 @@ presenting the actual volume of functionality present here.  We can get the cove
   2&gt; scutil:nybble_to_hex(15).
   102</pre></p>
 <p><b>Introduced in:</b> Version 570</p>
+
+<h3 class="function"><a name="paper_3d_basic_depth-4">paper_3d_basic_depth/4</a></h3>
+<div class="spec">
+<p><tt>paper_3d_basic_depth(X, Z, SliderPos, DepthConstant) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 633</p>
 
 <h3 class="function"><a name="partition_by_residue-2">partition_by_residue/2</a></h3>
 <div class="spec">
@@ -2040,6 +2067,18 @@ presenting the actual volume of functionality present here.  We can get the cove
   [{1.0,300},{2.5,200},{2.5,200},{4.0,100}]</pre></p>
 <p><b>Introduced in:</b> Version 561</p>
 
+<h3 class="function"><a name="triangle_index-1">triangle_index/1</a></h3>
+<div class="spec">
+<p><tt>triangle_index(X) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 632</p>
+
+<h3 class="function"><a name="triangle_index-2">triangle_index/2</a></h3>
+<div class="spec">
+<p><tt>triangle_index(X1, Y) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 632</p>
+
 <h3 class="function"><a name="tuple_member-2">tuple_member/2</a></h3>
 <div class="spec">
 <p><tt>tuple_member(E::any(), T::tuple()) -&gt; true | false</tt></p>
@@ -2190,6 +2229,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 27 2011, 22:08:19.</i></p>
+<p><i>Generated by EDoc, Apr 3 2011, 19:07:58.</i></p>
 </body>
 </html>

@@ -109,8 +109,18 @@
     starts_with/2,
     levenshtein/2,
     sanitize_filename/1,
-    circ_within_origin_circ/6,
-    circles_overlap/6,
+    circ_within_origin_circ/2,
+    circles_overlap/2,
+    circles_contact/2,
+    wglsh/1,
+
+    paper_3d_render/2,
+      paper_3d_render/3,
+      paper_3d_render/4,
+      paper_3d_basic_depth/4,
+
+    triangle_index/1,
+      triangle_index/2,
 
     map_scanline/2,
       map_scanline/3,
@@ -6485,7 +6495,7 @@ sanitize_filename(Filename) ->
 
 % todo comeback
 
-circ_within_origin_circ(OX, OY, OR, CX, CY, CR) ->
+circ_within_origin_circ({sc_circle, OX, OY, OR}, {sc_circle, CX, CY, CR}) ->
 
     (sc:euclidean_distance({OX,OY}, {CX,CY}) + CR) =< OR.
 
@@ -6493,7 +6503,7 @@ circ_within_origin_circ(OX, OY, OR, CX, CY, CR) ->
 
 
 
-circles_overlap(AX, AY, AR, BX, BY, BR) ->
+circles_overlap({sc_circle, AX, AY, AR}, {sc_circle, BX, BY, BR}) ->
 
     sc:euclidean_distance({AX,AY}, {BX,BY}) < (AR+BR).
 
@@ -6501,7 +6511,7 @@ circles_overlap(AX, AY, AR, BX, BY, BR) ->
 
 
 
-circles_contact(AX, AY, AR, BX, BY, BR) ->
+circles_contact({sc_circle, AX, AY, AR}, {sc_circle, BX, BY, BR}) ->
 
     sc:euclidean_distance({AX,AY}, {BX,BY}) =< (AR+BR).
 
@@ -6591,3 +6601,13 @@ triangle_index(LX, LY)
          is_list(LY) ->
 
     [ {X,Y} || X <- LX, Y <- LY, X<Y ].
+
+
+
+
+
+%% @since Version 633
+
+paper_3d_basic_depth(X, Z, SliderPos, DepthConstant) when Z > 0 ->
+
+    (X + (SliderPos * DepthConstant) )/Z.
