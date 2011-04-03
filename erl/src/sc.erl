@@ -6504,3 +6504,90 @@ circles_overlap(AX, AY, AR, BX, BY, BR) ->
 circles_contact(AX, AY, AR, BX, BY, BR) ->
 
     sc:euclidean_distance({AX,AY}, {BX,BY}) =< (AR+BR).
+
+
+
+
+
+%% @private
+
+% don't worry about this, it's part of an old IRC joke
+
+%% @since Version 632
+
+wglsh(List) when is_list(List) ->
+
+    [ case Ch of $a->$w;$A->$W; $e->$g;$E->$G; $i->$w;$I->$W; $o->$w;$O->$W; $u->$w;$U->$W; Z -> Z end || Ch <- List ].
+
+
+
+
+
+%% @since Version 632
+
+triangle_index(X) ->
+
+    triangle_index(X,X).
+
+
+
+
+
+%% @since Version 632
+
+triangle_index(X1, Y)
+
+    when is_integer(X1) ->
+
+    triangle_index({1,X1}, Y);
+
+
+
+
+
+%% @since Version 632
+
+triangle_index(X, Y1)
+
+    when is_integer(Y1) ->
+
+    triangle_index(X, {1,Y1});
+
+
+
+
+
+%% @since Version 632
+
+triangle_index({X0,X1}, Y)
+
+    when is_integer(X0),
+         is_integer(X1) ->
+
+    triangle_index(lists:seq(X0,X1), Y);
+
+
+
+
+
+%% @since Version 632
+
+triangle_index(X, {Y0,Y1})
+
+    when is_integer(Y0),
+         is_integer(Y1) ->
+
+    triangle_index(X, lists:seq(Y0,Y1));
+
+
+
+
+
+%% @since Version 632
+
+triangle_index(LX, LY)
+
+    when is_list(LX),
+         is_list(LY) ->
+
+    [ {X,Y} || X <- LX, Y <- LY, X<Y ].
