@@ -6719,3 +6719,13 @@ terminate_loop() ->
 show(X) ->
 
     io:format("~w~n",[X]).
+
+
+
+
+
+%% @since Version 638
+
+to_list(X) ->
+
+    lists:flatten(io_lib:format("~w",[X])).

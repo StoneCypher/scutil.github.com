@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 633 $</p>
+<p><b>Version:</b> $Revision: 637 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -282,6 +282,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#nth_difference-2">nth_difference/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#nybble_to_hex-1">nybble_to_hex/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Convert a nybble() to a hexchar().</td></tr>
 <tr><td valign="top"><a href="#paper_3d_basic_depth-4">paper_3d_basic_depth/4</a></td><td></td></tr>
+<tr><td valign="top"><a href="#paper_3d_render-1">paper_3d_render/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#paper_3d_render-2">paper_3d_render/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#paper_3d_render-3">paper_3d_render/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#paper_3d_render-4">paper_3d_render/4</a></td><td></td></tr>
@@ -321,6 +322,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#shared_keys-1">shared_keys/1</a></td><td>Create sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples, where key K appears in both A and B.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-2">shared_keys/2</a></td><td>Equivalent to <a href="#shared_keys-1"><code>shared_keys/1</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-3">shared_keys/3</a></td><td>Equivalent to <a href="#shared_keys-2"><code>shared_keys/2</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
+<tr><td valign="top"><a href="#show-1">show/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#shuffle-1">shuffle/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Return a list with the original list's shallow members in a random order.</td></tr>
 <tr><td valign="top"><a href="#simple_ranking-1">simple_ranking/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns a ranked ordering of the list without tie rankings.</td></tr>
 <tr><td valign="top"><a href="#skewness-1">skewness/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
@@ -331,16 +333,19 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#square-1">square/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Squares the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
 <tr><td valign="top"><a href="#srand-0">srand/0</a></td><td><span style="color:orange;font-style:italic">Untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.</td></tr>
 <tr><td valign="top"><a href="#srand-3">srand/3</a></td><td><span style="color:orange;font-style:italic">Untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.</td></tr>
+<tr><td valign="top"><a href="#start_register_if_not_running-2">start_register_if_not_running/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#start_register_if_not_running-3">start_register_if_not_running/3</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#start_register_if_not_running-4">start_register_if_not_running/4</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#start_register_if_not_running-5">start_register_if_not_running/5</a></td><td><span style="color:orange;font-style:italic">Untested</span> Check whether a process is registered locally, and if not, spawn it with a give function and arguments.</td></tr>
 <tr><td valign="top"><a href="#starts_with-2">starts_with/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#svn_revision-1">svn_revision/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.</td></tr>
+<tr><td valign="top"><a href="#terminate_loop-0">terminate_loop/0</a></td><td></td></tr>
 <tr><td valign="top"><a href="#test-0">test/0</a></td><td>Runs the test suite in terse form.</td></tr>
 <tr><td valign="top"><a href="#test-1">test/1</a></td><td>Runs the test suite in verbose form.</td></tr>
 <tr><td valign="top"><a href="#third_difference-1">third_difference/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#tied_ordered_ranking-1">tied_ordered_ranking/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns a tied ranked ordering of the list, ordered according to the input ordering rather than the sorted ordering.</td></tr>
 <tr><td valign="top"><a href="#tied_ranking-1">tied_ranking/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns a ranked ordering of the list with tie rankings.</td></tr>
+<tr><td valign="top"><a href="#to_list-1">to_list/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#triangle_index-1">triangle_index/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#triangle_index-2">triangle_index/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#tuple_member-2">tuple_member/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Checks whether E is a member element of tuple T, analogous to <code>lists::member(E, L)</code>.</td></tr>
@@ -1394,8 +1399,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 633 2011-04-03 23:08:31Z john $"},
-   {svn_revision,"$Revision: 633 $"},
+   {svn_id,"$Id: sc.erl 637 2011-04-04 05:04:52Z john $"},
+   {svn_revision,"$Revision: 637 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1503,6 +1508,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>paper_3d_basic_depth(X, Z, SliderPos, DepthConstant) -&gt; any()</tt></p>
 </div>
 <p><b>Introduced in:</b> Version 633</p>
+
+<h3 class="function"><a name="paper_3d_render-1">paper_3d_render/1</a></h3>
+<div class="spec">
+<p><tt>paper_3d_render(Bitmap3dList) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 634</p>
 
 <h3 class="function"><a name="paper_3d_render-2">paper_3d_render/2</a></h3>
 <div class="spec">
@@ -1851,6 +1862,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 </div><p>Equivalent to <a href="#shared_keys-2"><tt>shared_keys(lists:sort(A), lists:sort(B))</tt></a>.</p>
 <p>Equivalent to <a href="#shared_keys-2"><code>shared_keys/2</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</p>
 
+<h3 class="function"><a name="show-1">show/1</a></h3>
+<div class="spec">
+<p><tt>show(X) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 637</p>
+
 <h3 class="function"><a name="shuffle-1">shuffle/1</a></h3>
 <div class="spec">
 <p><tt>shuffle(List::list()) -&gt; list()</tt></p>
@@ -1951,6 +1968,12 @@ presenting the actual volume of functionality present here.  We can get the cove
   {ok,{seeded,{1,2,3}}}</pre></p>
 <p><b>Introduced in:</b> Version 598</p>
 
+<h3 class="function"><a name="start_register_if_not_running-2">start_register_if_not_running/2</a></h3>
+<div class="spec">
+<p><tt>start_register_if_not_running(Name, FunctionLambda) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 635</p>
+
 <h3 class="function"><a name="start_register_if_not_running-3">start_register_if_not_running/3</a></h3>
 <div class="spec">
 <p><tt>start_register_if_not_running(Name, Module, Function) -&gt; any()</tt></p>
@@ -1973,7 +1996,7 @@ presenting the actual volume of functionality present here.  We can get the cove
   undefined
  
   2&gt; scutil:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
-  ok
+  { ok, &lt;0.726.0&gt; }
  
   3&gt; whereis(test).
   &lt;0.726.0&gt;
@@ -1985,13 +2008,13 @@ presenting the actual volume of functionality present here.  We can get the cove
   undefined
  
   6&gt; scutil:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
-  true
+  { ok, &lt;0.731.0&gt; }
  
   7&gt; whereis(test).
   &lt;0.731.0&gt;
  
   8&gt; scutil:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
-  ok
+  { ok, &lt;0.731.0&gt; }
  
   9&gt; whereis(test).
   &lt;0.731.0&gt;</pre></p>
@@ -2009,6 +2032,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 </div><p><span style="color:orange;font-style:italic">Untested</span> Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.  To use, add a module attribute to your module as follows: <code>-svn_revision("$+Revision$).</code>, after removing the plus (if the plus wasn't there, the example would get corrupted when I updated the module <code>;)</code>).  Then set the svn keyword "Revision" on the file, and check it in.  After that, your version is magically updated every time you check in!  <code>:D</code>  The sole argument to this function is the name of the module to be scanned, as an atom. <pre>  1&gt; scutil:scan_svn_revision(testerl).
   16</pre></p>
 <p><b>Introduced in:</b> Version 523</p>
+
+<h3 class="function"><a name="terminate_loop-0">terminate_loop/0</a></h3>
+<div class="spec">
+<p><tt>terminate_loop() -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 636</p>
 
 <h3 class="function"><a name="test-0">test/0</a></h3>
 <div class="spec">
@@ -2087,6 +2116,12 @@ presenting the actual volume of functionality present here.  We can get the cove
   2&gt; scutil:tied([100,200,200,300]).
   [{1.0,300},{2.5,200},{2.5,200},{4.0,100}]</pre></p>
 <p><b>Introduced in:</b> Version 561</p>
+
+<h3 class="function"><a name="to_list-1">to_list/1</a></h3>
+<div class="spec">
+<p><tt>to_list(X) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 638</p>
 
 <h3 class="function"><a name="triangle_index-1">triangle_index/1</a></h3>
 <div class="spec">
@@ -2250,6 +2285,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Apr 3 2011, 19:08:52.</i></p>
+<p><i>Generated by EDoc, Apr 4 2011, 01:05:16.</i></p>
 </body>
 </html>
