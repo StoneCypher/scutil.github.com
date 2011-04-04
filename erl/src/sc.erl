@@ -6684,3 +6684,26 @@ paper_3d_render(Bitmap3dList, SliderPos, DepthConstant, DepthFun) ->
      ||
          { X, Y, Z } <- lists:keysort(3, Bitmap3dList)
      ]).
+
+
+
+
+
+%% @since Version 636
+
+terminate_loop() ->
+
+    receive
+    
+        terminate ->
+            ok;
+            
+        { PID, terminate } when is_pid(PID) ->
+            PID ! { terminate_loop_terminating, self() },
+            ok;
+
+        _ ->
+            terminate_loop();
+
+    end.
+    
