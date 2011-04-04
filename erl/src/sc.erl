@@ -117,6 +117,9 @@
     wglsh/1,
     terminate_loop/0,
 
+    show/1,
+      to_list/1,
+
     paper_3d_render/1,
       paper_3d_render/2,
       paper_3d_render/3,
@@ -6694,16 +6697,25 @@ paper_3d_render(Bitmap3dList, SliderPos, DepthConstant, DepthFun) ->
 terminate_loop() ->
 
     receive
-    
+
         terminate ->
             ok;
-            
+
         { PID, terminate } when is_pid(PID) ->
             PID ! { terminate_loop_terminating, self() },
             ok;
 
         _ ->
-            terminate_loop();
+            terminate_loop()
 
     end.
-    
+
+
+
+
+
+%% @since Version 637
+
+show(X) ->
+
+    io:format("~w~n",[X]).
