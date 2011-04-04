@@ -41,6 +41,8 @@
 %% @todo burn out @section
 %% @todo burn out was
 
+%% @todo module attributes and documentation attributes for license name, license url
+
 
 
 
@@ -113,8 +115,10 @@
     circles_overlap/2,
     circles_contact/2,
     wglsh/1,
+    terminate_loop/0,
 
-    paper_3d_render/2,
+    paper_3d_render/1,
+      paper_3d_render/2,
       paper_3d_render/3,
       paper_3d_render/4,
       paper_3d_basic_depth/4,
@@ -135,7 +139,8 @@
     multi_do/3,
       multi_do/4,
 
-    start_register_if_not_running/3,
+    start_register_if_not_running/2,
+      start_register_if_not_running/3,
       start_register_if_not_running/4,
       start_register_if_not_running/5,
 
@@ -6051,6 +6056,29 @@ get_linked_processes() ->
 
 
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+%% @since Version 635
+
+start_register_if_not_running(Name, FunctionLambda) ->
+
+    case whereis(Name) of
+
+        undefined ->
+            P = spawn(FunctionLambda),
+            register(Name, P),
+            { ok, P };
+
+        P ->
+            { ok, P }
+
+    end.
+
+
+
+
+
+
 %% @equiv start_register_if_not_running(node(), Name, Module, Function, [])
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
@@ -6083,7 +6111,7 @@ start_register_if_not_running(Name, Module, Function, Args) ->
 %% undefined
 %%
 %% 2> scutil:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
-%% ok
+%% { ok, <0.726.0> }
 %%
 %% 3> whereis(test).
 %% <0.726.0>
@@ -6095,13 +6123,13 @@ start_register_if_not_running(Name, Module, Function, Args) ->
 %% undefined
 %%
 %% 6> scutil:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
-%% true
+%% { ok, <0.731.0> }
 %%
 %% 7> whereis(test).
 %% <0.731.0>
 %%
 %% 8> scutil:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
-%% ok
+%% { ok, <0.731.0> }
 %%
 %% 9> whereis(test).
 %% <0.731.0>'''
@@ -6118,11 +6146,12 @@ start_register_if_not_running(Node, Name, Module, Function, Args)
     case whereis(Name) of
 
         undefined ->
-            register(Name, spawn(Node, Module, Function, Args)),
-            ok;
+            P = spawn(Node, Module, Function, Args),
+            register(Name, P),
+            { ok, P };
 
-        _ ->
-            ok
+        P ->
+            { ok, P }
 
     end.
 
@@ -6610,7 +6639,17 @@ triangle_index(LX, LY)
 
 paper_3d_basic_depth(X, Z, SliderPos, DepthConstant) when Z > 0 ->
 
-    (X + (SliderPos * DepthConstant) )/Z.
+    {(X - (SliderPos * DepthConstant) )/Z, (X + (SliderPos * DepthConstant) )/Z}.
+
+
+
+
+
+%% @since Version 634
+
+paper_3d_render(Bitmap3dList) ->
+
+    paper_3d_render(Bitmap3dList, 1.0, 1.0, fun paper_3d_basic_depth/4).
 
 
 
