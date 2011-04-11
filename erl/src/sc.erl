@@ -90,7 +90,6 @@
     even_or_odd/1,
     absolute_difference/2,
     mod/2,
-    factorial/1,
     mersenne_prime/1,
     factorize/1,
     centroid/1,
@@ -116,6 +115,9 @@
     circles_contact/2,
     wglsh/1,
     terminate_loop/0,
+
+    factorial/1,
+      additive_factorial/1,
 
     show/1,
       to_list/1,
@@ -2578,6 +2580,49 @@ factorial(X, Counter)
          X > 1 ->
 
     factorial(X-1, Counter*X).
+
+
+
+
+
+% comeback todo documentation
+
+%% @since Version 639
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
+additive_factorial(X) ->
+
+    additive_factorial(X, 1).
+
+
+
+
+
+%% @private
+
+additive_factorial(0, _Counter) ->
+
+    0;
+
+
+
+
+
+additive_factorial(1, Counter) ->
+
+    Counter;
+
+
+
+
+
+additive_factorial(X, Counter)
+
+    when is_integer(X),
+         X > 1 ->
+
+    additive_factorial(X-1, Counter+X).
 
 
 
