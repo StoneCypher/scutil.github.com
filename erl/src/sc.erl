@@ -6793,6 +6793,23 @@ bin_to_hex_list(Bin)
 
 
 
+%% @type list_or_binary() = list() | binary(). It's either a {@type list()} or a {@type binary()}.  Duh.
+
+%% @spec stretch_hash(State::list_or_binary(), HashFun::function(), ListOfSalts::list()) -> binary()
+
+%% @doc Stretches a hash with a list of salts. ```1> Res = sc:stretch_hash("abc", fun erlang:md5/1, ["def", "ghi", "jkl", "mno"]).
+%% <<129,166,92,224,108,140,78,205,151,136,77,203,166,229,62,186>>
+%% 
+%% 2> sc:bin_to_hex_list(Res).
+%% "81a65ce06c8c4ecd97884dcba6e53eba"
+%%
+%% C:\projects\scutil\res>php
+%% <?php echo md5("mno" . md5("jkl" . md5("ghi" . md5("defabc", true), true), true)); ?>
+%% ^Z
+%% 81a65ce06c8c4ecd97884dcba6e53eba'''
+%%
+%% Thanks Josh, Davr, Vat.
+
 %% @since Version 641
 
 stretch_hash(State, HashFun, [LastSalt])

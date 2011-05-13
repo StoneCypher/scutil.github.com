@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 638 $</p>
+<p><b>Version:</b> $Revision: 642 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -100,6 +100,10 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>list_of_lists() = list()</tt></p>
 <p>Every member of a <code><a href="#type-list_of_lists">list_of_lists()</a></code> is a <code>list()</code>.</p>
 
+<h3 class="typedecl"><a name="type-list_or_binary">list_or_binary()</a></h3>
+<p><tt>list_or_binary() = list() | binary()</tt></p>
+<p>It's either a <code>list()</code> or a <code>binary()</code>.  Duh.</p>
+
 <h3 class="typedecl"><a name="type-non_negative_integer">non_negative_integer()</a></h3>
 <p><tt>non_negative_integer() = integer()</tt></p>
 <p>A <code><a href="#type-non_negative_integer">non_negative_integer()</a></code> must be equal to or greater than zero.</p>
@@ -163,6 +167,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#bandwidth_calc-1">bandwidth_calc/1</a></td><td>Equivalent to <a href="#bandwidth_calc-2"><tt>bandwidth_calc(Data, all)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#bandwidth_calc-2">bandwidth_calc/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculates digital line bandwidth over timescales in converted units.</td></tr>
+<tr><td valign="top"><a href="#bin_to_hex_list-1">bin_to_hex_list/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#by_distance-2">by_distance/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#by_distance_raw-2">by_distance_raw/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#byte_to_hex-1">byte_to_hex/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Convert a byte() into a hexstring().</td></tr>
@@ -339,6 +344,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#start_register_if_not_running-4">start_register_if_not_running/4</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#start_register_if_not_running-5">start_register_if_not_running/5</a></td><td><span style="color:orange;font-style:italic">Untested</span> Check whether a process is registered locally, and if not, spawn it with a give function and arguments.</td></tr>
 <tr><td valign="top"><a href="#starts_with-2">starts_with/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#stretch_hash-3">stretch_hash/3</a></td><td>Stretches a hash with a list of salts.</td></tr>
 <tr><td valign="top"><a href="#svn_revision-1">svn_revision/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.</td></tr>
 <tr><td valign="top"><a href="#terminate_loop-0">terminate_loop/0</a></td><td></td></tr>
 <tr><td valign="top"><a href="#test-0">test/0</a></td><td>Runs the test suite in terse form.</td></tr>
@@ -453,6 +459,12 @@ presenting the actual volume of functionality present here.  We can get the cove
   Also knows the shorthand notations <code>{X,meg}</code>, <code>{X,gig}</code> and <code>{X,t}</code> for input only in base-10 only. <pre>  5&gt; sc:bandwidth_calc({10,meg}, {gigabits,day}).
   {{gigabits,day},864.0}</pre></p>
 <p><b>Introduced in:</b> Version 478</p>
+
+<h3 class="function"><a name="bin_to_hex_list-1">bin_to_hex_list/1</a></h3>
+<div class="spec">
+<p><tt>bin_to_hex_list(Bin) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 640</p>
 
 <h3 class="function"><a name="by_distance-2">by_distance/2</a></h3>
 <div class="spec">
@@ -1406,8 +1418,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 638 2011-04-04 05:05:38Z john $"},
-   {svn_revision,"$Revision: 638 $"},
+   {svn_id,"$Id: sc.erl 642 2011-05-13 00:16:51Z john $"},
+   {svn_revision,"$Revision: 642 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -2033,6 +2045,23 @@ presenting the actual volume of functionality present here.  We can get the cove
 </div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 624</p>
 
+<h3 class="function"><a name="stretch_hash-3">stretch_hash/3</a></h3>
+<div class="spec">
+<p><tt>stretch_hash(State::<a href="#type-list_or_binary">list_or_binary()</a>, HashFun::function(), ListOfSalts::list()) -&gt; binary()</tt></p>
+</div><p>Stretches a hash with a list of salts. <pre>  1&gt; Res = sc:stretch_hash("abc", fun erlang:md5/1, ["def", "ghi", "jkl", "mno"]).
+  &lt;&lt;129,166,92,224,108,140,78,205,151,136,77,203,166,229,62,186&gt;&gt;
+ 
+  2&gt; sc:bin_to_hex_list(Res).
+  "81a65ce06c8c4ecd97884dcba6e53eba"
+ 
+  C:\projects\scutil\res&gt;php
+  &lt;?php echo md5("mno" . md5("jkl" . md5("ghi" . md5("defabc", true), true), true)); ?&gt;
+  ^Z
+  81a65ce06c8c4ecd97884dcba6e53eba</pre>
+ 
+  Thanks Josh, Davr, Vat.</p>
+<p><b>Introduced in:</b> Version 641</p>
+
 <h3 class="function"><a name="svn_revision-1">svn_revision/1</a></h3>
 <div class="spec">
 <p><tt>svn_revision(ModuleName::atom()) -&gt; integer()</tt></p>
@@ -2292,6 +2321,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Apr 10 2011, 21:42:25.</i></p>
+<p><i>Generated by EDoc, May 12 2011, 20:30:05.</i></p>
 </body>
 </html>
