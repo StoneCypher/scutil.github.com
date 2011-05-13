@@ -115,6 +115,7 @@
     circles_contact/2,
     wglsh/1,
     terminate_loop/0,
+    bin_to_hex_list/1,
 
     factorial/1,
       additive_factorial/1,
@@ -6774,3 +6775,15 @@ show(X) ->
 to_list(X) ->
 
     lists:flatten(io_lib:format("~w",[X])).
+
+
+
+
+
+%% @since Version 640
+
+bin_to_hex_list(Bin) 
+
+    when is_binary(Bin) ->
+
+    lists:flatten([ sc:byte_to_hex(Byte) || Byte <- binary_to_list(Bin) ]).
