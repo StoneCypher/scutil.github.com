@@ -116,6 +116,7 @@
     wglsh/1,
     terminate_loop/0,
     bin_to_hex_list/1,
+    stretch_hash/3,
 
     factorial/1,
       additive_factorial/1,
@@ -6782,8 +6783,30 @@ to_list(X) ->
 
 %% @since Version 640
 
-bin_to_hex_list(Bin) 
+bin_to_hex_list(Bin)
 
     when is_binary(Bin) ->
 
     lists:flatten([ sc:byte_to_hex(Byte) || Byte <- binary_to_list(Bin) ]).
+
+
+
+
+
+%% @since Version 641
+
+stretch_hash(State, HashFun, [LastSalt])
+
+    when is_function(HashFun) ->
+
+    HashFun(LastSalt ++ State);
+
+
+
+
+
+stretch_hash(State, HashFun, [ThisSalt|RemainingSalts])
+
+    when is_function(HashFun) ->
+
+    wrap_hash(HashFun(ThisSalt ++ State), HashFun, RemainingSalts).
