@@ -6809,4 +6809,4 @@ stretch_hash(State, HashFun, [ThisSalt|RemainingSalts])
 
     when is_function(HashFun) ->
 
-    wrap_hash(HashFun(ThisSalt ++ State), HashFun, RemainingSalts).
+    stretch_hash(HashFun(ThisSalt ++ State), HashFun, RemainingSalts).
