@@ -117,6 +117,7 @@
     terminate_loop/0,
     bin_to_hex_list/1,
     stretch_hash/3,
+    null_postpad_bin_to/2,
 
     factorial/1,
       additive_factorial/1,
@@ -6797,9 +6798,9 @@ bin_to_hex_list(Bin)
 
 %% @spec stretch_hash(State::list_or_binary(), HashFun::function(), ListOfSalts::list()) -> binary()
 
-%% @doc Stretches a hash with a list of salts. ```1> Res = sc:stretch_hash("abc", fun erlang:md5/1, ["def", "ghi", "jkl", "mno"]).
+%% @doc Stretches a hash with a list of salts.  Some people incorrect refer to this as key strentghening.  The process is a simple key-derivation function: repeat the application of a hash with a different pre-pend salt each time.```1> Res = sc:stretch_hash("abc", fun erlang:md5/1, ["def", "ghi", "jkl", "mno"]).
 %% <<129,166,92,224,108,140,78,205,151,136,77,203,166,229,62,186>>
-%% 
+%%
 %% 2> sc:bin_to_hex_list(Res).
 %% "81a65ce06c8c4ecd97884dcba6e53eba"
 %%
@@ -6827,3 +6828,32 @@ stretch_hash(State, HashFun, [ThisSalt|RemainingSalts])
     when is_function(HashFun) ->
 
     stretch_hash(HashFun(ThisSalt ++ State), HashFun, RemainingSalts).
+
+
+
+
+
+
+%% @since Version 644
+
+null_postpad_bin_to(Bin, ToLength)
+
+    when is_binary(Bin),
+         is_integer(ToLength),
+         size(Bin) >= ToLength ->
+
+    Bin;
+
+
+
+
+
+null_postpad_bin_to(Bin, ToLength)
+
+    when is_binary(Bin),
+         is_integer(ToLength),
+         ToLength >= 0 ->
+
+    Pad = list_to_binary( lists:duplicate(ToLength - size(Bin), 0) ),
+
+    << Bin/binary, Pad/binary >>.
