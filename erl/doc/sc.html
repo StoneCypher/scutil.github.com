@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 642 $</p>
+<p><b>Version:</b> $Revision: 644 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -227,6 +227,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#harmonic_mean-1">harmonic_mean/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Take the harmonic mean of a list of numbers.</td></tr>
 <tr><td valign="top"><a href="#hex_to_int-1">hex_to_int/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Convert a hexstring() or hexchar() into its numeric value.</td></tr>
 <tr><td valign="top"><a href="#histograph-1">histograph/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes a histograph count of the items in the list.</td></tr>
+<tr><td valign="top"><a href="#hmac-4">hmac/4</a></td><td>An implementation of <a href="http://tools.ietf.org/html/rfc2104/">RFC 2104</a>, HMAC generic hash extension for any hash function and any key size.</td></tr>
 <tr><td valign="top"><a href="#hmean_vector_normal-1">hmean_vector_normal/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the harmonic mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#implode-2">implode/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#index_of_first-2">index_of_first/2</a></td><td>Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.</td></tr>
@@ -286,6 +287,7 @@ presenting the actual volume of functionality present here.  We can get the cove
   by the naive Bayes likelihood method.</td></tr>
 <tr><td valign="top"><a href="#nearest_to-2">nearest_to/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#nth_difference-2">nth_difference/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#null_postpad_bin_to-2">null_postpad_bin_to/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#nybble_to_hex-1">nybble_to_hex/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Convert a nybble() to a hexchar().</td></tr>
 <tr><td valign="top"><a href="#paper_3d_basic_depth-4">paper_3d_basic_depth/4</a></td><td></td></tr>
 <tr><td valign="top"><a href="#paper_3d_render-1">paper_3d_render/1</a></td><td></td></tr>
@@ -1005,6 +1007,40 @@ presenting the actual volume of functionality present here.  We can get the cove
   [{0,10044}, {1,9892}, {2,10009}, {3,10016}, {4,10050}, {5,10113}, {6,9990}, {7,9994}, {8,10004}, {9,9888}]</pre></p>
 <p><b>Introduced in:</b> Version 496</p>
 
+<h3 class="function"><a name="hmac-4">hmac/4</a></h3>
+<div class="spec">
+<p><tt>hmac(HashFun, Key, Data, BlockSize) -&gt; any()</tt></p>
+</div><p><p>An implementation of <a href="http://tools.ietf.org/html/rfc2104/">RFC 2104</a>, HMAC generic hash extension for any hash function and any key size.</p>
+ 
+  <p>The reason this exists is to bring HMAC access to any hashing algorithm, as was the RFC's purpose.  There are HMAC functions in Erlang's <code>crypto:</code> module, but they are bound to specific hashers which are beginning to show their age, and they fix block size.</p>
+ 
+  <p>The block size should be at most the block size of the hashing algorithm, but may be reduced (to the detriment of the safety of the result.)  Ideally, the block size should be the same as the hashing algorithm's block size, but many systems use variously truncated block sizes, so we support them all.  Jerks.</p>
+ 
+  The key should be at least as long as the hash residue.  For example, if you're using MD5, which has 16-byte residues, the key should be at least 16 bytes.  As the specification requires, if the key is larger than the algorithm selected block size, the key will be hashed then null post-padded to the algorithm selected block size.<pre>  1&gt; sc:bin_to_hex_list(sc:hmac(fun erlang:md5/1, "hello", "world", 64)).
+  "0e2564b7e100f034341ea477c23f283b"
+ 
+  2&gt; sc:bin_to_hex_list(crypto:md5_mac("hello","world")).
+  "0e2564b7e100f034341ea477c23f283b"
+ 
+  C:\Users\John&gt;php
+  &lt;?php /* php api is reversed of erlang's */
+    echo hash_hmac('md5', 'world','hello');
+  ?&gt; ^Z
+  0e2564b7e100f034341ea477c23f283b
+ 
+  % Also, one of the RFC test sets
+ 
+  3&gt; sc:bin_to_hex_list(sc:hmac(fun erlang:md5/1, "Jefe", "what do ya want for nothing?", 64)).
+  "750c783e6ab0b503eaa86e310a5db738"
+ 
+  4&gt; sc:bin_to_hex_list(crypto:md5_mac("Jefe", "what do ya want for nothing?")).
+  "750c783e6ab0b503eaa86e310a5db738"
+ 
+  C:\Users\John&gt;php
+  &lt;?php echo hash_hmac('md5', 'what do ya want for nothing?', 'Jefe'); ?&gt; ^Z
+  750c783e6ab0b503eaa86e310a5db738</pre></p>
+<p><b>Introduced in:</b> Version 645</p>
+
 <h3 class="function"><a name="hmean_vector_normal-1">hmean_vector_normal/1</a></h3>
 <div class="spec">
 <p><tt>hmean_vector_normal(VX::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt></p>
@@ -1418,8 +1454,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 642 2011-05-13 00:16:51Z john $"},
-   {svn_revision,"$Revision: 642 $"},
+   {svn_id,"$Id: sc.erl 644 2011-05-13 01:39:59Z john $"},
+   {svn_revision,"$Revision: 644 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1511,6 +1547,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>nth_difference(N, List) -&gt; any()</tt></p>
 </div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 547</p>
+
+<h3 class="function"><a name="null_postpad_bin_to-2">null_postpad_bin_to/2</a></h3>
+<div class="spec">
+<p><tt>null_postpad_bin_to(Bin, ToLength) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 644</p>
 
 <h3 class="function"><a name="nybble_to_hex-1">nybble_to_hex/1</a></h3>
 <div class="spec">
@@ -2048,7 +2090,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="stretch_hash-3">stretch_hash/3</a></h3>
 <div class="spec">
 <p><tt>stretch_hash(State::<a href="#type-list_or_binary">list_or_binary()</a>, HashFun::function(), ListOfSalts::list()) -&gt; binary()</tt></p>
-</div><p>Stretches a hash with a list of salts. <pre>  1&gt; Res = sc:stretch_hash("abc", fun erlang:md5/1, ["def", "ghi", "jkl", "mno"]).
+</div><p>Stretches a hash with a list of salts.  Some people incorrect refer to this as key strentghening.  The process is a simple key-derivation function: repeat the application of a hash with a different pre-pend salt each time.<pre>  1&gt; Res = sc:stretch_hash("abc", fun erlang:md5/1, ["def", "ghi", "jkl", "mno"]).
   &lt;&lt;129,166,92,224,108,140,78,205,151,136,77,203,166,229,62,186&gt;&gt;
  
   2&gt; sc:bin_to_hex_list(Res).
@@ -2321,6 +2363,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, May 12 2011, 20:30:05.</i></p>
+<p><i>Generated by EDoc, May 15 2011, 13:55:03.</i></p>
 </body>
 </html>

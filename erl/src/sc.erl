@@ -118,6 +118,7 @@
     bin_to_hex_list/1,
     stretch_hash/3,
     null_postpad_bin_to/2,
+    hmac/4,
 
     factorial/1,
       additive_factorial/1,
@@ -6857,3 +6858,89 @@ null_postpad_bin_to(Bin, ToLength)
     Pad = list_to_binary( lists:duplicate(ToLength - size(Bin), 0) ),
 
     << Bin/binary, Pad/binary >>.
+
+
+
+
+
+%% @doc An implementation of <a href="http://tools.ietf.org/html/rfc2104/">RFC 2104</a>, HMAC generic hash extension for any hash function and any key size.  
+%%
+%% The reason this exists is to bring HMAC access to any hashing algorithm, as was the RFC's purpose.  There are HMAC functions in Erlang's `crypto:' module, but they are bound to specific hashers which are beginning to show their age, and they fix block size.
+%%
+%% The block size should be at most the block size of the hashing algorithm, but may be reduced (to the detriment of the safety of the result.)  Ideally, the block size should be the same as the hashing algorithm's block size, but many systems use variously truncated block sizes, so we support them all.  Jerks.
+%%
+%% The key should be at least as long as the hash residue.  For example, if you're using MD5, which has 16-byte residues, the key should be at least 16 bytes.  As the specification requires, if the key is larger than the algorithm selected block size, the key will be hashed then null post-padded to the algorithm selected block size.```1> sc:bin_to_hex_list(sc:hmac(fun erlang:md5/1, "hello", "world", 64)).
+%% "0e2564b7e100f034341ea477c23f283b"
+%%
+%% 2> sc:bin_to_hex_list(crypto:md5_mac("hello","world")).
+%% "0e2564b7e100f034341ea477c23f283b"
+%%
+%% C:\Users\John>php
+%% <?php /* php api is reversed of erlang's */
+%%   echo hash_hmac('md5', 'world','hello');
+%% ?> ^Z
+%% 0e2564b7e100f034341ea477c23f283b
+%%
+%% % Also, one of the RFC test sets
+%%
+%% 3> sc:bin_to_hex_list(sc:hmac(fun erlang:md5/1, "Jefe", "what do ya want for nothing?", 64)).
+%% "750c783e6ab0b503eaa86e310a5db738"
+%%
+%% 4> sc:bin_to_hex_list(crypto:md5_mac("Jefe", "what do ya want for nothing?")).
+%% "750c783e6ab0b503eaa86e310a5db738"
+%%
+%% C:\Users\John>php
+%% <?php echo hash_hmac('md5', 'what do ya want for nothing?', 'Jefe'); ?> ^Z
+%% 750c783e6ab0b503eaa86e310a5db738'''
+
+% % @ s ee
+
+%% @since Version 645
+
+hmac(HashFun, Key, Data, BlockSize)
+
+    when is_list(Data) ->
+
+    hmac(HashFun, Key, list_to_binary(Data), BlockSize);
+
+
+
+
+
+hmac(HashFun, Key, Data, BlockSize)
+
+    when is_list(Key) ->
+
+    hmac(HashFun, list_to_binary(Key), Data, BlockSize);
+
+
+
+
+
+hmac(HashFun, Key, Data, BlockSize) ->
+
+    K = null_postpad_bin_to(
+
+        case size(Key) > BlockSize of
+
+            true ->
+                HashFun(Key);
+
+            false ->
+                Key
+
+        end,
+
+    BlockSize),
+
+%   io:format("~n[~w]~n",[K]),
+
+    IPad = list_to_binary(lists:duplicate(BlockSize, 16#36)),
+    OPad = list_to_binary(lists:duplicate(BlockSize, 16#5C)),
+
+    IKey = crypto:exor(K, IPad),
+    MKey = HashFun(<<IKey/binary, Data/binary>>),
+
+    OKey = crypto:exor(K, OPad),
+
+    HashFun(<<OKey/binary, MKey/binary>>).
