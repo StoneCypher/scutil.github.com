@@ -87,7 +87,6 @@
     naive_bayes_likelihood/4,
     caspers_jones_estimate/1,
     range_scale/1,
-    even_or_odd/1,
     absolute_difference/2,
     mod/2,
     mersenne_prime/1,
@@ -118,6 +117,9 @@
     bin_to_hex_list/1,
     stretch_hash/3,
     null_postpad_bin_to/2,
+
+    even_or_odd/1,
+      parity/1,
 
     hmac/3,
       hmac/4,
@@ -1924,9 +1926,28 @@ median(List)
 
 
 
+%% @spec parity(Num::integer()) -> even | odd
+
+%% @equiv even_or_odd(Num)
+
+%% @doc Documentary convenience function (synonymous with even_or_odd/1) that returns the atoms `even' or `odd' for any integer. ```1> sc:parity(3).
+%% odd'''
+%%
+%% Thanks for the suggestion, Forest.
+
+%% @since Version 648
+
+parity(Num) ->
+
+    even_or_odd(Num).
+
+
+
+
+
 %% @spec even_or_odd(Num::integer()) -> even | odd
 
-%% @doc Documentary convenience function that returns the atoms `even' or `odd' for any integer. ```1> sc:even_or_odd(3).
+%% @doc Documentary convenience function (synonymous with parity/1) that returns the atoms `even' or `odd' for any integer. ```1> sc:even_or_odd(3).
 %% odd'''
 
 %% @since Version 489
@@ -2781,27 +2802,27 @@ mersenne_prime_worker(Remain, Current) ->
 
 %% since Version 513
 
-%% @doc <span style="color:orange;font-style:italic">Untested</span>
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Thanks for noticing that I was repeating sqrt unnecessarily, Forest.
 
-factorize(N) 
+factorize(N)
 
     when is_integer(N), N > 1 ->
 
-    factorize(N, 2, []);
+    factorize(N, 2, [], math:sqrt(N));
 
 
 
 
 
-factorize(1) -> 
+factorize(1) ->
 
     [1];
-    
-    
 
 
 
-factorize(0) -> 
+
+
+factorize(0) ->
 
     [].
 
@@ -2809,17 +2830,20 @@ factorize(0) ->
 
 
 
-factorize(N, Current, Work) ->
+factorize(N, Current, Work, Cap) ->
 
-    case Current > math:sqrt(N) of
+    case Current > Cap of
 
         true ->
-            lists:reverse([N] ++ Work);
+            case N of
+                1 -> lists:reverse(       Work);
+                _ -> lists:reverse([N] ++ Work)
+            end;
 
         false ->
             case N rem Current of
-                0 -> factorize(N div Current, Current,   [Current] ++ Work);
-                _ -> factorize(N,             Current+1, Work)
+                0 -> factorize(N div Current, Current,   [Current] ++ Work, Cap);
+                _ -> factorize(N,             Current+1, Work,              Cap)
             end
 
     end.
