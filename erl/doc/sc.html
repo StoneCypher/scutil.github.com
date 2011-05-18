@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 644 $</p>
+<p><b>Version:</b> $Revision: 645 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -227,7 +227,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#harmonic_mean-1">harmonic_mean/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Take the harmonic mean of a list of numbers.</td></tr>
 <tr><td valign="top"><a href="#hex_to_int-1">hex_to_int/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Convert a hexstring() or hexchar() into its numeric value.</td></tr>
 <tr><td valign="top"><a href="#histograph-1">histograph/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes a histograph count of the items in the list.</td></tr>
-<tr><td valign="top"><a href="#hmac-4">hmac/4</a></td><td>An implementation of <a href="http://tools.ietf.org/html/rfc2104/">RFC 2104</a>, HMAC generic hash extension for any hash function and any key size.</td></tr>
+<tr><td valign="top"><a href="#hmac-3">hmac/3</a></td><td><span style="color:orange;font-style:italic">Untested</span> Shorthands for algorithms so you don't need to know block sizes.</td></tr>
+<tr><td valign="top"><a href="#hmac-4">hmac/4</a></td><td><span style="color:orange;font-style:italic">Semi-Untested</span> An implementation of <a href="http://tools.ietf.org/html/rfc2104/">RFC 2104</a>, HMAC generic hash extension for any hash function and any key size.</td></tr>
 <tr><td valign="top"><a href="#hmean_vector_normal-1">hmean_vector_normal/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the harmonic mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#implode-2">implode/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#index_of_first-2">index_of_first/2</a></td><td>Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.</td></tr>
@@ -346,7 +347,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#start_register_if_not_running-4">start_register_if_not_running/4</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#start_register_if_not_running-5">start_register_if_not_running/5</a></td><td><span style="color:orange;font-style:italic">Untested</span> Check whether a process is registered locally, and if not, spawn it with a give function and arguments.</td></tr>
 <tr><td valign="top"><a href="#starts_with-2">starts_with/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
-<tr><td valign="top"><a href="#stretch_hash-3">stretch_hash/3</a></td><td>Stretches a hash with a list of salts.</td></tr>
+<tr><td valign="top"><a href="#stretch_hash-3">stretch_hash/3</a></td><td><span style="color:orange;font-style:italic">Untested</span> Stretches a hash with a list of salts.</td></tr>
 <tr><td valign="top"><a href="#svn_revision-1">svn_revision/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.</td></tr>
 <tr><td valign="top"><a href="#terminate_loop-0">terminate_loop/0</a></td><td></td></tr>
 <tr><td valign="top"><a href="#test-0">test/0</a></td><td>Runs the test suite in terse form.</td></tr>
@@ -1007,14 +1008,21 @@ presenting the actual volume of functionality present here.  We can get the cove
   [{0,10044}, {1,9892}, {2,10009}, {3,10016}, {4,10050}, {5,10113}, {6,9990}, {7,9994}, {8,10004}, {9,9888}]</pre></p>
 <p><b>Introduced in:</b> Version 496</p>
 
+<h3 class="function"><a name="hmac-3">hmac/3</a></h3>
+<div class="spec">
+<p><tt>hmac(X1, Key, Data) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span> Shorthands for algorithms so you don't need to know block sizes.</p>
+
 <h3 class="function"><a name="hmac-4">hmac/4</a></h3>
 <div class="spec">
 <p><tt>hmac(HashFun, Key, Data, BlockSize) -&gt; any()</tt></p>
-</div><p><p>An implementation of <a href="http://tools.ietf.org/html/rfc2104/">RFC 2104</a>, HMAC generic hash extension for any hash function and any key size.</p>
+</div><p><p><span style="color:orange;font-style:italic">Semi-Untested</span> An implementation of <a href="http://tools.ietf.org/html/rfc2104/">RFC 2104</a>, HMAC generic hash extension for any hash function and any key size.</p>
  
   <p>The reason this exists is to bring HMAC access to any hashing algorithm, as was the RFC's purpose.  There are HMAC functions in Erlang's <code>crypto:</code> module, but they are bound to specific hashers which are beginning to show their age, and they fix block size.</p>
  
   <p>The block size should be at most the block size of the hashing algorithm, but may be reduced (to the detriment of the safety of the result.)  Ideally, the block size should be the same as the hashing algorithm's block size, but many systems use variously truncated block sizes, so we support them all.  Jerks.</p>
+ 
+  <p>This implementation was</p>
  
   The key should be at least as long as the hash residue.  For example, if you're using MD5, which has 16-byte residues, the key should be at least 16 bytes.  As the specification requires, if the key is larger than the algorithm selected block size, the key will be hashed then null post-padded to the algorithm selected block size.<pre>  1&gt; sc:bin_to_hex_list(sc:hmac(fun erlang:md5/1, "hello", "world", 64)).
   "0e2564b7e100f034341ea477c23f283b"
@@ -1454,8 +1462,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 644 2011-05-13 01:39:59Z john $"},
-   {svn_revision,"$Revision: 644 $"},
+   {svn_id,"$Id: sc.erl 645 2011-05-15 17:55:45Z john $"},
+   {svn_revision,"$Revision: 645 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -2090,7 +2098,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="stretch_hash-3">stretch_hash/3</a></h3>
 <div class="spec">
 <p><tt>stretch_hash(State::<a href="#type-list_or_binary">list_or_binary()</a>, HashFun::function(), ListOfSalts::list()) -&gt; binary()</tt></p>
-</div><p>Stretches a hash with a list of salts.  Some people incorrect refer to this as key strentghening.  The process is a simple key-derivation function: repeat the application of a hash with a different pre-pend salt each time.<pre>  1&gt; Res = sc:stretch_hash("abc", fun erlang:md5/1, ["def", "ghi", "jkl", "mno"]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Stretches a hash with a list of salts.  Some people incorrect refer to this as key strentghening.  The process is a simple key-derivation function: repeat the application of a hash with a different pre-pend salt each time.<pre>  1&gt; Res = sc:stretch_hash("abc", fun erlang:md5/1, ["def", "ghi", "jkl", "mno"]).
   &lt;&lt;129,166,92,224,108,140,78,205,151,136,77,203,166,229,62,186&gt;&gt;
  
   2&gt; sc:bin_to_hex_list(Res).
@@ -2363,6 +2371,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, May 15 2011, 13:55:03.</i></p>
+<p><i>Generated by EDoc, May 17 2011, 21:17:16.</i></p>
 </body>
 </html>

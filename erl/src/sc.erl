@@ -118,7 +118,9 @@
     bin_to_hex_list/1,
     stretch_hash/3,
     null_postpad_bin_to/2,
-    hmac/4,
+
+    hmac/3,
+      hmac/4,
 
     factorial/1,
       additive_factorial/1,
@@ -6799,7 +6801,7 @@ bin_to_hex_list(Bin)
 
 %% @spec stretch_hash(State::list_or_binary(), HashFun::function(), ListOfSalts::list()) -> binary()
 
-%% @doc Stretches a hash with a list of salts.  Some people incorrect refer to this as key strentghening.  The process is a simple key-derivation function: repeat the application of a hash with a different pre-pend salt each time.```1> Res = sc:stretch_hash("abc", fun erlang:md5/1, ["def", "ghi", "jkl", "mno"]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Stretches a hash with a list of salts.  Some people incorrect refer to this as key strentghening.  The process is a simple key-derivation function: repeat the application of a hash with a different pre-pend salt each time.```1> Res = sc:stretch_hash("abc", fun erlang:md5/1, ["def", "ghi", "jkl", "mno"]).
 %% <<129,166,92,224,108,140,78,205,151,136,77,203,166,229,62,186>>
 %%
 %% 2> sc:bin_to_hex_list(Res).
@@ -6863,11 +6865,13 @@ null_postpad_bin_to(Bin, ToLength)
 
 
 
-%% @doc An implementation of <a href="http://tools.ietf.org/html/rfc2104/">RFC 2104</a>, HMAC generic hash extension for any hash function and any key size.  
+%% @doc <span style="color:orange;font-style:italic">Semi-Untested</span> An implementation of <a href="http://tools.ietf.org/html/rfc2104/">RFC 2104</a>, HMAC generic hash extension for any hash function and any key size.
 %%
 %% The reason this exists is to bring HMAC access to any hashing algorithm, as was the RFC's purpose.  There are HMAC functions in Erlang's `crypto:' module, but they are bound to specific hashers which are beginning to show their age, and they fix block size.
 %%
 %% The block size should be at most the block size of the hashing algorithm, but may be reduced (to the detriment of the safety of the result.)  Ideally, the block size should be the same as the hashing algorithm's block size, but many systems use variously truncated block sizes, so we support them all.  Jerks.
+%%
+%% This implementation was
 %%
 %% The key should be at least as long as the hash residue.  For example, if you're using MD5, which has 16-byte residues, the key should be at least 16 bytes.  As the specification requires, if the key is larger than the algorithm selected block size, the key will be hashed then null post-padded to the algorithm selected block size.```1> sc:bin_to_hex_list(sc:hmac(fun erlang:md5/1, "hello", "world", 64)).
 %% "0e2564b7e100f034341ea477c23f283b"
@@ -6892,8 +6896,6 @@ null_postpad_bin_to(Bin, ToLength)
 %% C:\Users\John>php
 %% <?php echo hash_hmac('md5', 'what do ya want for nothing?', 'Jefe'); ?> ^Z
 %% 750c783e6ab0b503eaa86e310a5db738'''
-
-% % @ s ee
 
 %% @since Version 645
 
@@ -6933,14 +6935,51 @@ hmac(HashFun, Key, Data, BlockSize) ->
 
     BlockSize),
 
-%   io:format("~n[~w]~n",[K]),
-
-    IPad = list_to_binary(lists:duplicate(BlockSize, 16#36)),
-    OPad = list_to_binary(lists:duplicate(BlockSize, 16#5C)),
-
-    IKey = crypto:exor(K, IPad),
+    IKey = crypto:exor(K, list_to_binary(lists:duplicate(BlockSize, 16#36))),
     MKey = HashFun(<<IKey/binary, Data/binary>>),
 
-    OKey = crypto:exor(K, OPad),
+    OKey = crypto:exor(K, list_to_binary(lists:duplicate(BlockSize, 16#5C))),
 
     HashFun(<<OKey/binary, MKey/binary>>).
+
+
+
+
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Shorthands for algorithms so you don't need to know block sizes.
+
+hmac("md4", Key, Data) ->
+
+    hmac(fun erlang:md4/1, Key, Data, 64);
+
+
+
+
+
+hmac("md5", Key, Data) ->
+
+    hmac(fun erlang:md5/1, Key, Data, 64);
+
+
+
+
+
+hmac("sha", Key, Data) ->
+
+    hmac(fun erlang:sha/1, Key, Data, 120);
+
+
+
+
+
+hmac("sha1", Key, Data) ->
+
+    hmac(fun erlang:sha/1, Key, Data, 120);
+
+
+
+
+
+hmac("sha-1", Key, Data) ->
+
+    hmac(fun erlang:sha/1, Key, Data, 120).
