@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 645 $</p>
+<p><b>Version:</b> $Revision: 646 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -229,6 +229,9 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#histograph-1">histograph/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Takes a histograph count of the items in the list.</td></tr>
 <tr><td valign="top"><a href="#hmac-3">hmac/3</a></td><td><span style="color:orange;font-style:italic">Untested</span> Shorthands for algorithms so you don't need to know block sizes.</td></tr>
 <tr><td valign="top"><a href="#hmac-4">hmac/4</a></td><td><span style="color:orange;font-style:italic">Semi-Untested</span> An implementation of <a href="http://tools.ietf.org/html/rfc2104/">RFC 2104</a>, HMAC generic hash extension for any hash function and any key size.</td></tr>
+<tr><td valign="top"><a href="#hmac_md4-2">hmac_md4/2</a></td><td><span style="color:red;font-style:italic">Obsolete - legacy support only - do not use in new code</span> <span style="color:orange;font-style:italic">Untested</span> HMAC wrapper built around MD4 as the core hash, frequently known as <code>hmac-md4</code> or <code>md4-hmac</code>.</td></tr>
+<tr><td valign="top"><a href="#hmac_md5-2">hmac_md5/2</a></td><td><span style="color:red;font-style:italic">Obsolete - legacy support only - do not use in new code</span> <span style="color:orange;font-style:italic">Untested</span> HMAC wrapper built around MD5 as the core hash, frequently known as <code>hmac-md5</code> or <code>md5-hmac</code>.</td></tr>
+<tr><td valign="top"><a href="#hmac_sha1-2">hmac_sha1/2</a></td><td>Should be obsolete, but Erlang's standard library does not include SHA-2, and neither does <code>scutil</code> (yet) - <span style="color:orange;font-style:italic">Untested</span> HMAC wrapper built around SHA1-160 (the only SHA-1) as the core hash, frequently known as <code>hmac-sha1</code>, <code>hmac-sha</code> or <code>sha1-hmac</code>.</td></tr>
 <tr><td valign="top"><a href="#hmean_vector_normal-1">hmean_vector_normal/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the harmonic mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#implode-2">implode/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#index_of_first-2">index_of_first/2</a></td><td>Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.</td></tr>
@@ -1012,6 +1015,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <div class="spec">
 <p><tt>hmac(X1, Key, Data) -&gt; any()</tt></p>
 </div><p><span style="color:orange;font-style:italic">Untested</span> Shorthands for algorithms so you don't need to know block sizes.</p>
+<p><b>Introduced in:</b> Version 646</p>
 
 <h3 class="function"><a name="hmac-4">hmac/4</a></h3>
 <div class="spec">
@@ -1048,6 +1052,24 @@ presenting the actual volume of functionality present here.  We can get the cove
   &lt;?php echo hash_hmac('md5', 'what do ya want for nothing?', 'Jefe'); ?&gt; ^Z
   750c783e6ab0b503eaa86e310a5db738</pre></p>
 <p><b>Introduced in:</b> Version 645</p>
+
+<h3 class="function"><a name="hmac_md4-2">hmac_md4/2</a></h3>
+<div class="spec">
+<p><tt>hmac_md4(Key, Data) -&gt; any()</tt></p>
+</div><p><span style="color:red;font-style:italic">Obsolete - legacy support only - do not use in new code</span> <span style="color:orange;font-style:italic">Untested</span> HMAC wrapper built around MD4 as the core hash, frequently known as <code>hmac-md4</code> or <code>md4-hmac</code>.</p>
+<p><b>Introduced in:</b> Version 647</p>
+
+<h3 class="function"><a name="hmac_md5-2">hmac_md5/2</a></h3>
+<div class="spec">
+<p><tt>hmac_md5(Key, Data) -&gt; any()</tt></p>
+</div><p><span style="color:red;font-style:italic">Obsolete - legacy support only - do not use in new code</span> <span style="color:orange;font-style:italic">Untested</span> HMAC wrapper built around MD5 as the core hash, frequently known as <code>hmac-md5</code> or <code>md5-hmac</code>.</p>
+<p><b>Introduced in:</b> Version 647</p>
+
+<h3 class="function"><a name="hmac_sha1-2">hmac_sha1/2</a></h3>
+<div class="spec">
+<p><tt>hmac_sha1(Key, Data) -&gt; any()</tt></p>
+</div><p>Should be obsolete, but Erlang's standard library does not include SHA-2, and neither does <code>scutil</code> (yet) - <span style="color:orange;font-style:italic">Untested</span> HMAC wrapper built around SHA1-160 (the only SHA-1) as the core hash, frequently known as <code>hmac-sha1</code>, <code>hmac-sha</code> or <code>sha1-hmac</code>.</p>
+<p><b>Introduced in:</b> Version 647</p>
 
 <h3 class="function"><a name="hmean_vector_normal-1">hmean_vector_normal/1</a></h3>
 <div class="spec">
@@ -1462,8 +1484,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 645 2011-05-15 17:55:45Z john $"},
-   {svn_revision,"$Revision: 645 $"},
+   {svn_id,"$Id: sc.erl 646 2011-05-18 01:18:59Z john $"},
+   {svn_revision,"$Revision: 646 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -2371,6 +2393,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, May 17 2011, 21:17:16.</i></p>
+<p><i>Generated by EDoc, May 17 2011, 21:32:07.</i></p>
 </body>
 </html>

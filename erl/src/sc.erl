@@ -121,6 +121,9 @@
 
     hmac/3,
       hmac/4,
+      hmac_md4/2,
+      hmac_md5/2,
+      hmac_sha1/2,
 
     factorial/1,
       additive_factorial/1,
@@ -6948,6 +6951,8 @@ hmac(HashFun, Key, Data, BlockSize) ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span> Shorthands for algorithms so you don't need to know block sizes.
 
+%% @since Version 646
+
 hmac("md4", Key, Data) ->
 
     hmac(fun erlang:md4/1, Key, Data, 64);
@@ -6958,7 +6963,7 @@ hmac("md4", Key, Data) ->
 
 hmac("md5", Key, Data) ->
 
-    hmac(fun erlang:md5/1, Key, Data, 64);
+    hmac_md5(Key, Data);
 
 
 
@@ -6966,7 +6971,7 @@ hmac("md5", Key, Data) ->
 
 hmac("sha", Key, Data) ->
 
-    hmac(fun erlang:sha/1, Key, Data, 120);
+    hmac_sha1(Key, Data);
 
 
 
@@ -6974,7 +6979,7 @@ hmac("sha", Key, Data) ->
 
 hmac("sha1", Key, Data) ->
 
-    hmac(fun erlang:sha/1, Key, Data, 120);
+    hmac_sha1(Key, Data);
 
 
 
@@ -6982,4 +6987,39 @@ hmac("sha1", Key, Data) ->
 
 hmac("sha-1", Key, Data) ->
 
-    hmac(fun erlang:sha/1, Key, Data, 120).
+    hmac_sha1(Key, Data).
+
+
+
+
+%% @doc <span style="color:red;font-style:italic">Obsolete - legacy support only - do not use in new code</span> <span style="color:orange;font-style:italic">Untested</span> HMAC wrapper built around MD4 as the core hash, frequently known as `hmac-md4' or `md4-hmac'.
+
+%% @since Version 647
+
+hmac_md4(Key, Data) ->
+
+    hmac(fun crypto:md4/1, Key, Data, 64).
+
+
+
+
+
+%% @doc <span style="color:red;font-style:italic">Obsolete - legacy support only - do not use in new code</span> <span style="color:orange;font-style:italic">Untested</span> HMAC wrapper built around MD5 as the core hash, frequently known as `hmac-md5' or `md5-hmac'.
+
+%% @since Version 647
+
+hmac_md5(Key, Data) ->
+
+    hmac(fun erlang:md5/1, Key, Data, 64).
+
+
+
+
+
+%% @doc Should be obsolete, but Erlang's standard library does not include SHA-2, and neither does `scutil' (yet) - <span style="color:orange;font-style:italic">Untested</span> HMAC wrapper built around SHA1-160 (the only SHA-1) as the core hash, frequently known as `hmac-sha1', `hmac-sha' or `sha1-hmac'.
+
+%% @since Version 647
+
+hmac_sha1(Key, Data) ->
+
+    hmac(fun crypto:sha/1, Key, Data, 120).
