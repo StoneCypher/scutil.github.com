@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 647 $</p>
+<p><b>Version:</b> $Revision: 648 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -167,7 +167,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#bandwidth_calc-1">bandwidth_calc/1</a></td><td>Equivalent to <a href="#bandwidth_calc-2"><tt>bandwidth_calc(Data, all)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#bandwidth_calc-2">bandwidth_calc/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculates digital line bandwidth over timescales in converted units.</td></tr>
-<tr><td valign="top"><a href="#bin_to_hex_list-1">bin_to_hex_list/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#bin_to_hex_list-1">bin_to_hex_list/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#by_distance-2">by_distance/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#by_distance_raw-2">by_distance_raw/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#byte_to_hex-1">byte_to_hex/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Convert a byte() into a hexstring().</td></tr>
@@ -179,9 +179,9 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#central_moments-1">central_moments/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#central_moments-2">central_moments/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#centroid-1">centroid/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculates the coordinate which represents the per-axis arithmetic mean of a set of points.</td></tr>
-<tr><td valign="top"><a href="#circ_within_origin_circ-2">circ_within_origin_circ/2</a></td><td></td></tr>
-<tr><td valign="top"><a href="#circles_contact-2">circles_contact/2</a></td><td></td></tr>
-<tr><td valign="top"><a href="#circles_overlap-2">circles_overlap/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#circ_within_origin_circ-2">circ_within_origin_circ/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#circles_contact-2">circles_contact/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#circles_overlap-2">circles_overlap/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#combinations-2">combinations/2</a></td><td>Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#count_of-2">count_of/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Counts the number of instances of Item in List.</td></tr>
 <tr><td valign="top"><a href="#cube-1">cube/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
@@ -208,7 +208,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#extended_dstat-2">extended_dstat/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#extrema-1">extrema/1</a></td><td>Returns the lowest and highest values in a list of one or more member in the form <code>{Lo,Hi}</code>.</td></tr>
 <tr><td valign="top"><a href="#factorial-1">factorial/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
-<tr><td valign="top"><a href="#factorize-1">factorize/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Thanks for noticing that I was repeating sqrt unnecessarily, Forest.</td></tr>
+<tr><td valign="top"><a href="#factorize-1">factorize/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Generates a list of the factors of an integer.</td></tr>
 <tr><td valign="top"><a href="#first_difference-1">first_difference/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#first_pos-2">first_pos/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns false if none pass.</td></tr>
 <tr><td valign="top"><a href="#first_pos-3">first_pos/3</a></td><td><span style="color:orange;font-style:italic">Untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns a default value if none is found.</td></tr>
@@ -234,6 +234,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#hmac_sha1-2">hmac_sha1/2</a></td><td>Should be obsolete, but Erlang's standard library does not include SHA-2, and neither does <code>scutil</code> (yet) - <span style="color:orange;font-style:italic">Untested</span> HMAC wrapper built around SHA1-160 (the only SHA-1) as the core hash, frequently known as <code>hmac-sha1</code>, <code>hmac-sha</code> or <code>sha1-hmac</code>.</td></tr>
 <tr><td valign="top"><a href="#hmean_vector_normal-1">hmean_vector_normal/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the harmonic mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#implode-2">implode/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#in_range-3">in_range/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#index_of_first-2">index_of_first/2</a></td><td>Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.</td></tr>
 <tr><td valign="top"><a href="#integer_to_radix_list-2">integer_to_radix_list/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Convert a number to a radix string using a radix list of your specification and any size.</td></tr>
 <tr><td valign="top"><a href="#io_list_to_hex_string-1">io_list_to_hex_string/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Convert an io_list() to a hexstring().</td></tr>
@@ -293,11 +294,11 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#nth_difference-2">nth_difference/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#null_postpad_bin_to-2">null_postpad_bin_to/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#nybble_to_hex-1">nybble_to_hex/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Convert a nybble() to a hexchar().</td></tr>
-<tr><td valign="top"><a href="#paper_3d_basic_depth-4">paper_3d_basic_depth/4</a></td><td></td></tr>
-<tr><td valign="top"><a href="#paper_3d_render-1">paper_3d_render/1</a></td><td></td></tr>
-<tr><td valign="top"><a href="#paper_3d_render-2">paper_3d_render/2</a></td><td></td></tr>
-<tr><td valign="top"><a href="#paper_3d_render-3">paper_3d_render/3</a></td><td></td></tr>
-<tr><td valign="top"><a href="#paper_3d_render-4">paper_3d_render/4</a></td><td></td></tr>
+<tr><td valign="top"><a href="#paper_3d_basic_depth-4">paper_3d_basic_depth/4</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#paper_3d_render-1">paper_3d_render/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#paper_3d_render-2">paper_3d_render/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#paper_3d_render-3">paper_3d_render/3</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#paper_3d_render-4">paper_3d_render/4</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#parity-1">parity/1</a></td><td>Documentary convenience function (synonymous with even_or_odd/1) that returns the atoms <code>even</code> or <code>odd</code> for any integer.</td></tr>
 <tr><td valign="top"><a href="#partition_by_residue-2">partition_by_residue/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#pearson_correlation-1">pearson_correlation/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Compute the Pearson Correlation Coefficient of a list of coordinate tuples.</td></tr>
@@ -335,7 +336,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#shared_keys-1">shared_keys/1</a></td><td>Create sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples, where key K appears in both A and B.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-2">shared_keys/2</a></td><td>Equivalent to <a href="#shared_keys-1"><code>shared_keys/1</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-3">shared_keys/3</a></td><td>Equivalent to <a href="#shared_keys-2"><code>shared_keys/2</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
-<tr><td valign="top"><a href="#show-1">show/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#show-1">show/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#shuffle-1">shuffle/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Return a list with the original list's shallow members in a random order.</td></tr>
 <tr><td valign="top"><a href="#simple_ranking-1">simple_ranking/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns a ranked ordering of the list without tie rankings.</td></tr>
 <tr><td valign="top"><a href="#skewness-1">skewness/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
@@ -353,15 +354,15 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#starts_with-2">starts_with/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#stretch_hash-3">stretch_hash/3</a></td><td><span style="color:orange;font-style:italic">Untested</span> Stretches a hash with a list of salts.</td></tr>
 <tr><td valign="top"><a href="#svn_revision-1">svn_revision/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.</td></tr>
-<tr><td valign="top"><a href="#terminate_loop-0">terminate_loop/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#terminate_loop-0">terminate_loop/0</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#test-0">test/0</a></td><td>Runs the test suite in terse form.</td></tr>
 <tr><td valign="top"><a href="#test-1">test/1</a></td><td>Runs the test suite in verbose form.</td></tr>
 <tr><td valign="top"><a href="#third_difference-1">third_difference/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#tied_ordered_ranking-1">tied_ordered_ranking/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns a tied ranked ordering of the list, ordered according to the input ordering rather than the sorted ordering.</td></tr>
 <tr><td valign="top"><a href="#tied_ranking-1">tied_ranking/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns a ranked ordering of the list with tie rankings.</td></tr>
-<tr><td valign="top"><a href="#to_list-1">to_list/1</a></td><td></td></tr>
-<tr><td valign="top"><a href="#triangle_index-1">triangle_index/1</a></td><td></td></tr>
-<tr><td valign="top"><a href="#triangle_index-2">triangle_index/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#to_list-1">to_list/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#triangle_index-1">triangle_index/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#triangle_index-2">triangle_index/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#tuple_member-2">tuple_member/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Checks whether E is a member element of tuple T, analogous to <code>lists::member(E, L)</code>.</td></tr>
 <tr><td valign="top"><a href="#tuple_sort-1">tuple_sort/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#tuple_sum-1">tuple_sum/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero.</td></tr>
@@ -470,7 +471,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="bin_to_hex_list-1">bin_to_hex_list/1</a></h3>
 <div class="spec">
 <p><tt>bin_to_hex_list(Bin) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 640</p>
 
 <h3 class="function"><a name="by_distance-2">by_distance/2</a></h3>
@@ -565,17 +566,17 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="circ_within_origin_circ-2">circ_within_origin_circ/2</a></h3>
 <div class="spec">
 <p><tt>circ_within_origin_circ(X1, X2) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 
 <h3 class="function"><a name="circles_contact-2">circles_contact/2</a></h3>
 <div class="spec">
 <p><tt>circles_contact(X1, X2) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 
 <h3 class="function"><a name="circles_overlap-2">circles_overlap/2</a></h3>
 <div class="spec">
 <p><tt>circles_overlap(X1, X2) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 
 <h3 class="function"><a name="combinations-2">combinations/2</a></h3>
 <div class="spec">
@@ -839,7 +840,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="factorize-1">factorize/1</a></h3>
 <div class="spec">
 <p><tt>factorize(N) -&gt; any()</tt></p>
-</div><p><span style="color:orange;font-style:italic">Untested</span> Thanks for noticing that I was repeating sqrt unnecessarily, Forest.</p>
+</div><p><span style="color:orange;font-style:italic">Untested</span> Generates a list of the factors of an integer.  Not an awesome implementation.  Thanks for noticing that I was repeating sqrt unnecessarily, Forest.</p>
 
 <h3 class="function"><a name="first_difference-1">first_difference/1</a></h3>
 <div class="spec">
@@ -1083,6 +1084,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>implode(Separator, Data) -&gt; any()</tt></p>
 </div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 621</p>
+
+<h3 class="function"><a name="in_range-3">in_range/3</a></h3>
+<div class="spec">
+<p><tt>in_range(List, Lo, Hi) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 649</p>
 
 <h3 class="function"><a name="index_of_first-2">index_of_first/2</a></h3>
 <div class="spec">
@@ -1485,8 +1492,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 647 2011-05-18 01:33:50Z john $"},
-   {svn_revision,"$Revision: 647 $"},
+   {svn_id,"$Id: sc.erl 648 2011-05-18 01:49:55Z john $"},
+   {svn_revision,"$Revision: 648 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1598,31 +1605,31 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="paper_3d_basic_depth-4">paper_3d_basic_depth/4</a></h3>
 <div class="spec">
 <p><tt>paper_3d_basic_depth(X, Z, SliderPos, DepthConstant) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 633</p>
 
 <h3 class="function"><a name="paper_3d_render-1">paper_3d_render/1</a></h3>
 <div class="spec">
 <p><tt>paper_3d_render(Bitmap3dList) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 634</p>
 
 <h3 class="function"><a name="paper_3d_render-2">paper_3d_render/2</a></h3>
 <div class="spec">
 <p><tt>paper_3d_render(Bitmap3dList, DepthConstant) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 634</p>
 
 <h3 class="function"><a name="paper_3d_render-3">paper_3d_render/3</a></h3>
 <div class="spec">
 <p><tt>paper_3d_render(Bitmap3dList, SliderPos, DepthConstant) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 634</p>
 
 <h3 class="function"><a name="paper_3d_render-4">paper_3d_render/4</a></h3>
 <div class="spec">
 <p><tt>paper_3d_render(Bitmap3dList, SliderPos, DepthConstant, DepthFun) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 634</p>
 
 <h3 class="function"><a name="parity-1">parity/1</a></h3>
@@ -1967,7 +1974,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="show-1">show/1</a></h3>
 <div class="spec">
 <p><tt>show(X) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 637</p>
 
 <h3 class="function"><a name="shuffle-1">shuffle/1</a></h3>
@@ -2155,7 +2162,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="terminate_loop-0">terminate_loop/0</a></h3>
 <div class="spec">
 <p><tt>terminate_loop() -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 636</p>
 
 <h3 class="function"><a name="test-0">test/0</a></h3>
@@ -2239,19 +2246,19 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="to_list-1">to_list/1</a></h3>
 <div class="spec">
 <p><tt>to_list(X) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 638</p>
 
 <h3 class="function"><a name="triangle_index-1">triangle_index/1</a></h3>
 <div class="spec">
 <p><tt>triangle_index(X) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 632</p>
 
 <h3 class="function"><a name="triangle_index-2">triangle_index/2</a></h3>
 <div class="spec">
 <p><tt>triangle_index(X1, Y) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 632</p>
 
 <h3 class="function"><a name="tuple_member-2">tuple_member/2</a></h3>
@@ -2404,6 +2411,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, May 17 2011, 21:49:40.</i></p>
+<p><i>Generated by EDoc, May 19 2011, 21:49:11.</i></p>
 </body>
 </html>

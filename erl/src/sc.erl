@@ -118,6 +118,8 @@
     stretch_hash/3,
     null_postpad_bin_to/2,
 
+    in_range/3,
+
     even_or_odd/1,
       parity/1,
 
@@ -2590,7 +2592,7 @@ factorial(X) ->
 
 factorial(0, _Counter) ->
 
-    0;
+    1;
 
 
 
@@ -2802,7 +2804,7 @@ mersenne_prime_worker(Remain, Current) ->
 
 %% since Version 513
 
-%% @doc <span style="color:orange;font-style:italic">Untested</span> Thanks for noticing that I was repeating sqrt unnecessarily, Forest.
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Generates a list of the factors of an integer.  Not an awesome implementation.  Thanks for noticing that I was repeating sqrt unnecessarily, Forest.
 
 factorize(N)
 
@@ -2824,7 +2826,7 @@ factorize(1) ->
 
 factorize(0) ->
 
-    [].
+    {error, "The factorization of 0 is undefined."}.
 
 
 
@@ -6605,6 +6607,8 @@ sanitize_filename(Filename) ->
 
 % todo comeback
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 circ_within_origin_circ({sc_circle, OX, OY, OR}, {sc_circle, CX, CY, CR}) ->
 
     (sc:euclidean_distance({OX,OY}, {CX,CY}) + CR) =< OR.
@@ -6613,6 +6617,8 @@ circ_within_origin_circ({sc_circle, OX, OY, OR}, {sc_circle, CX, CY, CR}) ->
 
 
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 circles_overlap({sc_circle, AX, AY, AR}, {sc_circle, BX, BY, BR}) ->
 
     sc:euclidean_distance({AX,AY}, {BX,BY}) < (AR+BR).
@@ -6620,6 +6626,8 @@ circles_overlap({sc_circle, AX, AY, AR}, {sc_circle, BX, BY, BR}) ->
 
 
 
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 circles_contact({sc_circle, AX, AY, AR}, {sc_circle, BX, BY, BR}) ->
 
@@ -6635,6 +6643,8 @@ circles_contact({sc_circle, AX, AY, AR}, {sc_circle, BX, BY, BR}) ->
 
 %% @since Version 632
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 wglsh(List) when is_list(List) ->
 
     [ case Ch of $a->$w;$A->$W; $e->$g;$E->$G; $i->$w;$I->$W; $o->$w;$O->$W; $u->$w;$U->$W; Z -> Z end || Ch <- List ].
@@ -6645,6 +6655,8 @@ wglsh(List) when is_list(List) ->
 
 %% @since Version 632
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 triangle_index(X) ->
 
     triangle_index(X,X).
@@ -6654,6 +6666,8 @@ triangle_index(X) ->
 
 
 %% @since Version 632
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 triangle_index(X1, Y)
 
@@ -6718,6 +6732,8 @@ triangle_index(LX, LY)
 
 %% @since Version 633
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 paper_3d_basic_depth(X, Z, SliderPos, DepthConstant) when Z > 0 ->
 
     {(X - (SliderPos * DepthConstant) )/Z, (X + (SliderPos * DepthConstant) )/Z}.
@@ -6727,6 +6743,8 @@ paper_3d_basic_depth(X, Z, SliderPos, DepthConstant) when Z > 0 ->
 
 
 %% @since Version 634
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 paper_3d_render(Bitmap3dList) ->
 
@@ -6738,6 +6756,8 @@ paper_3d_render(Bitmap3dList) ->
 
 %% @since Version 634
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 paper_3d_render(Bitmap3dList, DepthConstant) ->
 
     paper_3d_render(Bitmap3dList, 1.0, DepthConstant, fun paper_3d_basic_depth/4).
@@ -6748,6 +6768,8 @@ paper_3d_render(Bitmap3dList, DepthConstant) ->
 
 %% @since Version 634
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 paper_3d_render(Bitmap3dList, SliderPos, DepthConstant) ->
 
     paper_3d_render(Bitmap3dList, SliderPos, DepthConstant, fun paper_3d_basic_depth/4).
@@ -6757,6 +6779,8 @@ paper_3d_render(Bitmap3dList, SliderPos, DepthConstant) ->
 
 
 %% @since Version 634
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 paper_3d_render(Bitmap3dList, SliderPos, DepthConstant, DepthFun) ->
 
@@ -6771,6 +6795,8 @@ paper_3d_render(Bitmap3dList, SliderPos, DepthConstant, DepthFun) ->
 
 
 %% @since Version 636
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 terminate_loop() ->
 
@@ -6794,6 +6820,8 @@ terminate_loop() ->
 
 %% @since Version 637
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 show(X) ->
 
     io:format("~w~n",[X]).
@@ -6804,6 +6832,8 @@ show(X) ->
 
 %% @since Version 638
 
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
+
 to_list(X) ->
 
     lists:flatten(io_lib:format("~w",[X])).
@@ -6813,6 +6843,8 @@ to_list(X) ->
 
 
 %% @since Version 640
+
+%% @doc <span style="color:orange;font-style:italic">Untested</span>
 
 bin_to_hex_list(Bin)
 
@@ -7047,3 +7079,32 @@ hmac_md5(Key, Data) ->
 hmac_sha1(Key, Data) ->
 
     hmac(fun crypto:sha/1, Key, Data, 120).
+
+
+
+
+
+% % @s ince Version 651
+
+% % @d oc <span style="color:orange;font-style:italic">Untested</span> Thanks for the idea and implementation, Forest.
+
+% probability_all(ListOfProbabilities) when is_list(ListOfProbabilities) ->
+
+%    list_product(ListOfProbabili
+
+
+
+
+% probability_each
+% in_range
+% out_of_range
+
+
+
+
+
+%% @since Version 649
+
+in_range(List, Lo, Hi) ->
+
+    [ I || I <- List, I =< Hi, I >= Lo ].
