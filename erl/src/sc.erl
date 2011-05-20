@@ -119,6 +119,7 @@
     null_postpad_bin_to/2,
 
     in_range/3,
+      out_of_range/3,
 
     even_or_odd/1,
       parity/1,
@@ -7097,7 +7098,6 @@ hmac_sha1(Key, Data) ->
 
 % probability_each
 % in_range
-% out_of_range
 
 
 
@@ -7108,3 +7108,13 @@ hmac_sha1(Key, Data) ->
 in_range(List, Lo, Hi) ->
 
     [ I || I <- List, I =< Hi, I >= Lo ].
+
+
+
+
+
+%% @since Version 650
+
+out_of_range(List, Lo, Hi) ->
+
+    [ I || I <- List, I > Hi orelse I < Lo ].
