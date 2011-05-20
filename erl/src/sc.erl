@@ -117,6 +117,8 @@
     bin_to_hex_list/1,
     stretch_hash/3,
     null_postpad_bin_to/2,
+    
+    probability_all/1,
 
     in_range/3,
       out_of_range/3,
@@ -7085,13 +7087,36 @@ hmac_sha1(Key, Data) ->
 
 
 
-% % @s ince Version 651
+%% @since Version 651
 
-% % @d oc <span style="color:orange;font-style:italic">Untested</span> Thanks for the idea and implementation, Forest.
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Calculates the likelihood that all items in a list of probabilities expressed on the real interval will occur.  ```1> sc:probability_all([ 0.5, 0.4, 0.3 ]).
+%% 0.06
+%% 2> sc:probability_all([ 0.5, 0.5, 0.5 ]).
+%% 0.125
+%% 3> sc:probability_all([ 0.9, 0.9, 0.9, 0.9, 0.9 ]).
+%% 0.5904900000000002'''
+%%
+%%  Notice the accumulated float rounding error.
+%%
+%%  And then, a probability result which surprises most people: ```4> sc:probability_all([ 0.8, 0.8, 0.8, 0.8, 0.8, 0.8 ]).
+%% 0.2621440000000001'''
+%%
+%% That's right, six 0.8s is 1 in 4.  Do the math.
+%%
+%% Thanks for the idea, Forest.
 
-% probability_all(ListOfProbabilities) when is_list(ListOfProbabilities) ->
 
-%    list_product(ListOfProbabili
+probability_all(ListOfProbabilities) when is_list(ListOfProbabilities) ->
+
+    case out_of_range(ListOfProbabilities, 0, 1) of
+
+        [] ->
+            list_product(ListOfProbabilities);
+
+        _AnythingElse ->
+            { error, "All members of the list of probabilities must be numbers on the interval [0,1] inclusive." }
+
+    end.
 
 
 
