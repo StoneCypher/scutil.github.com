@@ -117,8 +117,13 @@
     bin_to_hex_list/1,
     stretch_hash/3,
     null_postpad_bin_to/2,
-    
+    ascii_alphanum_list_subset/1,
+
+    ngrams/1,
+      ngrams/2,
+
     probability_all/1,
+      probability_any/1,
 
     in_range/3,
       out_of_range/3,
@@ -246,6 +251,8 @@
       third_difference/1,
       nth_difference/2,
 
+%    find_difference_sequence/1,
+
     elements/2,
       elements/3,
       elements/4,
@@ -297,6 +304,7 @@
 
     is_sorted_list/1,
       is_unique_list/1,
+      is_repeated_list/1,
 
     floor/1,
       ceil/1,
@@ -307,7 +315,7 @@
 %     nth_root/2,    % comeback todo
 
     dstat/2,
-      extended_dstat/2,
+      dstat_ex/2,
 
     moment/2,
       moments/1,
@@ -495,16 +503,6 @@ test([verbose]=_Style) ->
 %% 2> sc:extrema([1,2,3,a,b,c]).
 %% {1,c}'''
 %% @since Version 460
-
-% todo comeback
-
-% extrema([]) ->
-
-%     error(badarg);
-
-
-
-
 
 extrema(List) ->
 
@@ -971,7 +969,7 @@ zip_n(Ls) ->
 %% 2> sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii], [x,y,z], [red,blue,green], [april,may,june] ]).
 %% [{1,a,i,x,red,april},
 %%  {2,b,ii,y,blue,may},
-%%  {3,c,iii,z,green,june}]
+%%  {3,c,iii,z,green,june}]'''
 %%
 %% This is actually more efficient than one might expect at first glance.  I ran a benchmark of 100,000 transformations of a list of lists into a list of tuples using {@link benchmark/3} and {@link multi_do/4} against both zip_n and the library function zip3; the library function won at 150 seconds to 175, which is a far smaller difference than I expected.```3> Testy = [ [1,2,3], [1,2,3], [1,2,3] ].
 %% [[1,2,3],[1,2,3],[1,2,3]]
@@ -1060,13 +1058,18 @@ zip_n_foldn(Fun, Acc0, Ls, Ret) ->
 %% @spec combinations(OutputItemSize::positive_integer(), Items::list()) -> list_of_lists()
 
 %% @doc Provides a list of every unique combination of input terms, order-ignorant; contrast {@link permute/2}.  Permutations are all unique combinations of a set of tokens; the 2-permutations of `[a,b,c]' for example are `[a,b]', `[a,c]' and `[b,c]'.  Note the absence of other orderings, such as `[b,a]', which are provided by {@link permute/2}.  Combinations are taken of a smaller count of tokens than the main set.  Combinations are not ordered, but this implementation happens to provide answers in the same order as the input list.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> sc:combinations(2, [a,b,c,d]).
-%% [[a,b],[a,c],[a,d],[b,c],[b,d],[c,d]]
+%% [ [a,b], [a,c], [a,d], [b,c], [b,d], [c,d] ]
 %%
 %% 2> sc:combinations(2, ["dave","kate","pat"]).
-%% [["dave","kate"],["dave","pat"],["kate","pat"]]
+%% [ ["dave","kate"], ["dave","pat"], ["kate","pat"] ]
 %%
 %% 3> sc:combinations(2, [fast, strong, smart, lucky]).
-%% [[fast,strong], [fast,smart], [fast,lucky], [strong,smart], [strong,lucky], [smart,lucky]]''' {@section Thanks} to Alisdair Sullivan for this implementation, which has been slightly but not significantly modified since receipt.
+%% [ [ fast,   strong ],
+%%   [ fast,   smart  ],
+%%   [ fast,   lucky  ],
+%%   [ strong, smart  ],
+%%   [ strong, lucky  ],
+%%   [ smart,  lucky  ] ]''' {@section Thanks} to Alisdair Sullivan for this implementation, which has been slightly but not significantly modified since receipt.
 
 %% @since Version 473
 
@@ -1165,10 +1168,26 @@ permute(List) ->
 %% @spec permute(List::list(), Depth::positive_integer()) -> list()
 
 %% @doc Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast {@link combinations/2}.  Permutations are all valid orderings of a set of tokens; the permutations of `[a,b]' for example are `[a,b]' and `[b,a]'.  Depth limitation means the permutations of a smaller count of tokens from the main set; the 2-limited permutations of `[a,b,c]' for example are `[a,b]', `[a,c]', `[b,a]', `[b,c]', `[c,a]' and `[c,b]'.  Permutations are not ordered.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> sc:permute(["dave","kate","pat"]).
-%% [{"pat","kate","dave"}, {"kate","pat","dave"}, {"pat","dave","kate"}, {"dave","pat","kate"}, {"kate","dave","pat"}, {"dave","kate","pat"}]
+%% [ { "pat",  "kate", "dave" },
+%%   { "kate", "pat",  "dave" },
+%%   { "pat",  "dave", "kate" },
+%%   { "dave", "pat",  "kate" },
+%%   { "kate", "dave", "pat"  },
+%%   { "dave", "kate", "pat"  } ]
 %%
 %% 2> sc:permute([fast, strong, smart, lucky], 2).
-%% [{strong,fast}, {smart,fast}, {lucky,fast}, {fast,strong}, {smart,strong}, {lucky,strong}, {fast,smart}, {strong,smart}, {lucky,smart}, {fast,lucky}, {strong,lucky}, {smart,lucky}]'''
+%% [ { strong, fast   },
+%%   { smart,  fast   },
+%%   { lucky,  fast   },
+%%   { fast,   strong },
+%%   { smart,  strong },
+%%   { lucky,  strong },
+%%   { fast,   smart  },
+%%   { strong, smart  },
+%%   { lucky,  smart  },
+%%   { fast,   lucky  },
+%%   { strong, lucky  },
+%%   { smart,  lucky  } ]'''
 
 %% @since Version 474
 
@@ -1504,8 +1523,6 @@ bandwidth_calc(BitsPerSecond, {Unit, Timeframe})
 
 
 
-
-% todo comeback Expose?
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
@@ -1878,7 +1895,7 @@ dstat(NumericList, PopulationOrSample) ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-extended_dstat(NumericList, PopulationOrSample) ->
+dstat_ex(NumericList, PopulationOrSample) ->
 
     { Min, Max } = extrema(NumericList),
 
@@ -2186,7 +2203,28 @@ kurtosis(List) ->
 %% [{1,4},{2,5},{a,2},{b,3}]
 %%
 %% 2> sc:histograph([ sc:rand(10) || X <- lists:seq(1,100000) ]).
-%% [{0,10044}, {1,9892}, {2,10009}, {3,10016}, {4,10050}, {5,10113}, {6,9990}, {7,9994}, {8,10004}, {9,9888}]'''
+%% [{0,10044}, {1,9892}, {2,10009}, {3,10016}, {4,10050}, {5,10113}, {6,9990}, {7,9994}, {8,10004}, {9,9888}]
+%%
+%% 3> ChessBoard = [ rook,  knight, bishop, king,  queen, bishop, knight, rook,
+%%                   pawn,  pawn,   pawn,   pawn,  pawn,  pawn,   pawn,   pawn,
+%%                   empty, empty,  empty,  empty, empty, empty,  empty,  empty,
+%%                   empty, empty,  empty,  empty, empty, empty,  empty,  empty,
+%%                   empty, empty,  empty,  empty, empty, empty,  empty,  empty,
+%%                   empty, empty,  empty,  empty, empty, empty,  empty,  empty,
+%%                   pawn,  pawn,   pawn,   pawn,  pawn,  pawn,   pawn,   pawn,
+%%                   rook,  knight, bishop, king,  queen, bishop, knight, rook ].
+%% [rook,knight,bishop,king,queen,bishop,knight,rook,pawn,pawn,
+%%  pawn,pawn,pawn,pawn,pawn,pawn,empty,empty,empty,empty,empty,
+%%  empty,empty,empty,empty,empty,empty,empty,empty|...]
+%%
+%% 4> sc:histograph(ChessBoard).
+%% [ { bishop, 4  },
+%%   { empty,  32 },
+%%   { king,   2  },
+%%   { knight, 4  },
+%%   { pawn,   16 },
+%%   { queen,  2  },
+%%   { rook,   4  } ]'''
 
 %% @since Version 496
 
@@ -2443,7 +2481,16 @@ expected_value( [ UnweightedItem | Remainder], Sum, Range) ->
 %% @spec absolute_difference(A::number(), B::number()) -> number()
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span> Takes the absolute value of the difference between the two arguments.  Offered mostly to make dependant code clearer. ```1> sc:absolute_difference(1.25, 1).
-%% 0.25'''
+%% 0.25
+%%
+%% 2> sc:absolute_difference(2,1).
+%% 1
+%% 3> sc:absolute_difference(1,2).
+%% 1
+%% 4> sc:absolute_difference(1,1).
+%% 0
+%% 5> sc:absolute_difference(100,35).
+%% 65'''
 
 %% @since Version 504
 
@@ -4130,10 +4177,10 @@ elements_worker(Retlist, Config, Requested, KeyIdx, strip) ->
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-differences(List) 
+differences(List)
 
-    when is_list(List), 
-         length(List) > 2 ->
+    when is_list(List),
+         length(List) >= 2 ->
 
     [ B-A || {A,B} <- all_neighbor_pairs(List) ].
 
@@ -4145,10 +4192,10 @@ differences(List)
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-first_difference(List) 
+first_difference(List)
 
-    when is_list(List), 
-         length(List) > 2 ->
+    when is_list(List),
+         length(List) >= 2 ->
 
     differences(List).
 
@@ -4160,10 +4207,10 @@ first_difference(List)
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-second_difference(List) 
+second_difference(List)
 
-    when is_list(List), 
-         length(List) > 3 ->
+    when is_list(List),
+         length(List) >= 3 ->
 
     differences(differences(List)).
 
@@ -4175,10 +4222,10 @@ second_difference(List)
 
 %% @doc <span style="color:orange;font-style:italic">Untested</span>
 
-third_difference(List) 
+third_difference(List)
 
-    when is_list(List), 
-         length(List) > 4 ->
+    when is_list(List),
+         length(List) >= 4 ->
 
     differences(differences(differences(List))).
 
@@ -4200,10 +4247,10 @@ nth_difference(0, List) ->
 
 
 
-nth_difference(N, List) 
+nth_difference(N, List)
 
-    when is_list(List), 
-         length(List) > (N+1), 
+    when is_list(List),
+         length(List) > (N+1),
          N > 0               ->
 
     nth_difference(N-1, differences(List)).
@@ -4228,7 +4275,7 @@ walk_unique_pairings([], _) ->
 
 
 
-walk_unique_pairings([A|R], F) 
+walk_unique_pairings([A|R], F)
 
     when is_function(F) ->
 
@@ -4260,7 +4307,11 @@ walk_unique_pairings( A, [Rh|Rr], F) ->
 
 %% @spec count_of(Item::any(), List::list()) -> non_negative_integer()
 
-%% @doc <span style="color:orange;font-style:italic">Untested</span> Counts the number of instances of Item in List.  ```1> TestData = lists:duplicate(40,[healthy,nonsmoker]) ++ lists:duplicate(10,[healthy,smoker]) ++ lists:duplicate(7,[cancer,nonsmoker]) ++ lists:duplicate(3,[cancer,smoker]).
+%% @doc <span style="color:orange;font-style:italic">Untested</span> Counts the number of instances of Item in List.  ```1> TestData = lists:duplicate(40, [healthy, nonsmoker] ) ++
+%%               lists:duplicate(10, [healthy, smoker]    ) ++
+%%               lists:duplicate(7,  [cancer,  nonsmoker] ) ++
+%%               lists:duplicate(3,  [cancer,  smoker]    ).
+%%
 %% [[healthy,nonsmoker], [healthy,nonsmoker], [healthy|...], [...]|...]
 %%
 %% 2> sc:count_of([healthy,smoker], TestData).
@@ -7121,8 +7172,22 @@ probability_all(ListOfProbabilities) when is_list(ListOfProbabilities) ->
 
 
 
-% probability_each
-% in_range
+
+%% @since Version 652
+
+%% @doc <span style="color:red;font-style:italic">Incomplete Todo Comeback</span> <span style="color:orange;font-style:italic">Untested</span>
+
+probability_any(ListOfProbabilities) when is_list(ListOfProbabilities) ->
+
+    case out_of_range(ListOfProbabilities, 0, 1) of
+
+        [] ->
+            todo;
+
+        _AnythingElse ->
+            { error, "All members of the list of probabilities must be numbers on the interval [0,1] inclusive." }
+
+    end.
 
 
 
@@ -7143,3 +7208,114 @@ in_range(List, Lo, Hi) ->
 out_of_range(List, Lo, Hi) ->
 
     [ I || I <- List, I > Hi orelse I < Lo ].
+
+
+
+
+
+%% @since Version 650
+
+is_repeated_list([]) ->
+
+    true;
+
+
+
+
+
+is_repeated_list([_R]) ->
+
+    true;
+
+
+
+
+
+is_repeated_list([First|Rem] = List)
+
+    when is_list(List) ->
+
+    case [ R || R <- Rem, R =/= First ] of
+
+        [] ->
+            true;
+
+        _AnythingElse ->
+
+            false
+
+    end.
+
+
+
+
+
+ascii_alphanum_list_subset(List)
+
+    when is_list(List) ->
+
+    [
+        I
+    ||
+        I <- List,
+
+        (I >= $a andalso I =< $z) orelse
+        (I >= $A andalso I =< $Z) orelse
+        (I >= $0 andalso I =< $9)
+    ].
+
+
+
+
+
+%% @since Version 652
+
+ngrams(List) ->
+
+    ngrams(List, list).
+
+
+
+
+
+%% @since Version 652
+
+ngrams(List, list)
+
+    when is_list(List) ->
+
+    [ I || I <- re:split(string:to_lower(List), "[^\\pL\\pN]", [{return,list}]), I =/= [] ];
+
+
+
+
+
+ngrams(List, binary)
+
+    when is_list(List) ->
+
+    [ I || I <- re:split(string:to_lower(List), "[^\\pL\\pN]"),                  I =/= <<>> ].
+
+
+
+
+
+%find_difference_sequence([_X]) ->
+%
+%    { error, "Not an Nth Difference sequence." };
+
+
+
+
+
+%find_difference_sequence(Seq)
+%
+%    when is_list(Seq) ->
+%
+%    Diffs = differences(Seq),
+%
+%    case is_repeated_list(Seq) of
+%        true ->
+%        false ->
+%
+%    end.

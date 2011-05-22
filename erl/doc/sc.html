@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 650 $</p>
+<p><b>Version:</b> $Revision: 651 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -164,6 +164,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#all_neighbor_pairs-2">all_neighbor_pairs/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#amean_vector_normal-1">amean_vector_normal/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the arithmetic mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#arithmetic_mean-1">arithmetic_mean/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Take the arithmetic mean (often called the average) of a list of numbers.</td></tr>
+<tr><td valign="top"><a href="#ascii_alphanum_list_subset-1">ascii_alphanum_list_subset/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#bandwidth_calc-1">bandwidth_calc/1</a></td><td>Equivalent to <a href="#bandwidth_calc-2"><tt>bandwidth_calc(Data, all)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#bandwidth_calc-2">bandwidth_calc/2</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculates digital line bandwidth over timescales in converted units.</td></tr>
@@ -189,6 +190,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#distinct_neighbor_pairs-1">distinct_neighbor_pairs/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#distinct_neighbor_pairs-2">distinct_neighbor_pairs/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#dstat-2">dstat/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#dstat_ex-2">dstat_ex/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#elements-2">elements/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#elements-3">elements/3</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#elements-4">elements/4</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
@@ -205,7 +207,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#expected_value-1">expected_value/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns the expected value of infinite selection from a weighted numeric list.</td></tr>
 <tr><td valign="top"><a href="#explode-2">explode/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#explode-3">explode/3</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
-<tr><td valign="top"><a href="#extended_dstat-2">extended_dstat/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#extrema-1">extrema/1</a></td><td>Returns the lowest and highest values in a list of one or more member in the form <code>{Lo,Hi}</code>.</td></tr>
 <tr><td valign="top"><a href="#factorial-1">factorial/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#factorize-1">factorize/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Generates a list of the factors of an integer.</td></tr>
@@ -241,6 +242,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#is_numeric_string-1">is_numeric_string/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#is_numeric_string-2">is_numeric_string/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#is_postfix-2">is_postfix/2</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
+<tr><td valign="top"><a href="#is_repeated_list-1">is_repeated_list/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#is_sorted_list-1">is_sorted_list/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns true if the list is sorted; false otherwise.</td></tr>
 <tr><td valign="top"><a href="#is_unique_list-1">is_unique_list/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns true if the list is unique; false otherwise.</td></tr>
 <tr><td valign="top"><a href="#kendall_correlation-1">kendall_correlation/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Compute the Kendall Tau Rank Correlation Coefficient of a list of coordinate tuples.</td></tr>
@@ -310,6 +312,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#permute-2">permute/2</a></td><td>Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast <a href="#combinations-2"><code>combinations/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#power_set-1">power_set/1</a></td><td><span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#probability_all-1">probability_all/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Calculates the likelihood that all items in a list of probabilities expressed on the real interval will occur.</td></tr>
+<tr><td valign="top"><a href="#probability_any-1">probability_any/1</a></td><td><span style="color:red;font-style:italic">Incomplete Todo Comeback</span> <span style="color:orange;font-style:italic">Untested</span></td></tr>
 <tr><td valign="top"><a href="#rand-1">rand/1</a></td><td><span style="color:orange;font-style:italic">Untested</span> Returns a pseudorandom integer on the range <code>[0 - (Range-1)]</code> inclusive.</td></tr>
 <tr><td valign="top"><a href="#random_from-1">random_from/1</a></td><td>Equivalent to <a href="#from-3"><tt>from(1, List, no_remainder)</tt></a>.
 </td></tr>
@@ -455,6 +458,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><b>Introduced in:</b> Version 481</p>
 <p><b>See also:</b> <a href="#amean_vector_normal-1">amean_vector_normal/1</a>, <a href="#geometric_mean-1">geometric_mean/1</a>, <a href="#harmonic_mean-1">harmonic_mean/1</a>, <a href="#weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a>.</p>
 
+<h3 class="function"><a name="ascii_alphanum_list_subset-1">ascii_alphanum_list_subset/1</a></h3>
+<div class="spec">
+<p><tt>ascii_alphanum_list_subset(List) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 6..</p>
+
 <h3 class="function"><a name="bandwidth_calc-1">bandwidth_calc/1</a></h3>
 <div class="spec">
 <p><tt>bandwidth_calc(Data) -&gt; <a href="#type-list_of_2ary_tuples">list_of_2ary_tuples()</a></tt></p>
@@ -584,19 +593,28 @@ presenting the actual volume of functionality present here.  We can get the cove
 <div class="spec">
 <p><tt>combinations(OutputItemSize::<a href="#type-positive_integer">positive_integer()</a>, Items::list()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt></p>
 </div><p>Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.  Permutations are all unique combinations of a set of tokens; the 2-permutations of <code>[a,b,c]</code> for example are <code>[a,b]</code>, <code>[a,c]</code> and <code>[b,c]</code>.  Note the absence of other orderings, such as <code>[b,a]</code>, which are provided by <a href="#permute-2"><code>permute/2</code></a>.  Combinations are taken of a smaller count of tokens than the main set.  Combinations are not ordered, but this implementation happens to provide answers in the same order as the input list.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. <pre>  1&gt; sc:combinations(2, [a,b,c,d]).
-  [[a,b],[a,c],[a,d],[b,c],[b,d],[c,d]]
+  [ [a,b], [a,c], [a,d], [b,c], [b,d], [c,d] ]
  
   2&gt; sc:combinations(2, ["dave","kate","pat"]).
-  [["dave","kate"],["dave","pat"],["kate","pat"]]
+  [ ["dave","kate"], ["dave","pat"], ["kate","pat"] ]
  
   3&gt; sc:combinations(2, [fast, strong, smart, lucky]).
-  [[fast,strong], [fast,smart], [fast,lucky], [strong,smart], [strong,lucky], [smart,lucky]]</pre> <a href="#Thanks">Thanks</a> to Alisdair Sullivan for this implementation, which has been slightly but not significantly modified since receipt.</p>
+  [ [ fast,   strong ],
+    [ fast,   smart  ],
+    [ fast,   lucky  ],
+    [ strong, smart  ],
+    [ strong, lucky  ],
+    [ smart,  lucky  ] ]</pre> <a href="#Thanks">Thanks</a> to Alisdair Sullivan for this implementation, which has been slightly but not significantly modified since receipt.</p>
 <p><b>Introduced in:</b> Version 473</p>
 
 <h3 class="function"><a name="count_of-2">count_of/2</a></h3>
 <div class="spec">
 <p><tt>count_of(Item::any(), List::list()) -&gt; <a href="#type-non_negative_integer">non_negative_integer()</a></tt></p>
-</div><p><span style="color:orange;font-style:italic">Untested</span> Counts the number of instances of Item in List.  <pre>  1&gt; TestData = lists:duplicate(40,[healthy,nonsmoker]) ++ lists:duplicate(10,[healthy,smoker]) ++ lists:duplicate(7,[cancer,nonsmoker]) ++ lists:duplicate(3,[cancer,smoker]).
+</div><p><span style="color:orange;font-style:italic">Untested</span> Counts the number of instances of Item in List.  <pre>  1&gt; TestData = lists:duplicate(40, [healthy, nonsmoker] ) ++
+                lists:duplicate(10, [healthy, smoker]    ) ++
+                lists:duplicate(7,  [cancer,  nonsmoker] ) ++
+                lists:duplicate(3,  [cancer,  smoker]    ).
+ 
   [[healthy,nonsmoker], [healthy,nonsmoker], [healthy|...], [...]|...]
  
   2&gt; sc:count_of([healthy,smoker], TestData).
@@ -637,6 +655,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="dstat-2">dstat/2</a></h3>
 <div class="spec">
 <p><tt>dstat(NumericList, PopulationOrSample) -&gt; any()</tt></p>
+</div><p><span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 487</p>
+
+<h3 class="function"><a name="dstat_ex-2">dstat_ex/2</a></h3>
+<div class="spec">
+<p><tt>dstat_ex(NumericList, PopulationOrSample) -&gt; any()</tt></p>
 </div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 487</p>
 
@@ -816,12 +840,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>explode(Separator, Term, Max) -&gt; any()</tt></p>
 </div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 622</p>
-
-<h3 class="function"><a name="extended_dstat-2">extended_dstat/2</a></h3>
-<div class="spec">
-<p><tt>extended_dstat(NumericList, PopulationOrSample) -&gt; any()</tt></p>
-</div><p><span style="color:orange;font-style:italic">Untested</span></p>
-<p><b>Introduced in:</b> Version 487</p>
 
 <h3 class="function"><a name="extrema-1">extrema/1</a></h3>
 <div class="spec">
@@ -1012,7 +1030,28 @@ presenting the actual volume of functionality present here.  We can get the cove
   [{1,4},{2,5},{a,2},{b,3}]
  
   2&gt; sc:histograph([ sc:rand(10) || X &lt;- lists:seq(1,100000) ]).
-  [{0,10044}, {1,9892}, {2,10009}, {3,10016}, {4,10050}, {5,10113}, {6,9990}, {7,9994}, {8,10004}, {9,9888}]</pre></p>
+  [{0,10044}, {1,9892}, {2,10009}, {3,10016}, {4,10050}, {5,10113}, {6,9990}, {7,9994}, {8,10004}, {9,9888}]
+ 
+  3&gt; ChessBoard = [ rook,  knight, bishop, king,  queen, bishop, knight, rook,
+                    pawn,  pawn,   pawn,   pawn,  pawn,  pawn,   pawn,   pawn,
+                    empty, empty,  empty,  empty, empty, empty,  empty,  empty,
+                    empty, empty,  empty,  empty, empty, empty,  empty,  empty,
+                    empty, empty,  empty,  empty, empty, empty,  empty,  empty,
+                    empty, empty,  empty,  empty, empty, empty,  empty,  empty,
+                    pawn,  pawn,   pawn,   pawn,  pawn,  pawn,   pawn,   pawn,
+                    rook,  knight, bishop, king,  queen, bishop, knight, rook ].
+  [rook,knight,bishop,king,queen,bishop,knight,rook,pawn,pawn,
+   pawn,pawn,pawn,pawn,pawn,pawn,empty,empty,empty,empty,empty,
+   empty,empty,empty,empty,empty,empty,empty,empty|...]
+ 
+  4&gt; sc:histograph(ChessBoard).
+  [ { bishop, 4  },
+    { empty,  32 },
+    { king,   2  },
+    { knight, 4  },
+    { pawn,   16 },
+    { queen,  2  },
+    { rook,   4  } ]</pre></p>
 <p><b>Introduced in:</b> Version 496</p>
 
 <h3 class="function"><a name="hmac-3">hmac/3</a></h3>
@@ -1149,6 +1188,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>is_postfix(Postfix, String) -&gt; any()</tt></p>
 </div><p><span style="color:orange;font-style:italic">Untested</span></p>
 <p><b>Introduced in:</b> Version 543</p>
+
+<h3 class="function"><a name="is_repeated_list-1">is_repeated_list/1</a></h3>
+<div class="spec">
+<p><tt>is_repeated_list(Rem) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 650</p>
 
 <h3 class="function"><a name="is_sorted_list-1">is_sorted_list/1</a></h3>
 <div class="spec">
@@ -1494,8 +1539,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 650 2011-05-20 01:51:21Z john $"},
-   {svn_revision,"$Revision: 650 $"},
+   {svn_id,"$Id: sc.erl 651 2011-05-20 02:02:22Z john $"},
+   {svn_revision,"$Revision: 651 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1692,10 +1737,26 @@ presenting the actual volume of functionality present here.  We can get the cove
 <div class="spec">
 <p><tt>permute(List::list(), Depth::<a href="#type-positive_integer">positive_integer()</a>) -&gt; list()</tt></p>
 </div><p>Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast <a href="#combinations-2"><code>combinations/2</code></a>.  Permutations are all valid orderings of a set of tokens; the permutations of <code>[a,b]</code> for example are <code>[a,b]</code> and <code>[b,a]</code>.  Depth limitation means the permutations of a smaller count of tokens from the main set; the 2-limited permutations of <code>[a,b,c]</code> for example are <code>[a,b]</code>, <code>[a,c]</code>, <code>[b,a]</code>, <code>[b,c]</code>, <code>[c,a]</code> and <code>[c,b]</code>.  Permutations are not ordered.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. <pre>  1&gt; sc:permute(["dave","kate","pat"]).
-  [{"pat","kate","dave"}, {"kate","pat","dave"}, {"pat","dave","kate"}, {"dave","pat","kate"}, {"kate","dave","pat"}, {"dave","kate","pat"}]
+  [ { "pat",  "kate", "dave" },
+    { "kate", "pat",  "dave" },
+    { "pat",  "dave", "kate" },
+    { "dave", "pat",  "kate" },
+    { "kate", "dave", "pat"  },
+    { "dave", "kate", "pat"  } ]
  
   2&gt; sc:permute([fast, strong, smart, lucky], 2).
-  [{strong,fast}, {smart,fast}, {lucky,fast}, {fast,strong}, {smart,strong}, {lucky,strong}, {fast,smart}, {strong,smart}, {lucky,smart}, {fast,lucky}, {strong,lucky}, {smart,lucky}]</pre></p>
+  [ { strong, fast   },
+    { smart,  fast   },
+    { lucky,  fast   },
+    { fast,   strong },
+    { smart,  strong },
+    { lucky,  strong },
+    { fast,   smart  },
+    { strong, smart  },
+    { lucky,  smart  },
+    { fast,   lucky  },
+    { strong, lucky  },
+    { smart,  lucky  } ]</pre></p>
 <p><b>Introduced in:</b> Version 474</p>
 
 <h3 class="function"><a name="power_set-1">power_set/1</a></h3>
@@ -1723,6 +1784,12 @@ presenting the actual volume of functionality present here.  We can get the cove
  
   Thanks for the idea, Forest.</p>
 <p><b>Introduced in:</b> Version 651</p>
+
+<h3 class="function"><a name="probability_any-1">probability_any/1</a></h3>
+<div class="spec">
+<p><tt>probability_any(ListOfProbabilities) -&gt; any()</tt></p>
+</div><p><span style="color:red;font-style:italic">Incomplete Todo Comeback</span> <span style="color:orange;font-style:italic">Untested</span></p>
+<p><b>Introduced in:</b> Version 652</p>
 
 <h3 class="function"><a name="rand-1">rand/1</a></h3>
 <div class="spec">
@@ -2377,9 +2444,9 @@ presenting the actual volume of functionality present here.  We can get the cove
   2&gt; sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii], [x,y,z], [red,blue,green], [april,may,june] ]).
   [{1,a,i,x,red,april},
    {2,b,ii,y,blue,may},
-   {3,c,iii,z,green,june}]
+   {3,c,iii,z,green,june}]</pre>
  
-  This is actually more efficient than one might expect at first glance.  I ran a benchmark of 100,000 transformations of a list of lists into a list of tuples using &lt;a href="#benchmark-3"&gt;&lt;code&gt;benchmark/3&lt;/code&gt;&lt;/a&gt; and &lt;a href="#multi_do-4"&gt;&lt;code&gt;multi_do/4&lt;/code&gt;&lt;/a&gt; against both zip_n and the library function zip3; the library function won at 150 seconds to 175, which is a far smaller difference than I expected.```3&gt; Testy = [ [1,2,3], [1,2,3], [1,2,3] ].
+  This is actually more efficient than one might expect at first glance.  I ran a benchmark of 100,000 transformations of a list of lists into a list of tuples using <a href="#benchmark-3"><code>benchmark/3</code></a> and <a href="#multi_do-4"><code>multi_do/4</code></a> against both zip_n and the library function zip3; the library function won at 150 seconds to 175, which is a far smaller difference than I expected.<pre>  3&gt; Testy = [ [1,2,3], [1,2,3], [1,2,3] ].
   [[1,2,3],[1,2,3],[1,2,3]]
  
   4&gt; sc:benchmark(sc, multi_do, [100000, sc, zip_n, [Testy]]).
@@ -2439,6 +2506,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, May 19 2011, 22:01:02.</i></p>
+<p><i>Generated by EDoc, May 21 2011, 23:16:07.</i></p>
 </body>
 </html>
