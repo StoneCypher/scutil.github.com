@@ -498,16 +498,21 @@ test([verbose]=_Style) ->
 
 
 %% @spec extrema(List::non_empty_list()) -> {Low::any(),Hi::any()}
-%% @doc Returns the lowest and highest values in a list of one or more member in the form `{Lo,Hi}'.  `error()'s `badarg' for empty lists.  Mixed-type safe; sorts according to type order rules.  ```1> sc:extrema([1,2,3,4]).
+
+%% @doc Returns the lowest and highest values in a list of one or more member in the form `{Lo,Hi}'.  Undefined over the empty list.  Mixed-type safe; sorts according to type order rules.  ```1> sc:extrema([1,2,3,4]).
 %% {1,4}
 %%
 %% 2> sc:extrema([1,2,3,a,b,c]).
 %% {1,c}'''
+%%
+%% 3> sc:extrema( [] ).
+%% ** exception error: no function clause matching sc:extrema([])'''
+
 %% @since Version 460
 
-extrema(List) ->
+extrema([First | _] = List)
 
-    [First | _] = List,
+    when is_list(List) ->
 
     Next = fun(Next,T) ->
 
@@ -7325,9 +7330,9 @@ ngrams(List, binary)
 
 
 
+%% @since Version 653
 
-
-country_codes() -> 
+country_codes() ->
 
     [ {"af", "Afghanistan"},
       {"ax", "Aland Islands"},
