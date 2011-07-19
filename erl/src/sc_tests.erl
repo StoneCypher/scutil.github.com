@@ -6,6 +6,7 @@
 
 -module(sc_tests).
 -compile(export_all).
+-include_lib("eqc/include/eqc.hrl").
 -include_lib("eunit/include/eunit.hrl").
 
 
@@ -16,17 +17,40 @@ extrema_test_() ->
 
     { "Extrema tests", [
 
-        {"8,6,7,5,3,0,9", ?_assert( {0,9}      =:= sc:extrema( [8,6,7,5,3,0,9] ) ) },
-        {"1,2,3,4",       ?_assert( {1,4}      =:= sc:extrema( [1,2,3,4]       ) ) },
-        {"-1,-2,-3",      ?_assert( {-3,-1}    =:= sc:extrema( [-1,-2,-3]      ) ) },
-        {"-1.1,0,1.1",    ?_assert( {-1.1,1.1} =:= sc:extrema( [-1.1,1.1]      ) ) },
-        {"a,b,c",         ?_assert( {a,c}      =:= sc:extrema( [a,b,c]         ) ) },
-        {"1,a,{}",        ?_assert( {1,{}}     =:= sc:extrema( [1,a,{}]        ) ) },
-        {"1",             ?_assert( {1,1}      =:= sc:extrema( [1]             ) ) },
+        {"8,6,7,5,3,0,9",      ?_assert( {0,9}      =:= sc:extrema( [8,6,7,5,3,0,9] ) ) },
+        {"1,2,3,4",            ?_assert( {1,4}      =:= sc:extrema( [1,2,3,4]       ) ) },
+        {"-1,-2,-3",           ?_assert( {-3,-1}    =:= sc:extrema( [-1,-2,-3]      ) ) },
+        {"-1.1,0,1.1",         ?_assert( {-1.1,1.1} =:= sc:extrema( [-1.1,1.1]      ) ) },
+        {"a,b,c",              ?_assert( {a,c}      =:= sc:extrema( [a,b,c]         ) ) },
+        {"1,a,{}",             ?_assert( {1,{}}     =:= sc:extrema( [1,a,{}]        ) ) },
+        {"1",                  ?_assert( {1,1}      =:= sc:extrema( [1]             ) ) },
 
-        {"[] error badarg", ?_assertError(badarg, sc:extrema([]) ) }
+        {"[] error undefined", ?_assertError(function_clause, sc:extrema([]) ) }
 
     ] }.
+
+
+
+
+prop_key_duplicate_correct_length() ->
+
+    ?FORALL( {L,I}, {non_neg_int(), int()}, abs(L) == length( sc:key_duplicate([ {abs(L),I} ]) ) ).
+
+
+
+
+
+non_neg_int() ->
+
+    ?SUCHTHAT(I, int(), I > 0).
+
+
+
+
+
+pos_int() ->
+
+    ?SUCHTHAT(I, int(), I > 0).
 
 
 
@@ -36,9 +60,11 @@ key_duplicate_test_() ->
 
     { "Key duplicate tests", [
 
-        {"[ ]",             ?_assert( []          =:= sc:key_duplicate([ ])             ) },
-        {"[ {2,a} ]",       ?_assert( [a,a]       =:= sc:key_duplicate([ {2,a} ])       ) },
-        {"[ {2,a},{3,b} ]", ?_assert( [a,a,b,b,b] =:= sc:key_duplicate([ {2,a},{3,b} ]) ) }
+        {"[ ]",                        ?_assert( []          =:= sc:key_duplicate([ ])             ) },
+        {"[ {2,a} ]",                  ?_assert( [a,a]       =:= sc:key_duplicate([ {2,a} ])       ) },
+        {"[ {2,a},{3,b} ]",            ?_assert( [a,a,b,b,b] =:= sc:key_duplicate([ {2,a},{3,b} ]) ) },
+
+        {"Stochastic: correct length", ?_assert( true        =:= eqc:quickcheck(prop_key_duplicate_correct_length()) ) }
 
     ] }.
 
