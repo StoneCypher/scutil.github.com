@@ -6,6 +6,7 @@
 
 -module(sc_tests).
 -compile(export_all).
+
 -include_lib("eqc/include/eqc.hrl").
 -include_lib("eunit/include/eunit.hrl").
 
@@ -32,25 +33,10 @@ extrema_test_() ->
 
 
 
+
 prop_key_duplicate_correct_length() ->
 
-    ?FORALL( {L,I}, {non_neg_int(), int()}, abs(L) == length( sc:key_duplicate([ {abs(L),I} ]) ) ).
-
-
-
-
-
-non_neg_int() ->
-
-    ?SUCHTHAT(I, int(), I > 0).
-
-
-
-
-
-pos_int() ->
-
-    ?SUCHTHAT(I, int(), I > 0).
+    ?FORALL( {L,I}, {sc_eqc:non_neg_int(), int()}, abs(L) == length( sc:key_duplicate([ {abs(L),I} ]) ) ).
 
 
 

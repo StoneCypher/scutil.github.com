@@ -1,2 +1,2 @@
 {packages,[]}.
-{modules,[sc,sc_tests]}.
+{modules,[sc,sc_eqc,sc_tests]}.
