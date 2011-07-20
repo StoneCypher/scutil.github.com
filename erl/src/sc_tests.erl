@@ -36,7 +36,7 @@ extrema_test_() ->
 
 prop_key_duplicate_correct_length() ->
 
-    ?FORALL( {L,I}, {sc_eqc:non_neg_int(), sc_eqc:misc_type()}, abs(L) == length( sc:key_duplicate([ {abs(L),I} ]) ) ).
+    ?FORALL( {L,I}, {sc_eqc:non_neg_integer(), sc_eqc:misc_type()}, abs(L) == length( sc:key_duplicate([ {abs(L),I} ]) ) ).
 
 
 

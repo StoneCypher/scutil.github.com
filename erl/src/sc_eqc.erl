@@ -22,8 +22,8 @@
 
 -export([
 
-    pos_int/0,
-      non_neg_int/0,
+    pos_integer/0,
+      non_neg_integer/0,
       misc_type/0
 
 ]).
@@ -48,7 +48,7 @@
 
 %% @doc Generator to produce non-negative integers, with otherwise identical behavior to `eqc_gen:int()'.
 
-non_neg_int() ->
+non_neg_integer() ->
 
     ?SUCHTHAT(I, int(), I > 0).
 
@@ -60,7 +60,7 @@ non_neg_int() ->
 
 %% @doc Generator to produce positive integers, with otherwise identical behavior to `eqc_gen:int()'.
 
-pos_int() ->
+pos_integer() ->
 
     ?SUCHTHAT(I, int(), I >= 0).
 
@@ -88,7 +88,7 @@ misc_type() ->
             list(misc_type(shallow));
 
         tuple ->
-            {misc_type(shallow)}
+            list_to_tuple(list(misc_type(shallow)))
 
     end.
 
