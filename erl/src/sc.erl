@@ -396,7 +396,7 @@
 
 %% @spec gen_docs() -> ok|{'EXIT',any()}
 %% @equiv gen_docs("/projects/scutil/erl/src", "/projects/scutil/erl/src/docs")
-%% @doc Generates library documentation using the paths appropriate for the author's PC; you almost certainly want {@link gen_docs/2} instead.  ```1> sc:gen_docs().
+%% @doc (not testworthy) Generates library documentation using the paths appropriate for the author's PC; you almost certainly want {@link gen_docs/2} instead.  ```1> sc:gen_docs().
 %% ok'''
 %% @since 458
 
@@ -409,7 +409,7 @@ gen_docs() ->
 
 
 %% @spec gen_docs(WhereIsSrc::string(), WhereToPutDocs::string()) -> ok|{'EXIT',any()}
-%% @doc Generates library documentation from and to the specified paths `WhereIsSrc' and `WhereToPutDocs' respectively.  Do not use trailing slashes.  Windows paths are okay; remember to double your
+%% @doc (not testworthy) Generates library documentation from and to the specified paths `WhereIsSrc' and `WhereToPutDocs' respectively.  Do not use trailing slashes.  Windows paths are okay; remember to double your
 %% backslashes, as backslashes in strings need to be quoted.  ```1> sc:gen_docs("/projects/scutil/erl/src", "/projects/scutil/erl/src/docs").
 %% ok'''
 %% @since 458
@@ -424,7 +424,7 @@ gen_docs(WhereIsSrc, WhereToPutDocs) ->
 
 
 %% @spec test() -> ok|error
-%% @doc Runs the test suite in terse form. ```1> sc:test().
+%% @doc (not testworthy) Runs the test suite in terse form. ```1> sc:test().
 %%   All 9 tests passed.
 %% ok'''
 %% @since 458
@@ -438,7 +438,7 @@ test() ->
 
 
 %% @spec test(verbose) -> ok|error
-%% @doc Runs the test suite in verbose form.  Also responds to [verbose] to be more familiar to eunit devs.  An (ancient) example of output: ```1> sc:test(verbose).
+%% @doc (not testworthy) Runs the test suite in verbose form.  Also responds to [verbose] to be more familiar to eunit devs.  An (ancient) example of output: ```1> sc:test(verbose).
 %% ======================== EUnit ========================
 %% module 'sc'
 %%   module 'sc_tests'
@@ -547,7 +547,7 @@ extrema([First | _] = List)
 
 key_duplicate(KeyList) ->
 
-    lists:flatten( [ lists:duplicate(Key, Value) || {Key,Value} <- KeyList ] ).
+    lists:append( [ lists:duplicate(Key, Value) || {Key,Value} <- KeyList ] ).
 
 
 

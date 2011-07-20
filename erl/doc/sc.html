@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 654 $</p>
+<p><b>Version:</b> $Revision: 657 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -218,8 +218,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#floor-1">floor/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#function_point_count-1">function_point_count/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#function_stats-1">function_stats/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
-<tr><td valign="top"><a href="#gen_docs-0">gen_docs/0</a></td><td>Generates library documentation using the paths appropriate for the author's PC; you almost certainly want <a href="#gen_docs-2"><code>gen_docs/2</code></a> instead.</td></tr>
-<tr><td valign="top"><a href="#gen_docs-2">gen_docs/2</a></td><td>Generates library documentation from and to the specified paths <code>WhereIsSrc</code> and <code>WhereToPutDocs</code> respectively.</td></tr>
+<tr><td valign="top"><a href="#gen_docs-0">gen_docs/0</a></td><td>(not testworthy) Generates library documentation using the paths appropriate for the author's PC; you almost certainly want <a href="#gen_docs-2"><code>gen_docs/2</code></a> instead.</td></tr>
+<tr><td valign="top"><a href="#gen_docs-2">gen_docs/2</a></td><td>(not testworthy) Generates library documentation from and to the specified paths <code>WhereIsSrc</code> and <code>WhereToPutDocs</code> respectively.</td></tr>
 <tr><td valign="top"><a href="#geometric_mean-1">geometric_mean/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the geometric mean of a list of numbers.</td></tr>
 <tr><td valign="top"><a href="#get_linked_processes-0">get_linked_processes/0</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#gmean_vector_normal-1">gmean_vector_normal/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the geometric mean of the elements of the unit vector for the vector provided.</td></tr>
@@ -363,8 +363,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#stretch_hash-3">stretch_hash/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Stretches a hash with a list of salts.</td></tr>
 <tr><td valign="top"><a href="#svn_revision-1">svn_revision/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.</td></tr>
 <tr><td valign="top"><a href="#terminate_loop-0">terminate_loop/0</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
-<tr><td valign="top"><a href="#test-0">test/0</a></td><td>Runs the test suite in terse form.</td></tr>
-<tr><td valign="top"><a href="#test-1">test/1</a></td><td>Runs the test suite in verbose form.</td></tr>
+<tr><td valign="top"><a href="#test-0">test/0</a></td><td>(not testworthy) Runs the test suite in terse form.</td></tr>
+<tr><td valign="top"><a href="#test-1">test/1</a></td><td>(not testworthy) Runs the test suite in verbose form.</td></tr>
 <tr><td valign="top"><a href="#third_difference-1">third_difference/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#tied_ordered_ranking-1">tied_ordered_ranking/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a tied ranked ordering of the list, ordered according to the input ordering rather than the sorted ordering.</td></tr>
 <tr><td valign="top"><a href="#tied_ranking-1">tied_ranking/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a ranked ordering of the list with tie rankings.</td></tr>
@@ -959,14 +959,14 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>gen_docs() -&gt; ok | {'EXIT', any()}</tt></p>
 </div><p>Equivalent to <a href="#gen_docs-2"><tt>gen_docs("/projects/scutil/erl/src",
 	 "/projects/scutil/erl/src/docs")</tt></a>.</p>
-<p>Generates library documentation using the paths appropriate for the author's PC; you almost certainly want <a href="#gen_docs-2"><code>gen_docs/2</code></a> instead.  <pre>  1&gt; sc:gen_docs().
+<p>(not testworthy) Generates library documentation using the paths appropriate for the author's PC; you almost certainly want <a href="#gen_docs-2"><code>gen_docs/2</code></a> instead.  <pre>  1&gt; sc:gen_docs().
   ok</pre></p>
 <p><b>Introduced in:</b> 458</p>
 
 <h3 class="function"><a name="gen_docs-2">gen_docs/2</a></h3>
 <div class="spec">
 <p><tt>gen_docs(WhereIsSrc::string(), WhereToPutDocs::string()) -&gt; ok | {'EXIT', any()}</tt></p>
-</div><p>Generates library documentation from and to the specified paths <code>WhereIsSrc</code> and <code>WhereToPutDocs</code> respectively.  Do not use trailing slashes.  Windows paths are okay; remember to double your
+</div><p>(not testworthy) Generates library documentation from and to the specified paths <code>WhereIsSrc</code> and <code>WhereToPutDocs</code> respectively.  Do not use trailing slashes.  Windows paths are okay; remember to double your
   backslashes, as backslashes in strings need to be quoted.  <pre>  1&gt; sc:gen_docs("/projects/scutil/erl/src", "/projects/scutil/erl/src/docs").
   ok</pre></p>
 <p><b>Introduced in:</b> 458</p>
@@ -1560,8 +1560,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 654 2011-07-19 22:37:03Z john $"},
-   {svn_revision,"$Revision: 654 $"},
+   {svn_id,"$Id: sc.erl 657 2011-07-19 23:08:25Z john $"},
+   {svn_revision,"$Revision: 657 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -2296,7 +2296,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="test-0">test/0</a></h3>
 <div class="spec">
 <p><tt>test() -&gt; ok | error</tt></p>
-</div><p>Runs the test suite in terse form. <pre>  1&gt; sc:test().
+</div><p>(not testworthy) Runs the test suite in terse form. <pre>  1&gt; sc:test().
     All 9 tests passed.
   ok</pre></p>
 <p><b>Introduced in:</b> 458</p>
@@ -2304,7 +2304,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="test-1">test/1</a></h3>
 <div class="spec">
 <p><tt>test(Style::verbose) -&gt; ok | error</tt></p>
-</div><p>Runs the test suite in verbose form.  Also responds to [verbose] to be more familiar to eunit devs.  An (ancient) example of output: <pre>  1&gt; sc:test(verbose).
+</div><p>(not testworthy) Runs the test suite in verbose form.  Also responds to [verbose] to be more familiar to eunit devs.  An (ancient) example of output: <pre>  1&gt; sc:test(verbose).
   ======================== EUnit ========================
   module 'sc'
     module 'sc_tests'
@@ -2539,6 +2539,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Jul 19 2011, 19:06:35.</i></p>
+<p><i>Generated by EDoc, Jul 19 2011, 19:33:34.</i></p>
 </body>
 </html>

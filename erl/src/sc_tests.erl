@@ -36,7 +36,7 @@ extrema_test_() ->
 
 prop_key_duplicate_correct_length() ->
 
-    ?FORALL( {L,I}, {sc_eqc:non_neg_int(), int()}, abs(L) == length( sc:key_duplicate([ {abs(L),I} ]) ) ).
+    ?FORALL( {L,I}, {sc_eqc:non_neg_int(), sc_eqc:misc_type()}, abs(L) == length( sc:key_duplicate([ {abs(L),I} ]) ) ).
 
 
 
@@ -49,6 +49,8 @@ key_duplicate_test_() ->
         {"[ ]",                        ?_assert( []          =:= sc:key_duplicate([ ])             ) },
         {"[ {2,a} ]",                  ?_assert( [a,a]       =:= sc:key_duplicate([ {2,a} ])       ) },
         {"[ {2,a},{3,b} ]",            ?_assert( [a,a,b,b,b] =:= sc:key_duplicate([ {2,a},{3,b} ]) ) },
+
+        {"Regression: key empty-list", ?_assert( [ [], [] ]  =:= sc:key_duplicate([ {2, []} ])     ) },
 
         {"Stochastic: correct length", ?_assert( true        =:= eqc:quickcheck(prop_key_duplicate_correct_length()) ) }
 

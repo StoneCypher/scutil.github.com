@@ -23,7 +23,8 @@
 -export([
 
     pos_int/0,
-      non_neg_int/0
+      non_neg_int/0,
+      misc_type/0
 
 ]).
 
@@ -62,3 +63,59 @@ non_neg_int() ->
 pos_int() ->
 
     ?SUCHTHAT(I, int(), I >= 0).
+
+
+
+
+
+%% @since Version 655
+
+%% @doc Generator to produce positive integers, with otherwise identical behavior to `eqc_gen:int()'.
+
+misc_type() ->
+
+    %% add float, binary, bitstring, ?pid?, etc
+
+    case sc:random_from([ int, string, list, tuple ]) of
+
+        int ->
+            int();
+
+        string ->
+            list(int());
+
+        list ->
+            list(misc_type(shallow));
+
+        tuple ->
+            {misc_type(shallow)}
+
+    end.
+
+
+
+
+
+%% @since Version 655
+
+%% @doc Generator to produce positive integers, with otherwise identical behavior to `eqc_gen:int()'.
+
+misc_type(shallow) ->
+
+    %% add float, binary, bitstring, ?pid?, etc
+
+    case sc:random_from([ int, string, list, tuple ]) of
+
+        int ->
+            int();
+
+        string ->
+            list(int());
+
+        list ->
+            [];
+
+        tuple ->
+            {}
+
+    end.
