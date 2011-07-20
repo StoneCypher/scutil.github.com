@@ -662,7 +662,6 @@ index_of_first(Item, [_OtherItem|ListRem], Pos) ->
 
 
 
-
 %% @spec rotate_to_first(Item, List) -> list()
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Rotates the list to the first instance of Item.  ```1> sc:rotate_to_first(c, [a,b,c,d,e]).
 %% [c,d,e,a,b]
@@ -7583,3 +7582,13 @@ country_codes() ->
       {"ye", "Yemen"},
       {"zm", "Zambia"},
       {"zw", "Zimbabwe"} ].
+
+
+
+
+
+%% @since Version 660
+
+random_unicode_char() ->
+
+    rand(16#10ffff).

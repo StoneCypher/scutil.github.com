@@ -24,7 +24,8 @@
 
     pos_integer/0,
       non_neg_integer/0,
-      misc_type/0
+      misc_type/0,
+      real_char/0
 
 ]).
 
@@ -39,6 +40,18 @@
 
 
 -svn_revision("$Revision$").
+
+
+
+
+
+%% @since Version 660
+
+%% @doc eqc's char() generates byte()s, not char()s.  The difference came when Erlang moved to support unicode.
+
+real_char() ->
+
+    choose(0, 16#10ffff).
 
 
 
@@ -68,7 +81,7 @@ pos_integer() ->
 
 
 
-%% @since Version 655
+%% @since Version 657
 
 %% @doc Generator to produce positive integers, with otherwise identical behavior to `eqc_gen:int()'.
 
@@ -76,13 +89,16 @@ misc_type() ->
 
     %% add float, binary, bitstring, ?pid?, etc
 
-    case sc:random_from([ int, string, list, tuple ]) of
+    case sc:random_from([ int, iolist, unicodestring, list, tuple ]) of
 
         int ->
             int();
 
-        string ->
-            list(int());
+        iolist ->
+            list(eqc_gen:char());
+
+        unicodestring ->
+            list(real_char());
 
         list ->
             list(misc_type(shallow));
@@ -96,7 +112,7 @@ misc_type() ->
 
 
 
-%% @since Version 655
+%% @since Version 657
 
 %% @doc Generator to produce positive integers, with otherwise identical behavior to `eqc_gen:int()'.
 
@@ -104,13 +120,16 @@ misc_type(shallow) ->
 
     %% add float, binary, bitstring, ?pid?, etc
 
-    case sc:random_from([ int, string, list, tuple ]) of
+    case sc:random_from([ int, iolist, unicodestring, list, tuple ]) of
 
         int ->
             int();
 
-        string ->
-            list(int());
+        iolist ->
+            list(eqc_gen:char());
+
+        unicodestring ->
+            list(real_char());
 
         list ->
             [];
