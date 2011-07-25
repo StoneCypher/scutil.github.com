@@ -50,7 +50,33 @@
 
 %% @since Version 660
 
-%% @doc eqc's char() generates byte()s, not char()s.  The difference came when Erlang moved to support unicode.
+%% @doc This generates correct `char()' (eqc's `char()' generates `byte()'s, as legacy from before Erlang spoke unicode).  ```1> eqc_gen:sample(sc_eqc:real_char()).
+%% 587555
+%% 824312
+%% 1039897
+%% 520984
+%% 1059424
+%% 82091
+%% 325780
+%% 932253
+%% 584998
+%% 830263
+%% 29761
+%% ok
+%%
+%% 2> eqc_gen:sample(sc_eqc:real_char()).
+%% 750151
+%% 165286
+%% 495247
+%% 242058
+%% 614341
+%% 1013687
+%% 141668
+%% 460131
+%% 72752
+%% 398389
+%% 106443
+%% ok'''
 
 real_char() ->
 
@@ -62,11 +88,37 @@ real_char() ->
 
 %% @since Version 655
 
-%% @doc Generator to produce non-negative integers, with otherwise identical behavior to `eqc_gen:int()'.
+%% @doc Generator to produce non-negative integers, with otherwise identical behavior to `eqc_gen:int()'.  Inherits range scaling behavior from use of `int()' macro.  May produce zeros - if you don't want zeros, use `pos_integer()' instead.  ```1> eqc_gen:sample(sc_eqc:non_neg_integer()).
+%% 10
+%% 9
+%% 6
+%% 12
+%% 12
+%% 9
+%% 14
+%% 9
+%% 2
+%% 10
+%% 10
+%% ok
+%%
+%% 2> eqc_gen:sample(sc_eqc:non_neg_integer()).
+%% 11
+%% 12
+%% 0
+%% 4
+%% 13
+%% 8
+%% 14
+%% 0
+%% 14
+%% 9
+%% 10
+%% ok'''
 
 non_neg_integer() ->
 
-    ?SUCHTHAT(I, int(), I > 0).
+    ?SUCHTHAT(I, int(), I >= 0).
 
 
 
@@ -74,11 +126,37 @@ non_neg_integer() ->
 
 %% @since Version 655
 
-%% @doc Generator to produce positive integers, with otherwise identical behavior to `eqc_gen:int()'.
+%% @doc Generator to produce positive integers, with otherwise identical behavior to `eqc_gen:int()'.  Inherits range scaling behavior from use of `int()' macro.  Will not produce zeros - if you want zeros, use `non_neg_integer()' instead.  ```1> eqc_gen:sample(sc_eqc:pos_integer()).
+%% 9
+%% 1
+%% 9
+%% 11
+%% 5
+%% 6
+%% 14
+%% 6
+%% 3
+%% 8
+%% 8
+%% ok
+%%
+%% 2> eqc_gen:sample(sc_eqc:pos_integer()).
+%% 9
+%% 10
+%% 12
+%% 3
+%% 8
+%% 10
+%% 13
+%% 5
+%% 15
+%% 17
+%% 3
+%% ok'''
 
 pos_integer() ->
 
-    ?SUCHTHAT(I, int(), I >= 0).
+    ?SUCHTHAT(I, int(), I > 0).
 
 
 
