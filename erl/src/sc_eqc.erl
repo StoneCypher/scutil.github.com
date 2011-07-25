@@ -23,10 +23,11 @@
 -export([
 
     pos_integer/0,
-      non_neg_integer/0,
-      misc_type/0,
-      real_char/0,
-      rand_elements/1
+    non_neg_integer/0,
+    misc_type/0,
+    real_char/0,
+    rand_elements/1,
+    time12/0
 
 ]).
 
@@ -146,7 +147,7 @@ misc_type(shallow) ->
 
 %% @since Version 661
 
-%% @doc Produces a list of zero or more elements taken from `ElementList', out of order, possibly repeating. ```1> eqc_gen:sample(sc_eqc:rand_elements([1,2,3,4,5])).
+%% @doc Produces a list of zero or more elements taken from `ElementList', out of order, possibly repeating.  Scales list size on test depth from using list() macro.  ```1> eqc_gen:sample(sc_eqc:rand_elements([1,2,3,4,5])).
 %% []
 %% [1,5,2]
 %% [3,4]
@@ -177,3 +178,41 @@ misc_type(shallow) ->
 rand_elements(ElementList) ->
 
     ?LET(L,list(elements(ElementList)),L).
+
+
+
+
+
+%% @since Version 662
+
+%% @doc Produces a human-readable time as a 12-hour 4-tuple {h:int(),m:int(),s:int(),am|pm}.  ```1> eqc_gen:sample(sc_eqc:time12()).
+%% {3,41,52,am}
+%% {8,48,3,am}
+%% {9,11,38,pm}
+%% {1,49,6,am}
+%% {7,21,33,pm}
+%% {10,44,50,pm}
+%% {2,37,20,pm}
+%% {3,18,59,am}
+%% {8,46,42,pm}
+%% {12,47,35,pm}
+%% {2,0,41,am}
+%% ok
+%%
+%% 332> eqc_gen:sample(sc_eqc:time12()).
+%% {4,55,46,am}
+%% {12,8,22,pm}
+%% {12,44,15,pm}
+%% {6,59,28,am}
+%% {4,36,0,pm}
+%% {2,33,10,pm}
+%% {9,7,22,pm}
+%% {10,19,10,am}
+%% {9,57,33,am}
+%% {3,31,8,am}
+%% {7,34,23,am}
+%% ok'''
+
+time12() ->
+
+    { eqc_gen:choose(1,12), eqc_gen:choose(0,59), eqc_gen:choose(0,59), eqc_gen:elements([am,pm]) }.
