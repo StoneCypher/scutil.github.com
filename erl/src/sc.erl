@@ -119,6 +119,8 @@
     null_postpad_bin_to/2,
     ascii_alphanum_list_subset/1,
     country_codes/0,
+    random_unicode_char/0,
+    file_to_binary_literal_as_string/1,
 
     ngrams/1,
       ngrams/2,
@@ -1108,7 +1110,7 @@ combinations(0, L)
 combinations(N, Items) 
 
     when is_list(Items), 
-         is_integer(N), 
+         is_integer(N),
          N > 0         ->
 
     [ lists:flatten(lists:append( [lists:nth(I, Items)], [J] )) ||
@@ -7592,3 +7594,15 @@ country_codes() ->
 random_unicode_char() ->
 
     rand(16#10ffff).
+
+
+
+
+
+%% @since Version 661
+
+file_to_binary_literal_as_string(PathAndFilename) ->
+
+    { ok, F } = file:read_file(PathAndFilename),
+
+    lists:flatten(io_lib:format("~p", [F])).

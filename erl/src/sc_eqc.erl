@@ -25,7 +25,8 @@
     pos_integer/0,
       non_neg_integer/0,
       misc_type/0,
-      real_char/0
+      real_char/0,
+      rand_elements/1
 
 ]).
 
@@ -138,3 +139,41 @@ misc_type(shallow) ->
             {}
 
     end.
+
+
+
+
+
+%% @since Version 661
+
+%% @doc Produces a list of zero or more elements taken from `ElementList', out of order, possibly repeating. ```1> eqc_gen:sample(sc_eqc:rand_elements([1,2,3,4,5])).
+%% []
+%% [1,5,2]
+%% [3,4]
+%% [3,2,4]
+%% [2,2,5]
+%% []
+%% [3,3]
+%% [4,3,1,3,5,3]
+%% [3]
+%% [2,5,4]
+%% [1,4,5,4]
+%% ok
+%%
+%% 2> eqc_gen:sample(sc_eqc:rand_elements([1,2,3,4,5])).
+%% [3]
+%% []
+%% [5,4]
+%% [4,3,3,5]
+%% [1,2]
+%% [5,2]
+%% [4,1,3,4,2]
+%% [5,2]
+%% [3,4,4,2]
+%% [4,4,2,3]
+%% [2,4,2,5,4,4]
+%% ok'''
+
+rand_elements(ElementList) ->
+
+    ?LET(L,list(elements(ElementList)),L).

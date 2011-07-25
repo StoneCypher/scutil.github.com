@@ -60,6 +60,14 @@ key_duplicate_test_() ->
 
 
 
+prop_rotate_list_correct_length() ->
+
+    ?FORALL( {L,I}, {int(), list(int())}, abs(L) == length( sc:key_duplicate([ {abs(L),I} ]) ) ).
+
+
+
+
+
 rotate_list_test_() ->
 
     { "Rotate list tests", [
@@ -73,7 +81,10 @@ rotate_list_test_() ->
         {"-1, [ a,b,c ]", ?_assert( [c,a,b] =:= sc:rotate_list(-1, [ a,b,c ]) ) },
         {"3,  [ a,b,c ]", ?_assert( [a,b,c] =:= sc:rotate_list(3,  [ a,b,c ]) ) },
         {"-3, [ a,b,c ]", ?_assert( [a,b,c] =:= sc:rotate_list(-3, [ a,b,c ]) ) },
-        {"9,  [ a,b,c ]", ?_assert( [a,b,c] =:= sc:rotate_list(9,  [ a,b,c ]) ) }
+        {"9,  [ a,b,c ]", ?_assert( [a,b,c] =:= sc:rotate_list(9,  [ a,b,c ]) ) },
+
+
+        {"Stochastic: correct length", ?_assert( true  =:= eqc:quickcheck(prop_rotate_list_correct_length()) ) }
 
     ] }.
 
