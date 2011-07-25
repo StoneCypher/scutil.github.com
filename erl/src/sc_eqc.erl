@@ -27,7 +27,8 @@
     misc_type/0,
     real_char/0,
     rand_elements/1,
-    time12/0
+    time12/0,
+    time24/0
 
 ]).
 
@@ -185,7 +186,7 @@ rand_elements(ElementList) ->
 
 %% @since Version 662
 
-%% @doc Produces a human-readable time as a 12-hour 4-tuple {h:int(),m:int(),s:int(),am|pm}.  ```1> eqc_gen:sample(sc_eqc:time12()).
+%% @doc Produces a human-readable time as a 12-hour 4-tuple {h:int(),m:int(),s:int(),am|pm}.  Hours are on the interval [1..12] inclusive.  ```1> eqc_gen:sample(sc_eqc:time12()).
 %% {3,41,52,am}
 %% {8,48,3,am}
 %% {9,11,38,pm}
@@ -199,7 +200,7 @@ rand_elements(ElementList) ->
 %% {2,0,41,am}
 %% ok
 %%
-%% 332> eqc_gen:sample(sc_eqc:time12()).
+%% 2> eqc_gen:sample(sc_eqc:time12()).
 %% {4,55,46,am}
 %% {12,8,22,pm}
 %% {12,44,15,pm}
@@ -216,3 +217,43 @@ rand_elements(ElementList) ->
 time12() ->
 
     { eqc_gen:choose(1,12), eqc_gen:choose(0,59), eqc_gen:choose(0,59), eqc_gen:elements([am,pm]) }.
+
+
+
+
+
+%% @since Version 663
+
+%% @doc Produces a human-readable time as a 24-hour 3-tuple {h:int(),m:int(),s:int()}.  Hours are on the interval [0..23] inclusive.  ```9> c("/projects/scutil/erl/src/sc_eqc.erl").
+%% {ok,sc_eqc}
+%% 340> eqc_gen:sample(sc_eqc:time24()).
+%% {4,26,35}
+%% {20,20,45}
+%% {12,32,55}
+%% {14,48,23}
+%% {9,44,16}
+%% {17,34,31}
+%% {5,18,50}
+%% {18,0,1}
+%% {6,33,51}
+%% {23,41,59}
+%% {20,57,0}
+%% ok
+%%
+%% 341> eqc_gen:sample(sc_eqc:time24()).
+%% {1,49,3}
+%% {20,44,19}
+%% {0,13,25}
+%% {18,59,25}
+%% {10,16,17}
+%% {21,40,6}
+%% {9,37,13}
+%% {12,52,5}
+%% {3,15,29}
+%% {1,55,3}
+%% {13,53,31}
+%% ok'''
+
+time24() ->
+
+    { eqc_gen:choose(0,23), eqc_gen:choose(0,59), eqc_gen:choose(0,59) }.
