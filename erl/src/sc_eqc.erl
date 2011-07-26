@@ -407,6 +407,22 @@ rgb_color() ->
 
 %% @since Version 669
 
+%% @equiv playing_card(with_jokers)
+
+%% @doc Equivalent to calling with the argument `with_jokers'.  ```1> eqc_gen:sample(sc_eqc:playing_card()).
+%% {8,spades}
+%% {small,joker}
+%% {5,hearts}
+%% {7,clubs}
+%% {jack,clubs}
+%% {king,clubs}
+%% {ace,hearts}
+%% {jack,hearts}
+%% {jack,clubs}
+%% {5,hearts}
+%% {2,diamonds}
+%% ok'''
+
 playing_card() ->
 
     playing_card(with_jokers).
@@ -417,7 +433,37 @@ playing_card() ->
 
 %% @since Version 669
 
-playing_card(no_jokers) ->
+%% @doc Generates a random US-style playing card, with or without jokers depending on the argument passed.  ```1> eqc_gen:sample(sc_eqc:playing_card(with_jokers)).
+%% {10,spades}
+%% {small,joker}
+%% {10,spades}
+%% {king,spades}
+%% {small,joker}
+%% {king,spades}
+%% {9,hearts}
+%% {small,joker}
+%% {ace,clubs}
+%% {ace,diamonds}
+%% {6,spades}
+%% ok
+%%
+%% eqc_gen:sample(sc_eqc:playing_card(without_jokers)).
+%% {7,spades}
+%% {3,hearts}
+%% {jack,hearts}
+%% {5,clubs}
+%% {jack,spades}
+%% {queen,spades}
+%% {10,diamonds}
+%% {7,diamonds}
+%% {queen,diamonds}
+%% {9,hearts}
+%% {10,diamonds}
+%% '''
+
+
+
+playing_card(without_jokers) ->
 
     eqc_gen:elements([ {Face,Suit} || Face <- [ace]++lists:seq(2,10)++[jack,queen,king], Suit <- [hearts,clubs,spades,diamonds] ]);
 
