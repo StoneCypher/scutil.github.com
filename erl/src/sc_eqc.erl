@@ -28,12 +28,15 @@
     non_neg_integer/0,
 
     misc_type/0,
+
     unicode_codepoint/0,
 
     time12/0,
     time24/0,
 
-    roygbiv/0
+    roygbiv/0,
+    roygbp/0,
+    roygbpwb/0
 
 ]).
 
@@ -350,6 +353,26 @@ time24() ->
 roygbiv() ->
 
     eqc_gen:elements([red, orange, yellow, green, blue, indigo, violet]).
+
+
+
+
+
+%% @since Version 667
+
+roygbp() ->
+
+    eqc_gen:elements([red, orange, yellow, green, blue, purple]).
+
+
+
+
+
+%% @since Version 667
+
+roygbpwb() ->
+
+    eqc_gen:elements([red, orange, yellow, green, blue, purple, white, black]).
 
 
 
