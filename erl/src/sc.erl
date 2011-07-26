@@ -121,6 +121,7 @@
     country_codes/0,
     random_unicode_char/0,
     file_to_binary_literal_as_string/1,
+    months_as_short_atoms/0,
 
     ngrams/1,
       ngrams/2,
@@ -7606,3 +7607,13 @@ file_to_binary_literal_as_string(PathAndFilename) ->
     { ok, F } = file:read_file(PathAndFilename),
 
     lists:flatten(io_lib:format("~p", [F])).
+
+
+
+
+
+%% @since Version 665
+
+months_as_short_atoms() ->
+
+    [jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec].

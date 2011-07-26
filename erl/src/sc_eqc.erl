@@ -25,7 +25,7 @@
     pos_integer/0,
     non_neg_integer/0,
     misc_type/0,
-    real_char/0,
+    unicode_codepoint/0,
     rand_elements/1,
     time12/0,
     time24/0
@@ -50,7 +50,7 @@
 
 %% @since Version 660
 
-%% @doc This generates correct `char()' (eqc's `char()' generates `byte()'s, as legacy from before Erlang spoke unicode).  ```1> eqc_gen:sample(sc_eqc:real_char()).
+%% @doc This generates random unicode codepoints (eqc's `char()' generates `byte()'s, as legacy from before Erlang spoke unicode).  ```1> eqc_gen:sample(sc_eqc:unicode_codepoint()).
 %% 587555
 %% 824312
 %% 1039897
@@ -64,7 +64,7 @@
 %% 29761
 %% ok
 %%
-%% 2> eqc_gen:sample(sc_eqc:real_char()).
+%% 2> eqc_gen:sample(sc_eqc:unicode_codepoint()).
 %% 750151
 %% 165286
 %% 495247
@@ -78,7 +78,7 @@
 %% 106443
 %% ok'''
 
-real_char() ->
+unicode_codepoint() ->
 
     choose(0, 16#10ffff).
 
@@ -164,13 +164,13 @@ pos_integer() ->
 
 %% @since Version 657
 
-%% @doc Generator to produce positive integers, with otherwise identical behavior to `eqc_gen:int()'.
+%% @doc Generator to produce randomly typed, randomly valued output.  General approach found in http://www.trapexit.org/Recursive_Genereators#Generators_for_data_type .
 
 misc_type() ->
 
     %% add float, binary, bitstring, ?pid?, etc
 
-    case sc:random_from([ int, iolist, unicodestring, list, tuple ]) of
+    case sc:random_from([ int, iolist, unicode_string, list, tuple ]) of
 
         int ->
             int();
@@ -178,8 +178,8 @@ misc_type() ->
         iolist ->
             list(eqc_gen:char());
 
-        unicodestring ->
-            list(real_char());
+        unicode_string ->
+            list(unicode_codepoint());
 
         list ->
             list(misc_type(shallow));
@@ -201,7 +201,7 @@ misc_type(shallow) ->
 
     %% add float, binary, bitstring, ?pid?, etc
 
-    case sc:random_from([ int, iolist, unicodestring, list, tuple ]) of
+    case sc:random_from([ int, iolist, unicode_string, list, tuple ]) of
 
         int ->
             int();
@@ -209,8 +209,8 @@ misc_type(shallow) ->
         iolist ->
             list(eqc_gen:char());
 
-        unicodestring ->
-            list(real_char());
+        unicode_string ->
+            list(unicode_codepoint());
 
         list ->
             [];
@@ -264,7 +264,7 @@ rand_elements(ElementList) ->
 
 %% @since Version 662
 
-%% @doc Produces a human-readable time as a 12-hour 4-tuple {h:int(),m:int(),s:int(),am|pm}.  Hours are on the interval [1..12] inclusive.  ```1> eqc_gen:sample(sc_eqc:time12()).
+%% @doc Produces a human-readable time as a 12-hour 4-tuple `{h:int(),m:int(),s:int(),am|pm}'.  Hours are on the interval [1..12] inclusive.  ```1> eqc_gen:sample(sc_eqc:time12()).
 %% {3,41,52,am}
 %% {8,48,3,am}
 %% {9,11,38,pm}
@@ -302,7 +302,7 @@ time12() ->
 
 %% @since Version 663
 
-%% @doc Produces a human-readable time as a 24-hour 3-tuple {h:int(),m:int(),s:int()}.  Hours are on the interval [0..23] inclusive.  ```9> c("/projects/scutil/erl/src/sc_eqc.erl").
+%% @doc Produces a human-readable time as a 24-hour 3-tuple `{h:int(),m:int(),s:int()}'.  Hours are on the interval [0..23] inclusive.  ```9> c("/projects/scutil/erl/src/sc_eqc.erl").
 %% {ok,sc_eqc}
 %% 340> eqc_gen:sample(sc_eqc:time24()).
 %% {4,26,35}
@@ -335,3 +335,17 @@ time12() ->
 time24() ->
 
     { eqc_gen:choose(0,23), eqc_gen:choose(0,59), eqc_gen:choose(0,59) }.
+
+
+
+
+
+% % @ since Version 665 todo
+
+% % @ doc Produces a human-readable time as a 24-hour 3-tuple `{h:int(),m:int(),s:int()}'.  Hours are on the interval [0..23] inclusive.  ``` '''
+
+% date_short_atom_us() ->
+
+%     { eqc_gen:elements(sc:months_short_atom()), eqc_gen:choose(0,59), eqc_gen:choose(0,59) }.
+
+% needs to take into account length of month, and whether a given month/year is a leap year
