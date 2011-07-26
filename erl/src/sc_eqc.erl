@@ -37,8 +37,9 @@
     roygbiv/0,
     roygbp/0,
     roygbpwb/0,
+    rgb_color/0,
     websafe_216/0,
-    
+
     playing_card/0,
     playing_card/1
 
@@ -387,6 +388,18 @@ roygbpwb() ->
 websafe_216() ->
 
     [ eqc_gen:elements([$0, $3, $6, $9, $c, $f]), eqc_gen:elements([$0, $3, $6, $9, $c, $f]), eqc_gen:elements([$0, $3, $6, $9, $c, $f]) ].
+
+
+
+
+
+%% @since Version 670
+
+rgb_color() ->
+
+    [ eqc_gen:elements(lists:seq($0,$9)++lists:seq($a,$f)), eqc_gen:elements(lists:seq($0,$9)++lists:seq($a,$f)),
+      eqc_gen:elements(lists:seq($0,$9)++lists:seq($a,$f)), eqc_gen:elements(lists:seq($0,$9)++lists:seq($a,$f)),
+      eqc_gen:elements(lists:seq($0,$9)++lists:seq($a,$f)), eqc_gen:elements(lists:seq($0,$9)++lists:seq($a,$f)) ].
 
 
 
