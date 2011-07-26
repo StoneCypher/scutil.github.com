@@ -22,13 +22,18 @@
 
 -export([
 
+    rand_elements/1,
+
     pos_integer/0,
     non_neg_integer/0,
+
     misc_type/0,
     unicode_codepoint/0,
-    rand_elements/1,
+
     time12/0,
-    time24/0
+    time24/0,
+
+    roygbiv/0
 
 ]).
 
@@ -340,12 +345,22 @@ time24() ->
 
 
 
+%% @since Version 666
+
+roygbiv() ->
+
+    eqc_gen:elements([red, orange, yellow, green, blue, indigo, violet]).
+
+
+
+
+
 % % @ since Version 665 todo
 
 % % @ doc Produces a human-readable time as a 24-hour 3-tuple `{h:int(),m:int(),s:int()}'.  Hours are on the interval [0..23] inclusive.  ``` '''
 
 % date_short_atom_us() ->
 
-%     { eqc_gen:elements(sc:months_short_atom()), eqc_gen:choose(0,59), eqc_gen:choose(0,59) }.
+%     { eqc_gen:elements(sc:months_as_short_atoms()), eqc_gen:choose(0,59), eqc_gen:choose(0,59) }.
 
 % needs to take into account length of month, and whether a given month/year is a leap year
