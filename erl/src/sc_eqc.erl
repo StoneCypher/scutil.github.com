@@ -37,7 +37,10 @@
     roygbiv/0,
     roygbp/0,
     roygbpwb/0,
-    websafe_216/0
+    websafe_216/0,
+    
+    playing_card/0,
+    playing_card/1
 
 ]).
 
@@ -383,7 +386,37 @@ roygbpwb() ->
 
 websafe_216() ->
 
-    [ eqc_gen:elements([$0, $3, $6, $9, $c, $f]), eqc_gen:elements([$0, $3, $6, $9, $c, $f]), eqc_gen:elements([$0, $3, $6, $9, $c, $f])].
+    [ eqc_gen:elements([$0, $3, $6, $9, $c, $f]), eqc_gen:elements([$0, $3, $6, $9, $c, $f]), eqc_gen:elements([$0, $3, $6, $9, $c, $f]) ].
+
+
+
+
+
+%% @since Version 669
+
+playing_card() ->
+
+    playing_card(with_jokers).
+
+
+
+
+
+%% @since Version 669
+
+playing_card(no_jokers) ->
+
+    eqc_gen:elements([ {Face,Suit} || Face <- [ace]++lists:seq(2,10)++[jack,queen,king], Suit <- [hearts,clubs,spades,diamonds] ]);
+
+
+
+
+
+%% @since Version 669
+
+playing_card(with_jokers) ->
+
+    eqc_gen:elements([ {Face,Suit} || Face <- [ace]++lists:seq(2,10)++[jack,queen,king], Suit <- [hearts,clubs,spades,diamonds] ] ++ [{large,joker}, {small,joker}]).
 
 
 
