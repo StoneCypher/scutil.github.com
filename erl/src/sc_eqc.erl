@@ -36,7 +36,8 @@
 
     roygbiv/0,
     roygbp/0,
-    roygbpwb/0
+    roygbpwb/0,
+    websafe_216/0
 
 ]).
 
@@ -373,6 +374,16 @@ roygbp() ->
 roygbpwb() ->
 
     eqc_gen:elements([red, orange, yellow, green, blue, purple, white, black]).
+
+
+
+
+
+%% @since Version 668
+
+websafe_216() ->
+
+    [ eqc_gen:elements([$0, $3, $6, $9, $c, $f]), eqc_gen:elements([$0, $3, $6, $9, $c, $f]), eqc_gen:elements([$0, $3, $6, $9, $c, $f])].
 
 
 
