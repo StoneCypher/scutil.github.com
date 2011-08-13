@@ -122,6 +122,9 @@
     random_unicode_char/0,
     file_to_binary_literal_as_string/1,
     months_as_short_atoms/0,
+    module_is_loaded/1,
+
+%   module_flow/1,
 
     ngrams/1,
       ngrams/2,
@@ -2578,7 +2581,7 @@ vector_magnitude(VX) ->
 
 mod(Base, Range) 
 
-    when is_integer(Base), 
+    when is_integer(Base),
          is_integer(Range) ->
 
     case Base rem Range of
@@ -7617,3 +7620,15 @@ file_to_binary_literal_as_string(PathAndFilename) ->
 months_as_short_atoms() ->
 
     [jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec].
+
+
+
+
+
+%% @since Version 666
+
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Inspired by http://chrisdone.com/posts/2011-08-07-flo-flow-diagrams-from-your-codebase.html
+
+module_is_loaded(ModuleName) when is_atom(ModuleName) ->
+
+    lists:member(ModuleName, erlang:loaded()).

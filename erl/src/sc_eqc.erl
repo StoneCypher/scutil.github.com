@@ -177,30 +177,45 @@ pos_integer() ->
 
 %% @since Version 657
 
-%% @doc Generator to produce randomly typed, randomly valued output.  General approach found in http://www.trapexit.org/Recursive_Genereators#Generators_for_data_type .
+%% @doc Generator to produce randomly typed, randomly valued output.  General approach found in http://www.trapexit.org/Recursive_Genereators#Generators_for_data_type .  ```1> eqc_gen:sample( sc_eqc:misc_type() ).
+%% #Fun<sc_eqc.5.6489470>
+%% {[#Fun<sc_eqc.6.133772179>,<<">\t)">>,{[[],[509302,310720,81256]]}]}
+%% <<93,0:4>>
+%% [-5360596133,2358196763]
+%% []
+%% <<118,54:7>>
+%% <0.0.0>
+%% completely_different
+%% <<228,119,200,34,153,132,47,49,216,164,84,59,169,108,54,77,187,13>>
+%% #Fun<sc_eqc.6.133772179>
+%% {[[[1.0,-2.111111111111111,0.6666666666666666,-1.1333333333333333,
+%%     -3.1666666666666665,-2.5714285714285716],
+%%    4.5,-4912435490,
+%%    <<8:5>>],
+%%   {},-3471414436,
+%%   <<65,0:2>>]}
+%% ok
+%%
+%% 2> eqc_gen:sample( sc_eqc:misc_type() ).
+%% -3508369748
+%% <<65,50,251,208,133,199,158,179,199,172,1>>
+%% #Ref<0.0.0.14034>
+%% #Fun<sc_eqc.6.133772179>
+%% -2860100253
+%% []
+%% [{[{}]},249,silly_walks,"3#Ku"]
+%% [[2.0,-1.6,0.5555555555555556,-1.75,-0.07692307692307693,
+%%   -0.13333333333333333]]
+%% <0.0.0>
+%% 16
+%% <<9,18,0:4>>
+%% ok'''
 
 misc_type() ->
 
     %% add float, binary, bitstring, ?pid?, etc
 
-    case sc:random_from([ int, iolist, unicode_string, list, tuple ]) of
-
-        int ->
-            int();
-
-        iolist ->
-            list(eqc_gen:char());
-
-        unicode_string ->
-            list(unicode_codepoint());
-
-        list ->
-            list(misc_type(shallow));
-
-        tuple ->
-            list_to_tuple(list(misc_type(shallow)))
-
-    end.
+    ?SIZED(Size, misc_type(Size)).
 
 
 
@@ -210,28 +225,82 @@ misc_type() ->
 
 %% @doc Generator to produce positive integers, with otherwise identical behavior to `eqc_gen:int()'.
 
-misc_type(shallow) ->
+misc_type(0) ->
+
+    oneof([
+
+        int(),
+        real(),
+
+        binary(),
+        bitstring(),
+
+        c:pid(0,0,0),
+
+        bool(),
+        char(),
+        largeint(),
+        make_ref(),
+        fun() -> fun() -> ok     end end,
+        fun() -> fun() -> not_ok end end,
+
+        elements([red, blue, green, file, assasin, bacon, narwhal]),
+        elements([knights_who_say_ni, silly_walks, argument_bureau, completely_different]),
+
+        list(eqc_gen:char()),
+        list(unicode_codepoint()),
+        list(real()),
+        list(largeint()),
+
+        {},
+        []
+
+%        list_to_tuple(list(misc_type(shallow)))
+
+    ]);
+
+
+
+
+
+misc_type(Size) when is_integer(Size) ->
 
     %% add float, binary, bitstring, ?pid?, etc
 
-    case sc:random_from([ int, iolist, unicode_string, list, tuple ]) of
+    oneof([
 
-        int ->
-            int();
+        int(),
+        real(),
 
-        iolist ->
-            list(eqc_gen:char());
+        binary(Size),
+        bitstring(Size),
 
-        unicode_string ->
-            list(unicode_codepoint());
+        c:pid(0,0,0),
 
-        list ->
-            [];
+        bool(),
+        char(),
+        largeint(),
+        make_ref(),
+        fun() -> fun() -> ok     end end,
+        fun() -> fun() -> not_ok end end,
 
-        tuple ->
-            {}
+        elements([red, blue, green, file, assasin, bacon, narwhal]),
+        elements([knights_who_say_ni, silly_walks, argument_bureau, completely_different]),
 
-    end.
+        list(eqc_gen:char()),
+        list(unicode_codepoint()),
+        list(real()),
+        list(largeint()),
+
+        {},
+        [],
+
+        list(misc_type(trunc(Size/2))),
+        {list(misc_type(trunc(Size/2)))}
+
+%        list_to_tuple(list(misc_type(shallow)))
+
+    ]).
 
 
 

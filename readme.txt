@@ -9,4 +9,3 @@ A product of Crunchy Development
 
 All code here is MIT Licensed; see license.txt
   http://scutil.com/license.html
-  http://whyihatethegpl.com/
