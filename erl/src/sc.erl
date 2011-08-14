@@ -124,7 +124,7 @@
     months_as_short_atoms/0,
     module_is_loaded/1,
 
-%   module_flow/1,
+%   module_flow/1,     % module attributes can't be amongst the functions :(
 
     ngrams/1,
       ngrams/2,
@@ -544,7 +544,7 @@ extrema([First | _] = List)
 
 
 %% @spec key_duplicate(CvList::list()) -> [any()]
-%% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Iterates a list of `{Count,Term}', producing a list of `[Term,Term,...]'.  ```1> sc:key_duplicate([ {3,bork} ]).
+%% @doc Iterates a list of `{Count,Term}', producing a list of `[Term,Term,...]'.  ```1> sc:key_duplicate([ {3,bork} ]).
 %% [bork,bork,bork]
 %%
 %% 2> sc:key_duplicate([ {3,sunday}, {2,monster}, {2,truck}, {1,'MADNESS'} ]).
@@ -560,7 +560,7 @@ key_duplicate(KeyList) ->
 
 
 %% @spec rotate_list(Distance::integer(), ListData::list()) -> list()
-%% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Rotates the front `Distance' elements of a list to the back, in order.  Negative distances rotate the back towards the front.  Distances over the length of
+%% @doc Rotates the front `Distance' elements of a list to the back, in order.  Negative distances rotate the back towards the front.  Distances over the length of
 %% the list wrap in modulus.  ```1> sc:rotate_list(2, [1,2,3,4,5,6,7,8]).
 %% [3,4,5,6,7,8,1,2]
 %%
@@ -7627,8 +7627,33 @@ months_as_short_atoms() ->
 
 %% @since Version 666
 
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Inspired by http://chrisdone.com/posts/2011-08-07-flo-flow-diagrams-from-your-codebase.html
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+
+% % @ flow {module_is_loaded, {lists,member}}
 
 module_is_loaded(ModuleName) when is_atom(ModuleName) ->
 
     lists:member(ModuleName, erlang:loaded()).
+
+
+
+
+
+% % @ since Version 667
+
+% % @ doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Inspired by http://chrisdone.com/posts/2011-08-07-flo-flow-diagrams-from-your-codebase.html
+
+% oh no!  module attributes can't be among the functions.  that means the beautiful decoration scheme i had in mind
+% won't work.  i have to think of a different one before continuing.  le sad.
+
+% module_flow(ModuleNameList) when is_list(ModuleNameList) ->
+%
+%     case [ I || { I, Ir } <- [ { MN, module_is_loaded(MN) } || MN <- ModuleNameList ], Ir =/= true] of
+%
+%         [] ->
+%             "digraph G { " ++ lists:flatten([ atom_to_list(MN) ++ "; " || MN <- ModuleNameList ]) ++ "}";
+%
+%         Any ->
+%             { "Some modules not loaded", Any }
+%
+%     end.

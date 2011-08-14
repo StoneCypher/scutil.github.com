@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 665 $</p>
+<p><b>Version:</b> $Revision: 672 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -251,7 +251,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#kendall_correlation-2">kendall_correlation/2</a></td><td>Equivalent to <a href="#kendall-1"><tt>kendall(lists:zip(List1, List2))</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#key_cluster-2">key_cluster/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
-<tr><td valign="top"><a href="#key_duplicate-1">key_duplicate/1</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Iterates a list of <code>{Count,Term}</code>, producing a list of <code>[Term,Term,...]</code>.</td></tr>
+<tr><td valign="top"><a href="#key_duplicate-1">key_duplicate/1</a></td><td>Iterates a list of <code>{Count,Term}</code>, producing a list of <code>[Term,Term,...]</code>.</td></tr>
 <tr><td valign="top"><a href="#key_extrema-1">key_extrema/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#key_extrema-2">key_extrema/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#key_group-2">key_group/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -286,6 +286,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#module_attribute-1">module_attribute/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Look up all attributes of a given module.</td></tr>
 <tr><td valign="top"><a href="#module_attribute-2">module_attribute/2</a></td><td><span style="color:red"><b><i>BUGGY</i></b></span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Look up an Erlang module attribute value by title.</td></tr>
 <tr><td valign="top"><a href="#module_feature-2">module_feature/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#module_is_loaded-1">module_is_loaded/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#moment-2">moment/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the Nth moment of a list.</td></tr>
 <tr><td valign="top"><a href="#moments-1">moments/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#moments-2">moments/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -334,7 +335,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#reverse_map_filter-3">reverse_map_filter/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#root_mean_square-1">root_mean_square/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the root mean square of the values in the list.</td></tr>
 <tr><td valign="top"><a href="#root_sum_square-1">root_sum_square/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the magnitude (also known as the root sum square) of a vector.</td></tr>
-<tr><td valign="top"><a href="#rotate_list-2">rotate_list/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Rotates the front <code>Distance</code> elements of a list to the back, in order.</td></tr>
+<tr><td valign="top"><a href="#rotate_list-2">rotate_list/2</a></td><td>Rotates the front <code>Distance</code> elements of a list to the back, in order.</td></tr>
 <tr><td valign="top"><a href="#rotate_to_first-2">rotate_to_first/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Rotates the list to the first instance of Item.</td></tr>
 <tr><td valign="top"><a href="#rotate_to_last-2">rotate_to_last/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Rotates the list so that the first instance of Item becomes the last element in the list.</td></tr>
 <tr><td valign="top"><a href="#sanitize_filename-1">sanitize_filename/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Sanitize an arbitrary string to be appropriate for Windows and Unix filesystems, and URLs.</td></tr>
@@ -1293,7 +1294,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="key_duplicate-1">key_duplicate/1</a></h3>
 <div class="spec">
 <p><tt>key_duplicate(CvList::list()) -&gt; [any()]</tt></p>
-</div><p><span style="color:orange;font-style:italic">Stoch untested</span> Iterates a list of <code>{Count,Term}</code>, producing a list of <code>[Term,Term,...]</code>.  <pre>  1&gt; sc:key_duplicate([ {3,bork} ]).
+</div><p>Iterates a list of <code>{Count,Term}</code>, producing a list of <code>[Term,Term,...]</code>.  <pre>  1&gt; sc:key_duplicate([ {3,bork} ]).
   [bork,bork,bork]
  
   2&gt; sc:key_duplicate([ {3,sunday}, {2,monster}, {2,truck}, {1,'MADNESS'} ]).
@@ -1569,8 +1570,8 @@ presenting the actual volume of functionality present here.  We can get the cove
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 665 2011-07-26 00:04:09Z john $"},
-   {svn_revision,"$Revision: 665 $"},
+   {svn_id,"$Id: sc.erl 672 2011-08-13 22:20:32Z john $"},
+   {svn_revision,"$Revision: 672 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre></p>
@@ -1591,6 +1592,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>module_feature(Module, Feature) -&gt; any()</tt></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></p>
 <p><b>Introduced in:</b> Version 521</p>
+
+<h3 class="function"><a name="module_is_loaded-1">module_is_loaded/1</a></h3>
+<div class="spec">
+<p><tt>module_is_loaded(ModuleName) -&gt; any()</tt></p>
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></p>
+<p><b>Introduced in:</b> Version 666</p>
 
 <h3 class="function"><a name="moment-2">moment/2</a></h3>
 <div class="spec">
@@ -1992,7 +1999,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="function"><a name="rotate_list-2">rotate_list/2</a></h3>
 <div class="spec">
 <p><tt>rotate_list(Distance::integer(), ListData::list()) -&gt; list()</tt></p>
-</div><p><span style="color:orange;font-style:italic">Stoch untested</span> Rotates the front <code>Distance</code> elements of a list to the back, in order.  Negative distances rotate the back towards the front.  Distances over the length of
+</div><p>Rotates the front <code>Distance</code> elements of a list to the back, in order.  Negative distances rotate the back towards the front.  Distances over the length of
   the list wrap in modulus.  <pre>  1&gt; sc:rotate_list(2, [1,2,3,4,5,6,7,8]).
   [3,4,5,6,7,8,1,2]
  
@@ -2560,6 +2567,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Jul 26 2011, 18:21:00.</i></p>
+<p><i>Generated by EDoc, Aug 13 2011, 21:50:00.</i></p>
 </body>
 </html>
