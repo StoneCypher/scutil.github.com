@@ -6369,7 +6369,10 @@ multi_do(I, Module, Func, Args, Work) ->
 %% ",,"
 %%
 %% 4> sc:implode("-wop ", ["do", "do", "do"]).
-%% "do-wop do-wop do"'''
+%% "do-wop do-wop do"
+%%
+%% 5> sc:implode("", ["", "", ""]).
+%% []'''
 
 implode(Separator, Data)
 
