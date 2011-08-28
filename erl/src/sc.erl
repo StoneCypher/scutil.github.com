@@ -6359,22 +6359,34 @@ multi_do(I, Module, Func, Args, Work) ->
 
 %% @since Version 621
 
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+%% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Append strings with separating string inbetween - contrast {@link explode/2}. ```1> sc:implode(",", ["a", "b", "c"]).
+%% "a,b,c"
+%%
+%% 2> sc:implode(",", ["ab", "cd", "ef"]).
+%% "ab,cd,ef"
+%%
+%% 3> sc:implode(",", ["", "", ""]).
+%% ",,"
+%%
+%% 4> sc:implode("-wop ", ["do", "do", "do"]).
+%% "do-wop do-wop do"'''
 
 implode(Separator, Data)
 
     when is_list(Data),
          is_list(Separator) ->
 
-    lists:foldr(
-
-        fun(Item, [])  -> [Item];
-           (Item, Acc) -> [Item] ++ Separator ++ Acc
-        end,
-
-        "",
-        Data
-
+    lists:append(
+        lists:foldr(
+    
+            fun(Item, [])  -> [Item];
+               (Item, Acc) -> [Item] ++ [Separator] ++ Acc
+            end,
+    
+            "",
+            Data
+    
+        )
     ).
 
 
