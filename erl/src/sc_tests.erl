@@ -311,7 +311,22 @@ implode_test_() ->
 
         {"a,b,c",    ?_assert("a,b,c"    =:= sc:implode(",", ["a",  "b",  "c" ]))},
         {"ab,cd,ef", ?_assert("ab,cd,ef" =:= sc:implode(",", ["ab", "cd", "ef"]))},
-        {",,",       ?_assert(",,"       =:= sc:implode(",", ["",   "",   ""  ]))}
+        {",,",       ?_assert(",,"       =:= sc:implode(",", ["",   "",   ""  ]))},
+        {"",         ?_assert(""         =:= sc:implode("",  ["",   "",   ""  ]))}
+
+    ] }.
+
+
+
+
+
+explode_test_() ->
+
+    { "Explode tests", [
+
+        {"a,b,c",    ?_assert(["a",  "b",  "c" ] =:= sc:explode(",", "a,b,c"))},
+        {"ab,cd,ef", ?_assert(["ab", "cd", "ef"] =:= sc:explode(",", "ab,cd,ef"))},
+        {",,",       ?_assert(["",   "",   ""  ] =:= sc:explode(",", ",,"))}
 
     ] }.
 
