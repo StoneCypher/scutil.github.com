@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 675 $</p>
+<p><b>Version:</b> $Revision: 682 $</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -173,6 +173,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#abstract_function-2">abstract_function/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#abstract_functions-1">abstract_functions/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#additive_factorial-1">additive_factorial/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#adjust_counter_by-2">adjust_counter_by/2</a></td><td><a href="#Counters">Counters</a> Adds to a counter's value; if the counter was not already defined, it will become the value in the <code>By</code> argument.</td></tr>
 <tr><td valign="top"><a href="#alarm_set-3">alarm_set/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#alarm_terminate-1">alarm_terminate/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#all_neighbor_pairs-1">all_neighbor_pairs/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -200,8 +201,13 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#circles_overlap-2">circles_overlap/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#combinations-2">combinations/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#count_of-2">count_of/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Counts the number of instances of Item in List.</td></tr>
+<tr><td valign="top"><a href="#counter_at-1">counter_at/1</a></td><td><a href="#Counters">Counters</a> Checks a counter's value; if the counter was not already defined, it will report zero.</td></tr>
 <tr><td valign="top"><a href="#country_codes-0">country_codes/0</a></td><td></td></tr>
 <tr><td valign="top"><a href="#cube-1">cube/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
+<tr><td valign="top"><a href="#dec_counter-1">dec_counter/1</a></td><td>Equivalent to <a href="#adjust_counter_by-2"><tt>adjust_counter_by(Name, -1)</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#dec_counter-2">dec_counter/2</a></td><td>Equivalent to <a href="#adjust_counter_by-2"><tt>adjust_counter_by(Name, -1 * By)</tt></a>.
+</td></tr>
 <tr><td valign="top"><a href="#differences-1">differences/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#distinct_neighbor_pairs-1">distinct_neighbor_pairs/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#distinct_neighbor_pairs-2">distinct_neighbor_pairs/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -253,6 +259,10 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#hmean_vector_normal-1">hmean_vector_normal/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the harmonic mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#implode-2">implode/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Append strings with separating string inbetween - contrast <a href="#explode-2"><code>explode/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#in_range-3">in_range/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#inc_counter-1">inc_counter/1</a></td><td>Equivalent to <a href="#adjust_counter_by-2"><tt>adjust_counter_by(Name, 1)</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#inc_counter-2">inc_counter/2</a></td><td>Equivalent to <a href="#adjust_counter_by-2"><tt>adjust_counter_by(Name, By)</tt></a>.
+</td></tr>
 <tr><td valign="top"><a href="#index_of_first-2">index_of_first/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.</td></tr>
 <tr><td valign="top"><a href="#integer_to_radix_list-2">integer_to_radix_list/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a number to a radix string using a radix list of your specification and any size.</td></tr>
 <tr><td valign="top"><a href="#io_list_to_hex_string-1">io_list_to_hex_string/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert an io_list() to a hexstring().</td></tr>
@@ -348,6 +358,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#receive_one-0">receive_one/0</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Pop the front of the message queue and return it as <code>{item,X}</code>, or return nothing_there for empty queues; do not block.</td></tr>
 <tr><td valign="top"><a href="#record_member-2">record_member/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <span style="color:red">TODO: Needs Example</span> Checks whether E is a member element of record R, analogous to <code>lists::member(E, L)</code>.</td></tr>
 <tr><td valign="top"><a href="#replace-3">replace/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#reset_counter-1">reset_counter/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Resets a counter's value to zero.</td></tr>
 <tr><td valign="top"><a href="#reverse_filter-2">reverse_filter/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#reverse_map-2">reverse_map/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#reverse_map_filter-3">reverse_map_filter/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -363,6 +374,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#send_receive-3">send_receive/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Non-Blocking) First send a message to an entity.</td></tr>
 <tr><td valign="top"><a href="#send_receive_masked-3">send_receive_masked/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Blocking) First send a message to an entity.</td></tr>
 <tr><td valign="top"><a href="#send_receive_masked-4">send_receive_masked/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Non-Blocking) First send a message to an entity.</td></tr>
+<tr><td valign="top"><a href="#set_counter_value-2">set_counter_value/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Sets a counter's value to a specific value.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-1">shared_keys/1</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Create sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples, where key K appears in both A and B.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-2">shared_keys/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Equivalent to <a href="#shared_keys-1"><code>shared_keys/1</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
 <tr><td valign="top"><a href="#shared_keys-3">shared_keys/3</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Equivalent to <a href="#shared_keys-2"><code>shared_keys/2</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</td></tr>
@@ -458,6 +470,19 @@ and returns the tuple of the remainder and then a list of all results from the f
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></p>
 <p><b>Introduced in:</b> Version 639
  </p>
+
+<h3 class="function"><a name="adjust_counter_by-2">adjust_counter_by/2</a></h3>
+<div class="spec">
+<p><tt>adjust_counter_by(Name::any(), By::number()) -&gt; number()</tt></p>
+</div><p><a href="#Counters">Counters</a> Adds to a counter's value; if the counter was not already defined, it will become the value in the <code>By</code> argument. <pre>  1&gt; sc:counter_at(hello).
+  0
+ 
+  2&gt; sc:inc_counter(hello).
+  1
+ 
+  3&gt; sc:adjust_by(hello, 3).
+  4</pre></p>
+<p><b>Introduced in:</b> Version 680</p>
 
 <h3 class="function"><a name="alarm_set-3">alarm_set/3</a></h3>
 <div class="spec">
@@ -685,6 +710,31 @@ and returns the tuple of the remainder and then a list of all results from the f
  </p>
 <p><b>Introduced in:</b> Version 550</p>
 
+<h3 class="function"><a name="counter_at-1">counter_at/1</a></h3>
+<div class="spec">
+<p><tt>counter_at(Name::any()) -&gt; number()</tt></p>
+</div><p><a href="#Counters">Counters</a> Checks a counter's value; if the counter was not already defined, it will report zero. <pre>  1&gt; sc:counter_at(hello).
+  0
+ 
+  2&gt; sc:inc_counter(hello).
+  1
+ 
+  3&gt; sc:inc_counter(hello).
+  2
+ 
+  4&gt; sc:inc_counter(hello).
+  3
+ 
+  5&gt; sc:counter_at(hello).
+  3
+ 
+  6&gt; sc:reset_counter(hello).
+  0
+ 
+  7&gt; sc:counter_at(hello).
+  0</pre></p>
+<p><b>Introduced in:</b> Version 682</p>
+
 <h3 class="function"><a name="country_codes-0">country_codes/0</a></h3>
 <div class="spec">
 <p><tt>country_codes() -&gt; any()</tt></p>
@@ -701,6 +751,20 @@ and returns the tuple of the remainder and then a list of all results from the f
   6.25</pre>
  </p>
 <p><b>Introduced in:</b> Version 508</p>
+
+<h3 class="function"><a name="dec_counter-1">dec_counter/1</a></h3>
+<div class="spec">
+<p><tt>dec_counter(Name) -&gt; any()</tt></p>
+</div><p>Equivalent to <a href="#adjust_counter_by-2"><tt>adjust_counter_by(Name, -1)</tt></a>.</p>
+
+<p><b>Introduced in:</b> Version 681</p>
+
+<h3 class="function"><a name="dec_counter-2">dec_counter/2</a></h3>
+<div class="spec">
+<p><tt>dec_counter(Name, By) -&gt; any()</tt></p>
+</div><p>Equivalent to <a href="#adjust_counter_by-2"><tt>adjust_counter_by(Name, -1 * By)</tt></a>.</p>
+
+<p><b>Introduced in:</b> Version 681</p>
 
 <h3 class="function"><a name="differences-1">differences/1</a></h3>
 <div class="spec">
@@ -1219,13 +1283,15 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="hmac_md5-2">hmac_md5/2</a></h3>
 <div class="spec">
 <p><tt>hmac_md5(Key, Data) -&gt; any()</tt></p>
-</div><p><span style="color:red;font-style:italic">Obsolete - legacy support only - do not use in new code</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> HMAC wrapper built around MD5 as the core hash, frequently known as <code>hmac-md5</code> or <code>md5-hmac</code>.</p>
+</div><p><span style="color:red;font-style:italic">Obsolete - legacy support only - do not use in new code</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> HMAC wrapper built around MD5 as the core hash, frequently known as <code>hmac-md5</code> or <code>md5-hmac</code>.
+ </p>
 <p><b>Introduced in:</b> Version 647</p>
 
 <h3 class="function"><a name="hmac_sha1-2">hmac_sha1/2</a></h3>
 <div class="spec">
 <p><tt>hmac_sha1(Key, Data) -&gt; any()</tt></p>
-</div><p>Should be obsolete, but Erlang's standard library does not include SHA-2, and neither does <code>scutil</code> (yet) - <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> HMAC wrapper built around SHA1-160 (the only SHA-1) as the core hash, frequently known as <code>hmac-sha1</code>, <code>hmac-sha</code> or <code>sha1-hmac</code>.</p>
+</div><p>Should be obsolete, but Erlang's standard library does not include SHA-2, and neither does <code>scutil</code> (yet) - <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> HMAC wrapper built around SHA1-160 (the only SHA-1) as the core hash, frequently known as <code>hmac-sha1</code>, <code>hmac-sha</code> or <code>sha1-hmac</code>.
+ </p>
 <p><b>Introduced in:</b> Version 647</p>
 
 <h3 class="function"><a name="hmean_vector_normal-1">hmean_vector_normal/1</a></h3>
@@ -1262,6 +1328,20 @@ and returns the tuple of the remainder and then a list of all results from the f
 <p><tt>in_range(List, Lo, Hi) -&gt; any()</tt></p>
 </div>
 <p><b>Introduced in:</b> Version 649</p>
+
+<h3 class="function"><a name="inc_counter-1">inc_counter/1</a></h3>
+<div class="spec">
+<p><tt>inc_counter(Name) -&gt; any()</tt></p>
+</div><p>Equivalent to <a href="#adjust_counter_by-2"><tt>adjust_counter_by(Name, 1)</tt></a>.</p>
+
+<p><b>Introduced in:</b> Version 681</p>
+
+<h3 class="function"><a name="inc_counter-2">inc_counter/2</a></h3>
+<div class="spec">
+<p><tt>inc_counter(Name, By) -&gt; any()</tt></p>
+</div><p>Equivalent to <a href="#adjust_counter_by-2"><tt>adjust_counter_by(Name, By)</tt></a>.</p>
+
+<p><b>Introduced in:</b> Version 681</p>
 
 <h3 class="function"><a name="index_of_first-2">index_of_first/2</a></h3>
 <div class="spec">
@@ -1720,8 +1800,8 @@ and returns the tuple of the remainder and then a list of all results from the f
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
    {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 675 2011-08-28 18:33:48Z john $"},
-   {svn_revision,"$Revision: 675 $"},
+   {svn_id,"$Id: sc.erl 682 2011-10-01 18:49:58Z john $"},
+   {svn_revision,"$Revision: 682 $"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre>
@@ -1754,7 +1834,8 @@ and returns the tuple of the remainder and then a list of all results from the f
 <div class="spec">
 <p><tt>module_is_loaded(ModuleName) -&gt; any()</tt></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></p>
-<p><b>Introduced in:</b> Version 666</p>
+<p><b>Introduced in:</b> Version 666
+ </p>
 
 <h3 class="function"><a name="moment-2">moment/2</a></h3>
 <div class="spec">
@@ -2014,13 +2095,15 @@ and returns the tuple of the remainder and then a list of all results from the f
   <p>That's right, six 0.8s is 1 in 4.  Do the math.</p>
  
   Thanks for the idea, Forest.</p>
-<p><b>Introduced in:</b> Version 651</p>
+<p><b>Introduced in:</b> Version 651
+ </p>
 
 <h3 class="function"><a name="probability_any-1">probability_any/1</a></h3>
 <div class="spec">
 <p><tt>probability_any(ListOfProbabilities) -&gt; any()</tt></p>
 </div><p><span style="color:red;font-style:italic">Incomplete Todo Comeback</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></p>
-<p><b>Introduced in:</b> Version 652</p>
+<p><b>Introduced in:</b> Version 652
+ </p>
 
 <h3 class="function"><a name="rand-1">rand/1</a></h3>
 <div class="spec">
@@ -2152,6 +2235,26 @@ and returns the tuple of the remainder and then a list of all results from the f
 <div class="spec">
 <p><tt>replace(Source, Pattern, Replacement) -&gt; any()</tt></p>
 </div>
+
+<h3 class="function"><a name="reset_counter-1">reset_counter/1</a></h3>
+<div class="spec">
+<p><tt>reset_counter(Name) -&gt; any()</tt></p>
+</div><p>Equivalent to <a href="#set_counter_value-2"><tt>set_counter_value(Name, 0)</tt></a>.</p>
+<p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Resets a counter's value to zero. <pre>  1&gt; sc:counter_at(hello).
+  0
+ 
+  2&gt; sc:set_counter_value(hello,4).
+  4
+ 
+  3&gt; sc:counter_at(hello).
+  4
+ 
+  4&gt; sc:reset_counter(hello).
+  0
+ 
+  5&gt; sc:counter_at(hello).
+  0</pre></p>
+<p><b>Introduced in:</b> Version 679</p>
 
 <h3 class="function"><a name="reverse_filter-2">reverse_filter/2</a></h3>
 <div class="spec">
@@ -2309,6 +2412,25 @@ and returns the tuple of the remainder and then a list of all results from the f
   {item,message}</pre>
  </p>
 <p><b>Introduced in:</b> Version 581</p>
+
+<h3 class="function"><a name="set_counter_value-2">set_counter_value/2</a></h3>
+<div class="spec">
+<p><tt>set_counter_value(Name::any(), To::number()) -&gt; 0</tt></p>
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Sets a counter's value to a specific value. <pre>  1&gt; sc:counter_at(hello).
+  0
+ 
+  2&gt; sc:set_counter_value(hello,4).
+  4
+ 
+  3&gt; sc:counter_at(hello).
+  4
+ 
+  4&gt; sc:reset_counter(hello).
+  0
+ 
+  5&gt; sc:counter_at(hello).
+  0</pre></p>
+<p><b>Introduced in:</b> Version 678</p>
 
 <h3 class="function"><a name="shared_keys-1">shared_keys/1</a></h3>
 <div class="spec">
@@ -2813,6 +2935,6 @@ and returns the tuple of the remainder and then a list of all results from the f
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Sep 17 2011, 19:01:00.</i></p>
+<p><i>Generated by EDoc, Oct 1 2011, 14:51:56.</i></p>
 </body>
 </html>

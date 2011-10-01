@@ -62,7 +62,21 @@ key_duplicate_test_() ->
 
 prop_rotate_list_correct_length() ->
 
-    ?FORALL( {L,I}, {int(), list(int())}, abs(L) == length( sc:key_duplicate([ {abs(L),I} ]) ) ).
+    ?FORALL( {R,L},
+             {int(), list(sc_eqc:misc_type())},
+             length(L) == length(sc:rotate_list(R,L))
+           ).
+
+
+
+
+
+prop_rotate_list_same_histo() ->
+
+    ?FORALL( {R,L},
+             {int(), list(sc_eqc:misc_type())},
+             sc:histograph(L) == sc:histograph(sc:rotate_list(R,L))
+           ).
 
 
 
@@ -83,8 +97,8 @@ rotate_list_test_() ->
         {"-3, [ a,b,c ]", ?_assert( [a,b,c] =:= sc:rotate_list(-3, [ a,b,c ]) ) },
         {"9,  [ a,b,c ]", ?_assert( [a,b,c] =:= sc:rotate_list(9,  [ a,b,c ]) ) },
 
-
-        {"Stochastic: correct length", ?_assert( true  =:= eqc:quickcheck(prop_rotate_list_correct_length()) ) }
+        {"Stochastic: correct length",  ?_assert( true  =:= eqc:quickcheck(prop_rotate_list_correct_length()) ) },
+        {"Stochastic: same histograph", ?_assert( true  =:= eqc:quickcheck(prop_rotate_list_same_histo()) ) }
 
     ] }.
 
@@ -106,6 +120,17 @@ index_of_first_test_() ->
 
 
 
+prop_rotate_to_first_correct_length() ->
+
+    ?FORALL( {R,L},
+             {int(), list(sc_eqc:misc_type())},
+             length(L) == length(sc:rotate_to_first(R,L))
+           ).
+
+
+
+
+
 rotate_to_first_test_() ->
 
     { "Rotate to first tests", [
@@ -114,7 +139,9 @@ rotate_to_first_test_() ->
         {"4, [1,2,3,4]", ?_assert( [4,1,2,3] =:= sc:rotate_to_first( 4, [1,2,3,4]  ) ) },
         {"1, [1,2,3,4]", ?_assert( [1,2,3,4] =:= sc:rotate_to_first( 1, [1,2,3,4]  ) ) },
 
-        {"f, [1,2,3,4]", ?_assert( no_such_element =:= sc:rotate_to_first( f, [1,2,3,4]  ) ) }
+        {"f, [1,2,3,4]", ?_assert( no_such_element =:= sc:rotate_to_first( f, [1,2,3,4]  ) ) },
+
+        {"Stochastic: correct length",  ?_assert( true  =:= eqc:quickcheck(prop_rotate_to_first_correct_length()) ) }
 
     ] }.
 

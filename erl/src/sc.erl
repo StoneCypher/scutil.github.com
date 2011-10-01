@@ -7802,19 +7802,19 @@ counter_process() ->
 
 %% @spec set_counter_value(Name::any(), To::number()) -> 0
 
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Sets a counter's value to a specific value. ```1> sc_counter:counter(hello).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Sets a counter's value to a specific value. ```1> sc:counter_at(hello).
 %% 0
 %%
-%% 2> sc_counter:set(hello,4).
+%% 2> sc:set_counter_value(hello,4).
 %% 4
 %%
-%% 3> sc_counter:counter(hello).
+%% 3> sc:counter_at(hello).
 %% 4
 %%
-%% 4> sc_counter:reset(hello).
+%% 4> sc:reset_counter(hello).
 %% 0
 %%
-%% 5> sc_counter:counter(hello).
+%% 5> sc:counter_at(hello).
 %% 0'''
 
 %% @since Version 678
@@ -7836,19 +7836,19 @@ set_counter_value(Name, To) when is_number(To) ->
 
 %% @equiv set_counter_value(Name, 0)
 
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Resets a counter's value to zero. ```1> sc_counter:counter(hello).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Resets a counter's value to zero. ```1> sc:counter_at(hello).
 %% 0
 %%
-%% 2> sc_counter:set(hello,4).
+%% 2> sc:set_counter_value(hello,4).
 %% 4
 %%
-%% 3> sc_counter:counter(hello).
+%% 3> sc:counter_at(hello).
 %% 4
 %%
-%% 4> sc_counter:reset(hello).
+%% 4> sc:reset_counter(hello).
 %% 0
 %%
-%% 5> sc_counter:counter(hello).
+%% 5> sc:counter_at(hello).
 %% 0'''
 
 
@@ -7864,13 +7864,13 @@ reset_counter(Name) ->
 
 %% @spec adjust_counter_by(Name::any(), By::number()) -> number()
 
-%% @doc {@section Counters} Adds to a counter's value; if the counter was not already defined, it will become the value in the `By' argument. ```1> sc_counter:counter(hello).
+%% @doc {@section Counters} Adds to a counter's value; if the counter was not already defined, it will become the value in the `By' argument. ```1> sc:counter_at(hello).
 %% 0
 %%
-%% 2> sc_counter:inc(hello).
+%% 2> sc:inc_counter(hello).
 %% 1
 %%
-%% 3> sc_counter:adjust_by(hello, 3).
+%% 3> sc:adjust_by(hello, 3).
 %% 4'''
 
 %% @since Version 680
@@ -7940,25 +7940,25 @@ dec_counter(Name,By) ->
 
 %% @spec counter_at(Name::any()) -> number()
 
-%% @doc {@section Counters} Checks a counter's value; if the counter was not already defined, it will report zero. ```1> sc_counter:counter(hello).
+%% @doc {@section Counters} Checks a counter's value; if the counter was not already defined, it will report zero. ```1> sc:counter_at(hello).
 %% 0
 %%
-%% 2> sc_counter:inc(hello).
+%% 2> sc:inc_counter(hello).
 %% 1
 %%
-%% 3> sc_counter:inc(hello).
+%% 3> sc:inc_counter(hello).
 %% 2
 %%
-%% 4> sc_counter:inc(hello).
+%% 4> sc:inc_counter(hello).
 %% 3
 %%
-%% 5> sc_counter:counter(hello).
+%% 5> sc:counter_at(hello).
 %% 3
 %%
-%% 6> sc_counter:reset(hello).
+%% 6> sc:reset_counter(hello).
 %% 0
 %%
-%% 7> sc_counter:counter(hello).
+%% 7> sc:counter_at(hello).
 %% 0'''
 
 %% @since Version 682
