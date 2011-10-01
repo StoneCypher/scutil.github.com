@@ -129,7 +129,8 @@
 
 %   module_flow/1,     % module attributes can't be amongst the functions :(
 
-    set_counter_value/2,
+    counter_at/1,
+      set_counter_value/2,
       reset_counter/1,
       adjust_counter_by/2,
       inc_counter/1,
@@ -7932,3 +7933,43 @@ dec_counter(Name) ->
 dec_counter(Name,By) ->
 
     adjust_counter_by(Name, -1*By).
+
+
+
+
+
+%% @spec counter_at(Name::any()) -> number()
+
+%% @doc {@section Counters} Checks a counter's value; if the counter was not already defined, it will report zero. ```1> sc_counter:counter(hello).
+%% 0
+%%
+%% 2> sc_counter:inc(hello).
+%% 1
+%%
+%% 3> sc_counter:inc(hello).
+%% 2
+%%
+%% 4> sc_counter:inc(hello).
+%% 3
+%%
+%% 5> sc_counter:counter(hello).
+%% 3
+%%
+%% 6> sc_counter:reset(hello).
+%% 0
+%%
+%% 7> sc_counter:counter(hello).
+%% 0'''
+
+%% @since Version 682
+
+counter_at(Name) ->
+
+    start_register_if_not_running(sc_counter_counter_process, sc_counter, counter_process, []),
+    sc_counter_counter_process ! {self(), get_counter, Name},
+
+    receive
+        {counter_at, Name, Val} -> Val
+    after
+        1000 -> {error, timeout}
+    end.
