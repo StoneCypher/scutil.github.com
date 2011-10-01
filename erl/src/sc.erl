@@ -126,6 +126,7 @@
     module_is_loaded/1,
     replace/3,
     merge_settings/2,
+    neighbors/2,
 
 %   module_flow/1,     % module attributes can't be amongst the functions :(
 
@@ -7821,7 +7822,7 @@ counter_process() ->
 
 set_counter_value(Name, To) when is_number(To) ->
 
-    start_register_if_not_running(sc_counter_counter_process, sc_counter, counter_process, []),
+    start_register_if_not_running(sc_counter_counter_process, fun counter_process/0),
     sc_counter_counter_process ! {self(), set_counter, Name, To},
 
     receive
@@ -7864,7 +7865,7 @@ reset_counter(Name) ->
 
 %% @spec adjust_counter_by(Name::any(), By::number()) -> number()
 
-%% @doc {@section Counters} Adds to a counter's value; if the counter was not already defined, it will become the value in the `By' argument. ```1> sc:counter_at(hello).
+%% @doc Adds to a counter's value; if the counter was not already defined, it will become the value in the `By' argument. ```1> sc:counter_at(hello).
 %% 0
 %%
 %% 2> sc:inc_counter(hello).
@@ -7877,7 +7878,7 @@ reset_counter(Name) ->
 
 adjust_counter_by(Name, By) when is_number(By) ->
 
-    start_register_if_not_running(sc_counter_counter_process, sc_counter, counter_process, []),
+    start_register_if_not_running(sc_counter_counter_process, fun counter_process/0),
     sc_counter_counter_process ! {self(), adjust_by_counter, Name, By},
 
     receive
@@ -7940,7 +7941,7 @@ dec_counter(Name,By) ->
 
 %% @spec counter_at(Name::any()) -> number()
 
-%% @doc {@section Counters} Checks a counter's value; if the counter was not already defined, it will report zero. ```1> sc:counter_at(hello).
+%% @doc Checks a counter's value; if the counter was not already defined, it will report zero. ```1> sc:counter_at(hello).
 %% 0
 %%
 %% 2> sc:inc_counter(hello).
@@ -7965,7 +7966,7 @@ dec_counter(Name,By) ->
 
 counter_at(Name) ->
 
-    start_register_if_not_running(sc_counter_counter_process, sc_counter, counter_process, []),
+    start_register_if_not_running(sc_counter_counter_process, fun counter_process/0),
     sc_counter_counter_process ! {self(), get_counter, Name},
 
     receive
@@ -7973,3 +7974,17 @@ counter_at(Name) ->
     after
         1000 -> {error, timeout}
     end.
+
+
+
+
+
+%% @since Version 683
+
+neighbors(cartesian_no_corners, {X,Y}) ->
+
+    [ {X,   Y-1},  % N
+      {X+1, Y},    % E
+      {X,   Y+1},  % S
+      {X-1, Y}     % W
+    ].
