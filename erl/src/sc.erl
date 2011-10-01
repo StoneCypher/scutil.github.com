@@ -7713,3 +7713,71 @@ module_is_loaded(ModuleName) when is_atom(ModuleName) ->
 replace(Source, Pattern, Replacement) ->
 
     implode(Replacement, explode(Pattern, Source)).
+
+
+
+
+
+%% @private
+
+counter_process() ->
+
+    receive
+
+
+        shutdown ->
+            ok;
+
+
+        {Caller, get_counter, Name} ->
+
+            case get(Name) of
+
+                undefined ->
+                    Caller ! {counter_at, Name, 0},
+                    put(Name,0),
+                    counter_process();
+
+                Defined ->
+                    Caller ! {counter_at, Name, Defined},
+                    counter_process()
+
+            end;
+
+
+        {Caller, adjust_by_counter, Name, By} ->
+
+            case get(Name) of
+
+                undefined ->
+                    Caller ! {counter_at, Name, By},
+                    put(Name,By),
+                    counter_process();
+
+                Defined ->
+                    New = Defined+By,
+                    Caller ! {counter_at, Name, New},
+                    put(Name,New),
+                    counter_process()
+
+            end;
+
+
+        {Caller, set_counter, Name, To} ->
+
+            Caller ! {counter_at, Name, To},
+
+            case To of
+
+                0 ->
+                    erase(Name);
+
+                T ->
+                    put(Name,T)
+
+            end,
+
+            counter_process()
+
+
+    end.
