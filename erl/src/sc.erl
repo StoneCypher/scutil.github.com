@@ -128,6 +128,9 @@
     merge_settings/2,
     neighbors/2,
 
+    is_between/3,
+      is_between/4,
+
 %   module_flow/1,     % module attributes can't be amongst the functions :(
 
     counter_at/1,
@@ -1600,7 +1603,7 @@ scale_i(bits, exbibits) -> 1024*1024*1024*1024*1024*1024.
 caspers_jones_estimate(FunctionPoints)
 
     when is_integer(FunctionPoints),
-         FunctionPoints >= 0       ->
+         FunctionPoints >= 0 ->
 
 
     [   { estimated_defects,   math:pow(FunctionPoints, 1.25) },
@@ -4118,7 +4121,8 @@ reverse_map([Item|Rem], Work, Fun) ->
 
 elements(Config, Requested)
 
-    when is_list(Config), is_list(Requested) ->
+    when is_list(Config), 
+         is_list(Requested) ->
 
     elements_worker([], Config, Requested, 1).
 
@@ -4130,7 +4134,9 @@ elements(Config, Requested)
 
 elements(Config, Requested, KeyIdx)
 
-    when is_list(Config), is_list(Requested), is_integer(KeyIdx) ->
+    when is_list(Config), 
+         is_list(Requested), 
+         is_integer(KeyIdx) ->
 
     elements_worker([], Config, Requested, KeyIdx);
 
@@ -4142,7 +4148,8 @@ elements(Config, Requested, KeyIdx)
 
 elements(Config, Requested, strip)
 
-    when is_list(Config), is_list(Requested) ->
+    when is_list(Config), 
+         is_list(Requested) ->
 
     elements_worker([], Config, Requested, 1, strip).
 
@@ -4154,7 +4161,9 @@ elements(Config, Requested, strip)
 
 elements(Config, Requested, KeyIdx, strip)
 
-    when is_list(Config), is_list(Requested), is_integer(KeyIdx) ->
+    when is_list(Config), 
+         is_list(Requested), 
+         is_integer(KeyIdx) ->
 
     elements_worker([], Config, Requested, KeyIdx, strip).
 
@@ -5396,10 +5405,8 @@ euclidean_distance(C1, C2) ->
 
 merge_settings(S1, S2)
 
-    when
-
-        is_list(S1),
-        is_list(S2) ->
+    when is_list(S1),
+         is_list(S2) ->
 
     lists:key_merge(1, lists:ukeysort(1, S1), lists:ukeysort(1, S2)).
 
@@ -6624,25 +6631,34 @@ map_scanline(F,L,A) ->
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>, by fredrik svensson and adam lindberg, from http://www.merriampark.com/lderlang.htm
 
-levenshtein(Same, Same) when is_list(Same) ->
+levenshtein(Same, Same) 
+
+    when is_list(Same) ->
 
     0;
 
 
 
-levenshtein(String, []) when is_list(String) ->
+levenshtein(String, []) 
+
+    when is_list(String) ->
 
     length(String);
 
 
 
-levenshtein( [], String) when is_list(String) ->
+levenshtein( [], String) 
+
+    when is_list(String) ->
 
     length(String);
 
 
 
-levenshtein(Source, Target) when is_list(Source), is_list(Target) ->
+levenshtein(Source, Target) 
+    
+    when is_list(Source), 
+         is_list(Target) ->
 
     levenshtein_rec(Source, Target, lists:seq(0, length(Target)), 1).
 
@@ -6672,7 +6688,9 @@ levenshtein_rec( [], _, DistList, _) ->
 %%
 %% @private
 
-levenshtein_distlist([TargetHead|TargetTail], [DLH|DLT], SourceChar, NewDistList, LastDist) when length(DLT) > 0 ->
+levenshtein_distlist([TargetHead|TargetTail], [DLH|DLT], SourceChar, NewDistList, LastDist) 
+
+    when length(DLT) > 0 ->
 
     Min = lists:min( [LastDist + 1, hd(DLT) + 1, DLH + lev_dif(TargetHead, SourceChar)] ),
     levenshtein_distlist(TargetTail, DLT, SourceChar, NewDistList ++ [Min], Min);
@@ -6761,7 +6779,9 @@ circles_contact({sc_circle, AX, AY, AR}, {sc_circle, BX, BY, BR}) ->
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
 
-wglsh(List) when is_list(List) ->
+wglsh(List) 
+
+    when is_list(List) ->
 
     [ case Ch of $a->$w;$A->$W; $e->$g;$E->$G; $i->$w;$I->$W; $o->$w;$O->$W; $u->$w;$U->$W; Z -> Z end || Ch <- List ].
 
@@ -6850,7 +6870,9 @@ triangle_index(LX, LY)
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
 
-paper_3d_basic_depth(X, Z, SliderPos, DepthConstant) when Z > 0 ->
+paper_3d_basic_depth(X, Z, SliderPos, DepthConstant) 
+
+    when Z > 0 ->
 
     {(X - (SliderPos * DepthConstant) )/Z, (X + (SliderPos * DepthConstant) )/Z}.
 
@@ -7219,7 +7241,9 @@ hmac_sha1(Key, Data) ->
 %% Thanks for the idea, Forest.
 
 
-probability_all(ListOfProbabilities) when is_list(ListOfProbabilities) ->
+probability_all(ListOfProbabilities) 
+
+    when is_list(ListOfProbabilities) ->
 
     case out_of_range(ListOfProbabilities, 0, 1) of
 
@@ -7239,7 +7263,9 @@ probability_all(ListOfProbabilities) when is_list(ListOfProbabilities) ->
 %%
 %% @doc <span style="color:red;font-style:italic">Incomplete Todo Comeback</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
 
-probability_any(ListOfProbabilities) when is_list(ListOfProbabilities) ->
+probability_any(ListOfProbabilities) 
+
+    when is_list(ListOfProbabilities) ->
 
     case out_of_range(ListOfProbabilities, 0, 1) of
 
@@ -7643,7 +7669,8 @@ country_codes() ->
       {"eh", "Western Sahara"},
       {"ye", "Yemen"},
       {"zm", "Zambia"},
-      {"zw", "Zimbabwe"} ].
+      {"zw", "Zimbabwe"}
+    ].
 
 
 
@@ -7688,7 +7715,9 @@ months_as_short_atoms() ->
 % % todo comeback figure out a way to do this
 % % @ flow {module_is_loaded, {lists,member}}
 
-module_is_loaded(ModuleName) when is_atom(ModuleName) ->
+module_is_loaded(ModuleName) 
+
+    when is_atom(ModuleName) ->
 
     lists:member(ModuleName, erlang:loaded()).
 
@@ -7820,7 +7849,9 @@ counter_process() ->
 
 %% @since Version 678
 
-set_counter_value(Name, To) when is_number(To) ->
+set_counter_value(Name, To) 
+
+    when is_number(To) ->
 
     start_register_if_not_running(sc_counter_counter_process, fun counter_process/0),
     sc_counter_counter_process ! {self(), set_counter, Name, To},
@@ -7876,7 +7907,9 @@ reset_counter(Name) ->
 
 %% @since Version 680
 
-adjust_counter_by(Name, By) when is_number(By) ->
+adjust_counter_by(Name, By) 
+
+    when is_number(By) ->
 
     start_register_if_not_running(sc_counter_counter_process, fun counter_process/0),
     sc_counter_counter_process ! {self(), adjust_by_counter, Name, By},
@@ -8006,3 +8039,37 @@ neighbors(cartesian_with_corners, {X,Y}) ->
       {X-1, Y},    % W
       {X-1, Y-1}   % NW
     ].
+
+
+
+
+
+%% @since Version 685
+
+is_between(X, A, B) -> is_between(X, A, B, exclusive).
+
+
+
+
+
+%% @since Version 685
+
+is_between(X, A, B, exclusive) when X > A,  X < B  -> true;
+is_between(_, _, _, exclusive)                     -> false;
+
+is_between(X, A, B, inclusive) when X >= A, X =< B -> true;
+is_between(_, _, _, inclusive)                     -> false.
+
+
+
+
+
+%% @since Version 686
+
+%bounded_neighbors(cartesian_no_corners, {X,Y}, {XC,YC,W,H}) ->
+%
+%    [ {X,   Y-1},  % N
+%      {X+1, Y},    % E
+%      {X,   Y+1},  % S
+%      {X-1, Y}     % W
+%    ];

@@ -120,17 +120,6 @@ index_of_first_test_() ->
 
 
 
-prop_rotate_to_first_correct_length() ->
-
-    ?FORALL( {R,L},
-             {int(), list(sc_eqc:misc_type())},
-             length(L) == length(sc:rotate_to_first(R,L))
-           ).
-
-
-
-
-
 rotate_to_first_test_() ->
 
     { "Rotate to first tests", [
@@ -139,9 +128,7 @@ rotate_to_first_test_() ->
         {"4, [1,2,3,4]", ?_assert( [4,1,2,3] =:= sc:rotate_to_first( 4, [1,2,3,4]  ) ) },
         {"1, [1,2,3,4]", ?_assert( [1,2,3,4] =:= sc:rotate_to_first( 1, [1,2,3,4]  ) ) },
 
-        {"f, [1,2,3,4]", ?_assert( no_such_element =:= sc:rotate_to_first( f, [1,2,3,4]  ) ) },
-
-        {"Stochastic: correct length",  ?_assert( true  =:= eqc:quickcheck(prop_rotate_to_first_correct_length()) ) }
+        {"f, [1,2,3,4]", ?_assert( no_such_element =:= sc:rotate_to_first( f, [1,2,3,4]  ) ) }
 
     ] }.
 
@@ -356,4 +343,3 @@ explode_test_() ->
         {",,",       ?_assert(["",   "",   ""  ] =:= sc:explode(",", ",,"))}
 
     ] }.
-
