@@ -131,6 +131,7 @@
 
     set_counter_value/2,
       reset_counter/1,
+      adjust_counter_by/2,
 
     ngrams/1,
       ngrams/2,
@@ -7851,3 +7852,31 @@ set_counter_value(Name, To) when is_number(To) ->
 reset_counter(Name) ->
 
     set_counter_value(Name, 0).
+
+
+
+
+
+%% @spec adjust_counter_by(Name::any(), By::number()) -> number()
+
+%% @doc {@section Counters} Adds to a counter's value; if the counter was not already defined, it will become the value in the `By' argument. ```1> sc_counter:counter(hello).
+%% 0
+%%
+%% 2> sc_counter:inc(hello).
+%% 1
+%%
+%% 3> sc_counter:adjust_by(hello, 3).
+%% 4'''
+
+%% @since Version 680
+
+adjust_counter_by(Name, By) when is_number(By) ->
+
+    start_register_if_not_running(sc_counter_counter_process, sc_counter, counter_process, []),
+    sc_counter_counter_process ! {self(), adjust_by_counter, Name, By},
+
+    receive
+        {counter_at, Name, Val} -> Val
+    after
+        1000 -> {error, timeout}
+    end.
