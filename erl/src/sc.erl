@@ -132,6 +132,10 @@
     set_counter_value/2,
       reset_counter/1,
       adjust_counter_by/2,
+      inc_counter/1,
+      inc_counter/2,
+      dec_counter/1,
+      dec_counter/2,
 
     ngrams/1,
       ngrams/2,
@@ -7880,3 +7884,51 @@ adjust_counter_by(Name, By) when is_number(By) ->
     after
         1000 -> {error, timeout}
     end.
+
+
+
+
+
+%% @equiv adjust_counter_by(Name,1)
+
+%% @since Version 681
+
+inc_counter(Name) ->
+
+    adjust_counter_by(Name, 1).
+
+
+
+
+
+%% @equiv adjust_counter_by(Name,By)
+
+%% @since Version 681
+
+inc_counter(Name,By) ->
+
+    adjust_counter_by(Name, By).
+
+
+
+
+
+%% @equiv adjust_counter_by(Name,-1)
+
+%% @since Version 681
+
+dec_counter(Name) ->
+
+    adjust_counter_by(Name, -1).
+
+
+
+
+
+%% @equiv adjust_counter_by(Name,-1*By)
+
+%% @since Version 681
+
+dec_counter(Name,By) ->
+
+    adjust_counter_by(Name, -1*By).
