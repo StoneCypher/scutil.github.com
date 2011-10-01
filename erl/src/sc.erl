@@ -36,6 +36,7 @@
 %% @version $Revision$
 %% @since September 14, 2007
 
+%% @todo burn out sc_
 %% @todo burn out sc.
 %% @todo burn out scutil:
 %% @todo burn out @section
@@ -127,6 +128,8 @@
     merge_settings/2,
 
 %   module_flow/1,     % module attributes can't be amongst the functions :(
+
+    set_counter_value/2,
 
     ngrams/1,
       ngrams/2,
@@ -7710,6 +7713,8 @@ module_is_loaded(ModuleName) when is_atom(ModuleName) ->
 
 % todo comeback
 
+%% @ since Version 676
+
 replace(Source, Pattern, Replacement) ->
 
     implode(Replacement, explode(Pattern, Source)).
@@ -7719,6 +7724,8 @@ replace(Source, Pattern, Replacement) ->
 
 
 %% @private
+
+%% @ since Version 677
 
 counter_process() ->
 
@@ -7780,4 +7787,38 @@ counter_process() ->
             counter_process()
 
 
+    end.
+
+
+
+
+
+%% @spec set(Name::any(), To::number()) -> 0
+
+%% @doc {@section Counters} Sets a counter's value to a specific value. ```1> sc_counter:counter(hello).
+%% 0
+%%
+%% 2> sc_counter:set(hello,4).
+%% 4
+%%
+%% 3> sc_counter:counter(hello).
+%% 4
+%%
+%% 4> sc_counter:reset(hello).
+%% 0
+%%
+%% 5> sc_counter:counter(hello).
+%% 0'''
+
+%% @since Version 678
+
+set_counter_value(Name, To) when is_number(To) ->
+
+    start_register_if_not_running(sc_counter_counter_process, sc_counter, counter_process, []),
+    sc_counter_counter_process ! {self(), set_counter, Name, To},
+
+    receive
+        {counter_at, Name, Val} -> Val
+    after
+        1000 -> {error, timeout}
     end.
