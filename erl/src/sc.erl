@@ -7987,4 +7987,22 @@ neighbors(cartesian_no_corners, {X,Y}) ->
       {X+1, Y},    % E
       {X,   Y+1},  % S
       {X-1, Y}     % W
+    ];
+
+
+
+
+
+%% @since Version 684
+
+neighbors(cartesian_with_corners, {X,Y}) ->
+
+    [ {X,   Y-1},  % N
+      {X+1, Y-1},  % NE
+      {X+1, Y},    % E
+      {X+1, Y+1},  % SE
+      {X,   Y+1},  % S
+      {X-1, Y+1},  % SW
+      {X-1, Y},    % W
+      {X-1, Y-1}   % NW
     ].
