@@ -130,6 +130,7 @@
 %   module_flow/1,     % module attributes can't be amongst the functions :(
 
     set_counter_value/2,
+      reset_counter/1,
 
     ngrams/1,
       ngrams/2,
@@ -7793,9 +7794,9 @@ counter_process() ->
 
 
 
-%% @spec set(Name::any(), To::number()) -> 0
+%% @spec set_counter_value(Name::any(), To::number()) -> 0
 
-%% @doc {@section Counters} Sets a counter's value to a specific value. ```1> sc_counter:counter(hello).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Sets a counter's value to a specific value. ```1> sc_counter:counter(hello).
 %% 0
 %%
 %% 2> sc_counter:set(hello,4).
@@ -7822,3 +7823,31 @@ set_counter_value(Name, To) when is_number(To) ->
     after
         1000 -> {error, timeout}
     end.
+
+
+
+
+
+%% @equiv set_counter_value(Name, 0)
+
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Resets a counter's value to zero. ```1> sc_counter:counter(hello).
+%% 0
+%%
+%% 2> sc_counter:set(hello,4).
+%% 4
+%%
+%% 3> sc_counter:counter(hello).
+%% 4
+%%
+%% 4> sc_counter:reset(hello).
+%% 0
+%%
+%% 5> sc_counter:counter(hello).
+%% 0'''
+
+
+%% @since Version 679
+
+reset_counter(Name) ->
+
+    set_counter_value(Name, 0).
