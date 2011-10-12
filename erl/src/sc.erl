@@ -66,6 +66,35 @@
 %%
 %% ScUtil is free.  However, I'd like to know where it's ended up.  Therefore, please consider mail to stonecypher@gmail.com with text saying where this went a form of "registration."  This is not required.
 %%
+%% == Thanks ==
+%% <p>ScUtil has profited significantly from the donations of time, understanding and code given by a variety of generous friends and strangers.  The list of small tweaks would
+%%    be prohibitive, but significant influence on this library is due the following people, in alphabetical order (the least fair of all generic orderings):</p>
+%%
+%% <ul>
+%%   <li>Alain O'Dea of <a href="http://concise-software.blogspot.com/" target="_blank">Concise Software</a></li>
+%%   <li>Alisdair Sullivan</li>
+%%   <li>Aristid Breitkreuz / [MrN, MisterN]</li>
+%%   <li>Ayrnieu</li>
+%%   <li>Bryon Vandiver of <a href="http://sublab.net/" target="_blank">Sublab Research and Design</a></li>
+%%   <li>Chile</li>
+%%   <li>Dave Murphy / <a href="http://devkitpro.org/" target="_blank">WinterMute</a></li>
+%%   <li>DizzyD</li>
+%%   <li>Dylan Barrie / PhforSlayer</li>
+%%   <li>Geoff Cant / <a href="http://github.com/archaelus">Archaelus</a></li>
+%%   <li>GrizzlyAdams of <a href="http://grizzly.thewaffleiron.net/" target="_blank">The Waffle Iron</a></li>
+%%   <li>Jeff Katz / <a href="http://kraln.com/" target="_blank">Kraln</a></li>
+%%   <li>John Sensebe of <a href="http://bargaintuan.com/" target="_blank">Bargaintuan</a></li>
+%%   <li>raleigh</li>
+%%   <li><a href="http://hem.bredband.net/richardc/">Richard Carlsson</a></li>
+%%   <li><a href="http://rvirding.blogspot.com/" target="_blank">Robert Virding</a></li>
+%%   <li><a href="http://akkit.org/" target="_blank">Steve Stair</a></li>
+%%   <li><a href="http://steve.vinoski.net/">Steve Vinoski</a></li>
+%%   <li>Torbj*rn T*rnkvist (those asterisks are o-umlauts, until I work out a bug in edoc) / <a href="http://github.com/etnt">Etnt</a></li>
+%%   <li><a href="http://opferman.com/" target="_blank">Toby Opferman</a></li>
+%%   <li><a href="http://blueventhorizon.com/" target="_blank">Vat Raghavan</a></li>
+%%   <li>Vladimir Sessikov</li>
+%% </ul>
+%%
 %% @end
 
 -module(sc).
