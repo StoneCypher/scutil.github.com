@@ -99,6 +99,8 @@
 
 -module(sc).
 
+-svn_revision("$Revision$").
+
 
 
 
