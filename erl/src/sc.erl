@@ -2825,7 +2825,7 @@ ceil(X) ->
 %% 344> sc:ceiling(0.0).
 %% 0'''
 
-ceiling(X) 
+ceiling(X)
 
     when X < 0 ->
 
@@ -2854,8 +2854,30 @@ ceiling(X) ->
 % todo comeback docs; point out this isn't erlang:floor because of negative number behavior
 
 %% @since Version 511
+
+%% @doc 1> sc:floor(0.5).
+%% 0
+%% 
+%% 2> sc:floor(0).
+%% 0
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+%% 3> sc:floor(0.0).
+%% 0
+%%
+%% 4> sc:floor(1.0).
+%% 1
+%%
+%% 5> sc:floor(-1.0).
+%% -1
+%%
+%% 6> sc:floor(-1.5).
+%% -2
+%%
+%% 7> sc:floor(-1).
+%% -1
+%%
+%% 8> sc:floor(1).
+%% 1'''
 
 floor(X) ->
 

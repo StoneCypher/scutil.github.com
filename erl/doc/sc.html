@@ -266,7 +266,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#first_pos-2">first_pos/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns false if none pass.</td></tr>
 <tr><td valign="top"><a href="#first_pos-3">first_pos/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns a default value if none is found.</td></tr>
 <tr><td valign="top"><a href="#flag_sets-1">flag_sets/1</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
-<tr><td valign="top"><a href="#floor-1">floor/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#floor-1">floor/1</a></td><td>1&gt; sc:floor(0.5).</td></tr>
 <tr><td valign="top"><a href="#function_point_count-1">function_point_count/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#function_stats-1">function_stats/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#gen_docs-0">gen_docs/0</a></td><td>(not testworthy) Generates library documentation using the paths appropriate for the author's PC; you almost certainly want <a href="#gen_docs-2"><code>gen_docs/2</code></a> instead.</td></tr>
@@ -329,6 +329,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#map_scanline-2">map_scanline/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Parses a string on all three newline types, discarding any empty lines; applies F as a functor to each line,  
 and returns the tuple of the remainder and then a list of all results from the functor(s) issued.</td></tr>
 <tr><td valign="top"><a href="#map_scanline-3">map_scanline/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Third argument passes argument list as secondary argument to the functor; useful for passing ancillary state.</td></tr>
+<tr><td valign="top"><a href="#markhov_chain-2">markhov_chain/2</a></td><td>Generates a markhov chain from a list of lists.</td></tr>
 <tr><td valign="top"><a href="#median-1">median/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the median (central) value of a list.</td></tr>
 <tr><td valign="top"><a href="#median_absolute_deviation-1">median_absolute_deviation/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the median absolute deviation of a <code><a href="#type-numericlist">numericlist()</a></code>.</td></tr>
 <tr><td valign="top"><a href="#member_sets-1">member_sets/1</a></td><td>Equivalent to <a href="#member_sets-2"><tt>member_sets(Memberships, no_absence)</tt></a>.
@@ -1127,9 +1128,30 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="floor-1">floor/1</a></h3>
 <div class="spec">
 <p><tt>floor(X) -&gt; any()</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></p>
-<p><b>Introduced in:</b> Version 511
- </p>
+</div><p><p>1&gt; sc:floor(0.5).  
+0</p>
+ 
+  <p>2&gt; sc:floor(0).  
+0</p>
+ 
+  <p>3&gt; sc:floor(0.0).  
+0</p>
+ 
+  <p>4&gt; sc:floor(1.0).  
+1</p>
+ 
+  <p>5&gt; sc:floor(-1.0).  
+-1</p>
+ 
+  <p>6&gt; sc:floor(-1.5).  
+-2</p>
+ 
+  <p>7&gt; sc:floor(-1).  
+-1</p>
+ 
+  8&gt; sc:floor(1).
+  1'''</p>
+<p><b>Introduced in:</b> Version 511</p>
 
 <h3 class="function"><a name="function_point_count-1">function_point_count/1</a></h3>
 <div class="spec">
@@ -1714,6 +1736,12 @@ and returns the tuple of the remainder and then a list of all results from the f
   Modified from map_scaline/2 by ayrnieu</p>
 <p><b>Introduced in:</b> Version 626
  </p>
+
+<h3 class="function"><a name="markhov_chain-2">markhov_chain/2</a></h3>
+<div class="spec">
+<p><tt>markhov_chain(Depth, Sources) -&gt; any()</tt></p>
+</div><p>Generates a markhov chain from a list of lists.</p>
+<p><b>Introduced in:</b> Version 703</p>
 
 <h3 class="function"><a name="median-1">median/1</a></h3>
 <div class="spec">
@@ -3019,6 +3047,6 @@ and returns the tuple of the remainder and then a list of all results from the f
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 29 2011, 12:46:25.</i></p>
+<p><i>Generated by EDoc, Oct 29 2011, 15:36:11.</i></p>
 </body>
 </html>

@@ -372,3 +372,32 @@ ceil_test_() ->
         {"Stochastic: all floats are smaller within 1",     ?_assert( true =:= eqc:quickcheck(prop_ceil_floats_smaller_within_1()) ) }
 
     ] }.
+
+
+
+
+
+prop_floor_ints_as_floats_identity() ->
+
+    ?FORALL( I, eqc_gen:int(), sc:floor(I*1.0) =:= I ).
+
+
+
+
+
+prop_floor_floats_larger_within_1() ->
+
+    ?FORALL( R, eqc_gen:real(), (R - sc:floor(R)) < 1 andalso (R - sc:floor(R)) >= 0 ).
+
+
+
+
+
+floor_test_() ->
+
+    { "Floor tests", [
+
+        {"Stochastic: all integers-as-floats are identity", ?_assert( true =:= eqc:quickcheck(prop_floor_ints_as_floats_identity()) ) },
+        {"Stochastic: all floats are larger within 1",      ?_assert( true =:= eqc:quickcheck(prop_floor_floats_larger_within_1()) ) }
+
+    ] }.
