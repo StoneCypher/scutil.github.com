@@ -8781,3 +8781,45 @@ first_row( [ThisCol|RemCols], OutCols, Work) ->
 
     {Item,ColRem} = first_or_nothing(ThisCol),
     first_row(RemCols, [ColRem]++OutCols, [Item]++Work).
+
+
+
+
+
+%% @equiv columnate(List, 2, 3)
+%% @since Version 734
+
+columnate(List) ->
+
+    columnate(List, []).
+
+
+
+%% @since Version 734
+
+columnate(List, Options) ->
+
+    Settings = lists:ukeymerge(1, Options, [{align, center}, {columns, 2}, {margin, 3}] ),
+
+    [ColumnCount, Margin, Align] = [ proplists:get_value(X, Settings) || X <- [columns,margin,align] ],
+
+    Columns = columns(ColumnCount, List),
+
+    MinWidths = [ lists:max( [length(lists:flatten(io_lib:format("~w",[Item]))) || Item <- Col]) || Col <- Columns ],
+
+    DoAlign = fun(Item, Width) ->
+
+        case Align of
+            left   -> string:left(   lists:flatten( io_lib:format("~w",[Item]) ), Width);
+            center -> string:centre( lists:flatten( io_lib:format("~w",[Item]) ), Width);
+            centre -> string:centre( lists:flatten( io_lib:format("~w",[Item]) ), Width);
+            right  -> string:right(  lists:flatten( io_lib:format("~w",[Item]) ), Width)
+        end
+
+    end,
+
+    Aligned = [ [ DoAlign(Item, Width) || Item <- Col]  || {Width, Col} <- lists:zip(MinWidths, Columns) ],
+
+    Format = implode( lists:duplicate(Margin, $ ), [ "~" ++ integer_to_list(Width) ++ "s" || Width <- MinWidths ] ),
+
+    columnate_each_row(Aligned, Format, []).
