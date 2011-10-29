@@ -211,6 +211,14 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>unit_vector() = <a href="#type-vector">vector()</a></tt></p>
 <p>The hypoteneuse of a unit vector is precisely one unit long.  Unit vectors are also called normalized or magnitude-normalized vectors.</p>
 
+<h3 class="typedecl"><a name="type-vector">vector()</a></h3>
+<p><tt>vector() = list() | tuple()</tt></p>
+<p>Every member element of a vector() is a <code>number()</code>.</p>
+
+<h3 class="typedecl"><a name="type-vectorlist">vectorlist()</a></h3>
+<p><tt>vectorlist() = list()</tt></p>
+<p>Every member element of a vectorlist() is a <code><a href="#type-vector">vector()</a></code>.</p>
+
 <h3 class="typedecl"><a name="type-weightedvalue">weightedvalue()</a></h3>
 <p><tt>weightedvalue() = {Value::any(), Weight::number()}</tt></p>
 <p>Used by functions like weighted_arithmetic_mean/1 and from_weighted/1, weightedvalue()s represent a value with an associated importance or "weight".</p>
@@ -409,6 +417,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#power_set-1">power_set/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#probability_all-1">probability_all/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the likelihood that all items in a list of probabilities expressed on the real interval will occur.</td></tr>
 <tr><td valign="top"><a href="#probability_any-1">probability_any/1</a></td><td><span style="color:red;font-style:italic">Incomplete Todo Comeback</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#qsp_average-2">qsp_average/2</a></td><td><a href="#Math">Math</a> Takes the quadratic scalar product average of a vector <code>W</code> and a list of vectors <code>X</code>.</td></tr>
 <tr><td valign="top"><a href="#rand-1">rand/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a pseudorandom integer on the range <code>[0 - (Range-1)]</code> inclusive.</td></tr>
 <tr><td valign="top"><a href="#random_from-1">random_from/1</a></td><td>Equivalent to <a href="#from-3"><tt>from(1, List, no_remainder)</tt></a>.
 </td></tr>
@@ -644,10 +653,10 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="byte_to_hex-1">byte_to_hex/1</a></h3>
 <div class="spec">
 <p><tt>byte_to_hex(TheByte::<a href="#type-byte">byte()</a>) -&gt; <a href="#type-hexstring">hexstring()</a></tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a byte() into a hexstring().  The hexstring() result will always be two characters (left padded with zero if necessary). <pre>  1&gt; scutil:byte_to_hex(7).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a byte() into a hexstring().  The hexstring() result will always be two characters (left padded with zero if necessary). <pre>  1&gt; sc:byte_to_hex(7).
   "07"
  
-  2&gt; scutil:byte_to_hex(255).
+  2&gt; sc:byte_to_hex(255).
   "ff"</pre>
  </p>
 <p><b>Introduced in:</b> Version 571</p>
@@ -834,19 +843,19 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="cross_product-2">cross_product/2</a></h3>
 <div class="spec">
 <p><tt>cross_product(VX::<a href="#type-three_vector">three_vector()</a>, VY::<a href="#type-three_vector">three_vector()</a>) -&gt; <a href="#type-three_vector">three_vector()</a></tt></p>
-</div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the cross product of two vectors (<span style="color:red">Incomplete</span> represented as <code><a href="#type-three_vector">three_vector()</a></code>s - no support yet for seven). <pre>  1&gt; scutil:dot_product([1,1,1],[2,2,2]).
+</div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the cross product of two vectors (<span style="color:red">Incomplete</span> represented as <code><a href="#type-three_vector">three_vector()</a></code>s - no support yet for seven). <pre>  1&gt; sc:dot_product([1,1,1],[2,2,2]).
   6
  
-  2&gt; scutil:dot_product([1,1,1],[3,3,3]).
+  2&gt; sc:dot_product([1,1,1],[3,3,3]).
   9
  
-  3&gt; scutil:dot_product([-1,0,1],[3,3,3]).
+  3&gt; sc:dot_product([-1,0,1],[3,3,3]).
   0
  
-  4&gt; scutil:dot_product([-1,1,1],[3,3,3]).
+  4&gt; sc:dot_product([-1,1,1],[3,3,3]).
   3
  
-  5&gt; scutil:dot_product([0.5,1,2],[1,1,1]).
+  5&gt; sc:dot_product([0.5,1,2],[1,1,1]).
   3.5</pre><span style="color:red">TODO: Implement seven-dimensional cross product</span></p>
 <p><b>Introduced in:</b> Version 80</p>
 
@@ -999,13 +1008,13 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="every_flag_representation-1">every_flag_representation/1</a></h3>
 <div class="spec">
 <p><tt>every_flag_representation(Flags::list()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns every interpretation of the list as a set of boolean flags, including all-off and all-on. <pre>  1&gt; scutil:every_flag_representation([1,2,3,4]).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns every interpretation of the list as a set of boolean flags, including all-off and all-on. <pre>  1&gt; sc:every_flag_representation([1,2,3,4]).
   [ [], [4], [3], [3,4], [2], [2,4], [2,3], [2,3,4], [1], [1,4], [1,3], [1,3,4], [1,2], [1,2,4], [1,2,3], [1,2,3,4] ]
  
-  2&gt; length(scutil:every_flag_representation(lists:seq(1,16))).
+  2&gt; length(sc:every_flag_representation(lists:seq(1,16))).
   65536
  
-  3&gt; SourceOfPowers = scutil:every_flag_representation([magic,technology,evil,alien]).
+  3&gt; SourceOfPowers = sc:every_flag_representation([magic,technology,evil,alien]).
   [[],                              % Batman
    [alien],                         % Superman
    [evil],                          % Darkseid
@@ -1034,10 +1043,10 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="every_member_representation-2">every_member_representation/2</a></h3>
 <div class="spec">
 <p><tt>every_member_representation(Memberships::<a href="#type-list_of_lists">list_of_lists()</a>, AllowAbsence::atom()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> For a list of memberships, return every possible combination of one representative member from each list.  The parameter <code>AllowAbsence</code> controls whether memberships may be unrepresented; if unrepresented memberships are possible, then one possible representation becomes the empty list. <pre>  1&gt; scutil:every_member_representation([ [a,b],[1,2,3],[i,ii,iii] ], no_absence).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> For a list of memberships, return every possible combination of one representative member from each list.  The parameter <code>AllowAbsence</code> controls whether memberships may be unrepresented; if unrepresented memberships are possible, then one possible representation becomes the empty list. <pre>  1&gt; sc:every_member_representation([ [a,b],[1,2,3],[i,ii,iii] ], no_absence).
   [[a,1,i], [a,1,ii], [a,1,iii], [a,2,i], [a,2,ii], [a,2,iii], [a,3,i], [a,3,ii], [a,3,iii], [b,1,i], [b,1,ii], [b,1,iii], [b,2,i], [b,2,ii], [b,2,iii], [b,3,i], [b,3,ii], [b,3,iii]]
  
-  2&gt; scutil:every_member_representation([ [a,b],[1,2],[i,ii] ], allow_absence).
+  2&gt; sc:every_member_representation([ [a,b],[1,2],[i,ii] ], allow_absence).
   [ [], [i], [ii], [1], [1,i], [1,ii], [2], [2,i], [2,ii], [a], [a,i], [a,ii], [a,1], [a,1,i], [a,1,ii], [a,2], [a,2,i], [a,2,ii], [b], [b,i], [b,ii], [b,1], [b,1,i], [b,1,ii], [b,2], [b,2,i], [b,2,ii] ]
  
   3&gt; Format = fun(Person, Place, Weapon) -&gt; "It was " ++ Person ++ " in the " ++ Place ++ " with the " ++ Weapon ++ "!" end.
@@ -1340,13 +1349,13 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="hex_to_int-1">hex_to_int/1</a></h3>
 <div class="spec">
 <p><tt>hex_to_int(HexChar::<a href="#type-hexstring">hexstring()</a> | <a href="#type-hexchar">hexchar()</a>) -&gt; integer()</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a hexstring() or hexchar() into its numeric value. <pre>  1&gt; scutil:hex_to_int("c0ffEE").
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a hexstring() or hexchar() into its numeric value. <pre>  1&gt; sc:hex_to_int("c0ffEE").
   12648430
  
-  2&gt; scutil:hex_to_int($e).
+  2&gt; sc:hex_to_int($e).
   14
  
-  3&gt; scutil:hex_to_int("100").
+  3&gt; sc:hex_to_int("100").
   256</pre>
  </p>
 <p><b>Introduced in:</b> Version 572</p>
@@ -1532,10 +1541,10 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="io_list_to_hex_string-1">io_list_to_hex_string/1</a></h3>
 <div class="spec">
 <p><tt>io_list_to_hex_string(Input::<a href="#type-io_list">io_list()</a>) -&gt; <a href="#type-hexstring">hexstring()</a></tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert an io_list() to a hexstring().  <pre>  1&gt; scutil:io_list_to_hex_string("a").
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert an io_list() to a hexstring().  <pre>  1&gt; sc:io_list_to_hex_string("a").
   "61"
  
-  2&gt; scutil:io_list_to_hex_string("a08n408nbqa").
+  2&gt; sc:io_list_to_hex_string("a08n408nbqa").
   "6130386e3430386e627161"</pre>
  </p>
 <p><b>Introduced in:</b> Version 569</p>
@@ -1625,19 +1634,19 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="kendall_correlation-1">kendall_correlation/1</a></h3>
 <div class="spec">
 <p><tt>kendall_correlation(TupleList::<a href="#type-coordlist">coordlist()</a>) -&gt; {tau, Correlation::number()}</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Kendall Tau Rank Correlation Coefficient of a list of coordinate tuples. <pre>  1&gt; scutil:kendall([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Kendall Tau Rank Correlation Coefficient of a list of coordinate tuples. <pre>  1&gt; sc:kendall([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
   {tau,1.0}
  
-  2&gt; scutil:kendall([ {1,5}, {2,4}, {3,3}, {4,2}, {5,1} ]).
+  2&gt; sc:kendall([ {1,5}, {2,4}, {3,3}, {4,2}, {5,1} ]).
   {tau,-1.0}
  
-  3&gt; scutil:kendall([ {1,3}, {2,3}, {3,3}, {4,3}, {5,3} ]).
+  3&gt; sc:kendall([ {1,3}, {2,3}, {3,3}, {4,3}, {5,3} ]).
   {tau,1.0}
  
-  4&gt; scutil:kendall([ {1,2}, {2,2.5}, {3,3}, {4,3.5}, {5,4} ]).
+  4&gt; sc:kendall([ {1,2}, {2,2.5}, {3,3}, {4,3.5}, {5,4} ]).
   {tau,1.0}
  
-  5&gt; scutil:kendall([ {1,2}, {2,2.4}, {3,3}, {4,3.6}, {5,4} ]).
+  5&gt; sc:kendall([ {1,2}, {2,2.4}, {3,3}, {4,3.6}, {5,4} ]).
   {tau,1.0}</pre>
  </p>
 <p><b>Introduced in:</b> Version 557</p>
@@ -1796,13 +1805,13 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="list_to_number-1">list_to_number/1</a></h3>
 <div class="spec">
 <p><tt>list_to_number(X::list()) -&gt; number()</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Converts a list into a number; integers will be returned if there is no mantissa in the list representation. <pre>  1&gt; scutil:list_to_number("2").
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Converts a list into a number; integers will be returned if there is no mantissa in the list representation. <pre>  1&gt; sc:list_to_number("2").
   2
  
-  2&gt; scutil:list_to_number("2.0").
+  2&gt; sc:list_to_number("2.0").
   2.0
  
-  3&gt; scutil:list_to_number("2.1").
+  3&gt; sc:list_to_number("2.1").
   2.1</pre>
  </p>
 <p><b>Introduced in:</b> Version 574</p>
@@ -2078,10 +2087,10 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="multi_do-4">multi_do/4</a></h3>
 <div class="spec">
 <p><tt>multi_do(Count::integer(), Module::atom(), Function::atom(), Args::list()) -&gt; list()</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take an iteration count, a module name, a function name and an argument list, and repeatedly apply the argument list to the module/function, count times.  This is primarily useful with nondeterministic functions whose result might change despite identical arguments, such as functions with random behavior; for example, this function is invoked to implement stochastic testing in <a href="http://testerl.com/">TestErl</a>. <pre>  1&gt; scutil:multi_do(10, scutil, rand, [100]).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take an iteration count, a module name, a function name and an argument list, and repeatedly apply the argument list to the module/function, count times.  This is primarily useful with nondeterministic functions whose result might change despite identical arguments, such as functions with random behavior; for example, this function is invoked to implement stochastic testing in <a href="http://testerl.com/">TestErl</a>. <pre>  1&gt; sc:multi_do(10, scutil, rand, [100]).
   [9,94,4,82,77,44,89,19,45,92]
  
-  2&gt; scutil:multi_do(10, scutil, rand, [10000]).
+  2&gt; sc:multi_do(10, scutil, rand, [10000]).
   [2377,2559,1713,8489,4468,3261,3344,3751,380,2525]</pre>
  </p>
 <p><b>Introduced in:</b> Version 620</p>
@@ -2135,10 +2144,10 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="nybble_to_hex-1">nybble_to_hex/1</a></h3>
 <div class="spec">
 <p><tt>nybble_to_hex(Nyb::<a href="#type-nybble">nybble()</a>) -&gt; integer()</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a nybble() to a hexchar(). <pre>  1&gt; scutil:nybble_to_hex(7).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a nybble() to a hexchar(). <pre>  1&gt; sc:nybble_to_hex(7).
   55
  
-  2&gt; scutil:nybble_to_hex(15).
+  2&gt; sc:nybble_to_hex(15).
   102</pre>
  </p>
 <p><b>Introduced in:</b> Version 570</p>
@@ -2296,19 +2305,52 @@ and returns the tuple of the remainder and then a list of all results from the f
 <p><b>Introduced in:</b> Version 652
  </p>
 
+<h3 class="function"><a name="qsp_average-2">qsp_average/2</a></h3>
+<div class="spec">
+<p><tt>qsp_average(W::<a href="#type-numericlist">numericlist()</a>, InputVecs::<a href="#type-vectorlist">vectorlist()</a>) -&gt; float()</tt></p>
+</div><p><a href="#Math">Math</a> Takes the quadratic scalar product average of a vector <code>W</code> and a list of vectors <code>X</code>.  The QSP Average
+  is the arithmetic mean of the result set Y, where Y is generated as the square of the magnitude of the dot product
+  of W and each individual vector in X. @see http://www.inf.fu-berlin.de/inst/ag-ki/rojas_home/documents/1996/NeuralNetworks/K5.pdf
+  pdf-page 15.  <pre>  1&gt; sc:qsp_average([1,2,3], [[0,0,0],[0,0,0]]).
+  0.0
+ 
+  2&gt; sc:qsp_average([1,2,3], [[0,0,1],[0,0,0]]).
+  4.5
+ 
+  3&gt; sc:qsp_average([1,2,3], [[0,1,0],[0,0,0]]).
+  2.0
+ 
+  4&gt; sc:qsp_average([1,2,3], [[1,0,0],[0,0,0]]).
+  0.5
+ 
+  5&gt; sc:qsp_average([1,2,3], [[1,1,1],[0,0,0]]).
+  18.0
+ 
+  6&gt; sc:qsp_average([1,2,3], [[0,0,0],[1,1,1]]).
+  18.0
+ 
+  7&gt; sc:qsp_average([1,2,3], [[1,1,1],[1,1,1]]).
+  36.0</pre>The linked documentation incorrectly uses the notation ||Foo|| instead of |Foo| to
+  present the algorithm.  ||Foo|| is the vector magnitude - the root sum square of vector elements - but as the input is the
+  dot product of two 1d vectors, which will always be a single number, the vector magnitude serves no purpose other than to
+  normalize the sign slowly and counterintuitively; thus we switch to abs despite the documentation.  <a href="#Thanks">Thanks</a> to Steve
+  Stair for helping straighten this out.  Thanks to the following for help with qsp_average and dependencies: Asterick, Chile,
+  John Sensebe, PfhorSlayer, Raleigh.</p>
+<p><b>Introduced in:</b> Version 726</p>
+
 <h3 class="function"><a name="rand-1">rand/1</a></h3>
 <div class="spec">
 <p><tt>rand(Range::integer()) -&gt; integer()</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a pseudorandom integer on the range <code>[0 - (Range-1)]</code> inclusive. <pre>  1&gt; scutil:rand(100).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a pseudorandom integer on the range <code>[0 - (Range-1)]</code> inclusive. <pre>  1&gt; sc:rand(100).
   9
  
-  2&gt; [ scutil:rand(100) || X &lt;- lists:seq(1,10) ].
+  2&gt; [ sc:rand(100) || X &lt;- lists:seq(1,10) ].
   [12,27,99,86,20,96,28,36,28,15]
  
-  3&gt; scutil:histograph([ scutil:rand(10) || X &lt;- lists:seq(1,10000) ]).
+  3&gt; sc:histograph([ sc:rand(10) || X &lt;- lists:seq(1,10000) ]).
   [{0,992}, {1,990}, {2,992}, {3,1033}, {4,1017}, {5,1003}, {6,996}, {7,1024}, {8,969}, {9,984}]
  
-  4&gt; scutil:histograph([ scutil:rand(10) || X &lt;- lists:seq(1,10000) ]).
+  4&gt; sc:histograph([ sc:rand(10) || X &lt;- lists:seq(1,10000) ]).
   [{0,1028}, {1,979}, {2,934}, {3,970}, {4,1035}, {5,1007}, {6,986}, {7,1012}, {8,1052}, {9,997}]</pre>
  </p>
 <p><b>Introduced in:</b> Version 595</p>
@@ -2359,13 +2401,13 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="random_from_weighted-1">random_from_weighted/1</a></h3>
 <div class="spec">
 <p><tt>random_from_weighted(InputList::<a href="#type-weightlist">weightlist()</a>) -&gt; any()</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take a random single item from a list with weighted probabilities.  Probabilities may be any numeric type, and may be any non-negative value (items with zero probability will be omitted).  Input is a <code>weightlist()</code>, which is a list in the form <code>[{Item,Probability}, {I2,P2}, ...]</code>. There is no requirement to normalize probabilities to any range, though probabilities normalized to ranges will still work as expected. <pre>  1&gt; scutil:from([ {quad,4}, {double,2}, {single,1} ]).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take a random single item from a list with weighted probabilities.  Probabilities may be any numeric type, and may be any non-negative value (items with zero probability will be omitted).  Input is a <code>weightlist()</code>, which is a list in the form <code>[{Item,Probability}, {I2,P2}, ...]</code>. There is no requirement to normalize probabilities to any range, though probabilities normalized to ranges will still work as expected. <pre>  1&gt; sc:from([ {quad,4}, {double,2}, {single,1} ]).
   quad
  
-  2&gt; [ scutil:from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X &lt;- lists:seq(1,10) ].
+  2&gt; [ sc:from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X &lt;- lists:seq(1,10) ].
   [single,quad,quad,double,quad,double,quad,quad,quad,double]
  
-  3&gt; scutil:histograph([ scutil:from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X &lt;- lists:seq(1,777777) ]).
+  3&gt; sc:histograph([ sc:from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X &lt;- lists:seq(1,777777) ]).
   [{double,222200},{quad,444165},{single,111412}]</pre></p>
 <p><b>Introduced in:</b> Version 592</p>
 
@@ -2401,16 +2443,16 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="receive_one-0">receive_one/0</a></h3>
 <div class="spec">
 <p><tt>receive_one() -&gt; {item, any()} | nothing_there</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Pop the front of the message queue and return it as <code>{item,X}</code>, or return nothing_there for empty queues; do not block.  <pre>  1&gt; scutil:receive_one().
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Pop the front of the message queue and return it as <code>{item,X}</code>, or return nothing_there for empty queues; do not block.  <pre>  1&gt; sc:receive_one().
   nothing_there
  
   2&gt; self() ! message.
   message
  
-  3&gt; scutil:receive_one().
+  3&gt; sc:receive_one().
   {item,message}
  
-  4&gt; scutil:receive_one().
+  4&gt; sc:receive_one().
   nothing_there</pre>
  </p>
 <p><b>Introduced in:</b> Version 582</p>
@@ -2529,7 +2571,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="sanitize_filename-1">sanitize_filename/1</a></h3>
 <div class="spec">
 <p><tt>sanitize_filename(Filename::string()) -&gt; string()</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Sanitize an arbitrary string to be appropriate for Windows and Unix filesystems, and URLs. <pre>  1&gt; scutil:sanitize_filename("\h/e~l%lo! w^o@r#l*d.").
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Sanitize an arbitrary string to be appropriate for Windows and Unix filesystems, and URLs. <pre>  1&gt; sc:sanitize_filename("\h/e~l%lo! w^o@r#l*d.").
   "helloworld"</pre>
  </p>
 <p><b>Introduced in:</b> Version 628</p>
@@ -2575,7 +2617,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="send_receive-2">send_receive/2</a></h3>
 <div class="spec">
 <p><tt>send_receive(ToWhom::pid() | atom(), What::any()) -&gt; {item, any()}</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as <code>{item,X}</code>; block.  <pre>  1&gt; scutil:send_receive(self(), message).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as <code>{item,X}</code>; block.  <pre>  1&gt; sc:send_receive(self(), message).
   {item,message}</pre>
  </p>
 <p><b>Introduced in:</b> Version 578</p>
@@ -2583,7 +2625,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="send_receive-3">send_receive/3</a></h3>
 <div class="spec">
 <p><tt>send_receive(ToWhom::pid() | atom(), What::any(), HowLong::<a href="#type-non_negative_integer">non_negative_integer()</a> | infinity) -&gt; {item, any()} | nothing_there</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as <code>{item,X}</code>, or return nothing_there for empty queues; do not block.  <pre>  1&gt; scutil:send_receive(self(), message).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as <code>{item,X}</code>, or return nothing_there for empty queues; do not block.  <pre>  1&gt; sc:send_receive(self(), message).
   {item,message}</pre>
  </p>
 <p><b>Introduced in:</b> Version 579</p>
@@ -2591,7 +2633,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="send_receive_masked-3">send_receive_masked/3</a></h3>
 <div class="spec">
 <p><tt>send_receive_masked(Mask::any(), ToWhom::pid() | atom(), What::any()) -&gt; {Mask, any()}</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Blocking) First send a message to an entity.  Then pop the first message queue item matching the mask as a 2-tuple, and return it as <code>{Mask,X}</code>; block.  <pre>  1&gt; scutil:send_receive(self(), message).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Blocking) First send a message to an entity.  Then pop the first message queue item matching the mask as a 2-tuple, and return it as <code>{Mask,X}</code>; block.  <pre>  1&gt; sc:send_receive(self(), message).
   {item,message}</pre>
  </p>
 <p><b>Introduced in:</b> Version 580</p>
@@ -2599,7 +2641,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="send_receive_masked-4">send_receive_masked/4</a></h3>
 <div class="spec">
 <p><tt>send_receive_masked(Mask::any(), ToWhom::pid() | atom(), What::any(), HowLong::<a href="#type-non_negative_integer">non_negative_integer()</a> | infinity) -&gt; {item, any()} | nothing_there</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as <code>{Mask,X}</code>, or return nothing_there for empty queues; do not block.  <pre>  1&gt; scutil:send_receive(self(), message).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as <code>{Mask,X}</code>, or return nothing_there for empty queues; do not block.  <pre>  1&gt; sc:send_receive(self(), message).
   {item,message}</pre>
  </p>
 <p><b>Introduced in:</b> Version 581</p>
@@ -2656,17 +2698,17 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="shuffle-1">shuffle/1</a></h3>
 <div class="spec">
 <p><tt>shuffle(List::list()) -&gt; list()</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return a list with the original list's shallow members in a random order.  Deep lists are not shuffled; <code>[ [a,b,c], [d,e,f], [g,h,i] ]</code> will never produce sublist reorderings (<code>[b,c,a]</code>) or list mixing (<code>[b,g,e]</code>), only reordering of the three top level lists.  The output list will always be the same length as the input list.  Repeated items and mixed types in input lists are safe. <pre>  1&gt; scutil:shuffle(lists:seq(1,9)).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return a list with the original list's shallow members in a random order.  Deep lists are not shuffled; <code>[ [a,b,c], [d,e,f], [g,h,i] ]</code> will never produce sublist reorderings (<code>[b,c,a]</code>) or list mixing (<code>[b,g,e]</code>), only reordering of the three top level lists.  The output list will always be the same length as the input list.  Repeated items and mixed types in input lists are safe. <pre>  1&gt; sc:shuffle(lists:seq(1,9)).
   [8,4,7,9,5,2,6,1,3]
  
   2&gt; {TheFaces, TheSuits} = {  [ace] ++ lists:seq(2,10) ++ [jack,queen,king],  [hearts,spades,clubs,diamonds]  }
   {[ace,jack,queen,king,2,3,4,5,6,7,8,9,10],
    [hearts,spades,clubs,diamonds]}
  
-  3&gt; Deck = scutil:shuffle([ {Face,Suit} || Face &lt;- TheFaces, Suit &lt;- TheSuits ]).
+  3&gt; Deck = sc:shuffle([ {Face,Suit} || Face &lt;- TheFaces, Suit &lt;- TheSuits ]).
   [ {6,spades}, {7,hearts}, {8,clubs}, {queen,spades}, {6,diamonds}, {ace,...}, {...} | ...]
  
-  4&gt; scutil:shuffle([ duck,duck,duck,duck, goose ]).
+  4&gt; sc:shuffle([ duck,duck,duck,duck, goose ]).
   [duck,goose,duck,duck,duck]</pre>
  
   <i>Originally found at <a href="http://wiki.trapexit.org/index.php/RandomShuffle">http://wiki.trapexit.org/index.php/RandomShuffle</a>; refactored for clarity, and unnecessary repeat nesting behavior removed.</i>
@@ -2695,19 +2737,19 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="spearman_correlation-1">spearman_correlation/1</a></h3>
 <div class="spec">
 <p><tt>spearman_correlation(TupleList::<a href="#type-coordlist">coordlist()</a>) -&gt; {rsquared, Correlation::number()}</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Spearman's Rank Correlation Coefficient of a list of coordinate tuples. <pre>  1&gt; scutil:spearman([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Spearman's Rank Correlation Coefficient of a list of coordinate tuples. <pre>  1&gt; sc:spearman([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
   {rsquared,1.0}
  
-  2&gt; scutil:spearman([ {1,5}, {2,4}, {3,3}, {4,2}, {5,1} ]).
+  2&gt; sc:spearman([ {1,5}, {2,4}, {3,3}, {4,2}, {5,1} ]).
   {rsquared,-1.0}
  
-  3&gt; scutil:spearman([ {1,3}, {2,3}, {3,3}, {4,3}, {5,3} ]).
+  3&gt; sc:spearman([ {1,3}, {2,3}, {3,3}, {4,3}, {5,3} ]).
   {rsquared,0.5}
  
-  4&gt; scutil:spearman([ {1,2}, {2,2.5}, {3,3}, {4,3.5}, {5,4} ]).
+  4&gt; sc:spearman([ {1,2}, {2,2.5}, {3,3}, {4,3.5}, {5,4} ]).
   {rsquared,1.0}
  
-  5&gt; scutil:spearman([ {1,2}, {2,2.4}, {3,3}, {4,3.6}, {5,4} ]).
+  5&gt; sc:spearman([ {1,2}, {2,2.4}, {3,3}, {4,3.6}, {5,4} ]).
   {rsquared,1.0}</pre>
  </p>
 <p><b>Introduced in:</b> Version 558</p>
@@ -2739,10 +2781,10 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="srand-0">srand/0</a></h3>
 <div class="spec">
 <p><tt>srand() -&gt; {ok, {seeded, Seed}}</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want to know what seed was used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) <pre>  1&gt; scutil:srand().
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want to know what seed was used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) <pre>  1&gt; sc:srand().
   {ok,{seeded,{1227,902172,685000}}}
  
-  2&gt; scutil:srand().
+  2&gt; sc:srand().
   {ok,{seeded,{1227,902173,231000}}}</pre>
  </p>
 <p><b>Introduced in:</b> Version 598</p>
@@ -2750,13 +2792,13 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="srand-3">srand/3</a></h3>
 <div class="spec">
 <p><tt>srand(A::integer(), B::integer(), C::integer()) -&gt; {ok, {seeded, Seed}}</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want set what seed is used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) <pre>  1&gt; scutil:srand(1,2,3).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want set what seed is used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) <pre>  1&gt; sc:srand(1,2,3).
   {ok,{seeded,{1,2,3}}}
  
-  2&gt; scutil:srand().
+  2&gt; sc:srand().
   {ok,{seeded,{1227,902568,604600}}}
  
-  3&gt; scutil:srand(1,2,3).
+  3&gt; sc:srand(1,2,3).
   {ok,{seeded,{1,2,3}}}</pre>
  </p>
 <p><b>Introduced in:</b> Version 598</p>
@@ -2791,7 +2833,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Check whether a process is registered locally, and if not, spawn it with a give function and arguments.  <pre>  1&gt; whereis(test).
   undefined
  
-  2&gt; scutil:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
+  2&gt; sc:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
   { ok, &lt;0.726.0&gt; }
  
   3&gt; whereis(test).
@@ -2803,13 +2845,13 @@ and returns the tuple of the remainder and then a list of all results from the f
   5&gt; whereis(test).
   undefined
  
-  6&gt; scutil:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
+  6&gt; sc:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
   { ok, &lt;0.731.0&gt; }
  
   7&gt; whereis(test).
   &lt;0.731.0&gt;
  
-  8&gt; scutil:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
+  8&gt; sc:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
   { ok, &lt;0.731.0&gt; }
  
   9&gt; whereis(test).
@@ -2845,7 +2887,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="svn_revision-1">svn_revision/1</a></h3>
 <div class="spec">
 <p><tt>svn_revision(ModuleName::atom()) -&gt; integer()</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.  To use, add a module attribute to your module as follows: <code>-svn_revision("$+Revision$).</code>, after removing the plus (if the plus wasn't there, the example would get corrupted when I updated the module <code>;)</code>).  Then set the svn keyword "Revision" on the file, and check it in.  After that, your version is magically updated every time you check in!  <code>:D</code>  The sole argument to this function is the name of the module to be scanned, as an atom. <pre>  1&gt; scutil:scan_svn_revision(testerl).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.  To use, add a module attribute to your module as follows: <code>-svn_revision("$+Revision$).</code>, after removing the plus (if the plus wasn't there, the example would get corrupted when I updated the module <code>;)</code>).  Then set the svn keyword "Revision" on the file, and check it in.  After that, your version is magically updated every time you check in!  <code>:D</code>  The sole argument to this function is the name of the module to be scanned, as an atom. <pre>  1&gt; sc:scan_svn_revision(testerl).
   16</pre>
  </p>
 <p><b>Introduced in:</b> Version 523</p>
@@ -2921,10 +2963,10 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="tied_ordered_ranking-1">tied_ordered_ranking/1</a></h3>
 <div class="spec">
 <p><tt>tied_ordered_ranking(Values::<a href="#type-numericlist">numericlist()</a>) -&gt; <a href="#type-rankinglist">rankinglist()</a></tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a tied ranked ordering of the list, ordered according to the input ordering rather than the sorted ordering.  As with <a href="#tied-1"><code>tied/1</code></a>, all rankings are floats, and ties are represented as the centers of ranges. <pre>  1&gt; scutil:ordered([10,90,20,80,30,70,40,60,50]).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a tied ranked ordering of the list, ordered according to the input ordering rather than the sorted ordering.  As with <a href="#tied-1"><code>tied/1</code></a>, all rankings are floats, and ties are represented as the centers of ranges. <pre>  1&gt; sc:ordered([10,90,20,80,30,70,40,60,50]).
   [{9.0,10}, {1.0,90}, {8.0,20}, {2.0,80}, {7.0,30}, {3.0,70}, {6.0,40}, {4.0,60}, {5.0,50}]
  
-  2&gt; scutil:ordered([100,200,200,300]).
+  2&gt; sc:ordered([100,200,200,300]).
   [{4.0,100},{2.5,200},{2.5,200},{1.0,300}]</pre>
  </p>
 <p><b>Introduced in:</b> Version 562</p>
@@ -2932,10 +2974,10 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="tied_ranking-1">tied_ranking/1</a></h3>
 <div class="spec">
 <p><tt>tied_ranking(Values::<a href="#type-numericlist">numericlist()</a>) -&gt; <a href="#type-rankinglist">rankinglist()</a></tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a ranked ordering of the list with tie rankings.  As such, for uniformity, all rankings are floats.  Ties are represented as the centers of ranges. <pre>  1&gt; scutil:tied([10,90,20,80,30,70,40,60,50]).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a ranked ordering of the list with tie rankings.  As such, for uniformity, all rankings are floats.  Ties are represented as the centers of ranges. <pre>  1&gt; sc:tied([10,90,20,80,30,70,40,60,50]).
   [{1.0,90}, {2.0,80}, {3.0,70}, {4.0,60}, {5.0,50}, {6.0,40}, {7.0,30}, {8.0,20}, {9.0,10}]
  
-  2&gt; scutil:tied([100,200,200,300]).
+  2&gt; sc:tied([100,200,200,300]).
   [{1.0,300},{2.5,200},{2.5,200},{4.0,100}]</pre>
  
   needs significant refactoring; work is being repeated
@@ -3001,10 +3043,10 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="type_of-1">type_of/1</a></h3>
 <div class="spec">
 <p><tt>type_of(Argument::any()) -&gt; <a href="#type-typelabel">typelabel()</a></tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of <code>is_bitstring()</code> . <pre>  1&gt; scutil:type_of(1).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of <code>is_bitstring()</code> . <pre>  1&gt; sc:type_of(1).
   integer
  
-  2&gt; scutil:type_of({hello,world}).
+  2&gt; sc:type_of({hello,world}).
   tuple</pre></p>
 <p><b>Introduced in:</b> Version 722</p>
 
@@ -3173,6 +3215,6 @@ and returns the tuple of the remainder and then a list of all results from the f
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 29 2011, 18:56:39.</i></p>
+<p><i>Generated by EDoc, Oct 29 2011, 19:01:57.</i></p>
 </body>
 </html>
