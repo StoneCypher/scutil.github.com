@@ -173,6 +173,8 @@
     standard_card_backs/0,
       standard_card_backs/1,
 
+    multi_deck/2,
+
     calc_fk_readability/3,
       labelled_fk_readability/1,
       fk_readability/4,
@@ -8649,3 +8651,44 @@ standard_card_backs(Count) ->
             Front
 
     end.
+
+
+
+
+
+%% @type function_or_list() = function() | list()
+
+%% @type positive_integer() = integer().  This integer must be greater than zero.
+%% @type positive_integer_or_list() = positive_integer() | list()
+
+%% @spec multi_deck(Backs::positive_integer_or_list(), DeckGenerator::function_or_list()) -> list()
+
+%% @doc Makes a number of instances of a deck, and applies a different back to each.  The first parameter may be a {@type positive_integer()}, at which point the color sequence from {@link standard_backs/0} will be used; otherwise, a list may be used, which will be used as the card backs (there is no requirement regarding their type or uniqueness, only that they be presented as a list.)  The second parameter may be a {@type function()}, which will be called to generate a list of cards, or a {@type list} of cards which will be used directly.
+
+%% @since Version 729
+
+multi_deck(Backs, DeckGenerator) when is_function(DeckGenerator) ->
+
+    multi_deck(Backs, DeckGenerator());
+
+
+
+
+
+multi_deck(BackCount, Deck) when is_integer(BackCount) ->
+
+    [Backs, _] = standard_card_backs(BackCount),
+    multi_deck(Backs, Deck);
+
+
+
+
+
+multi_deck(Backs, Deck) ->
+
+    [ list_to_tuple([Back] ++ tuple_to_list(Card)) ||
+
+        Back <- Backs,
+        Card <- Deck
+
+    ].
