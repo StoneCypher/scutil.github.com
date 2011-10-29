@@ -8728,3 +8728,29 @@ columns( [], Output, Unrotate) ->
 columns( [Item|ListRem], [Output|OutRem], Unrotate) ->
 
     columns(ListRem, OutRem ++ [[Item]++Output], Unrotate-1).
+
+
+
+
+
+%% @since Version 731
+
+columnated_rows(ColumnCount, List) ->
+
+    columns(ceiling(length(List) / ColumnCount), List).
+
+
+
+
+
+%% @since Version 732
+
+first_or_nothing( [H|T] ) ->
+
+    {H,T};
+
+
+
+first_or_nothing( [] ) ->
+
+    { [], [] }.
