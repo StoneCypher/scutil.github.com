@@ -160,6 +160,10 @@
     neighbors/2,
     markhov_chain/2,
     to_lines/1,
+    isolate_waveform/1,
+    unit_scale/1,
+    type_of/1,
+    cross_product/2,
 
     calc_fk_readability/3,
       labelled_fk_readability/1,
@@ -8284,7 +8288,7 @@ to_lines(Text) ->
 
 %% @since Version 706
 
-%% @doc Calculate the Flesch-Kincaid readability score of a set of text metrics.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a set of text metrics.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .
 
 calc_fk_readability(Words, Sentences, Syllables) ->
 
@@ -8296,7 +8300,7 @@ calc_fk_readability(Words, Sentences, Syllables) ->
 
 %% @since Version 707
 
-%% @doc Provides mandated human-readable labels for Flesch-Kincaid readability calculations.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Provides mandated human-readable labels for Flesch-Kincaid readability calculations.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .
 
 labelled_fk_readability(R) when R > 100 -> { "Easy before 11 years",     R };
 labelled_fk_readability(R) when R >  90 -> { "Easy at 11 years",         R };
@@ -8312,7 +8316,7 @@ labelled_fk_readability(R)              -> { "Difficult",                R }.
 
 %% @since Version 708
 
-%% @doc Calculate the Flesch-Kincaid readability score of a block of text.  Also takes three lambdas to do text parsing.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a block of text.  Also takes three lambdas to do text parsing.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test
 
 % comeback todo
 % fk_readability(Data) -> fk_readability(Data, fun count_words/1, fun count_sentences/1, fun count_syllables/1).
@@ -8338,3 +8342,105 @@ fk_readability(Data, WordCounter, SentenceCounter, SyllableCounter) ->
 % dissimilar_charset(english, alphanum)  -> "abcdefghjklmnopqrstuwxyzABDEFGHRT34679".
 
 % similarize_charset   a10OZ2B8 -> aloozzBB
+
+
+
+
+%% @since Version 716
+
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Remove the baseline of a dataset, normalizing a waveform or other signal to its bottom peak.
+
+isolate_waveform(Waveform) ->
+
+    Baseline = lists:min(Waveform),
+
+    [ Sample - Baseline ||
+        Sample <- Waveform
+    ].
+
+
+
+
+
+%% @since Version 720
+
+unit_scale(Waveform) ->
+
+    { Baseline, MaxObserved } = sc:extrema(Waveform),
+    SignalMax                 = MaxObserved - Baseline,
+
+    [ (Sample - Baseline) / SignalMax ||
+        Sample <- Waveform
+    ].
+
+
+
+
+
+%% @type typelabel() = [ integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown ].  Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
+
+%% @spec type_of(Argument::any()) -> typelabel()
+
+%% @doc {@section Utility} Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of `is_bitstring()' . ```1> scutil:type_of(1).
+%% integer
+%%
+%% 2> scutil:type_of({hello,world}).
+%% tuple'''
+
+%% @since Version 722
+
+type_of(X) when is_integer(X)   -> integer;
+type_of(X) when is_float(X)     -> float;
+type_of(X) when is_list(X)      -> list;
+type_of(X) when is_tuple(X)     -> tuple;
+type_of(X) when is_binary(X)    -> binary;
+type_of(X) when is_bitstring(X) -> bitstring;  % will fail before erlang 12
+type_of(X) when is_boolean(X)   -> boolean;
+type_of(X) when is_function(X)  -> function;
+type_of(X) when is_pid(X)       -> pid;
+type_of(X) when is_port(X)      -> port;
+type_of(X) when is_reference(X) -> reference;
+type_of(X) when is_atom(X)      -> atom;
+
+type_of(_X)                     -> unknown.
+
+
+
+
+
+%% @type three_vector() = vector().  A three-vector always has three elements, so this can be expressed as the alternation `{A::number(), B::number(), C::number()} | [A::number(), B::number(), C::number()]'.
+%% @type seven_vector() = vector().  A seven-vector always has seven elements, so this can be expressed as the alternation `{A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()} | [A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()]'.
+%% @type three_or_seven_vector() = three_vector() | seven_vector().
+
+%% @spec cross_product(VX::three_vector(), VY::three_vector()) -> three_vector()
+
+%% @doc {@section Math} <span style="color:red">Incomplete</span> Calculates the cross product of two vectors (<span style="color:red">Incomplete</span> represented as {@type three_vector()}s - no support yet for seven). ```1> scutil:dot_product([1,1,1],[2,2,2]).
+%% 6
+%%
+%% 2> scutil:dot_product([1,1,1],[3,3,3]).
+%% 9
+%%
+%% 3> scutil:dot_product([-1,0,1],[3,3,3]).
+%% 0
+%%
+%% 4> scutil:dot_product([-1,1,1],[3,3,3]).
+%% 3
+%%
+%% 5> scutil:dot_product([0.5,1,2],[1,1,1]).
+%% 3.5'''<span style="color:red">TODO: Implement seven-dimensional cross product</span>
+
+%% @since Version 80
+
+%% @todo implement 7-dimensional variation, http://en.wikipedia.org/wiki/Seven-dimensional_cross_product
+
+cross_product( {X1,Y1,Z1}, {X2,Y2,Z2} ) ->
+
+    { (Y1*Z2) - (Z1*Y2) , (Z1*X2) - (X1*Z2), (X1*Y2) - (Y1*X2) };
+
+
+
+
+
+cross_product( [X1,Y1,Z1], [X2,Y2,Z2] ) ->
+
+    [ (Y1*Z2) - (Z1*Y2) , (Z1*X2) - (X1*Z2), (X1*Y2) - (Y1*X2) ].

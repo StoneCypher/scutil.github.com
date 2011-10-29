@@ -182,6 +182,10 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p>Sanitizers are used by <a href="#sanitize_tokens-2"><code>sanitize_tokens/2</code></a> for input sanitization; they define what parts of an input list are valid, and the remainder are removed.  Sanitizers may either be a list of acceptable elements or a filter function.
  </p>
 
+<h3 class="typedecl"><a name="type-seven_vector">seven_vector()</a></h3>
+<p><tt>seven_vector() = <a href="#type-vector">vector()</a></tt></p>
+<p>A seven-vector always has seven elements, so this can be expressed as the alternation <code>{A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()} | [A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()]</code>.</p>
+
 <h3 class="typedecl"><a name="type-sorted_keylist">sorted_keylist()</a></h3>
 <p><tt>sorted_keylist() = <a href="#type-keylist">keylist()</a></tt></p>
 <p>A sorted keylist is a keylist in the order provided by <a href="lists.html#sort-1"><code>lists:sort/1</code></a>.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.
@@ -190,6 +194,18 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="typedecl"><a name="type-stringlist">stringlist()</a></h3>
 <p><tt>stringlist() = list()</tt></p>
 <p>Every member of a stringlist() is a string().</p>
+
+<h3 class="typedecl"><a name="type-three_or_seven_vector">three_or_seven_vector()</a></h3>
+<p><tt>three_or_seven_vector() = <a href="#type-three_vector">three_vector()</a> | <a href="#type-seven_vector">seven_vector()</a></tt></p>
+
+
+<h3 class="typedecl"><a name="type-three_vector">three_vector()</a></h3>
+<p><tt>three_vector() = <a href="#type-vector">vector()</a></tt></p>
+<p>A three-vector always has three elements, so this can be expressed as the alternation <code>{A::number(), B::number(), C::number()} | [A::number(), B::number(), C::number()]</code>.</p>
+
+<h3 class="typedecl"><a name="type-typelabel">typelabel()</a></h3>
+<p><tt>typelabel() = [integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown]</tt></p>
+<p>Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.</p>
 
 <h3 class="typedecl"><a name="type-weightedvalue">weightedvalue()</a></h3>
 <p><tt>weightedvalue() = {Value::any(), Weight::number()}</tt></p>
@@ -221,7 +237,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#by_distance-2">by_distance/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#by_distance_raw-2">by_distance_raw/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#byte_to_hex-1">byte_to_hex/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a byte() into a hexstring().</td></tr>
-<tr><td valign="top"><a href="#calc_fk_readability-3">calc_fk_readability/3</a></td><td>Calculate the Flesch-Kincaid readability score of a set of text metrics.</td></tr>
+<tr><td valign="top"><a href="#calc_fk_readability-3">calc_fk_readability/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a set of text metrics.</td></tr>
 <tr><td valign="top"><a href="#caspers_jones_estimate-1">caspers_jones_estimate/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#ceil-1">ceil/1</a></td><td>Equivalent to <a href="#ceiling-1"><tt>ceiling(X)</tt></a>.
 </td></tr>
@@ -237,6 +253,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#count_of-2">count_of/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Counts the number of instances of Item in List.</td></tr>
 <tr><td valign="top"><a href="#counter_at-1">counter_at/1</a></td><td>Checks a counter's value; if the counter was not already defined, it will report zero.</td></tr>
 <tr><td valign="top"><a href="#country_codes-0">country_codes/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#cross_product-2">cross_product/2</a></td><td><a href="#Math">Math</a> <span style="color:red">Incomplete</span> Calculates the cross product of two vectors (<span style="color:red">Incomplete</span> represented as <code><a href="#type-three_vector">three_vector()</a></code>s - no support yet for seven).</td></tr>
 <tr><td valign="top"><a href="#cube-1">cube/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
 <tr><td valign="top"><a href="#dec_counter-1">dec_counter/1</a></td><td>Equivalent to <a href="#adjust_counter_by-2"><tt>adjust_counter_by(Name, -1)</tt></a>.
 </td></tr>
@@ -270,7 +287,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#first_difference-1">first_difference/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#first_pos-2">first_pos/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns false if none pass.</td></tr>
 <tr><td valign="top"><a href="#first_pos-3">first_pos/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns a default value if none is found.</td></tr>
-<tr><td valign="top"><a href="#fk_readability-4">fk_readability/4</a></td><td>Calculate the Flesch-Kincaid readability score of a block of text.</td></tr>
+<tr><td valign="top"><a href="#fk_readability-4">fk_readability/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a block of text.</td></tr>
 <tr><td valign="top"><a href="#flag_sets-1">flag_sets/1</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
 <tr><td valign="top"><a href="#floor-1">floor/1</a></td><td>1&gt; sc:floor(0.5).</td></tr>
 <tr><td valign="top"><a href="#function_point_count-1">function_point_count/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -309,6 +326,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#is_repeated_list-1">is_repeated_list/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#is_sorted_list-1">is_sorted_list/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns true if the list is sorted; false otherwise.</td></tr>
 <tr><td valign="top"><a href="#is_unique_list-1">is_unique_list/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns true if the list is unique; false otherwise.</td></tr>
+<tr><td valign="top"><a href="#isolate_waveform-1">isolate_waveform/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Remove the baseline of a dataset, normalizing a waveform or other signal to its bottom peak.</td></tr>
 <tr><td valign="top"><a href="#kendall_correlation-1">kendall_correlation/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Kendall Tau Rank Correlation Coefficient of a list of coordinate tuples.</td></tr>
 <tr><td valign="top"><a href="#kendall_correlation-2">kendall_correlation/2</a></td><td>Equivalent to <a href="#kendall-1"><tt>kendall(lists:zip(List1, List2))</tt></a>.
 </td></tr>
@@ -323,7 +341,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#key_min-1">key_min/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
 <tr><td valign="top"><a href="#key_min-2">key_min/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#kurtosis-1">kurtosis/1</a></td><td><span style="color:red"><b><i>BUGGY</i></b></span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
-<tr><td valign="top"><a href="#labelled_fk_readability-1">labelled_fk_readability/1</a></td><td>Provides mandated human-readable labels for Flesch-Kincaid readability calculations.</td></tr>
+<tr><td valign="top"><a href="#labelled_fk_readability-1">labelled_fk_readability/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Provides mandated human-readable labels for Flesch-Kincaid readability calculations.</td></tr>
 <tr><td valign="top"><a href="#last_while_pos-2">last_while_pos/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the last element of the initial sequence where all items pass the predicate function.</td></tr>
 <tr><td valign="top"><a href="#last_while_pos-3">last_while_pos/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#levenshtein-2">levenshtein/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>, by fredrik svensson and adam lindberg, from http://www.merriampark.com/lderlang.htm.</td></tr>
@@ -449,12 +467,14 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#tuple_member-2">tuple_member/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether E is a member element of tuple T, analogous to <code>lists::member(E, L)</code>.</td></tr>
 <tr><td valign="top"><a href="#tuple_sort-1">tuple_sort/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#tuple_sum-1">tuple_sum/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero.</td></tr>
+<tr><td valign="top"><a href="#type_of-1">type_of/1</a></td><td><a href="#Utility">Utility</a> Fetch the type of the argument.</td></tr>
 <tr><td valign="top"><a href="#unfunnel-2">unfunnel/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Reverse a marketing funnel, to go from goal needed to input needed.</td></tr>
 <tr><td valign="top"><a href="#unfunnel-3">unfunnel/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#union-1">union/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#union-2">union/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#union-3">union/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#union-4">union/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#unit_scale-1">unit_scale/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#vector_magnitude-1">vector_magnitude/1</a></td><td>Equivalent to <a href="#root_sum_square-1"><tt>root_sum_square(VX)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#walk_unique_pairings-2">walk_unique_pairings/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
@@ -629,7 +649,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="calc_fk_readability-3">calc_fk_readability/3</a></h3>
 <div class="spec">
 <p><tt>calc_fk_readability(Words, Sentences, Syllables) -&gt; any()</tt></p>
-</div><p>Calculate the Flesch-Kincaid readability score of a set of text metrics.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .</p>
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a set of text metrics.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .</p>
 <p><b>Introduced in:</b> Version 706</p>
 
 <h3 class="function"><a name="caspers_jones_estimate-1">caspers_jones_estimate/1</a></h3>
@@ -804,6 +824,25 @@ and returns the tuple of the remainder and then a list of all results from the f
 <p><tt>country_codes() -&gt; any()</tt></p>
 </div>
 <p><b>Introduced in:</b> Version 653</p>
+
+<h3 class="function"><a name="cross_product-2">cross_product/2</a></h3>
+<div class="spec">
+<p><tt>cross_product(VX::<a href="#type-three_vector">three_vector()</a>, VY::<a href="#type-three_vector">three_vector()</a>) -&gt; <a href="#type-three_vector">three_vector()</a></tt></p>
+</div><p><a href="#Math">Math</a> <span style="color:red">Incomplete</span> Calculates the cross product of two vectors (<span style="color:red">Incomplete</span> represented as <code><a href="#type-three_vector">three_vector()</a></code>s - no support yet for seven). <pre>  1&gt; scutil:dot_product([1,1,1],[2,2,2]).
+  6
+ 
+  2&gt; scutil:dot_product([1,1,1],[3,3,3]).
+  9
+ 
+  3&gt; scutil:dot_product([-1,0,1],[3,3,3]).
+  0
+ 
+  4&gt; scutil:dot_product([-1,1,1],[3,3,3]).
+  3
+ 
+  5&gt; scutil:dot_product([0.5,1,2],[1,1,1]).
+  3.5</pre><span style="color:red">TODO: Implement seven-dimensional cross product</span></p>
+<p><b>Introduced in:</b> Version 80</p>
 
 <h3 class="function"><a name="cube-1">cube/1</a></h3>
 <div class="spec">
@@ -1110,7 +1149,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="fk_readability-4">fk_readability/4</a></h3>
 <div class="spec">
 <p><tt>fk_readability(Data, WordCounter, SentenceCounter, SyllableCounter) -&gt; any()</tt></p>
-</div><p>Calculate the Flesch-Kincaid readability score of a block of text.  Also takes three lambdas to do text parsing.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test</p>
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a block of text.  Also takes three lambdas to do text parsing.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test</p>
 <p><b>Introduced in:</b> Version 708</p>
 
 <h3 class="function"><a name="flag_sets-1">flag_sets/1</a></h3>
@@ -1552,6 +1591,12 @@ and returns the tuple of the remainder and then a list of all results from the f
  </p>
 <p><b>Introduced in:</b> Version 514</p>
 
+<h3 class="function"><a name="isolate_waveform-1">isolate_waveform/1</a></h3>
+<div class="spec">
+<p><tt>isolate_waveform(Waveform) -&gt; any()</tt></p>
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Remove the baseline of a dataset, normalizing a waveform or other signal to its bottom peak.</p>
+<p><b>Introduced in:</b> Version 716</p>
+
 <h3 class="function"><a name="kendall_correlation-1">kendall_correlation/1</a></h3>
 <div class="spec">
 <p><tt>kendall_correlation(TupleList::<a href="#type-coordlist">coordlist()</a>) -&gt; {tau, Correlation::number()}</tt></p>
@@ -1669,7 +1714,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="labelled_fk_readability-1">labelled_fk_readability/1</a></h3>
 <div class="spec">
 <p><tt>labelled_fk_readability(R) -&gt; any()</tt></p>
-</div><p>Provides mandated human-readable labels for Flesch-Kincaid readability calculations.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .</p>
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Provides mandated human-readable labels for Flesch-Kincaid readability calculations.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .</p>
 <p><b>Introduced in:</b> Version 707</p>
 
 <h3 class="function"><a name="last_while_pos-2">last_while_pos/2</a></h3>
@@ -2928,6 +2973,16 @@ and returns the tuple of the remainder and then a list of all results from the f
  </p>
 <p><b>Introduced in:</b> Version 609</p>
 
+<h3 class="function"><a name="type_of-1">type_of/1</a></h3>
+<div class="spec">
+<p><tt>type_of(Argument::any()) -&gt; <a href="#type-typelabel">typelabel()</a></tt></p>
+</div><p><a href="#Utility">Utility</a> Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of <code>is_bitstring()</code> . <pre>  1&gt; scutil:type_of(1).
+  integer
+ 
+  2&gt; scutil:type_of({hello,world}).
+  tuple</pre></p>
+<p><b>Introduced in:</b> Version 722</p>
+
 <h3 class="function"><a name="unfunnel-2">unfunnel/2</a></h3>
 <div class="spec">
 <p><tt>unfunnel(Tgt, ProbPropList) -&gt; any()</tt></p>
@@ -2975,6 +3030,12 @@ and returns the tuple of the remainder and then a list of all results from the f
 <p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></p>
 <p><b>Introduced in:</b> Version 586
  </p>
+
+<h3 class="function"><a name="unit_scale-1">unit_scale/1</a></h3>
+<div class="spec">
+<p><tt>unit_scale(Waveform) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 720</p>
 
 <h3 class="function"><a name="vector_magnitude-1">vector_magnitude/1</a></h3>
 <div class="spec">
@@ -3080,6 +3141,6 @@ and returns the tuple of the remainder and then a list of all results from the f
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 29 2011, 17:30:17.</i></p>
+<p><i>Generated by EDoc, Oct 29 2011, 18:45:41.</i></p>
 </body>
 </html>
