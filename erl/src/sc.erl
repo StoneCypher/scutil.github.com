@@ -8282,8 +8282,24 @@ to_lines(Text) ->
 
 %% @since Version 706
 
-%% @doc Calculate the Flesch-Kincaid readability score of a block of text.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .
+%% @doc Calculate the Flesch-Kincaid readability score of a set of text metrics.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .
 
 calc_fk_readability(Words, Sentences, Syllables) ->
 
     206.835 - (1.015 * (Words/Sentences)) - (84.6 * (Syllables/Words)).
+
+
+
+
+
+%% @since Version 707
+
+%% @doc Provides mandated human-readable labels for Flesch-Kincaid readability calculations.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .
+
+labelled_fk_readability(R) when R > 100 -> { "Easy before 11 years",     R };
+labelled_fk_readability(R) when R >  90 -> { "Easy at 11 years",         R };
+labelled_fk_readability(R) when R >  70 -> { "Easy for 11 to 13 years",  R };
+labelled_fk_readability(R) when R >  60 -> { "Easy for 13 to 15 years",  R };
+labelled_fk_readability(R) when R >  30 -> { "Appropriate for 15 years", R };
+labelled_fk_readability(R) when R >   0 -> { "Appropriate for college",  R };
+labelled_fk_readability(R)              -> { "Difficult",                R }.
