@@ -182,6 +182,10 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p>Sanitizers are used by <a href="#sanitize_tokens-2"><code>sanitize_tokens/2</code></a> for input sanitization; they define what parts of an input list are valid, and the remainder are removed.  Sanitizers may either be a list of acceptable elements or a filter function.
  </p>
 
+<h3 class="typedecl"><a name="type-seven_vector">seven_vector()</a></h3>
+<p><tt>seven_vector() = <a href="#type-vector">vector()</a></tt></p>
+<p>A seven-vector always has seven elements, so this can be expressed as the alternation <code>{A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()} | [A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()]</code>.</p>
+
 <h3 class="typedecl"><a name="type-sorted_keylist">sorted_keylist()</a></h3>
 <p><tt>sorted_keylist() = <a href="#type-keylist">keylist()</a></tt></p>
 <p>A sorted keylist is a keylist in the order provided by <a href="lists.html#sort-1"><code>lists:sort/1</code></a>.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.
@@ -190,6 +194,14 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="typedecl"><a name="type-stringlist">stringlist()</a></h3>
 <p><tt>stringlist() = list()</tt></p>
 <p>Every member of a stringlist() is a string().</p>
+
+<h3 class="typedecl"><a name="type-three_or_seven_vector">three_or_seven_vector()</a></h3>
+<p><tt>three_or_seven_vector() = <a href="#type-three_vector">three_vector()</a> | <a href="#type-seven_vector">seven_vector()</a></tt></p>
+
+
+<h3 class="typedecl"><a name="type-three_vector">three_vector()</a></h3>
+<p><tt>three_vector() = <a href="#type-vector">vector()</a></tt></p>
+<p>A three-vector always has three elements, so this can be expressed as the alternation <code>{A::number(), B::number(), C::number()} | [A::number(), B::number(), C::number()]</code>.</p>
 
 <h3 class="typedecl"><a name="type-typelabel">typelabel()</a></h3>
 <p><tt>typelabel() = [integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown]</tt></p>
@@ -241,6 +253,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#count_of-2">count_of/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Counts the number of instances of Item in List.</td></tr>
 <tr><td valign="top"><a href="#counter_at-1">counter_at/1</a></td><td>Checks a counter's value; if the counter was not already defined, it will report zero.</td></tr>
 <tr><td valign="top"><a href="#country_codes-0">country_codes/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#cross_product-2">cross_product/2</a></td><td><a href="#Math">Math</a> <span style="color:red">Incomplete</span> Calculates the cross product of two vectors (<span style="color:red">Incomplete</span> represented as <code><a href="#type-three_vector">three_vector()</a></code>s - no support yet for seven).</td></tr>
 <tr><td valign="top"><a href="#cube-1">cube/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
 <tr><td valign="top"><a href="#dec_counter-1">dec_counter/1</a></td><td>Equivalent to <a href="#adjust_counter_by-2"><tt>adjust_counter_by(Name, -1)</tt></a>.
 </td></tr>
@@ -402,11 +415,6 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#range_scale-1">range_scale/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Get the scale of a same-sign numeric range.</td></tr>
 <tr><td valign="top"><a href="#receive_one-0">receive_one/0</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Pop the front of the message queue and return it as <code>{item,X}</code>, or return nothing_there for empty queues; do not block.</td></tr>
 <tr><td valign="top"><a href="#record_member-2">record_member/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <span style="color:red">TODO: Needs Example</span> Checks whether E is a member element of record R, analogous to <code>lists::member(E, L)</code>.</td></tr>
-<tr><td valign="top"><a href="#regex_matches-2">regex_matches/2</a></td><td>Equivalent to <a href="#regex_matches-3"><tt>regex_matches(String, Reg, {0, 0})</tt></a>.
-</td></tr>
-<tr><td valign="top"><a href="#regex_matches-3">regex_matches/3</a></td><td>Take a string and a regular expression (and optionally an offset and length to trim to in each result), and return a list of all matches.</td></tr>
-<tr><td valign="top"><a href="#regex_matches-4">regex_matches/4</a></td><td>Equivalent to <a href="#regex_matches-3"><tt>regex_matches(String, Reg, {TrimFront, TrimLength})</tt></a>.
-</td></tr>
 <tr><td valign="top"><a href="#replace-3">replace/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#reset_counter-1">reset_counter/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Resets a counter's value to zero.</td></tr>
 <tr><td valign="top"><a href="#reverse_filter-2">reverse_filter/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -816,6 +824,25 @@ and returns the tuple of the remainder and then a list of all results from the f
 <p><tt>country_codes() -&gt; any()</tt></p>
 </div>
 <p><b>Introduced in:</b> Version 653</p>
+
+<h3 class="function"><a name="cross_product-2">cross_product/2</a></h3>
+<div class="spec">
+<p><tt>cross_product(VX::<a href="#type-three_vector">three_vector()</a>, VY::<a href="#type-three_vector">three_vector()</a>) -&gt; <a href="#type-three_vector">three_vector()</a></tt></p>
+</div><p><a href="#Math">Math</a> <span style="color:red">Incomplete</span> Calculates the cross product of two vectors (<span style="color:red">Incomplete</span> represented as <code><a href="#type-three_vector">three_vector()</a></code>s - no support yet for seven). <pre>  1&gt; scutil:dot_product([1,1,1],[2,2,2]).
+  6
+ 
+  2&gt; scutil:dot_product([1,1,1],[3,3,3]).
+  9
+ 
+  3&gt; scutil:dot_product([-1,0,1],[3,3,3]).
+  0
+ 
+  4&gt; scutil:dot_product([-1,1,1],[3,3,3]).
+  3
+ 
+  5&gt; scutil:dot_product([0.5,1,2],[1,1,1]).
+  3.5</pre><span style="color:red">TODO: Implement seven-dimensional cross product</span></p>
+<p><b>Introduced in:</b> Version 80</p>
 
 <h3 class="function"><a name="cube-1">cube/1</a></h3>
 <div class="spec">
@@ -2370,35 +2397,6 @@ and returns the tuple of the remainder and then a list of all results from the f
  </p>
 <p><b>Introduced in:</b> Version 616</p>
 
-<h3 class="function"><a name="regex_matches-2">regex_matches/2</a></h3>
-<div class="spec">
-<p><tt>regex_matches(String, Reg) -&gt; any()</tt></p>
-</div><p>Equivalent to <a href="#regex_matches-3"><tt>regex_matches(String, Reg, {0, 0})</tt></a>.</p>
-
-<p><b>Introduced in:</b> Version 721</p>
-
-<h3 class="function"><a name="regex_matches-3">regex_matches/3</a></h3>
-<div class="spec">
-<p><tt>regex_matches(String::string(), Reg::string(), X3::{TrimFront::integer(), TrimLength::integer()}) -&gt; list() | {error, E}</tt></p>
-</div><p>Take a string and a regular expression (and optionally an offset and length to trim to in each result), and return a list of all matches.  For a trim length of {A,B}, the first A and last B characters of each result will be removed.<pre>  1&gt; sc:regex_matches("0j2  4g5  8t9", "[0-9](.)[0-9]").
-  ["0j2","4g5","8t9"]
- 
-  2&gt; sc:regex_matches("0j2  4g5  8t9", "[0-9](.)[0-9]", {1,1}).
-  ["j","g","t"]
- 
-  3&gt; sc:regex_matches("0j2  4g5  8t9", "[0-9](.)[0-9]", 1, 1).
-  ["j","g","t"]</pre>
- 
-  Why provide the equivalent syntaxes (_, _, {A,B}) and (_, _, A,B) ?  Without the tuple is more natural to many, but with the tuple is far more convenient for database-driven behavior, as well as the internal implementation.  I frequently find myself using both forms, and so every time I simplify I find myself wrapping the non-removed form back into the removed form.  Does it violate the simplest interface principle?  Yeah, but in this case it's a boon, IMO.  As such, keeping both forms.</p>
-<p><b>Introduced in:</b> Version 721</p>
-
-<h3 class="function"><a name="regex_matches-4">regex_matches/4</a></h3>
-<div class="spec">
-<p><tt>regex_matches(String, Reg, TrimFront, TrimLength) -&gt; any()</tt></p>
-</div><p>Equivalent to <a href="#regex_matches-3"><tt>regex_matches(String, Reg, {TrimFront, TrimLength})</tt></a>.</p>
-
-<p><b>Introduced in:</b> Version 721</p>
-
 <h3 class="function"><a name="replace-3">replace/3</a></h3>
 <div class="spec">
 <p><tt>replace(Source, Pattern, Replacement) -&gt; any()</tt></p>
@@ -3143,6 +3141,6 @@ and returns the tuple of the remainder and then a list of all results from the f
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 29 2011, 18:32:10.</i></p>
+<p><i>Generated by EDoc, Oct 29 2011, 18:45:41.</i></p>
 </body>
 </html>
