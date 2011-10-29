@@ -8754,3 +8754,30 @@ first_or_nothing( [H|T] ) ->
 first_or_nothing( [] ) ->
 
     { [], [] }.
+
+
+
+
+
+%% @todo needs spec, doc, since
+
+%% @since Version 733
+
+first_row(Columns) ->
+
+     first_row(Columns, [], []).
+
+
+
+%% @private
+
+first_row( [], OutCols, Work) ->
+
+    { lists:reverse(Work), lists:reverse(OutCols) };
+
+
+
+first_row( [ThisCol|RemCols], OutCols, Work) ->
+
+    {Item,ColRem} = first_or_nothing(ThisCol),
+    first_row(RemCols, [ColRem]++OutCols, [Item]++Work).
