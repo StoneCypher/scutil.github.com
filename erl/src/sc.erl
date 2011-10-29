@@ -154,7 +154,9 @@
     replace/3,
     merge_settings/2,
     neighbors/2,
+
     unfunnel/2,
+      unfunnel/3,
 
     is_between/3,
       is_between/4,
@@ -8109,18 +8111,26 @@ is_between(_, _, _, inclusive)                     -> false.
 
 %% @since Version 691
 
-unfunnel(Tgt, ProbPropList)
+unfunnel(Tgt, ProbPropList) -> 
+
+    unfunnel(Tgt, ProbPropList, ceil).
+    
+    
+    
+
+
+unfunnel(Tgt, ProbPropList, MaybeCeil)
 
     when is_number(Tgt),
          is_list(ProbPropList) ->
 
-    unfunnel(Tgt, [ { Tgt, "Result" } ], lists:reverse(ProbPropList)).
+    unfunnel(Tgt, [ { Tgt, "Result" } ], lists:reverse(ProbPropList), MaybeCeil).
 
 
 
 
 
-unfunnel(Counter, Output, []) ->
+unfunnel(Counter, Output, [], _WhoCaresIfCeil) ->
 
     [{Counter, "Input Needed"}]++Output;
 
@@ -8128,6 +8138,14 @@ unfunnel(Counter, Output, []) ->
 
 
 
-unfunnel(Counter, Output, [{Scale,Label} | RemWork]) ->
+unfunnel(Counter, Output, [{Scale,Label} | RemWork], no_ceil) ->
 
-    unfunnel(Counter/Scale, [{Counter, Label, Scale}]++Output, RemWork).
+    unfunnel(Counter/Scale, [{Counter, Label, Scale}]++Output, RemWork, no_ceil);
+
+
+
+
+
+unfunnel(Counter, Output, [{Scale,Label} | RemWork], ceil) ->
+
+    unfunnel(sc:ceil(Counter/Scale), [{Counter, Label, Scale}]++Output, RemWork, ceil).
