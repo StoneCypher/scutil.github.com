@@ -163,10 +163,15 @@
     isolate_waveform/1,
     unit_scale/1,
     type_of/1,
+    cross_product/2,
+    dot_product/2,
+    vector_normalize/1,
+    qsp_average/2,
+    has_bit/2,
+    count_bits/1,
 
-    regex_matches/2,
-      regex_matches/3,
-      regex_matches/4,
+    standard_card_backs/0,
+      standard_card_backs/1,
 
     calc_fk_readability/3,
       labelled_fk_readability/1,
@@ -1670,7 +1675,7 @@ caspers_jones_estimate(FunctionPoints)
 %%
 %% @since Version 478
 
-naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatureTotal) 
+naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatureTotal)
 
     when is_integer(FeatureEvident),
          is_integer(FeatureTotal),
@@ -3390,7 +3395,7 @@ module_feature(Module, Feature) ->
 
 %% @spec svn_revision(ModuleName::atom()) -> integer()
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.  To use, add a module attribute to your module as follows: `-svn_revision("$+Revision$).', after removing the plus (if the plus wasn't there, the example would get corrupted when I updated the module `;)').  Then set the svn keyword "Revision" on the file, and check it in.  After that, your version is magically updated every time you check in!  `:D'  The sole argument to this function is the name of the module to be scanned, as an atom. ```1> scutil:scan_svn_revision(testerl).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.  To use, add a module attribute to your module as follows: `-svn_revision("$+Revision$).', after removing the plus (if the plus wasn't there, the example would get corrupted when I updated the module `;)').  Then set the svn keyword "Revision" on the file, and check it in.  After that, your version is magically updated every time you check in!  `:D'  The sole argument to this function is the name of the module to be scanned, as an atom. ```1> sc:scan_svn_revision(testerl).
 %% 16'''
 %%
 %% @since Version 523
@@ -4477,10 +4482,10 @@ every_member_representation(Memberships) ->
 
 %% @spec every_member_representation(Memberships::list_of_lists(), AllowAbsence::atom()) -> list_of_lists()
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> For a list of memberships, return every possible combination of one representative member from each list.  The parameter `AllowAbsence' controls whether memberships may be unrepresented; if unrepresented memberships are possible, then one possible representation becomes the empty list. ```1> scutil:every_member_representation([ [a,b],[1,2,3],[i,ii,iii] ], no_absence).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> For a list of memberships, return every possible combination of one representative member from each list.  The parameter `AllowAbsence' controls whether memberships may be unrepresented; if unrepresented memberships are possible, then one possible representation becomes the empty list. ```1> sc:every_member_representation([ [a,b],[1,2,3],[i,ii,iii] ], no_absence).
 %% [[a,1,i], [a,1,ii], [a,1,iii], [a,2,i], [a,2,ii], [a,2,iii], [a,3,i], [a,3,ii], [a,3,iii], [b,1,i], [b,1,ii], [b,1,iii], [b,2,i], [b,2,ii], [b,2,iii], [b,3,i], [b,3,ii], [b,3,iii]]
 %%
-%% 2> scutil:every_member_representation([ [a,b],[1,2],[i,ii] ], allow_absence).
+%% 2> sc:every_member_representation([ [a,b],[1,2],[i,ii] ], allow_absence).
 %% [ [], [i], [ii], [1], [1,i], [1,ii], [2], [2,i], [2,ii], [a], [a,i], [a,ii], [a,1], [a,1,i], [a,1,ii], [a,2], [a,2,i], [a,2,ii], [b], [b,i], [b,ii], [b,1], [b,1,i], [b,1,ii], [b,2], [b,2,i], [b,2,ii] ]
 %%
 %% 3> Format = fun(Person, Place, Weapon) -> "It was " ++ Person ++ " in the " ++ Place ++ " with the " ++ Weapon ++ "!" end.
@@ -4559,13 +4564,13 @@ every_member_representation( [Membership|RemMemberships], allow_absence) ->
 
 %% @spec every_flag_representation(Flags::list()) -> list_of_lists()
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns every interpretation of the list as a set of boolean flags, including all-off and all-on. ```1> scutil:every_flag_representation([1,2,3,4]).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns every interpretation of the list as a set of boolean flags, including all-off and all-on. ```1> sc:every_flag_representation([1,2,3,4]).
 %% [ [], [4], [3], [3,4], [2], [2,4], [2,3], [2,3,4], [1], [1,4], [1,3], [1,3,4], [1,2], [1,2,4], [1,2,3], [1,2,3,4] ]
 %%
-%% 2> length(scutil:every_flag_representation(lists:seq(1,16))).
+%% 2> length(sc:every_flag_representation(lists:seq(1,16))).
 %% 65536
 %%
-%% 3> SourceOfPowers = scutil:every_flag_representation([magic,technology,evil,alien]).
+%% 3> SourceOfPowers = sc:every_flag_representation([magic,technology,evil,alien]).
 %% [[],                              % Batman
 %%  [alien],                         % Superman
 %%  [evil],                          % Darkseid
@@ -4676,19 +4681,19 @@ eval(S, Environ) ->
 %%
 %% @spec kendall_correlation(TupleList::coordlist()) -> { tau, Correlation::number() }
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Kendall Tau Rank Correlation Coefficient of a list of coordinate tuples. ```1> scutil:kendall([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Kendall Tau Rank Correlation Coefficient of a list of coordinate tuples. ```1> sc:kendall([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
 %% {tau,1.0}
 %%
-%% 2> scutil:kendall([ {1,5}, {2,4}, {3,3}, {4,2}, {5,1} ]).
+%% 2> sc:kendall([ {1,5}, {2,4}, {3,3}, {4,2}, {5,1} ]).
 %% {tau,-1.0}
 %%
-%% 3> scutil:kendall([ {1,3}, {2,3}, {3,3}, {4,3}, {5,3} ]).
+%% 3> sc:kendall([ {1,3}, {2,3}, {3,3}, {4,3}, {5,3} ]).
 %% {tau,1.0}
 %%
-%% 4> scutil:kendall([ {1,2}, {2,2.5}, {3,3}, {4,3.5}, {5,4} ]).
+%% 4> sc:kendall([ {1,2}, {2,2.5}, {3,3}, {4,3.5}, {5,4} ]).
 %% {tau,1.0}
 %%
-%% 5> scutil:kendall([ {1,2}, {2,2.4}, {3,3}, {4,3.6}, {5,4} ]).
+%% 5> sc:kendall([ {1,2}, {2,2.4}, {3,3}, {4,3.6}, {5,4} ]).
 %% {tau,1.0}'''
 %%
 %% @since Version 557
@@ -4776,19 +4781,19 @@ kendall_right_of_item(B, Rem) ->
 %%
 %% @spec spearman_correlation(TupleList::coordlist()) -> { rsquared, Correlation::number() }
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Spearman's Rank Correlation Coefficient of a list of coordinate tuples. ```1> scutil:spearman([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Spearman's Rank Correlation Coefficient of a list of coordinate tuples. ```1> sc:spearman([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
 %% {rsquared,1.0}
 %%
-%% 2> scutil:spearman([ {1,5}, {2,4}, {3,3}, {4,2}, {5,1} ]).
+%% 2> sc:spearman([ {1,5}, {2,4}, {3,3}, {4,2}, {5,1} ]).
 %% {rsquared,-1.0}
 %%
-%% 3> scutil:spearman([ {1,3}, {2,3}, {3,3}, {4,3}, {5,3} ]).
+%% 3> sc:spearman([ {1,3}, {2,3}, {3,3}, {4,3}, {5,3} ]).
 %% {rsquared,0.5}
 %%
-%% 4> scutil:spearman([ {1,2}, {2,2.5}, {3,3}, {4,3.5}, {5,4} ]).
+%% 4> sc:spearman([ {1,2}, {2,2.5}, {3,3}, {4,3.5}, {5,4} ]).
 %% {rsquared,1.0}
 %%
-%% 5> scutil:spearman([ {1,2}, {2,2.4}, {3,3}, {4,3.6}, {5,4} ]).
+%% 5> sc:spearman([ {1,2}, {2,2.4}, {3,3}, {4,3.6}, {5,4} ]).
 %% {rsquared,1.0}'''
 %%
 %% @since Version 558
@@ -4959,10 +4964,10 @@ simple_ranking(List)
 %%
 %% @spec tied_ranking(Values::numericlist()) -> rankinglist()
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a ranked ordering of the list with tie rankings.  As such, for uniformity, all rankings are floats.  Ties are represented as the centers of ranges. ```1> scutil:tied([10,90,20,80,30,70,40,60,50]).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a ranked ordering of the list with tie rankings.  As such, for uniformity, all rankings are floats.  Ties are represented as the centers of ranges. ```1> sc:tied([10,90,20,80,30,70,40,60,50]).
 %% [{1.0,90}, {2.0,80}, {3.0,70}, {4.0,60}, {5.0,50}, {6.0,40}, {7.0,30}, {8.0,20}, {9.0,10}]
 %%
-%% 2> scutil:tied([100,200,200,300]).
+%% 2> sc:tied([100,200,200,300]).
 %% [{1.0,300},{2.5,200},{2.5,200},{4.0,100}]'''
 %%
 %% needs significant refactoring; work is being repeated
@@ -5026,10 +5031,10 @@ tied_rank_worker([Item|Remainder], Work, PrevValue) ->
 %%
 %% @spec tied_ordered_ranking(Values::numericlist()) -> rankinglist()
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a tied ranked ordering of the list, ordered according to the input ordering rather than the sorted ordering.  As with {@link tied/1}, all rankings are floats, and ties are represented as the centers of ranges. ```1> scutil:ordered([10,90,20,80,30,70,40,60,50]).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a tied ranked ordering of the list, ordered according to the input ordering rather than the sorted ordering.  As with {@link tied/1}, all rankings are floats, and ties are represented as the centers of ranges. ```1> sc:ordered([10,90,20,80,30,70,40,60,50]).
 %% [{9.0,10}, {1.0,90}, {8.0,20}, {2.0,80}, {7.0,30}, {3.0,70}, {6.0,40}, {4.0,60}, {5.0,50}]
 %%
-%% 2> scutil:ordered([100,200,200,300]).
+%% 2> sc:ordered([100,200,200,300]).
 %% [{4.0,100},{2.5,200},{2.5,200},{1.0,300}]'''
 %%
 %% @since Version 562
@@ -5192,10 +5197,10 @@ list_to_term(List) ->
 %%
 %% @spec io_list_to_hex_string(Input::io_list()) -> hexstring()
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert an io_list() to a hexstring().  ```1> scutil:io_list_to_hex_string("a").
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert an io_list() to a hexstring().  ```1> sc:io_list_to_hex_string("a").
 %% "61"
 %%
-%% 2> scutil:io_list_to_hex_string("a08n408nbqa").
+%% 2> sc:io_list_to_hex_string("a08n408nbqa").
 %% "6130386e3430386e627161"'''
 %%
 %% @since Version 569
@@ -5243,10 +5248,10 @@ io_list_to_hex_string(_, _) ->
 %%
 %% @spec nybble_to_hex(Nyb::nybble()) -> integer()
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a nybble() to a hexchar(). ```1> scutil:nybble_to_hex(7).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a nybble() to a hexchar(). ```1> sc:nybble_to_hex(7).
 %% 55
 %%
-%% 2> scutil:nybble_to_hex(15).
+%% 2> sc:nybble_to_hex(15).
 %% 102'''
 %%
 %% @since Version 570
@@ -5279,10 +5284,10 @@ nybble_to_hex(Nyb)
 %%
 %% @spec byte_to_hex(TheByte::byte()) -> hexstring()
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a byte() into a hexstring().  The hexstring() result will always be two characters (left padded with zero if necessary). ```1> scutil:byte_to_hex(7).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a byte() into a hexstring().  The hexstring() result will always be two characters (left padded with zero if necessary). ```1> sc:byte_to_hex(7).
 %% "07"
 %%
-%% 2> scutil:byte_to_hex(255).
+%% 2> sc:byte_to_hex(255).
 %% "ff"'''
 %%
 %% @since Version 571
@@ -5303,13 +5308,13 @@ byte_to_hex(TheByte)
 %% @type hexstring() = list().  All elements of the list must be of type {@type hexchar()}.
 %%
 %% @spec hex_to_int(HexChar::hexstring() | hexchar()) -> integer()
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a hexstring() or hexchar() into its numeric value. ```1> scutil:hex_to_int("c0ffEE").
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a hexstring() or hexchar() into its numeric value. ```1> sc:hex_to_int("c0ffEE").
 %% 12648430
 %%
-%% 2> scutil:hex_to_int($e).
+%% 2> sc:hex_to_int($e).
 %% 14
 %%
-%% 3> scutil:hex_to_int("100").
+%% 3> sc:hex_to_int("100").
 %% 256'''
 %%
 %% @since Version 572
@@ -5378,13 +5383,13 @@ hex_to_int([Digit|Rem], Acc) ->
 
 %% @spec list_to_number(X::list()) -> number()
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Converts a list into a number; integers will be returned if there is no mantissa in the list representation. ```1> scutil:list_to_number("2").
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Converts a list into a number; integers will be returned if there is no mantissa in the list representation. ```1> sc:list_to_number("2").
 %% 2
 %%
-%% 2> scutil:list_to_number("2.0").
+%% 2> sc:list_to_number("2.0").
 %% 2.0
 %%
-%% 3> scutil:list_to_number("2.1").
+%% 3> sc:list_to_number("2.1").
 %% 2.1'''
 %%
 %% @since Version 574
@@ -5472,7 +5477,7 @@ merge_settings(S1, S2)
 
 %% @spec send_receive(ToWhom::pid()|atom(), What::any()) -> { item, any() }
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{item,X}'; block.  ```1> scutil:send_receive(self(), message).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{item,X}'; block.  ```1> sc:send_receive(self(), message).
 %% {item,message}'''
 %%
 %% @since Version 578
@@ -5491,7 +5496,7 @@ send_receive(ToWhom, What) ->
 
 %% @spec send_receive(ToWhom::pid()|atom(), What::any(), HowLong::non_negative_integer()|infinity) -> { item, any() } | nothing_there
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block.  ```1> scutil:send_receive(self(), message).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block.  ```1> sc:send_receive(self(), message).
 %% {item,message}'''
 %%
 %% @since Version 579
@@ -5512,7 +5517,7 @@ send_receive(ToWhom, What, HowLong) ->
 
 %% @spec send_receive_masked(Mask::any(), ToWhom::pid()|atom(), What::any()) -> { Mask, any() }
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Blocking) First send a message to an entity.  Then pop the first message queue item matching the mask as a 2-tuple, and return it as `{Mask,X}'; block.  ```1> scutil:send_receive(self(), message).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Blocking) First send a message to an entity.  Then pop the first message queue item matching the mask as a 2-tuple, and return it as `{Mask,X}'; block.  ```1> sc:send_receive(self(), message).
 %% {item,message}'''
 %%
 %% @since Version 580
@@ -5531,7 +5536,7 @@ send_receive_masked(Mask, ToWhom, What) ->
 
 %% @spec send_receive_masked(Mask::any(), ToWhom::pid()|atom(), What::any(), HowLong::non_negative_integer()|infinity) -> { item, any() } | nothing_there
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{Mask,X}', or return nothing_there for empty queues; do not block.  ```1> scutil:send_receive(self(), message).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{Mask,X}', or return nothing_there for empty queues; do not block.  ```1> sc:send_receive(self(), message).
 %% {item,message}'''
 %%
 %% @since Version 581
@@ -5552,16 +5557,16 @@ send_receive_masked(Mask, ToWhom, What, HowLong) ->
 
 %% @spec receive_one() -> { item, any() } | nothing_there
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block.  ```1> scutil:receive_one().
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block.  ```1> sc:receive_one().
 %% nothing_there
 %%
 %% 2> self() ! message.
 %% message
 %%
-%% 3> scutil:receive_one().
+%% 3> sc:receive_one().
 %% {item,message}
 %%
-%% 4> scutil:receive_one().
+%% 4> sc:receive_one().
 %% nothing_there'''
 %%
 %% @since Version 582
@@ -5651,17 +5656,17 @@ power_set(L)
 
 %% @spec shuffle(List::list()) -> list()
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return a list with the original list's shallow members in a random order.  Deep lists are not shuffled; `[ [a,b,c], [d,e,f], [g,h,i] ]' will never produce sublist reorderings (`[b,c,a]') or list mixing (`[b,g,e]'), only reordering of the three top level lists.  The output list will always be the same length as the input list.  Repeated items and mixed types in input lists are safe. ```1> scutil:shuffle(lists:seq(1,9)).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return a list with the original list's shallow members in a random order.  Deep lists are not shuffled; `[ [a,b,c], [d,e,f], [g,h,i] ]' will never produce sublist reorderings (`[b,c,a]') or list mixing (`[b,g,e]'), only reordering of the three top level lists.  The output list will always be the same length as the input list.  Repeated items and mixed types in input lists are safe. ```1> sc:shuffle(lists:seq(1,9)).
 %% [8,4,7,9,5,2,6,1,3]
 %%
 %% 2> {TheFaces, TheSuits} = {  [ace] ++ lists:seq(2,10) ++ [jack,queen,king],  [hearts,spades,clubs,diamonds]  }
 %% {[ace,jack,queen,king,2,3,4,5,6,7,8,9,10],
 %%  [hearts,spades,clubs,diamonds]}
 %%
-%% 3> Deck = scutil:shuffle([ {Face,Suit} || Face <- TheFaces, Suit <- TheSuits ]).
+%% 3> Deck = sc:shuffle([ {Face,Suit} || Face <- TheFaces, Suit <- TheSuits ]).
 %% [ {6,spades}, {7,hearts}, {8,clubs}, {queen,spades}, {6,diamonds}, {ace,...}, {...} | ...]
 %%
-%% 4> scutil:shuffle([ duck,duck,duck,duck, goose ]).
+%% 4> sc:shuffle([ duck,duck,duck,duck, goose ]).
 %% [duck,goose,duck,duck,duck]'''
 %%
 %% <i>Originally found at <a href="http://wiki.trapexit.org/index.php/RandomShuffle">http://wiki.trapexit.org/index.php/RandomShuffle</a>; refactored for clarity, and unnecessary repeat nesting behavior removed.</i>
@@ -5693,13 +5698,13 @@ shuffle(List)
 %%
 %% @spec random_from_weighted(InputList::weightlist()) -> any()
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take a random single item from a list with weighted probabilities.  Probabilities may be any numeric type, and may be any non-negative value (items with zero probability will be omitted).  Input is a `weightlist()', which is a list in the form `[{Item,Probability}, {I2,P2}, ...]'. There is no requirement to normalize probabilities to any range, though probabilities normalized to ranges will still work as expected. ```1> scutil:from([ {quad,4}, {double,2}, {single,1} ]).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take a random single item from a list with weighted probabilities.  Probabilities may be any numeric type, and may be any non-negative value (items with zero probability will be omitted).  Input is a `weightlist()', which is a list in the form `[{Item,Probability}, {I2,P2}, ...]'. There is no requirement to normalize probabilities to any range, though probabilities normalized to ranges will still work as expected. ```1> sc:from([ {quad,4}, {double,2}, {single,1} ]).
 %% quad
 %%
-%% 2> [ scutil:from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X <- lists:seq(1,10) ].
+%% 2> [ sc:from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X <- lists:seq(1,10) ].
 %% [single,quad,quad,double,quad,double,quad,quad,quad,double]
 %%
-%% 3> scutil:histograph([ scutil:from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X <- lists:seq(1,777777) ]).
+%% 3> sc:histograph([ sc:from_weighted([ {quad,4}, {double,2}, {single,1} ]) || X <- lists:seq(1,777777) ]).
 %% [{double,222200},{quad,444165},{single,111412}]'''
 %% @since Version 592
 
@@ -5824,16 +5829,16 @@ random_from(N, List, remainder) ->
 
 %% @spec rand(Range::integer()) -> integer()
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a pseudorandom integer on the range `[0 - (Range-1)]' inclusive. ```1> scutil:rand(100).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a pseudorandom integer on the range `[0 - (Range-1)]' inclusive. ```1> sc:rand(100).
 %% 9
 %%
-%% 2> [ scutil:rand(100) || X <- lists:seq(1,10) ].
+%% 2> [ sc:rand(100) || X <- lists:seq(1,10) ].
 %% [12,27,99,86,20,96,28,36,28,15]
 %%
-%% 3> scutil:histograph([ scutil:rand(10) || X <- lists:seq(1,10000) ]).
+%% 3> sc:histograph([ sc:rand(10) || X <- lists:seq(1,10000) ]).
 %% [{0,992}, {1,990}, {2,992}, {3,1033}, {4,1017}, {5,1003}, {6,996}, {7,1024}, {8,969}, {9,984}]
 %%
-%% 4> scutil:histograph([ scutil:rand(10) || X <- lists:seq(1,10000) ]).
+%% 4> sc:histograph([ sc:rand(10) || X <- lists:seq(1,10000) ]).
 %% [{0,1028}, {1,979}, {2,934}, {3,970}, {4,1035}, {5,1007}, {6,986}, {7,1012}, {8,1052}, {9,997}]'''
 %%
 %% @since Version 595
@@ -5896,10 +5901,10 @@ random_generator() ->
 
 %% @spec srand() -> { ok, { seeded, Seed } }
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want to know what seed was used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> scutil:srand().
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want to know what seed was used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> sc:srand().
 %% {ok,{seeded,{1227,902172,685000}}}
 %%
-%% 2> scutil:srand().
+%% 2> sc:srand().
 %% {ok,{seeded,{1227,902173,231000}}}'''
 %%
 %% @since Version 598
@@ -5915,13 +5920,13 @@ srand() ->
 
 
 %% @spec srand(A::integer(), B::integer(), C::integer()) -> { ok, { seeded, Seed } }
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want set what seed is used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> scutil:srand(1,2,3).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want set what seed is used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> sc:srand(1,2,3).
 %% {ok,{seeded,{1,2,3}}}
 %%
-%% 2> scutil:srand().
+%% 2> sc:srand().
 %% {ok,{seeded,{1227,902568,604600}}}
 %%
-%% 3> scutil:srand(1,2,3).
+%% 3> sc:srand(1,2,3).
 %% {ok,{seeded,{1,2,3}}}'''
 %%
 %% @since Version 598
@@ -6357,7 +6362,7 @@ start_register_if_not_running(Name, Module, Function, Args) ->
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Check whether a process is registered locally, and if not, spawn it with a give function and arguments.  ```1> whereis(test).
 %% undefined
 %%
-%% 2> scutil:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
+%% 2> sc:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
 %% { ok, <0.726.0> }
 %%
 %% 3> whereis(test).
@@ -6369,13 +6374,13 @@ start_register_if_not_running(Name, Module, Function, Args) ->
 %% 5> whereis(test).
 %% undefined
 %%
-%% 6> scutil:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
+%% 6> sc:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
 %% { ok, <0.731.0> }
 %%
 %% 7> whereis(test).
 %% <0.731.0>
 %%
-%% 8> scutil:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
+%% 8> sc:start_register_if_not_running(node(), test, scutil, wait_until_terminate, []).
 %% { ok, <0.731.0> }
 %%
 %% 9> whereis(test).
@@ -6419,10 +6424,10 @@ multi_do(C, Module, Func) ->
 
 %% @spec multi_do(Count::integer(), Module::atom(), Function::atom(), Args::list()) -> list()
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take an iteration count, a module name, a function name and an argument list, and repeatedly apply the argument list to the module/function, count times.  This is primarily useful with nondeterministic functions whose result might change despite identical arguments, such as functions with random behavior; for example, this function is invoked to implement stochastic testing in <a href="http://testerl.com/">TestErl</a>. ```1> scutil:multi_do(10, scutil, rand, [100]).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take an iteration count, a module name, a function name and an argument list, and repeatedly apply the argument list to the module/function, count times.  This is primarily useful with nondeterministic functions whose result might change despite identical arguments, such as functions with random behavior; for example, this function is invoked to implement stochastic testing in <a href="http://testerl.com/">TestErl</a>. ```1> sc:multi_do(10, scutil, rand, [100]).
 %% [9,94,4,82,77,44,89,19,45,92]
 %%
-%% 2> scutil:multi_do(10, scutil, rand, [10000]).
+%% 2> sc:multi_do(10, scutil, rand, [10000]).
 %% [2377,2559,1713,8489,4468,3261,3344,3751,380,2525]'''
 %%
 %% @since Version 620
@@ -6772,7 +6777,7 @@ lev_dif(_C1, _C2) -> 1.
 
 %% @spec sanitize_filename(Filename::string()) -> string()
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Sanitize an arbitrary string to be appropriate for Windows and Unix filesystems, and URLs. ```1> scutil:sanitize_filename("\h/e~l%lo! w^o@r#l*d.").
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Sanitize an arbitrary string to be appropriate for Windows and Unix filesystems, and URLs. ```1> sc:sanitize_filename("\h/e~l%lo! w^o@r#l*d.").
 %% "helloworld"'''
 %%
 %% @see sanitize_tokens/2
@@ -8380,64 +8385,14 @@ unit_scale(Waveform) ->
 
 
 
-%% @equiv regex_matches(String, Reg, {0,0})
-%% @since Version 721
-
-regex_matches(String, Reg) ->
-
-    regex_matches(String, Reg, {0,0}).
-
-
-
-
-%% @equiv regex_matches(String, Reg, {TrimFront,TrimLength})
-%% @since Version 721
-
-regex_matches(String, Reg, TrimFront, TrimLength) ->
-
-    regex_matches(String, Reg, {TrimFront, TrimLength}).
-
-
-
-%% @spec regex_matches(String::string(), Reg::string(), { TrimFront::integer(), TrimLength::integer() }) -> list() | { error, E }
-
-%% @doc Take a string and a regular expression (and optionally an offset and length to trim to in each result), and return a list of all matches.  For a trim length of {A,B}, the first A and last B characters of each result will be removed.```1> sc:regex_matches("0j2  4g5  8t9", "[0-9](.)[0-9]").
-%% ["0j2","4g5","8t9"]
-%%
-%% 2> sc:regex_matches("0j2  4g5  8t9", "[0-9](.)[0-9]", {1,1}).
-%% ["j","g","t"]
-%%
-%% 3> sc:regex_matches("0j2  4g5  8t9", "[0-9](.)[0-9]", 1, 1).
-%% ["j","g","t"]'''
-%%
-%% Why provide the equivalent syntaxes (_, _, {A,B}) and (_, _, A,B) ?  Without the tuple is more natural to many, but with the tuple is far more convenient for database-driven behavior, as well as the internal implementation.  I frequently find myself using both forms, and so every time I simplify I find myself wrapping the non-removed form back into the removed form.  Does it violate the simplest interface principle?  Yeah, but in this case it's a boon, IMO.  As such, keeping both forms.
-
-%% @since Version 721
-
-regex_matches(String, Reg, {TrimFront, TrimLength}) ->
-
-    case regexp:matches(String, Reg) of
-
-        { match, Matches } ->
-            [ string:substr(String, Start+TrimFront, End-(TrimLength+1)) || {Start,End} <- Matches ];
-
-        { error, E } ->
-            { error, E }
-
-    end.
-
-
-
-
-
 %% @type typelabel() = [ integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown ].  Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
 
 %% @spec type_of(Argument::any()) -> typelabel()
 
-%% @doc {@section Utility} Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of `is_bitstring()' . ```1> scutil:type_of(1).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of `is_bitstring()' . ```1> sc:type_of(1).
 %% integer
 %%
-%% 2> scutil:type_of({hello,world}).
+%% 2> sc:type_of({hello,world}).
 %% tuple'''
 
 %% @since Version 722
@@ -8456,3 +8411,241 @@ type_of(X) when is_reference(X) -> reference;
 type_of(X) when is_atom(X)      -> atom;
 
 type_of(_X)                     -> unknown.
+
+
+
+
+
+%% @type three_vector() = vector().  A three-vector always has three elements, so this can be expressed as the alternation `{A::number(), B::number(), C::number()} | [A::number(), B::number(), C::number()]'.
+%% @type seven_vector() = vector().  A seven-vector always has seven elements, so this can be expressed as the alternation `{A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()} | [A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()]'.
+%% @type three_or_seven_vector() = three_vector() | seven_vector().
+
+%% @spec cross_product(VX::three_vector(), VY::three_vector()) -> three_vector()
+
+%% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the cross product of two vectors (<span style="color:red">Incomplete</span> represented as {@type three_vector()}s - no support yet for seven). ```1> sc:dot_product([1,1,1],[2,2,2]).
+%% 6
+%%
+%% 2> sc:dot_product([1,1,1],[3,3,3]).
+%% 9
+%%
+%% 3> sc:dot_product([-1,0,1],[3,3,3]).
+%% 0
+%%
+%% 4> sc:dot_product([-1,1,1],[3,3,3]).
+%% 3
+%%
+%% 5> sc:dot_product([0.5,1,2],[1,1,1]).
+%% 3.5'''<span style="color:red">TODO: Implement seven-dimensional cross product</span>
+
+%% @since Version 80
+
+%% @todo implement 7-dimensional variation, http://en.wikipedia.org/wiki/Seven-dimensional_cross_product
+
+cross_product( {X1,Y1,Z1}, {X2,Y2,Z2} ) ->
+
+    { (Y1*Z2) - (Z1*Y2) , (Z1*X2) - (X1*Z2), (X1*Y2) - (Y1*X2) };
+
+
+
+
+
+cross_product( [X1,Y1,Z1], [X2,Y2,Z2] ) ->
+
+    [ (Y1*Z2) - (Z1*Y2) , (Z1*X2) - (X1*Z2), (X1*Y2) - (Y1*X2) ].
+
+
+
+
+
+% removed when length(VX) == length(VY) because it's implied by lists:zip
+
+%% @spec dot_product(VX::numeric_list(), VY::numeric_list()) -> number()
+
+%% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the dot product of two vectors (<span style="color:red">Incomplete</span> represented as numeric lists; tuples not yet supported). ```1> sc:dot_product([1,1,1],[2,2,2]).
+%% 6
+%%
+%% 2> sc:dot_product([1,1,1],[3,3,3]).
+%% 9
+%%
+%% 3> sc:dot_product([-1,0,1],[3,3,3]).
+%% 0
+%%
+%% 4> sc:dot_product([-1,1,1],[3,3,3]).
+%% 3
+%%
+%% 5> sc:dot_product([0.5,1,2],[1,1,1]).
+%% 3.5'''<span style="color:red">TODO: The tuple variation of vectors has not yet been implemented in this function.</span>
+
+%% @since Version 80
+
+%% @todo implement tuple variation
+
+dot_product(VX, VY) ->
+
+    lists:sum( [ X*Y || {X,Y} <- lists:zip(VX,VY) ] ).
+
+
+
+
+
+%% @type unit_vector() = vector().  The hypoteneuse of a unit vector is precisely one unit long.  Unit vectors are also called normalized or magnitude-normalized vectors.
+
+%% @spec vector_normalize(Vector::vector()) -> unit_vector()
+
+%% @doc Returns the magnitude of a vector.  A vector's magnitude is the length of its hypoteneuse.  A vector can be seen as the product of its unit vector and its magnitude; as such many people see a vector's magnitude as its scale.  The normal of the zero vector is undefined, in the way that dividing by zero is undefined, and will throw an arithmetic exception. ```1> sc:vector_normalize([0,3,4]).
+%% [0.0,0.6,0.8]'''<span style="color:red">TODO: When tuple comprehensions are introduced to the language, convert this to using them.</span>
+
+%% @since Version 725
+
+vector_normalize(VX) when is_list(VX) ->
+
+    VM = vector_magnitude(VX),
+    [ X / VM || X <- VX ];
+
+
+
+vector_normalize(VX) when is_tuple(VX) ->
+
+    list_to_tuple(vector_normalize(tuple_to_list(VX))).
+
+
+
+
+
+%% @type vector() = list() | tuple().  Every member element of a vector() is a {@type number()}.
+%% @type vectorlist() = list().  Every member element of a vectorlist() is a {@type vector()}.
+
+%% @spec qsp_average(W::numericlist(), InputVecs::vectorlist()) -> float()
+
+%% @doc {@section Math} Takes the quadratic scalar product average of a vector `W' and a list of vectors `X'.  The QSP Average
+%% is the arithmetic mean of the result set Y, where Y is generated as the square of the magnitude of the dot product
+%% of W and each individual vector in X. @see http://www.inf.fu-berlin.de/inst/ag-ki/rojas_home/documents/1996/NeuralNetworks/K5.pdf
+%% pdf-page 15.  ```1> sc:qsp_average([1,2,3], [[0,0,0],[0,0,0]]).
+%% 0.0
+%%
+%% 2> sc:qsp_average([1,2,3], [[0,0,1],[0,0,0]]).
+%% 4.5
+%%
+%% 3> sc:qsp_average([1,2,3], [[0,1,0],[0,0,0]]).
+%% 2.0
+%%
+%% 4> sc:qsp_average([1,2,3], [[1,0,0],[0,0,0]]).
+%% 0.5
+%%
+%% 5> sc:qsp_average([1,2,3], [[1,1,1],[0,0,0]]).
+%% 18.0
+%%
+%% 6> sc:qsp_average([1,2,3], [[0,0,0],[1,1,1]]).
+%% 18.0
+%%
+%% 7> sc:qsp_average([1,2,3], [[1,1,1],[1,1,1]]).
+%% 36.0'''The linked documentation incorrectly uses the notation ||Foo|| instead of |Foo| to
+%% present the algorithm.  ||Foo|| is the vector magnitude - the root sum square of vector elements - but as the input is the
+%% dot product of two 1d vectors, which will always be a single number, the vector magnitude serves no purpose other than to
+%% normalize the sign slowly and counterintuitively; thus we switch to abs despite the documentation.  {@section Thanks} to Steve
+%% Stair for helping straighten this out.  Thanks to the following for help with qsp_average and dependencies: Asterick, Chile,
+%% John Sensebe, PfhorSlayer, Raleigh.
+
+%% @since Version 726
+
+qsp_average(W, InputVecs) ->
+
+    GetSqVnDp = fun(Xi) ->
+        VnDp = abs(dot_product(W, Xi)),
+        VnDp * VnDp
+    end,
+
+    sc:arithmetic_mean([ GetSqVnDp(Xi) || Xi <- InputVecs ]).
+
+
+
+
+
+%% @spec has_bit(Number::non_negative_integer(), Bit::non_negative_integer()) -> true | false
+
+%% @doc Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of `Num'.  ```1> sc:has_bit(5,0).
+%% true
+%%
+%% 2> scutil:has_bit(5,1).
+%% false'''
+
+%% @since Version 727
+
+has_bit(Num, Bit)
+
+    when is_integer(Num),
+         is_integer(Bit),
+         Num > 0,
+         Bit >= 0,
+         Bit < 64 ->
+
+    (Num band (1 bsl Bit)) > 0.
+
+
+
+
+
+%% @spec count_bits(Number::non_negative_integer()) -> non_negative_integer()
+
+%% @doc Counts the number of bits turned on in a sufficiently sized unsigned two's compliment integer representation of `Num'.  ```1> sc:count_bits(5).
+%% 2'''
+
+%% @since Version 727
+
+count_bits(Num)
+
+    when is_integer(Num),
+         Num > 0 ->
+
+    length( [S || S <- lists:seq(0,63), has_bit(Num, S) == true] ).
+
+
+
+
+
+%% @spec standard_card_backs() -> list()
+
+%% @doc Returns the list of colors which are used, in order, as the standard back colors of a series of decks for {@link multi_deck/2}.  Each color is presented as an atom.  ```1> sc:standard_card_backs().
+%% [ red, blue, green, black, purple, orange, brown, yellow,
+%%   teal, gray, cyan, indigo, pink, white, tan, maroon,
+%%   navy, forest, leaf, sky, brick ]
+%%
+%% 2> length(sc:standard_card_backs()).
+%% 24'''
+
+%% @since Version 728
+
+standard_card_backs() ->
+
+    [red, blue, green, black, purple, orange, brown, yellow, teal, gray, cyan, indigo, pink, white, tan, maroon, navy, forest, leaf, sky, brick, emerald, steel, turquoise].
+
+
+
+
+
+%% @type positive_integer() = integer().  A {@type positive_integer()} must be greater than zero.
+
+%% @spec standard_card_backs(Count::positive_integer()) -> list()
+
+%% @doc Returns the front of the list of colors which are used, in order, as the standard back colors of a series of decks for {@link multi_deck/2}.  Each color is presented as an atom.  If you request more colors than are in the list, the list `[1,2...Count]' is provided instead.  ```1> sc:standard_card_backs(5).
+%% [ red, blue, green, black, purple ]
+%%
+%% 2> sc:standard_card_backs(29).
+%% [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]'''
+
+%% @since Version 728
+
+standard_card_backs(Count) ->
+
+    CList = standard_card_backs(),
+
+    case Count > length(CList) of
+
+        true  ->
+            lists:seq(1,Count);
+
+        false ->
+            {Front, _Back} = lists:split(Count, CList),
+            Front
+
+    end.
