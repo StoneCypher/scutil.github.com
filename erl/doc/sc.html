@@ -163,6 +163,10 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p>Positive integer must be greater than zero.
  </p>
 
+<h3 class="typedecl"><a name="type-positive_integer">positive_integer()</a></h3>
+<p><tt>positive_integer() = integer()</tt></p>
+<p>A <code><a href="#type-positive_integer">positive_integer()</a></code> must be greater than zero.</p>
+
 <h3 class="typedecl"><a name="type-ranking">ranking()</a></h3>
 <p><tt>ranking() = {Ranking::number(), Value::any()}</tt></p>
 <p>Values are usually <code>number()</code>s, but do not have to be with custom ranking predicates.</p>
@@ -463,6 +467,8 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#square-1">square/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Squares the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
 <tr><td valign="top"><a href="#srand-0">srand/0</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.</td></tr>
 <tr><td valign="top"><a href="#srand-3">srand/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.</td></tr>
+<tr><td valign="top"><a href="#standard_card_backs-0">standard_card_backs/0</a></td><td>Returns the list of colors which are used, in order, as the standard back colors of a series of decks for <a href="#multi_deck-2"><code>multi_deck/2</code></a>.</td></tr>
+<tr><td valign="top"><a href="#standard_card_backs-1">standard_card_backs/1</a></td><td>Returns the front of the list of colors which are used, in order, as the standard back colors of a series of decks for <a href="#multi_deck-2"><code>multi_deck/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#start_register_if_not_running-2">start_register_if_not_running/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
 <tr><td valign="top"><a href="#start_register_if_not_running-3">start_register_if_not_running/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
 <tr><td valign="top"><a href="#start_register_if_not_running-4">start_register_if_not_running/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
@@ -2822,6 +2828,28 @@ and returns the tuple of the remainder and then a list of all results from the f
  </p>
 <p><b>Introduced in:</b> Version 598</p>
 
+<h3 class="function"><a name="standard_card_backs-0">standard_card_backs/0</a></h3>
+<div class="spec">
+<p><tt>standard_card_backs() -&gt; list()</tt></p>
+</div><p>Returns the list of colors which are used, in order, as the standard back colors of a series of decks for <a href="#multi_deck-2"><code>multi_deck/2</code></a>.  Each color is presented as an atom.  <pre>  1&gt; sc:standard_card_backs().
+  [ red, blue, green, black, purple, orange, brown, yellow,
+    teal, gray, cyan, indigo, pink, white, tan, maroon,
+    navy, forest, leaf, sky, brick ]
+ 
+  2&gt; length(sc:standard_card_backs()).
+  24</pre></p>
+<p><b>Introduced in:</b> Version 728</p>
+
+<h3 class="function"><a name="standard_card_backs-1">standard_card_backs/1</a></h3>
+<div class="spec">
+<p><tt>standard_card_backs(Count::<a href="#type-positive_integer">positive_integer()</a>) -&gt; list()</tt></p>
+</div><p>Returns the front of the list of colors which are used, in order, as the standard back colors of a series of decks for <a href="#multi_deck-2"><code>multi_deck/2</code></a>.  Each color is presented as an atom.  If you request more colors than are in the list, the list <code>[1,2...Count]</code> is provided instead.  <pre>  1&gt; sc:standard_card_backs(5).
+  [ red, blue, green, black, purple ]
+ 
+  2&gt; sc:standard_card_backs(29).
+  [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]</pre></p>
+<p><b>Introduced in:</b> Version 728</p>
+
 <h3 class="function"><a name="start_register_if_not_running-2">start_register_if_not_running/2</a></h3>
 <div class="spec">
 <p><tt>start_register_if_not_running(Name, FunctionLambda) -&gt; any()</tt></p>
@@ -3234,6 +3262,6 @@ and returns the tuple of the remainder and then a list of all results from the f
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 29 2011, 19:16:33.</i></p>
+<p><i>Generated by EDoc, Oct 29 2011, 19:23:28.</i></p>
 </body>
 </html>

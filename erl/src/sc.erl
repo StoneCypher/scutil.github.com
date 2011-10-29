@@ -170,6 +170,9 @@
     has_bit/2,
     count_bits/1,
 
+    standard_card_backs/0,
+      standard_card_backs/1,
+
     calc_fk_readability/3,
       labelled_fk_readability/1,
       fk_readability/4,
@@ -8552,7 +8555,7 @@ qsp_average(W, InputVecs) ->
         VnDp * VnDp
     end,
 
-    sc_mean:arithmetic([ GetSqVnDp(Xi) || Xi <- InputVecs ]).
+    sc:arithmetic_mean([ GetSqVnDp(Xi) || Xi <- InputVecs ]).
 
 
 
@@ -8568,7 +8571,13 @@ qsp_average(W, InputVecs) ->
 
 %% @since Version 727
 
-has_bit(Num, Bit) when is_integer(Num), is_integer(Bit), Num > 0, Bit >= 0, Bit < 64 ->
+has_bit(Num, Bit)
+
+    when is_integer(Num),
+         is_integer(Bit),
+         Num > 0,
+         Bit >= 0,
+         Bit < 64 ->
 
     (Num band (1 bsl Bit)) > 0.
 
@@ -8583,6 +8592,60 @@ has_bit(Num, Bit) when is_integer(Num), is_integer(Bit), Num > 0, Bit >= 0, Bit 
 
 %% @since Version 727
 
-count_bits(Num) when is_integer(Num), Num > 0 ->
+count_bits(Num)
 
-    length( [S || S <- .lists:seq(0,63), has_bit(Num, S) == true] ).
+    when is_integer(Num),
+         Num > 0 ->
+
+    length( [S || S <- lists:seq(0,63), has_bit(Num, S) == true] ).
+
+
+
+
+
+%% @spec standard_card_backs() -> list()
+
+%% @doc Returns the list of colors which are used, in order, as the standard back colors of a series of decks for {@link multi_deck/2}.  Each color is presented as an atom.  ```1> sc:standard_card_backs().
+%% [ red, blue, green, black, purple, orange, brown, yellow,
+%%   teal, gray, cyan, indigo, pink, white, tan, maroon,
+%%   navy, forest, leaf, sky, brick ]
+%%
+%% 2> length(sc:standard_card_backs()).
+%% 24'''
+
+%% @since Version 728
+
+standard_card_backs() ->
+
+    [red, blue, green, black, purple, orange, brown, yellow, teal, gray, cyan, indigo, pink, white, tan, maroon, navy, forest, leaf, sky, brick, emerald, steel, turquoise].
+
+
+
+
+
+%% @type positive_integer() = integer().  A {@type positive_integer()} must be greater than zero.
+
+%% @spec standard_card_backs(Count::positive_integer()) -> list()
+
+%% @doc Returns the front of the list of colors which are used, in order, as the standard back colors of a series of decks for {@link multi_deck/2}.  Each color is presented as an atom.  If you request more colors than are in the list, the list `[1,2...Count]' is provided instead.  ```1> sc:standard_card_backs(5).
+%% [ red, blue, green, black, purple ]
+%%
+%% 2> sc:standard_card_backs(29).
+%% [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]'''
+
+%% @since Version 728
+
+standard_card_backs(Count) ->
+
+    CList = standard_card_backs(),
+
+    case Count > length(CList) of
+
+        true  ->
+            lists:seq(1,Count);
+
+        false ->
+            {Front, _Back} = lists:split(Count, CList),
+            Front
+
+    end.
