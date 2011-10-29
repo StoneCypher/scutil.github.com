@@ -170,6 +170,15 @@
     has_bit/2,
     count_bits/1,
 
+    columnated_text/2,
+      columnated_rows/2,
+
+    columnate/1,
+      columnate/2,
+
+    columns/2,
+      first_row/1,
+
     standard_card_backs/0,
       standard_card_backs/1,
 
@@ -8692,3 +8701,30 @@ multi_deck(Backs, Deck) ->
         Card <- Deck
 
     ].
+
+
+
+
+
+%% @since Version 730
+
+columns(RowCount, List) ->
+
+    columns(List, lists:duplicate(RowCount, []), 0).
+
+
+
+columns( [], Output, Unrotate) ->
+
+    .sc.list:rotate(
+        Unrotate,
+        [ lists:reverse(Column) ||
+            Column <- Output
+        ]
+    );
+
+
+
+columns( [Item|ListRem], [Output|OutRem], Unrotate) ->
+
+    columns(ListRem, OutRem ++ [[Item]++Output], Unrotate-1).
