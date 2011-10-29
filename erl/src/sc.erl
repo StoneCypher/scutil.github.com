@@ -161,6 +161,8 @@
     markhov_chain/2,
     to_lines/1,
 
+    calc_fk_readability/3,
+
     unfunnel/2,
       unfunnel/3,
 
@@ -8273,3 +8275,15 @@ markhov_chain(N, Depth, Source, Work) ->
 to_lines(Text) ->
 
     string:tokens(Text, "\r\n"). % yay convenience functions
+
+
+
+
+
+%% @since Version 706
+
+%% @doc Calculate the Flesch-Kincaid readability score of a block of text.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .
+
+calc_fk_readability(Words, Sentences, Syllables) ->
+
+    206.835 - (1.015 * (Words/Sentences)) - (84.6 * (Syllables/Words)).
