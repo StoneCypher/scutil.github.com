@@ -165,6 +165,7 @@
     type_of/1,
     cross_product/2,
     dot_product/2,
+    vector_normalize/1,
 
     calc_fk_readability/3,
       labelled_fk_readability/1,
@@ -8476,3 +8477,27 @@ cross_product( [X1,Y1,Z1], [X2,Y2,Z2] ) ->
 dot_product(VX, VY) ->
 
     lists:sum( [ X*Y || {X,Y} <- lists:zip(VX,VY) ] ).
+
+
+
+
+
+%% @type unit_vector() = vector().  The hypoteneuse of a unit vector is precisely one unit long.  Unit vectors are also called normalized or magnitude-normalized vectors.
+
+%% @spec vector_normalize(Vector::vector()) -> unit_vector()
+
+%% @doc Returns the magnitude of a vector.  A vector's magnitude is the length of its hypoteneuse.  A vector can be seen as the product of its unit vector and its magnitude; as such many people see a vector's magnitude as its scale.  The normal of the zero vector is undefined, in the way that dividing by zero is undefined, and will throw an arithmetic exception. ```1> sc:vector_normalize([0,3,4]).
+%% [0.0,0.6,0.8]'''<span style="color:red">TODO: When tuple comprehensions are introduced to the language, convert this to using them.</span>
+
+%% @since Version 725
+
+vector_normalize(VX) when is_list(VX) ->
+
+    VM = vector_magnitude(VX),
+    [ X / VM || X <- VX ];
+
+
+
+vector_normalize(VX) when is_tuple(VX) ->
+
+    list_to_tuple(vector_normalize(tuple_to_list(VX))).
