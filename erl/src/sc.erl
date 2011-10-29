@@ -160,6 +160,7 @@
     neighbors/2,
     markhov_chain/2,
     to_lines/1,
+    isolate_waveform/1,
 
     calc_fk_readability/3,
       labelled_fk_readability/1,
@@ -8284,7 +8285,7 @@ to_lines(Text) ->
 
 %% @since Version 706
 
-%% @doc Calculate the Flesch-Kincaid readability score of a set of text metrics.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a set of text metrics.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .
 
 calc_fk_readability(Words, Sentences, Syllables) ->
 
@@ -8296,7 +8297,7 @@ calc_fk_readability(Words, Sentences, Syllables) ->
 
 %% @since Version 707
 
-%% @doc Provides mandated human-readable labels for Flesch-Kincaid readability calculations.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Provides mandated human-readable labels for Flesch-Kincaid readability calculations.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .
 
 labelled_fk_readability(R) when R > 100 -> { "Easy before 11 years",     R };
 labelled_fk_readability(R) when R >  90 -> { "Easy at 11 years",         R };
@@ -8312,7 +8313,7 @@ labelled_fk_readability(R)              -> { "Difficult",                R }.
 
 %% @since Version 708
 
-%% @doc Calculate the Flesch-Kincaid readability score of a block of text.  Also takes three lambdas to do text parsing.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a block of text.  Also takes three lambdas to do text parsing.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test
 
 % comeback todo
 % fk_readability(Data) -> fk_readability(Data, fun count_words/1, fun count_sentences/1, fun count_syllables/1).
@@ -8338,3 +8339,18 @@ fk_readability(Data, WordCounter, SentenceCounter, SyllableCounter) ->
 % dissimilar_charset(english, alphanum)  -> "abcdefghjklmnopqrstuwxyzABDEFGHRT34679".
 
 % similarize_charset   a10OZ2B8 -> aloozzBB
+
+
+
+
+%% @since Version 716
+
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Remove the baseline of a dataset, normalizing a waveform or other signal to its bottom peak.
+
+isolate_waveform(Waveform) ->
+
+    Baseline = lists:min(Waveform),
+
+    [ Sample - Baseline ||
+        Sample <- Waveform
+    ].
