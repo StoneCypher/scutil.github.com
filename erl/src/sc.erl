@@ -154,6 +154,7 @@
     replace/3,
     merge_settings/2,
     neighbors/2,
+    unfunnel/2,
 
     is_between/3,
       is_between/4,
@@ -6683,7 +6684,7 @@ levenshtein( [], String)
 
 
 levenshtein(Source, Target) 
-    
+
     when is_list(Source), 
          is_list(Target) ->
 
@@ -8100,3 +8101,33 @@ is_between(_, _, _, inclusive)                     -> false.
 %      {X,   Y+1},  % S
 %      {X-1, Y}     % W
 %    ];
+
+
+        
+
+
+
+%% @since Version 691
+
+unfunnel(Tgt, ProbPropList) 
+
+    when is_number(Tgt), 
+         is_list(ProbPropList) ->
+
+    unfunnel(Tgt, [ { Tgt, "Result" } ], lists:reverse(ProbPropList)).
+
+
+
+
+
+unfunnel(Counter, Output, []) ->
+
+    [{Counter, "Input Needed"}]++Output;
+
+
+
+
+
+unfunnel(Counter, Output, [{Scale,Label} | RemWork]) ->
+
+    unfunnel(Counter/Scale, [{Counter, Label, Scale}]++Output, RemWork).
