@@ -164,6 +164,7 @@
     unit_scale/1,
     type_of/1,
     cross_product/2,
+    dot_product/2,
 
     calc_fk_readability/3,
       labelled_fk_readability/1,
@@ -8381,7 +8382,7 @@ unit_scale(Waveform) ->
 
 %% @spec type_of(Argument::any()) -> typelabel()
 
-%% @doc {@section Utility} Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of `is_bitstring()' . ```1> scutil:type_of(1).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of `is_bitstring()' . ```1> scutil:type_of(1).
 %% integer
 %%
 %% 2> scutil:type_of({hello,world}).
@@ -8414,7 +8415,7 @@ type_of(_X)                     -> unknown.
 
 %% @spec cross_product(VX::three_vector(), VY::three_vector()) -> three_vector()
 
-%% @doc {@section Math} <span style="color:red">Incomplete</span> Calculates the cross product of two vectors (<span style="color:red">Incomplete</span> represented as {@type three_vector()}s - no support yet for seven). ```1> scutil:dot_product([1,1,1],[2,2,2]).
+%% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the cross product of two vectors (<span style="color:red">Incomplete</span> represented as {@type three_vector()}s - no support yet for seven). ```1> scutil:dot_product([1,1,1],[2,2,2]).
 %% 6
 %%
 %% 2> scutil:dot_product([1,1,1],[3,3,3]).
@@ -8444,3 +8445,34 @@ cross_product( {X1,Y1,Z1}, {X2,Y2,Z2} ) ->
 cross_product( [X1,Y1,Z1], [X2,Y2,Z2] ) ->
 
     [ (Y1*Z2) - (Z1*Y2) , (Z1*X2) - (X1*Z2), (X1*Y2) - (Y1*X2) ].
+
+
+
+
+
+% removed when length(VX) == length(VY) because it's implied by lists:zip
+
+%% @spec dot_product(VX::numeric_list(), VY::numeric_list()) -> number()
+
+%% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the dot product of two vectors (<span style="color:red">Incomplete</span> represented as numeric lists; tuples not yet supported). ```1> sc:dot_product([1,1,1],[2,2,2]).
+%% 6
+%%
+%% 2> sc:dot_product([1,1,1],[3,3,3]).
+%% 9
+%%
+%% 3> sc:dot_product([-1,0,1],[3,3,3]).
+%% 0
+%%
+%% 4> sc:dot_product([-1,1,1],[3,3,3]).
+%% 3
+%%
+%% 5> sc:dot_product([0.5,1,2],[1,1,1]).
+%% 3.5'''<span style="color:red">TODO: The tuple variation of vectors has not yet been implemented in this function.</span>
+
+%% @since Version 80
+
+%% @todo implement tuple variation
+
+dot_product(VX, VY) ->
+
+    lists:sum( [ X*Y || {X,Y} <- lists:zip(VX,VY) ] ).

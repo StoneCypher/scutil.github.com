@@ -253,7 +253,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#count_of-2">count_of/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Counts the number of instances of Item in List.</td></tr>
 <tr><td valign="top"><a href="#counter_at-1">counter_at/1</a></td><td>Checks a counter's value; if the counter was not already defined, it will report zero.</td></tr>
 <tr><td valign="top"><a href="#country_codes-0">country_codes/0</a></td><td></td></tr>
-<tr><td valign="top"><a href="#cross_product-2">cross_product/2</a></td><td><a href="#Math">Math</a> <span style="color:red">Incomplete</span> Calculates the cross product of two vectors (<span style="color:red">Incomplete</span> represented as <code><a href="#type-three_vector">three_vector()</a></code>s - no support yet for seven).</td></tr>
+<tr><td valign="top"><a href="#cross_product-2">cross_product/2</a></td><td><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the cross product of two vectors (<span style="color:red">Incomplete</span> represented as <code><a href="#type-three_vector">three_vector()</a></code>s - no support yet for seven).</td></tr>
 <tr><td valign="top"><a href="#cube-1">cube/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
 <tr><td valign="top"><a href="#dec_counter-1">dec_counter/1</a></td><td>Equivalent to <a href="#adjust_counter_by-2"><tt>adjust_counter_by(Name, -1)</tt></a>.
 </td></tr>
@@ -262,6 +262,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#differences-1">differences/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#distinct_neighbor_pairs-1">distinct_neighbor_pairs/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#distinct_neighbor_pairs-2">distinct_neighbor_pairs/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#dot_product-2">dot_product/2</a></td><td><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the dot product of two vectors (<span style="color:red">Incomplete</span> represented as numeric lists; tuples not yet supported).</td></tr>
 <tr><td valign="top"><a href="#dstat-2">dstat/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#dstat_ex-2">dstat_ex/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#elements-2">elements/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
@@ -467,7 +468,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#tuple_member-2">tuple_member/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether E is a member element of tuple T, analogous to <code>lists::member(E, L)</code>.</td></tr>
 <tr><td valign="top"><a href="#tuple_sort-1">tuple_sort/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#tuple_sum-1">tuple_sum/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero.</td></tr>
-<tr><td valign="top"><a href="#type_of-1">type_of/1</a></td><td><a href="#Utility">Utility</a> Fetch the type of the argument.</td></tr>
+<tr><td valign="top"><a href="#type_of-1">type_of/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Fetch the type of the argument.</td></tr>
 <tr><td valign="top"><a href="#unfunnel-2">unfunnel/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Reverse a marketing funnel, to go from goal needed to input needed.</td></tr>
 <tr><td valign="top"><a href="#unfunnel-3">unfunnel/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#union-1">union/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -828,7 +829,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="cross_product-2">cross_product/2</a></h3>
 <div class="spec">
 <p><tt>cross_product(VX::<a href="#type-three_vector">three_vector()</a>, VY::<a href="#type-three_vector">three_vector()</a>) -&gt; <a href="#type-three_vector">three_vector()</a></tt></p>
-</div><p><a href="#Math">Math</a> <span style="color:red">Incomplete</span> Calculates the cross product of two vectors (<span style="color:red">Incomplete</span> represented as <code><a href="#type-three_vector">three_vector()</a></code>s - no support yet for seven). <pre>  1&gt; scutil:dot_product([1,1,1],[2,2,2]).
+</div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the cross product of two vectors (<span style="color:red">Incomplete</span> represented as <code><a href="#type-three_vector">three_vector()</a></code>s - no support yet for seven). <pre>  1&gt; scutil:dot_product([1,1,1],[2,2,2]).
   6
  
   2&gt; scutil:dot_product([1,1,1],[3,3,3]).
@@ -889,6 +890,25 @@ and returns the tuple of the remainder and then a list of all results from the f
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></p>
 <p><b>Introduced in:</b> Version 535
  </p>
+
+<h3 class="function"><a name="dot_product-2">dot_product/2</a></h3>
+<div class="spec">
+<p><tt>dot_product(VX::<a href="#type-numeric_list">numeric_list()</a>, VY::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt></p>
+</div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the dot product of two vectors (<span style="color:red">Incomplete</span> represented as numeric lists; tuples not yet supported). <pre>  1&gt; sc:dot_product([1,1,1],[2,2,2]).
+  6
+ 
+  2&gt; sc:dot_product([1,1,1],[3,3,3]).
+  9
+ 
+  3&gt; sc:dot_product([-1,0,1],[3,3,3]).
+  0
+ 
+  4&gt; sc:dot_product([-1,1,1],[3,3,3]).
+  3
+ 
+  5&gt; sc:dot_product([0.5,1,2],[1,1,1]).
+  3.5</pre><span style="color:red">TODO: The tuple variation of vectors has not yet been implemented in this function.</span></p>
+<p><b>Introduced in:</b> Version 80</p>
 
 <h3 class="function"><a name="dstat-2">dstat/2</a></h3>
 <div class="spec">
@@ -2976,7 +2996,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="type_of-1">type_of/1</a></h3>
 <div class="spec">
 <p><tt>type_of(Argument::any()) -&gt; <a href="#type-typelabel">typelabel()</a></tt></p>
-</div><p><a href="#Utility">Utility</a> Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of <code>is_bitstring()</code> . <pre>  1&gt; scutil:type_of(1).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of <code>is_bitstring()</code> . <pre>  1&gt; scutil:type_of(1).
   integer
  
   2&gt; scutil:type_of({hello,world}).
@@ -3141,6 +3161,6 @@ and returns the tuple of the remainder and then a list of all results from the f
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 29 2011, 18:45:41.</i></p>
+<p><i>Generated by EDoc, Oct 29 2011, 18:50:30.</i></p>
 </body>
 </html>
