@@ -161,6 +161,7 @@
     markhov_chain/2,
     to_lines/1,
     isolate_waveform/1,
+    unit_scale/1,
 
     calc_fk_readability/3,
       labelled_fk_readability/1,
@@ -8352,5 +8353,20 @@ isolate_waveform(Waveform) ->
     Baseline = lists:min(Waveform),
 
     [ Sample - Baseline ||
+        Sample <- Waveform
+    ].
+
+
+
+
+
+%% @since Version 720
+
+unit_scale(Waveform) ->
+
+    { Baseline, MaxObserved } = sc:extrema(Waveform),
+    SignalMax                 = MaxObserved - Baseline,
+
+    [ (Sample - Baseline) / SignalMax ||
         Sample <- Waveform
     ].
