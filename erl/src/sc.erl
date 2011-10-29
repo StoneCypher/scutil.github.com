@@ -43,6 +43,8 @@
 %% @todo burn out was
 
 %% @todo module attributes and documentation attributes for license name, license url
+%% @todo Every documentation example should be enforced as a unit test, to keep the docs up to date
+%% @todo Automate the version back into the docs
 
 
 
@@ -2802,11 +2804,25 @@ ceil(X) ->
 
 
 
-% todo comeback docs
-
 %% @since Version 510
+
+%% @doc Returns the ceiling of a float. ```1> 339> sc:ceiling(2.5).
+%% 3
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+%% 340> sc:ceiling(3.0).
+%% 3
+%%
+%% 341> sc:ceiling(-2.5).
+%% -2
+%%
+%% 342> sc:ceiling(-3.0).
+%% -3
+%%
+%% 343> sc:ceiling(0).
+%% 0
+%%
+%% 344> sc:ceiling(0.0).
+%% 0'''
 
 ceiling(X) ->
 
@@ -8111,12 +8127,12 @@ is_between(_, _, _, inclusive)                     -> false.
 
 %% @since Version 691
 
-unfunnel(Tgt, ProbPropList) -> 
+unfunnel(Tgt, ProbPropList) ->
 
     unfunnel(Tgt, ProbPropList, ceil).
-    
-    
-    
+
+
+
 
 
 unfunnel(Tgt, ProbPropList, MaybeCeil)

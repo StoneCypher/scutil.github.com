@@ -343,3 +343,23 @@ explode_test_() ->
         {",,",       ?_assert(["",   "",   ""  ] =:= sc:explode(",", ",,"))}
 
     ] }.
+
+
+
+
+
+prop_ceil_ints_as_floats_identity() ->
+
+    ?FORALL( I, eqc_gen:int(), sc:ceiling(I*1.0) =:= I ).
+
+
+
+
+
+ceil_test_() ->
+
+    { "Ceil/Ceiling tests", [
+
+        {"Stochastic: all integers-as-floats are identity", ?_assert( true =:= eqc:quickcheck(prop_ceil_ints_as_floats_identity()) ) }
+
+    ] }.
