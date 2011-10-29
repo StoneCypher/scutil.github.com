@@ -8506,7 +8506,7 @@ dot_product(VX, VY) ->
 
 %% @spec vector_normalize(Vector::vector()) -> unit_vector()
 
-%% @doc Returns the magnitude of a vector.  A vector's magnitude is the length of its hypoteneuse.  A vector can be seen as the product of its unit vector and its magnitude; as such many people see a vector's magnitude as its scale.  The normal of the zero vector is undefined, in the way that dividing by zero is undefined, and will throw an arithmetic exception. ```1> sc:vector_normalize([0,3,4]).
+%% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the magnitude of a vector.  A vector's magnitude is the length of its hypoteneuse.  A vector can be seen as the product of its unit vector and its magnitude; as such many people see a vector's magnitude as its scale.  The normal of the zero vector is undefined, in the way that dividing by zero is undefined, and will throw an arithmetic exception. ```1> sc:vector_normalize([0,3,4]).
 %% [0.0,0.6,0.8]'''<span style="color:red">TODO: When tuple comprehensions are introduced to the language, convert this to using them.</span>
 
 %% @since Version 725
@@ -8531,7 +8531,7 @@ vector_normalize(VX) when is_tuple(VX) ->
 
 %% @spec qsp_average(W::numericlist(), InputVecs::vectorlist()) -> float()
 
-%% @doc {@section Math} Takes the quadratic scalar product average of a vector `W' and a list of vectors `X'.  The QSP Average
+%% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the quadratic scalar product average of a vector `W' and a list of vectors `X'.  The QSP Average
 %% is the arithmetic mean of the result set Y, where Y is generated as the square of the magnitude of the dot product
 %% of W and each individual vector in X. @see http://www.inf.fu-berlin.de/inst/ag-ki/rojas_home/documents/1996/NeuralNetworks/K5.pdf
 %% pdf-page 15.  ```1> sc:qsp_average([1,2,3], [[0,0,0],[0,0,0]]).
@@ -8577,7 +8577,7 @@ qsp_average(W, InputVecs) ->
 
 %% @spec has_bit(Number::non_negative_integer(), Bit::non_negative_integer()) -> true | false
 
-%% @doc Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of `Num'.  ```1> sc:has_bit(5,0).
+%% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of `Num'.  ```1> sc:has_bit(5,0).
 %% true
 %%
 %% 2> scutil:has_bit(5,1).
@@ -8601,7 +8601,7 @@ has_bit(Num, Bit)
 
 %% @spec count_bits(Number::non_negative_integer()) -> non_negative_integer()
 
-%% @doc Counts the number of bits turned on in a sufficiently sized unsigned two's compliment integer representation of `Num'.  ```1> sc:count_bits(5).
+%% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Counts the number of bits turned on in a sufficiently sized unsigned two's compliment integer representation of `Num'.  ```1> sc:count_bits(5).
 %% 2'''
 
 %% @since Version 727
@@ -8619,7 +8619,7 @@ count_bits(Num)
 
 %% @spec standard_card_backs() -> list()
 
-%% @doc Returns the list of colors which are used, in order, as the standard back colors of a series of decks for {@link multi_deck/2}.  Each color is presented as an atom.  ```1> sc:standard_card_backs().
+%% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the list of colors which are used, in order, as the standard back colors of a series of decks for {@link multi_deck/2}.  Each color is presented as an atom.  ```1> sc:standard_card_backs().
 %% [ red, blue, green, black, purple, orange, brown, yellow,
 %%   teal, gray, cyan, indigo, pink, white, tan, maroon,
 %%   navy, forest, leaf, sky, brick ]
@@ -8641,7 +8641,7 @@ standard_card_backs() ->
 
 %% @spec standard_card_backs(Count::positive_integer()) -> list()
 
-%% @doc Returns the front of the list of colors which are used, in order, as the standard back colors of a series of decks for {@link multi_deck/2}.  Each color is presented as an atom.  If you request more colors than are in the list, the list `[1,2...Count]' is provided instead.  ```1> sc:standard_card_backs(5).
+%% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the front of the list of colors which are used, in order, as the standard back colors of a series of decks for {@link multi_deck/2}.  Each color is presented as an atom.  If you request more colors than are in the list, the list `[1,2...Count]' is provided instead.  ```1> sc:standard_card_backs(5).
 %% [ red, blue, green, black, purple ]
 %%
 %% 2> sc:standard_card_backs(29).
@@ -8675,7 +8675,7 @@ standard_card_backs(Count) ->
 
 %% @spec multi_deck(Backs::positive_integer_or_list(), DeckGenerator::function_or_list()) -> list()
 
-%% @doc Makes a number of instances of a deck, and applies a different back to each.  The first parameter may be a {@type positive_integer()}, at which point the color sequence from {@link standard_backs/0} will be used; otherwise, a list may be used, which will be used as the card backs (there is no requirement regarding their type or uniqueness, only that they be presented as a list.)  The second parameter may be a {@type function()}, which will be called to generate a list of cards, or a {@type list} of cards which will be used directly.
+%% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Makes a number of instances of a deck, and applies a different back to each.  The first parameter may be a {@type positive_integer()}, at which point the color sequence from {@link standard_backs/0} will be used; otherwise, a list may be used, which will be used as the card backs (there is no requirement regarding their type or uniqueness, only that they be presented as a list.)  The second parameter may be a {@type function()}, which will be called to generate a list of cards, or a {@type list} of cards which will be used directly.
 
 %% @since Version 729
 
