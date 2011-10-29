@@ -220,7 +220,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#caspers_jones_estimate-1">caspers_jones_estimate/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#ceil-1">ceil/1</a></td><td>Equivalent to <a href="#ceiling-1"><tt>ceiling(X)</tt></a>.
 </td></tr>
-<tr><td valign="top"><a href="#ceiling-1">ceiling/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#ceiling-1">ceiling/1</a></td><td>Returns the ceiling of a float.</td></tr>
 <tr><td valign="top"><a href="#central_moment-2">central_moment/2</a></td><td><span style="color:red"><b><i>BUGGY</i></b></span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the Nth cetral moment of a list.</td></tr>
 <tr><td valign="top"><a href="#central_moments-1">central_moments/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#central_moments-2">central_moments/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -440,7 +440,8 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#tuple_member-2">tuple_member/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether E is a member element of tuple T, analogous to <code>lists::member(E, L)</code>.</td></tr>
 <tr><td valign="top"><a href="#tuple_sort-1">tuple_sort/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#tuple_sum-1">tuple_sum/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero.</td></tr>
-<tr><td valign="top"><a href="#unfunnel-2">unfunnel/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#unfunnel-2">unfunnel/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Reverse a marketing funnel, to go from goal needed to input needed.</td></tr>
+<tr><td valign="top"><a href="#unfunnel-3">unfunnel/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#union-1">union/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#union-2">union/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#union-3">union/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -633,9 +634,24 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="ceiling-1">ceiling/1</a></h3>
 <div class="spec">
 <p><tt>ceiling(X) -&gt; any()</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></p>
-<p><b>Introduced in:</b> Version 510
- </p>
+</div><p>Returns the ceiling of a float. <pre>  1&gt; 339&gt; sc:ceiling(2.5).
+  3
+ 
+  340&gt; sc:ceiling(3.0).
+  3
+ 
+  341&gt; sc:ceiling(-2.5).
+  -2
+ 
+  342&gt; sc:ceiling(-3.0).
+  -3
+ 
+  343&gt; sc:ceiling(0).
+  0
+ 
+  344&gt; sc:ceiling(0.0).
+  0</pre></p>
+<p><b>Introduced in:</b> Version 510</p>
 
 <h3 class="function"><a name="central_moment-2">central_moment/2</a></h3>
 <div class="spec">
@@ -2854,8 +2870,19 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="unfunnel-2">unfunnel/2</a></h3>
 <div class="spec">
 <p><tt>unfunnel(Tgt, ProbPropList) -&gt; any()</tt></p>
-</div>
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Reverse a marketing funnel, to go from goal needed to input needed.  <pre>  1&gt; % Using the data from http://www.forentrepreneurs.com/lessons-from-leaders/jboss-example/
+  1&gt; sc:unfunnel(300, [{0.25,"Web activity scoring"}, {0.333,"Telemarketing"}, {0.25,"Inside Sales"}]).
+  [{14416,"Input Needed"},
+   {3604,"Web activity scoring",0.25},
+   {1200,"Telemarketing",0.333},
+   {300,"Inside Sales",0.25},
+   {300,"Result"}]</pre></p>
 <p><b>Introduced in:</b> Version 691</p>
+
+<h3 class="function"><a name="unfunnel-3">unfunnel/3</a></h3>
+<div class="spec">
+<p><tt>unfunnel(Tgt, ProbPropList, MaybeCeil) -&gt; any()</tt></p>
+</div>
 
 <h3 class="function"><a name="union-1">union/1</a></h3>
 <div class="spec">
@@ -2992,6 +3019,6 @@ and returns the tuple of the remainder and then a list of all results from the f
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 29 2011, 11:23:36.</i></p>
+<p><i>Generated by EDoc, Oct 29 2011, 12:46:25.</i></p>
 </body>
 </html>

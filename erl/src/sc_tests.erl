@@ -356,10 +356,19 @@ prop_ceil_ints_as_floats_identity() ->
 
 
 
+prop_ceil_floats_smaller_within_1() ->
+
+    ?FORALL( R, eqc_gen:real(), (sc:ceiling(R) - R) < 1 andalso (sc:ceiling(R) - R) >= 0 ).
+
+
+
+
+
 ceil_test_() ->
 
     { "Ceil/Ceiling tests", [
 
-        {"Stochastic: all integers-as-floats are identity", ?_assert( true =:= eqc:quickcheck(prop_ceil_ints_as_floats_identity()) ) }
+        {"Stochastic: all integers-as-floats are identity", ?_assert( true =:= eqc:quickcheck(prop_ceil_ints_as_floats_identity()) ) },
+        {"Stochastic: all floats are smaller within 1",     ?_assert( true =:= eqc:quickcheck(prop_ceil_floats_smaller_within_1()) ) }
 
     ] }.

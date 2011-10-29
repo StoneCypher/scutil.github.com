@@ -156,6 +156,7 @@
     replace/3,
     merge_settings/2,
     neighbors/2,
+    markhov_chain/2,
 
     unfunnel/2,
       unfunnel/3,
@@ -2824,38 +2825,27 @@ ceil(X) ->
 %% 344> sc:ceiling(0.0).
 %% 0'''
 
+ceiling(X) 
+
+    when X < 0 ->
+
+    trunc(X);
+
+
+
+
+
 ceiling(X) ->
 
-     ceiling_t(trunc(X), trunc(X)-X).
+    T = trunc(X),
 
+    case X - T of
 
+        0   -> T;
+        0.0 -> T;
+        _   -> T + 1
 
-
-
-%% @private
-
-ceiling_t(T, Td)
-
-    when Td < 0 ->
-
-    T+1;
-
-
-
-
-ceiling_t(T, Td)
-
-    when Td > 0 ->
-
-    T;
-
-
-
-
-
-ceiling_t(T,_Td) ->
-
-    T.
+    end.
 
 
 
@@ -7895,7 +7885,7 @@ counter_process() ->
 
 %% @since Version 678
 
-set_counter_value(Name, To) 
+set_counter_value(Name, To)
 
     when is_number(To) ->
 
@@ -7953,7 +7943,7 @@ reset_counter(Name) ->
 
 %% @since Version 680
 
-adjust_counter_by(Name, By) 
+adjust_counter_by(Name, By)
 
     when is_number(By) ->
 
@@ -8127,6 +8117,14 @@ is_between(_, _, _, inclusive)                     -> false.
 
 %% @since Version 691
 
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Reverse a marketing funnel, to go from goal needed to input needed.  ```1> % Using the data from http://www.forentrepreneurs.com/lessons-from-leaders/jboss-example/
+%% 1> sc:unfunnel(300, [{0.25,"Web activity scoring"}, {0.333,"Telemarketing"}, {0.25,"Inside Sales"}]).
+%% [{14416,"Input Needed"},
+%%  {3604,"Web activity scoring",0.25},
+%%  {1200,"Telemarketing",0.333},
+%%  {300,"Inside Sales",0.25},
+%%  {300,"Result"}]'''
+
 unfunnel(Tgt, ProbPropList) ->
 
     unfunnel(Tgt, ProbPropList, ceil).
@@ -8165,3 +8163,87 @@ unfunnel(Counter, Output, [{Scale,Label} | RemWork], no_ceil) ->
 unfunnel(Counter, Output, [{Scale,Label} | RemWork], ceil) ->
 
     unfunnel(sc:ceil(Counter/Scale), [{Counter, Label, Scale}]++Output, RemWork, ceil).
+
+
+
+
+
+%% @since Version 703
+
+%% @doc Generates a markhov chain from a list of lists.
+
+markhov_chain(Depth, Sources)
+
+    when
+        Depth > 0,
+        is_integer(Depth),
+        is_list(Sources) ->
+
+    Numbered = lists:zip(lists:seq(1,length(Sources)), Sources),
+
+    sc:histograph(lists:append([ markhov_chain(N, Depth, Source) || {N, Source} <- Numbered ])).
+
+
+
+
+
+markhov_starts(Depth, Source) ->
+
+    {Start,_} = lists:split(Depth, Source),
+
+    [{markhov_start,Start}].
+
+
+
+
+
+markhov_ends(Depth, Source) ->
+
+    {Start,_} = lists:split(Depth, lists:reverse(Source)),
+
+    [{markhov_end,lists:reverse(Start)}].
+
+
+
+
+
+markhov_chain(N, Depth, Source)
+
+    when
+        Depth > 0,
+        is_integer(Depth),
+        is_list(Source) ->
+
+    case length(Source) > Depth of
+
+        false ->
+            { error, "Source for " ++ integer_to_list(N) ++ " must be at least one token longer than the precursor depth." };
+
+        true ->
+            markhov_chain(N, Depth, Source, [])   ++
+            markhov_starts(Depth, Source) ++
+            markhov_ends(Depth, Source)
+
+    end.
+
+
+
+
+
+markhov_chain(N, Depth, Source, Work) ->
+
+    case length(Source) > Depth of
+
+        false ->
+
+            lists:reverse(Work);
+
+        true ->
+
+            {Precursor, Successor} = lists:split(Depth, Source),
+            [SFirst | _]           = Successor,
+            [_ | Postcursor]       = Source,
+
+            markhov_chain(N, Depth, Postcursor, [ {Precursor, SFirst} ] ++ Work)
+
+    end.
