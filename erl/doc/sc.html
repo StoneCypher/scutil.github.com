@@ -12,7 +12,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> $Revision: 682 $</p>
+<p><b>Version:</b> $Revision$</p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
@@ -32,7 +32,36 @@ presenting the actual volume of functionality present here.  We can get the cove
  
   <p>As always, this work remains open source under the MIT license, because free isn't real unless it's free for everyone.  <a href="http://scutil.com/license/">http://scutil.com/license/</a></p>
  
-  ScUtil is free.  However, I'd like to know where it's ended up.  Therefore, please consider mail to stonecypher@gmail.com with text saying where this went a form of "registration."  This is not required.
+  <p>ScUtil is free.  However, I'd like to know where it's ended up.  Therefore, please consider mail to stonecypher@gmail.com with text saying where this went a form of "registration."  This is not required.</p>
+ 
+  <h3><a name="Thanks">Thanks</a></h3>
+  <p>ScUtil has profited significantly from the donations of time, understanding and code given by a variety of generous friends and strangers.  The list of small tweaks would
+     be prohibitive, but significant influence on this library is due the following people, in alphabetical order (the least fair of all generic orderings):</p>
+ 
+  <ul>
+    <li>Alain O'Dea of <a href="http://concise-software.blogspot.com/" target="_blank">Concise Software</a></li>
+    <li>Alisdair Sullivan</li>
+    <li>Aristid Breitkreuz / [MrN, MisterN]</li>
+    <li>Ayrnieu</li>
+    <li>Bryon Vandiver of <a href="http://sublab.net/" target="_blank">Sublab Research and Design</a></li>
+    <li>Chile</li>
+    <li>Dave Murphy / <a href="http://devkitpro.org/" target="_blank">WinterMute</a></li>
+    <li>DizzyD</li>
+    <li>Dylan Barrie / PhforSlayer</li>
+    <li>Geoff Cant / <a href="http://github.com/archaelus">Archaelus</a></li>
+    <li>GrizzlyAdams of <a href="http://grizzly.thewaffleiron.net/" target="_blank">The Waffle Iron</a></li>
+    <li>Jeff Katz / <a href="http://kraln.com/" target="_blank">Kraln</a></li>
+    <li>John Sensebe of <a href="http://bargaintuan.com/" target="_blank">Bargaintuan</a></li>
+    <li>raleigh</li>
+    <li><a href="http://hem.bredband.net/richardc/">Richard Carlsson</a></li>
+    <li><a href="http://rvirding.blogspot.com/" target="_blank">Robert Virding</a></li>
+    <li><a href="http://akkit.org/" target="_blank">Steve Stair</a></li>
+    <li><a href="http://steve.vinoski.net/">Steve Vinoski</a></li>
+    <li>Torbj*rn T*rnkvist (those asterisks are o-umlauts, until I work out a bug in edoc) / <a href="http://github.com/etnt">Etnt</a></li>
+    <li><a href="http://opferman.com/" target="_blank">Toby Opferman</a></li>
+    <li><a href="http://blueventhorizon.com/" target="_blank">Vat Raghavan</a></li>
+    <li>Vladimir Sessikov</li>
+  </ul>
  
 <h2><a name="types">Data Types</a></h2>
 
@@ -173,7 +202,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#abstract_function-2">abstract_function/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#abstract_functions-1">abstract_functions/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#additive_factorial-1">additive_factorial/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
-<tr><td valign="top"><a href="#adjust_counter_by-2">adjust_counter_by/2</a></td><td><a href="#Counters">Counters</a> Adds to a counter's value; if the counter was not already defined, it will become the value in the <code>By</code> argument.</td></tr>
+<tr><td valign="top"><a href="#adjust_counter_by-2">adjust_counter_by/2</a></td><td>Adds to a counter's value; if the counter was not already defined, it will become the value in the <code>By</code> argument.</td></tr>
 <tr><td valign="top"><a href="#alarm_set-3">alarm_set/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#alarm_terminate-1">alarm_terminate/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#all_neighbor_pairs-1">all_neighbor_pairs/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -201,7 +230,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#circles_overlap-2">circles_overlap/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#combinations-2">combinations/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#count_of-2">count_of/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Counts the number of instances of Item in List.</td></tr>
-<tr><td valign="top"><a href="#counter_at-1">counter_at/1</a></td><td><a href="#Counters">Counters</a> Checks a counter's value; if the counter was not already defined, it will report zero.</td></tr>
+<tr><td valign="top"><a href="#counter_at-1">counter_at/1</a></td><td>Checks a counter's value; if the counter was not already defined, it will report zero.</td></tr>
 <tr><td valign="top"><a href="#country_codes-0">country_codes/0</a></td><td></td></tr>
 <tr><td valign="top"><a href="#cube-1">cube/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
 <tr><td valign="top"><a href="#dec_counter-1">dec_counter/1</a></td><td>Equivalent to <a href="#adjust_counter_by-2"><tt>adjust_counter_by(Name, -1)</tt></a>.
@@ -266,6 +295,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#index_of_first-2">index_of_first/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.</td></tr>
 <tr><td valign="top"><a href="#integer_to_radix_list-2">integer_to_radix_list/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a number to a radix string using a radix list of your specification and any size.</td></tr>
 <tr><td valign="top"><a href="#io_list_to_hex_string-1">io_list_to_hex_string/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert an io_list() to a hexstring().</td></tr>
+<tr><td valign="top"><a href="#is_between-3">is_between/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#is_between-4">is_between/4</a></td><td></td></tr>
 <tr><td valign="top"><a href="#is_numeric_string-1">is_numeric_string/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#is_numeric_string-2">is_numeric_string/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#is_postfix-2">is_postfix/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -324,6 +355,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#naive_bayes_likelihood-4">naive_bayes_likelihood/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
   by the naive Bayes likelihood method.</td></tr>
 <tr><td valign="top"><a href="#nearest_to-2">nearest_to/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#neighbors-2">neighbors/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ngrams-1">ngrams/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ngrams-2">ngrams/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#nth_difference-2">nth_difference/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -408,6 +440,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#tuple_member-2">tuple_member/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether E is a member element of tuple T, analogous to <code>lists::member(E, L)</code>.</td></tr>
 <tr><td valign="top"><a href="#tuple_sort-1">tuple_sort/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#tuple_sum-1">tuple_sum/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero.</td></tr>
+<tr><td valign="top"><a href="#unfunnel-2">unfunnel/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#union-1">union/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#union-2">union/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#union-3">union/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -474,7 +507,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="adjust_counter_by-2">adjust_counter_by/2</a></h3>
 <div class="spec">
 <p><tt>adjust_counter_by(Name::any(), By::number()) -&gt; number()</tt></p>
-</div><p><a href="#Counters">Counters</a> Adds to a counter's value; if the counter was not already defined, it will become the value in the <code>By</code> argument. <pre>  1&gt; sc:counter_at(hello).
+</div><p>Adds to a counter's value; if the counter was not already defined, it will become the value in the <code>By</code> argument. <pre>  1&gt; sc:counter_at(hello).
   0
  
   2&gt; sc:inc_counter(hello).
@@ -713,7 +746,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="counter_at-1">counter_at/1</a></h3>
 <div class="spec">
 <p><tt>counter_at(Name::any()) -&gt; number()</tt></p>
-</div><p><a href="#Counters">Counters</a> Checks a counter's value; if the counter was not already defined, it will report zero. <pre>  1&gt; sc:counter_at(hello).
+</div><p>Checks a counter's value; if the counter was not already defined, it will report zero. <pre>  1&gt; sc:counter_at(hello).
   0
  
   2&gt; sc:inc_counter(hello).
@@ -1385,6 +1418,18 @@ and returns the tuple of the remainder and then a list of all results from the f
  </p>
 <p><b>Introduced in:</b> Version 569</p>
 
+<h3 class="function"><a name="is_between-3">is_between/3</a></h3>
+<div class="spec">
+<p><tt>is_between(X, A, B) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 685</p>
+
+<h3 class="function"><a name="is_between-4">is_between/4</a></h3>
+<div class="spec">
+<p><tt>is_between(X, A, B, X4) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 685</p>
+
 <h3 class="function"><a name="is_numeric_string-1">is_numeric_string/1</a></h3>
 <div class="spec">
 <p><tt>is_numeric_string(Str) -&gt; any()</tt></p>
@@ -1799,9 +1844,9 @@ and returns the tuple of the remainder and then a list of all results from the f
    {license,[{mit_license,"http://scutil.com/license.html"}]},
    {publicforum,"http://crunchyd.com/forum/scutil-discussion/"},
    {publicsvn,"svn://crunchyd.com/scutil/"},
-   {svn_head,"$HeadURL: svn://crunchyd.com/scutil/erl/src/sc.erl $"},
-   {svn_id,"$Id: sc.erl 682 2011-10-01 18:49:58Z john $"},
-   {svn_revision,"$Revision: 682 $"},
+   {svn_head,"$HeadURL$"},
+   {svn_id,"$Id$"},
+   {svn_revision,"$Revision$"},
    {testerl_export,[{[],scutil_testsuite}]},
    {vsn,[134633400955530778836494569152232539093]},
    {webpage,"http://scutil.com/"}]</pre>
@@ -1915,6 +1960,12 @@ and returns the tuple of the remainder and then a list of all results from the f
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></p>
 <p><b>Introduced in:</b> Version 517
  </p>
+
+<h3 class="function"><a name="neighbors-2">neighbors/2</a></h3>
+<div class="spec">
+<p><tt>neighbors(X1, X2) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 683</p>
 
 <h3 class="function"><a name="ngrams-1">ngrams/1</a></h3>
 <div class="spec">
@@ -2800,6 +2851,12 @@ and returns the tuple of the remainder and then a list of all results from the f
  </p>
 <p><b>Introduced in:</b> Version 609</p>
 
+<h3 class="function"><a name="unfunnel-2">unfunnel/2</a></h3>
+<div class="spec">
+<p><tt>unfunnel(Tgt, ProbPropList) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 691</p>
+
 <h3 class="function"><a name="union-1">union/1</a></h3>
 <div class="spec">
 <p><tt>union(L) -&gt; any()</tt></p>
@@ -2935,6 +2992,6 @@ and returns the tuple of the remainder and then a list of all results from the f
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 1 2011, 14:51:56.</i></p>
+<p><i>Generated by EDoc, Oct 29 2011, 11:23:36.</i></p>
 </body>
 </html>

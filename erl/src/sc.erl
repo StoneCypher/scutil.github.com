@@ -455,7 +455,7 @@
 
 gen_docs() ->
 
-    gen_docs("/projects/scutil/erl/src", "/projects/scutil/erl/doc").
+    gen_docs("/projects/github/scutil.github.com/erl/src", "/projects/github/scutil.github.com/erl/doc").
 
 
 
@@ -8092,7 +8092,7 @@ is_between(_, _, _, inclusive)                     -> false.
 
 
 
-%% @since Version 686
+% % @ since Version 686
 
 %bounded_neighbors(cartesian_no_corners, {X,Y}, {XC,YC,W,H}) ->
 %
@@ -8103,15 +8103,15 @@ is_between(_, _, _, inclusive)                     -> false.
 %    ];
 
 
-        
+
 
 
 
 %% @since Version 691
 
-unfunnel(Tgt, ProbPropList) 
+unfunnel(Tgt, ProbPropList)
 
-    when is_number(Tgt), 
+    when is_number(Tgt),
          is_list(ProbPropList) ->
 
     unfunnel(Tgt, [ { Tgt, "Result" } ], lists:reverse(ProbPropList)).
