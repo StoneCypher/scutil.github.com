@@ -8823,3 +8823,13 @@ columnate(List, Options) ->
     Format = implode( lists:duplicate(Margin, $ ), [ "~" ++ integer_to_list(Width) ++ "s" || Width <- MinWidths ] ),
 
     columnate_each_row(Aligned, Format, []).
+
+
+
+
+
+%% @since Version 735
+
+columnated_text(List, Options) ->
+
+    implode("\r\n", columnate(List, Options)).
