@@ -167,6 +167,8 @@
     dot_product/2,
     vector_normalize/1,
     qsp_average/2,
+    has_bit/2,
+    count_bits/1,
 
     calc_fk_readability/3,
       labelled_fk_readability/1,
@@ -1670,7 +1672,7 @@ caspers_jones_estimate(FunctionPoints)
 %%
 %% @since Version 478
 
-naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatureTotal) 
+naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatureTotal)
 
     when is_integer(FeatureEvident),
          is_integer(FeatureTotal),
@@ -8551,3 +8553,36 @@ qsp_average(W, InputVecs) ->
     end,
 
     sc_mean:arithmetic([ GetSqVnDp(Xi) || Xi <- InputVecs ]).
+
+
+
+
+
+%% @spec has_bit(Number::non_negative_integer(), Bit::non_negative_integer()) -> true | false
+
+%% @doc Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of `Num'.  ```1> sc:has_bit(5,0).
+%% true
+%%
+%% 2> scutil:has_bit(5,1).
+%% false'''
+
+%% @since Version 727
+
+has_bit(Num, Bit) when is_integer(Num), is_integer(Bit), Num > 0, Bit >= 0, Bit < 64 ->
+
+    (Num band (1 bsl Bit)) > 0.
+
+
+
+
+
+%% @spec count_bits(Number::non_negative_integer()) -> non_negative_integer()
+
+%% @doc Counts the number of bits turned on in a sufficiently sized unsigned two's compliment integer representation of `Num'.  ```1> sc:count_bits(5).
+%% 2'''
+
+%% @since Version 727
+
+count_bits(Num) when is_integer(Num), Num > 0 ->
+
+    length( [S || S <- .lists:seq(0,63), has_bit(Num, S) == true] ).

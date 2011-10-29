@@ -262,6 +262,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#circles_contact-2">circles_contact/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#circles_overlap-2">circles_overlap/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#combinations-2">combinations/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.</td></tr>
+<tr><td valign="top"><a href="#count_bits-1">count_bits/1</a></td><td>Counts the number of bits turned on in a sufficiently sized unsigned two's compliment integer representation of <code>Num</code>.</td></tr>
 <tr><td valign="top"><a href="#count_of-2">count_of/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Counts the number of instances of Item in List.</td></tr>
 <tr><td valign="top"><a href="#counter_at-1">counter_at/1</a></td><td>Checks a counter's value; if the counter was not already defined, it will report zero.</td></tr>
 <tr><td valign="top"><a href="#country_codes-0">country_codes/0</a></td><td></td></tr>
@@ -314,6 +315,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#halstead_complexity-4">halstead_complexity/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#halstead_complexity-5">halstead_complexity/5</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#harmonic_mean-1">harmonic_mean/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the harmonic mean of a list of numbers.</td></tr>
+<tr><td valign="top"><a href="#has_bit-2">has_bit/2</a></td><td>Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of <code>Num</code>.</td></tr>
 <tr><td valign="top"><a href="#hex_to_int-1">hex_to_int/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a hexstring() or hexchar() into its numeric value.</td></tr>
 <tr><td valign="top"><a href="#histograph-1">histograph/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes a histograph count of the items in the list.</td></tr>
 <tr><td valign="top"><a href="#hmac-3">hmac/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Shorthands for algorithms so you don't need to know block sizes.</td></tr>
@@ -790,6 +792,13 @@ and returns the tuple of the remainder and then a list of all results from the f
     [ smart,  lucky  ] ]</pre> <a href="#Thanks">Thanks</a> to Alisdair Sullivan for this implementation, which has been slightly but not significantly modified since receipt.
  </p>
 <p><b>Introduced in:</b> Version 473</p>
+
+<h3 class="function"><a name="count_bits-1">count_bits/1</a></h3>
+<div class="spec">
+<p><tt>count_bits(Number::<a href="#type-non_negative_integer">non_negative_integer()</a>) -&gt; <a href="#type-non_negative_integer">non_negative_integer()</a></tt></p>
+</div><p>Counts the number of bits turned on in a sufficiently sized unsigned two's compliment integer representation of <code>Num</code>.  <pre>  1&gt; sc:count_bits(5).
+  2</pre></p>
+<p><b>Introduced in:</b> Version 727</p>
 
 <h3 class="function"><a name="count_of-2">count_of/2</a></h3>
 <div class="spec">
@@ -1345,6 +1354,16 @@ and returns the tuple of the remainder and then a list of all results from the f
  </p>
 <p><b>Introduced in:</b> Version 483</p>
 <p><b>See also:</b> <a href="#arithmetic_mean-1">arithmetic_mean/1</a>, <a href="#geometric_mean-1">geometric_mean/1</a>, <a href="#hmean_vector_normal-1">hmean_vector_normal/1</a>.</p>
+
+<h3 class="function"><a name="has_bit-2">has_bit/2</a></h3>
+<div class="spec">
+<p><tt>has_bit(Number::<a href="#type-non_negative_integer">non_negative_integer()</a>, Bit::<a href="#type-non_negative_integer">non_negative_integer()</a>) -&gt; true | false</tt></p>
+</div><p>Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of <code>Num</code>.  <pre>  1&gt; sc:has_bit(5,0).
+  true
+ 
+  2&gt; scutil:has_bit(5,1).
+  false</pre></p>
+<p><b>Introduced in:</b> Version 727</p>
 
 <h3 class="function"><a name="hex_to_int-1">hex_to_int/1</a></h3>
 <div class="spec">
@@ -3215,6 +3234,6 @@ and returns the tuple of the remainder and then a list of all results from the f
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 29 2011, 19:01:57.</i></p>
+<p><i>Generated by EDoc, Oct 29 2011, 19:16:33.</i></p>
 </body>
 </html>
