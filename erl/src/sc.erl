@@ -42,6 +42,8 @@
 %% @todo burn out @section
 %% @todo burn out was
 
+%% @todo paranoid guards
+
 %% @todo module attributes and documentation attributes for license name, license url
 %% @todo Every documentation example should be enforced as a unit test, to keep the docs up to date
 %% @todo Automate the version back into the docs
@@ -157,6 +159,7 @@
     merge_settings/2,
     neighbors/2,
     markhov_chain/2,
+    to_lines/1,
 
     unfunnel/2,
       unfunnel/3,
@@ -2857,7 +2860,7 @@ ceiling(X) ->
 
 %% @doc 1> sc:floor(0.5).
 %% 0
-%% 
+%%
 %% 2> sc:floor(0).
 %% 0
 %%
@@ -2879,39 +2882,23 @@ ceiling(X) ->
 %% 8> sc:floor(1).
 %% 1'''
 
+floor(X) when X < 0 ->
+
+    TruncX = trunc(X),
+
+    case X - TruncX of
+        0   -> TruncX;
+        0.0 -> TruncX;
+        _   -> TruncX - 1
+    end;
+
+
+
+
+
 floor(X) ->
 
-     floor_t(trunc(X), trunc(X)-X).
-
-
-
-
-
-%% @private
-
-floor_t(T, Td)
-
-    when Td < 0 ->
-
-    T;
-
-
-
-
-
-floor_t(T, Td)
-
-    when Td > 0 ->
-
-    T-1;
-
-
-
-
-
-floor_t(T,_Td) ->
-
-    T.
+    trunc(X).
 
 
 
@@ -8140,12 +8127,12 @@ is_between(_, _, _, inclusive)                     -> false.
 %% @since Version 691
 
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Reverse a marketing funnel, to go from goal needed to input needed.  ```1> % Using the data from http://www.forentrepreneurs.com/lessons-from-leaders/jboss-example/
-%% 1> sc:unfunnel(300, [{0.25,"Web activity scoring"}, {0.333,"Telemarketing"}, {0.25,"Inside Sales"}]).
-%% [{14416,"Input Needed"},
-%%  {3604,"Web activity scoring",0.25},
-%%  {1200,"Telemarketing",0.333},
-%%  {300,"Inside Sales",0.25},
-%%  {300,"Result"}]'''
+%% 1> sc:unfunnel(300, [{1/4,"Web activity scoring"}, {1/3,"Telemarketing"}, {1/4,"Inside Sales"}]).
+%% [ { 14400, "Input Needed" },
+%%   { 3600,  "Web activity scoring", 0.25 },
+%%   { 1200,  "Telemarketing",        0.3333333333333333 },
+%%   { 300,   "Inside Sales",         0.25 },
+%%   { 300,   "Result" } ]'''
 
 unfunnel(Tgt, ProbPropList) ->
 
@@ -8269,3 +8256,20 @@ markhov_chain(N, Depth, Source, Work) ->
             markhov_chain(N, Depth, Postcursor, [ {Precursor, SFirst} ] ++ Work)
 
     end.
+
+
+
+
+
+%% @type stringlist() = list().  Every member of a stringlist() is a string().
+
+%% @spec to_lines(Text::string()) -> stringlist()
+
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Cuts a string according to any of the three newline conventions (even mixed), and discards empty strings.  Mostly convenience and documentary. ```1> sc:to_lines("one\rtwo\nthree\r\nfour\r\r\rfive").
+%% ["one","two","three","four","five"]'''
+
+%% @since Version 705
+
+to_lines(Text) ->
+
+    string:tokens(Text, "\r\n"). % yay convenience functions

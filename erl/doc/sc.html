@@ -187,6 +187,10 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p>A sorted keylist is a keylist in the order provided by <a href="lists.html#sort-1"><code>lists:sort/1</code></a>.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.
  </p>
 
+<h3 class="typedecl"><a name="type-stringlist">stringlist()</a></h3>
+<p><tt>stringlist() = list()</tt></p>
+<p>Every member of a stringlist() is a string().</p>
+
 <h3 class="typedecl"><a name="type-weightedvalue">weightedvalue()</a></h3>
 <p><tt>weightedvalue() = {Value::any(), Weight::number()}</tt></p>
 <p>Used by functions like weighted_arithmetic_mean/1 and from_weighted/1, weightedvalue()s represent a value with an associated importance or "weight".</p>
@@ -435,6 +439,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#third_difference-1">third_difference/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#tied_ordered_ranking-1">tied_ordered_ranking/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a tied ranked ordering of the list, ordered according to the input ordering rather than the sorted ordering.</td></tr>
 <tr><td valign="top"><a href="#tied_ranking-1">tied_ranking/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a ranked ordering of the list with tie rankings.</td></tr>
+<tr><td valign="top"><a href="#to_lines-1">to_lines/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Cuts a string according to any of the three newline conventions (even mixed), and discards empty strings.</td></tr>
 <tr><td valign="top"><a href="#to_list-1">to_list/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#triangle_index-1">triangle_index/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#triangle_index-2">triangle_index/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -2846,6 +2851,13 @@ and returns the tuple of the remainder and then a list of all results from the f
  </p>
 <p><b>Introduced in:</b> Version 561</p>
 
+<h3 class="function"><a name="to_lines-1">to_lines/1</a></h3>
+<div class="spec">
+<p><tt>to_lines(Text::string()) -&gt; <a href="#type-stringlist">stringlist()</a></tt></p>
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Cuts a string according to any of the three newline conventions (even mixed), and discards empty strings.  Mostly convenience and documentary. <pre>  1&gt; sc:to_lines("one\rtwo\nthree\r\nfour\r\r\rfive").
+  ["one","two","three","four","five"]</pre></p>
+<p><b>Introduced in:</b> Version 705</p>
+
 <h3 class="function"><a name="to_list-1">to_list/1</a></h3>
 <div class="spec">
 <p><tt>to_list(X) -&gt; any()</tt></p>
@@ -2899,12 +2911,12 @@ and returns the tuple of the remainder and then a list of all results from the f
 <div class="spec">
 <p><tt>unfunnel(Tgt, ProbPropList) -&gt; any()</tt></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Reverse a marketing funnel, to go from goal needed to input needed.  <pre>  1&gt; % Using the data from http://www.forentrepreneurs.com/lessons-from-leaders/jboss-example/
-  1&gt; sc:unfunnel(300, [{0.25,"Web activity scoring"}, {0.333,"Telemarketing"}, {0.25,"Inside Sales"}]).
-  [{14416,"Input Needed"},
-   {3604,"Web activity scoring",0.25},
-   {1200,"Telemarketing",0.333},
-   {300,"Inside Sales",0.25},
-   {300,"Result"}]</pre></p>
+  1&gt; sc:unfunnel(300, [{1/4,"Web activity scoring"}, {1/3,"Telemarketing"}, {1/4,"Inside Sales"}]).
+  [ { 14400, "Input Needed" },
+    { 3600,  "Web activity scoring", 0.25 },
+    { 1200,  "Telemarketing",        0.3333333333333333 },
+    { 300,   "Inside Sales",         0.25 },
+    { 300,   "Result" } ]</pre></p>
 <p><b>Introduced in:</b> Version 691</p>
 
 <h3 class="function"><a name="unfunnel-3">unfunnel/3</a></h3>
@@ -3047,6 +3059,6 @@ and returns the tuple of the remainder and then a list of all results from the f
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 29 2011, 15:36:11.</i></p>
+<p><i>Generated by EDoc, Oct 29 2011, 17:19:48.</i></p>
 </body>
 </html>
