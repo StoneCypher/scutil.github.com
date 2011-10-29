@@ -8326,3 +8326,15 @@ fk_readability(Data, WordCounter, SentenceCounter, SyllableCounter) ->
     labelled_fk_readability(
       calc_fk_readability(Words, Sentences, Syllables)
     ).
+
+
+
+
+
+%% @todo finish me
+
+% dissimilar_charset(english, lowercase) -> "abcdefghjklmnopqrstuwxyz";
+% dissimilar_charset(english, mixedcase) -> "abcdefghjklmnopqrstuwxyzABDEFGHRT";
+% dissimilar_charset(english, alphanum)  -> "abcdefghjklmnopqrstuwxyzABDEFGHRT34679".
+
+% similarize_charset   a10OZ2B8 -> aloozzBB
