@@ -221,6 +221,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#by_distance-2">by_distance/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#by_distance_raw-2">by_distance_raw/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#byte_to_hex-1">byte_to_hex/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a byte() into a hexstring().</td></tr>
+<tr><td valign="top"><a href="#calc_fk_readability-3">calc_fk_readability/3</a></td><td>Calculate the Flesch-Kincaid readability score of a set of text metrics.</td></tr>
 <tr><td valign="top"><a href="#caspers_jones_estimate-1">caspers_jones_estimate/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#ceil-1">ceil/1</a></td><td>Equivalent to <a href="#ceiling-1"><tt>ceiling(X)</tt></a>.
 </td></tr>
@@ -269,6 +270,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#first_difference-1">first_difference/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#first_pos-2">first_pos/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns false if none pass.</td></tr>
 <tr><td valign="top"><a href="#first_pos-3">first_pos/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns a default value if none is found.</td></tr>
+<tr><td valign="top"><a href="#fk_readability-4">fk_readability/4</a></td><td>Calculate the Flesch-Kincaid readability score of a block of text.</td></tr>
 <tr><td valign="top"><a href="#flag_sets-1">flag_sets/1</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
 <tr><td valign="top"><a href="#floor-1">floor/1</a></td><td>1&gt; sc:floor(0.5).</td></tr>
 <tr><td valign="top"><a href="#function_point_count-1">function_point_count/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -321,6 +323,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#key_min-1">key_min/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
 <tr><td valign="top"><a href="#key_min-2">key_min/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#kurtosis-1">kurtosis/1</a></td><td><span style="color:red"><b><i>BUGGY</i></b></span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#labelled_fk_readability-1">labelled_fk_readability/1</a></td><td>Provides mandated human-readable labels for Flesch-Kincaid readability calculations.</td></tr>
 <tr><td valign="top"><a href="#last_while_pos-2">last_while_pos/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the last element of the initial sequence where all items pass the predicate function.</td></tr>
 <tr><td valign="top"><a href="#last_while_pos-3">last_while_pos/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#levenshtein-2">levenshtein/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>, by fredrik svensson and adam lindberg, from http://www.merriampark.com/lderlang.htm.</td></tr>
@@ -622,6 +625,12 @@ and returns the tuple of the remainder and then a list of all results from the f
   "ff"</pre>
  </p>
 <p><b>Introduced in:</b> Version 571</p>
+
+<h3 class="function"><a name="calc_fk_readability-3">calc_fk_readability/3</a></h3>
+<div class="spec">
+<p><tt>calc_fk_readability(Words, Sentences, Syllables) -&gt; any()</tt></p>
+</div><p>Calculate the Flesch-Kincaid readability score of a set of text metrics.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .</p>
+<p><b>Introduced in:</b> Version 706</p>
 
 <h3 class="function"><a name="caspers_jones_estimate-1">caspers_jones_estimate/1</a></h3>
 <div class="spec">
@@ -1097,6 +1106,12 @@ and returns the tuple of the remainder and then a list of all results from the f
 <div class="spec">
 <p><tt>first_pos(List, Predicate, Default) -&gt; any()</tt></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns a default value if none is found.  See <a href="#first_pos-2"><code>first_pos/2</code></a> for details.</p>
+
+<h3 class="function"><a name="fk_readability-4">fk_readability/4</a></h3>
+<div class="spec">
+<p><tt>fk_readability(Data, WordCounter, SentenceCounter, SyllableCounter) -&gt; any()</tt></p>
+</div><p>Calculate the Flesch-Kincaid readability score of a block of text.  Also takes three lambdas to do text parsing.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test</p>
+<p><b>Introduced in:</b> Version 708</p>
 
 <h3 class="function"><a name="flag_sets-1">flag_sets/1</a></h3>
 <div class="spec">
@@ -1650,6 +1665,12 @@ and returns the tuple of the remainder and then a list of all results from the f
   Wrong! todo comeback</p>
 <p><b>Introduced in:</b> Version 494
  </p>
+
+<h3 class="function"><a name="labelled_fk_readability-1">labelled_fk_readability/1</a></h3>
+<div class="spec">
+<p><tt>labelled_fk_readability(R) -&gt; any()</tt></p>
+</div><p>Provides mandated human-readable labels for Flesch-Kincaid readability calculations.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .</p>
+<p><b>Introduced in:</b> Version 707</p>
 
 <h3 class="function"><a name="last_while_pos-2">last_while_pos/2</a></h3>
 <div class="spec">
@@ -3059,6 +3080,6 @@ and returns the tuple of the remainder and then a list of all results from the f
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 29 2011, 17:19:48.</i></p>
+<p><i>Generated by EDoc, Oct 29 2011, 17:30:17.</i></p>
 </body>
 </html>

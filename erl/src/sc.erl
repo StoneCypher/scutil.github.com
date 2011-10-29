@@ -162,6 +162,8 @@
     to_lines/1,
 
     calc_fk_readability/3,
+      labelled_fk_readability/1,
+      fk_readability/4,
 
     unfunnel/2,
       unfunnel/3,
@@ -8303,3 +8305,24 @@ labelled_fk_readability(R) when R >  60 -> { "Easy for 13 to 15 years",  R };
 labelled_fk_readability(R) when R >  30 -> { "Appropriate for 15 years", R };
 labelled_fk_readability(R) when R >   0 -> { "Appropriate for college",  R };
 labelled_fk_readability(R)              -> { "Difficult",                R }.
+
+
+
+
+
+%% @since Version 708
+
+%% @doc Calculate the Flesch-Kincaid readability score of a block of text.  Also takes three lambdas to do text parsing.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test
+
+% comeback todo
+% fk_readability(Data) -> fk_readability(Data, fun count_words/1, fun count_sentences/1, fun count_syllables/1).
+
+fk_readability(Data, WordCounter, SentenceCounter, SyllableCounter) ->
+
+    Words     = WordCounter(Data),
+    Sentences = SentenceCounter(Data),
+    Syllables = SyllableCounter(Data),
+
+    labelled_fk_readability(
+      calc_fk_readability(Words, Sentences, Syllables)
+    ).
