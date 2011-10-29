@@ -8833,3 +8833,21 @@ columnate(List, Options) ->
 columnated_text(List, Options) ->
 
     implode("\r\n", columnate(List, Options)).
+
+
+
+
+
+%% @since Version 736
+
+columnate_each_row( [ [] | _ ], _Format, Output) ->
+
+    lists:reverse(Output);
+
+
+
+columnate_each_row(Columns, Format, Output) ->
+
+    {ThisRow, RemRows} = first_row(Columns),
+    ThisOut = lists:flatten(io_lib:format(Format, ThisRow)),
+    columnate_each_row(RemRows, Format, [ThisOut]++Output).
