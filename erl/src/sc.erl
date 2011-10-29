@@ -170,6 +170,9 @@
     has_bit/2,
     count_bits/1,
 
+    is_numeric_char/1,
+      is_numeric_char/2,
+
     columnated_text/2,
       columnated_rows/2,
 
@@ -8851,3 +8854,14 @@ columnate_each_row(Columns, Format, Output) ->
     {ThisRow, RemRows} = first_row(Columns),
     ThisOut = lists:flatten(io_lib:format(Format, ThisRow)),
     columnate_each_row(RemRows, Format, [ThisOut]++Output).
+
+
+
+
+
+%% @since Version 737
+
+is_numeric_char(Ch) -> is_numeric_char(Ch, decimal).
+
+is_numeric_char(Ch, decimal) when $0 =< Ch, Ch =< $9; Ch == $-; Ch == $. -> true;
+is_numeric_char(_, _)                                                    -> false.
