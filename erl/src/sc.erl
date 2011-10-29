@@ -161,6 +161,12 @@
     markhov_chain/2,
     to_lines/1,
     isolate_waveform/1,
+    unit_scale/1,
+    type_of/1,
+
+    regex_matches/2,
+      regex_matches/3,
+      regex_matches/4,
 
     calc_fk_readability/3,
       labelled_fk_readability/1,
@@ -8354,3 +8360,99 @@ isolate_waveform(Waveform) ->
     [ Sample - Baseline ||
         Sample <- Waveform
     ].
+
+
+
+
+
+%% @since Version 720
+
+unit_scale(Waveform) ->
+
+    { Baseline, MaxObserved } = sc:extrema(Waveform),
+    SignalMax                 = MaxObserved - Baseline,
+
+    [ (Sample - Baseline) / SignalMax ||
+        Sample <- Waveform
+    ].
+
+
+
+
+
+%% @equiv regex_matches(String, Reg, {0,0})
+%% @since Version 721
+
+regex_matches(String, Reg) ->
+
+    regex_matches(String, Reg, {0,0}).
+
+
+
+
+%% @equiv regex_matches(String, Reg, {TrimFront,TrimLength})
+%% @since Version 721
+
+regex_matches(String, Reg, TrimFront, TrimLength) ->
+
+    regex_matches(String, Reg, {TrimFront, TrimLength}).
+
+
+
+%% @spec regex_matches(String::string(), Reg::string(), { TrimFront::integer(), TrimLength::integer() }) -> list() | { error, E }
+
+%% @doc Take a string and a regular expression (and optionally an offset and length to trim to in each result), and return a list of all matches.  For a trim length of {A,B}, the first A and last B characters of each result will be removed.```1> sc:regex_matches("0j2  4g5  8t9", "[0-9](.)[0-9]").
+%% ["0j2","4g5","8t9"]
+%%
+%% 2> sc:regex_matches("0j2  4g5  8t9", "[0-9](.)[0-9]", {1,1}).
+%% ["j","g","t"]
+%%
+%% 3> sc:regex_matches("0j2  4g5  8t9", "[0-9](.)[0-9]", 1, 1).
+%% ["j","g","t"]'''
+%%
+%% Why provide the equivalent syntaxes (_, _, {A,B}) and (_, _, A,B) ?  Without the tuple is more natural to many, but with the tuple is far more convenient for database-driven behavior, as well as the internal implementation.  I frequently find myself using both forms, and so every time I simplify I find myself wrapping the non-removed form back into the removed form.  Does it violate the simplest interface principle?  Yeah, but in this case it's a boon, IMO.  As such, keeping both forms.
+
+%% @since Version 721
+
+regex_matches(String, Reg, {TrimFront, TrimLength}) ->
+
+    case regexp:matches(String, Reg) of
+
+        { match, Matches } ->
+            [ string:substr(String, Start+TrimFront, End-(TrimLength+1)) || {Start,End} <- Matches ];
+
+        { error, E } ->
+            { error, E }
+
+    end.
+
+
+
+
+
+%% @type typelabel() = [ integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown ].  Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
+
+%% @spec type_of(Argument::any()) -> typelabel()
+
+%% @doc {@section Utility} Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of `is_bitstring()' . ```1> scutil:type_of(1).
+%% integer
+%%
+%% 2> scutil:type_of({hello,world}).
+%% tuple'''
+
+%% @since Version 722
+
+type_of(X) when is_integer(X)   -> integer;
+type_of(X) when is_float(X)     -> float;
+type_of(X) when is_list(X)      -> list;
+type_of(X) when is_tuple(X)     -> tuple;
+type_of(X) when is_binary(X)    -> binary;
+type_of(X) when is_bitstring(X) -> bitstring;  % will fail before erlang 12
+type_of(X) when is_boolean(X)   -> boolean;
+type_of(X) when is_function(X)  -> function;
+type_of(X) when is_pid(X)       -> pid;
+type_of(X) when is_port(X)      -> port;
+type_of(X) when is_reference(X) -> reference;
+type_of(X) when is_atom(X)      -> atom;
+
+type_of(_X)                     -> unknown.
