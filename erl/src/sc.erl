@@ -170,6 +170,11 @@
     has_bit/2,
     count_bits/1,
 
+    time_diff/2,
+
+%    benchmark/1,
+%      benchmark/2,
+
     is_numeric_char/1,
       is_numeric_char/2,
 
@@ -8865,3 +8870,29 @@ is_numeric_char(Ch) -> is_numeric_char(Ch, decimal).
 
 is_numeric_char(Ch, decimal) when $0 =< Ch, Ch =< $9; Ch == $-; Ch == $. -> true;
 is_numeric_char(_, _)                                                    -> false.
+
+
+
+
+
+%% @type timestamp() = {Megaseconds::non_negative_integer(), Seconds::non_negative_integer(), MicroSeconds::non_negative_integer()}.
+
+%% @spec time_diff(A::timestamp(), B::timestamp()) -> float()
+
+%% @doc Returns the difference, in seconds as a float, between two erlang timestamps as returned by `erlang:now()'.  Negative differences are returned if the latter timestamp `B' is earlier than the former timestamp `A'.  ```1> A = now().
+%% {1232,947675,340000}
+%%
+%% 2> B = now().
+%% {1232,947679,412000}
+%%
+%% 3> sc:time_diff(A,B).
+%% 4.072
+%%
+%% 4> sc:time_diff(B,A).
+%% -4.072'''
+
+%% @since Version 742
+
+time_diff({AM,AS,AU}, {BM, BS, BU}) ->
+
+    ((BM-AM) * 1000000) + (BS-AS) + ((BU-AU)/1000000).
