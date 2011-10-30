@@ -170,8 +170,27 @@
     has_bit/2,
     count_bits/1,
 
+    time_diff/2,
+
+    benchmark/1,
+      benchmark/2,
+
+    is_numeric_char/1,
+      is_numeric_char/2,
+
+    columnated_text/2,
+      columnated_rows/2,
+
+    columnate/1,
+      columnate/2,
+
+    columns/2,
+      first_row/1,
+
     standard_card_backs/0,
       standard_card_backs/1,
+
+    multi_deck/2,
 
     calc_fk_readability/3,
       labelled_fk_readability/1,
@@ -8492,7 +8511,7 @@ dot_product(VX, VY) ->
 
 %% @spec vector_normalize(Vector::vector()) -> unit_vector()
 
-%% @doc Returns the magnitude of a vector.  A vector's magnitude is the length of its hypoteneuse.  A vector can be seen as the product of its unit vector and its magnitude; as such many people see a vector's magnitude as its scale.  The normal of the zero vector is undefined, in the way that dividing by zero is undefined, and will throw an arithmetic exception. ```1> sc:vector_normalize([0,3,4]).
+%% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the magnitude of a vector.  A vector's magnitude is the length of its hypoteneuse.  A vector can be seen as the product of its unit vector and its magnitude; as such many people see a vector's magnitude as its scale.  The normal of the zero vector is undefined, in the way that dividing by zero is undefined, and will throw an arithmetic exception. ```1> sc:vector_normalize([0,3,4]).
 %% [0.0,0.6,0.8]'''<span style="color:red">TODO: When tuple comprehensions are introduced to the language, convert this to using them.</span>
 
 %% @since Version 725
@@ -8517,7 +8536,7 @@ vector_normalize(VX) when is_tuple(VX) ->
 
 %% @spec qsp_average(W::numericlist(), InputVecs::vectorlist()) -> float()
 
-%% @doc {@section Math} Takes the quadratic scalar product average of a vector `W' and a list of vectors `X'.  The QSP Average
+%% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the quadratic scalar product average of a vector `W' and a list of vectors `X'.  The QSP Average
 %% is the arithmetic mean of the result set Y, where Y is generated as the square of the magnitude of the dot product
 %% of W and each individual vector in X. @see http://www.inf.fu-berlin.de/inst/ag-ki/rojas_home/documents/1996/NeuralNetworks/K5.pdf
 %% pdf-page 15.  ```1> sc:qsp_average([1,2,3], [[0,0,0],[0,0,0]]).
@@ -8563,7 +8582,7 @@ qsp_average(W, InputVecs) ->
 
 %% @spec has_bit(Number::non_negative_integer(), Bit::non_negative_integer()) -> true | false
 
-%% @doc Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of `Num'.  ```1> sc:has_bit(5,0).
+%% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of `Num'.  ```1> sc:has_bit(5,0).
 %% true
 %%
 %% 2> scutil:has_bit(5,1).
@@ -8587,7 +8606,7 @@ has_bit(Num, Bit)
 
 %% @spec count_bits(Number::non_negative_integer()) -> non_negative_integer()
 
-%% @doc Counts the number of bits turned on in a sufficiently sized unsigned two's compliment integer representation of `Num'.  ```1> sc:count_bits(5).
+%% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Counts the number of bits turned on in a sufficiently sized unsigned two's compliment integer representation of `Num'.  ```1> sc:count_bits(5).
 %% 2'''
 
 %% @since Version 727
@@ -8605,7 +8624,7 @@ count_bits(Num)
 
 %% @spec standard_card_backs() -> list()
 
-%% @doc Returns the list of colors which are used, in order, as the standard back colors of a series of decks for {@link multi_deck/2}.  Each color is presented as an atom.  ```1> sc:standard_card_backs().
+%% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the list of colors which are used, in order, as the standard back colors of a series of decks for {@link multi_deck/2}.  Each color is presented as an atom.  ```1> sc:standard_card_backs().
 %% [ red, blue, green, black, purple, orange, brown, yellow,
 %%   teal, gray, cyan, indigo, pink, white, tan, maroon,
 %%   navy, forest, leaf, sky, brick ]
@@ -8627,7 +8646,7 @@ standard_card_backs() ->
 
 %% @spec standard_card_backs(Count::positive_integer()) -> list()
 
-%% @doc Returns the front of the list of colors which are used, in order, as the standard back colors of a series of decks for {@link multi_deck/2}.  Each color is presented as an atom.  If you request more colors than are in the list, the list `[1,2...Count]' is provided instead.  ```1> sc:standard_card_backs(5).
+%% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the front of the list of colors which are used, in order, as the standard back colors of a series of decks for {@link multi_deck/2}.  Each color is presented as an atom.  If you request more colors than are in the list, the list `[1,2...Count]' is provided instead.  ```1> sc:standard_card_backs(5).
 %% [ red, blue, green, black, purple ]
 %%
 %% 2> sc:standard_card_backs(29).
@@ -8649,3 +8668,271 @@ standard_card_backs(Count) ->
             Front
 
     end.
+
+
+
+
+
+%% @type function_or_list() = function() | list()
+
+%% @type positive_integer() = integer().  This integer must be greater than zero.
+%% @type positive_integer_or_list() = positive_integer() | list()
+
+%% @spec multi_deck(Backs::positive_integer_or_list(), DeckGenerator::function_or_list()) -> list()
+
+%% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Makes a number of instances of a deck, and applies a different back to each.  The first parameter may be a {@type positive_integer()}, at which point the color sequence from {@link standard_backs/0} will be used; otherwise, a list may be used, which will be used as the card backs (there is no requirement regarding their type or uniqueness, only that they be presented as a list.)  The second parameter may be a {@type function()}, which will be called to generate a list of cards, or a {@type list} of cards which will be used directly.
+
+%% @since Version 729
+
+multi_deck(Backs, DeckGenerator) when is_function(DeckGenerator) ->
+
+    multi_deck(Backs, DeckGenerator());
+
+
+
+
+
+multi_deck(BackCount, Deck) when is_integer(BackCount) ->
+
+    [Backs, _] = standard_card_backs(BackCount),
+    multi_deck(Backs, Deck);
+
+
+
+
+
+multi_deck(Backs, Deck) ->
+
+    [ list_to_tuple([Back] ++ tuple_to_list(Card)) ||
+
+        Back <- Backs,
+        Card <- Deck
+
+    ].
+
+
+
+
+
+%% @since Version 730
+
+columns(RowCount, List) ->
+
+    columns(List, lists:duplicate(RowCount, []), 0).
+
+
+
+columns( [], Output, Unrotate) ->
+
+    .sc.list:rotate(
+        Unrotate,
+        [ lists:reverse(Column) ||
+            Column <- Output
+        ]
+    );
+
+
+
+columns( [Item|ListRem], [Output|OutRem], Unrotate) ->
+
+    columns(ListRem, OutRem ++ [[Item]++Output], Unrotate-1).
+
+
+
+
+
+%% @since Version 731
+
+columnated_rows(ColumnCount, List) ->
+
+    columns(ceiling(length(List) / ColumnCount), List).
+
+
+
+
+
+%% @since Version 732
+
+first_or_nothing( [H|T] ) ->
+
+    {H,T};
+
+
+
+first_or_nothing( [] ) ->
+
+    { [], [] }.
+
+
+
+
+
+%% @todo needs spec, doc, since
+
+%% @since Version 733
+
+first_row(Columns) ->
+
+     first_row(Columns, [], []).
+
+
+
+%% @private
+
+first_row( [], OutCols, Work) ->
+
+    { lists:reverse(Work), lists:reverse(OutCols) };
+
+
+
+first_row( [ThisCol|RemCols], OutCols, Work) ->
+
+    {Item,ColRem} = first_or_nothing(ThisCol),
+    first_row(RemCols, [ColRem]++OutCols, [Item]++Work).
+
+
+
+
+
+%% @equiv columnate(List, 2, 3)
+%% @since Version 734
+
+columnate(List) ->
+
+    columnate(List, []).
+
+
+
+%% @since Version 734
+
+columnate(List, Options) ->
+
+    Settings = lists:ukeymerge(1, Options, [{align, center}, {columns, 2}, {margin, 3}] ),
+
+    [ColumnCount, Margin, Align] = [ proplists:get_value(X, Settings) || X <- [columns,margin,align] ],
+
+    Columns = columns(ColumnCount, List),
+
+    MinWidths = [ lists:max( [length(lists:flatten(io_lib:format("~w",[Item]))) || Item <- Col]) || Col <- Columns ],
+
+    DoAlign = fun(Item, Width) ->
+
+        case Align of
+            left   -> string:left(   lists:flatten( io_lib:format("~w",[Item]) ), Width);
+            center -> string:centre( lists:flatten( io_lib:format("~w",[Item]) ), Width);
+            centre -> string:centre( lists:flatten( io_lib:format("~w",[Item]) ), Width);
+            right  -> string:right(  lists:flatten( io_lib:format("~w",[Item]) ), Width)
+        end
+
+    end,
+
+    Aligned = [ [ DoAlign(Item, Width) || Item <- Col]  || {Width, Col} <- lists:zip(MinWidths, Columns) ],
+
+    Format = implode( lists:duplicate(Margin, $ ), [ "~" ++ integer_to_list(Width) ++ "s" || Width <- MinWidths ] ),
+
+    columnate_each_row(Aligned, Format, []).
+
+
+
+
+
+%% @since Version 735
+
+columnated_text(List, Options) ->
+
+    implode("\r\n", columnate(List, Options)).
+
+
+
+
+
+%% @since Version 736
+
+columnate_each_row( [ [] | _ ], _Format, Output) ->
+
+    lists:reverse(Output);
+
+
+
+columnate_each_row(Columns, Format, Output) ->
+
+    {ThisRow, RemRows} = first_row(Columns),
+    ThisOut = lists:flatten(io_lib:format(Format, ThisRow)),
+    columnate_each_row(RemRows, Format, [ThisOut]++Output).
+
+
+
+
+
+%% @since Version 737
+
+is_numeric_char(Ch) -> is_numeric_char(Ch, decimal).
+
+is_numeric_char(Ch, decimal) when $0 =< Ch, Ch =< $9; Ch == $-; Ch == $. -> true;
+is_numeric_char(_, _)                                                    -> false.
+
+
+
+
+
+%% @type timestamp() = {Megaseconds::non_negative_integer(), Seconds::non_negative_integer(), MicroSeconds::non_negative_integer()}.
+
+%% @spec time_diff(A::timestamp(), B::timestamp()) -> float()
+
+%% @doc Returns the difference, in seconds as a float, between two erlang timestamps as returned by `erlang:now()'.  Negative differences are returned if the latter timestamp `B' is earlier than the former timestamp `A'.  ```1> A = now().
+%% {1232,947675,340000}
+%%
+%% 2> B = now().
+%% {1232,947679,412000}
+%%
+%% 3> sc:time_diff(A,B).
+%% 4.072
+%%
+%% 4> sc:time_diff(B,A).
+%% -4.072'''
+
+%% @since Version 742
+
+time_diff({AM,AS,AU}, {BM, BS, BU}) ->
+
+    ((BM-AM) * 1000000) + (BS-AS) + ((BU-AU)/1000000).
+
+
+
+
+
+%% @since Version 743
+
+benchmark(BareLambda) ->
+
+    Start  = now(),
+    Result = BareLambda(),
+    End    = now(),
+
+    { diff(Start,End), Result }.
+
+
+
+
+
+%% @since Version 743
+
+benchmark(Fun, Args) ->
+
+    Start  = now(),
+    Result = apply(Fun, Args),
+    End    = now(),
+
+    { diff(Start,End), Result }.
+
+
+
+
+
+benchmark(Module, Func, Args) ->
+
+    Start  = now(),
+    Result = apply(Module, Func, Args),
+    End    = now(),
+
+    { diff(Start,End), Result }.
