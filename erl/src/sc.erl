@@ -172,8 +172,8 @@
 
     time_diff/2,
 
-%    benchmark/1,
-%      benchmark/2,
+    benchmark/1,
+      benchmark/2,
 
     is_numeric_char/1,
       is_numeric_char/2,
@@ -8896,3 +8896,43 @@ is_numeric_char(_, _)                                                    -> fals
 time_diff({AM,AS,AU}, {BM, BS, BU}) ->
 
     ((BM-AM) * 1000000) + (BS-AS) + ((BU-AU)/1000000).
+
+
+
+
+
+%% @since Version 743
+
+benchmark(BareLambda) ->
+
+    Start  = now(),
+    Result = BareLambda(),
+    End    = now(),
+
+    { diff(Start,End), Result }.
+
+
+
+
+
+%% @since Version 743
+
+benchmark(Fun, Args) ->
+
+    Start  = now(),
+    Result = apply(Fun, Args),
+    End    = now(),
+
+    { diff(Start,End), Result }.
+
+
+
+
+
+benchmark(Module, Func, Args) ->
+
+    Start  = now(),
+    Result = apply(Module, Func, Args),
+    End    = now(),
+
+    { diff(Start,End), Result }.
