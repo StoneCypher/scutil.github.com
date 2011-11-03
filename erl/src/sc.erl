@@ -178,6 +178,7 @@
     notebook_validate/1,
       notebook_create/1,
       notebook_destroy/1,
+      notebook_write/3,
 
     time_diff/2,
 
@@ -9000,6 +9001,19 @@ private_close_notebook_table( { sc_notebook_handle, TableName } )
 
 
 
+%% @since Version 750
+%% @private
+
+private_write_to_notebook_table( { sc_notebook_handle, TableName }, Key, Value )
+
+    when is_list(TableName) ->
+
+    dets:insert(TableName, {Key, Value}).
+
+
+
+
+
 %% @since Version 747
 
 notebook_create(NotebookName)
@@ -9035,6 +9049,20 @@ notebook_validate(NotebookName)
     case dets:is_dets_file(private_notebook_name_to_table_name(NotebookName)) of
 
         { error, _ } -> false;
-        _            -> { sc_notebook, [ todo, details ]}
+        _            -> { sc_notebook, [ todo, details ]}  % comeback todo
 
     end.
+
+
+
+
+
+%% @since Version 750
+
+notebook_write(NotebookName, Key, Value)
+
+    when is_list(NotebookName) ->
+
+    NT = private_open_notebook_table(NotebookName),
+         private_write_to_notebook_table(NT, Key, Value),
+         private_close_notebook_table(NT).
