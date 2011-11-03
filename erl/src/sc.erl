@@ -169,11 +169,13 @@
     qsp_average/2,
     has_bit/2,
     count_bits/1,
+    now_str_utc24/0,
 
     time_diff/2,
 
     benchmark/1,
       benchmark/2,
+      benchmark/3,
 
     is_numeric_char/1,
       is_numeric_char/2,
@@ -8909,7 +8911,7 @@ benchmark(BareLambda) ->
     Result = BareLambda(),
     End    = now(),
 
-    { diff(Start,End), Result }.
+    { time_diff(Start,End), Result }.
 
 
 
@@ -8923,7 +8925,7 @@ benchmark(Fun, Args) ->
     Result = apply(Fun, Args),
     End    = now(),
 
-    { diff(Start,End), Result }.
+    { time_diff(Start,End), Result }.
 
 
 
@@ -8935,4 +8937,17 @@ benchmark(Module, Func, Args) ->
     Result = apply(Module, Func, Args),
     End    = now(),
 
-    { diff(Start,End), Result }.
+    { time_diff(Start,End), Result }.
+
+
+
+
+
+%% @since Version 744
+
+now_str_utc24() ->
+
+    { {Y,M,D}, {H,MM,S} }     = calendar:now_to_universal_time(now()),
+    [Ys, Ms, Ds, Hs, MMs, Ss] = [ integer_to_list(X) || X <- [ Y, M, D, H, MM, S ] ],
+
+    Ys++"/"++Ms++"/"++Ds++" "++Hs++":"++MMs++":"++Ss++" UTC24".

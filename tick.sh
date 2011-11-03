@@ -1,8 +1,9 @@
 majorver=`head major.version`
+minorver=`head minor.version`
 ver=`head version.counter`
 next=`expr $ver + 1`
 `echo $next > version.counter`
-gver=$majorver.$next
+gver=$majorver.$minorver.$next
 
 echo "Updating $majorver $ver to $next (git $gver)"
 
