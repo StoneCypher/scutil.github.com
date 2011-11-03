@@ -176,6 +176,7 @@
     now_str_utc24/0,
 
     notebook_create/1,
+      notebook_destroy/1,
 
     time_diff/2,
 
@@ -8962,6 +8963,14 @@ now_str_utc24() ->
 
 
 
+private_notebook_name_to_table_name(NotebookName) ->
+
+    "sc_notebooks/" ++ NotebookName ++ ".dets".
+
+
+
+
+
 %% @since Version 745
 %% @private
 
@@ -8970,7 +8979,7 @@ private_open_notebook_table(TableName)
     when is_list(TableName) ->
 
     filelib:ensure_dir("sc_notebooks/"),
-    { ok, ResultTableName } = dets:open_file("sc_notebooks/" ++ TableName ++ ".dets", [{type, set}] ),
+    { ok, ResultTableName } = dets:open_file(private_notebook_name_to_table_name(TableName), [{type, set}] ),
     { sc_notebook_handle, ResultTableName }.
 
 
@@ -8997,3 +9006,15 @@ notebook_create(NotebookName)
     when is_list(NotebookName) ->
 
     private_close_notebook_table(private_open_notebook_table(NotebookName)).
+
+
+
+
+
+%% @since Version 748
+
+notebook_destroy(NotebookName)
+
+    when is_list(NotebookName) ->
+
+    file:delete(private_notebook_name_to_table_name(NotebookName)).

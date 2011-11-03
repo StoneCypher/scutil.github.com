@@ -108,6 +108,10 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>filterfunction() = function()</tt></p>
 <p>Filter functions are 1ary binary predicates - they accept an argument and return either true or false.</p>
 
+<h3 class="typedecl"><a name="type-function_or_list">function_or_list()</a></h3>
+<p><tt>function_or_list() = function() | list()</tt></p>
+
+
 <h3 class="typedecl"><a name="type-gridsize">gridsize()</a></h3>
 <p><tt>gridsize() = <a href="#type-coord2">coord2()</a> | integer()</tt></p>
 <p>Coordinates are the width and height of a (1,1) originated grid; as such, coordinates are of the range [1,X] , [1,Y] inclusive, and returned in the form {A,B}.  The integer form implies a square grid.</p>
@@ -167,6 +171,14 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>positive_integer() = integer()</tt></p>
 <p>A <code><a href="#type-positive_integer">positive_integer()</a></code> must be greater than zero.</p>
 
+<h3 class="typedecl"><a name="type-positive_integer">positive_integer()</a></h3>
+<p><tt>positive_integer() = integer()</tt></p>
+<p>This integer must be greater than zero.</p>
+
+<h3 class="typedecl"><a name="type-positive_integer_or_list">positive_integer_or_list()</a></h3>
+<p><tt>positive_integer_or_list() = <a href="#type-positive_integer">positive_integer()</a> | list()</tt></p>
+
+
 <h3 class="typedecl"><a name="type-ranking">ranking()</a></h3>
 <p><tt>ranking() = {Ranking::number(), Value::any()}</tt></p>
 <p>Values are usually <code>number()</code>s, but do not have to be with custom ranking predicates.</p>
@@ -206,6 +218,10 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="typedecl"><a name="type-three_vector">three_vector()</a></h3>
 <p><tt>three_vector() = <a href="#type-vector">vector()</a></tt></p>
 <p>A three-vector always has three elements, so this can be expressed as the alternation <code>{A::number(), B::number(), C::number()} | [A::number(), B::number(), C::number()]</code>.</p>
+
+<h3 class="typedecl"><a name="type-timestamp">timestamp()</a></h3>
+<p><tt>timestamp() = {Megaseconds::<a href="#type-non_negative_integer">non_negative_integer()</a>, Seconds::<a href="#type-non_negative_integer">non_negative_integer()</a>, MicroSeconds::<a href="#type-non_negative_integer">non_negative_integer()</a>}</tt></p>
+
 
 <h3 class="typedecl"><a name="type-typelabel">typelabel()</a></h3>
 <p><tt>typelabel() = [integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown]</tt></p>
@@ -249,6 +265,9 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#bandwidth_calc-1">bandwidth_calc/1</a></td><td>Equivalent to <a href="#bandwidth_calc-2"><tt>bandwidth_calc(Data, all)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#bandwidth_calc-2">bandwidth_calc/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates digital line bandwidth over timescales in converted units.</td></tr>
+<tr><td valign="top"><a href="#benchmark-1">benchmark/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#benchmark-2">benchmark/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#benchmark-3">benchmark/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#bin_to_hex_list-1">bin_to_hex_list/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#by_distance-2">by_distance/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#by_distance_raw-2">by_distance_raw/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -265,8 +284,14 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#circ_within_origin_circ-2">circ_within_origin_circ/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#circles_contact-2">circles_contact/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#circles_overlap-2">circles_overlap/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#columnate-1">columnate/1</a></td><td>Equivalent to <a href="#columnate-3"><tt>columnate(List, 2, 3)</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#columnate-2">columnate/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#columnated_rows-2">columnated_rows/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#columnated_text-2">columnated_text/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#columns-2">columns/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#combinations-2">combinations/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.</td></tr>
-<tr><td valign="top"><a href="#count_bits-1">count_bits/1</a></td><td>Counts the number of bits turned on in a sufficiently sized unsigned two's compliment integer representation of <code>Num</code>.</td></tr>
+<tr><td valign="top"><a href="#count_bits-1">count_bits/1</a></td><td><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Counts the number of bits turned on in a sufficiently sized unsigned two's compliment integer representation of <code>Num</code>.</td></tr>
 <tr><td valign="top"><a href="#count_of-2">count_of/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Counts the number of instances of Item in List.</td></tr>
 <tr><td valign="top"><a href="#counter_at-1">counter_at/1</a></td><td>Checks a counter's value; if the counter was not already defined, it will report zero.</td></tr>
 <tr><td valign="top"><a href="#country_codes-0">country_codes/0</a></td><td></td></tr>
@@ -305,6 +330,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#first_difference-1">first_difference/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#first_pos-2">first_pos/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns false if none pass.</td></tr>
 <tr><td valign="top"><a href="#first_pos-3">first_pos/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns a default value if none is found.</td></tr>
+<tr><td valign="top"><a href="#first_row-1">first_row/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#fk_readability-4">fk_readability/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a block of text.</td></tr>
 <tr><td valign="top"><a href="#flag_sets-1">flag_sets/1</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
 <tr><td valign="top"><a href="#floor-1">floor/1</a></td><td>1&gt; sc:floor(0.5).</td></tr>
@@ -319,7 +345,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#halstead_complexity-4">halstead_complexity/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#halstead_complexity-5">halstead_complexity/5</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#harmonic_mean-1">harmonic_mean/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the harmonic mean of a list of numbers.</td></tr>
-<tr><td valign="top"><a href="#has_bit-2">has_bit/2</a></td><td>Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of <code>Num</code>.</td></tr>
+<tr><td valign="top"><a href="#has_bit-2">has_bit/2</a></td><td><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of <code>Num</code>.</td></tr>
 <tr><td valign="top"><a href="#hex_to_int-1">hex_to_int/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a hexstring() or hexchar() into its numeric value.</td></tr>
 <tr><td valign="top"><a href="#histograph-1">histograph/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes a histograph count of the items in the list.</td></tr>
 <tr><td valign="top"><a href="#hmac-3">hmac/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Shorthands for algorithms so you don't need to know block sizes.</td></tr>
@@ -339,6 +365,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#io_list_to_hex_string-1">io_list_to_hex_string/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert an io_list() to a hexstring().</td></tr>
 <tr><td valign="top"><a href="#is_between-3">is_between/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#is_between-4">is_between/4</a></td><td></td></tr>
+<tr><td valign="top"><a href="#is_numeric_char-1">is_numeric_char/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#is_numeric_char-2">is_numeric_char/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#is_numeric_string-1">is_numeric_string/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#is_numeric_string-2">is_numeric_string/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#is_postfix-2">is_postfix/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -394,6 +422,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#moments-1">moments/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#moments-2">moments/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#months_as_short_atoms-0">months_as_short_atoms/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#multi_deck-2">multi_deck/2</a></td><td><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Makes a number of instances of a deck, and applies a different back to each.</td></tr>
 <tr><td valign="top"><a href="#multi_do-3">multi_do/3</a></td><td>Equivalent to <a href="#multi_do-4"><tt>multi_do(C, M, F, [])</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#multi_do-4">multi_do/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take an iteration count, a module name, a function name and an argument list, and repeatedly apply the argument list to the module/function, count times.</td></tr>
@@ -403,6 +432,9 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#neighbors-2">neighbors/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ngrams-1">ngrams/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ngrams-2">ngrams/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#notebook_create-1">notebook_create/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#notebook_destroy-1">notebook_destroy/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#now_str_utc24-0">now_str_utc24/0</a></td><td></td></tr>
 <tr><td valign="top"><a href="#nth_difference-2">nth_difference/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#null_postpad_bin_to-2">null_postpad_bin_to/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#nybble_to_hex-1">nybble_to_hex/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a nybble() to a hexchar().</td></tr>
@@ -423,7 +455,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#power_set-1">power_set/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#probability_all-1">probability_all/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the likelihood that all items in a list of probabilities expressed on the real interval will occur.</td></tr>
 <tr><td valign="top"><a href="#probability_any-1">probability_any/1</a></td><td><span style="color:red;font-style:italic">Incomplete Todo Comeback</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
-<tr><td valign="top"><a href="#qsp_average-2">qsp_average/2</a></td><td><a href="#Math">Math</a> Takes the quadratic scalar product average of a vector <code>W</code> and a list of vectors <code>X</code>.</td></tr>
+<tr><td valign="top"><a href="#qsp_average-2">qsp_average/2</a></td><td><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the quadratic scalar product average of a vector <code>W</code> and a list of vectors <code>X</code>.</td></tr>
 <tr><td valign="top"><a href="#rand-1">rand/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a pseudorandom integer on the range <code>[0 - (Range-1)]</code> inclusive.</td></tr>
 <tr><td valign="top"><a href="#random_from-1">random_from/1</a></td><td>Equivalent to <a href="#from-3"><tt>from(1, List, no_remainder)</tt></a>.
 </td></tr>
@@ -467,8 +499,8 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#square-1">square/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Squares the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions.</td></tr>
 <tr><td valign="top"><a href="#srand-0">srand/0</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.</td></tr>
 <tr><td valign="top"><a href="#srand-3">srand/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.</td></tr>
-<tr><td valign="top"><a href="#standard_card_backs-0">standard_card_backs/0</a></td><td>Returns the list of colors which are used, in order, as the standard back colors of a series of decks for <a href="#multi_deck-2"><code>multi_deck/2</code></a>.</td></tr>
-<tr><td valign="top"><a href="#standard_card_backs-1">standard_card_backs/1</a></td><td>Returns the front of the list of colors which are used, in order, as the standard back colors of a series of decks for <a href="#multi_deck-2"><code>multi_deck/2</code></a>.</td></tr>
+<tr><td valign="top"><a href="#standard_card_backs-0">standard_card_backs/0</a></td><td><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the list of colors which are used, in order, as the standard back colors of a series of decks for <a href="#multi_deck-2"><code>multi_deck/2</code></a>.</td></tr>
+<tr><td valign="top"><a href="#standard_card_backs-1">standard_card_backs/1</a></td><td><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the front of the list of colors which are used, in order, as the standard back colors of a series of decks for <a href="#multi_deck-2"><code>multi_deck/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#start_register_if_not_running-2">start_register_if_not_running/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
 <tr><td valign="top"><a href="#start_register_if_not_running-3">start_register_if_not_running/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
 <tr><td valign="top"><a href="#start_register_if_not_running-4">start_register_if_not_running/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
@@ -482,6 +514,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#third_difference-1">third_difference/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#tied_ordered_ranking-1">tied_ordered_ranking/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a tied ranked ordering of the list, ordered according to the input ordering rather than the sorted ordering.</td></tr>
 <tr><td valign="top"><a href="#tied_ranking-1">tied_ranking/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a ranked ordering of the list with tie rankings.</td></tr>
+<tr><td valign="top"><a href="#time_diff-2">time_diff/2</a></td><td>Returns the difference, in seconds as a float, between two erlang timestamps as returned by <code>erlang:now()</code>.</td></tr>
 <tr><td valign="top"><a href="#to_lines-1">to_lines/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Cuts a string according to any of the three newline conventions (even mixed), and discards empty strings.</td></tr>
 <tr><td valign="top"><a href="#to_list-1">to_list/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#triangle_index-1">triangle_index/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -499,7 +532,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#unit_scale-1">unit_scale/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#vector_magnitude-1">vector_magnitude/1</a></td><td>Equivalent to <a href="#root_sum_square-1"><tt>root_sum_square(VX)</tt></a>.
 </td></tr>
-<tr><td valign="top"><a href="#vector_normalize-1">vector_normalize/1</a></td><td>Returns the magnitude of a vector.</td></tr>
+<tr><td valign="top"><a href="#vector_normalize-1">vector_normalize/1</a></td><td><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the magnitude of a vector.</td></tr>
 <tr><td valign="top"><a href="#walk_unique_pairings-2">walk_unique_pairings/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
 <tr><td valign="top"><a href="#weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the weighted arithmetic mean of the input values.</td></tr>
 <tr><td valign="top"><a href="#zip_n-1">zip_n/1</a></td><td>Equivalent to <a href="#zip_n-2"><tt>zip_n(Ls, to_tuple)</tt></a>.
@@ -636,6 +669,23 @@ and returns the tuple of the remainder and then a list of all results from the f
  </p>
 <p><b>Introduced in:</b> Version 478
  </p>
+
+<h3 class="function"><a name="benchmark-1">benchmark/1</a></h3>
+<div class="spec">
+<p><tt>benchmark(BareLambda) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 743</p>
+
+<h3 class="function"><a name="benchmark-2">benchmark/2</a></h3>
+<div class="spec">
+<p><tt>benchmark(Fun, Args) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 743</p>
+
+<h3 class="function"><a name="benchmark-3">benchmark/3</a></h3>
+<div class="spec">
+<p><tt>benchmark(Module, Func, Args) -&gt; any()</tt></p>
+</div>
 
 <h3 class="function"><a name="bin_to_hex_list-1">bin_to_hex_list/1</a></h3>
 <div class="spec">
@@ -780,6 +830,37 @@ and returns the tuple of the remainder and then a list of all results from the f
 <p><tt>circles_overlap(X1, X2) -&gt; any()</tt></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></p>
 
+<h3 class="function"><a name="columnate-1">columnate/1</a></h3>
+<div class="spec">
+<p><tt>columnate(List) -&gt; any()</tt></p>
+</div><p>Equivalent to <a href="#columnate-3"><tt>columnate(List, 2, 3)</tt></a>.</p>
+
+<p><b>Introduced in:</b> Version 734</p>
+
+<h3 class="function"><a name="columnate-2">columnate/2</a></h3>
+<div class="spec">
+<p><tt>columnate(List, Options) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 734</p>
+
+<h3 class="function"><a name="columnated_rows-2">columnated_rows/2</a></h3>
+<div class="spec">
+<p><tt>columnated_rows(ColumnCount, List) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 731</p>
+
+<h3 class="function"><a name="columnated_text-2">columnated_text/2</a></h3>
+<div class="spec">
+<p><tt>columnated_text(List, Options) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 735</p>
+
+<h3 class="function"><a name="columns-2">columns/2</a></h3>
+<div class="spec">
+<p><tt>columns(RowCount, List) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 730</p>
+
 <h3 class="function"><a name="combinations-2">combinations/2</a></h3>
 <div class="spec">
 <p><tt>combinations(OutputItemSize::<a href="#type-positive_integer">positive_integer()</a>, Items::list()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt></p>
@@ -802,7 +883,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="count_bits-1">count_bits/1</a></h3>
 <div class="spec">
 <p><tt>count_bits(Number::<a href="#type-non_negative_integer">non_negative_integer()</a>) -&gt; <a href="#type-non_negative_integer">non_negative_integer()</a></tt></p>
-</div><p>Counts the number of bits turned on in a sufficiently sized unsigned two's compliment integer representation of <code>Num</code>.  <pre>  1&gt; sc:count_bits(5).
+</div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Counts the number of bits turned on in a sufficiently sized unsigned two's compliment integer representation of <code>Num</code>.  <pre>  1&gt; sc:count_bits(5).
   2</pre></p>
 <p><b>Introduced in:</b> Version 727</p>
 
@@ -1195,6 +1276,12 @@ and returns the tuple of the remainder and then a list of all results from the f
 <p><tt>first_pos(List, Predicate, Default) -&gt; any()</tt></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns a default value if none is found.  See <a href="#first_pos-2"><code>first_pos/2</code></a> for details.</p>
 
+<h3 class="function"><a name="first_row-1">first_row/1</a></h3>
+<div class="spec">
+<p><tt>first_row(Columns) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 733</p>
+
 <h3 class="function"><a name="fk_readability-4">fk_readability/4</a></h3>
 <div class="spec">
 <p><tt>fk_readability(Data, WordCounter, SentenceCounter, SyllableCounter) -&gt; any()</tt></p>
@@ -1364,7 +1451,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="has_bit-2">has_bit/2</a></h3>
 <div class="spec">
 <p><tt>has_bit(Number::<a href="#type-non_negative_integer">non_negative_integer()</a>, Bit::<a href="#type-non_negative_integer">non_negative_integer()</a>) -&gt; true | false</tt></p>
-</div><p>Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of <code>Num</code>.  <pre>  1&gt; sc:has_bit(5,0).
+</div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of <code>Num</code>.  <pre>  1&gt; sc:has_bit(5,0).
   true
  
   2&gt; scutil:has_bit(5,1).
@@ -1585,6 +1672,17 @@ and returns the tuple of the remainder and then a list of all results from the f
 <p><tt>is_between(X, A, B, X4) -&gt; any()</tt></p>
 </div>
 <p><b>Introduced in:</b> Version 685</p>
+
+<h3 class="function"><a name="is_numeric_char-1">is_numeric_char/1</a></h3>
+<div class="spec">
+<p><tt>is_numeric_char(Ch) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 737</p>
+
+<h3 class="function"><a name="is_numeric_char-2">is_numeric_char/2</a></h3>
+<div class="spec">
+<p><tt>is_numeric_char(Ch, X2) -&gt; any()</tt></p>
+</div>
 
 <h3 class="function"><a name="is_numeric_string-1">is_numeric_string/1</a></h3>
 <div class="spec">
@@ -2102,6 +2200,12 @@ and returns the tuple of the remainder and then a list of all results from the f
 </div>
 <p><b>Introduced in:</b> Version 665</p>
 
+<h3 class="function"><a name="multi_deck-2">multi_deck/2</a></h3>
+<div class="spec">
+<p><tt>multi_deck(Backs::<a href="#type-positive_integer_or_list">positive_integer_or_list()</a>, DeckGenerator::<a href="#type-function_or_list">function_or_list()</a>) -&gt; list()</tt></p>
+</div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Makes a number of instances of a deck, and applies a different back to each.  The first parameter may be a <code><a href="#type-positive_integer">positive_integer()</a></code>, at which point the color sequence from <a href="#standard_backs-0"><code>standard_backs/0</code></a> will be used; otherwise, a list may be used, which will be used as the card backs (there is no requirement regarding their type or uniqueness, only that they be presented as a list.)  The second parameter may be a <code>function()</code>, which will be called to generate a list of cards, or a <code>list</code> of cards which will be used directly.</p>
+<p><b>Introduced in:</b> Version 729</p>
+
 <h3 class="function"><a name="multi_do-3">multi_do/3</a></h3>
 <div class="spec">
 <p><tt>multi_do(C, Module, Func) -&gt; any()</tt></p>
@@ -2152,6 +2256,24 @@ and returns the tuple of the remainder and then a list of all results from the f
 <p><tt>ngrams(List, X2) -&gt; any()</tt></p>
 </div>
 <p><b>Introduced in:</b> Version 652</p>
+
+<h3 class="function"><a name="notebook_create-1">notebook_create/1</a></h3>
+<div class="spec">
+<p><tt>notebook_create(NotebookName) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 747</p>
+
+<h3 class="function"><a name="notebook_destroy-1">notebook_destroy/1</a></h3>
+<div class="spec">
+<p><tt>notebook_destroy(NotebookName) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 748</p>
+
+<h3 class="function"><a name="now_str_utc24-0">now_str_utc24/0</a></h3>
+<div class="spec">
+<p><tt>now_str_utc24() -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 744</p>
 
 <h3 class="function"><a name="nth_difference-2">nth_difference/2</a></h3>
 <div class="spec">
@@ -2333,7 +2455,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="qsp_average-2">qsp_average/2</a></h3>
 <div class="spec">
 <p><tt>qsp_average(W::<a href="#type-numericlist">numericlist()</a>, InputVecs::<a href="#type-vectorlist">vectorlist()</a>) -&gt; float()</tt></p>
-</div><p><a href="#Math">Math</a> Takes the quadratic scalar product average of a vector <code>W</code> and a list of vectors <code>X</code>.  The QSP Average
+</div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the quadratic scalar product average of a vector <code>W</code> and a list of vectors <code>X</code>.  The QSP Average
   is the arithmetic mean of the result set Y, where Y is generated as the square of the magnitude of the dot product
   of W and each individual vector in X. @see http://www.inf.fu-berlin.de/inst/ag-ki/rojas_home/documents/1996/NeuralNetworks/K5.pdf
   pdf-page 15.  <pre>  1&gt; sc:qsp_average([1,2,3], [[0,0,0],[0,0,0]]).
@@ -2831,7 +2953,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="standard_card_backs-0">standard_card_backs/0</a></h3>
 <div class="spec">
 <p><tt>standard_card_backs() -&gt; list()</tt></p>
-</div><p>Returns the list of colors which are used, in order, as the standard back colors of a series of decks for <a href="#multi_deck-2"><code>multi_deck/2</code></a>.  Each color is presented as an atom.  <pre>  1&gt; sc:standard_card_backs().
+</div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the list of colors which are used, in order, as the standard back colors of a series of decks for <a href="#multi_deck-2"><code>multi_deck/2</code></a>.  Each color is presented as an atom.  <pre>  1&gt; sc:standard_card_backs().
   [ red, blue, green, black, purple, orange, brown, yellow,
     teal, gray, cyan, indigo, pink, white, tan, maroon,
     navy, forest, leaf, sky, brick ]
@@ -2843,7 +2965,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="standard_card_backs-1">standard_card_backs/1</a></h3>
 <div class="spec">
 <p><tt>standard_card_backs(Count::<a href="#type-positive_integer">positive_integer()</a>) -&gt; list()</tt></p>
-</div><p>Returns the front of the list of colors which are used, in order, as the standard back colors of a series of decks for <a href="#multi_deck-2"><code>multi_deck/2</code></a>.  Each color is presented as an atom.  If you request more colors than are in the list, the list <code>[1,2...Count]</code> is provided instead.  <pre>  1&gt; sc:standard_card_backs(5).
+</div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the front of the list of colors which are used, in order, as the standard back colors of a series of decks for <a href="#multi_deck-2"><code>multi_deck/2</code></a>.  Each color is presented as an atom.  If you request more colors than are in the list, the list <code>[1,2...Count]</code> is provided instead.  <pre>  1&gt; sc:standard_card_backs(5).
   [ red, blue, green, black, purple ]
  
   2&gt; sc:standard_card_backs(29).
@@ -3031,6 +3153,22 @@ and returns the tuple of the remainder and then a list of all results from the f
  </p>
 <p><b>Introduced in:</b> Version 561</p>
 
+<h3 class="function"><a name="time_diff-2">time_diff/2</a></h3>
+<div class="spec">
+<p><tt>time_diff(A::<a href="#type-timestamp">timestamp()</a>, B::<a href="#type-timestamp">timestamp()</a>) -&gt; float()</tt></p>
+</div><p>Returns the difference, in seconds as a float, between two erlang timestamps as returned by <code>erlang:now()</code>.  Negative differences are returned if the latter timestamp <code>B</code> is earlier than the former timestamp <code>A</code>.  <pre>  1&gt; A = now().
+  {1232,947675,340000}
+ 
+  2&gt; B = now().
+  {1232,947679,412000}
+ 
+  3&gt; sc:time_diff(A,B).
+  4.072
+ 
+  4&gt; sc:time_diff(B,A).
+  -4.072</pre></p>
+<p><b>Introduced in:</b> Version 742</p>
+
 <h3 class="function"><a name="to_lines-1">to_lines/1</a></h3>
 <div class="spec">
 <p><tt>to_lines(Text::string()) -&gt; <a href="#type-stringlist">stringlist()</a></tt></p>
@@ -3161,7 +3299,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="vector_normalize-1">vector_normalize/1</a></h3>
 <div class="spec">
 <p><tt>vector_normalize(Vector::<a href="#type-vector">vector()</a>) -&gt; <a href="#type-unit_vector">unit_vector()</a></tt></p>
-</div><p>Returns the magnitude of a vector.  A vector's magnitude is the length of its hypoteneuse.  A vector can be seen as the product of its unit vector and its magnitude; as such many people see a vector's magnitude as its scale.  The normal of the zero vector is undefined, in the way that dividing by zero is undefined, and will throw an arithmetic exception. <pre>  1&gt; sc:vector_normalize([0,3,4]).
+</div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the magnitude of a vector.  A vector's magnitude is the length of its hypoteneuse.  A vector can be seen as the product of its unit vector and its magnitude; as such many people see a vector's magnitude as its scale.  The normal of the zero vector is undefined, in the way that dividing by zero is undefined, and will throw an arithmetic exception. <pre>  1&gt; sc:vector_normalize([0,3,4]).
   [0.0,0.6,0.8]</pre><span style="color:red">TODO: When tuple comprehensions are introduced to the language, convert this to using them.</span></p>
 <p><b>Introduced in:</b> Version 725</p>
 
@@ -3262,6 +3400,6 @@ and returns the tuple of the remainder and then a list of all results from the f
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Oct 29 2011, 19:23:28.</i></p>
+<p><i>Generated by EDoc, Nov 3 2011, 18:47:10.</i></p>
 </body>
 </html>
