@@ -175,9 +175,6 @@
     count_bits/1,
     now_str_utc24/0,
 
-    open_notebook_table/1,
-      close_notebook_table/1,
-
     time_diff/2,
 
     benchmark/1,
@@ -8966,11 +8963,12 @@ now_str_utc24() ->
 %% @since Version 745
 %% @private
 
-open_notebook_table(TableName)
+private_open_notebook_table(TableName)
 
     when is_list(TableName) ->
 
-    dets:open_file(TableName, [{type, set}] ).
+    { ok, TableName } = dets:open_file(TableName, [{type, set}] ),
+    { sc_notebook_handle, TableName }.
 
 
 
@@ -8979,7 +8977,7 @@ open_notebook_table(TableName)
 %% @since Version 745
 %% @private
 
-close_notebook_table(TableName)
+private_close_notebook_table( { sc_notebook_handle, TableName } )
 
     when is_list(TableName) ->
 
