@@ -175,7 +175,8 @@
     count_bits/1,
     now_str_utc24/0,
 
-    notebook_create/1,
+    notebook_validate/1,
+      notebook_create/1,
       notebook_destroy/1,
 
     time_diff/2,
@@ -9018,3 +9019,22 @@ notebook_destroy(NotebookName)
     when is_list(NotebookName) ->
 
     file:delete(private_notebook_name_to_table_name(NotebookName)).
+
+
+
+
+
+%% @since Version 749
+
+% This could be - will be - much stronger.
+
+notebook_validate(NotebookName)
+
+    when is_list(NotebookName) ->
+
+    case dets:is_dets_file(private_notebook_name_to_table_name(NotebookName)) of
+
+        { error, _ } -> false;
+        _            -> { sc_notebook, [ todo, details ]}
+
+    end.
