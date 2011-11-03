@@ -101,6 +101,10 @@
 %%
 %% @end
 
+
+
+
+
 -module(sc).
 
 
@@ -170,6 +174,9 @@
     has_bit/2,
     count_bits/1,
     now_str_utc24/0,
+
+    open_notebook_table/1,
+      close_notebook_table/1,
 
     time_diff/2,
 
@@ -8951,3 +8958,29 @@ now_str_utc24() ->
     [Ys, Ms, Ds, Hs, MMs, Ss] = [ integer_to_list(X) || X <- [ Y, M, D, H, MM, S ] ],
 
     Ys++"/"++Ms++"/"++Ds++" "++Hs++":"++MMs++":"++Ss++" UTC24".
+
+
+
+
+
+%% @since Version 745
+%% @private
+
+open_notebook_table(TableName)
+
+    when is_list(TableName) ->
+
+    dets:open_file(TableName, [{type, set}] ).
+
+
+
+
+
+%% @since Version 745
+%% @private
+
+close_notebook_table(TableName)
+
+    when is_list(TableName) ->
+
+    dets:close(TableName).
