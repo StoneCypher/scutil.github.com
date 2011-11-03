@@ -175,6 +175,8 @@
     count_bits/1,
     now_str_utc24/0,
 
+    notebook_create/1,
+
     time_diff/2,
 
     benchmark/1,
@@ -8967,8 +8969,9 @@ private_open_notebook_table(TableName)
 
     when is_list(TableName) ->
 
-    { ok, TableName } = dets:open_file(TableName, [{type, set}] ),
-    { sc_notebook_handle, TableName }.
+    filelib:ensure_dir("sc_notebooks/"),
+    { ok, ResultTableName } = dets:open_file("sc_notebooks/" ++ TableName ++ ".dets", [{type, set}] ),
+    { sc_notebook_handle, ResultTableName }.
 
 
 
@@ -8982,3 +8985,15 @@ private_close_notebook_table( { sc_notebook_handle, TableName } )
     when is_list(TableName) ->
 
     dets:close(TableName).
+
+
+
+
+
+%% @since Version 747
+
+notebook_create(NotebookName)
+
+    when is_list(NotebookName) ->
+
+    private_close_notebook_table(private_open_notebook_table(NotebookName)).
