@@ -179,6 +179,8 @@
       notebook_create/1,
       notebook_destroy/1,
       notebook_write/3,
+      notebook_read/2,
+      notebook_contains/2,
 
     time_diff/2,
 
@@ -8965,6 +8967,9 @@ now_str_utc24() ->
 
 
 
+%% @since Version 748
+%% @private
+
 private_notebook_name_to_table_name(NotebookName) ->
 
     "sc_notebooks/" ++ NotebookName ++ ".dets".
@@ -9009,6 +9014,27 @@ private_write_to_notebook_table( { sc_notebook_handle, TableName }, Key, Value )
     when is_list(TableName) ->
 
     dets:insert(TableName, {Key, Value}).
+
+
+
+
+
+%% @since Version 751
+%% @private
+
+private_read_from_notebook_table( { sc_notebook_handle, TableName }, Key )
+
+    when is_list(TableName) ->
+
+    case dets:match(TableName, {Key, '$1'}) of
+
+        []  ->
+            undefined;
+
+        [[X]] ->
+            { value, X }
+
+    end.
 
 
 
@@ -9066,3 +9092,36 @@ notebook_write(NotebookName, Key, Value)
     NT = private_open_notebook_table(NotebookName),
          private_write_to_notebook_table(NT, Key, Value),
          private_close_notebook_table(NT).
+
+
+
+
+
+%% @since Version 751
+
+notebook_read(NotebookName, Key)
+
+    when is_list(NotebookName) ->
+
+    NT  = private_open_notebook_table(NotebookName),
+    Res = private_read_from_notebook_table(NT, Key),
+    private_close_notebook_table(NT),
+
+    Res.
+
+
+
+
+
+%% @since Version 752
+
+notebook_contains(NotebookName, Key)
+
+    when is_list(NotebookName) ->
+
+    case notebook_read(NotebookName, Key) of
+
+        undefined    -> false;
+        { value, _ } -> true
+
+    end.
