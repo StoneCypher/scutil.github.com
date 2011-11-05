@@ -181,6 +181,7 @@
       notebook_write/3,
       notebook_read/2,
       notebook_contains/2,
+      notebook_remove/2,
 
     time_diff/2,
 
@@ -9040,6 +9041,19 @@ private_read_from_notebook_table( { sc_notebook_handle, TableName }, Key )
 
 
 
+%% @since Version 753
+%% @private
+
+private_remove_from_notebook_table( { sc_notebook_handle, TableName }, Key )
+
+    when is_list(TableName) ->
+
+    dets:delete(TableName, Key).
+
+
+
+
+
 %% @since Version 747
 
 notebook_create(NotebookName)
@@ -9125,3 +9139,35 @@ notebook_contains(NotebookName, Key)
         { value, _ } -> true
 
     end.
+
+
+
+
+
+%% @since Version 753
+
+%% @doc Removes an item from a notebook.  ```1> sc:notebook_write("Test", "test", "test").
+%% ok
+%%
+%% 2> sc:notebook_read("Test", "test").
+%% {value,"test"}
+%%
+%% 3> sc:notebook_remove("Test", "test").
+%% ok
+%%
+%% 4> sc:notebook_read("Test", "test").
+%% undefined
+%%
+%% 5> sc:notebook_read("Not an existing notebook", "test").  
+%% ok'''
+
+
+notebook_remove(NotebookName, Key)
+
+    when is_list(NotebookName) ->
+
+    NT  = private_open_notebook_table(NotebookName),
+    Res = private_remove_from_notebook_table(NT, Key),
+    private_close_notebook_table(NT),
+
+    Res.
