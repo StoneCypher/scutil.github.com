@@ -206,7 +206,7 @@
 
     multi_deck/2,
 
-    calc_fk_readability/3,
+    fk_readability/3,
       labelled_fk_readability/1,
       fk_readability/4,
 
@@ -8329,9 +8329,9 @@ to_lines(Text) ->
 
 %% @since Version 706
 
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a set of text metrics.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a set of text metrics.  See <a href="http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test">Wikipedia</a> and <a href="http://www.readabilityformulas.com/graphics/fleschresults.gif">readabilityformulas.com</a>.
 
-calc_fk_readability(Words, Sentences, Syllables) ->
+fk_readability(Words, Sentences, Syllables) ->
 
     206.835 - (1.015 * (Words/Sentences)) - (84.6 * (Syllables/Words)).
 
@@ -8369,7 +8369,7 @@ fk_readability(Data, WordCounter, SentenceCounter, SyllableCounter) ->
     Syllables = SyllableCounter(Data),
 
     labelled_fk_readability(
-      calc_fk_readability(Words, Sentences, Syllables)
+      fk_readability(Words, Sentences, Syllables)
     ).
 
 
@@ -9146,7 +9146,7 @@ notebook_contains(NotebookName, Key)
 
 %% @since Version 753
 
-%% @doc Removes an item from a notebook.  ```1> sc:notebook_write("Test", "test", "test").
+%% @doc Removes an item from a notebook.  Like most other notebook functions, if the referred notebook does not already exist, it will be created.  {@link notebook_write/3} for details.  ```1> sc:notebook_write("Test", "test", "test").
 %% ok
 %%
 %% 2> sc:notebook_read("Test", "test").
@@ -9158,7 +9158,7 @@ notebook_contains(NotebookName, Key)
 %% 4> sc:notebook_read("Test", "test").
 %% undefined
 %%
-%% 5> sc:notebook_read("Not an existing notebook", "test").  
+%% 5> sc:notebook_read("Not an existing notebook", "test").
 %% ok'''
 
 
@@ -9171,3 +9171,4 @@ notebook_remove(NotebookName, Key)
     private_close_notebook_table(NT),
 
     Res.
+    

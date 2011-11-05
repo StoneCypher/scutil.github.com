@@ -272,7 +272,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#by_distance-2">by_distance/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#by_distance_raw-2">by_distance_raw/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#byte_to_hex-1">byte_to_hex/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a byte() into a hexstring().</td></tr>
-<tr><td valign="top"><a href="#calc_fk_readability-3">calc_fk_readability/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a set of text metrics.</td></tr>
 <tr><td valign="top"><a href="#caspers_jones_estimate-1">caspers_jones_estimate/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#ceil-1">ceil/1</a></td><td>Equivalent to <a href="#ceiling-1"><tt>ceiling(X)</tt></a>.
 </td></tr>
@@ -331,6 +330,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#first_pos-2">first_pos/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns false if none pass.</td></tr>
 <tr><td valign="top"><a href="#first_pos-3">first_pos/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Finds the 1-offset index of the first item in the list which passes the given predicate, or returns a default value if none is found.</td></tr>
 <tr><td valign="top"><a href="#first_row-1">first_row/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#fk_readability-3">fk_readability/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a set of text metrics.</td></tr>
 <tr><td valign="top"><a href="#fk_readability-4">fk_readability/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a block of text.</td></tr>
 <tr><td valign="top"><a href="#flag_sets-1">flag_sets/1</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
 <tr><td valign="top"><a href="#floor-1">floor/1</a></td><td>1&gt; sc:floor(0.5).</td></tr>
@@ -723,12 +723,6 @@ and returns the tuple of the remainder and then a list of all results from the f
   "ff"</pre>
  </p>
 <p><b>Introduced in:</b> Version 571</p>
-
-<h3 class="function"><a name="calc_fk_readability-3">calc_fk_readability/3</a></h3>
-<div class="spec">
-<p><tt>calc_fk_readability(Words, Sentences, Syllables) -&gt; any()</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a set of text metrics.  @see http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test and http://www.readabilityformulas.com/graphics/fleschresults.gif .</p>
-<p><b>Introduced in:</b> Version 706</p>
 
 <h3 class="function"><a name="caspers_jones_estimate-1">caspers_jones_estimate/1</a></h3>
 <div class="spec">
@@ -1286,6 +1280,12 @@ and returns the tuple of the remainder and then a list of all results from the f
 <p><tt>first_row(Columns) -&gt; any()</tt></p>
 </div>
 <p><b>Introduced in:</b> Version 733</p>
+
+<h3 class="function"><a name="fk_readability-3">fk_readability/3</a></h3>
+<div class="spec">
+<p><tt>fk_readability(Words, Sentences, Syllables) -&gt; any()</tt></p>
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a set of text metrics.  See <a href="http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test">Wikipedia</a> and <a href="http://www.readabilityformulas.com/graphics/fleschresults.gif">readabilityformulas.com</a>.</p>
+<p><b>Introduced in:</b> Version 706</p>
 
 <h3 class="function"><a name="fk_readability-4">fk_readability/4</a></h3>
 <div class="spec">
@@ -2289,7 +2289,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="notebook_remove-2">notebook_remove/2</a></h3>
 <div class="spec">
 <p><tt>notebook_remove(NotebookName, Key) -&gt; any()</tt></p>
-</div><p>Removes an item from a notebook.  <pre>  1&gt; sc:notebook_write("Test", "test", "test").
+</div><p>Removes an item from a notebook.  Like most other notebook functions, if the referred notebook does not already exist, it will be created.  <a href="#notebook_write-3"><code>notebook_write/3</code></a> for details.  <pre>  1&gt; sc:notebook_write("Test", "test", "test").
   ok
  
   2&gt; sc:notebook_read("Test", "test").
@@ -3448,6 +3448,6 @@ and returns the tuple of the remainder and then a list of all results from the f
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Nov 5 2011, 13:56:06.</i></p>
+<p><i>Generated by EDoc, Nov 5 2011, 14:12:44.</i></p>
 </body>
 </html>
