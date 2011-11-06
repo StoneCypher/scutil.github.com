@@ -5,10 +5,7 @@ next=`expr $ver + 1`
 `echo $next > version.counter`
 gver=$majorver.$minorver.$next
 
-blue='\e[1;34m'
-gray='\e[0m'
-
-echo "${blue}Updating $majorver.$minorver.$ver to $next (git $gver)$gray"
+echo "Updating $majorver.$minorver.$ver to $next (git $gver)"
 
 `git tag -a $gver -m 'Version $gver'`
 echo Created `git describe --tags --long`

@@ -182,6 +182,8 @@
       notebook_read/2,
       notebook_contains/2,
       notebook_remove/2,
+      notebook_contents_incl_deleted/1,
+%      notebook_contents/1,
 
     time_diff/2,
 
@@ -9054,6 +9056,19 @@ private_remove_from_notebook_table( { sc_notebook_handle, TableName }, Key )
 
 
 
+%% @since Version 757
+%% @private
+
+private_get_contents_from_notebook_table( { sc_notebook_handle, TableName } )
+
+    when is_list(TableName) ->
+
+    [ I || [{I,_}] <- dets:match(TableName, '$1') ].
+
+
+
+
+
 %% @since Version 747
 
 notebook_create(NotebookName)
@@ -9171,4 +9186,19 @@ notebook_remove(NotebookName, Key)
     private_close_notebook_table(NT),
 
     Res.
-    
+
+
+
+
+
+%% @since Version 757
+
+notebook_contents_incl_deleted(NotebookName)
+
+    when is_list(NotebookName) ->
+
+    NT  = private_open_notebook_table(NotebookName),
+    Res = private_get_contents_from_notebook_table(NT),
+    private_close_notebook_table(NT),
+
+    Res.
