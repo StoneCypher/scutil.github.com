@@ -70,7 +70,7 @@
 %%
 %% ScUtil is free.  However, I'd like to know where it's ended up.  Therefore, please consider mail to stonecypher@gmail.com with text saying where this went a form of "registration."  This is not required.
 %%
-%% == Thanks ==
+%% <h2>Thanks</h2>
 %% <p>ScUtil has profited significantly from the donations of time, understanding and code given by a variety of generous friends and strangers.  The list of small tweaks would
 %%    be prohibitive, but significant influence on this library is due the following people, in alphabetical order (the least fair of all generic orderings):</p>
 %%
@@ -84,10 +84,12 @@
 %%   <li>Dave Murphy / <a href="http://devkitpro.org/" target="_blank">WinterMute</a></li>
 %%   <li>DizzyD</li>
 %%   <li>Dylan Barrie / PhforSlayer</li>
+%%   <li>Essen</li>
 %%   <li>Geoff Cant / <a href="http://github.com/archaelus">Archaelus</a></li>
 %%   <li>GrizzlyAdams of <a href="http://grizzly.thewaffleiron.net/" target="_blank">The Waffle Iron</a></li>
 %%   <li>Jeff Katz / <a href="http://kraln.com/" target="_blank">Kraln</a></li>
 %%   <li>John Sensebe of <a href="http://bargaintuan.com/" target="_blank">Bargaintuan</a></li>
+%%   <li><a href="http://functional-orbitz.blogspot.com/" target="_blank">Orbitz</a></li>
 %%   <li>raleigh</li>
 %%   <li><a href="http://hem.bredband.net/richardc/">Richard Carlsson</a></li>
 %%   <li><a href="http://rvirding.blogspot.com/" target="_blank">Robert Virding</a></li>
@@ -174,6 +176,7 @@
     has_bit/2,
     count_bits/1,
     now_str_utc24/0,
+    ensure_started/1,
 
     notebook_validate/1,
       notebook_create/1,
@@ -182,8 +185,7 @@
       notebook_read/2,
       notebook_contains/2,
       notebook_remove/2,
-      notebook_contents_incl_deleted/1,
-%      notebook_contents/1,
+      notebook_contents/1,
 
     time_diff/2,
 
@@ -514,7 +516,7 @@
 
 gen_docs() ->
 
-    gen_docs("/projects/github/scutil.github.com/erl/src", "/projects/github/scutil.github.com/erl/doc").
+    gen_docs("/projects/github/scutil.github.com", "/projects/github/scutil.github.com/erl/doc").
 
 
 
@@ -523,15 +525,30 @@ gen_docs() ->
 %% @spec gen_docs(WhereIsSrc::string(), WhereToPutDocs::string()) -> ok|{'EXIT',any()}
 %%
 %% @doc (not testworthy) Generates library documentation from and to the specified paths `WhereIsSrc' and `WhereToPutDocs' respectively.  Do not use trailing slashes.  Windows paths are okay; remember to double your
-%% backslashes, as backslashes in strings need to be quoted.  ```1> sc:gen_docs("/projects/scutil/erl/src", "/projects/scutil/erl/src/docs").
+%% backslashes, as backslashes in strings need to be quoted.  ```1> sc:gen_docs("/projects/scutil", "/projects/scutil/erl/src/docs").
 %% ok'''
 %%
 %% @since 458
 
-gen_docs(WhereIsSrc, WhereToPutDocs) ->
+gen_docs(WhereIsBase, WhereToPutDocs) ->
+
+    WhereIsSrc     = WhereIsBase ++ "/erl/src",
+    {ok,CMaj}      = file:read_file(WhereIsBase ++ "/major.version"),
+    {ok,CMin}      = file:read_file(WhereIsBase ++ "/minor.version"),
+    {ok,CVer}      = file:read_file(WhereIsBase ++ "/version.counter"),
+    CurrentVersion = << CMaj/binary, <<".">>/binary, CMin/binary, <<".">>/binary, CVer/binary >>,
+
+    DocTargets = ["sc", "sc_eqc", "sc_tests"],
 
     filelib:ensure_dir(WhereToPutDocs),
-    edoc:files([WhereIsSrc++"/sc.erl", WhereIsSrc++"/sc_eqc.erl", WhereIsSrc++"/sc_tests.erl"], [{dir, WhereToPutDocs}, {new,true}]).
+    edoc:files([WhereIsSrc++"/"++DocFile++".erl" || DocFile <- DocTargets ], [{dir, WhereToPutDocs}, {new,true}]),
+
+    VerFix = fun(Tgt) ->
+      { ok, OldTextBin } = file:read_file(Tgt),
+      file:write_file(Tgt, binary:replace(OldTextBin, <<"<p><b>Version:</b> $Revision$</p>">>, << <<"<p><b>Version:</b> ">>/binary, CurrentVersion/binary, <<"</p>">>/binary >>))
+    end,
+
+    [ VerFix(WhereToPutDocs ++ "/" ++ Doc ++ ".html") || Doc <- DocTargets ].
 
 
 
@@ -3094,6 +3111,8 @@ is_unique_list(List) ->
 %%
 %% @since Version 514
 
+%% @todo ascending, descending, both forms
+
 is_sorted_list([]) ->
 
     true;
@@ -5504,7 +5523,7 @@ merge_settings(S1, S2)
     when is_list(S1),
          is_list(S2) ->
 
-    lists:key_merge(1, lists:ukeysort(1, S1), lists:ukeysort(1, S2)).
+    lists:ukeymerge(1, lists:ukeysort(1, S1), lists:ukeysort(1, S2) ).
 
 
 
@@ -9095,7 +9114,7 @@ notebook_destroy(NotebookName)
 
 %% @since Version 749
 
-% This could be - will be - much stronger.
+%% @todo This could be - will be - much stronger.
 
 notebook_validate(NotebookName)
 
@@ -9159,8 +9178,6 @@ notebook_contains(NotebookName, Key)
 
 
 
-%% @since Version 753
-
 %% @doc Removes an item from a notebook.  Like most other notebook functions, if the referred notebook does not already exist, it will be created.  {@link notebook_write/3} for details.  ```1> sc:notebook_write("Test", "test", "test").
 %% ok
 %%
@@ -9176,6 +9193,7 @@ notebook_contains(NotebookName, Key)
 %% 5> sc:notebook_read("Not an existing notebook", "test").
 %% ok'''
 
+%% @since Version 753
 
 notebook_remove(NotebookName, Key)
 
@@ -9193,7 +9211,7 @@ notebook_remove(NotebookName, Key)
 
 %% @since Version 757
 
-notebook_contents_incl_deleted(NotebookName)
+notebook_contents(NotebookName)
 
     when is_list(NotebookName) ->
 
@@ -9202,3 +9220,19 @@ notebook_contents_incl_deleted(NotebookName)
     private_close_notebook_table(NT),
 
     Res.
+
+
+
+
+
+%% @since Version 758
+
+ensure_started(App)
+
+    when is_atom(App) ->
+
+    case apply(App, start, []) of
+        ok                              -> ok;
+        {error, {already_started, App}} -> ok;
+        Other                           -> Other
+    end.
