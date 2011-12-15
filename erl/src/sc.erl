@@ -44,6 +44,8 @@
 
 %% @todo paranoid guards
 
+%% @todo http://tidier.softlab.ntua.gr:20000/tidier/getstarted
+
 %% @todo module attributes and documentation attributes for license name, license url
 %% @todo Every documentation example should be enforced as a unit test, to keep the docs up to date
 %% @todo Automate the version back into the docs
@@ -85,6 +87,7 @@
 %%   <li>DizzyD</li>
 %%   <li>Dylan Barrie / PhforSlayer</li>
 %%   <li>Essen</li>
+%%   <li><a href="ferd.ca">Fred Hebert</a> / <a href="learnyousomeerlang.com">MononcQc</a></li>
 %%   <li>Geoff Cant / <a href="http://github.com/archaelus">Archaelus</a></li>
 %%   <li>GrizzlyAdams of <a href="http://grizzly.thewaffleiron.net/" target="_blank">The Waffle Iron</a></li>
 %%   <li>Jeff Katz / <a href="http://kraln.com/" target="_blank">Kraln</a></li>
@@ -2640,11 +2643,17 @@ expected_value( [ UnweightedItem | Remainder], Sum, Range) ->
 %%
 %% 2> sc:absolute_difference(2,1).
 %% 1
+%%
 %% 3> sc:absolute_difference(1,2).
 %% 1
+%%
 %% 4> sc:absolute_difference(1,1).
 %% 0
-%% 5> sc:absolute_difference(100,35).
+%%
+%% 5> sc:absolute_difference(1,-1).
+%% 2
+%%
+%% 6> sc:absolute_difference(100,35).
 %% 65'''
 %%
 %% @since Version 504
