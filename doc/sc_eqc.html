@@ -1,0 +1,359 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Module sc_eqc</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module sc_eqc</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>Extended quickcheck generators.
+<p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
+
+<p><b>Version:</b> 2.5.757
+</p>
+<p><b>Introduced in:</b> September 14, 2007</p>
+<p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
+
+<h2><a name="description">Description</a></h2>Extended quickcheck generators.  Kept separate because I don't want to require eQC to compile scutil, and because eQC
+  conflicts eval/1,2 and shuffle/1.  The list of QuickCheck generators could use substantial extension, and, well, here it is.
+  These are essentially entirely used by <code>sc_tests.erl</code>.
+ 
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#misc_type-0">misc_type/0</a></td><td>Generator to produce randomly typed, randomly valued output.</td></tr>
+<tr><td valign="top"><a href="#non_neg_integer-0">non_neg_integer/0</a></td><td>Generator to produce non-negative integers, with otherwise identical behavior to <code>eqc_gen:int()</code>.</td></tr>
+<tr><td valign="top"><a href="#playing_card-0">playing_card/0</a></td><td>Equivalent to calling with the argument <code>with_jokers</code>.</td></tr>
+<tr><td valign="top"><a href="#playing_card-1">playing_card/1</a></td><td>Generates a random US-style playing card, with or without jokers depending on the argument passed.</td></tr>
+<tr><td valign="top"><a href="#pos_integer-0">pos_integer/0</a></td><td>Generator to produce positive integers, with otherwise identical behavior to <code>eqc_gen:int()</code>.</td></tr>
+<tr><td valign="top"><a href="#rand_elements-1">rand_elements/1</a></td><td>Produces a list of zero or more elements taken from <code>ElementList</code>, out of order, possibly repeating.</td></tr>
+<tr><td valign="top"><a href="#rgb_color-0">rgb_color/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#roygbiv-0">roygbiv/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#roygbp-0">roygbp/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#roygbpwb-0">roygbpwb/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#time12-0">time12/0</a></td><td>Produces a human-readable time as a 12-hour 4-tuple <code>{h:int(),m:int(),s:int(),am|pm}</code>.</td></tr>
+<tr><td valign="top"><a href="#time24-0">time24/0</a></td><td>Produces a human-readable time as a 24-hour 3-tuple <code>{h:int(),m:int(),s:int()}</code>.</td></tr>
+<tr><td valign="top"><a href="#unicode_codepoint-0">unicode_codepoint/0</a></td><td>This generates random unicode codepoints (eqc's <code>char()</code> generates <code>byte()</code>s, as legacy from before Erlang spoke unicode).</td></tr>
+<tr><td valign="top"><a href="#websafe_216-0">websafe_216/0</a></td><td></td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="misc_type-0">misc_type/0</a></h3>
+<div class="spec">
+<p><tt>misc_type() -&gt; any()</tt></p>
+</div><p>Generator to produce randomly typed, randomly valued output.  General approach found in http://www.trapexit.org/Recursive_Genereators#Generators_for_data_type .  <pre>  1&gt; eqc_gen:sample( sc_eqc:misc_type() ).
+  #Fun&lt;sc_eqc.5.6489470&gt;
+  {[#Fun&lt;sc_eqc.6.133772179&gt;,&lt;&lt;"&gt;\t)"&gt;&gt;,{[[],[509302,310720,81256]]}]}
+  &lt;&lt;93,0:4&gt;&gt;
+  [-5360596133,2358196763]
+  []
+  &lt;&lt;118,54:7&gt;&gt;
+  &lt;0.0.0&gt;
+  completely_different
+  &lt;&lt;228,119,200,34,153,132,47,49,216,164,84,59,169,108,54,77,187,13&gt;&gt;
+  #Fun&lt;sc_eqc.6.133772179&gt;
+  {[[[1.0,-2.111111111111111,0.6666666666666666,-1.1333333333333333,
+      -3.1666666666666665,-2.5714285714285716],
+     4.5,-4912435490,
+     &lt;&lt;8:5&gt;&gt;],
+    {},-3471414436,
+    &lt;&lt;65,0:2&gt;&gt;]}
+  ok
+ 
+  2&gt; eqc_gen:sample( sc_eqc:misc_type() ).
+  -3508369748
+  &lt;&lt;65,50,251,208,133,199,158,179,199,172,1&gt;&gt;
+  #Ref&lt;0.0.0.14034&gt;
+  #Fun&lt;sc_eqc.6.133772179&gt;
+  -2860100253
+  []
+  [{[{}]},249,silly_walks,"3#Ku"]
+  [[2.0,-1.6,0.5555555555555556,-1.75,-0.07692307692307693,
+    -0.13333333333333333]]
+  &lt;0.0.0&gt;
+  16
+  &lt;&lt;9,18,0:4&gt;&gt;
+  ok</pre></p>
+<p><b>Introduced in:</b> Version 657</p>
+
+<h3 class="function"><a name="non_neg_integer-0">non_neg_integer/0</a></h3>
+<div class="spec">
+<p><tt>non_neg_integer() -&gt; any()</tt></p>
+</div><p>Generator to produce non-negative integers, with otherwise identical behavior to <code>eqc_gen:int()</code>.  Inherits range scaling behavior from use of <code>int()</code> macro.  May produce zeros - if you don't want zeros, use <code>pos_integer()</code> instead.  <pre>  1&gt; eqc_gen:sample(sc_eqc:non_neg_integer()).
+  10
+  9
+  6
+  12
+  12
+  9
+  14
+  9
+  2
+  10
+  10
+  ok
+ 
+  2&gt; eqc_gen:sample(sc_eqc:non_neg_integer()).
+  11
+  12
+  0
+  4
+  13
+  8
+  14
+  0
+  14
+  9
+  10
+  ok</pre></p>
+<p><b>Introduced in:</b> Version 655</p>
+
+<h3 class="function"><a name="playing_card-0">playing_card/0</a></h3>
+<div class="spec">
+<p><tt>playing_card() -&gt; any()</tt></p>
+</div><p>Equivalent to <a href="#playing_card-1"><tt>playing_card(with_jokers)</tt></a>.</p>
+<p>Equivalent to calling with the argument <code>with_jokers</code>.  <pre>  1&gt; eqc_gen:sample(sc_eqc:playing_card()).
+  {8,spades}
+  {small,joker}
+  {5,hearts}
+  {7,clubs}
+  {jack,clubs}
+  {king,clubs}
+  {ace,hearts}
+  {jack,hearts}
+  {jack,clubs}
+  {5,hearts}
+  {2,diamonds}
+  ok</pre></p>
+<p><b>Introduced in:</b> Version 669</p>
+
+<h3 class="function"><a name="playing_card-1">playing_card/1</a></h3>
+<div class="spec">
+<p><tt>playing_card(X1) -&gt; any()</tt></p>
+</div><p>Generates a random US-style playing card, with or without jokers depending on the argument passed.  <pre>  1&gt; eqc_gen:sample(sc_eqc:playing_card(with_jokers)).
+  {10,spades}
+  {small,joker}
+  {10,spades}
+  {king,spades}
+  {small,joker}
+  {king,spades}
+  {9,hearts}
+  {small,joker}
+  {ace,clubs}
+  {ace,diamonds}
+  {6,spades}
+  ok
+ 
+  eqc_gen:sample(sc_eqc:playing_card(without_jokers)).
+  {7,spades}
+  {3,hearts}
+  {jack,hearts}
+  {5,clubs}
+  {jack,spades}
+  {queen,spades}
+  {10,diamonds}
+  {7,diamonds}
+  {queen,diamonds}
+  {9,hearts}
+  {10,diamonds}</pre></p>
+<p><b>Introduced in:</b> Version 669</p>
+
+<h3 class="function"><a name="pos_integer-0">pos_integer/0</a></h3>
+<div class="spec">
+<p><tt>pos_integer() -&gt; any()</tt></p>
+</div><p>Generator to produce positive integers, with otherwise identical behavior to <code>eqc_gen:int()</code>.  Inherits range scaling behavior from use of <code>int()</code> macro.  Will not produce zeros - if you want zeros, use <code>non_neg_integer()</code> instead.  <pre>  1&gt; eqc_gen:sample(sc_eqc:pos_integer()).
+  9
+  1
+  9
+  11
+  5
+  6
+  14
+  6
+  3
+  8
+  8
+  ok
+ 
+  2&gt; eqc_gen:sample(sc_eqc:pos_integer()).
+  9
+  10
+  12
+  3
+  8
+  10
+  13
+  5
+  15
+  17
+  3
+  ok</pre></p>
+<p><b>Introduced in:</b> Version 655</p>
+
+<h3 class="function"><a name="rand_elements-1">rand_elements/1</a></h3>
+<div class="spec">
+<p><tt>rand_elements(ElementList) -&gt; any()</tt></p>
+</div><p>Produces a list of zero or more elements taken from <code>ElementList</code>, out of order, possibly repeating.  Scales list size on test depth from using list() macro.  <pre>  1&gt; eqc_gen:sample(sc_eqc:rand_elements([1,2,3,4,5])).
+  []
+  [1,5,2]
+  [3,4]
+  [3,2,4]
+  [2,2,5]
+  []
+  [3,3]
+  [4,3,1,3,5,3]
+  [3]
+  [2,5,4]
+  [1,4,5,4]
+  ok
+ 
+  2&gt; eqc_gen:sample(sc_eqc:rand_elements([1,2,3,4,5])).
+  [3]
+  []
+  [5,4]
+  [4,3,3,5]
+  [1,2]
+  [5,2]
+  [4,1,3,4,2]
+  [5,2]
+  [3,4,4,2]
+  [4,4,2,3]
+  [2,4,2,5,4,4]
+  ok</pre></p>
+<p><b>Introduced in:</b> Version 661</p>
+
+<h3 class="function"><a name="rgb_color-0">rgb_color/0</a></h3>
+<div class="spec">
+<p><tt>rgb_color() -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 670</p>
+
+<h3 class="function"><a name="roygbiv-0">roygbiv/0</a></h3>
+<div class="spec">
+<p><tt>roygbiv() -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 666</p>
+
+<h3 class="function"><a name="roygbp-0">roygbp/0</a></h3>
+<div class="spec">
+<p><tt>roygbp() -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 667</p>
+
+<h3 class="function"><a name="roygbpwb-0">roygbpwb/0</a></h3>
+<div class="spec">
+<p><tt>roygbpwb() -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 667</p>
+
+<h3 class="function"><a name="time12-0">time12/0</a></h3>
+<div class="spec">
+<p><tt>time12() -&gt; any()</tt></p>
+</div><p>Produces a human-readable time as a 12-hour 4-tuple <code>{h:int(),m:int(),s:int(),am|pm}</code>.  Hours are on the interval [1..12] inclusive.  <pre>  1&gt; eqc_gen:sample(sc_eqc:time12()).
+  {3,41,52,am}
+  {8,48,3,am}
+  {9,11,38,pm}
+  {1,49,6,am}
+  {7,21,33,pm}
+  {10,44,50,pm}
+  {2,37,20,pm}
+  {3,18,59,am}
+  {8,46,42,pm}
+  {12,47,35,pm}
+  {2,0,41,am}
+  ok
+ 
+  2&gt; eqc_gen:sample(sc_eqc:time12()).
+  {4,55,46,am}
+  {12,8,22,pm}
+  {12,44,15,pm}
+  {6,59,28,am}
+  {4,36,0,pm}
+  {2,33,10,pm}
+  {9,7,22,pm}
+  {10,19,10,am}
+  {9,57,33,am}
+  {3,31,8,am}
+  {7,34,23,am}
+  ok</pre></p>
+<p><b>Introduced in:</b> Version 662</p>
+
+<h3 class="function"><a name="time24-0">time24/0</a></h3>
+<div class="spec">
+<p><tt>time24() -&gt; any()</tt></p>
+</div><p>Produces a human-readable time as a 24-hour 3-tuple <code>{h:int(),m:int(),s:int()}</code>.  Hours are on the interval [0..23] inclusive.  <pre>  9&gt; c("/projects/scutil/erl/src/sc_eqc.erl").
+  {ok,sc_eqc}
+  340&gt; eqc_gen:sample(sc_eqc:time24()).
+  {4,26,35}
+  {20,20,45}
+  {12,32,55}
+  {14,48,23}
+  {9,44,16}
+  {17,34,31}
+  {5,18,50}
+  {18,0,1}
+  {6,33,51}
+  {23,41,59}
+  {20,57,0}
+  ok
+ 
+  341&gt; eqc_gen:sample(sc_eqc:time24()).
+  {1,49,3}
+  {20,44,19}
+  {0,13,25}
+  {18,59,25}
+  {10,16,17}
+  {21,40,6}
+  {9,37,13}
+  {12,52,5}
+  {3,15,29}
+  {1,55,3}
+  {13,53,31}
+  ok</pre></p>
+<p><b>Introduced in:</b> Version 663</p>
+
+<h3 class="function"><a name="unicode_codepoint-0">unicode_codepoint/0</a></h3>
+<div class="spec">
+<p><tt>unicode_codepoint() -&gt; any()</tt></p>
+</div><p>This generates random unicode codepoints (eqc's <code>char()</code> generates <code>byte()</code>s, as legacy from before Erlang spoke unicode).  <pre>  1&gt; eqc_gen:sample(sc_eqc:unicode_codepoint()).
+  587555
+  824312
+  1039897
+  520984
+  1059424
+  82091
+  325780
+  932253
+  584998
+  830263
+  29761
+  ok
+ 
+  2&gt; eqc_gen:sample(sc_eqc:unicode_codepoint()).
+  750151
+  165286
+  495247
+  242058
+  614341
+  1013687
+  141668
+  460131
+  72752
+  398389
+  106443
+  ok</pre></p>
+<p><b>Introduced in:</b> Version 660</p>
+
+<h3 class="function"><a name="websafe_216-0">websafe_216/0</a></h3>
+<div class="spec">
+<p><tt>websafe_216() -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 668</p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Nov 26 2011, 14:07:08.</i></p>
+</body>
+</html>
