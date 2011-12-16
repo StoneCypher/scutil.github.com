@@ -510,7 +510,7 @@
 
 %% @spec gen_docs() -> ok|{'EXIT',any()}
 %%
-%% @equiv gen_docs("/projects/scutil/erl/src", "/projects/scutil/erl/src/docs")
+%% @equiv gen_docs("/projects/github/scutil.github.com", "/projects/github/scutil.github.com/erl/doc")
 %%
 %% @doc (not testworthy) Generates library documentation using the paths appropriate for the author's PC; you almost certainly want {@link gen_docs/2} instead.  ```1> sc:gen_docs().
 %% ok'''
@@ -519,7 +519,7 @@
 
 gen_docs() ->
 
-    gen_docs("/projects/github/scutil.github.com", "/projects/github/scutil.github.com/erl/doc").
+    gen_docs("/projects/github/scutil.github.com", "/projects/github/scutil.github.com/doc/erl").
 
 
 
@@ -535,13 +535,13 @@ gen_docs() ->
 
 gen_docs(WhereIsBase, WhereToPutDocs) ->
 
-    WhereIsSrc     = WhereIsBase ++ "/erl/src",
+    WhereIsSrc     = WhereIsBase ++ "/src",
     {ok,CMaj}      = file:read_file(WhereIsBase ++ "/major.version"),
     {ok,CMin}      = file:read_file(WhereIsBase ++ "/minor.version"),
     {ok,CVer}      = file:read_file(WhereIsBase ++ "/version.counter"),
     CurrentVersion = << CMaj/binary, <<".">>/binary, CMin/binary, <<".">>/binary, CVer/binary >>,
 
-    DocTargets = ["sc", "sc_eqc", "sc_tests"],
+    DocTargets = ["sc", "sc_tests"],
 
     filelib:ensure_dir(WhereToPutDocs),
     edoc:files([WhereIsSrc++"/"++DocFile++".erl" || DocFile <- DocTargets ], [{dir, WhereToPutDocs}, {new,true}]),
@@ -1316,8 +1316,6 @@ permute(List) ->
 
 
 
-%% @type positive_integer() = integer().  Positive integer must be greater than zero.
-%%
 %% @spec permute(List::list(), Depth::positive_integer()) -> list()
 %%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast {@link combinations/2}.  Permutations are all valid orderings of a set of tokens; the permutations of `[a,b]' for example are `[a,b]' and `[b,a]'.  Depth limitation means the permutations of a smaller count of tokens from the main set; the 2-limited permutations of `[a,b,c]' for example are `[a,b]', `[a,c]', `[b,a]', `[b,c]', `[c,a]' and `[c,b]'.  Permutations are not ordered.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> sc:permute(["dave","kate","pat"]).
@@ -5343,8 +5341,6 @@ nybble_to_hex(Nyb)
 
 
 
-%% @type byte() = integer().  A byte must be an integer in the range 0-255, inclusive.  (Technically this is an octet, not a byte, but the word byte is extensively misused throughout the erlang documentation and standard library, which makes this an important concession, so we're when-in-Rome-ing.)
-%%
 %% @spec byte_to_hex(TheByte::byte()) -> hexstring()
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a byte() into a hexstring().  The hexstring() result will always be two characters (left padded with zero if necessary). ```1> sc:byte_to_hex(7).
@@ -8685,8 +8681,6 @@ standard_card_backs() ->
 
 
 
-
-%% @type positive_integer() = integer().  A {@type positive_integer()} must be greater than zero.
 
 %% @spec standard_card_backs(Count::positive_integer()) -> list()
 

@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Module sc</title>
 <link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
 </head>
@@ -12,7 +13,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> 2.5.757
+<p><b>Version:</b> 2.5.767
 </p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
@@ -50,6 +51,7 @@ presenting the actual volume of functionality present here.  We can get the cove
     <li>DizzyD</li>
     <li>Dylan Barrie / PhforSlayer</li>
     <li>Essen</li>
+    <li><a href="ferd.ca">Fred Hebert</a> / <a href="learnyousomeerlang.com">MononcQc</a></li>
     <li>Geoff Cant / <a href="http://github.com/archaelus">Archaelus</a></li>
     <li>GrizzlyAdams of <a href="http://grizzly.thewaffleiron.net/" target="_blank">The Waffle Iron</a></li>
     <li>Jeff Katz / <a href="http://kraln.com/" target="_blank">Kraln</a></li>
@@ -76,11 +78,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="typedecl"><a name="type-bw_scale">bw_scale()</a></h3>
 <p><tt>bw_scale() = {Unit::atom(), Timescale::atom()}</tt></p>
 <p><code>bw_scale</code> - Bandwidth scale - is a units-per-time notation for bandwidth measurement, eg <code>{megabits,day}</code>.</p>
-
-<h3 class="typedecl"><a name="type-byte">byte()</a></h3>
-<p><tt>byte() = integer()</tt></p>
-<p>A byte must be an integer in the range 0-255, inclusive.  (Technically this is an octet, not a byte, but the word byte is extensively misused throughout the erlang documentation and standard library, which makes this an important concession, so we're when-in-Rome-ing.)
- </p>
 
 <h3 class="typedecl"><a name="type-coord">coord()</a></h3>
 <p><tt>coord() = tuple()</tt></p>
@@ -130,7 +127,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 
 <h3 class="typedecl"><a name="type-io_list">io_list()</a></h3>
 <p><tt>io_list() = list()</tt></p>
-<p>Every list member of an <code><a href="#type-io_list">io_list()</a></code> must be a <code><a href="#type-byte">byte()</a></code>.
+<p>Every list member of an <code><a href="#type-io_list">io_list()</a></code> must be a <code>byte()</code>.
  </p>
 
 <h3 class="typedecl"><a name="type-keylist">keylist()</a></h3>
@@ -164,15 +161,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>nybble() = integer()</tt></p>
 <p>A nybble must be an integer in the range 0-15, inclusive.
  </p>
-
-<h3 class="typedecl"><a name="type-positive_integer">positive_integer()</a></h3>
-<p><tt>positive_integer() = integer()</tt></p>
-<p>Positive integer must be greater than zero.
- </p>
-
-<h3 class="typedecl"><a name="type-positive_integer">positive_integer()</a></h3>
-<p><tt>positive_integer() = integer()</tt></p>
-<p>A <code><a href="#type-positive_integer">positive_integer()</a></code> must be greater than zero.</p>
 
 <h3 class="typedecl"><a name="type-positive_integer">positive_integer()</a></h3>
 <p><tt>positive_integer() = integer()</tt></p>
@@ -557,17 +545,23 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="absolute_difference-2">absolute_difference/2</a></h3>
 <div class="spec">
-<p><tt>absolute_difference(A::number(), B::number()) -&gt; number()</tt></p>
+<p><tt>absolute_difference(A::number(), B::number()) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the absolute value of the difference between the two arguments.  Offered mostly to make dependant code clearer. <pre>  1&gt; sc:absolute_difference(1.25, 1).
   0.25
  
   2&gt; sc:absolute_difference(2,1).
   1
+ 
   3&gt; sc:absolute_difference(1,2).
   1
+ 
   4&gt; sc:absolute_difference(1,1).
   0
-  5&gt; sc:absolute_difference(100,35).
+ 
+  5&gt; sc:absolute_difference(1,-1).
+  2
+ 
+  6&gt; sc:absolute_difference(100,35).
   65</pre>
  </p>
 <p><b>Introduced in:</b> Version 504</p>
@@ -602,7 +596,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="adjust_counter_by-2">adjust_counter_by/2</a></h3>
 <div class="spec">
-<p><tt>adjust_counter_by(Name::any(), By::number()) -&gt; number()</tt></p>
+<p><tt>adjust_counter_by(Name::any(), By::number()) -&gt; number()</tt><br></p>
 </div><p>Adds to a counter's value; if the counter was not already defined, it will become the value in the <code>By</code> argument. <pre>  1&gt; sc:counter_at(hello).
   0
  
@@ -643,14 +637,14 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="amean_vector_normal-1">amean_vector_normal/1</a></h3>
 <div class="spec">
-<p><tt>amean_vector_normal(VX::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt></p>
+<p><tt>amean_vector_normal(VX::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the arithmetic mean of the elements of the unit vector for the vector provided.
  </p>
 <p><b>Introduced in:</b> Version 497</p>
 
 <h3 class="function"><a name="arithmetic_mean-1">arithmetic_mean/1</a></h3>
 <div class="spec">
-<p><tt>arithmetic_mean(InputList::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt></p>
+<p><tt>arithmetic_mean(InputList::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the arithmetic mean (often called the average) of a list of numbers. <pre>  1&gt; sc:arithmetic_mean([1,2,3,4,5]).
   3.0</pre>
  </p>
@@ -665,14 +659,14 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="bandwidth_calc-1">bandwidth_calc/1</a></h3>
 <div class="spec">
-<p><tt>bandwidth_calc(Data) -&gt; <a href="#type-list_of_2ary_tuples">list_of_2ary_tuples()</a></tt></p>
+<p><tt>bandwidth_calc(Data) -&gt; <a href="#type-list_of_2ary_tuples">list_of_2ary_tuples()</a></tt><br></p>
 </div><p>Equivalent to <a href="#bandwidth_calc-2"><tt>bandwidth_calc(Data, all)</tt></a>.</p>
 
 <p><b>Introduced in:</b> Version 478</p>
 
 <h3 class="function"><a name="bandwidth_calc-2">bandwidth_calc/2</a></h3>
 <div class="spec">
-<p><tt>bandwidth_calc(BitsPerSecond::Data, Scale::bw_scale | all) -&gt; <a href="#type-bw_rate">bw_rate()</a> | [<a href="#type-bw_rate">bw_rate()</a>]</tt></p>
+<p><tt>bandwidth_calc(BitsPerSecond::Data, Scale::bw_scale | all) -&gt; <a href="#type-bw_rate">bw_rate()</a> | [<a href="#type-bw_rate">bw_rate()</a>]</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates digital line bandwidth over timescales in converted units. <pre>  1&gt;</pre>
   Also knows the shorthand notations <code>{X,meg}</code>, <code>{X,gig}</code> and <code>{X,t}</code> for input only in base-10 only. <pre>  5&gt; sc:bandwidth_calc({10,meg}, {gigabits,day}).
   {{gigabits,day},864.0}</pre>
@@ -720,7 +714,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="byte_to_hex-1">byte_to_hex/1</a></h3>
 <div class="spec">
-<p><tt>byte_to_hex(TheByte::<a href="#type-byte">byte()</a>) -&gt; <a href="#type-hexstring">hexstring()</a></tt></p>
+<p><tt>byte_to_hex(TheByte::byte()) -&gt; <a href="#type-hexstring">hexstring()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a byte() into a hexstring().  The hexstring() result will always be two characters (left padded with zero if necessary). <pre>  1&gt; sc:byte_to_hex(7).
   "07"
  
@@ -767,7 +761,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="central_moment-2">central_moment/2</a></h3>
 <div class="spec">
-<p><tt>central_moment(List::list(), N::integer()) -&gt; float()</tt></p>
+<p><tt>central_moment(List::list(), N::integer()) -&gt; float()</tt><br></p>
 </div><p><span style="color:red"><b><i>BUGGY</i></b></span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the Nth cetral moment of a list.  The Nth central moment of a list is the arithmetic mean of (the list items each minus the mean of the list, each
   taken to the Nth power).  In a sense, this is the "normalized" moment.  Fractional Ns are not defined.  Not to be confused with <a href="#moment-2"><code>moment/2</code></a>.  <a href="#Thanks">Thanks</a> to Kraln and
   Chile for straightening me out on moments and central moments.  <pre>  1&gt; sc:central_moment([1,1,1], 2).
@@ -804,7 +798,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="centroid-1">centroid/1</a></h3>
 <div class="spec">
-<p><tt>centroid(InputList::<a href="#type-coord_list">coord_list()</a>) -&gt; <a href="#type-coord">coord()</a></tt></p>
+<p><tt>centroid(InputList::<a href="#type-coord_list">coord_list()</a>) -&gt; <a href="#type-coord">coord()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the coordinate which represents the per-axis arithmetic mean of a set of points.  Convenient in list comprehensions.  To calculate the centroid of <code>[1,1]</code>, <code>[2,3]</code>, you gather the X coordinates <code>[1,2]</code>, then use their mean <code>1.5</code>; then do the same for the Y, <code>[1,3]</code> to <code>2</code>.  The centroid would thus be <code>[1.5,2]</code>.  You may pass any number of coordinates to this function, of any axis count, but they must all be the same axis count.  The return value will be a coordinate with the same axis count.  Negative and real values are fine; imaginary math is not implemented. <pre>  1&gt; sc:centroid([[1]]).
   [1.0]
  
@@ -867,7 +861,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="combinations-2">combinations/2</a></h3>
 <div class="spec">
-<p><tt>combinations(OutputItemSize::<a href="#type-positive_integer">positive_integer()</a>, Items::list()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt></p>
+<p><tt>combinations(OutputItemSize::<a href="#type-positive_integer">positive_integer()</a>, Items::list()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.  Permutations are all unique combinations of a set of tokens; the 2-permutations of <code>[a,b,c]</code> for example are <code>[a,b]</code>, <code>[a,c]</code> and <code>[b,c]</code>.  Note the absence of other orderings, such as <code>[b,a]</code>, which are provided by <a href="#permute-2"><code>permute/2</code></a>.  Combinations are taken of a smaller count of tokens than the main set.  Combinations are not ordered, but this implementation happens to provide answers in the same order as the input list.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. <pre>  1&gt; sc:combinations(2, [a,b,c,d]).
   [ [a,b], [a,c], [a,d], [b,c], [b,d], [c,d] ]
  
@@ -886,14 +880,14 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="count_bits-1">count_bits/1</a></h3>
 <div class="spec">
-<p><tt>count_bits(Number::<a href="#type-non_negative_integer">non_negative_integer()</a>) -&gt; <a href="#type-non_negative_integer">non_negative_integer()</a></tt></p>
+<p><tt>count_bits(Number::<a href="#type-non_negative_integer">non_negative_integer()</a>) -&gt; <a href="#type-non_negative_integer">non_negative_integer()</a></tt><br></p>
 </div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Counts the number of bits turned on in a sufficiently sized unsigned two's compliment integer representation of <code>Num</code>.  <pre>  1&gt; sc:count_bits(5).
   2</pre></p>
 <p><b>Introduced in:</b> Version 727</p>
 
 <h3 class="function"><a name="count_of-2">count_of/2</a></h3>
 <div class="spec">
-<p><tt>count_of(Item::any(), List::list()) -&gt; <a href="#type-non_negative_integer">non_negative_integer()</a></tt></p>
+<p><tt>count_of(Item::any(), List::list()) -&gt; <a href="#type-non_negative_integer">non_negative_integer()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Counts the number of instances of Item in List.  <pre>  1&gt; TestData = lists:duplicate(40, [healthy, nonsmoker] ) ++
                 lists:duplicate(10, [healthy, smoker]    ) ++
                 lists:duplicate(7,  [cancer,  nonsmoker] ) ++
@@ -911,7 +905,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="counter_at-1">counter_at/1</a></h3>
 <div class="spec">
-<p><tt>counter_at(Name::any()) -&gt; number()</tt></p>
+<p><tt>counter_at(Name::any()) -&gt; number()</tt><br></p>
 </div><p>Checks a counter's value; if the counter was not already defined, it will report zero. <pre>  1&gt; sc:counter_at(hello).
   0
  
@@ -942,7 +936,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="cross_product-2">cross_product/2</a></h3>
 <div class="spec">
-<p><tt>cross_product(VX::<a href="#type-three_vector">three_vector()</a>, VY::<a href="#type-three_vector">three_vector()</a>) -&gt; <a href="#type-three_vector">three_vector()</a></tt></p>
+<p><tt>cross_product(VX::<a href="#type-three_vector">three_vector()</a>, VY::<a href="#type-three_vector">three_vector()</a>) -&gt; <a href="#type-three_vector">three_vector()</a></tt><br></p>
 </div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the cross product of two vectors (<span style="color:red">Incomplete</span> represented as <code><a href="#type-three_vector">three_vector()</a></code>s - no support yet for seven). <pre>  1&gt; sc:dot_product([1,1,1],[2,2,2]).
   6
  
@@ -961,7 +955,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="cube-1">cube/1</a></h3>
 <div class="spec">
-<p><tt>cube(Input::number()) -&gt; number()</tt></p>
+<p><tt>cube(Input::number()) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions. <pre>  1&gt; sc:cube(2).
   8
  
@@ -1007,7 +1001,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="dot_product-2">dot_product/2</a></h3>
 <div class="spec">
-<p><tt>dot_product(VX::<a href="#type-numeric_list">numeric_list()</a>, VY::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt></p>
+<p><tt>dot_product(VX::<a href="#type-numeric_list">numeric_list()</a>, VY::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the dot product of two vectors (<span style="color:red">Incomplete</span> represented as numeric lists; tuples not yet supported). <pre>  1&gt; sc:dot_product([1,1,1],[2,2,2]).
   6
  
@@ -1077,7 +1071,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="euclidean_distance-2">euclidean_distance/2</a></h3>
 <div class="spec">
-<p><tt>euclidean_distance(Coordinate1::<a href="#type-coord">coord()</a>, Coordinate2::<a href="#type-coord">coord()</a>) -&gt; number()</tt></p>
+<p><tt>euclidean_distance(Coordinate1::<a href="#type-coord">coord()</a>, Coordinate2::<a href="#type-coord">coord()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the distance between two coordinates in any N-space.  In two dimensions, this is known as the Pythagorean theorem.  The coordinates may be of any positive integer dimensionality (2d, 3d, but no -1d or 2.5d), but both coordinates must be of the same dimensionality.  The coordinates may have real-valued or negative components, but imaginary math is not implemented.  This function tolerates tuple coordinates by converting them to lists; list coordinates are thus slightly faster. <pre>  1&gt; sc:distance([0,0],[1,1]).
   1.4142135623730951
  
@@ -1105,7 +1099,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="even_or_odd-1">even_or_odd/1</a></h3>
 <div class="spec">
-<p><tt>even_or_odd(Num::integer()) -&gt; even | odd</tt></p>
+<p><tt>even_or_odd(Num::integer()) -&gt; even | odd</tt><br></p>
 </div><p>Documentary convenience function (synonymous with parity/1) that returns the atoms <code>even</code> or <code>odd</code> for any integer. <pre>  1&gt; sc:even_or_odd(3).
   odd</pre>
  </p>
@@ -1113,7 +1107,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="every_flag_representation-1">every_flag_representation/1</a></h3>
 <div class="spec">
-<p><tt>every_flag_representation(Flags::list()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt></p>
+<p><tt>every_flag_representation(Flags::list()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns every interpretation of the list as a set of boolean flags, including all-off and all-on. <pre>  1&gt; sc:every_flag_representation([1,2,3,4]).
   [ [], [4], [3], [3,4], [2], [2,4], [2,3], [2,3,4], [1], [1,4], [1,3], [1,3,4], [1,2], [1,2,4], [1,2,3], [1,2,3,4] ]
  
@@ -1148,7 +1142,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="every_member_representation-2">every_member_representation/2</a></h3>
 <div class="spec">
-<p><tt>every_member_representation(Memberships::<a href="#type-list_of_lists">list_of_lists()</a>, AllowAbsence::atom()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt></p>
+<p><tt>every_member_representation(Memberships::<a href="#type-list_of_lists">list_of_lists()</a>, AllowAbsence::atom()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> For a list of memberships, return every possible combination of one representative member from each list.  The parameter <code>AllowAbsence</code> controls whether memberships may be unrepresented; if unrepresented memberships are possible, then one possible representation becomes the empty list. <pre>  1&gt; sc:every_member_representation([ [a,b],[1,2,3],[i,ii,iii] ], no_absence).
   [[a,1,i], [a,1,ii], [a,1,iii], [a,2,i], [a,2,ii], [a,2,iii], [a,3,i], [a,3,ii], [a,3,iii], [b,1,i], [b,1,ii], [b,1,iii], [b,2,i], [b,2,ii], [b,2,iii], [b,3,i], [b,3,ii], [b,3,iii]]
  
@@ -1187,7 +1181,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="expand_labels-1">expand_labels/1</a></h3>
 <div class="spec">
-<p><tt>expand_labels(List::[{Label::any(), List::list()}]) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt></p>
+<p><tt>expand_labels(List::[{Label::any(), List::list()}]) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Expands a series of labels over lists to create a cartesian 2-ary tuple expansion.  <pre>  1&gt; sc:expand_labels([{villain,[lex_luthor,sinistar,gargamel]}]).
   [{villain,lex_luthor},{villain,sinistar},{villain,gargamel}]
  
@@ -1203,7 +1197,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="expected_value-1">expected_value/1</a></h3>
 <div class="spec">
-<p><tt>expected_value(List::<a href="#type-mixed_weight_list">mixed_weight_list()</a>) -&gt; number()</tt></p>
+<p><tt>expected_value(List::<a href="#type-mixed_weight_list">mixed_weight_list()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the expected value of infinite selection from a weighted numeric list.  <pre>  1&gt; sc:expected_value([1,2,3,4,5,6]).
   3.50000</pre>
  
@@ -1233,7 +1227,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="extrema-1">extrema/1</a></h3>
 <div class="spec">
-<p><tt>extrema(List::<a href="#type-non_empty_list">non_empty_list()</a>) -&gt; {Low::any(), Hi::any()}</tt></p>
+<p><tt>extrema(List::<a href="#type-non_empty_list">non_empty_list()</a>) -&gt; {Low::any(), Hi::any()}</tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Returns the lowest and highest values in a list of one or more member in the form <code>{Lo,Hi}</code>.  Undefined over the empty list.  Mixed-type safe; sorts according to type order rules.  <pre>  1&gt; sc:extrema([1,2,3,4]).
   {1,4}
  
@@ -1306,7 +1300,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="flag_sets-1">flag_sets/1</a></h3>
 <div class="spec">
-<p><tt>flag_sets(Flags::list()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt></p>
+<p><tt>flag_sets(Flags::list()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Returns every interpretation of the list as a set of boolean flags, including all-off and all-on. <pre>  1&gt; sc:flag_sets([1,2,3,4]).
   [ [], [4], [3], [3,4], [2], [2,4], [2,3], [2,3,4], [1], [1,4], [1,3], [1,3,4], [1,2], [1,2,4], [1,2,3], [1,2,3,4] ]
  
@@ -1380,9 +1374,9 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="gen_docs-0">gen_docs/0</a></h3>
 <div class="spec">
-<p><tt>gen_docs() -&gt; ok | {'EXIT', any()}</tt></p>
-</div><p>Equivalent to <a href="#gen_docs-2"><tt>gen_docs("/projects/scutil/erl/src",
-	 "/projects/scutil/erl/src/docs")</tt></a>.</p>
+<p><tt>gen_docs() -&gt; ok | {'EXIT', any()}</tt><br></p>
+</div><p>Equivalent to <a href="#gen_docs-2"><tt>gen_docs("/projects/github/scutil.github.com",
+	 "/projects/github/scutil.github.com/erl/doc")</tt></a>.</p>
 <p>(not testworthy) Generates library documentation using the paths appropriate for the author's PC; you almost certainly want <a href="#gen_docs-2"><code>gen_docs/2</code></a> instead.  <pre>  1&gt; sc:gen_docs().
   ok</pre>
  </p>
@@ -1390,7 +1384,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="gen_docs-2">gen_docs/2</a></h3>
 <div class="spec">
-<p><tt>gen_docs(WhereIsSrc::string(), WhereToPutDocs::string()) -&gt; ok | {'EXIT', any()}</tt></p>
+<p><tt>gen_docs(WhereIsSrc::string(), WhereToPutDocs::string()) -&gt; ok | {'EXIT', any()}</tt><br></p>
 </div><p>(not testworthy) Generates library documentation from and to the specified paths <code>WhereIsSrc</code> and <code>WhereToPutDocs</code> respectively.  Do not use trailing slashes.  Windows paths are okay; remember to double your
   backslashes, as backslashes in strings need to be quoted.  <pre>  1&gt; sc:gen_docs("/projects/scutil", "/projects/scutil/erl/src/docs").
   ok</pre>
@@ -1399,7 +1393,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="geometric_mean-1">geometric_mean/1</a></h3>
 <div class="spec">
-<p><tt>geometric_mean(InputList::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt></p>
+<p><tt>geometric_mean(InputList::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the geometric mean of a list of numbers. <pre>  1&gt; sc:geometric_mean([1,2,3,4,5]).
   2.6051710846973517</pre>
  
@@ -1423,14 +1417,14 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="gmean_vector_normal-1">gmean_vector_normal/1</a></h3>
 <div class="spec">
-<p><tt>gmean_vector_normal(VX::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt></p>
+<p><tt>gmean_vector_normal(VX::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the geometric mean of the elements of the unit vector for the vector provided.
  </p>
 <p><b>Introduced in:</b> Version 498</p>
 
 <h3 class="function"><a name="grid_scatter-2">grid_scatter/2</a></h3>
 <div class="spec">
-<p><tt>grid_scatter(Count::integer(), Size::<a href="#type-gridsize">gridsize()</a>) -&gt; <a href="#type-coordlist">coordlist()</a></tt></p>
+<p><tt>grid_scatter(Count::integer(), Size::<a href="#type-gridsize">gridsize()</a>) -&gt; <a href="#type-coordlist">coordlist()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return a Count-length list of non-repeating coordinates in a grid of specified size; useful for feature generation.
  </p>
 <p><b>Introduced in:</b> Version 599</p>
@@ -1451,7 +1445,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="harmonic_mean-1">harmonic_mean/1</a></h3>
 <div class="spec">
-<p><tt>harmonic_mean(InputList::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt></p>
+<p><tt>harmonic_mean(InputList::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the harmonic mean of a list of numbers. <pre>  1&gt; sc:harmonic_mean([1,2,3,4,5]).
   2.18978102189781</pre>
  
@@ -1466,7 +1460,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="has_bit-2">has_bit/2</a></h3>
 <div class="spec">
-<p><tt>has_bit(Number::<a href="#type-non_negative_integer">non_negative_integer()</a>, Bit::<a href="#type-non_negative_integer">non_negative_integer()</a>) -&gt; true | false</tt></p>
+<p><tt>has_bit(Number::<a href="#type-non_negative_integer">non_negative_integer()</a>, Bit::<a href="#type-non_negative_integer">non_negative_integer()</a>) -&gt; true | false</tt><br></p>
 </div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of <code>Num</code>.  <pre>  1&gt; sc:has_bit(5,0).
   true
  
@@ -1476,7 +1470,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="hex_to_int-1">hex_to_int/1</a></h3>
 <div class="spec">
-<p><tt>hex_to_int(HexChar::<a href="#type-hexstring">hexstring()</a> | <a href="#type-hexchar">hexchar()</a>) -&gt; integer()</tt></p>
+<p><tt>hex_to_int(HexChar::<a href="#type-hexstring">hexstring()</a> | <a href="#type-hexchar">hexchar()</a>) -&gt; integer()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a hexstring() or hexchar() into its numeric value. <pre>  1&gt; sc:hex_to_int("c0ffEE").
   12648430
  
@@ -1490,7 +1484,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="histograph-1">histograph/1</a></h3>
 <div class="spec">
-<p><tt>histograph(List::list()) -&gt; <a href="#type-weightlist">weightlist()</a></tt></p>
+<p><tt>histograph(List::list()) -&gt; <a href="#type-weightlist">weightlist()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes a histograph count of the items in the list.  Mixed type lists are safe.  Input lists do not need to be sorted.  The histograph is shallow - that is, the histograph of <code>[ [1,2], [1,2], [2,2] ]</code> is <code>[ {[1,2],2}, {[2,2],1} ]</code>, not <code>[ {1,2}, {2,4} ]</code>. <pre>  1&gt; sc:histograph([1,2,a,2,b,1,b,1,b,2,a,2,2,1]).
   [{1,4},{2,5},{a,2},{b,3}]
  
@@ -1588,7 +1582,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="hmean_vector_normal-1">hmean_vector_normal/1</a></h3>
 <div class="spec">
-<p><tt>hmean_vector_normal(VX::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt></p>
+<p><tt>hmean_vector_normal(VX::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the harmonic mean of the elements of the unit vector for the vector provided.
  </p>
 <p><b>Introduced in:</b> Version 499</p>
@@ -1637,7 +1631,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="index_of_first-2">index_of_first/2</a></h3>
 <div class="spec">
-<p><tt>index_of_first(Item, List) -&gt; integer() | undefined</tt></p>
+<p><tt>index_of_first(Item, List) -&gt; integer() | undefined</tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.  <pre>  1&gt; sc:index_of_first(c, [a,b,c,d,e]).
   3
  
@@ -1648,7 +1642,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="integer_to_radix_list-2">integer_to_radix_list/2</a></h3>
 <div class="spec">
-<p><tt>integer_to_radix_list(Number::number(), Radix::tuple()) -&gt; list()</tt></p>
+<p><tt>integer_to_radix_list(Number::number(), Radix::tuple()) -&gt; list()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a number to a radix string using a radix list of your specification and any size.  When appropriate, prefer the system provided <code>erlang:integer_to_list/2</code>.  Lists are accepted, but converted to tuples before use, so are inefficient.  <pre>  1&gt; sc_convert:integer_to_radix_list(1111, "0123456789abcdef").
   "457"
  
@@ -1668,7 +1662,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="io_list_to_hex_string-1">io_list_to_hex_string/1</a></h3>
 <div class="spec">
-<p><tt>io_list_to_hex_string(Input::<a href="#type-io_list">io_list()</a>) -&gt; <a href="#type-hexstring">hexstring()</a></tt></p>
+<p><tt>io_list_to_hex_string(Input::<a href="#type-io_list">io_list()</a>) -&gt; <a href="#type-hexstring">hexstring()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert an io_list() to a hexstring().  <pre>  1&gt; sc:io_list_to_hex_string("a").
   "61"
  
@@ -1729,7 +1723,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="is_sorted_list-1">is_sorted_list/1</a></h3>
 <div class="spec">
-<p><tt>is_sorted_list(List::list()) -&gt; true | false</tt></p>
+<p><tt>is_sorted_list(List::list()) -&gt; true | false</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns true if the list is sorted; false otherwise.  List sortedness is typesafe, and defined equivalently to how defined by the language and <code>lists:sort()</code>. <pre>  1&gt; sc:is_sorted_list([1,2,3]).
   true
  
@@ -1746,7 +1740,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="is_unique_list-1">is_unique_list/1</a></h3>
 <div class="spec">
-<p><tt>is_unique_list(List::list()) -&gt; true | false</tt></p>
+<p><tt>is_unique_list(List::list()) -&gt; true | false</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns true if the list is unique; false otherwise.  List uniqueness is defined as whether any member of the list compares equally to any other member; deep list inspection is not performed.  Comparison is type-safe. <pre>  2&gt; sc:is_unique_list([1,2,3]).
   true
  
@@ -1772,7 +1766,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="kendall_correlation-1">kendall_correlation/1</a></h3>
 <div class="spec">
-<p><tt>kendall_correlation(TupleList::<a href="#type-coordlist">coordlist()</a>) -&gt; {tau, Correlation::number()}</tt></p>
+<p><tt>kendall_correlation(TupleList::<a href="#type-coordlist">coordlist()</a>) -&gt; {tau, Correlation::number()}</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Kendall Tau Rank Correlation Coefficient of a list of coordinate tuples. <pre>  1&gt; sc:kendall([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
   {tau,1.0}
  
@@ -1803,7 +1797,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="key_duplicate-1">key_duplicate/1</a></h3>
 <div class="spec">
-<p><tt>key_duplicate(CvList::list()) -&gt; [any()]</tt></p>
+<p><tt>key_duplicate(CvList::list()) -&gt; [any()]</tt><br></p>
 </div><p>Iterates a list of <code>{Count,Term}</code>, producing a list of <code>[Term,Term,...]</code>.  <pre>  1&gt; sc:key_duplicate([ {3,bork} ]).
   [bork,bork,bork]
  
@@ -1924,7 +1918,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="list_intersection-3">list_intersection/3</a></h3>
 <div class="spec">
-<p><tt>list_intersection(List1::list(), List2::list(), IsSorted::atom()) -&gt; list()</tt></p>
+<p><tt>list_intersection(List1::list(), List2::list(), IsSorted::atom()) -&gt; list()</tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Efficiently computes the intersection of two lists.  The third parameter, which is optional and defaults to <code>unsorted</code>, is either the atom <code>sorted</code> or <code>unsorted</code>.  If <code>sorted</code> is used, the function will sort both inputs before proceeding, as it requires sorted lists; as such, if you already know your lists to be sorted, passing <code>unsorted</code> will save some time.  The return list will be reverse sorted. <pre>  1&gt; sc:list_intersection([1,2,3,4,5,2,3,10,15,25,30,40,45,55],[1,3,5,5,5,15,20,30,35,40,50,55]).
   [55,40,30,15,5,3,1]
  
@@ -1935,7 +1929,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="list_product-1">list_product/1</a></h3>
 <div class="spec">
-<p><tt>list_product(A::<a href="#type-numericlist">numericlist()</a>) -&gt; number()</tt></p>
+<p><tt>list_product(A::<a href="#type-numericlist">numericlist()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Takes the product of all numbers in the list.  Offered mostly to make dependant code clearer. <pre>  1&gt; sc:list_product([1,2,5.4]).
   10.8</pre>
  </p>
@@ -1943,7 +1937,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="list_to_number-1">list_to_number/1</a></h3>
 <div class="spec">
-<p><tt>list_to_number(X::list()) -&gt; number()</tt></p>
+<p><tt>list_to_number(X::list()) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Converts a list into a number; integers will be returned if there is no mantissa in the list representation. <pre>  1&gt; sc:list_to_number("2").
   2
  
@@ -1989,7 +1983,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="median-1">median/1</a></h3>
 <div class="spec">
-<p><tt>median(List::<a href="#type-numericlist">numericlist()</a>) -&gt; number()</tt></p>
+<p><tt>median(List::<a href="#type-numericlist">numericlist()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the median (central) value of a list.  Sorts the input list, then finds and returns the middle value.  <pre>  1&gt; sc:median([1,2,999]).
   2</pre>
  </p>
@@ -1998,7 +1992,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="median_absolute_deviation-1">median_absolute_deviation/1</a></h3>
 <div class="spec">
-<p><tt>median_absolute_deviation(List::<a href="#type-numericlist">numericlist()</a>) -&gt; number()</tt></p>
+<p><tt>median_absolute_deviation(List::<a href="#type-numericlist">numericlist()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the median absolute deviation of a <code><a href="#type-numericlist">numericlist()</a></code>. <pre>  1&gt; sc:median_absolute_deviation([1,1,2,2,4,6,9]).
   1</pre>
  </p>
@@ -2012,7 +2006,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="member_sets-2">member_sets/2</a></h3>
 <div class="spec">
-<p><tt>member_sets(Memberships::<a href="#type-list_of_lists">list_of_lists()</a>, AllowAbsence::atom()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt></p>
+<p><tt>member_sets(Memberships::<a href="#type-list_of_lists">list_of_lists()</a>, AllowAbsence::atom()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> For a list of memberships, return every possible combination of one representative member from each list.
   The parameter <code>AllowAbsence</code> controls whether memberships may be unrepresented; if unrepresented memberships are possible, then
   one possible representation becomes the empty list. <pre>  1&gt; sc:member_sets([ [a,b],[1,2,3],[i,ii,iii] ], no_absence).
@@ -2075,7 +2069,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="mod-2">mod/2</a></h3>
 <div class="spec">
-<p><tt>mod(Base::integer(), Range::integer()) -&gt; integer()</tt></p>
+<p><tt>mod(Base::integer(), Range::integer()) -&gt; integer()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the modulus of an integer by another integer.  Luckily, erlang calls what most languages refer to as modulus by its correct name, remainder (c's <code>%</code>, erlang's <code>rem</code>).  Modulus is implemented incorrectly in nearly every language, because chip vendors implement remainder and the wrong name stuck.  The difference is in how the operator reacts to a negative <code>Base</code>: -10 modulo 3 is 2, whereas -10 rem 3 is -1.  Remainder takes the residue of dividing the base by the lowest (nearest negative infinity) integer N adjacent the real valued divisor; modulo returns the highest, which is less CPU efficient but always provides an answer on [0..Range-1]. <pre>  1&gt; sc:mod(10,3).
   1
  
@@ -2086,7 +2080,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="mode-1">mode/1</a></h3>
 <div class="spec">
-<p><tt>mode(List::<a href="#type-numericlist">numericlist()</a>) -&gt; any()</tt></p>
+<p><tt>mode(List::<a href="#type-numericlist">numericlist()</a>) -&gt; any()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the mode (most common) value(s) of a list, as a list.  If there are more than one value tied for most common, all tied will be returned.  This function is safe for mixed-type lists, and does not perform deep traversal (that is, the mode of <code>[ [2,2] ]</code> is <code>[2,2]</code>, not <code>2</code>). <pre>  sc:mode([1,2,1,3,1,4]).
   [1]
  
@@ -2122,7 +2116,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="module_attribute-1">module_attribute/1</a></h3>
 <div class="spec">
-<p><tt>module_attribute(Module::atom()) -&gt; AttributeList | {error, no_such_module}</tt></p>
+<p><tt>module_attribute(Module::atom()) -&gt; AttributeList | {error, no_such_module}</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Look up all attributes of a given module.  <pre>  1&gt; sc:module_attribute(sc).
   [{author,"John Haugeland &lt;stonecypher@gmail.com&gt;"},
    {bugtracker,"http://crunchyd.com/forum/project.php?projectid=7"},
@@ -2143,7 +2137,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="module_attribute-2">module_attribute/2</a></h3>
 <div class="spec">
-<p><tt>module_attribute(Module::atom(), Attribute::atom()) -&gt; {value, {Attribute, Value}} | {error, no_such_attribute} | {error, no_such_module}</tt></p>
+<p><tt>module_attribute(Module::atom(), Attribute::atom()) -&gt; {value, {Attribute, Value}} | {error, no_such_attribute} | {error, no_such_module}</tt><br></p>
 </div><p><span style="color:red"><b><i>BUGGY</i></b></span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  <pre>  1&gt; sc:module_attribute(scutil, author).
   "John Haugeland &lt;stonecypher@gmail.com&gt;"
  
@@ -2172,7 +2166,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="moment-2">moment/2</a></h3>
 <div class="spec">
-<p><tt>moment(List::list(), N::number()) -&gt; float()</tt></p>
+<p><tt>moment(List::list(), N::number()) -&gt; float()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the Nth moment of a list.  The Nth moment of a list is the arithmetic mean of the list items, each taken to the Nth power.  Fractional Ns are well defined
   and have obscure uses, though most will only ever use this with integer values of N; this function is valid for both.  Not to be confused with <a href="#central_moment-2"><code>central_moment/2</code></a>.  <a href="#Thanks">Thanks</a>
   to Kraln and Chile for straightening me out on moments and central moments.  <pre>  1&gt; sc:moment([1,1,1], 2).
@@ -2218,7 +2212,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="multi_deck-2">multi_deck/2</a></h3>
 <div class="spec">
-<p><tt>multi_deck(Backs::<a href="#type-positive_integer_or_list">positive_integer_or_list()</a>, DeckGenerator::<a href="#type-function_or_list">function_or_list()</a>) -&gt; list()</tt></p>
+<p><tt>multi_deck(Backs::<a href="#type-positive_integer_or_list">positive_integer_or_list()</a>, DeckGenerator::<a href="#type-function_or_list">function_or_list()</a>) -&gt; list()</tt><br></p>
 </div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Makes a number of instances of a deck, and applies a different back to each.  The first parameter may be a <code><a href="#type-positive_integer">positive_integer()</a></code>, at which point the color sequence from <a href="#standard_backs-0"><code>standard_backs/0</code></a> will be used; otherwise, a list may be used, which will be used as the card backs (there is no requirement regarding their type or uniqueness, only that they be presented as a list.)  The second parameter may be a <code>function()</code>, which will be called to generate a list of cards, or a <code>list</code> of cards which will be used directly.</p>
 <p><b>Introduced in:</b> Version 729</p>
 
@@ -2231,7 +2225,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="multi_do-4">multi_do/4</a></h3>
 <div class="spec">
-<p><tt>multi_do(Count::integer(), Module::atom(), Function::atom(), Args::list()) -&gt; list()</tt></p>
+<p><tt>multi_do(Count::integer(), Module::atom(), Function::atom(), Args::list()) -&gt; list()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take an iteration count, a module name, a function name and an argument list, and repeatedly apply the argument list to the module/function, count times.  This is primarily useful with nondeterministic functions whose result might change despite identical arguments, such as functions with random behavior; for example, this function is invoked to implement stochastic testing in <a href="http://testerl.com/">TestErl</a>. <pre>  1&gt; sc:multi_do(10, scutil, rand, [100]).
   [9,94,4,82,77,44,89,19,45,92]
  
@@ -2242,7 +2236,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="naive_bayes_likelihood-4">naive_bayes_likelihood/4</a></h3>
 <div class="spec">
-<p><tt>naive_bayes_likelihood(FeatureEvident::<a href="#type-non_negative_integer">non_negative_integer()</a>, FeatureTotal::<a href="#type-positive_integer">positive_integer()</a>, NonFeatureEvident::<a href="#type-non_negative_integer">non_negative_integer()</a>, NonFeatureTotal::<a href="#type-positive_integer">positive_integer()</a>) -&gt; Result::list()</tt></p>
+<p><tt>naive_bayes_likelihood(FeatureEvident::<a href="#type-non_negative_integer">non_negative_integer()</a>, FeatureTotal::<a href="#type-positive_integer">positive_integer()</a>, NonFeatureEvident::<a href="#type-non_negative_integer">non_negative_integer()</a>, NonFeatureTotal::<a href="#type-positive_integer">positive_integer()</a>) -&gt; Result::list()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
   by the naive Bayes likelihood method.
  </p>
@@ -2355,7 +2349,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="nybble_to_hex-1">nybble_to_hex/1</a></h3>
 <div class="spec">
-<p><tt>nybble_to_hex(Nyb::<a href="#type-nybble">nybble()</a>) -&gt; integer()</tt></p>
+<p><tt>nybble_to_hex(Nyb::<a href="#type-nybble">nybble()</a>) -&gt; integer()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a nybble() to a hexchar(). <pre>  1&gt; sc:nybble_to_hex(7).
   55
  
@@ -2407,7 +2401,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="parity-1">parity/1</a></h3>
 <div class="spec">
-<p><tt>parity(Num::integer()) -&gt; even | odd</tt></p>
+<p><tt>parity(Num::integer()) -&gt; even | odd</tt><br></p>
 </div><p>Equivalent to <a href="#even_or_odd-1"><tt>even_or_odd(Num)</tt></a>.</p>
 <p>Documentary convenience function (synonymous with even_or_odd/1) that returns the atoms <code>even</code> or <code>odd</code> for any integer. <pre>  1&gt; sc:parity(3).
   odd</pre>
@@ -2425,7 +2419,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="pearson_correlation-1">pearson_correlation/1</a></h3>
 <div class="spec">
-<p><tt>pearson_correlation(TupleList::<a href="#type-coordlist">coordlist()</a>) -&gt; {r, Correlation::number()}</tt></p>
+<p><tt>pearson_correlation(TupleList::<a href="#type-coordlist">coordlist()</a>) -&gt; {r, Correlation::number()}</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Pearson Correlation Coefficient of a list of coordinate tuples. <pre>  1&gt; sc_correlate:pearson([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
   {r,1.0}
  
@@ -2457,7 +2451,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="permute-2">permute/2</a></h3>
 <div class="spec">
-<p><tt>permute(List::list(), Depth::<a href="#type-positive_integer">positive_integer()</a>) -&gt; list()</tt></p>
+<p><tt>permute(List::list(), Depth::<a href="#type-positive_integer">positive_integer()</a>) -&gt; list()</tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast <a href="#combinations-2"><code>combinations/2</code></a>.  Permutations are all valid orderings of a set of tokens; the permutations of <code>[a,b]</code> for example are <code>[a,b]</code> and <code>[b,a]</code>.  Depth limitation means the permutations of a smaller count of tokens from the main set; the 2-limited permutations of <code>[a,b,c]</code> for example are <code>[a,b]</code>, <code>[a,c]</code>, <code>[b,a]</code>, <code>[b,c]</code>, <code>[c,a]</code> and <code>[c,b]</code>.  Permutations are not ordered.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. <pre>  1&gt; sc:permute(["dave","kate","pat"]).
   [ { "pat",  "kate", "dave" },
     { "kate", "pat",  "dave" },
@@ -2519,7 +2513,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="qsp_average-2">qsp_average/2</a></h3>
 <div class="spec">
-<p><tt>qsp_average(W::<a href="#type-numericlist">numericlist()</a>, InputVecs::<a href="#type-vectorlist">vectorlist()</a>) -&gt; float()</tt></p>
+<p><tt>qsp_average(W::<a href="#type-numericlist">numericlist()</a>, InputVecs::<a href="#type-vectorlist">vectorlist()</a>) -&gt; float()</tt><br></p>
 </div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the quadratic scalar product average of a vector <code>W</code> and a list of vectors <code>X</code>.  The QSP Average
   is the arithmetic mean of the result set Y, where Y is generated as the square of the magnitude of the dot product
   of W and each individual vector in X. @see http://www.inf.fu-berlin.de/inst/ag-ki/rojas_home/documents/1996/NeuralNetworks/K5.pdf
@@ -2552,7 +2546,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="rand-1">rand/1</a></h3>
 <div class="spec">
-<p><tt>rand(Range::integer()) -&gt; integer()</tt></p>
+<p><tt>rand(Range::integer()) -&gt; integer()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a pseudorandom integer on the range <code>[0 - (Range-1)]</code> inclusive. <pre>  1&gt; sc:rand(100).
   9
  
@@ -2583,7 +2577,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="random_from-3">random_from/3</a></h3>
 <div class="spec">
-<p><tt>random_from(N::integer(), List::list(), WantRemainder::<a href="#type-want_remainder">want_remainder()</a>) -&gt; list()</tt></p>
+<p><tt>random_from(N::integer(), List::list(), WantRemainder::<a href="#type-want_remainder">want_remainder()</a>) -&gt; list()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take N non-repeating random elements from a list in undefined order.  If the atom <code>remainder</code> is passed in as the third argument, the unused portion of the source list will be returned as the second member of a 2ary tuple with the results; the default is no_remainder, which only returns the result set.  Mixed type input lists are perfectly safe, and membership for random selection is shallow (ie, <code>[ [1,2], [3,4] ]</code> as an input list would only generate outputs of lists, never integers.)<pre>  1&gt; sc:random_from([monday,tuesday,wednesday,thursday,friday]).
   friday
  
@@ -2612,7 +2606,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="random_from_weighted-1">random_from_weighted/1</a></h3>
 <div class="spec">
-<p><tt>random_from_weighted(InputList::<a href="#type-weightlist">weightlist()</a>) -&gt; any()</tt></p>
+<p><tt>random_from_weighted(InputList::<a href="#type-weightlist">weightlist()</a>) -&gt; any()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take a random single item from a list with weighted probabilities.  Probabilities may be any numeric type, and may be any non-negative value (items with zero probability will be omitted).  Input is a <code>weightlist()</code>, which is a list in the form <code>[{Item,Probability}, {I2,P2}, ...]</code>. There is no requirement to normalize probabilities to any range, though probabilities normalized to ranges will still work as expected. <pre>  1&gt; sc:from([ {quad,4}, {double,2}, {single,1} ]).
   quad
  
@@ -2631,7 +2625,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="range_scale-1">range_scale/1</a></h3>
 <div class="spec">
-<p><tt>range_scale(NumList::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt></p>
+<p><tt>range_scale(NumList::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Get the scale of a same-sign numeric range.  Gives nonsense results for non-numeric lists, or for lists which have both positive and negative members.  For a numeric list [4,5,6,12], the scale of the range 4..12 is 3:1, which is represented as 3.0 . <pre>  1&gt; sc:range_scale([3, 4, 5, 6]).
   2.0
  
@@ -2654,7 +2648,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="receive_one-0">receive_one/0</a></h3>
 <div class="spec">
-<p><tt>receive_one() -&gt; {item, any()} | nothing_there</tt></p>
+<p><tt>receive_one() -&gt; {item, any()} | nothing_there</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Pop the front of the message queue and return it as <code>{item,X}</code>, or return nothing_there for empty queues; do not block.  <pre>  1&gt; sc:receive_one().
   nothing_there
  
@@ -2671,7 +2665,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="record_member-2">record_member/2</a></h3>
 <div class="spec">
-<p><tt>record_member(E::any(), R::<a href="#type-record">record()</a>) -&gt; true | false</tt></p>
+<p><tt>record_member(E::any(), R::<a href="#type-record">record()</a>) -&gt; true | false</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <span style="color:red">TODO: Needs Example</span> Checks whether E is a member element of record R, analogous to <code>lists::member(E, L)</code>.  This function does not have examples because the shell does not correctly handle records; <span style="color:red">todo: add examples later</span>
  </p>
 <p><b>Introduced in:</b> Version 616</p>
@@ -2724,7 +2718,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="root_mean_square-1">root_mean_square/1</a></h3>
 <div class="spec">
-<p><tt>root_mean_square(Values::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt></p>
+<p><tt>root_mean_square(Values::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the root mean square of the values in the list.  <pre>  1&gt; sc:root_mean_square([1,2,3,4,5]).
   3.3166247903554
  
@@ -2735,14 +2729,14 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="root_sum_square-1">root_sum_square/1</a></h3>
 <div class="spec">
-<p><tt>root_sum_square(VX::<a href="#type-vector">vector()</a>) -&gt; number()</tt></p>
+<p><tt>root_sum_square(VX::<a href="#type-vector">vector()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the magnitude (also known as the root sum square) of a vector.
  </p>
 <p><b>Introduced in:</b> Version 506</p>
 
 <h3 class="function"><a name="rotate_list-2">rotate_list/2</a></h3>
 <div class="spec">
-<p><tt>rotate_list(Distance::integer(), ListData::list()) -&gt; list()</tt></p>
+<p><tt>rotate_list(Distance::integer(), ListData::list()) -&gt; list()</tt><br></p>
 </div><p>Rotates the front <code>Distance</code> elements of a list to the back, in order.  Negative distances rotate the back towards the front.  Distances over the length of
   the list wrap in modulus.  <pre>  1&gt; sc:rotate_list(2, [1,2,3,4,5,6,7,8]).
   [3,4,5,6,7,8,1,2]
@@ -2760,7 +2754,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="rotate_to_first-2">rotate_to_first/2</a></h3>
 <div class="spec">
-<p><tt>rotate_to_first(Item, List) -&gt; list()</tt></p>
+<p><tt>rotate_to_first(Item, List) -&gt; list()</tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Rotates the list to the first instance of Item.  <pre>  1&gt; sc:rotate_to_first(c, [a,b,c,d,e]).
   [c,d,e,a,b]
  
@@ -2771,7 +2765,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="rotate_to_last-2">rotate_to_last/2</a></h3>
 <div class="spec">
-<p><tt>rotate_to_last(Item, List) -&gt; list()</tt></p>
+<p><tt>rotate_to_last(Item, List) -&gt; list()</tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Rotates the list so that the first instance of Item becomes the last element in the list.  <pre>  1&gt; sc:rotate_to_last(c, [a,b,c,d,e]).
   [d,e,a,b,c]
  
@@ -2782,7 +2776,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="sanitize_filename-1">sanitize_filename/1</a></h3>
 <div class="spec">
-<p><tt>sanitize_filename(Filename::string()) -&gt; string()</tt></p>
+<p><tt>sanitize_filename(Filename::string()) -&gt; string()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Sanitize an arbitrary string to be appropriate for Windows and Unix filesystems, and URLs. <pre>  1&gt; sc:sanitize_filename("\h/e~l%lo! w^o@r#l*d.").
   "helloworld"</pre>
  </p>
@@ -2791,7 +2785,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="sanitize_tokens-2">sanitize_tokens/2</a></h3>
 <div class="spec">
-<p><tt>sanitize_tokens(InputList::list(), Allowed::<a href="#type-sanitizer">sanitizer()</a>) -&gt; list()</tt></p>
+<p><tt>sanitize_tokens(InputList::list(), Allowed::<a href="#type-sanitizer">sanitizer()</a>) -&gt; list()</tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Remove unacceptable elements from an input list, as defined by another list or a filter function.  Common reasons for sanitization include reducing arbitrary or bulk data to key format (such as using an original filename and new size to generate a new filename or database key) and removing malformed items from a list before processing. <pre>  1&gt; sc:sanitize_tokens("ae0z4nb'wc-04bn ze0e 0;4ci ;e0o5rn;", "ace").
   "aeceece"
  
@@ -2828,7 +2822,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="send_receive-2">send_receive/2</a></h3>
 <div class="spec">
-<p><tt>send_receive(ToWhom::pid() | atom(), What::any()) -&gt; {item, any()}</tt></p>
+<p><tt>send_receive(ToWhom::pid() | atom(), What::any()) -&gt; {item, any()}</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as <code>{item,X}</code>; block.  <pre>  1&gt; sc:send_receive(self(), message).
   {item,message}</pre>
  </p>
@@ -2836,7 +2830,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="send_receive-3">send_receive/3</a></h3>
 <div class="spec">
-<p><tt>send_receive(ToWhom::pid() | atom(), What::any(), HowLong::<a href="#type-non_negative_integer">non_negative_integer()</a> | infinity) -&gt; {item, any()} | nothing_there</tt></p>
+<p><tt>send_receive(ToWhom::pid() | atom(), What::any(), HowLong::<a href="#type-non_negative_integer">non_negative_integer()</a> | infinity) -&gt; {item, any()} | nothing_there</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as <code>{item,X}</code>, or return nothing_there for empty queues; do not block.  <pre>  1&gt; sc:send_receive(self(), message).
   {item,message}</pre>
  </p>
@@ -2844,7 +2838,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="send_receive_masked-3">send_receive_masked/3</a></h3>
 <div class="spec">
-<p><tt>send_receive_masked(Mask::any(), ToWhom::pid() | atom(), What::any()) -&gt; {Mask, any()}</tt></p>
+<p><tt>send_receive_masked(Mask::any(), ToWhom::pid() | atom(), What::any()) -&gt; {Mask, any()}</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Blocking) First send a message to an entity.  Then pop the first message queue item matching the mask as a 2-tuple, and return it as <code>{Mask,X}</code>; block.  <pre>  1&gt; sc:send_receive(self(), message).
   {item,message}</pre>
  </p>
@@ -2852,7 +2846,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="send_receive_masked-4">send_receive_masked/4</a></h3>
 <div class="spec">
-<p><tt>send_receive_masked(Mask::any(), ToWhom::pid() | atom(), What::any(), HowLong::<a href="#type-non_negative_integer">non_negative_integer()</a> | infinity) -&gt; {item, any()} | nothing_there</tt></p>
+<p><tt>send_receive_masked(Mask::any(), ToWhom::pid() | atom(), What::any(), HowLong::<a href="#type-non_negative_integer">non_negative_integer()</a> | infinity) -&gt; {item, any()} | nothing_there</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as <code>{Mask,X}</code>, or return nothing_there for empty queues; do not block.  <pre>  1&gt; sc:send_receive(self(), message).
   {item,message}</pre>
  </p>
@@ -2860,7 +2854,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="set_counter_value-2">set_counter_value/2</a></h3>
 <div class="spec">
-<p><tt>set_counter_value(Name::any(), To::number()) -&gt; 0</tt></p>
+<p><tt>set_counter_value(Name::any(), To::number()) -&gt; 0</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Sets a counter's value to a specific value. <pre>  1&gt; sc:counter_at(hello).
   0
  
@@ -2879,7 +2873,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="shared_keys-1">shared_keys/1</a></h3>
 <div class="spec">
-<p><tt>shared_keys(TupleList::<a href="#type-sorted_keylist">sorted_keylist()</a>) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt></p>
+<p><tt>shared_keys(TupleList::<a href="#type-sorted_keylist">sorted_keylist()</a>) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Create sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples, where key K appears in both A and B. <pre>  1&gt; sc:shared_keys([{1,a},{2,a},{3,a}],[{1,b},{3,b},{4,b}]).
   [{1,a,b},{3,a,b}]
  
@@ -2890,13 +2884,13 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="shared_keys-2">shared_keys/2</a></h3>
 <div class="spec">
-<p><tt>shared_keys(TupleList::<a href="#type-sorted_keylist">sorted_keylist()</a>, Presorted::presorted) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt></p>
+<p><tt>shared_keys(TupleList::<a href="#type-sorted_keylist">sorted_keylist()</a>, Presorted::presorted) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt><br></p>
 </div><p>Equivalent to <a href="#shared_keys-1"><tt>shared_keys(lists:zip(lists:sort(A), lists:sort(B)))</tt></a>.</p>
 <p><span style="color:orange;font-style:italic">Stoch untested</span> Equivalent to <a href="#shared_keys-1"><code>shared_keys/1</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</p>
 
 <h3 class="function"><a name="shared_keys-3">shared_keys/3</a></h3>
 <div class="spec">
-<p><tt>shared_keys(A::<a href="#type-sorted_keylist">sorted_keylist()</a>, B::<a href="#type-sorted_keylist">sorted_keylist()</a>, Presorted::presorted) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt></p>
+<p><tt>shared_keys(A::<a href="#type-sorted_keylist">sorted_keylist()</a>, B::<a href="#type-sorted_keylist">sorted_keylist()</a>, Presorted::presorted) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt><br></p>
 </div><p>Equivalent to <a href="#shared_keys-2"><tt>shared_keys(lists:sort(A), lists:sort(B))</tt></a>.</p>
 <p><span style="color:orange;font-style:italic">Stoch untested</span> Equivalent to <a href="#shared_keys-2"><code>shared_keys/2</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</p>
 
@@ -2909,7 +2903,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="shuffle-1">shuffle/1</a></h3>
 <div class="spec">
-<p><tt>shuffle(List::list()) -&gt; list()</tt></p>
+<p><tt>shuffle(List::list()) -&gt; list()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return a list with the original list's shallow members in a random order.  Deep lists are not shuffled; <code>[ [a,b,c], [d,e,f], [g,h,i] ]</code> will never produce sublist reorderings (<code>[b,c,a]</code>) or list mixing (<code>[b,g,e]</code>), only reordering of the three top level lists.  The output list will always be the same length as the input list.  Repeated items and mixed types in input lists are safe. <pre>  1&gt; sc:shuffle(lists:seq(1,9)).
   [8,4,7,9,5,2,6,1,3]
  
@@ -2929,7 +2923,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="simple_ranking-1">simple_ranking/1</a></h3>
 <div class="spec">
-<p><tt>simple_ranking(Values::<a href="#type-numericlist">numericlist()</a>) -&gt; <a href="#type-rankinglist">rankinglist()</a></tt></p>
+<p><tt>simple_ranking(Values::<a href="#type-numericlist">numericlist()</a>) -&gt; <a href="#type-rankinglist">rankinglist()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a ranked ordering of the list without tie rankings.  <pre>  1&gt; sc_rank:simple([10,90,20,80,30,70,40,60,50]).
   [{1,90}, {2,80}, {3,70}, {4,60}, {5,50}, {6,40}, {7,30}, {8,20}, {9,10}]
  
@@ -2948,7 +2942,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="spearman_correlation-1">spearman_correlation/1</a></h3>
 <div class="spec">
-<p><tt>spearman_correlation(TupleList::<a href="#type-coordlist">coordlist()</a>) -&gt; {rsquared, Correlation::number()}</tt></p>
+<p><tt>spearman_correlation(TupleList::<a href="#type-coordlist">coordlist()</a>) -&gt; {rsquared, Correlation::number()}</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Spearman's Rank Correlation Coefficient of a list of coordinate tuples. <pre>  1&gt; sc:spearman([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
   {rsquared,1.0}
  
@@ -2981,7 +2975,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="square-1">square/1</a></h3>
 <div class="spec">
-<p><tt>square(Input::number()) -&gt; number()</tt></p>
+<p><tt>square(Input::number()) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Squares the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions. <pre>  1&gt; sc:square(2).
   4
  
@@ -2992,7 +2986,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="srand-0">srand/0</a></h3>
 <div class="spec">
-<p><tt>srand() -&gt; {ok, {seeded, Seed}}</tt></p>
+<p><tt>srand() -&gt; {ok, {seeded, Seed}}</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want to know what seed was used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) <pre>  1&gt; sc:srand().
   {ok,{seeded,{1227,902172,685000}}}
  
@@ -3003,7 +2997,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="srand-3">srand/3</a></h3>
 <div class="spec">
-<p><tt>srand(A::integer(), B::integer(), C::integer()) -&gt; {ok, {seeded, Seed}}</tt></p>
+<p><tt>srand(A::integer(), B::integer(), C::integer()) -&gt; {ok, {seeded, Seed}}</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want set what seed is used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) <pre>  1&gt; sc:srand(1,2,3).
   {ok,{seeded,{1,2,3}}}
  
@@ -3017,7 +3011,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="standard_card_backs-0">standard_card_backs/0</a></h3>
 <div class="spec">
-<p><tt>standard_card_backs() -&gt; list()</tt></p>
+<p><tt>standard_card_backs() -&gt; list()</tt><br></p>
 </div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the list of colors which are used, in order, as the standard back colors of a series of decks for <a href="#multi_deck-2"><code>multi_deck/2</code></a>.  Each color is presented as an atom.  <pre>  1&gt; sc:standard_card_backs().
   [ red, blue, green, black, purple, orange, brown, yellow,
     teal, gray, cyan, indigo, pink, white, tan, maroon,
@@ -3029,7 +3023,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="standard_card_backs-1">standard_card_backs/1</a></h3>
 <div class="spec">
-<p><tt>standard_card_backs(Count::<a href="#type-positive_integer">positive_integer()</a>) -&gt; list()</tt></p>
+<p><tt>standard_card_backs(Count::<a href="#type-positive_integer">positive_integer()</a>) -&gt; list()</tt><br></p>
 </div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the front of the list of colors which are used, in order, as the standard back colors of a series of decks for <a href="#multi_deck-2"><code>multi_deck/2</code></a>.  Each color is presented as an atom.  If you request more colors than are in the list, the list <code>[1,2...Count]</code> is provided instead.  <pre>  1&gt; sc:standard_card_backs(5).
   [ red, blue, green, black, purple ]
  
@@ -3063,7 +3057,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="start_register_if_not_running-5">start_register_if_not_running/5</a></h3>
 <div class="spec">
-<p><tt>start_register_if_not_running(Node::atom(), Name::atom(), Module::atom(), Function::atom(), Args::list()) -&gt; pid() | ok</tt></p>
+<p><tt>start_register_if_not_running(Node::atom(), Name::atom(), Module::atom(), Function::atom(), Args::list()) -&gt; pid() | ok</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Check whether a process is registered locally, and if not, spawn it with a give function and arguments.  <pre>  1&gt; whereis(test).
   undefined
  
@@ -3102,7 +3096,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="stretch_hash-3">stretch_hash/3</a></h3>
 <div class="spec">
-<p><tt>stretch_hash(State::<a href="#type-list_or_binary">list_or_binary()</a>, HashFun::function(), ListOfSalts::list()) -&gt; binary()</tt></p>
+<p><tt>stretch_hash(State::<a href="#type-list_or_binary">list_or_binary()</a>, HashFun::function(), ListOfSalts::list()) -&gt; binary()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Stretches a hash with a list of salts.  Some people incorrect refer to this as key strentghening.  The process is a simple key-derivation function: repeat the application of a hash with a different pre-pend salt each time.<pre>  1&gt; Res = sc:stretch_hash("abc", fun erlang:md5/1, ["def", "ghi", "jkl", "mno"]).
   &lt;&lt;129,166,92,224,108,140,78,205,151,136,77,203,166,229,62,186&gt;&gt;
  
@@ -3120,7 +3114,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="svn_revision-1">svn_revision/1</a></h3>
 <div class="spec">
-<p><tt>svn_revision(ModuleName::atom()) -&gt; integer()</tt></p>
+<p><tt>svn_revision(ModuleName::atom()) -&gt; integer()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.  To use, add a module attribute to your module as follows: <code>-svn_revision("$+Revision$).</code>, after removing the plus (if the plus wasn't there, the example would get corrupted when I updated the module <code>;)</code>).  Then set the svn keyword "Revision" on the file, and check it in.  After that, your version is magically updated every time you check in!  <code>:D</code>  The sole argument to this function is the name of the module to be scanned, as an atom. <pre>  1&gt; sc:scan_svn_revision(testerl).
   16</pre>
  </p>
@@ -3135,7 +3129,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="test-0">test/0</a></h3>
 <div class="spec">
-<p><tt>test() -&gt; ok | error</tt></p>
+<p><tt>test() -&gt; ok | error</tt><br></p>
 </div><p>(not testworthy) Runs the test suite in terse form. <pre>  1&gt; sc:test().
     All 9 tests passed.
   ok</pre>
@@ -3144,7 +3138,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="test-1">test/1</a></h3>
 <div class="spec">
-<p><tt>test(Style::verbose) -&gt; ok | error</tt></p>
+<p><tt>test(Style::verbose) -&gt; ok | error</tt><br></p>
 </div><p>(not testworthy) Runs the test suite in verbose form.  Also responds to [verbose] to be more familiar to eunit devs.  An (ancient) example of output: <pre>  1&gt; sc:test(verbose).
   ======================== EUnit ========================
   module 'sc'
@@ -3196,7 +3190,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="tied_ordered_ranking-1">tied_ordered_ranking/1</a></h3>
 <div class="spec">
-<p><tt>tied_ordered_ranking(Values::<a href="#type-numericlist">numericlist()</a>) -&gt; <a href="#type-rankinglist">rankinglist()</a></tt></p>
+<p><tt>tied_ordered_ranking(Values::<a href="#type-numericlist">numericlist()</a>) -&gt; <a href="#type-rankinglist">rankinglist()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a tied ranked ordering of the list, ordered according to the input ordering rather than the sorted ordering.  As with <a href="#tied-1"><code>tied/1</code></a>, all rankings are floats, and ties are represented as the centers of ranges. <pre>  1&gt; sc:ordered([10,90,20,80,30,70,40,60,50]).
   [{9.0,10}, {1.0,90}, {8.0,20}, {2.0,80}, {7.0,30}, {3.0,70}, {6.0,40}, {4.0,60}, {5.0,50}]
  
@@ -3207,7 +3201,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="tied_ranking-1">tied_ranking/1</a></h3>
 <div class="spec">
-<p><tt>tied_ranking(Values::<a href="#type-numericlist">numericlist()</a>) -&gt; <a href="#type-rankinglist">rankinglist()</a></tt></p>
+<p><tt>tied_ranking(Values::<a href="#type-numericlist">numericlist()</a>) -&gt; <a href="#type-rankinglist">rankinglist()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a ranked ordering of the list with tie rankings.  As such, for uniformity, all rankings are floats.  Ties are represented as the centers of ranges. <pre>  1&gt; sc:tied([10,90,20,80,30,70,40,60,50]).
   [{1.0,90}, {2.0,80}, {3.0,70}, {4.0,60}, {5.0,50}, {6.0,40}, {7.0,30}, {8.0,20}, {9.0,10}]
  
@@ -3220,7 +3214,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="time_diff-2">time_diff/2</a></h3>
 <div class="spec">
-<p><tt>time_diff(A::<a href="#type-timestamp">timestamp()</a>, B::<a href="#type-timestamp">timestamp()</a>) -&gt; float()</tt></p>
+<p><tt>time_diff(A::<a href="#type-timestamp">timestamp()</a>, B::<a href="#type-timestamp">timestamp()</a>) -&gt; float()</tt><br></p>
 </div><p>Returns the difference, in seconds as a float, between two erlang timestamps as returned by <code>erlang:now()</code>.  Negative differences are returned if the latter timestamp <code>B</code> is earlier than the former timestamp <code>A</code>.  <pre>  1&gt; A = now().
   {1232,947675,340000}
  
@@ -3236,7 +3230,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="to_lines-1">to_lines/1</a></h3>
 <div class="spec">
-<p><tt>to_lines(Text::string()) -&gt; <a href="#type-stringlist">stringlist()</a></tt></p>
+<p><tt>to_lines(Text::string()) -&gt; <a href="#type-stringlist">stringlist()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Cuts a string according to any of the three newline conventions (even mixed), and discards empty strings.  Mostly convenience and documentary. <pre>  1&gt; sc:to_lines("one\rtwo\nthree\r\nfour\r\r\rfive").
   ["one","two","three","four","five"]</pre></p>
 <p><b>Introduced in:</b> Version 705</p>
@@ -3264,7 +3258,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="tuple_member-2">tuple_member/2</a></h3>
 <div class="spec">
-<p><tt>tuple_member(E::any(), T::tuple()) -&gt; true | false</tt></p>
+<p><tt>tuple_member(E::any(), T::tuple()) -&gt; true | false</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether E is a member element of tuple T, analogous to <code>lists::member(E, L)</code>. <pre>  1&gt; sc:tuple_member(b, {a,b,c}).
   true
  
@@ -3285,14 +3279,14 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="tuple_sum-1">tuple_sum/1</a></h3>
 <div class="spec">
-<p><tt>tuple_sum(T::<a href="#type-relaxed_numeric_tuple">relaxed_numeric_tuple()</a>) -&gt; number()</tt></p>
+<p><tt>tuple_sum(T::<a href="#type-relaxed_numeric_tuple">relaxed_numeric_tuple()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero. <pre>  1&gt;</pre>
  </p>
 <p><b>Introduced in:</b> Version 609</p>
 
 <h3 class="function"><a name="type_of-1">type_of/1</a></h3>
 <div class="spec">
-<p><tt>type_of(Argument::any()) -&gt; <a href="#type-typelabel">typelabel()</a></tt></p>
+<p><tt>type_of(Argument::any()) -&gt; <a href="#type-typelabel">typelabel()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of <code>is_bitstring()</code> . <pre>  1&gt; sc:type_of(1).
   integer
  
@@ -3363,7 +3357,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="vector_normalize-1">vector_normalize/1</a></h3>
 <div class="spec">
-<p><tt>vector_normalize(Vector::<a href="#type-vector">vector()</a>) -&gt; <a href="#type-unit_vector">unit_vector()</a></tt></p>
+<p><tt>vector_normalize(Vector::<a href="#type-vector">vector()</a>) -&gt; <a href="#type-unit_vector">unit_vector()</a></tt><br></p>
 </div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the magnitude of a vector.  A vector's magnitude is the length of its hypoteneuse.  A vector can be seen as the product of its unit vector and its magnitude; as such many people see a vector's magnitude as its scale.  The normal of the zero vector is undefined, in the way that dividing by zero is undefined, and will throw an arithmetic exception. <pre>  1&gt; sc:vector_normalize([0,3,4]).
   [0.0,0.6,0.8]</pre><span style="color:red">TODO: When tuple comprehensions are introduced to the language, convert this to using them.</span></p>
 <p><b>Introduced in:</b> Version 725</p>
@@ -3377,7 +3371,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a></h3>
 <div class="spec">
-<p><tt>weighted_arithmetic_mean(InputList::<a href="#type-weightlist">weightlist()</a>) -&gt; float()</tt></p>
+<p><tt>weighted_arithmetic_mean(InputList::<a href="#type-weightlist">weightlist()</a>) -&gt; float()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the weighted arithmetic mean of the input values. <pre>  1&gt; sc:weighted_arithmetic_mean([ {8,1}, {3,4}, {16,1} ]).
   6.0</pre>
  </p>
@@ -3386,13 +3380,13 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="zip_n-1">zip_n/1</a></h3>
 <div class="spec">
-<p><tt>zip_n(Ls::list()) -&gt; <a href="#type-list_of_tuples">list_of_tuples()</a></tt></p>
+<p><tt>zip_n(Ls::list()) -&gt; <a href="#type-list_of_tuples">list_of_tuples()</a></tt><br></p>
 </div><p>Equivalent to <a href="#zip_n-2"><tt>zip_n(Ls, to_tuple)</tt></a>.</p>
 
 
 <h3 class="function"><a name="zip_n-2">zip_n/2</a></h3>
 <div class="spec">
-<p><tt>zip_n(Ls::list(), ResultType::atom()) -&gt; <a href="#type-list_of_tuples">list_of_tuples()</a></tt></p>
+<p><tt>zip_n(Ls::list(), ResultType::atom()) -&gt; <a href="#type-list_of_tuples">list_of_tuples()</a></tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Computes a zip on any sized group of lists, rather than just two or three as offered by the lists module. <pre>  1&gt; sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii] ]).
   [{1,a,i},{2,b,ii},{3,c,iii}]
  
@@ -3416,7 +3410,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="zipf_estimate_list-1">zipf_estimate_list/1</a></h3>
 <div class="spec">
-<p><tt>zipf_estimate_list(PosNumericList::<a href="#type-positive_numeric_list">positive_numeric_list()</a>) -&gt; <a href="#type-positive_numeric_list">positive_numeric_list()</a></tt></p>
+<p><tt>zipf_estimate_list(PosNumericList::<a href="#type-positive_numeric_list">positive_numeric_list()</a>) -&gt; <a href="#type-positive_numeric_list">positive_numeric_list()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Estimates the zipf baseline from each number in a numeric list. <pre>  1&gt; sc:zipf_estimate_list([ 120, 60, 40, 30, 24, 20 ]).
   [120, 120, 120, 120, 120, 120]
  
@@ -3430,7 +3424,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="zipf_nearness-1">zipf_nearness/1</a></h3>
 <div class="spec">
-<p><tt>zipf_nearness(PosNumericList::<a href="#type-positive_numeric_list">positive_numeric_list()</a>) -&gt; number()</tt></p>
+<p><tt>zipf_nearness(PosNumericList::<a href="#type-positive_numeric_list">positive_numeric_list()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> todo. <pre>  1&gt; sc:zipf_nearness([ 120, 60, 40, 30, 24, 20 ]).
   [[ {strength,1.0}, {center,120.0} ],
    [ {strength,1.0}, {center,120.0} ],
@@ -3457,7 +3451,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="zipf_position_estimate-2">zipf_position_estimate/2</a></h3>
 <div class="spec">
-<p><tt>zipf_position_estimate(Score::number(), Rank::<a href="#type-positive_integer">positive_integer()</a>) -&gt; number()</tt></p>
+<p><tt>zipf_position_estimate(Score::number(), Rank::<a href="#type-positive_integer">positive_integer()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Estimates the zipf baseline from a score and a rank position. <pre>  1&gt; sc:zipf_position_estimate(120, 3).
   360</pre>
  </p>
@@ -3465,6 +3459,6 @@ and returns the tuple of the remainder and then a list of all results from the f
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Nov 26 2011, 14:07:08.</i></p>
+<p><i>Generated by EDoc, Dec 15 2011, 23:24:40.</i></p>
 </body>
 </html>
