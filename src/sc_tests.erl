@@ -7,7 +7,7 @@
 -module(sc_tests).
 -compile(export_all).
 
--include_lib("eqc/include/eqc.hrl").
+-include_lib("proper/include/proper.hrl").
 -include_lib("eunit/include/eunit.hrl").
 
 
@@ -36,7 +36,7 @@ extrema_test_() ->
 
 prop_key_duplicate_correct_length() ->
 
-    ?FORALL( {L,I}, {sc_eqc:non_neg_integer(), sc_eqc:misc_type()}, abs(L) == length( sc:key_duplicate([ {abs(L),I} ]) ) ).
+    ?FORALL( {L,I}, {proper_types:non_neg_integer(), proper_types:any()}, abs(L) == length( sc:key_duplicate([ {abs(L),I} ]) ) ).
 
 
 
@@ -52,7 +52,7 @@ key_duplicate_test_() ->
 
         {"Regression: key empty-list", ?_assert( [ [], [] ]  =:= sc:key_duplicate([ {2, []} ])     ) },
 
-        {"Stochastic: correct length", ?_assert( true        =:= eqc:quickcheck(prop_key_duplicate_correct_length()) ) }
+        {"Stochastic: correct length", ?_assert( true        =:= proper:quickcheck(prop_key_duplicate_correct_length()) ) }
 
     ] }.
 
@@ -97,8 +97,8 @@ rotate_list_test_() ->
         {"-3, [ a,b,c ]", ?_assert( [a,b,c] =:= sc:rotate_list(-3, [ a,b,c ]) ) },
         {"9,  [ a,b,c ]", ?_assert( [a,b,c] =:= sc:rotate_list(9,  [ a,b,c ]) ) },
 
-        {"Stochastic: correct length",  ?_assert( true  =:= eqc:quickcheck(prop_rotate_list_correct_length()) ) },
-        {"Stochastic: same histograph", ?_assert( true  =:= eqc:quickcheck(prop_rotate_list_same_histo()) ) }
+        {"Stochastic: correct length",  ?_assert( true  =:= proper:quickcheck(prop_rotate_list_correct_length()) ) },
+        {"Stochastic: same histograph", ?_assert( true  =:= proper:quickcheck(prop_rotate_list_same_histo()) ) }
 
     ] }.
 
@@ -350,7 +350,7 @@ explode_test_() ->
 
 prop_ceil_ints_as_floats_identity() ->
 
-    ?FORALL( I, eqc_gen:int(), sc:ceiling(I*1.0) =:= I ).
+    ?FORALL( I, proper_types:integer(), sc:ceiling(I*1.0) =:= I ).
 
 
 
@@ -358,7 +358,7 @@ prop_ceil_ints_as_floats_identity() ->
 
 prop_ceil_floats_smaller_within_1() ->
 
-    ?FORALL( R, eqc_gen:real(), (sc:ceiling(R) - R) < 1 andalso (sc:ceiling(R) - R) >= 0 ).
+    ?FORALL( R, proper_types:real(), (sc:ceiling(R) - R) < 1 andalso (sc:ceiling(R) - R) >= 0 ).
 
 
 
@@ -368,8 +368,8 @@ ceil_test_() ->
 
     { "Ceil/Ceiling tests", [
 
-        {"Stochastic: all integers-as-floats are identity", ?_assert( true =:= eqc:quickcheck(prop_ceil_ints_as_floats_identity()) ) },
-        {"Stochastic: all floats are smaller within 1",     ?_assert( true =:= eqc:quickcheck(prop_ceil_floats_smaller_within_1()) ) }
+        {"Stochastic: all integers-as-floats are identity", ?_assert( true =:= proper:quickcheck(prop_ceil_ints_as_floats_identity()) ) },
+        {"Stochastic: all floats are smaller within 1",     ?_assert( true =:= proper:quickcheck(prop_ceil_floats_smaller_within_1()) ) }
 
     ] }.
 
@@ -379,7 +379,7 @@ ceil_test_() ->
 
 prop_floor_ints_as_floats_identity() ->
 
-    ?FORALL( I, eqc_gen:int(), sc:floor(I*1.0) =:= I ).
+    ?FORALL( I, proper_types:int(), sc:floor(I*1.0) =:= I ).
 
 
 
@@ -387,7 +387,7 @@ prop_floor_ints_as_floats_identity() ->
 
 prop_floor_floats_larger_within_1() ->
 
-    ?FORALL( R, eqc_gen:real(), (R - sc:floor(R)) < 1 andalso (R - sc:floor(R)) >= 0 ).
+    ?FORALL( R, proper_types:real(), (R - sc:floor(R)) < 1 andalso (R - sc:floor(R)) >= 0 ).
 
 
 
@@ -397,8 +397,8 @@ floor_test_() ->
 
     { "Floor tests", [
 
-        {"Stochastic: all integers-as-floats are identity", ?_assert( true =:= eqc:quickcheck(prop_floor_ints_as_floats_identity()) ) },
-        {"Stochastic: all floats are larger within 1",      ?_assert( true =:= eqc:quickcheck(prop_floor_floats_larger_within_1()) ) }
+        {"Stochastic: all integers-as-floats are identity", ?_assert( true =:= proper:quickcheck(prop_floor_ints_as_floats_identity()) ) },
+        {"Stochastic: all floats are larger within 1",      ?_assert( true =:= proper:quickcheck(prop_floor_floats_larger_within_1()) ) }
 
     ] }.
 
