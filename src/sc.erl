@@ -179,7 +179,9 @@
     has_bit/2,
     count_bits/1,
     now_str_utc24/0,
+
     ensure_started/1,
+      ensure_started/2,
 
     notebook_validate/1,
       notebook_create/1,
@@ -9228,13 +9230,25 @@ notebook_contents(NotebookName)
 
 
 
+%% @equiv ensure_started(App, [])
+
 %% @since Version 758
 
-ensure_started(App)
+ensure_started(App) ->
+
+    ensure_started(App, []).
+
+
+
+
+
+%% @since Version 770
+
+ensure_started(App, Opts)
 
     when is_atom(App) ->
 
-    case apply(App, start, []) of
+    case apply(App, start, Opts) of
         ok                              -> ok;
         {error, {already_started, App}} -> ok;
         Other                           -> Other
