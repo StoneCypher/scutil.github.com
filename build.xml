@@ -63,7 +63,7 @@
   <target name="test" depends="compile" description="Test the binaries and scripts">
 
 
-    <fileset dir="client" id="jsfiles.raw">
+    <fileset dir="html-css-js" id="jsfiles.raw">
       <include name="**/*.js" />
       <exclude name="**/*.min.js" />
     </fileset>
@@ -82,7 +82,7 @@
 
 
     <echo> - CSS</echo>
-    <fileset dir="client" id="cssfiles.raw">
+    <fileset dir="html-css-js" id="cssfiles.raw">
       <include name="**/*.css" />
     </fileset>
 
