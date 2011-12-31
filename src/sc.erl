@@ -41,6 +41,8 @@
 %% @todo burn out scutil:
 %% @todo burn out @section
 %% @todo burn out was
+%% @todo move to -spec 
+%% @todo distinguish -opaque types from -types (opaque are not meant to be understood by the outside world, merely tracked, eg handles)
 
 %% @todo paranoid guards
 
@@ -125,7 +127,6 @@
     flag_sets/1,
     list_product/1,
     sanitize_tokens/2,
-    naive_bayes_likelihood/4,
     caspers_jones_estimate/1,
     range_scale/1,
     absolute_difference/2,
@@ -179,6 +180,9 @@
     has_bit/2,
     count_bits/1,
     now_str_utc24/0,
+
+    naive_bayes_likelihood/4,
+      naive_bayes_likelihood/5,
 
     ensure_started/1,
       ensure_started/2,
@@ -655,21 +659,21 @@ extrema([First | _] = List)
 
     Next = fun(Next,T) ->
 
-               {Lo, Hi} = T,
+        {Lo, Hi} = T,
 
-               Lo2 = if
-                   Next < Lo -> Next;
-                   true      -> Lo
-               end,
+        Lo2 = if
+            Next < Lo -> Next;
+            true      -> Lo
+        end,
 
-               Hi2 = if
-                   Next > Hi -> Next;
-                   true      -> Hi
-               end,
+        Hi2 = if
+            Next > Hi -> Next;
+            true      -> Hi
+        end,
 
-               {Lo2, Hi2}
-
-           end,
+        {Lo2, Hi2}
+    
+    end,
 
     lists:foldl(Next, {First,First}, List).
 
@@ -1725,12 +1729,53 @@ caspers_jones_estimate(FunctionPoints)
 
 %% @spec naive_bayes_likelihood(FeatureEvident::non_negative_integer(), FeatureTotal::positive_integer(), NonFeatureEvident::non_negative_integer(), NonFeatureTotal::positive_integer()) -> Result::list()
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
-%% by the naive Bayes likelihood method.
+%% @equiv naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatureTotal, simple)
 %%
-%% @since Version 478
+%% @since Version 772
 
-naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatureTotal)
+naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatureTotal) ->
+
+    naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatureTotal, simple).
+
+
+
+
+
+%% @spec naive_bayes_likelihood(FeatureEvident::non_negative_integer(), FeatureTotal::positive_integer(), NonFeatureEvident::non_negative_integer(), NonFeatureTotal::positive_integer(), WhetherIsSimple::simple|full) -> Result::list()
+%%
+%% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
+%% via Naive Bayes Likelihood.
+%%
+%% For example, given a bulk of 100 email, where 60 are known spam and 40 known legit, where of the spam 48 contain the word "buy" and of the non-spam only 4 contain the word "buy," calculate bayes likelihoods regarding new email containing the word "buy." ```1> sc:naive_bayes_likelihood(48, 60, 4, 40).
+%% 0.9230769230769231
+%%
+%% 2> sc:naive_bayes_likelihood(48, 60, 4, 40, full).
+%% [ {contributing_difference,0.7000000000000001},
+%%   {likelihood_featured,0.8},
+%%   {likelihood_nonfeatured,0.1},
+%%   {evident_feature_likelihood,0.9230769230769231} ]
+%%
+%% 3> sc:naive_bayes_likelihood(48, 60, 4, 40, simple).
+%% 0.9230769230769231'''
+%%
+%% @since Version 772
+
+naive_bayes_likelihood(FeatureEvident, _FeatureTotal, NonFeatureEvident, _NonFeatureTotal, simple)
+
+    when is_integer(FeatureEvident),
+         is_integer(NonFeatureEvident),
+
+         FeatureEvident    >= 0,
+         NonFeatureEvident >= 0 ->
+
+
+    FeatureEvident / (FeatureEvident + NonFeatureEvident);
+
+
+
+
+
+naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatureTotal, full)
 
     when is_integer(FeatureEvident),
          is_integer(FeatureTotal),
@@ -1743,11 +1788,15 @@ naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatu
          NonFeatureTotal   >  0       ->
 
 
-    LF = FeatureEvident / FeatureTotal,
-    NF = NonFeatureEvident / NonFeatureTotal,
-    CD = LF - NF,
+    LF  = FeatureEvident / FeatureTotal,
+    NF  = NonFeatureEvident / NonFeatureTotal,
+    CD  = LF - NF,
+    EFL = FeatureEvident / (FeatureEvident + NonFeatureEvident),
 
-    [ {contributing_difference, CD}, {likelihood_featured, LF}, {likelihood_nonfeatured, NF} ].
+    [ {contributing_difference,    CD},
+      {likelihood_featured,        LF},
+      {likelihood_nonfeatured,     NF},
+      {evident_feature_likelihood, EFL} ].
 
 
 

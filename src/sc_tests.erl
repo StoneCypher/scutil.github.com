@@ -424,3 +424,19 @@ to_lines_test_() ->
         {"Long stack",        ?_assert( ["a","b","c","d","e"] =:= sc:to_lines("a\rb\nc\r\nd\n\r\r\ne") ) }
 
     ] }.
+
+
+
+
+
+naive_bayes_likelihood_test_() ->
+
+    LongForm = [ {contributing_difference,0.7000000000000001}, {likelihood_featured,0.8}, {likelihood_nonfeatured,0.1}, {evident_feature_likelihood,0.9230769230769231} ],
+
+    { "Naive bayes likelihood tests", [
+
+        { "Simple", ?_assert( 0.9230769230769231 =:= sc:naive_bayes_likelihood(48, 60, 4, 40) ) },
+        { "Simple", ?_assert( 0.9230769230769231 =:= sc:naive_bayes_likelihood(48, 60, 4, 40, simple) ) },
+        { "Simple", ?_assert( LongForm           =:= sc:naive_bayes_likelihood(48, 60, 4, 40, full) ) }
+
+    ] }.

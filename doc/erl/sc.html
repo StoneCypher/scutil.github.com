@@ -13,7 +13,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> 2.5.767
+<p><b>Version:</b> 2.5.771
 </p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
@@ -300,7 +300,9 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#elements-2">elements/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
 <tr><td valign="top"><a href="#elements-3">elements/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#elements-4">elements/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
-<tr><td valign="top"><a href="#ensure_started-1">ensure_started/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ensure_started-1">ensure_started/1</a></td><td>Equivalent to <a href="#ensure_started-2"><tt>ensure_started(App, [])</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#ensure_started-2">ensure_started/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#entrypoints-1">entrypoints/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#entrypoints-2">entrypoints/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#euclidean_distance-2">euclidean_distance/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the distance between two coordinates in any N-space.</td></tr>
@@ -418,8 +420,11 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#multi_do-3">multi_do/3</a></td><td>Equivalent to <a href="#multi_do-4"><tt>multi_do(C, M, F, [])</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#multi_do-4">multi_do/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take an iteration count, a module name, a function name and an argument list, and repeatedly apply the argument list to the module/function, count times.</td></tr>
-<tr><td valign="top"><a href="#naive_bayes_likelihood-4">naive_bayes_likelihood/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
-  by the naive Bayes likelihood method.</td></tr>
+<tr><td valign="top"><a href="#naive_bayes_likelihood-4">naive_bayes_likelihood/4</a></td><td>Equivalent to <a href="#naive_bayes_likelihood-5"><tt>naive_bayes_likelihood(FeatureEvident, FeatureTotal,
+		       NonFeatureEvident, NonFeatureTotal, simple)</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#naive_bayes_likelihood-5">naive_bayes_likelihood/5</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event  
+via Naive Bayes Likelihood.</td></tr>
 <tr><td valign="top"><a href="#nearest_to-2">nearest_to/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#neighbors-2">neighbors/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#ngrams-1">ngrams/1</a></td><td></td></tr>
@@ -513,7 +518,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#tied_ordered_ranking-1">tied_ordered_ranking/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a tied ranked ordering of the list, ordered according to the input ordering rather than the sorted ordering.</td></tr>
 <tr><td valign="top"><a href="#tied_ranking-1">tied_ranking/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a ranked ordering of the list with tie rankings.</td></tr>
 <tr><td valign="top"><a href="#time_diff-2">time_diff/2</a></td><td>Returns the difference, in seconds as a float, between two erlang timestamps as returned by <code>erlang:now()</code>.</td></tr>
-<tr><td valign="top"><a href="#to_lines-1">to_lines/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Cuts a string according to any of the three newline conventions (even mixed), and discards empty strings.</td></tr>
+<tr><td valign="top"><a href="#to_lines-1">to_lines/1</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Cuts a string according to any of the three newline conventions (even mixed), and discards empty strings.</td></tr>
 <tr><td valign="top"><a href="#to_list-1">to_list/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#triangle_index-1">triangle_index/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#triangle_index-2">triangle_index/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -1052,8 +1057,15 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="ensure_started-1">ensure_started/1</a></h3>
 <div class="spec">
 <p><tt>ensure_started(App) -&gt; any()</tt></p>
-</div>
+</div><p>Equivalent to <a href="#ensure_started-2"><tt>ensure_started(App, [])</tt></a>.</p>
+
 <p><b>Introduced in:</b> Version 758</p>
+
+<h3 class="function"><a name="ensure_started-2">ensure_started/2</a></h3>
+<div class="spec">
+<p><tt>ensure_started(App, Opts) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 770</p>
 
 <h3 class="function"><a name="entrypoints-1">entrypoints/1</a></h3>
 <div class="spec">
@@ -2237,10 +2249,30 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="naive_bayes_likelihood-4">naive_bayes_likelihood/4</a></h3>
 <div class="spec">
 <p><tt>naive_bayes_likelihood(FeatureEvident::<a href="#type-non_negative_integer">non_negative_integer()</a>, FeatureTotal::<a href="#type-positive_integer">positive_integer()</a>, NonFeatureEvident::<a href="#type-non_negative_integer">non_negative_integer()</a>, NonFeatureTotal::<a href="#type-positive_integer">positive_integer()</a>) -&gt; Result::list()</tt><br></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
-  by the naive Bayes likelihood method.
+</div><p>Equivalent to <a href="#naive_bayes_likelihood-5"><tt>naive_bayes_likelihood(FeatureEvident, FeatureTotal,
+		       NonFeatureEvident, NonFeatureTotal, simple)</tt></a>.</p>
+
+<p><b>Introduced in:</b> Version 772</p>
+
+<h3 class="function"><a name="naive_bayes_likelihood-5">naive_bayes_likelihood/5</a></h3>
+<div class="spec">
+<p><tt>naive_bayes_likelihood(FeatureEvident::<a href="#type-non_negative_integer">non_negative_integer()</a>, FeatureTotal::<a href="#type-positive_integer">positive_integer()</a>, NonFeatureEvident::<a href="#type-non_negative_integer">non_negative_integer()</a>, NonFeatureTotal::<a href="#type-positive_integer">positive_integer()</a>, WhetherIsSimple::simple | full) -&gt; Result::list()</tt><br></p>
+</div><p><p><span style="color:orange;font-style:italic">Stoch untested</span> Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event  
+via Naive Bayes Likelihood.</p>
+ 
+  For example, given a bulk of 100 email, where 60 are known spam and 40 known legit, where of the spam 48 contain the word "buy" and of the non-spam only 4 contain the word "buy," calculate bayes likelihoods regarding new email containing the word "buy." <pre>  1&gt; sc:naive_bayes_likelihood(48, 60, 4, 40).
+  0.9230769230769231
+ 
+  2&gt; sc:naive_bayes_likelihood(48, 60, 4, 40, full).
+  [ {contributing_difference,0.7000000000000001},
+    {likelihood_featured,0.8},
+    {likelihood_nonfeatured,0.1},
+    {evident_feature_likelihood,0.9230769230769231} ]
+ 
+  3&gt; sc:naive_bayes_likelihood(48, 60, 4, 40, simple).
+  0.9230769230769231</pre>
  </p>
-<p><b>Introduced in:</b> Version 478</p>
+<p><b>Introduced in:</b> Version 772</p>
 
 <h3 class="function"><a name="nearest_to-2">nearest_to/2</a></h3>
 <div class="spec">
@@ -3231,7 +3263,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <h3 class="function"><a name="to_lines-1">to_lines/1</a></h3>
 <div class="spec">
 <p><tt>to_lines(Text::string()) -&gt; <a href="#type-stringlist">stringlist()</a></tt><br></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Cuts a string according to any of the three newline conventions (even mixed), and discards empty strings.  Mostly convenience and documentary. <pre>  1&gt; sc:to_lines("one\rtwo\nthree\r\nfour\r\r\rfive").
+</div><p><span style="color:orange;font-style:italic">Stoch untested</span> Cuts a string according to any of the three newline conventions (even mixed), and discards empty strings.  Mostly convenience and documentary. <pre>  1&gt; sc:to_lines("one\rtwo\nthree\r\nfour\r\r\rfive").
   ["one","two","three","four","five"]</pre></p>
 <p><b>Introduced in:</b> Version 705</p>
 
@@ -3459,6 +3491,6 @@ and returns the tuple of the remainder and then a list of all results from the f
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Dec 15 2011, 23:24:40.</i></p>
+<p><i>Generated by EDoc, Dec 31 2011, 01:26:26.</i></p>
 </body>
 </html>
