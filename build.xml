@@ -77,7 +77,7 @@
     <echo> - Javascript</echo>
 
     <exec executable="java" output="build/logs/jslint.xml">
-      <arg line="-jar /usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0/jre/lib/ext/jslint4java/201/jslint4java-2.0.1/jslint4java-2.0.1.jar --browser --report xml ${jsfiles.clean}" />
+      <arg line="-jar /usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0/jre/lib/ext/jslint4java/201/jslint4java-2.0.1/jslint4java-2.0.1.jar --browser --plusplus --report xml ${jsfiles.clean}" />
     </exec>
 
 
