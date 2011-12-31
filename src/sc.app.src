@@ -1,0 +1,8 @@
+{application,
+  sc,
+  [ {description,  "ScUtil"},
+    {applications, [proper]},
+    {modules,      [sc, sc_proper, sc_tests]},
+    {vsn,          "0.0.0"}
+  ]
+}.
