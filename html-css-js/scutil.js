@@ -66,6 +66,8 @@ function emptyish(X) {
 function AddClassIfMissing(Tag, tclass) {
 
     'use strict';
+    
+    var i;
 
     // depending on the class name
     switch (Tag.className) {
@@ -87,7 +89,7 @@ function AddClassIfMissing(Tag, tclass) {
             var Classes = Tag.className.split(' ');
 
             // iterate the resulting classes
-            for (var i in Classes) {
+            for (i in Classes) {
 
                 // if one matches the to-be-added, do nothing and return
                 if (Classes[i] === tclass) {
@@ -112,11 +114,13 @@ function RemoveClassOnceIfPresent(Tag, tclass) {
 
     'use strict';
 
+    var i;
+
     // take the current class list and tokenize on spaces
     var Classes = Tag.className.split(' ');
 
     // iterate the resulting classes
-    for (var i in Classes) {
+    for (i in Classes) {
 
         // remove any matching element
         if (Classes[i] === tclass) {
