@@ -409,4 +409,18 @@ floor_test_() ->
 to_lines_test_() ->
 
     { "To lines tests", [
+
+        {"Single DOS-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\nb") ) },
+        {"Double DOS-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\n\r\nb") ) },
+
+        {"Single unix-style", ?_assert( ["a","b"] =:= sc:to_lines("a\nb") ) },
+        {"Double unix-style", ?_assert( ["a","b"] =:= sc:to_lines("a\n\nb") ) },
+
+        {"Single mac-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\rb") ) },
+        {"Double mac-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\rb") ) },
+
+        {"Backwards",         ?_assert( ["a","b"] =:= sc:to_lines("a\n\rb") ) },
+
+        {"Long stack",        ?_assert( ["a","b","c","d","e"] =:= sc:to_lines("a\rb\nc\r\nd\n\r\r\ne") ) }
+
     ] }.

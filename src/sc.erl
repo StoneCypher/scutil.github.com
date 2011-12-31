@@ -8342,7 +8342,7 @@ markhov_chain(N, Depth, Source, Work) ->
 
 %% @spec to_lines(Text::string()) -> stringlist()
 
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Cuts a string according to any of the three newline conventions (even mixed), and discards empty strings.  Mostly convenience and documentary. ```1> sc:to_lines("one\rtwo\nthree\r\nfour\r\r\rfive").
+%% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Cuts a string according to any of the three newline conventions (even mixed), and discards empty strings.  Mostly convenience and documentary. ```1> sc:to_lines("one\rtwo\nthree\r\nfour\r\r\rfive").
 %% ["one","two","three","four","five"]'''
 
 %% @since Version 705
