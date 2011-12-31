@@ -15,10 +15,9 @@ function CreateUniqueId(Prefix, Suffix) {
 
     'use strict';
 
-    var uPref = (Prefix == undefined)? 'id_' : Prefix;
-    var uSuff = (Suffix == undefined)? ''    : Suffix;
-
-    var Curr;
+    var uPref = (Prefix === undefined) ? 'id_' : Prefix,
+        uSuff = (Suffix === undefined) ? ''    : Suffix,
+        Curr;
 
     while (true) {
 
