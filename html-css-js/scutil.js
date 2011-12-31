@@ -141,10 +141,9 @@ function RemoveClassRepeatedlyIfPresent(Tag, tclass) {
 
     'use strict';
 
-    var i;
-
     // Take the current class list and tokenise it on spaces.
-    var Classes = Tag.className.split(' ');
+    var Classes = Tag.className.split(' '),
+        i;
 
     // iterate the resulting classes
     for (i in Classes) {
@@ -189,18 +188,17 @@ function Zebrafy(Tag, RowType, ClassList) {
     while (kid !== undefined) {
 
         // if it isn't the kind of child counted, skip to the next without incrementing the class counter
-        if (kid.nodeName !== RowType.toUpperCase()) {
-            kid = kid.nextSibling;
-            continue;
-        }
+        if (kid.nodeName === RowType.toUpperCase()) {
 
-        // increment the class counter, and zero on tick-over
-        if ((++ci) >= cc) {
-            ci = 0;
-        }
+            // increment the class counter, and zero on tick-over
+            if ((++ci) >= cc) {
+                ci = 0;
+            }
 
-        // set the target row's class
-        AddClassIfMissing(kid, ClassList[ci]);
+            // set the target row's class
+            AddClassIfMissing(kid, ClassList[ci]);
+
+        }
 
         // next tag
         kid = kid.nextSibling;
