@@ -235,7 +235,7 @@ function MonthLength(Month, Year) {
 
     switch (Month) {
         case  1: return 31;
-        case  2: return ((IsLeapYear(Year) === true) ? 29 : 28);
+        case  2: var iLY = IsLeapYear(Year); return ((iLY === true) ? 29 : 28);
         case  3: return 31;
         case  4: return 30;
         case  5: return 31;
