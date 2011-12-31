@@ -3,6 +3,6 @@
   [ {description,  "ScUtil"},
     {applications, [proper]},
     {modules,      [sc, sc_proper, sc_tests]},
-    {vsn,          "2.5.760"}
+    {vsn,          "2.5.777"}
   ]
 }.

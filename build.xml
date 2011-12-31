@@ -44,11 +44,11 @@
     <echo>Test builds</echo>
     <echo> - Erlang</echo>
 
-    <exec executable="make" output="build/logs/initialrebarmake.xml" dir="/var/lib/jenkins/jobs/scutil/workspace/src">
+    <exec executable="make" output="build/logs/initialrebarmake.xml" dir="/var/lib/jenkins/jobs/scutil/workspace">
       <arg line="" />
     </exec>
 
-    <exec executable="make" output="build/logs/testrebarmake.xml" dir="/var/lib/jenkins/jobs/scutil/workspace/src">
+    <exec executable="make" output="build/logs/testrebarmake.xml" dir="/var/lib/jenkins/jobs/scutil/workspace">
       <arg line="test" />
     </exec>
 
@@ -108,7 +108,7 @@
     <echo>Generating docs</echo>
     <echo> - Erlang</echo>
 
-    <exec executable="make" output="build/logs/docsphrasematrixmake.xml" dir="/var/lib/jenkins/jobs/scutil/workspace/src">
+    <exec executable="make" output="build/logs/docsphrasematrixmake.xml" dir="/var/lib/jenkins/jobs/scutil/workspace">
       <arg line="docs" />
     </exec>
 
@@ -125,7 +125,7 @@
     <echo>Building production erlang</echo>
     <echo> - Compile</echo>
 
-    <exec executable="make" output="build/logs/rebarmake.xml" dir="/var/lib/jenkins/jobs/scutil/workspace/src">
+    <exec executable="make" output="build/logs/rebarmake.xml" dir="/var/lib/jenkins/jobs/scutil/workspace">
       <arg line="" />
     </exec>
 
