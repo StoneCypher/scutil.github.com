@@ -87,7 +87,7 @@ function AddClassIfMissing(Tag, tclass) {
             var Classes = Tag.className.split(' ');
 
             // iterate the resulting classes
-            for (i in Classes) {
+            for (var i in Classes) {
 
                 // if one matches the to-be-added, do nothing and return
                 if (Classes[i] === tclass) {
@@ -116,7 +116,7 @@ function RemoveClassOnceIfPresent(Tag, tclass) {
     var Classes = Tag.className.split(' ');
 
     // iterate the resulting classes
-    for (i in Classes) {
+    for (var i in Classes) {
 
         // remove any matching element
         if (Classes[i] === tclass) {
@@ -214,6 +214,24 @@ function Zebrafy(Tag, RowType, ClassList) {
 
 
 
+function IsLeapYear(Year) {
+
+    'use strict';
+
+    return (
+        ((Year % 400) === 0)? true  : (
+        ((Year % 100) === 0)? false : (
+        ((Year % 4)   === 0)? true  :
+                              false
+        ))
+    );
+
+}
+
+
+
+
+
 function MonthLength(Month, Year) {
 
     'use strict';
@@ -234,24 +252,6 @@ function MonthLength(Month, Year) {
     }
 
     return false;
-
-}
-
-
-
-
-
-function IsLeapYear(Year) {
-
-    'use strict';
-
-    return (
-        ((Year % 400) === 0)? true  : (
-        ((Year % 100) === 0)? false : (
-        ((Year % 4)   === 0)? true  :
-                              false
-        ))
-    );
 
 }
 
