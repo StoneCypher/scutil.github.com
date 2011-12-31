@@ -90,7 +90,7 @@ function AddClassIfMissing(Tag, tclass) {
             for (i in Classes) {
 
                 // if one matches the to-be-added, do nothing and return
-                if (Classes[i] == tclass) {
+                if (Classes[i] === tclass) {
                     return;
                 }
             }
@@ -119,7 +119,7 @@ function RemoveClassOnceIfPresent(Tag, tclass) {
     for (i in Classes) {
 
         // remove any matching element
-        if (Classes[i] == tclass) {
+        if (Classes[i] === tclass) {
 
             Classes.splice(i, 1);
 
@@ -149,13 +149,13 @@ function RemoveClassRepeatedlyIfPresent(Tag, tclass) {
         // space expansion if there are extra 0-length strings getting .join()ed back together to make more,
         // so we discard them as a memory space safety issue
 
-        if (Classes[i] == '') {
+        if (Classes[i] === '') {
             Classes.splice(i, 1);
         }
 
         // remove any matching element
 
-        if (Classes[i] == tclass) {
+        if (Classes[i] === tclass) {
             Classes.splice(i, 1);
         }
 
@@ -187,10 +187,10 @@ function Zebrafy(Tag, RowType, ClassList) {
 
 
     // loop will terminate when out of children
-    while (kid != undefined) {
+    while (kid !== undefined) {
 
         // if it isn't the kind of child counted, skip to the next without incrementing the class counter
-        if (kid.nodeName != RowType.toUpperCase()) {
+        if (kid.nodeName !== RowType.toUpperCase()) {
             kid = kid.nextSibling;
             continue;
         }
@@ -246,10 +246,10 @@ function IsLeapYear(Year) {
     'use strict';
 
     return (
-        ((Year % 400) == 0)? true  : (
-        ((Year % 100) == 0)? false : (
-        ((Year % 4)   == 0)? true  :
-                             false
+        ((Year % 400) === 0)? true  : (
+        ((Year % 100) === 0)? false : (
+        ((Year % 4)   === 0)? true  :
+                              false
         ))
     );
 
