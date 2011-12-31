@@ -67,8 +67,6 @@ function AddClassIfMissing(Tag, tclass) {
 
     'use strict';
     
-    var i;
-
     // depending on the class name
     switch (Tag.className) {
 
@@ -86,7 +84,8 @@ function AddClassIfMissing(Tag, tclass) {
         default :
 
             // tokenise on spaces
-            var Classes = Tag.className.split(' ');
+            var Classes = Tag.className.split(' '), 
+                i;
 
             // iterate the resulting classes
             for (i in Classes) {
@@ -114,10 +113,9 @@ function RemoveClassOnceIfPresent(Tag, tclass) {
 
     'use strict';
 
-    var i;
-
     // take the current class list and tokenize on spaces
-    var Classes = Tag.className.split(' ');
+    var Classes = Tag.className.split(' '),
+        i;
 
     // iterate the resulting classes
     for (i in Classes) {
@@ -142,6 +140,8 @@ function RemoveClassOnceIfPresent(Tag, tclass) {
 function RemoveClassRepeatedlyIfPresent(Tag, tclass) {
 
     'use strict';
+
+    var i;
 
     // Take the current class list and tokenise it on spaces.
     var Classes = Tag.className.split(' ');
@@ -180,14 +180,9 @@ function Zebrafy(Tag, RowType, ClassList) {
     'use strict';
 
 
-    // get the first child of the container to start the tag iteration
-    var kid = Tag.firstChild;
-
-    // cc is the class count - how many classes there are.  cached because object inspection could have a changing value (no mutability control in javascript :( )
-    var cc = ClassList.length;
-
-    // ci is the class index - the current class.  started at -1 so that when the counter is immediately incremented, it's to the correct default of 0, to skip uptick safety logic.
-    var ci = -1;
+    var kid = Tag.firstChild,   // get the first child of the container to start the tag iteration
+        cc = ClassList.length,  // cc is the class count - how many classes there are.  cached because object inspection could have a changing value (no mutability control in javascript :( )
+        ci = -1;                // ci is the class index - the current class.  started at -1 so that when the counter is immediately incremented, it's to the correct default of 0, to skip uptick safety logic.
 
 
     // loop will terminate when out of children
@@ -267,8 +262,8 @@ function DateToOrdinalDate(Month, Day, Year) {
 
     'use strict';
 
-    var Base = 0;
-    var i;
+    var Base = 0,
+        i;
 
     for (i=1; i<Month; ++i) {
         Base += MonthLength(i, Year);
