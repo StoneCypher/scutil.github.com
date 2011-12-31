@@ -51,6 +51,7 @@
 %% @todo module attributes and documentation attributes for license name, license url
 %% @todo Every documentation example should be enforced as a unit test, to keep the docs up to date
 %% @todo Automate the version back into the docs
+%% @todo Automate the version into the .app.src
 
 
 
