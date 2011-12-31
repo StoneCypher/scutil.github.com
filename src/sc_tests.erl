@@ -435,8 +435,25 @@ naive_bayes_likelihood_test_() ->
 
     { "Naive bayes likelihood tests", [
 
-        { "Simple", ?_assert( 0.9230769230769231 =:= sc:naive_bayes_likelihood(48, 60, 4, 40) ) },
-        { "Simple", ?_assert( 0.9230769230769231 =:= sc:naive_bayes_likelihood(48, 60, 4, 40, simple) ) },
-        { "Simple", ?_assert( LongForm           =:= sc:naive_bayes_likelihood(48, 60, 4, 40, full) ) }
+        { "Doc ex 1 - implicit", ?_assert( 0.9230769230769231 =:= sc:naive_bayes_likelihood(48, 60, 4, 40)         ) },
+        { "Doc ex 2 - simple",   ?_assert( 0.9230769230769231 =:= sc:naive_bayes_likelihood(48, 60, 4, 40, simple) ) },
+        { "Doc ex 3 - full",     ?_assert( LongForm           =:= sc:naive_bayes_likelihood(48, 60, 4, 40, full)   ) }
+
+    ] }.
+
+
+
+
+
+range_scale_test_() ->
+
+    { "Range scale tests", [
+
+        { "Doc ex 1 - range",     ?_assert( 2.0  =:= sc:range_scale([3, 4, 5, 6])         ) },
+        { "Doc ex 2 - bookends",  ?_assert( 2.0  =:= sc:range_scale([3, 6])               ) },
+        { "Doc ex 3 - backwards", ?_assert( 2.0  =:= sc:range_scale([6, 5, 3])            ) },
+        { "Doc ex 4 - float",     ?_assert( 2.5  =:= sc:range_scale([3, 4, 5, 6, 7, 7.5]) ) },
+        { "Doc ex 5 - irregular", ?_assert( 33.0 =:= sc:range_scale([3, 10, 12, 99])      ) },
+        { "Doc ex 6 - repeat",    ?_assert( 1.0  =:= sc:range_scale([3, 3, 3])            ) }
 
     ] }.
