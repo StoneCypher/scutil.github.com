@@ -1,9 +1,5 @@
 
-// $Revision$
-// $Date$
 // since April 3, 2009
-// $Id$
-// $HeadURL$
 
 
 
@@ -11,7 +7,7 @@
 
 var scutil_LastUniqueIdFound = 0;
 
-function CreateUniqueId(Prefix, Suffix) {
+function createUniqueId(Prefix, Suffix) {
 
     'use strict';
 
@@ -63,10 +59,10 @@ function emptyish(X) {
 
 
 
-function AddClassIfMissing(Tag, tclass) {
+function addClassIfMissing(Tag, tclass) {
 
     'use strict';
-    
+
     // depending on the class name
     switch (Tag.className) {
 
@@ -84,7 +80,7 @@ function AddClassIfMissing(Tag, tclass) {
         default :
 
             // tokenise on spaces
-            var Classes = Tag.className.split(' '), 
+            var Classes = Tag.className.split(' '),
                 i;
 
             // iterate the resulting classes
@@ -109,7 +105,7 @@ function AddClassIfMissing(Tag, tclass) {
 
 // only removes the first instance of the class if repeated
 
-function RemoveClassOnceIfPresent(Tag, tclass) {
+function removeClassOnceIfPresent(Tag, tclass) {
 
     'use strict';
 
@@ -137,7 +133,7 @@ function RemoveClassOnceIfPresent(Tag, tclass) {
 
 
 
-function RemoveClassRepeatedlyIfPresent(Tag, tclass) {
+function removeClassRepeatedlyIfPresent(Tag, tclass) {
 
     'use strict';
 
@@ -174,7 +170,7 @@ function RemoveClassRepeatedlyIfPresent(Tag, tclass) {
 
 
 
-function Zebrafy(Tag, RowType, ClassList) {
+function zebrafy(Tag, RowType, ClassList) {
 
     'use strict';
 
@@ -196,7 +192,7 @@ function Zebrafy(Tag, RowType, ClassList) {
             }
 
             // set the target row's class
-            AddClassIfMissing(kid, ClassList[ci]);
+            addClassIfMissing(kid, ClassList[ci]);
 
         }
 
@@ -229,7 +225,7 @@ function isLeapYear(Year) {
 
 
 
-function MonthLength(Month, Year) {
+function monthLength(Month, Year) {
 
     'use strict';
 
@@ -256,7 +252,7 @@ function MonthLength(Month, Year) {
 
 
 
-function DateToOrdinalDate(Month, Day, Year) {
+function dateToOrdinalDate(Month, Day, Year) {
 
     'use strict';
 
@@ -264,7 +260,7 @@ function DateToOrdinalDate(Month, Day, Year) {
         i;
 
     for (i=1; i<Month; ++i) {
-        Base += MonthLength(i, Year);
+        Base += monthLength(i, Year);
     }
 
     return { 'year':Year, 'ord':Base+Day };
