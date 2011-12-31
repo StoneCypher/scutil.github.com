@@ -13,6 +13,8 @@ var scutil_LastUniqueIdFound = 0;
 
 function CreateUniqueId(Prefix, Suffix) {
 
+    'use strict';
+
     var uPref = (Prefix == undefined)? 'id_' : Prefix;
     var uSuff = (Suffix == undefined)? ''    : Suffix;
 
@@ -34,6 +36,8 @@ function CreateUniqueId(Prefix, Suffix) {
 
 
 function emptyish(X) {
+
+    'use strict';
 
     // there are a variety of reasons not to add empty objects
 
@@ -62,6 +66,8 @@ function emptyish(X) {
 
 function AddClassIfMissing(Tag, tclass) {
 
+    'use strict';
+
     // depending on the class name
     switch (Tag.className) {
 
@@ -82,7 +88,7 @@ function AddClassIfMissing(Tag, tclass) {
             var Classes = Tag.className.split(' ');
 
             // iterate the resulting classes
-            for (i in Classes) { 
+            for (i in Classes) {
 
                 // if one matches the to-be-added, do nothing and return
                 if (Classes[i] == tclass) {
@@ -105,9 +111,11 @@ function AddClassIfMissing(Tag, tclass) {
 
 function RemoveClassOnceIfPresent(Tag, tclass) {
 
+    'use strict';
+
     // take the current class list and tokenize on spaces
     var Classes = Tag.className.split(' ');
-    
+
     // iterate the resulting classes
     for (i in Classes) {
 
@@ -115,7 +123,7 @@ function RemoveClassOnceIfPresent(Tag, tclass) {
         if (Classes[i] == tclass) {
 
             Classes.splice(i, 1);
-            
+
             // then immediately recombine and return
             Tag.className = Classes.join(' ');
             return;
@@ -129,6 +137,8 @@ function RemoveClassOnceIfPresent(Tag, tclass) {
 
 
 function RemoveClassRepeatedlyIfPresent(Tag, tclass) {
+
+    'use strict';
 
     // Take the current class list and tokenise it on spaces.
     var Classes = Tag.className.split(' ');
@@ -163,6 +173,8 @@ function RemoveClassRepeatedlyIfPresent(Tag, tclass) {
 
 
 function Zebrafy(Tag, RowType, ClassList) {
+
+    'use strict';
 
 
     // get the first child of the container to start the tag iteration
@@ -205,6 +217,8 @@ function Zebrafy(Tag, RowType, ClassList) {
 
 function MonthLength(Month, Year) {
 
+    'use strict';
+
     switch (Month) {
         case  1: return 31;
         case  2: return (IsLeapYear(Year))? 29 : 28;
@@ -229,6 +243,9 @@ function MonthLength(Month, Year) {
 
 
 function IsLeapYear(Year) {
+
+    'use strict';
+
     return (
         ((Year % 400) == 0)? true  : (
         ((Year % 100) == 0)? false : (
@@ -236,6 +253,7 @@ function IsLeapYear(Year) {
                              false
         ))
     );
+
 }
 
 
@@ -243,6 +261,8 @@ function IsLeapYear(Year) {
 
 
 function DateToOrdinalDate(Month, Day, Year) {
+
+    'use strict';
 
     var Base = 0;
     var i;
