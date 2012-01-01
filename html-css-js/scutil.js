@@ -122,15 +122,18 @@ function removeClassOnceIfPresent(Tag, tclass) {
     // iterate the resulting classes
     for (i in Classes) {
 
-        // remove any matching element
-        if (Classes[i] === tclass) {
+        if (Classes.hasOwnProperty(i)) {
 
-            Classes.splice(i, 1);
-
-            // then immediately recombine and return
-            Tag.className = Classes.join(' ');
-            return;
-
+            // remove any matching element
+            if (Classes[i] === tclass) {
+    
+                Classes.splice(i, 1);
+    
+                // then immediately recombine and return
+                Tag.className = Classes.join(' ');
+                return;
+    
+            }
         }
     }
 }
