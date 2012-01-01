@@ -457,3 +457,20 @@ range_scale_test_() ->
         { "Doc ex 6 - repeat",    ?_assert( 1.0  =:= sc:range_scale([3, 3, 3])            ) }
 
     ] }.
+
+
+
+
+
+expected_value_test_() ->
+
+    { "Range scale tests", [
+
+        { "Doc ex 1 - 1..6=3.5",           ?_assert( 3.5                 =:= sc:expected_value([1,2,3,4,5,6])         ) },
+        { "Doc ex 2 - 5x1,1x10=2.5",       ?_assert( 2.5                 =:= sc:expected_value([ {1,5}, {10,1} ])     ) },
+        { "Doc ex 3 - 1,1,1,1,1;1x10=2.5", ?_assert( 2.5                 =:= sc:expected_value([ 1,1,1,1,1, {10,1} ]) ) },
+        { "Doc ex 4 - 8x1,7x-1=0.66",      ?_assert( 0.06666666666666667 =:= sc:expected_value([ {1,8}, {-1,7} ])     ) },
+
+        { "Doc assertion - [] throws",     ?_assertError( badarith, sc:expected_value([]) ) }
+
+    ] }.

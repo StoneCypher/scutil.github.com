@@ -2662,16 +2662,29 @@ median_absolute_deviation(List)
 
 %% @spec expected_value(List::mixed_weight_list()) -> number()
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the expected value of infinite selection from a weighted numeric list.  ```1> sc:expected_value([1,2,3,4,5,6]).
-%% 3.50000'''
+%% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Returns the expected value of infinite selection from a weighted numeric list.  Elements of the list may either be numbers or tuples in the form `{Value,Weight}' (weight may be floating-point).  This means that `[ 1,1,1, 10,10 ]' and `[ {1,3}, {10,2} ]' are the same list. The expected value of an empty list is undefined, and will throw `badarith'. ```1> sc:expected_value([1,2,3,4,5,6]).
+%% 3.50000
 %%
-%% <a href="http://www.wolframalpha.com/input/?i=ExpectedValue[+f%2C+{1%2C2%2C3%2C4%2C5%2C6}%2C+f+]">Wolfram Alpha confirms</a>
-%%
-%% ```2> sc:expected_value([ {1,5}, {10,1} ]).
+%% 2> sc:expected_value([ {1,5}, {10,1} ]).
 %% 2.5
 %%
-%% 3> sc:expected_value([ {-1,37}, {35,1} ]).
-%% -5.26316e-2'''
+%% 3> sc:expected_value([ 1,1,1,1,1, {10,1} ]).
+%% 2.5
+%%
+%% 4> sc:expected_value([ {1,8}, {-1,7} ]).
+%% 0.06666666666666667'''
+%%
+%% 5> catch sc:expected_value([ ]).
+%% {'EXIT',{badarith,[{sc,expected_value,3},
+%%                    {erl_eval,do_apply,5},
+%%                    {erl_eval,expr,5},
+%%                    {shell,exprs,7},
+%%                    {shell,eval_exprs,7},
+%%                    {shell,eval_loop,3}]}}'''
+%%
+%% <a href="http://www.wolframalpha.com/input/?i=ExpectedValue[+f%2C+{1%2C2%2C3%2C4%2C5%2C6}%2C+f+]">Wolfram Alpha confirms result 1</a><br/>
+%% <a href="http://www.wolframalpha.com/input/?i=ExpectedValue[+f%2C+{1%2C1%2C1%2C1%2C1%2C10}%2C+f+]">Wolfram Alpha confirms result 2</a><br/>
+%% <a href="http://www.wolframalpha.com/input/?i=ExpectedValue[+f%2C+{+1%2C+1%2C+1%2C+1%2C+1%2C+1%2C+1%2C+1%2C+-1%2C+-1%2C+-1%2C+-1%2C+-1%2C+-1%2C+-1+}%2C+f+]">Wolfram Alpha confirms result 4</a>
 %%
 %% @since Version 502
 
@@ -3006,7 +3019,8 @@ ceiling(X) ->
 
 %% @since Version 511
 
-%% @doc 1> sc:floor(0.5).
+%% @doc Takes the floor of a number (rounds towards negative infinity.)  This is different than `erlang:trunc/1', which removes the mantissa, in its
+%% handling of negative numbers: trunc diminishes towards zero, not towards negative infinity (note examples 6 and 7 below.) ```1> sc:floor(0.5).
 %% 0
 %%
 %% 2> sc:floor(0).
@@ -3024,10 +3038,13 @@ ceiling(X) ->
 %% 6> sc:floor(-1.5).
 %% -2
 %%
-%% 7> sc:floor(-1).
+%% 7> erlang:trunc(-1.5).
 %% -1
 %%
-%% 8> sc:floor(1).
+%% 8> sc:floor(-1).
+%% -1
+%%
+%% 9> sc:floor(1).
 %% 1'''
 
 floor(X) when X < 0 ->
@@ -8995,10 +9012,10 @@ is_numeric_char(_, _)                                                    -> fals
 
 %% @spec time_diff(A::timestamp(), B::timestamp()) -> float()
 
-%% @doc Returns the difference, in seconds as a float, between two erlang timestamps as returned by `erlang:now()'.  Negative differences are returned if the latter timestamp `B' is earlier than the former timestamp `A'.  ```1> A = now().
+%% @doc Returns the difference, in seconds as a float, between two erlang timestamps as returned by `os:timestamp()'.  Negative differences are returned if the latter timestamp `B' is earlier than the former timestamp `A'.  This is different than `timer:now_diff/2' in that this works in floating point seconds, rather than integer microseconds. `os:timestamp/0' should be used rather than `erlang:now/0' because `erlang:now/0' is massaged time - gaps are smoothed, reversals are prevented, reads are forced monotonic increasing, et cetera (thanks MononcQc,) whereas `os:timestamp/0' is raw.  ```1> A = os:timestamp().
 %% {1232,947675,340000}
 %%
-%% 2> B = now().
+%% 2> B = os:timestamp().
 %% {1232,947679,412000}
 %%
 %% 3> sc:time_diff(A,B).
@@ -9009,7 +9026,7 @@ is_numeric_char(_, _)                                                    -> fals
 
 %% @since Version 742
 
-time_diff({AM,AS,AU}, {BM, BS, BU}) ->
+time_diff( {AM,AS,AU}, {BM,BS,BU}) ->
 
     ((BM-AM) * 1000000) + (BS-AS) + ((BU-AU)/1000000).
 
@@ -9019,11 +9036,31 @@ time_diff({AM,AS,AU}, {BM, BS, BU}) ->
 
 %% @since Version 743
 
+%% @doc Benchmark a lambda call.  `os:timestamp/0' is used rather than `erlang:now/0' because `erlang:now/0' is massaged time - gaps are smoothed, reversals are prevented, reads are forced monotonic increasing, et cetera (thanks MononcQc,) whereas `os:timestamp/0' is raw. ```1> Delay1s = fun() -> receive after 1000 -> mississippi end end.
+%% #Fun<erl_eval.20.21881191>
+%%
+%% 2> Delay1s().
+%% mississippi
+%%
+%% 3> sc:benchmark(Delay1s).
+%% {1.014,mississippi}
+%%
+%% 4> {GenTime, Dataset} = sc:benchmark(fun() -> sc:shuffle(lists:seq(1,100000)) end).
+%% { 0.203,
+%%   [ 51251,43276,49951,60293,85795,53354,81523,80855,35387,
+%%     63856,17466,50722,88409,33148,98511,43668,12019,6187,63052,
+%%     80796,80444,68758,60669,74765,31900,66920,82825 | ... ] }
+%%
+%% 5> {SortTime, _Sorted} = sc:benchmark(fun() -> lists:sort(Dataset) end).
+%% { 0.078,
+%%   [ 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,
+%%     23,24,25,26,27 | ... ] }'''
+
 benchmark(BareLambda) ->
 
-    Start  = now(),
+    Start  = os:timestamp(),
     Result = BareLambda(),
-    End    = now(),
+    End    = os:timestamp(),
 
     { time_diff(Start,End), Result }.
 
