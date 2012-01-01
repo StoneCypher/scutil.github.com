@@ -89,7 +89,7 @@
     <pathconvert pathsep=" " property="cssfiles.clean" refid="cssfiles.raw" /> <!-- should separator be a comma here or smth? didn't do multifile ##TODO -->
 
     <exec executable="java" output="build/logs/csslint.xml">
-      <arg line="-jar /usr/share/java/js.jar /erlanginst/csslint/stubbornella-csslint-1147557/release/csslint-rhino.js --format=lint-xml ${cssfiles.clean}" />
+      <arg line="-jar /usr/share/java/js.jar /erlanginst/csslint/stubbornella-csslint-1147557/release/csslint-rhino.js --errors=box-model,compatible-vendor-prefixes,display-property-grouping,duplicate-properties,empty-rules,errors,gradients,import,important,known-properties,outline-none,qualified-headings,regex-selectors,shorthand,text-indent,vendor-prefix,zero-units --format=lint-xml ${cssfiles.clean}" />
     </exec>
 
 
