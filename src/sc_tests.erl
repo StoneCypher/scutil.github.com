@@ -405,6 +405,15 @@ floor_test_() ->
 
     { "Floor tests", [
 
+        {"0.5",  ?_assert(  0 =:= sc:floor(0.5)  ) },
+        {"0",    ?_assert(  0 =:= sc:floor(0)    ) },
+        {"0.0",  ?_assert(  0 =:= sc:floor(0.0)  ) },
+        {"1.0",  ?_assert(  1 =:= sc:floor(1.0)  ) },
+        {"-1.0", ?_assert( -1 =:= sc:floor(-1.0) ) },
+        {"-1.5", ?_assert( -2 =:= sc:floor(-1.5) ) },
+        {"-1",   ?_assert( -1 =:= sc:floor(-1)   ) },
+        {"1",    ?_assert(  1 =:= sc:floor(1)    ) },
+
         {"Stochastic: all integers-as-floats are identity", ?_assert( true =:= proper:quickcheck(prop_floor_ints_as_floats_identity()) ) },
         {"Stochastic: all floats are larger within 1",      ?_assert( true =:= proper:quickcheck(prop_floor_floats_larger_within_1()) ) }
 
@@ -418,18 +427,20 @@ to_lines_test_() ->
 
     { "To lines tests", [
 
-        {"Single DOS-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\nb") ) },
-        {"Double DOS-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\n\r\nb") ) },
+        { "Doc ex 1, Readable",          ?_assert( ["one","two","three","four","five"] =:= sc:to_lines("one\rtwo\nthree\r\nfour\r\r\rfive") ) },
 
-        {"Single unix-style", ?_assert( ["a","b"] =:= sc:to_lines("a\nb") ) },
-        {"Double unix-style", ?_assert( ["a","b"] =:= sc:to_lines("a\n\nb") ) },
+        { "Doc ex 4, Single DOS-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\nb") ) },
+        {           "Double DOS-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\n\r\nb") ) },
 
-        {"Single mac-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\rb") ) },
-        {"Double mac-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\rb") ) },
+        { "Doc ex 2, Single unix-style", ?_assert( ["a","b"] =:= sc:to_lines("a\nb") ) },
+        { "Doc ex 3, Double unix-style", ?_assert( ["a","b"] =:= sc:to_lines("a\n\nb") ) },
 
-        {"Backwards",         ?_assert( ["a","b"] =:= sc:to_lines("a\n\rb") ) },
+        { "Doc ex 5, Single mac-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\rb") ) },
+        {           "Double mac-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\rb") ) },
 
-        {"Long stack",        ?_assert( ["a","b","c","d","e"] =:= sc:to_lines("a\rb\nc\r\nd\n\r\r\ne") ) }
+        {           "Backwards",         ?_assert( ["a","b"] =:= sc:to_lines("a\n\rb") ) },
+
+        { "Doc ex 6, Long stack",        ?_assert( ["a","b","c","d","e"] =:= sc:to_lines("a\rb\nc\r\nd\n\r\r\ne") ) }
 
     ] }.
 

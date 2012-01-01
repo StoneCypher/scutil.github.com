@@ -1780,6 +1780,8 @@ naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatu
 %% 3> sc:naive_bayes_likelihood(48, 60, 4, 40, simple).
 %% 0.9230769230769231'''
 %%
+%% Unit and doc tested.
+%%
 %% @since Version 772
 
 naive_bayes_likelihood(FeatureEvident, _FeatureTotal, NonFeatureEvident, _NonFeatureTotal, simple)
@@ -1843,6 +1845,8 @@ naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatu
 %%
 %% 6> sc:range_scale([3, 3, 3]).
 %% 1.0'''
+%%
+%% Unit and doc tested.
 %%
 %% @since Version 479
 
@@ -2694,6 +2698,8 @@ median_absolute_deviation(List)
 %% <a href="http://www.wolframalpha.com/input/?i=ExpectedValue[+f%2C+{1%2C1%2C1%2C1%2C1%2C10}%2C+f+]">Wolfram Alpha confirms result 2</a><br/>
 %% <a href="http://www.wolframalpha.com/input/?i=ExpectedValue[+f%2C+{+1%2C+1%2C+1%2C+1%2C+1%2C+1%2C+1%2C+1%2C+-1%2C+-1%2C+-1%2C+-1%2C+-1%2C+-1%2C+-1+}%2C+f+]">Wolfram Alpha confirms result 4</a>
 %%
+%% Unit and doc tested.
+%%
 %% @since Version 502
 
 expected_value(List) ->
@@ -3054,6 +3060,8 @@ ceiling(X) ->
 %%
 %% 9> sc:floor(1).
 %% 1'''
+%%
+%% Unit, doc and stochastic property (int as float identity; float always larger within 1) tested.
 
 floor(X) when X < 0 ->
 
@@ -8444,7 +8452,24 @@ markhov_chain(N, Depth, Source, Work) ->
 %% @spec to_lines(Text::string()) -> stringlist()
 
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Cuts a string according to any of the three newline conventions (even mixed), and discards empty strings.  Mostly convenience and documentary. ```1> sc:to_lines("one\rtwo\nthree\r\nfour\r\r\rfive").
-%% ["one","two","three","four","five"]'''
+%% ["one","two","three","four","five"]
+%%
+%% 2> sc:to_lines("a\nb").
+%% ["a","b"]
+%%
+%% 3> sc:to_lines("a\n\n\n\n\n\nb").
+%% ["a","b"]
+%%
+%% 4> sc:to_lines("a\r\nb").
+%% ["a","b"]
+%%
+%% 5> sc:to_lines("a\rb").
+%% ["a","b"]
+%%
+%% 6> sc:to_lines("a\rb\nc\r\nd\n\r\r\ne")
+%% ["a","b","c","d","e"]'''
+%%
+%% Unit and doc tested.
 
 %% @since Version 705
 
