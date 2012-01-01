@@ -372,12 +372,30 @@ prop_ceil_floats_smaller_within_1() ->
 
 
 
+prop_ceil_always_gives_integers() ->
+
+    ?FORALL( N, proper_types:number(), is_integer(sc:ceiling(N)) ).
+
+
+
+
+
 ceil_test_() ->
 
     { "Ceil/Ceiling tests", [
 
+        {"0.5",  ?_assert(  1 =:= sc:ceil(0.5)  ) },
+        {"0",    ?_assert(  0 =:= sc:ceil(0)    ) },
+        {"0.0",  ?_assert(  0 =:= sc:ceil(0.0)  ) },
+        {"1.0",  ?_assert(  1 =:= sc:ceil(1.0)  ) },
+        {"-1.0", ?_assert( -1 =:= sc:ceil(-1.0) ) },
+        {"-1.5", ?_assert( -1 =:= sc:ceil(-1.5) ) },
+        {"-1",   ?_assert( -1 =:= sc:ceil(-1)   ) },
+        {"1",    ?_assert(  1 =:= sc:ceil(1)    ) },
+
         {"Stochastic: all integers-as-floats are identity", ?_assert( true =:= proper:quickcheck(prop_ceil_ints_as_floats_identity()) ) },
-        {"Stochastic: all floats are smaller within 1",     ?_assert( true =:= proper:quickcheck(prop_ceil_floats_smaller_within_1()) ) }
+        {"Stochastic: all floats are smaller within 1",     ?_assert( true =:= proper:quickcheck(prop_ceil_floats_smaller_within_1()) ) },
+        {"Stochastic: all numbers give integer results",    ?_assert( true =:= proper:quickcheck(prop_ceil_always_gives_integers())   ) }
 
     ] }.
 
@@ -401,6 +419,14 @@ prop_floor_floats_larger_within_1() ->
 
 
 
+prop_floor_always_gives_integers() ->
+
+    ?FORALL( N, proper_types:number(), is_integer(sc:floor(N)) ).
+
+
+
+
+
 floor_test_() ->
 
     { "Floor tests", [
@@ -415,7 +441,8 @@ floor_test_() ->
         {"1",    ?_assert(  1 =:= sc:floor(1)    ) },
 
         {"Stochastic: all integers-as-floats are identity", ?_assert( true =:= proper:quickcheck(prop_floor_ints_as_floats_identity()) ) },
-        {"Stochastic: all floats are larger within 1",      ?_assert( true =:= proper:quickcheck(prop_floor_floats_larger_within_1()) ) }
+        {"Stochastic: all floats are larger within 1",      ?_assert( true =:= proper:quickcheck(prop_floor_floats_larger_within_1())  ) },
+        {"Stochastic: all numbers give integer results",    ?_assert( true =:= proper:quickcheck(prop_floor_always_gives_integers())   ) }
 
     ] }.
 
@@ -494,5 +521,32 @@ expected_value_test_() ->
 
         { "Doc assertion - [] throws",               ?_assertError( badarith, sc:expected_value([]) ) },
         { "Doc assertion - [ {1,0}, {2,0} ] throws", ?_assertError( badarith, sc:expected_value([]) ) }
+
+    ] }.
+
+
+
+
+
+nybble_to_hex_test_() ->
+
+    { "Nybble to hex tests", [
+
+        { "0n", ?_assert( $0 =:= sc:nybble_to_hex(0)  ) },
+        { "1n", ?_assert( $1 =:= sc:nybble_to_hex(1)  ) },
+        { "2n", ?_assert( $2 =:= sc:nybble_to_hex(2)  ) },
+        { "3n", ?_assert( $3 =:= sc:nybble_to_hex(3)  ) },
+        { "4n", ?_assert( $4 =:= sc:nybble_to_hex(4)  ) },
+        { "5n", ?_assert( $5 =:= sc:nybble_to_hex(5)  ) },
+        { "6n", ?_assert( $6 =:= sc:nybble_to_hex(6)  ) },
+        { "7n", ?_assert( $7 =:= sc:nybble_to_hex(7)  ) },
+        { "8n", ?_assert( $8 =:= sc:nybble_to_hex(8)  ) },
+        { "9n", ?_assert( $9 =:= sc:nybble_to_hex(9)  ) },
+        { "an", ?_assert( $a =:= sc:nybble_to_hex(10) ) },
+        { "bn", ?_assert( $b =:= sc:nybble_to_hex(11) ) },
+        { "cn", ?_assert( $c =:= sc:nybble_to_hex(12) ) },
+        { "dn", ?_assert( $d =:= sc:nybble_to_hex(13) ) },
+        { "en", ?_assert( $e =:= sc:nybble_to_hex(14) ) },
+        { "fn", ?_assert( $f =:= sc:nybble_to_hex(15) ) }
 
     ] }.

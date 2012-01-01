@@ -13,7 +13,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of the erlang portion of the scutil library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> 2.5.799
+<p><b>Version:</b> 2.5.801
 </p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
@@ -168,8 +168,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 
 <h3 class="typedecl"><a name="type-nybble">nybble()</a></h3>
 <p><tt>nybble() = integer()</tt></p>
-<p>A nybble must be an integer in the range 0-15, inclusive.
- </p>
+<p>A nybble must be an integer in the range 0-15, inclusive.</p>
 
 <h3 class="typedecl"><a name="type-positive_integer">positive_integer()</a></h3>
 <p><tt>positive_integer() = integer()</tt></p>
@@ -275,7 +274,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#caspers_jones_estimate-1">caspers_jones_estimate/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#ceil-1">ceil/1</a></td><td>Equivalent to <a href="#ceiling-1"><tt>ceiling(X)</tt></a>.
 </td></tr>
-<tr><td valign="top"><a href="#ceiling-1">ceiling/1</a></td><td>Returns the ceiling of a float.</td></tr>
+<tr><td valign="top"><a href="#ceiling-1">ceiling/1</a></td><td>Returns the ceiling (round towards positive infinity) of a float.</td></tr>
 <tr><td valign="top"><a href="#central_moment-2">central_moment/2</a></td><td><span style="color:red"><b><i>BUGGY</i></b></span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the Nth cetral moment of a list.</td></tr>
 <tr><td valign="top"><a href="#central_moments-1">central_moments/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#central_moments-2">central_moments/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -336,35 +335,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#fk_readability-3">fk_readability/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a set of text metrics.</td></tr>
 <tr><td valign="top"><a href="#fk_readability-4">fk_readability/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a block of text.</td></tr>
 <tr><td valign="top"><a href="#flag_sets-1">flag_sets/1</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
-<tr><td valign="top"><a href="#floor-1">floor/1</a></td><td>Takes the floor of a number (rounds towards negative infinity.)  This is different than <code>erlang:trunc/1</code>, which removes the mantissa, in its
-  handling of negative numbers: trunc diminishes towards zero, not towards negative infinity (note examples 6 and 7 below.) <pre>  1&gt; sc:floor(0.5).
-  0
- 
-  2&gt; sc:floor(0).
-  0
- 
-  3&gt; sc:floor(0.0).
-  0
- 
-  4&gt; sc:floor(1.0).
-  1
- 
-  5&gt; sc:floor(-1.0).
-  -1
- 
-  6&gt; sc:floor(-1.5).
-  -2
- 
-  7&gt; erlang:trunc(-1.5).
-  -1
- 
-  8&gt; sc:floor(-1).
-  -1
- 
-  9&gt; sc:floor(1).
-  1</pre>
- 
-  Unit, doc and stochastic property (int as float identity; float always larger within 1) tested.</td></tr>
+<tr><td valign="top"><a href="#floor-1">floor/1</a></td><td>Takes the floor (round towards negative infinity) of a number.</td></tr>
 <tr><td valign="top"><a href="#function_point_count-1">function_point_count/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#function_stats-1">function_stats/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#gen_docs-0">gen_docs/0</a></td><td>(not testworthy) Generates library documentation using the paths appropriate for the author's PC; you almost certainly want <a href="#gen_docs-2"><code>gen_docs/2</code></a> instead.</td></tr>
@@ -477,7 +448,7 @@ via Naive Bayes Likelihood.</td></tr>
 <tr><td valign="top"><a href="#now_str_utc24-0">now_str_utc24/0</a></td><td></td></tr>
 <tr><td valign="top"><a href="#nth_difference-2">nth_difference/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#null_postpad_bin_to-2">null_postpad_bin_to/2</a></td><td></td></tr>
-<tr><td valign="top"><a href="#nybble_to_hex-1">nybble_to_hex/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a nybble() to a hexchar().</td></tr>
+<tr><td valign="top"><a href="#nybble_to_hex-1">nybble_to_hex/1</a></td><td>Convert a nybble() to a hexchar().</td></tr>
 <tr><td valign="top"><a href="#out_of_range-3">out_of_range/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#paper_3d_basic_depth-4">paper_3d_basic_depth/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#paper_3d_render-1">paper_3d_render/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -799,24 +770,32 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="ceiling-1">ceiling/1</a></h3>
 <div class="spec">
-<p><tt>ceiling(X) -&gt; any()</tt></p>
-</div><p>Returns the ceiling of a float. <pre>  1&gt; 339&gt; sc:ceiling(2.5).
-  3
+<p><tt>ceiling(X::number()) -&gt; integer()</tt><br></p>
+</div><p>Returns the ceiling (round towards positive infinity) of a float. <pre>  1&gt; sc:ceil(0.5).
+  1
  
-  340&gt; sc:ceiling(3.0).
-  3
- 
-  341&gt; sc:ceiling(-2.5).
-  -2
- 
-  342&gt; sc:ceiling(-3.0).
-  -3
- 
-  343&gt; sc:ceiling(0).
+  2&gt; sc:ceil(0).
   0
  
-  344&gt; sc:ceiling(0.0).
-  0</pre></p>
+  3&gt; sc:ceil(0.0).
+  0
+ 
+  4&gt; sc:ceil(1.0).
+  1
+ 
+  5&gt; sc:ceil(-1.0).
+  -1
+ 
+  6&gt; sc:ceil(-1.5).
+  -1
+ 
+  7&gt; sc:ceil(-1).
+  -1
+ 
+  8&gt; sc:ceil(1).
+  1</pre>
+ 
+  Unit, doc and stochastic property (int as float identity; float always smaller within 1; all results integers) tested.</p>
 <p><b>Introduced in:</b> Version 510</p>
 
 <h3 class="function"><a name="central_moment-2">central_moment/2</a></h3>
@@ -1422,8 +1401,8 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="floor-1">floor/1</a></h3>
 <div class="spec">
-<p><tt>floor(X) -&gt; any()</tt></p>
-</div><p>Takes the floor of a number (rounds towards negative infinity.)  This is different than <code>erlang:trunc/1</code>, which removes the mantissa, in its
+<p><tt>floor(X::number()) -&gt; integer()</tt><br></p>
+</div><p>Takes the floor (round towards negative infinity) of a number.  This is different than <code>erlang:trunc/1</code>, which removes the mantissa, in its
   handling of negative numbers: trunc diminishes towards zero, not towards negative infinity (note examples 6 and 7 below.) <pre>  1&gt; sc:floor(0.5).
   0
  
@@ -1451,7 +1430,7 @@ via Naive Bayes Likelihood.</td></tr>
   9&gt; sc:floor(1).
   1</pre>
  
-  Unit, doc and stochastic property (int as float identity; float always larger within 1) tested.</p>
+  Unit, doc and stochastic property (int as float identity; float always larger within 1; all results integers) tested.</p>
 <p><b>Introduced in:</b> Version 511</p>
 
 <h3 class="function"><a name="function_point_count-1">function_point_count/1</a></h3>
@@ -2467,13 +2446,14 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="nybble_to_hex-1">nybble_to_hex/1</a></h3>
 <div class="spec">
-<p><tt>nybble_to_hex(Nyb::<a href="#type-nybble">nybble()</a>) -&gt; integer()</tt><br></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a nybble() to a hexchar(). <pre>  1&gt; sc:nybble_to_hex(7).
+<p><tt>nybble_to_hex(Nyb::<a href="#type-nybble">nybble()</a>) -&gt; <a href="#type-hexchar">hexchar()</a></tt><br></p>
+</div><p>Convert a nybble() to a hexchar(). <pre>  1&gt; sc:nybble_to_hex(7).
   55
  
   2&gt; sc:nybble_to_hex(15).
   102</pre>
- </p>
+ 
+  Exhaustively unit tested.</p>
 <p><b>Introduced in:</b> Version 570</p>
 
 <h3 class="function"><a name="out_of_range-3">out_of_range/3</a></h3>
@@ -3367,7 +3347,13 @@ via Naive Bayes Likelihood.</p>
   ["a","b"]
  
   6&gt; sc:to_lines("a\rb\nc\r\nd\n\r\r\ne")
-  ["a","b","c","d","e"]</pre>
+  ["a","b","c","d","e"]
+ 
+  7&gt; sc:to_lines("").
+  []
+ 
+  8&gt; sc:to_lines("\r\n\r\r\n\n\r").
+  []</pre>
  
   Unit and doc tested.</p>
 <p><b>Introduced in:</b> Version 705</p>
@@ -3596,6 +3582,6 @@ via Naive Bayes Likelihood.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Jan 1 2012, 17:15:51.</i></p>
+<p><i>Generated by EDoc, Jan 1 2012, 17:48:59.</i></p>
 </body>
 </html>

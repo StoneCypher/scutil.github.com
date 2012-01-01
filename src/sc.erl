@@ -2985,23 +2985,34 @@ ceil(X) ->
 
 %% @since Version 510
 
-%% @doc Returns the ceiling of a float. ```1> 339> sc:ceiling(2.5).
-%% 3
+-spec ceiling(X :: number()) -> integer().
+%% @spec ceiling(X::number()) -> integer()
+
+%% @doc Returns the ceiling (round towards positive infinity) of a float. ```1> sc:ceil(0.5).
+%% 1
 %%
-%% 340> sc:ceiling(3.0).
-%% 3
-%%
-%% 341> sc:ceiling(-2.5).
-%% -2
-%%
-%% 342> sc:ceiling(-3.0).
-%% -3
-%%
-%% 343> sc:ceiling(0).
+%% 2> sc:ceil(0).
 %% 0
 %%
-%% 344> sc:ceiling(0.0).
-%% 0'''
+%% 3> sc:ceil(0.0).
+%% 0
+%%
+%% 4> sc:ceil(1.0).
+%% 1
+%%
+%% 5> sc:ceil(-1.0).
+%% -1
+%%
+%% 6> sc:ceil(-1.5).
+%% -1
+%%
+%% 7> sc:ceil(-1).
+%% -1
+%%
+%% 8> sc:ceil(1).
+%% 1'''
+%%
+%% Unit, doc and stochastic property (int as float identity; float always smaller within 1; all results integers) tested.
 
 ceiling(X)
 
@@ -3033,7 +3044,10 @@ ceiling(X) ->
 
 %% @since Version 511
 
-%% @doc Takes the floor of a number (rounds towards negative infinity.)  This is different than `erlang:trunc/1', which removes the mantissa, in its
+-spec floor(X :: number()) -> integer().
+%% @spec floor(X::number()) -> integer()
+
+%% @doc Takes the floor (round towards negative infinity) of a number.  This is different than `erlang:trunc/1', which removes the mantissa, in its
 %% handling of negative numbers: trunc diminishes towards zero, not towards negative infinity (note examples 6 and 7 below.) ```1> sc:floor(0.5).
 %% 0
 %%
@@ -3061,7 +3075,7 @@ ceiling(X) ->
 %% 9> sc:floor(1).
 %% 1'''
 %%
-%% Unit, doc and stochastic property (int as float identity; float always larger within 1) tested.
+%% Unit, doc and stochastic property (int as float identity; float always larger within 1; all results integers) tested.
 
 floor(X) when X < 0 ->
 
@@ -5372,7 +5386,7 @@ list_to_term(List) ->
 %%
 %% @since Version 569
 
-io_list_to_hex_string(Input) 
+io_list_to_hex_string(Input)
 
     when is_list(Input) ->
 
@@ -5411,16 +5425,20 @@ io_list_to_hex_string(_, _) ->
 
 
 
+-type nybble() :: 0..15.
 %% @type nybble() = integer().  A nybble must be an integer in the range 0-15, inclusive.
-%%
-%% @spec nybble_to_hex(Nyb::nybble()) -> integer()
-%%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a nybble() to a hexchar(). ```1> sc:nybble_to_hex(7).
+
+-spec nybble_to_hex(Nyb::nybble()) -> hexchar().
+%% @spec nybble_to_hex(Nyb::nybble()) -> hexchar()
+
+%% @doc Convert a nybble() to a hexchar(). ```1> sc:nybble_to_hex(7).
 %% 55
 %%
 %% 2> sc:nybble_to_hex(15).
 %% 102'''
 %%
+%% Exhaustively unit tested.
+
 %% @since Version 570
 
 nybble_to_hex(Nyb) 
@@ -8467,13 +8485,13 @@ markhov_chain(N, Depth, Source, Work) ->
 %% ["a","b"]
 %%
 %% 6> sc:to_lines("a\rb\nc\r\nd\n\r\r\ne")
-%% ["a","b","c","d","e"]'''
+%% ["a","b","c","d","e"]
 %%
 %% 7> sc:to_lines("").
 %% []
 %%
 %% 8> sc:to_lines("\r\n\r\r\n\n\r").
-%% []
+%% []'''
 %%
 %% Unit and doc tested.
 

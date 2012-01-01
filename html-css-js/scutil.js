@@ -87,10 +87,15 @@ function addClassIfMissing(Tag, tclass) {
             // iterate the resulting classes
             for (i in Classes) {
 
-                // if one matches the to-be-added, do nothing and return
-                if (Classes[i] === tclass) {
-                    return;
+                if (Classes.hasOwnProperty(i)) {
+
+                    // if one matches the to-be-added, do nothing and return
+                    if (Classes[i] === tclass) {
+                        return;
+                    }
+                
                 }
+
             }
 
             // otherwise stuff the class and a space on the front and return
