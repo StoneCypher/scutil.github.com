@@ -248,11 +248,19 @@ combinations_test_() ->
 
 expand_labels_test_() ->
 
+    Villains = [ {villain,lex_luthor}, {villain,sinistar}, {villain,gargamel} ],
+    VLabel   = [ {villain, [lex_luthor,sinistar,gargamel] } ],
+
+    HandV    = [ {hero,superman}, {hero,tinyship}, {hero,papa_smurf}, {villain,lex_luthor}, {villain,sinistar}, {villain,gargamel} ],
+    HVLabel  = [ {hero, [superman,tinyship,papa_smurf]}, {villain, [lex_luthor,sinistar,gargamel]} ],
+
     { "Expand labels test", [
 
-        {"[]",                    ?_assert( []                        =:= sc:expand_labels([])                    )},
-        {"[{1,[a,b]}]",           ?_assert( [{1,a},{1,b}]             =:= sc:expand_labels([{1,[a,b]}])           )},
-        {"[{1,[a,b]},{2,[c,d]}]", ?_assert( [{1,a},{1,b},{2,c},{2,d}] =:= sc:expand_labels([{1,[a,b]},{2,[c,d]}]) )}
+        {"[]",                    ?_assert( []                        =:= sc:expand_labels([])                    ) },
+        {"[{1,[a,b]}]",           ?_assert( [{1,a},{1,b}]             =:= sc:expand_labels([{1,[a,b]}])           ) },
+        {"[{1,[a,b]},{2,[c,d]}]", ?_assert( [{1,a},{1,b},{2,c},{2,d}] =:= sc:expand_labels([{1,[a,b]},{2,[c,d]}]) ) },
+        { "Doc ex 1 - Villains",  ?_assert( Villains                  =:= sc:expand_labels(VLabel)                ) },
+        { "Doc ex 2 - Heroes",    ?_assert( HandV                     =:= sc:expand_labels(HVLabel)               ) }
 
     ] }.
 
