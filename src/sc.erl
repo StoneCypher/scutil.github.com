@@ -57,7 +57,9 @@
 
 
 
-%% @doc This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
+%% @doc This is the 2011 revamp of the erlang portion of the scutil library.
+%%
+%% ScUtil (erlang and other languages) is available from <a href="http://scutil.com/" target="_blank">its own webpage</a>, or on <a href="https://github.com/StoneCypher/scutil.github.com" target="_blank">github</a>.  The erlang portion of scutil is a valid OTP application and rebar dependency.
 %%
 %% <!-- google analytics --><script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script><script type="text/javascript">var pageTracker = _gat._getTracker("UA-4903191-10");pageTracker._trackPageview();</script>
 %% <a href="http://fullof.bs/">I'm</a> modernizing my library.  Originally it got too big, so I split it up.  However, that's proven more trouble than it's worth - I often found myself asking whether the thing I wanted was
@@ -75,7 +77,7 @@
 %%
 %% ScUtil is free.  However, I'd like to know where it's ended up.  Therefore, please consider mail to stonecypher@gmail.com with text saying where this went a form of "registration."  This is not required.
 %%
-%% <h2>Thanks</h2>
+%% <a name="Thanks"><h2>Thanks</h2></a>
 %% <p>ScUtil has profited significantly from the donations of time, understanding and code given by a variety of generous friends and strangers.  The list of small tweaks would
 %%    be prohibitive, but significant influence on this library is due the following people, in alphabetical order (the least fair of all generic orderings):</p>
 %%
@@ -94,6 +96,7 @@
 %%   <li>Geoff Cant / <a href="http://github.com/archaelus">Archaelus</a></li>
 %%   <li>GrizzlyAdams of <a href="http://grizzly.thewaffleiron.net/" target="_blank">The Waffle Iron</a></li>
 %%   <li>Jeff Katz / <a href="http://kraln.com/" target="_blank">Kraln</a></li>
+%%   <li>Jesper Louis Andersen / <a href="jlouisramblings.blogspot.com">jlouis</a></li>
 %%   <li>John Sensebe of <a href="http://bargaintuan.com/" target="_blank">Bargaintuan</a></li>
 %%   <li><a href="http://functional-orbitz.blogspot.com/" target="_blank">Orbitz</a></li>
 %%   <li>raleigh</li>
@@ -101,11 +104,18 @@
 %%   <li><a href="http://rvirding.blogspot.com/" target="_blank">Robert Virding</a></li>
 %%   <li><a href="http://akkit.org/" target="_blank">Steve Stair</a></li>
 %%   <li><a href="http://steve.vinoski.net/">Steve Vinoski</a></li>
-%%   <li>Torbj*rn T*rnkvist (those asterisks are o-umlauts, until I work out a bug in edoc) / <a href="http://github.com/etnt">Etnt</a></li>
+%%   <li>Torbj&#246;rn T&#246;rnkvist / <a href="http://github.com/etnt">Etnt</a></li>
 %%   <li><a href="http://opferman.com/" target="_blank">Toby Opferman</a></li>
 %%   <li><a href="http://blueventhorizon.com/" target="_blank">Vat Raghavan</a></li>
 %%   <li>Vladimir Sessikov</li>
 %% </ul>
+%%
+%% <h2>Rebar use</h2>
+%%
+%% Here is a valid dependency rule containing instructions to fetch current `sc' and the testing dependency `PropEr' for rebar:
+%%
+%% ```{deps, [ {proper, ".*", {git, "git://github.com/manopapad/proper.git",              "master"}},
+%%             {sc,     ".*", {git, "git://github.com/StoneCypher/scutil.github.com.git", "master"}} ].'''
 %%
 %% @end
 
@@ -502,6 +512,17 @@
 
     gen_docs/0,
       gen_docs/2
+
+]).
+
+
+
+
+
+-export_type([
+
+    hexchar/0,
+    hexstring/0
 
 ]).
 
@@ -5415,9 +5436,14 @@ byte_to_hex(TheByte)
 
 
 
+
+-type hexchar() :: 0..15.  %% Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.
 %% @type hexchar() = integer().  Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.
+
+-type hexstring() :: [hexchar()].  %% All elements of the list must be of type {@type hexchar()}.
 %% @type hexstring() = list().  All elements of the list must be of type {@type hexchar()}.
-%%
+
+-spec hex_to_int(Hex::hexstring() | hexchar()) -> integer().
 %% @spec hex_to_int(HexChar::hexstring() | hexchar()) -> integer()
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a hexstring() or hexchar() into its numeric value. ```1> sc:hex_to_int("c0ffEE").
 %% 12648430

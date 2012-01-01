@@ -10,15 +10,17 @@
 <hr>
 
 <h1>Module sc</h1>
-<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of the erlang portion of the scutil library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> 2.5.772
+<p><b>Version:</b> 2.5.793
 </p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
 
-<h2><a name="description">Description</a></h2><p>This is the 2011 revamp of <a href="http://scutil.com/" target="_blank">scutil</a>'s erlang library.</p>
+<h2><a name="description">Description</a></h2><p>This is the 2011 revamp of the erlang portion of the scutil library.</p>
+ 
+  <p>ScUtil (erlang and other languages) is available from <a href="http://scutil.com/" target="_blank">its own webpage</a>, or on <a href="https://github.com/StoneCypher/scutil.github.com" target="_blank">github</a>.  The erlang portion of scutil is a valid OTP application and rebar dependency.</p>
  
   <p><script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script><script type="text/javascript">var pageTracker = _gat._getTracker("UA-4903191-10");pageTracker._trackPageview();</script>
   <a href="http://fullof.bs/">I'm</a> modernizing my library.  Originally it got too big, so I split it up.  However, that's proven more trouble than it's worth - I often found myself asking whether the thing I wanted was
@@ -36,7 +38,7 @@ presenting the actual volume of functionality present here.  We can get the cove
  
   <p>ScUtil is free.  However, I'd like to know where it's ended up.  Therefore, please consider mail to stonecypher@gmail.com with text saying where this went a form of "registration."  This is not required.</p>
  
-  <h2>Thanks</h2>
+  <a name="Thanks"><h2>Thanks</h2></a>
   <p>ScUtil has profited significantly from the donations of time, understanding and code given by a variety of generous friends and strangers.  The list of small tweaks would
      be prohibitive, but significant influence on this library is due the following people, in alphabetical order (the least fair of all generic orderings):</p>
  
@@ -55,6 +57,7 @@ presenting the actual volume of functionality present here.  We can get the cove
     <li>Geoff Cant / <a href="http://github.com/archaelus">Archaelus</a></li>
     <li>GrizzlyAdams of <a href="http://grizzly.thewaffleiron.net/" target="_blank">The Waffle Iron</a></li>
     <li>Jeff Katz / <a href="http://kraln.com/" target="_blank">Kraln</a></li>
+    <li>Jesper Louis Andersen / <a href="jlouisramblings.blogspot.com">jlouis</a></li>
     <li>John Sensebe of <a href="http://bargaintuan.com/" target="_blank">Bargaintuan</a></li>
     <li><a href="http://functional-orbitz.blogspot.com/" target="_blank">Orbitz</a></li>
     <li>raleigh</li>
@@ -62,11 +65,18 @@ presenting the actual volume of functionality present here.  We can get the cove
     <li><a href="http://rvirding.blogspot.com/" target="_blank">Robert Virding</a></li>
     <li><a href="http://akkit.org/" target="_blank">Steve Stair</a></li>
     <li><a href="http://steve.vinoski.net/">Steve Vinoski</a></li>
-    <li>Torbj*rn T*rnkvist (those asterisks are o-umlauts, until I work out a bug in edoc) / <a href="http://github.com/etnt">Etnt</a></li>
+    <li>Torbjörn Törnkvist / <a href="http://github.com/etnt">Etnt</a></li>
     <li><a href="http://opferman.com/" target="_blank">Toby Opferman</a></li>
     <li><a href="http://blueventhorizon.com/" target="_blank">Vat Raghavan</a></li>
     <li>Vladimir Sessikov</li>
   </ul>
+ 
+  <h2>Rebar use</h2>
+ 
+  <p>Here is a valid dependency rule containing instructions to fetch current <code>sc</code> and the testing dependency <code>PropEr</code> for rebar:</p>
+ 
+  <pre>     {deps, [ {proper, ".*", {git, "git://github.com/manopapad/proper.git",              "master"}},
+              {sc,     ".*", {git, "git://github.com/StoneCypher/scutil.github.com.git", "master"}} ].</pre>
  
 <h2><a name="types">Data Types</a></h2>
 
@@ -122,8 +132,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 
 <h3 class="typedecl"><a name="type-hexstring">hexstring()</a></h3>
 <p><tt>hexstring() = list()</tt></p>
-<p>All elements of the list must be of type <code><a href="#type-hexchar">hexchar()</a></code>.
- </p>
+<p>All elements of the list must be of type <code><a href="#type-hexchar">hexchar()</a></code>.</p>
 
 <h3 class="typedecl"><a name="type-io_list">io_list()</a></h3>
 <p><tt>io_list() = list()</tt></p>
@@ -3491,6 +3500,6 @@ via Naive Bayes Likelihood.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Dec 31 2011, 02:03:01.</i></p>
+<p><i>Generated by EDoc, Jan 1 2012, 13:38:25.</i></p>
 </body>
 </html>

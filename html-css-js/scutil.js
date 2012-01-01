@@ -30,6 +30,7 @@ function createUniqueId(Prefix, Suffix) {
 
 
 
+
 function emptyish(X) {
 
     'use strict';
@@ -39,7 +40,7 @@ function emptyish(X) {
     switch (X) {
 
         case 0:
-        case 0.0:
+//      case 0.0:   // not needed, JS promotes numbers to match in either direction in a case
         case false:
         case null:
         case '':
@@ -174,29 +175,22 @@ function zebrafy(Tag, RowType, ClassList) {
 
     'use strict';
 
+    var kid = Tag.firstChild,                          // get the first child of the container to start the tag iteration
+        cc  = ClassList.length,                        // cc is the class count - how many classes there are.  cached because object inspection could have a changing value (no mutability control in javascript :( )
+        ci  = -1;                                      // ci is the class index - the current class.  started at -1 so that when the counter is immediately incremented, it's to the correct default of 0, to skip uptick safety logic.
 
-    var kid = Tag.firstChild,   // get the first child of the container to start the tag iteration
-        cc = ClassList.length,  // cc is the class count - how many classes there are.  cached because object inspection could have a changing value (no mutability control in javascript :( )
-        ci = -1;                // ci is the class index - the current class.  started at -1 so that when the counter is immediately incremented, it's to the correct default of 0, to skip uptick safety logic.
-
-
-    // loop will terminate when out of children
     while (kid !== undefined) {
 
-        // if it isn't the kind of child counted, skip to the next without incrementing the class counter
-        if (kid.nodeName === RowType.toUpperCase()) {
+        if (kid.nodeName === RowType.toUpperCase()) {  // if it isn't the kind of child counted, skip to the next without incrementing the class counter
 
-            // increment the class counter, and zero on tick-over
             if ((++ci) >= cc) {
                 ci = 0;
             }
 
-            // set the target row's class
-            addClassIfMissing(kid, ClassList[ci]);
+            addClassIfMissing(kid, ClassList[ci]);     // set the target row's class
 
         }
 
-        // next tag
         kid = kid.nextSibling;
 
     }
@@ -230,6 +224,7 @@ function monthLength(Month, Year) {
     'use strict';
 
     switch (Month) {
+
         case  1: return 31;
         case  2: return (isLeapYear(Year) === true)? 29 : 28;
         case  3: return 31;
@@ -242,6 +237,7 @@ function monthLength(Month, Year) {
         case 10: return 31;
         case 11: return 30;
         case 12: return 31;
+
     }
 
     return false;
