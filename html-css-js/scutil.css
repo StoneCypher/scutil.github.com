@@ -220,9 +220,9 @@ body.colorpage {
 
 
 
-.scpage th, 
-.scpage td { 
-  
+.scpage th,
+.scpage td {
+
     padding        : 0.25em 0.75em;
     margin         : 0;
     font-weight    : normal;
@@ -234,10 +234,9 @@ body.colorpage {
 
 
 
-.scpage th { 
-  
+.scpage th {
+
     background-color : #ddd;
-    text-align       : center;
     border           : 1px solid black;
     text-align       : center;
 
@@ -247,10 +246,9 @@ body.colorpage {
 
 
 
-.scpage td { 
-  
+.scpage td {
+
     background-color : #f8f8f8;
-    text-align       : justify;
     border           : 1px solid #888;
     text-align       : justify;
 
