@@ -8469,6 +8469,12 @@ markhov_chain(N, Depth, Source, Work) ->
 %% 6> sc:to_lines("a\rb\nc\r\nd\n\r\r\ne")
 %% ["a","b","c","d","e"]'''
 %%
+%% 7> sc:to_lines("").
+%% []
+%%
+%% 8> sc:to_lines("\r\n\r\r\n\n\r").
+%% []
+%%
 %% Unit and doc tested.
 
 %% @since Version 705

@@ -440,7 +440,9 @@ to_lines_test_() ->
 
         {           "Backwards",         ?_assert( ["a","b"] =:= sc:to_lines("a\n\rb") ) },
 
-        { "Doc ex 6, Long stack",        ?_assert( ["a","b","c","d","e"] =:= sc:to_lines("a\rb\nc\r\nd\n\r\r\ne") ) }
+        { "Doc ex 6, Long stack",        ?_assert( ["a","b","c","d","e"] =:= sc:to_lines("a\rb\nc\r\nd\n\r\r\ne") ) },
+        { "Doc ex 7, Empty string",      ?_assert( []                    =:= sc:to_lines("") ) },
+        { "Doc ex 8, Just rseqs",        ?_assert( []                    =:= sc:to_lines("\r\n\r\r\n\n\r") ) }
 
     ] }.
 
