@@ -126,13 +126,13 @@ function removeClassOnceIfPresent(Tag, tclass) {
 
             // remove any matching element
             if (Classes[i] === tclass) {
-    
+
                 Classes.splice(i, 1);
-    
+
                 // then immediately recombine and return
                 Tag.className = Classes.join(' ');
                 return;
-    
+
             }
         }
     }
@@ -153,18 +153,21 @@ function removeClassRepeatedlyIfPresent(Tag, tclass) {
     // iterate the resulting classes
     for (i in Classes) {
 
-        // even though the non-match of a tclass would get skipped, the repeated joins can cause combinatoric
-        // space expansion if there are extra 0-length strings getting .join()ed back together to make more,
-        // so we discard them as a memory space safety issue
+        if (Classes.hasOwnProperty(i)) {
+            // even though the non-match of a tclass would get skipped, the repeated joins can cause combinatoric
+            // space expansion if there are extra 0-length strings getting .join()ed back together to make more,
+            // so we discard them as a memory space safety issue
+    
+            if (Classes[i] === '') {
+                Classes.splice(i, 1);
+            }
+    
+            // remove any matching element
+    
+            if (Classes[i] === tclass) {
+                Classes.splice(i, 1);
+            }
 
-        if (Classes[i] === '') {
-            Classes.splice(i, 1);
-        }
-
-        // remove any matching element
-
-        if (Classes[i] === tclass) {
-            Classes.splice(i, 1);
         }
 
     }
