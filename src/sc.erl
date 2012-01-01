@@ -2662,7 +2662,7 @@ median_absolute_deviation(List)
 
 %% @spec expected_value(List::mixed_weight_list()) -> number()
 %%
-%% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Returns the expected value of infinite selection from a weighted numeric list.  Elements of the list may either be numbers or tuples in the form `{Value,Weight}' (weight may be floating-point).  This means that `[ 1,1,1, 10,10 ]' and `[ {1,3}, {10,2} ]' are the same list. The expected value of an empty list is undefined, and will throw `badarith'. ```1> sc:expected_value([1,2,3,4,5,6]).
+%% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Returns the expected value of infinite selection from a weighted numeric list.  Elements of the list may either be numbers or tuples in the form `{Value,Weight}' (weight may be floating-point).  This means that `[ 1,1,1, 10,10 ]' and `[ {1,3}, {10,2} ]' are the same list. The expected value of an empty list is undefined, and will throw `badarith'. This includes zero-weighted tuple form (example 6.) ```1> sc:expected_value([1,2,3,4,5,6]).
 %% 3.50000
 %%
 %% 2> sc:expected_value([ {1,5}, {10,1} ]).
@@ -2672,9 +2672,17 @@ median_absolute_deviation(List)
 %% 2.5
 %%
 %% 4> sc:expected_value([ {1,8}, {-1,7} ]).
-%% 0.06666666666666667'''
+%% 0.06666666666666667
 %%
 %% 5> catch sc:expected_value([ ]).
+%% {'EXIT',{badarith,[{sc,expected_value,3},
+%%                    {erl_eval,do_apply,5},
+%%                    {erl_eval,expr,5},
+%%                    {shell,exprs,7},
+%%                    {shell,eval_exprs,7},
+%%                    {shell,eval_loop,3}]}}
+%%
+%% 6> catch sc:expected_value([ {1,0}, {2,0} ]).
 %% {'EXIT',{badarith,[{sc,expected_value,3},
 %%                    {erl_eval,do_apply,5},
 %%                    {erl_eval,expr,5},
