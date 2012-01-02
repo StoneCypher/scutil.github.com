@@ -348,7 +348,16 @@ explode_test_() ->
 
         {"a,b,c",    ?_assert(["a",  "b",  "c" ] =:= sc:explode(",", "a,b,c"))},
         {"ab,cd,ef", ?_assert(["ab", "cd", "ef"] =:= sc:explode(",", "ab,cd,ef"))},
-        {",,",       ?_assert(["",   "",   ""  ] =:= sc:explode(",", ",,"))}
+
+        {"Doc ex 1 - num comma",            ?_assert(["1","2","5","10","20"]                   =:= sc:explode(",", "1,2,5,10,20"))},
+        {"Doc ex 2 - name space",           ?_assert(["John","Jacob","Jingleheimer","Schmidt"] =:= sc:explode(" ", "John Jacob Jingleheimer Schmidt"))},
+        {"Doc ex 3 - dir semi,space",       ?_assert(["North","East","South","West"]           =:= sc:explode("; ", "North; East; South; West"))},
+        {"Doc ex 4 - no such delim",        ?_assert(["I am the monarch of the sea"]           =:= sc:explode("No such delimiter", "I am the monarch of the sea"))},
+        {"Doc ex 5 - comma gaps",           ?_assert(["", "", ""]                              =:= sc:explode(",", ",,"))},
+        {"Doc ex 6 - atoms",                ?_assert([[alpha],[gamma,delta],[epsilon]]         =:= sc:explode([beta], [alpha, beta, gamma, delta, beta, epsilon]))},
+
+        {"Doc ex 7 - [] delim throws",      ?_assertError( badarg, sc:explode([], [alpha, beta, gamma, delta, beta, epsilon])   ) },
+        {"Doc ex 8 - nonlist delim throws", ?_assertError( badarg, sc:explode(beta, [alpha, beta, gamma, delta, beta, epsilon]) ) }
 
     ] }.
 
@@ -454,22 +463,22 @@ to_lines_test_() ->
 
     { "To lines tests", [
 
-        { "Doc ex 1, Readable",          ?_assert( ["one","two","three","four","five"] =:= sc:to_lines("one\rtwo\nthree\r\nfour\r\r\rfive") ) },
+        { "Doc ex 1 - Readable",          ?_assert( ["one","two","three","four","five"] =:= sc:to_lines("one\rtwo\nthree\r\nfour\r\r\rfive") ) },
 
-        { "Doc ex 4, Single DOS-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\nb") ) },
-        {           "Double DOS-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\n\r\nb") ) },
+        { "Doc ex 4 - Single DOS-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\nb") ) },
+        {            "Double DOS-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\n\r\nb") ) },
 
-        { "Doc ex 2, Single unix-style", ?_assert( ["a","b"] =:= sc:to_lines("a\nb") ) },
-        { "Doc ex 3, Double unix-style", ?_assert( ["a","b"] =:= sc:to_lines("a\n\nb") ) },
+        { "Doc ex 2 - Single unix-style", ?_assert( ["a","b"] =:= sc:to_lines("a\nb") ) },
+        { "Doc ex 3 - Double unix-style", ?_assert( ["a","b"] =:= sc:to_lines("a\n\nb") ) },
 
-        { "Doc ex 5, Single mac-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\rb") ) },
-        {           "Double mac-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\rb") ) },
+        { "Doc ex 5 - Single mac-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\rb") ) },
+        {            "Double mac-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\rb") ) },
 
-        {           "Backwards",         ?_assert( ["a","b"] =:= sc:to_lines("a\n\rb") ) },
+        {            "Backwards",         ?_assert( ["a","b"] =:= sc:to_lines("a\n\rb") ) },
 
-        { "Doc ex 6, Long stack",        ?_assert( ["a","b","c","d","e"] =:= sc:to_lines("a\rb\nc\r\nd\n\r\r\ne") ) },
-        { "Doc ex 7, Empty string",      ?_assert( []                    =:= sc:to_lines("") ) },
-        { "Doc ex 8, Just rseqs",        ?_assert( []                    =:= sc:to_lines("\r\n\r\r\n\n\r") ) }
+        { "Doc ex 6 - Long stack",        ?_assert( ["a","b","c","d","e"] =:= sc:to_lines("a\rb\nc\r\nd\n\r\r\ne") ) },
+        { "Doc ex 7 - Empty string",      ?_assert( []                    =:= sc:to_lines("") ) },
+        { "Doc ex 8 - Just rseqs",        ?_assert( []                    =:= sc:to_lines("\r\n\r\r\n\n\r") ) }
 
     ] }.
 

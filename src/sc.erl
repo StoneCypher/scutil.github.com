@@ -6690,12 +6690,67 @@ implode(Separator, Data)
 
 
 %% @since Version 622
+
+-spec explode(Seperator::list(), Term::list()) -> list(list()).
+%% @spec explode(Seperator::list(), Term::list()) -> list(list()).
+
+%% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Split any list by any other list, typically a string by a substring. ```1> sc:explode(",", "1,2,5,10,20").
+%% ["1","2","5","10","20"]
 %%
-%% @doc <span style="color:orange;font-style:italic">Stoch untested</span>
+%% 2> sc:explode(" ", "John Jacob Jingleheimer Schmidt").
+%% ["John","Jacob","Jingleheimer","Schmidt"]
+%%
+%% 3> sc:explode("; ", "North; East; South; West").
+%% ["North","East","South","West"]
+%%
+%% 4> sc:explode("No such delimiter", "I am the monarch of the sea").
+%% ["I am the monarch of the sea"]
+%%
+%% 5> sc:explode(",", ",,").
+%% ["", "", ""]
+%%
+%% 6> sc:explode([beta], [alpha, beta, gamma, delta, beta, epsilon]).
+%% [[alpha],[gamma,delta],[epsilon]]
+%%
+%% 7> catch sc:explode([], [alpha, beta, gamma, delta, beta, epsilon]).
+%% badarg
+%%
+%% 8> catch sc:explode(beta, [alpha, beta, gamma, delta, beta, epsilon]).
+%% badarg'''
+%%
+%% Unit and doc tested.
+
+explode(Seperator, _Term) when not is_list(Seperator) ->
+
+    error(badarg);
+
+
+
+
+
+
+explode(_Seperator, Term) when not is_list(Term) ->
+
+    error(badarg);
+
+
+
+
+
+
+explode("", _Term) ->
+
+    error(badarg);
+
+
+
+
 
 explode(Separator, Term) ->
 
     explode(Separator, Term, [], [], -1,  0).
+
+
 
 
 
@@ -6709,12 +6764,16 @@ explode(Separator, Term, Max) ->
 
 
 
+
+
 %% @private
 %% @since Version 622
 
 explode(_Separator, [], Pass, Out, _Max, _Cur) ->
 
     Out ++ [Pass];
+
+
 
 
 
@@ -6735,6 +6794,8 @@ explode(Separator, Remainder, Pass, Out, -1, _Cur) -> % ignore cap
             explode(Separator, LeftOver, [], Out ++ [Pass], -1, 0)
 
     end;
+
+
 
 
 
