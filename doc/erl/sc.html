@@ -13,7 +13,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of the erlang portion of the scutil library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> 2.5.808
+<p><b>Version:</b> 2.5.809
 </p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
@@ -82,11 +82,11 @@ presenting the actual volume of functionality present here.  We can get the cove
 
 <h3 class="typedecl"><a name="type-bw_rate">bw_rate()</a></h3>
 <p><tt>bw_rate() = {Scale::<a href="#type-bw_scale">bw_scale()</a>, Rate::float()}</tt></p>
-<p><code>bw_rate</code> - Bandwidth rate - is a rate-in-units-per-time notation for bandwidth measurement, eg <code>{{megabits,day},10.5}</code>.</p>
+<p>  <code>bw_rate</code> - Bandwidth rate - is a rate-in-units-per-time notation for bandwidth measurement, eg <code>{{megabits,day},10.5}</code>.</p>
 
 <h3 class="typedecl"><a name="type-bw_scale">bw_scale()</a></h3>
 <p><tt>bw_scale() = {Unit::atom(), Timescale::atom()}</tt></p>
-<p><code>bw_scale</code> - Bandwidth scale - is a units-per-time notation for bandwidth measurement, eg <code>{megabits,day}</code>.</p>
+<p>  <code>bw_scale</code> - Bandwidth scale - is a units-per-time notation for bandwidth measurement, eg <code>{megabits,day}</code>.</p>
 
 <h3 class="typedecl"><a name="type-coord">coord()</a></h3>
 <p><tt>coord() = {}</tt></p>
@@ -96,24 +96,24 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>coord2() = {number(), number()}</tt></p>
 <p>  Represents a coordinate, which may imply a sized rectangle.  Many functions expect integer coordinates; the type does not require them.</p>
 
-<h3 class="typedecl"><a name="type-coord2list">coord2list()</a></h3>
-<p><tt>coord2list() = [<a href="#type-coord2">coord2()</a>]</tt></p>
+<h3 class="typedecl"><a name="type-coord2_list">coord2_list()</a></h3>
+<p><tt>coord2_list() = [<a href="#type-coord2">coord2()</a>]</tt></p>
 <p>  All members of a <code><a href="#type-coord2list">coord2list()</a></code> must be <code><a href="#type-coord2">coord2()</a></code>s.</p>
 
 <h3 class="typedecl"><a name="type-coord3">coord3()</a></h3>
 <p><tt>coord3() = {number(), number(), number()}</tt></p>
 <p>  Represents a coordinate, which may imply a sized 3d box region.  Many functions expect integer coordinates; the type does not require them.</p>
 
-<h3 class="typedecl"><a name="type-coord3list">coord3list()</a></h3>
-<p><tt>coord3list() = [<a href="#type-coord3">coord3()</a>]</tt></p>
+<h3 class="typedecl"><a name="type-coord3_list">coord3_list()</a></h3>
+<p><tt>coord3_list() = [<a href="#type-coord3">coord3()</a>]</tt></p>
 <p>  All members of a <code><a href="#type-coord3list">coord3list()</a></code> must be <code><a href="#type-coord3">coord3()</a></code>s.</p>
 
-<h3 class="typedecl"><a name="type-coordlist">coordlist()</a></h3>
-<p><tt>coordlist() = [{}]</tt></p>
+<h3 class="typedecl"><a name="type-coord_list">coord_list()</a></h3>
+<p><tt>coord_list() = [{}]</tt></p>
 <p>  All members of a <code><a href="#type-coordlist">coordlist()</a></code> must be <code><a href="#type-coord">coord()</a></code>s.  All member coordinates must be of the same size, though this type does not define what that size is.  If your function requires a specific count of members, name it, as in a <code><a href="#type-coord2list">coord2list()</a></code> or <code><a href="#type-coord3list">coord3list()</a></code>.</p>
 
-<h3 class="typedecl"><a name="type-filterfunction">filterfunction()</a></h3>
-<p><tt>filterfunction() = function()</tt></p>
+<h3 class="typedecl"><a name="type-filter_function">filter_function()</a></h3>
+<p><tt>filter_function() = function()</tt></p>
 <p>  Filter functions are 1ary binary predicates - they accept an argument and return either true or false.</p>
 
 <h3 class="typedecl"><a name="type-function_or_list">function_or_list()</a></h3>
@@ -133,8 +133,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p>  All elements of the list must be of type <code><a href="#type-hexchar">hexchar()</a></code>.</p>
 
 <h3 class="typedecl"><a name="type-io_list">io_list()</a></h3>
-<p><tt>io_list() = list()</tt></p>
-<p>Every list member of an <code><a href="#type-io_list">io_list()</a></code> must be a <code>byte()</code>.</p>
+<p><tt>io_list() = [byte()]</tt></p>
+<p>  Every list member of an <code><a href="#type-io_list">io_list()</a></code> must be a <code>byte()</code>.</p>
+
+<h3 class="typedecl"><a name="type-io_list_or_binary">io_list_or_binary()</a></h3>
+<p><tt>io_list_or_binary() = <a href="#type-io_list">io_list()</a> | binary()</tt></p>
+<p>  It's either an <code><a href="#type-io_list">io_list()</a></code> or a <code>binary()</code>.  Duh.</p>
 
 <h3 class="typedecl"><a name="type-keylist">keylist()</a></h3>
 <p><tt>keylist() = [{}]</tt></p>
@@ -150,63 +154,79 @@ presenting the actual volume of functionality present here.  We can get the cove
 
 <h3 class="typedecl"><a name="type-list_or_binary">list_or_binary()</a></h3>
 <p><tt>list_or_binary() = list() | binary()</tt></p>
-<p>It's either a <code>list()</code> or a <code>binary()</code>.  Duh.</p>
+<p>  It's either a <code>list()</code> or a <code>binary()</code>.  Duh.</p>
+
+<h3 class="typedecl"><a name="type-numeric_list">numeric_list()</a></h3>
+<p><tt>numeric_list() = [number()]</tt></p>
+<p>  All members of a numeric list must be number()s.</p>
 
 <h3 class="typedecl"><a name="type-numeric_tuple">numeric_tuple()</a></h3>
 <p><tt>numeric_tuple() = tuple()</tt></p>
 <p>Every member of a <code><a href="#type-numeric_tuple">numeric_tuple()</a></code> must be a <code>number()</code>.</p>
 
-<h3 class="typedecl"><a name="type-numericlist">numericlist()</a></h3>
-<p><tt>numericlist() = list()</tt></p>
-<p>All members of a numeric list must be number()s.</p>
-
 <h3 class="typedecl"><a name="type-nybble">nybble()</a></h3>
 <p><tt>nybble() = 0..15</tt></p>
 <p>  Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.  Synonym of hexchar().</p>
 
-<h3 class="typedecl"><a name="type-positive_integer">positive_integer()</a></h3>
-<p><tt>positive_integer() = integer()</tt></p>
-<p>This integer must be greater than zero.</p>
-
-<h3 class="typedecl"><a name="type-positive_integer_or_list">positive_integer_or_list()</a></h3>
-<p><tt>positive_integer_or_list() = <a href="#type-positive_integer">positive_integer()</a> | list()</tt></p>
-
+<h3 class="typedecl"><a name="type-ranking">ranking()</a></h3>
+<p><tt>ranking(T) = {Ranking::number(), Value::T}</tt></p>
+<p>  Values are usually <code>number()</code>s, but do not have to be with custom ranking predicates.</p>
 
 <h3 class="typedecl"><a name="type-ranking">ranking()</a></h3>
 <p><tt>ranking() = {Ranking::number(), Value::any()}</tt></p>
-<p>Values are usually <code>number()</code>s, but do not have to be with custom ranking predicates.</p>
+<p>  Values are usually <code>number()</code>s, but do not have to be with custom ranking predicates.</p>
 
-<h3 class="typedecl"><a name="type-rankinglist">rankinglist()</a></h3>
-<p><tt>rankinglist() = list()</tt></p>
-<p>Members of a <code><a href="#type-rankinglist">rankinglist()</a></code> must be <code><a href="#type-ranking">ranking()</a></code>s.</p>
+<h3 class="typedecl"><a name="type-ranking_list">ranking_list()</a></h3>
+<p><tt>ranking_list(T) = [<a href="#type-ranking">ranking</a>(T)]</tt></p>
+<p>  Members of a <code><a href="#type-rankinglist">rankinglist()</a></code> must be <code><a href="#type-ranking">ranking()</a></code>s.</p>
+
+<h3 class="typedecl"><a name="type-ranking_list">ranking_list()</a></h3>
+<p><tt>ranking_list() = [<a href="#type-ranking">ranking()</a>]</tt></p>
+<p>  Members of a <code><a href="#type-rankinglist">rankinglist()</a></code> must be <code><a href="#type-ranking">ranking()</a></code>s.</p>
 
 <h3 class="typedecl"><a name="type-relaxed_numeric_tuple">relaxed_numeric_tuple()</a></h3>
 <p><tt>relaxed_numeric_tuple() = <a href="#type-numeric_tuple">numeric_tuple()</a></tt></p>
 <p>Relaxed numeric tuples are allowed to contain non-numeric elements, which are treated as zero for purposes of computation.</p>
 
 <h3 class="typedecl"><a name="type-sanitizer">sanitizer()</a></h3>
-<p><tt>sanitizer() = [] | <a href="#type-filterfunction">filterfunction()</a></tt></p>
+<p><tt>sanitizer() = [] | <a href="#type-filter_function">filter_function()</a></tt></p>
 <p>  Sanitizers are used by <a href="#sanitize_tokens-2"><code>sanitize_tokens/2</code></a> for input sanitization; they define what parts of an input list are valid, and the remainder are removed.  Sanitizers may either be a list of acceptable elements or a filter function.</p>
 
 <h3 class="typedecl"><a name="type-seven_vector">seven_vector()</a></h3>
-<p><tt>seven_vector() = <a href="#type-vector">vector()</a></tt></p>
-<p>A seven-vector always has seven elements, so this can be expressed as the alternation <code>{A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()} | [A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()]</code>.</p>
+<p><tt>seven_vector(T) = [T] | {T, T, T, T, T, T, T}</tt></p>
+<p>  A seven-vector always has seven elements, so this can be expressed as the alternation <code>{A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()} | [A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()]</code>.</p>
+
+<h3 class="typedecl"><a name="type-seven_vector_list">seven_vector_list()</a></h3>
+<p><tt>seven_vector_list(T) = [T]</tt></p>
+<p>  A seven-vector expressed as a list.</p>
+
+<h3 class="typedecl"><a name="type-seven_vector_tuple">seven_vector_tuple()</a></h3>
+<p><tt>seven_vector_tuple(T) = {T, T, T, T, T, T, T}</tt></p>
+<p>  A seven-vector expressed as a tuple.</p>
 
 <h3 class="typedecl"><a name="type-sorted_keylist">sorted_keylist()</a></h3>
 <p><tt>sorted_keylist() = <a href="#type-keylist">keylist()</a></tt></p>
 <p>  A sorted keylist is a keylist in the order provided by <a href="lists.html#sort-1"><code>lists:sort/1</code></a>.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.</p>
 
-<h3 class="typedecl"><a name="type-stringlist">stringlist()</a></h3>
-<p><tt>stringlist() = list()</tt></p>
-<p>Every member of a stringlist() is a string().</p>
+<h3 class="typedecl"><a name="type-string_list">string_list()</a></h3>
+<p><tt>string_list() = [[]]</tt></p>
+<p>  Every member of a stringlist() is a string().</p>
 
 <h3 class="typedecl"><a name="type-three_or_seven_vector">three_or_seven_vector()</a></h3>
-<p><tt>three_or_seven_vector() = <a href="#type-three_vector">three_vector()</a> | <a href="#type-seven_vector">seven_vector()</a></tt></p>
-
+<p><tt>three_or_seven_vector(T) = <a href="#type-three_vector">three_vector</a>(T) | <a href="#type-seven_vector">seven_vector</a>(T)</tt></p>
+<p>  A three or a seven-vector.</p>
 
 <h3 class="typedecl"><a name="type-three_vector">three_vector()</a></h3>
-<p><tt>three_vector() = <a href="#type-vector">vector()</a></tt></p>
-<p>A three-vector always has three elements, so this can be expressed as the alternation <code>{A::number(), B::number(), C::number()} | [A::number(), B::number(), C::number()]</code>.</p>
+<p><tt>three_vector(T) = [T] | {T, T, T}</tt></p>
+<p>  A three-vector always has three elements, so this can be expressed as the alternation <code>{A::T(), B::T(), C::T()} | [A::T(), B::T(), C::T()]</code>.</p>
+
+<h3 class="typedecl"><a name="type-three_vector_list">three_vector_list()</a></h3>
+<p><tt>three_vector_list(T) = [T]</tt></p>
+<p>  A three-vector expressed as a list.</p>
+
+<h3 class="typedecl"><a name="type-three_vector_tuple">three_vector_tuple()</a></h3>
+<p><tt>three_vector_tuple(T) = {T, T, T}</tt></p>
+<p>  A three-vector expressed as a tuple.</p>
 
 <h3 class="typedecl"><a name="type-time12">time12()</a></h3>
 <p><tt>time12() = {1..12, 1..60, am | pm}</tt></p>
@@ -234,23 +254,35 @@ presenting the actual volume of functionality present here.  We can get the cove
 
 <h3 class="typedecl"><a name="type-unit_vector">unit_vector()</a></h3>
 <p><tt>unit_vector() = <a href="#type-vector">vector()</a></tt></p>
-<p>The hypoteneuse of a unit vector is precisely one unit long.  Unit vectors are also called normalized or magnitude-normalized vectors.</p>
+<p>  The hypoteneuse of a unit vector is precisely one unit long.  Unit vectors are also called normalized or magnitude-normalized vectors.</p>
 
 <h3 class="typedecl"><a name="type-vector">vector()</a></h3>
-<p><tt>vector() = list() | tuple()</tt></p>
-<p>Every member element of a vector() is a <code>number()</code>.</p>
+<p><tt>vector(T) = [T] | {T}</tt></p>
+<p>  Every member element of a vector(T) is a T.</p>
+
+<h3 class="typedecl"><a name="type-vector">vector()</a></h3>
+<p><tt>vector() = [number()] | {number()}</tt></p>
+<p>  Every member element of a vector() is a <code>number()</code>.</p>
 
 <h3 class="typedecl"><a name="type-vectorlist">vectorlist()</a></h3>
 <p><tt>vectorlist() = list()</tt></p>
 <p>Every member element of a vectorlist() is a <code><a href="#type-vector">vector()</a></code>.</p>
 
-<h3 class="typedecl"><a name="type-weightedvalue">weightedvalue()</a></h3>
-<p><tt>weightedvalue() = {Value::any(), Weight::number()}</tt></p>
-<p>Used by functions like weighted_arithmetic_mean/1 and from_weighted/1, weightedvalue()s represent a value with an associated importance or "weight".</p>
+<h3 class="typedecl"><a name="type-weight_list">weight_list()</a></h3>
+<p><tt>weight_list(T) = [<a href="#type-weighted_value">weighted_value</a>(T)]</tt></p>
+<p>  All members of weightlists must be weighted_value(T)s.</p>
 
-<h3 class="typedecl"><a name="type-weightlist">weightlist()</a></h3>
-<p><tt>weightlist() = list()</tt></p>
-<p>All members of weightlists must be weightedvalue()s.</p>
+<h3 class="typedecl"><a name="type-weight_list">weight_list()</a></h3>
+<p><tt>weight_list() = [<a href="#type-weighted_value">weighted_value()</a>]</tt></p>
+<p>  All members of weightlists must be weighted_value()s.</p>
+
+<h3 class="typedecl"><a name="type-weighted_value">weighted_value()</a></h3>
+<p><tt>weighted_value(T) = {Value::T, Weight::number()}</tt></p>
+<p>  Used by functions like weighted_arithmetic_mean/1 and from_weighted/1, weighted_value()s represent a value with an associated importance or "weight".</p>
+
+<h3 class="typedecl"><a name="type-weighted_value">weighted_value()</a></h3>
+<p><tt>weighted_value() = {Value::any(), Weight::number()}</tt></p>
+<p>  Used by functions like weighted_arithmetic_mean/1 and from_weighted/1, weighted_value()s represent a value with an associated importance or "weight".</p>
 
 <h2><a name="index">Function Index</a></h2>
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#absolute_difference-2">absolute_difference/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the absolute value of the difference between the two arguments.</td></tr>
@@ -3648,6 +3680,6 @@ via Naive Bayes Likelihood.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Jan 8 2012, 20:35:06.</i></p>
+<p><i>Generated by EDoc, Jan 8 2012, 21:41:50.</i></p>
 </body>
 </html>

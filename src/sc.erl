@@ -531,15 +531,50 @@
     list_of_lists/0,
       list_of_lists/1,
 
-    filterfunction/0,
+    filter_function/0,
       sanitizer/0,
 
     coord/0,
-      coordlist/0,
+      coord_list/0,
       coord2/0,
-      coord2list/0,
+      coord2_list/0,
       coord3/0,
-      coord3list/0,
+      coord3_list/0,
+
+    vector/0,
+      vector/1,
+      three_vector/1,
+      three_vector_list/1,
+      three_vector_tuple/1,
+      seven_vector/1,
+      seven_vector_list/1,
+      seven_vector_tuple/1,
+      three_or_seven_vector/1,
+      unit_vector/0,
+
+    ranking_list/0,
+      ranking_list/1,
+      ranking/0,
+      ranking/1,
+
+    string_list/0,
+      numeric_list/0,
+
+    numeric_tuple/0,
+
+    byte/0,
+      io_list/0,
+
+    weight_list/0,
+      weight_list/1,
+      weighted_value/0,
+      weighted_value/1,
+
+    list_or_binary/0,
+      io_list_or_binary/0,
+
+    bw_scale/0,
+      bw_rate/0,
 
     time12/0,
       time24/0,
@@ -558,59 +593,70 @@
 
 
 
+-type time12()                 :: { 1..12, 1..60, am|pm }.               %% A human readable 12-hour time
+-type time24()                 :: { 0..23, 1..60 }.                      %% A human readable 24-hour time
 
-%% Stray exportable types
-%% ##todo comeback find a way to doc this meaningfully
+-type time12s()                :: { 1..12, 1..60, 1..60, am|pm }.        %% A human readable 12-hour time, with seconds
+-type time24s()                :: { 0..23, 1..60, 1..60 }.               %% A human readable 24-hour time, with seconds
 
--type time12()         :: { 1..12, 1..60, am|pm }.             %% A human readable 12-hour time
--type time24()         :: { 0..23, 1..60 }.                    %% A human readable 24-hour time
+-type list_of_lists()          :: [[]].                                  %% Every member of a `list_of_lists()' is a `list()'.
+-type list_of_lists(T)         :: [[ T ]].                               %% Every member of a `list_of_lists(T)' is a `list(T)'.
 
--type time12s()        :: { 1..12, 1..60, 1..60, am|pm }.      %% A human readable 12-hour time, with seconds
--type time24s()        :: { 0..23, 1..60, 1..60 }.             %% A human readable 24-hour time, with seconds
+-type nybble()                 :: 0..15.                                 %% Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.  Synonym of hexchar().
+-type hexchar()                :: 0..15.                                 %% Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.  Synonym of nybble().
+-type hexstring()              :: [ hexchar() ].                         %% All elements of the list must be of type {@type hexchar()}.
 
--type list_of_lists()  :: [[]].                                %% Every member of a `list_of_lists()' is a `list()'.
--type list_of_lists(T) :: [[ T ]].                             %% Every member of a `list_of_lists(T)' is a `list(T)'.
+-type keylist()                :: [{}].                                  %% All members of keylists are tuples of two-or-greater arity, and the first element is considered their key in the list.  List keys are unique; therefore `[{a,1},{b,1}]' is a keylist, but `[{a,1},{a,1}]' is not.
+-type sorted_keylist()         :: keylist().                             %% A sorted keylist is a keylist in the order provided by {@link lists:sort/1}.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.
 
--type nybble()         :: 0..15.                               %% Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.  Synonym of hexchar().
--type hexchar()        :: 0..15.                               %% Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.  Synonym of nybble().
--type hexstring()      :: [ hexchar() ].                       %% All elements of the list must be of type {@type hexchar()}.
+-type filter_function()        :: function().                            %% Filter functions are 1ary binary predicates - they accept an argument and return either true or false.
+-type sanitizer()              :: [] | filter_function().                %% Sanitizers are used by {@link sanitize_tokens/2} for input sanitization; they define what parts of an input list are valid, and the remainder are removed.  Sanitizers may either be a list of acceptable elements or a filter function.
 
--type keylist()        :: [{}].                                %% All members of keylists are tuples of two-or-greater arity, and the first element is considered their key in the list.  List keys are unique; therefore `[{a,1},{b,1}]' is a keylist, but `[{a,1},{a,1}]' is not.
--type sorted_keylist() :: keylist().                           %% A sorted keylist is a keylist in the order provided by {@link lists:sort/1}.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.
+-type coord()                  :: {}.                                    %% Every member of a {@type coord()} is a {@type number()}.  Represents a coordinate, which may imply a sized cartesian space.  Many functions expect integer coordinates; the type does not require them.  This type does not define member count.  If your function requires a specific count of members, name it, as in a {@type coord2()} or {@type coord3()}.
+-type coord_list()             :: [{}].                                  %% All members of a {@type coordlist()} must be {@type coord()}s.  All member coordinates must be of the same size, though this type does not define what that size is.  If your function requires a specific count of members, name it, as in a {@type coord2list()} or {@type coord3list()}.
+-type coord2()                 :: { number(), number() }.                %% Represents a coordinate, which may imply a sized rectangle.  Many functions expect integer coordinates; the type does not require them.
+-type coord2_list()            :: [ coord2() ].                          %% All members of a {@type coord2list()} must be {@type coord2()}s.
+-type coord3()                 :: { number(), number(), number() }.      %% Represents a coordinate, which may imply a sized 3d box region.  Many functions expect integer coordinates; the type does not require them.
+-type coord3_list()            :: [ coord3() ].                          %% All members of a {@type coord3list()} must be {@type coord3()}s.
 
--type filterfunction() :: function().                          %% Filter functions are 1ary binary predicates - they accept an argument and return either true or false.
--type sanitizer()      :: [] | filterfunction().               %% Sanitizers are used by {@link sanitize_tokens/2} for input sanitization; they define what parts of an input list are valid, and the remainder are removed.  Sanitizers may either be a list of acceptable elements or a filter function.
+-type three_vector(T)          :: [T] | {T,T,T}.                         %% A three-vector always has three elements, so this can be expressed as the alternation `{A::T(), B::T(), C::T()} | [A::T(), B::T(), C::T()]'.
+-type three_vector_list(T)     :: [T].                                   %% A three-vector expressed as a list.
+-type three_vector_tuple(T)    :: {T,T,T}.                               %% A three-vector expressed as a tuple.
+-type seven_vector(T)          :: [T] | {T,T,T,T,T,T,T}.                 %% A seven-vector always has seven elements, so this can be expressed as the alternation `{A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()} | [A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()]'.
+-type seven_vector_list(T)     :: [T].                                   %% A seven-vector expressed as a list.
+-type seven_vector_tuple(T)    :: {T,T,T,T,T,T,T}.                       %% A seven-vector expressed as a tuple.
+-type three_or_seven_vector(T) :: three_vector(T) | seven_vector(T).     %% A three or a seven-vector.
+-type unit_vector()            :: vector().                              %% The hypoteneuse of a unit vector is precisely one unit long.  Unit vectors are also called normalized or magnitude-normalized vectors.
+-type vector()                 :: [number()] | tuple(number()).          %% Every member element of a vector() is a {@type number()}.
+-type vector(T)                :: list(T) | tuple(T).                    %% Every member element of a vector(T) is a T.
 
--type coord()          :: {}.                                  %% Every member of a {@type coord()} is a {@type number()}.  Represents a coordinate, which may imply a sized cartesian space.  Many functions expect integer coordinates; the type does not require them.  This type does not define member count.  If your function requires a specific count of members, name it, as in a {@type coord2()} or {@type coord3()}.
--type coordlist()      :: [{}].                                %% All members of a {@type coordlist()} must be {@type coord()}s.  All member coordinates must be of the same size, though this type does not define what that size is.  If your function requires a specific count of members, name it, as in a {@type coord2list()} or {@type coord3list()}.
--type coord2()         :: { number(), number() }.              %% Represents a coordinate, which may imply a sized rectangle.  Many functions expect integer coordinates; the type does not require them.
--type coord2list()     :: [ coord2() ].                        %% All members of a {@type coord2list()} must be {@type coord2()}s.
--type coord3()         :: { number(), number(), number() }.    %% Represents a coordinate, which may imply a sized 3d box region.  Many functions expect integer coordinates; the type does not require them.
--type coord3list()     :: [ coord3() ].                        %% All members of a {@type coord3list()} must be {@type coord3()}s.
+-type weighted_value()         :: { Value::any(), Weight::number() }.    %% Used by functions like weighted_arithmetic_mean/1 and from_weighted/1, weighted_value()s represent a value with an associated importance or "weight".
+-type weighted_value(T)        :: { Value::T, Weight::number() }.        %% Used by functions like weighted_arithmetic_mean/1 and from_weighted/1, weighted_value()s represent a value with an associated importance or "weight".
+-type weight_list()            :: [ weighted_value() ].                  %% All members of weightlists must be weighted_value()s.
+-type weight_list(T)           :: [ weighted_value(T) ].                 %% All members of weightlists must be weighted_value(T)s.
 
-%% @type bw_scale() = { Unit::atom(),      Timescale::atom() }.  `bw_scale' - Bandwidth scale - is a units-per-time notation for bandwidth measurement, eg `{megabits,day}'.
-%% @type bw_rate()  = { Scale::bw_scale(), Rate::float() }.      `bw_rate' - Bandwidth rate - is a rate-in-units-per-time notation for bandwidth measurement, eg `{{megabits,day},10.5}'.
-%% @type numericlist() = list().  All members of a numeric list must be number()s.
-%% @type ranking() = { Ranking::number(), Value::any() }.  Values are usually {@type number()}s, but do not have to be with custom ranking predicates.
-%% @type rankinglist() = list().  Members of a {@type rankinglist()} must be {@type ranking()}s.
-%% @type io_list() = list().  Every list member of an {@type io_list()} must be a {@type byte()}.
-%% @type weightedvalue() = { Value::any(), Weight::number() }.  Used by functions like weighted_arithmetic_mean/1 and from_weighted/1, weightedvalue()s represent a value with an associated importance or "weight".
-%% @type weightlist() = list().  All members of weightlists must be weightedvalue()s.
+-type ranking()                :: { Ranking::number(), Value::any() }.   %% Values are usually {@type number()}s, but do not have to be with custom ranking predicates.
+-type ranking(T)               :: { Ranking::number(), Value::T }.       %% Values are usually {@type number()}s, but do not have to be with custom ranking predicates.
+-type ranking_list()           :: [ ranking() ].                         %% Members of a {@type rankinglist()} must be {@type ranking()}s.
+-type ranking_list(T)          :: [ ranking(T) ].                        %% Members of a {@type rankinglist()} must be {@type ranking()}s.
+
+-type string_list()            :: [[]].                                  %% Every member of a stringlist() is a string().
+-type io_list()                :: [ byte() ].                            %% Every list member of an {@type io_list()} must be a {@type byte()}.
+-type numeric_list()           :: [ number() ].                          %% All members of a numeric list must be number()s.
+-type numeric_tuple()          :: tuple(number()).                       %% Every member of a {@type numeric_tuple()} must be a {@type number()}.
+
+-type list_or_binary()         :: list() | binary().                     %% It's either a {@type list()} or a {@type binary()}.  Duh.
+-type io_list_or_binary()      :: io_list() | binary().                  %% It's either an {@type io_list()} or a {@type binary()}.  Duh.
+
+-type bw_scale()               :: { Unit::atom(), Timescale::atom() }.   %% `bw_scale' - Bandwidth scale - is a units-per-time notation for bandwidth measurement, eg `{megabits,day}'.
+-type bw_rate()                :: { Scale::bw_scale(), Rate::float() }.  %% `bw_rate' - Bandwidth rate - is a rate-in-units-per-time notation for bandwidth measurement, eg `{{megabits,day},10.5}'.
+
 %% @type gridsize() = coord2() | integer().  Coordinates are the width and height of a (1,1) originated grid; as such, coordinates are of the range [1,X] , [1,Y] inclusive, and returned in the form {A,B}.  The integer form implies a square grid.
 %% @type numeric_tuple() = tuple().  Every member of a {@type numeric_tuple()} must be a {@type number()}.
 %% @type relaxed_numeric_tuple() = numeric_tuple().  Relaxed numeric tuples are allowed to contain non-numeric elements, which are treated as zero for purposes of computation.
-%% @type list_or_binary() = list() | binary(). It's either a {@type list()} or a {@type binary()}.  Duh.
-%% @type stringlist() = list().  Every member of a stringlist() is a string().
 %% @type typelabel() = [ integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown ].  Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
-%% @type three_vector() = vector().  A three-vector always has three elements, so this can be expressed as the alternation `{A::number(), B::number(), C::number()} | [A::number(), B::number(), C::number()]'.
-%% @type seven_vector() = vector().  A seven-vector always has seven elements, so this can be expressed as the alternation `{A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()} | [A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()]'.
-%% @type three_or_seven_vector() = three_vector() | seven_vector().
-%% @type unit_vector() = vector().  The hypoteneuse of a unit vector is precisely one unit long.  Unit vectors are also called normalized or magnitude-normalized vectors.
-%% @type vector() = list() | tuple().  Every member element of a vector() is a {@type number()}.
 %% @type vectorlist() = list().  Every member element of a vectorlist() is a {@type vector()}.
 %% @type function_or_list() = function() | list()
-%% @type positive_integer() = integer().  This integer must be greater than zero.
-%% @type positive_integer_or_list() = positive_integer() | list()
 %% @type timestamp() = {Megaseconds::non_neg_integer(), Seconds::non_neg_integer(), MicroSeconds::non_neg_integer()}.
 
 
