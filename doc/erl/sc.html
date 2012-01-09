@@ -13,7 +13,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of the erlang portion of the scutil library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> 2.5.806
+<p><b>Version:</b> 2.5.807
 </p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
@@ -153,11 +153,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p>It's either a <code>list()</code> or a <code>binary()</code>.  Duh.
  </p>
 
-<h3 class="typedecl"><a name="type-non_negative_integer">non_negative_integer()</a></h3>
-<p><tt>non_negative_integer() = integer()</tt></p>
-<p>A <code><a href="#type-non_negative_integer">non_negative_integer()</a></code> must be equal to or greater than zero.
- </p>
-
 <h3 class="typedecl"><a name="type-numeric_tuple">numeric_tuple()</a></h3>
 <p><tt>numeric_tuple() = tuple()</tt></p>
 <p>Every member of a <code><a href="#type-numeric_tuple">numeric_tuple()</a></code> must be a <code>number()</code>.</p>
@@ -219,7 +214,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p>A three-vector always has three elements, so this can be expressed as the alternation <code>{A::number(), B::number(), C::number()} | [A::number(), B::number(), C::number()]</code>.</p>
 
 <h3 class="typedecl"><a name="type-timestamp">timestamp()</a></h3>
-<p><tt>timestamp() = {Megaseconds::<a href="#type-non_negative_integer">non_negative_integer()</a>, Seconds::<a href="#type-non_negative_integer">non_negative_integer()</a>, MicroSeconds::<a href="#type-non_negative_integer">non_negative_integer()</a>}</tt></p>
+<p><tt>timestamp() = {Megaseconds::non_neg_integer(), Seconds::non_neg_integer(), MicroSeconds::non_neg_integer()}</tt></p>
 
 
 <h3 class="typedecl"><a name="type-typelabel">typelabel()</a></h3>
@@ -259,7 +254,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#all_neighbor_pairs-1">all_neighbor_pairs/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#all_neighbor_pairs-2">all_neighbor_pairs/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#amean_vector_normal-1">amean_vector_normal/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the arithmetic mean of the elements of the unit vector for the vector provided.</td></tr>
-<tr><td valign="top"><a href="#arithmetic_mean-1">arithmetic_mean/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the arithmetic mean (often called the average) of a list of numbers.</td></tr>
+<tr><td valign="top"><a href="#arithmetic_mean-1">arithmetic_mean/1</a></td><td>Take the arithmetic mean (often called the average) of a list of numbers.</td></tr>
 <tr><td valign="top"><a href="#ascii_alphanum_list_subset-1">ascii_alphanum_list_subset/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#bandwidth_calc-1">bandwidth_calc/1</a></td><td>Equivalent to <a href="#bandwidth_calc-2"><tt>bandwidth_calc(Data, all)</tt></a>.
 </td></tr>
@@ -530,6 +525,7 @@ via Naive Bayes Likelihood.</td></tr>
 <tr><td valign="top"><a href="#to_list-1">to_list/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#triangle_index-1">triangle_index/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#triangle_index-2">triangle_index/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#tuple_duplicate-2">tuple_duplicate/2</a></td><td>Creates a tuple of fixed width, repeating the given element the given number of times.</td></tr>
 <tr><td valign="top"><a href="#tuple_member-2">tuple_member/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether E is a member element of tuple T, analogous to <code>lists::member(E, L)</code>.</td></tr>
 <tr><td valign="top"><a href="#tuple_sort-1">tuple_sort/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#tuple_sum-1">tuple_sum/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero.</td></tr>
@@ -658,8 +654,23 @@ via Naive Bayes Likelihood.</td></tr>
 <h3 class="function"><a name="arithmetic_mean-1">arithmetic_mean/1</a></h3>
 <div class="spec">
 <p><tt>arithmetic_mean(InputList::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt><br></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the arithmetic mean (often called the average) of a list of numbers. <pre>  1&gt; sc:arithmetic_mean([1,2,3,4,5]).
-  3.0</pre>
+</div><p>Take the arithmetic mean (often called the average) of a list of numbers. <pre>  1&gt; sc:arithmetic_mean([1,2,3,4,5]).
+  3.0
+ 
+  2&gt; sc:arithmetic_mean([]).
+  0.0
+ 
+  3&gt; sc:arithmetic_mean([2,2,2,2]).
+  2.0
+ 
+  4&gt; sc:arithmetic_mean([-3,2]).
+  -0.5</pre>
+ 
+  <p><a href="http://www.wolframalpha.com/input/?i=mean%281%2C2%2C3%2C4%2C5%29">Wolfram Alpha confirms result 1</a><br>
+  <a href="http://www.wolframalpha.com/input/?i=mean%282%2C2%2C2%2C2%29">Wolfram Alpha confirms result 3</a><br>
+  <a href="http://www.wolframalpha.com/input/?i=mean%28-3%2C2%29">Wolfram Alpha confirms result 4</a><br></p>
+ 
+  Unit, doc and stochastic (result is number(); result between-eq extrema) tested.
  </p>
 <p><b>Introduced in:</b> Version 481</p>
 <p><b>See also:</b> <a href="#amean_vector_normal-1">amean_vector_normal/1</a>, <a href="#geometric_mean-1">geometric_mean/1</a>, <a href="#harmonic_mean-1">harmonic_mean/1</a>, <a href="#weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a>.</p>
@@ -919,14 +930,14 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="count_bits-1">count_bits/1</a></h3>
 <div class="spec">
-<p><tt>count_bits(Number::<a href="#type-non_negative_integer">non_negative_integer()</a>) -&gt; <a href="#type-non_negative_integer">non_negative_integer()</a></tt><br></p>
+<p><tt>count_bits(Number::non_neg_integer()) -&gt; non_neg_integer()</tt><br></p>
 </div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Counts the number of bits turned on in a sufficiently sized unsigned two's compliment integer representation of <code>Num</code>.  <pre>  1&gt; sc:count_bits(5).
   2</pre></p>
 <p><b>Introduced in:</b> Version 727</p>
 
 <h3 class="function"><a name="count_of-2">count_of/2</a></h3>
 <div class="spec">
-<p><tt>count_of(Item::any(), List::list()) -&gt; <a href="#type-non_negative_integer">non_negative_integer()</a></tt><br></p>
+<p><tt>count_of(Item::any(), List::list()) -&gt; non_neg_integer()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Counts the number of instances of Item in List.  <pre>  1&gt; TestData = lists:duplicate(40, [healthy, nonsmoker] ) ++
                 lists:duplicate(10, [healthy, smoker]    ) ++
                 lists:duplicate(7,  [cancer,  nonsmoker] ) ++
@@ -1283,7 +1294,7 @@ via Naive Bayes Likelihood.</td></tr>
 <h3 class="function"><a name="explode-2">explode/2</a></h3>
 <div class="spec">
 <p><tt>explode(Seperator::list(), Term::list()) -&gt; [list()]</tt><br></p>
-</div><p><span style="color:orange;font-style:italic">Stoch untested</span> Split any list by any other list, typically a string by a substring. <pre>  1&gt; sc:explode(",", "1,2,5,10,20").
+</div><p><span style="color:orange;font-style:italic">Stoch untested</span> Split any list by any other list, typically a string by a substring. The seperator list must not be empty. <pre>  1&gt; sc:explode(",", "1,2,5,10,20").
   ["1","2","5","10","20"]
  
   2&gt; sc:explode(" ", "John Jacob Jingleheimer Schmidt").
@@ -1295,14 +1306,29 @@ via Naive Bayes Likelihood.</td></tr>
   4&gt; sc:explode("No such delimiter", "I am the monarch of the sea").
   ["I am the monarch of the sea"]
  
-  5&gt; sc:explode([beta], [alpha, beta, gamma, delta, beta, epsilon]).
+  5&gt; sc:explode(",", ",,").
+  ["", "", ""]
+ 
+  6&gt; sc:explode([beta], [alpha, beta, gamma, delta, beta, epsilon]).
   [[alpha],[gamma,delta],[epsilon]]
  
-  6&gt; catch sc:explode([], [alpha, beta, gamma, delta, beta, epsilon]).
-  badarg
+  7&gt; catch sc:explode([], [alpha, beta, gamma, delta, beta, epsilon]).
+  {'EXIT',{badarg,[{sc,explode,2},
+                   {erl_eval,do_apply,5},
+                   {erl_eval,expr,5},
+                   {shell,exprs,7},
+                   {shell,eval_exprs,7},
+                   {shell,eval_loop,3}]}}
  
-  7&gt; catch sc:explode(beta, [alpha, beta, gamma, delta, beta, epsilon]).
-  badarg</pre></p>
+  8&gt; catch sc:explode(beta, [alpha, beta, gamma, delta, beta, epsilon]).
+  {'EXIT',{badarg,[{sc,explode,2},
+                   {erl_eval,do_apply,5},
+                   {erl_eval,expr,5},
+                   {shell,exprs,7},
+                   {shell,eval_exprs,7},
+                   {shell,eval_loop,3}]}}</pre>
+ 
+  Unit and doc tested.</p>
 <p><b>Introduced in:</b> Version 622</p>
 
 <h3 class="function"><a name="explode-3">explode/3</a></h3>
@@ -1553,7 +1579,7 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="has_bit-2">has_bit/2</a></h3>
 <div class="spec">
-<p><tt>has_bit(Number::<a href="#type-non_negative_integer">non_negative_integer()</a>, Bit::<a href="#type-non_negative_integer">non_negative_integer()</a>) -&gt; true | false</tt><br></p>
+<p><tt>has_bit(Number::non_neg_integer(), Bit::non_neg_integer()) -&gt; true | false</tt><br></p>
 </div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of <code>Num</code>.  <pre>  1&gt; sc:has_bit(5,0).
   true
  
@@ -2329,7 +2355,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="naive_bayes_likelihood-4">naive_bayes_likelihood/4</a></h3>
 <div class="spec">
-<p><tt>naive_bayes_likelihood(FeatureEvident::<a href="#type-non_negative_integer">non_negative_integer()</a>, FeatureTotal::<a href="#type-positive_integer">positive_integer()</a>, NonFeatureEvident::<a href="#type-non_negative_integer">non_negative_integer()</a>, NonFeatureTotal::<a href="#type-positive_integer">positive_integer()</a>) -&gt; Result::list()</tt><br></p>
+<p><tt>naive_bayes_likelihood(FeatureEvident::non_neg_integer(), FeatureTotal::<a href="#type-positive_integer">positive_integer()</a>, NonFeatureEvident::non_neg_integer(), NonFeatureTotal::<a href="#type-positive_integer">positive_integer()</a>) -&gt; Result::list()</tt><br></p>
 </div><p>Equivalent to <a href="#naive_bayes_likelihood-5"><tt>naive_bayes_likelihood(FeatureEvident, FeatureTotal,
 		       NonFeatureEvident, NonFeatureTotal, simple)</tt></a>.</p>
 
@@ -2337,7 +2363,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="naive_bayes_likelihood-5">naive_bayes_likelihood/5</a></h3>
 <div class="spec">
-<p><tt>naive_bayes_likelihood(FeatureEvident::<a href="#type-non_negative_integer">non_negative_integer()</a>, FeatureTotal::<a href="#type-positive_integer">positive_integer()</a>, NonFeatureEvident::<a href="#type-non_negative_integer">non_negative_integer()</a>, NonFeatureTotal::<a href="#type-positive_integer">positive_integer()</a>, WhetherIsSimple::simple | full) -&gt; Result::list()</tt><br></p>
+<p><tt>naive_bayes_likelihood(FeatureEvident::non_neg_integer(), FeatureTotal::<a href="#type-positive_integer">positive_integer()</a>, NonFeatureEvident::non_neg_integer(), NonFeatureTotal::<a href="#type-positive_integer">positive_integer()</a>, WhetherIsSimple::simple | full) -&gt; Result::list()</tt><br></p>
 </div><p><p><span style="color:orange;font-style:italic">Stoch untested</span> Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event  
 via Naive Bayes Likelihood.</p>
  
@@ -2948,7 +2974,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="send_receive-3">send_receive/3</a></h3>
 <div class="spec">
-<p><tt>send_receive(ToWhom::pid() | atom(), What::any(), HowLong::<a href="#type-non_negative_integer">non_negative_integer()</a> | infinity) -&gt; {item, any()} | nothing_there</tt><br></p>
+<p><tt>send_receive(ToWhom::pid() | atom(), What::any(), HowLong::non_neg_integer() | infinity) -&gt; {item, any()} | nothing_there</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as <code>{item,X}</code>, or return nothing_there for empty queues; do not block.  <pre>  1&gt; sc:send_receive(self(), message).
   {item,message}</pre>
  </p>
@@ -2964,7 +2990,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="send_receive_masked-4">send_receive_masked/4</a></h3>
 <div class="spec">
-<p><tt>send_receive_masked(Mask::any(), ToWhom::pid() | atom(), What::any(), HowLong::<a href="#type-non_negative_integer">non_negative_integer()</a> | infinity) -&gt; {item, any()} | nothing_there</tt><br></p>
+<p><tt>send_receive_masked(Mask::any(), ToWhom::pid() | atom(), What::any(), HowLong::non_neg_integer() | infinity) -&gt; {item, any()} | nothing_there</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as <code>{Mask,X}</code>, or return nothing_there for empty queues; do not block.  <pre>  1&gt; sc:send_receive(self(), message).
   {item,message}</pre>
  </p>
@@ -3397,6 +3423,16 @@ via Naive Bayes Likelihood.</p>
 <p><b>Introduced in:</b> Version 632
  </p>
 
+<h3 class="function"><a name="tuple_duplicate-2">tuple_duplicate/2</a></h3>
+<div class="spec">
+<p><tt>tuple_duplicate(N::non_neg_integer(), Item::any()) -&gt; tuple()</tt><br></p>
+</div><p>Creates a tuple of fixed width, repeating the given element the given number of times.  This is equivalent to <code>lists:duplicate</code>.  <pre>  1&gt; sc:tuple_duplicate(3,hi).
+  {hi,hi,hi}
+ 
+  2&gt; sc:tuple_duplicate(0,hi).
+  {}</pre></p>
+<p><b>Introduced in:</b> Version 809</p>
+
 <h3 class="function"><a name="tuple_member-2">tuple_member/2</a></h3>
 <div class="spec">
 <p><tt>tuple_member(E::any(), T::tuple()) -&gt; true | false</tt><br></p>
@@ -3600,6 +3636,6 @@ via Naive Bayes Likelihood.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Jan 1 2012, 18:43:50.</i></p>
+<p><i>Generated by EDoc, Jan 8 2012, 19:26:46.</i></p>
 </body>
 </html>

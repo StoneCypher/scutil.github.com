@@ -305,6 +305,7 @@
     tuple_sum/1,
       tuple_sort/1,
       tuple_member/2,
+      tuple_duplicate/2,
 
     key_max/1,
       key_max/2,
@@ -1749,7 +1750,7 @@ caspers_jones_estimate(FunctionPoints)
 
 
 
-%% @spec naive_bayes_likelihood(FeatureEvident::non_negative_integer(), FeatureTotal::positive_integer(), NonFeatureEvident::non_negative_integer(), NonFeatureTotal::positive_integer()) -> Result::list()
+%% @spec naive_bayes_likelihood(FeatureEvident::non_neg_integer(), FeatureTotal::positive_integer(), NonFeatureEvident::non_neg_integer(), NonFeatureTotal::positive_integer()) -> Result::list()
 %%
 %% @equiv naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatureTotal, simple)
 %%
@@ -1763,7 +1764,7 @@ naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatu
 
 
 
-%% @spec naive_bayes_likelihood(FeatureEvident::non_negative_integer(), FeatureTotal::positive_integer(), NonFeatureEvident::non_negative_integer(), NonFeatureTotal::positive_integer(), WhetherIsSimple::simple|full) -> Result::list()
+%% @spec naive_bayes_likelihood(FeatureEvident::non_neg_integer(), FeatureTotal::positive_integer(), NonFeatureEvident::non_neg_integer(), NonFeatureTotal::positive_integer(), WhetherIsSimple::simple|full) -> Result::list()
 %%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
 %% via Naive Bayes Likelihood.
@@ -1954,8 +1955,23 @@ zipf_nearness_walk_strengths([_|Rem]=ZD, Work) ->
 %% @type numericlist() = list().  All members of a numeric list must be number()s.
 %% @spec arithmetic_mean(InputList::numericlist()) -> float()
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the arithmetic mean (often called the average) of a list of numbers. ```1> sc:arithmetic_mean([1,2,3,4,5]).
-%% 3.0'''
+%% @doc Take the arithmetic mean (often called the average) of a list of numbers. ```1> sc:arithmetic_mean([1,2,3,4,5]).
+%% 3.0
+%%
+%% 2> sc:arithmetic_mean([]).
+%% 0.0
+%%
+%% 3> sc:arithmetic_mean([2,2,2,2]).
+%% 2.0
+%%
+%% 4> sc:arithmetic_mean([-3,2]).
+%% -0.5'''
+%%
+%% <a href="http://www.wolframalpha.com/input/?i=mean%281%2C2%2C3%2C4%2C5%29">Wolfram Alpha confirms result 1</a><br/>
+%% <a href="http://www.wolframalpha.com/input/?i=mean%282%2C2%2C2%2C2%29">Wolfram Alpha confirms result 3</a><br/>
+%% <a href="http://www.wolframalpha.com/input/?i=mean%28-3%2C2%29">Wolfram Alpha confirms result 4</a><br/>
+%%
+%% Unit, doc and stochastic (result is number(); result between-eq extrema) tested.
 %%
 %% @see geometric_mean/1
 %% @see harmonic_mean/1
@@ -4603,9 +4619,7 @@ walk_unique_pairings( A, [Rh|Rr], F) ->
 
 
 
-%% @type non_negative_integer() = integer().  A {@type non_negative_integer()} must be equal to or greater than zero.
-%%
-%% @spec count_of(Item::any(), List::list()) -> non_negative_integer()
+%% @spec count_of(Item::any(), List::list()) -> non_neg_integer()
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Counts the number of instances of Item in List.  ```1> TestData = lists:duplicate(40, [healthy, nonsmoker] ) ++
 %%               lists:duplicate(10, [healthy, smoker]    ) ++
@@ -5682,7 +5696,7 @@ send_receive(ToWhom, What) ->
 
 
 
-%% @spec send_receive(ToWhom::pid()|atom(), What::any(), HowLong::non_negative_integer()|infinity) -> { item, any() } | nothing_there
+%% @spec send_receive(ToWhom::pid()|atom(), What::any(), HowLong::non_neg_integer()|infinity) -> { item, any() } | nothing_there
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block.  ```1> sc:send_receive(self(), message).
 %% {item,message}'''
@@ -5722,7 +5736,7 @@ send_receive_masked(Mask, ToWhom, What) ->
 
 
 
-%% @spec send_receive_masked(Mask::any(), ToWhom::pid()|atom(), What::any(), HowLong::non_negative_integer()|infinity) -> { item, any() } | nothing_there
+%% @spec send_receive_masked(Mask::any(), ToWhom::pid()|atom(), What::any(), HowLong::non_neg_integer()|infinity) -> { item, any() } | nothing_there
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{Mask,X}', or return nothing_there for empty queues; do not block.  ```1> sc:send_receive(self(), message).
 %% {item,message}'''
@@ -6694,7 +6708,7 @@ implode(Separator, Data)
 -spec explode(Seperator::list(), Term::list()) -> list(list()).
 %% @spec explode(Seperator::list(), Term::list()) -> list(list()).
 
-%% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Split any list by any other list, typically a string by a substring. ```1> sc:explode(",", "1,2,5,10,20").
+%% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Split any list by any other list, typically a string by a substring. The seperator list must not be empty. ```1> sc:explode(",", "1,2,5,10,20").
 %% ["1","2","5","10","20"]
 %%
 %% 2> sc:explode(" ", "John Jacob Jingleheimer Schmidt").
@@ -6713,10 +6727,20 @@ implode(Separator, Data)
 %% [[alpha],[gamma,delta],[epsilon]]
 %%
 %% 7> catch sc:explode([], [alpha, beta, gamma, delta, beta, epsilon]).
-%% badarg
+%% {'EXIT',{badarg,[{sc,explode,2},
+%%                  {erl_eval,do_apply,5},
+%%                  {erl_eval,expr,5},
+%%                  {shell,exprs,7},
+%%                  {shell,eval_exprs,7},
+%%                  {shell,eval_loop,3}]}}
 %%
 %% 8> catch sc:explode(beta, [alpha, beta, gamma, delta, beta, epsilon]).
-%% badarg'''
+%% {'EXIT',{badarg,[{sc,explode,2},
+%%                  {erl_eval,do_apply,5},
+%%                  {erl_eval,expr,5},
+%%                  {shell,exprs,7},
+%%                  {shell,eval_exprs,7},
+%%                  {shell,eval_loop,3}]}}'''
 %%
 %% Unit and doc tested.
 
@@ -8833,7 +8857,7 @@ qsp_average(W, InputVecs) ->
 
 
 
-%% @spec has_bit(Number::non_negative_integer(), Bit::non_negative_integer()) -> true | false
+%% @spec has_bit(Number::non_neg_integer(), Bit::non_neg_integer()) -> true | false
 
 %% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of `Num'.  ```1> sc:has_bit(5,0).
 %% true
@@ -8857,7 +8881,7 @@ has_bit(Num, Bit)
 
 
 
-%% @spec count_bits(Number::non_negative_integer()) -> non_negative_integer()
+%% @spec count_bits(Number::non_neg_integer()) -> non_neg_integer()
 
 %% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Counts the number of bits turned on in a sufficiently sized unsigned two's compliment integer representation of `Num'.  ```1> sc:count_bits(5).
 %% 2'''
@@ -9126,7 +9150,7 @@ is_numeric_char(_, _)                                                    -> fals
 
 
 
-%% @type timestamp() = {Megaseconds::non_negative_integer(), Seconds::non_negative_integer(), MicroSeconds::non_negative_integer()}.
+%% @type timestamp() = {Megaseconds::non_neg_integer(), Seconds::non_neg_integer(), MicroSeconds::non_neg_integer()}.
 
 %% @spec time_diff(A::timestamp(), B::timestamp()) -> float()
 
@@ -9484,3 +9508,21 @@ ensure_started(App, Opts)
         {error, {already_started, App}} -> ok;
         Other                           -> Other
     end.
+
+
+
+
+
+-spec tuple_duplicate(N::non_neg_integer(), Item::any()) -> tuple().
+
+%% @doc Creates a tuple of fixed width, repeating the given element the given number of times.  This is equivalent to `lists:duplicate'.  ```1> sc:tuple_duplicate(3,hi).
+%% {hi,hi,hi}
+%%
+%% 2> sc:tuple_duplicate(0,hi).
+%% {}'''
+
+%% @since Version 809
+
+tuple_duplicate(N, Item) when is_integer(N), N >= 0 ->
+
+    list_to_tuple(lists:duplicate(N, Item)).

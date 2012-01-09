@@ -63,7 +63,7 @@ key_duplicate_test_() ->
 prop_rotate_list_correct_length() ->
 
     ?FORALL( {R,L},
-             {int(), list(sc_eqc:misc_type())},
+             {int(), list(proper_types:any())},
              length(L) == length(sc:rotate_list(R,L))
            ).
 
@@ -74,7 +74,7 @@ prop_rotate_list_correct_length() ->
 prop_rotate_list_same_histo() ->
 
     ?FORALL( {R,L},
-             {int(), list(sc_eqc:misc_type())},
+             {int(), list(proper_types:any())},
              sc:histograph(L) == sc:histograph(sc:rotate_list(R,L))
            ).
 
@@ -557,5 +557,79 @@ nybble_to_hex_test_() ->
         { "dn", ?_assert( $d =:= sc:nybble_to_hex(13) ) },
         { "en", ?_assert( $e =:= sc:nybble_to_hex(14) ) },
         { "fn", ?_assert( $f =:= sc:nybble_to_hex(15) ) }
+
+    ] }.
+
+
+
+
+
+prop_arithmetic_mean_result_numeric() ->
+
+    ?FORALL( Ln, list(number()), true =:= is_number(sc:arithmetic_mean(Ln)) ).
+
+
+
+
+
+prop_arithmetic_mean_between_eq_extrema_p(L) ->
+
+    {Lo,Hi} = sc:extrema(L),
+    sc:is_between(sc:arithmetic_mean(L), Lo, Hi, inclusive).
+
+
+prop_arithmetic_mean_between_eq_extrema() ->
+
+    ?FORALL( Ln, non_empty(list(number())), true =:= prop_arithmetic_mean_between_eq_extrema_p(Ln) ).
+
+
+
+
+
+arithmetic_mean_test_() ->
+
+    { "Arithmetic mean tests", [
+
+        { "Doc ex 1 - 1..5=3.0",  ?_assert(  3.0 =:= sc:arithmetic_mean([1,2,3,4,5]) ) },
+        { "Doc ex 1 - []=0.0",    ?_assert(  0.0 =:= sc:arithmetic_mean([])          ) },
+        { "Doc ex 1 - 4x2=2.0",   ?_assert(  2.0 =:= sc:arithmetic_mean([2,2,2,2])   ) },
+        { "Doc ex 1 - -3,2=-0.5", ?_assert( -0.5 =:= sc:arithmetic_mean([-3,2])      ) },
+
+        {"Stochastic: all results are numbers",        ?_assert( true =:= proper:quickcheck(prop_arithmetic_mean_result_numeric())     ) },
+        {"Stochastic: all results between-eq extrema", ?_assert( true =:= proper:quickcheck(prop_arithmetic_mean_between_eq_extrema()) ) }
+
+    ] }.
+
+
+
+
+
+prop_tuple_duplicate_result_tuple() ->
+
+    ?FORALL( {Sz,Inp}, {proper_types:non_neg_integer(), proper_types:any()}, true =:= is_tuple(sc:tuple_duplicate(Sz,Inp)) ).
+
+
+
+
+
+prop_tuple_duplicate_correct_size() ->
+
+    ?FORALL( {Sz,Inp}, {proper_types:non_neg_integer(), proper_types:any()}, Sz =:= size(sc:tuple_duplicate(Sz,Inp)) ).
+
+
+
+
+
+tuple_duplicate_test_() ->
+
+    { "Tuple duplicate tests", [
+
+        {"3,hi", ?_assert( {hi,hi,hi} =:= sc:tuple_duplicate(3, hi) ) },
+        {"0,hi", ?_assert( {}         =:= sc:tuple_duplicate(0, hi) ) },
+
+        {"Stochastic: all results are tuples",                ?_assert( true =:= proper:quickcheck(prop_tuple_duplicate_result_tuple()) ) },
+        {"Stochastic: all results have correct member count", ?_assert( true =:= proper:quickcheck(prop_tuple_duplicate_correct_size()) ) },
+
+        {"-1,hi error undefined", ?_assertError(function_clause, sc:tuple_duplicate(-1, hi) ) }
 
     ] }.
