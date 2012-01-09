@@ -73,9 +73,11 @@ key_duplicate_test_() ->
         {"[ {3,bork} ]",                                          ?_assert( [bork,bork,bork]                                             =:= sc:key_duplicate([ {3,bork} ])                                       ) },
         {"[ {3,sunday}, {2,monster}, {2,truck}, {1,'MADNESS'} ]", ?_assert( [sunday,sunday,sunday,monster,monster,truck,truck,'MADNESS'] =:= sc:key_duplicate([ {3,sunday},{2,monster},{2,truck},{1,'MADNESS'} ]) ) },
 
-        {"Regression: key empty-list", ?_assert( [ [], [] ]  =:= sc:key_duplicate([ {2, []} ])     ) },
+        {"Regression: key empty-list",                            ?_assert( [ [], [] ]  =:= sc:key_duplicate([ {2, []} ])     ) },
 
-        {"Stochastic: correct length", ?_assert( true        =:= proper:quickcheck(prop_key_duplicate_correct_length()) ) }
+        {"Spec test",                                             ?_assert( true =:= proper:check_spec({sc,key_duplicate,1}) ) },
+
+        {"Stochastic: correct length",                            ?_assert( true =:= proper:quickcheck(prop_key_duplicate_correct_length()) ) }
 
     ] }.
 
@@ -394,7 +396,7 @@ explode_test_() ->
 
 prop_ceil_ints_as_floats_identity() ->
 
-    ?FORALL( I, 
+    ?FORALL( I,
              proper_types:integer(), 
               
              sc:ceiling(I*1.0) =:= I 
@@ -470,7 +472,7 @@ prop_floor_ints_as_floats_identity() ->
 prop_floor_floats_larger_within_1() ->
 
     ?FORALL( R, 
-             proper_types:real(), 
+             proper_types:real(),
              
              (R - sc:floor(R)) < 1 andalso (R - sc:floor(R)) >= 0 
              
@@ -623,11 +625,11 @@ nybble_to_hex_test_() ->
 
 prop_arithmetic_mean_result_numeric() ->
 
-    ?FORALL( Ln, 
-             list(number()), 
-             
-             true =:= is_number(sc:arithmetic_mean(Ln)) 
-             
+    ?FORALL( Ln,
+             list(number()),
+
+             true =:= is_number(sc:arithmetic_mean(Ln))
+
            ).
 
 
@@ -642,11 +644,11 @@ prop_arithmetic_mean_between_eq_extrema_p(L) ->
 
 prop_arithmetic_mean_between_eq_extrema() ->
 
-    ?FORALL( Ln, 
-             non_empty(list(number())), 
-             
-             true =:= prop_arithmetic_mean_between_eq_extrema_p(Ln) 
-             
+    ?FORALL( Ln,
+             non_empty(list(number())),
+
+             true =:= prop_arithmetic_mean_between_eq_extrema_p(Ln)
+
            ).
 
 
@@ -661,6 +663,8 @@ arithmetic_mean_test_() ->
         { "Doc ex 1 - []=0.0",    ?_assert(  0.0 =:= sc:arithmetic_mean([])          ) },
         { "Doc ex 1 - 4x2=2.0",   ?_assert(  2.0 =:= sc:arithmetic_mean([2,2,2,2])   ) },
         { "Doc ex 1 - -3,2=-0.5", ?_assert( -0.5 =:= sc:arithmetic_mean([-3,2])      ) },
+
+        {"Spec test",                                  ?_assert( true =:= proper:check_spec({sc,arithmetic_mean,1}) ) },
 
         {"Stochastic: all results are numbers",        ?_assert( true =:= proper:quickcheck(prop_arithmetic_mean_result_numeric())     ) },
         {"Stochastic: all results between-eq extrema", ?_assert( true =:= proper:quickcheck(prop_arithmetic_mean_between_eq_extrema()) ) }
@@ -721,6 +725,58 @@ tuple_duplicate_test_() ->
         {"Stochastic: all results have correct member count", ?_assert( true =:= proper:quickcheck(prop_tuple_duplicate_correct_size()) ) },
         {"Stochastic: first item is correct",                 ?_assert( true =:= proper:quickcheck(prop_tuple_duplicate_first_item()) ) },
 
+        {"Spec test",                                         ?_assert( true =:= proper:check_spec({sc,tuple_duplicate,2}) ) },
+
         {"-1,hi error undefined", ?_assertError(function_clause, sc:tuple_duplicate(-1, hi) ) }
+
+    ] }.
+
+
+
+
+
+prop_geometric_mean_result_float() ->
+
+    ?FORALL( Ln,
+             list(pos_number()),
+
+             true =:= is_float(sc:geometric_mean(Ln))
+
+           ).
+
+
+
+
+
+prop_geometric_mean_between_eq_extrema_p(L) ->
+
+    {Lo,Hi} = sc:extrema(L),
+    sc:is_between(sc:geometric_mean(L), Lo, Hi, inclusive).
+
+
+prop_geometric_mean_between_eq_extrema() ->
+
+    ?FORALL( Ln,
+             non_empty(list(pos_integer())),
+
+             true =:= prop_geometric_mean_between_eq_extrema_p(Ln)
+
+           ).
+
+
+
+
+
+geometric_mean_test_() ->
+
+    { "Geometric mean tests", [
+
+        { "[]",          ?_assert( 0.0                =:= sc:geometric_mean( [] )          ) },
+        { "[1,2,3,4,5]", ?_assert( 2.6051710846973517 =:= sc:geometric_mean( [1,2,3,4,5] ) ) },
+        { "[2,2,2]",     ?_assert( 2.0                =:= sc:geometric_mean( [2,2,2] )     ) },
+        { "[1,10,100]",  ?_assert( 10.000000000000002 =:= sc:geometric_mean( [1,10,100] )  ) },
+
+        {"Stochastic: all results between-eq extrema", ?_assert( true =:= proper:quickcheck(prop_geometric_mean_between_eq_extrema()) ) },
+        {"Stochastic: all results are floats",         ?_assert( true =:= proper:quickcheck(prop_tuple_duplicate_result_tuple())      ) }
 
     ] }.

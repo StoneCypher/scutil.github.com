@@ -41,7 +41,6 @@
 %% @todo burn out scutil:
 %% @todo burn out @section
 %% @todo burn out was
-%% @todo move to -spec
 %% @todo distinguish -opaque types from -types (opaque are not meant to be understood by the outside world, merely tracked, eg handles)
 
 %% @todo paranoid guards
@@ -860,7 +859,7 @@ extrema([First | _] = List)
 %% 2> sc:key_duplicate([ {3,sunday}, {2,monster}, {2,truck}, {1,'MADNESS'} ]).
 %% [sunday,sunday,sunday,monster,monster,truck,truck,'MADNESS']'''
 %%
-%% Unit, doc and stochastic (correct length) tested.
+%% Unit, doc, spec and stochastic (correct length) tested.
 %%
 %% @since Version 462
 
@@ -2149,13 +2148,27 @@ arithmetic_mean(List)
 
 
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the geometric mean of a list of numbers. ```1> sc:geometric_mean([1,2,3,4,5]).
-%% 2.6051710846973517'''
+%% 2.6051710846973517
 %%
-%% <a href="http://www.wolframalpha.com/input/?i=geometric+mean+{1%2C2%2C3%2C4%2C5}">WolframAlpha Confirms</a>
+%% 2> sc:geometric_mean([2,2,2]).
+%% 2.0
 %%
-%% The geometric mean is not defined for lists including 0.
+%% 3> sc:geometric_mean([3]).
+%% 3.0
+%%
+%% 4> sc:geometric_mean([1,10,100]).
+%% 10.000000000000002'''
+%%
+%% <a href="http://www.wolframalpha.com/input/?i=geometric+mean+{1%2C2%2C3%2C4%2C5}">Wolfram Alpha confirms result 1</a><br/>
+%% <a href="http://www.wolframalpha.com/input/?i=geometric+mean+{2%2C2%2C2}">Wolfram Alpha confirms result 2</a><br/>
+%% <a href="http://www.wolframalpha.com/input/?i=geometric+mean+{3}">Wolfram Alpha confirms result 3</a><br/>
+%% <a href="http://www.wolframalpha.com/input/?i=geometric+mean+{1%2C10%2C100}">Wolfram Alpha confirms result 3</a>
+%%
+%% The geometric mean is not defined for lists including 0.  This implementation does not handle the geometric mean of lists including negative numbers.
 %%
 %% The naive approach `geometric_mean(List) -> math:pow(sc:list_product(List), 1/length(List))' is not used because it accumulates error very quickly, and is as such unsuited to huge lists.  This is the same as the expected function nth-root(prod, 1/n), but calculated differently for machine reasons.'''
+%%
+%% Unit, doc and stochastic (all results are floats, all results between extrema) tested.
 %%
 %% Thanks to Forest (anonymous by choice) for help resolving 0-correctness.
 %%
@@ -2165,7 +2178,7 @@ arithmetic_mean(List)
 %%
 %% @since Version 482
 
--spec geometric_mean(InputList::numeric_list()) -> float().
+-spec geometric_mean(InputList::pos_numeric_list()) -> float().
 
 geometric_mean([]) ->
 
@@ -2175,11 +2188,33 @@ geometric_mean([]) ->
 
 
 
+% resist loss of precision for single item
+
+geometric_mean([X]) ->
+
+    X * 1.0;
+
+
+
+
+
 geometric_mean(List)
 
     when is_list(List) ->
 
-    math:exp(arithmetic_mean([ math:log(X) || X<-List ])).
+    % resist loss of precision for repeated item
+    case is_repeated_list(List) of
+
+        true ->
+            [Item|_] = List,
+            geometric_mean([Item]);
+
+        false ->
+            math:exp(arithmetic_mean([ math:log(X) || X<-List ]))
+
+    end.
+
+
 
 
 
@@ -9608,7 +9643,7 @@ ensure_started(App, Opts)
 %% 2> sc:tuple_duplicate(0,hi).
 %% {}
 %%
-%% Unit, doc and stochastic (correct length, is tuple, first item is correct) tested.'''
+%% Unit, doc, spec and stochastic (correct length, is tuple, first item is correct) tested.'''
 
 %% @since Version 809
 
