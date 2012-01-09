@@ -620,11 +620,11 @@
 -type sanitizer()              :: [] | filter_function().                %% Sanitizers are used by {@link sanitize_tokens/2} for input sanitization; they define what parts of an input list are valid, and the remainder are removed.  Sanitizers may either be a list of acceptable elements or a filter function.
 
 -type coord()                  :: {}.                                    %% Every member of a {@type coord()} is a {@type number()}.  Represents a coordinate, which may imply a sized cartesian space.  Many functions expect integer coordinates; the type does not require them.  This type does not define member count.  If your function requires a specific count of members, name it, as in a {@type coord2()} or {@type coord3()}.
--type coord_list()             :: [{}].                                  %% All members of a {@type coordlist()} must be {@type coord()}s.  All member coordinates must be of the same size, though this type does not define what that size is.  If your function requires a specific count of members, name it, as in a {@type coord2list()} or {@type coord3list()}.
+-type coord_list()             :: [{}].                                  %% All members of a {@type coord_list()} must be {@type coord()}s.  All member coordinates must be of the same size, though this type does not define what that size is.  If your function requires a specific count of members, name it, as in a {@type coord2_list()} or {@type coord3_list()}.
 -type coord2()                 :: { number(), number() }.                %% Represents a coordinate, which may imply a sized rectangle.  Many functions expect integer coordinates; the type does not require them.
--type coord2_list()            :: [ coord2() ].                          %% All members of a {@type coord2list()} must be {@type coord2()}s.
+-type coord2_list()            :: [ coord2() ].                          %% All members of a {@type coord2_list()} must be {@type coord2()}s.
 -type coord3()                 :: { number(), number(), number() }.      %% Represents a coordinate, which may imply a sized 3d box region.  Many functions expect integer coordinates; the type does not require them.
--type coord3_list()            :: [ coord3() ].                          %% All members of a {@type coord3list()} must be {@type coord3()}s.
+-type coord3_list()            :: [ coord3() ].                          %% All members of a {@type coord3_list()} must be {@type coord3()}s.
 
 -type three_vector(T)          :: [T] | {T,T,T}.                         %% A three-vector always has three elements, so this can be expressed as the alternation `{A::T(), B::T(), C::T()} | [A::T(), B::T(), C::T()]'.
 -type three_vector_list(T)     :: [T].                                   %% A three-vector expressed as a list.
@@ -675,14 +675,14 @@
 
 
 
-%% @spec gen_docs() -> ok|{'EXIT',any()}
-%%
 %% @equiv gen_docs("/projects/github/scutil.github.com", "/projects/github/scutil.github.com/erl/doc")
 %%
 %% @doc (not testworthy) Generates library documentation using the paths appropriate for the author's PC; you almost certainly want {@link gen_docs/2} instead.  ```1> sc:gen_docs().
 %% ok'''
 %%
 %% @since 458
+
+-spec gen_docs() -> ok | { 'EXIT', any() }.
 
 gen_docs() ->
 
@@ -692,13 +692,13 @@ gen_docs() ->
 
 
 
-%% @spec gen_docs(WhereIsSrc::string(), WhereToPutDocs::string()) -> ok|{'EXIT',any()}
-%%
 %% @doc (not testworthy) Generates library documentation from and to the specified paths `WhereIsSrc' and `WhereToPutDocs' respectively.  Do not use trailing slashes.  Windows paths are okay; remember to double your
 %% backslashes, as backslashes in strings need to be quoted.  ```1> sc:gen_docs("/projects/scutil", "/projects/scutil/erl/src/docs").
 %% ok'''
 %%
 %% @since 458
+
+-spec gen_docs(WhereIsSrc::string(), WhereToPutDocs::string()) -> ok | {'EXIT', any()}.
 
 gen_docs(WhereIsBase, WhereToPutDocs) ->
 
@@ -724,13 +724,13 @@ gen_docs(WhereIsBase, WhereToPutDocs) ->
 
 
 
-%% @spec test() -> ok|error
-%%
 %% @doc (not testworthy) Runs the test suite in terse form. ```1> sc:test().
 %%   All 9 tests passed.
 %% ok'''
 %%
 %% @since 458
+
+-spec test() -> ok | error.
 
 test() ->
 
@@ -740,8 +740,6 @@ test() ->
 
 
 
-%% @spec test(verbose) -> ok|error
-%%
 %% @doc (not testworthy) Runs the test suite in verbose form.  Also responds to [verbose] to be more familiar to eunit devs.  An (ancient) example of output: ```1> sc:test(verbose).
 %% ======================== EUnit ========================
 %% module 'sc'
@@ -784,6 +782,8 @@ test() ->
 %%
 %% @since 460
 
+-spec test(verbose) -> ok | error.
+
 test(verbose=_Style) ->
 
     eunit:test(sc, [verbose]);
@@ -801,8 +801,6 @@ test([verbose]=_Style) ->
 
 
 
-%% @spec extrema(List::non_empty_list()) -> {Low::any(),Hi::any()}
-%%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Returns the lowest and highest values in a list of one or more member in the form `{Lo,Hi}'.  Undefined over the empty list.  Mixed-type safe; sorts according to type order rules.  ```1> sc:extrema([1,2,3,4]).
 %% {1,4}
 %%
@@ -813,6 +811,8 @@ test([verbose]=_Style) ->
 %% ** exception error: no function clause matching sc:extrema([])'''
 %%
 %% @since Version 460
+
+-spec extrema(List::list()) -> { Low::any(), Hi::any() }.
 
 extrema([First | _] = List)
 
@@ -833,7 +833,7 @@ extrema([First | _] = List)
         end,
 
         {Lo2, Hi2}
-    
+
     end,
 
     lists:foldl(Next, {First,First}, List).
@@ -842,8 +842,6 @@ extrema([First | _] = List)
 
 
 
-%% @spec key_duplicate(CvList::list()) -> [any()]
-%%
 %% @doc Iterates a list of `{Count,Term}', producing a list of `[Term,Term,...]'.  ```1> sc:key_duplicate([ {3,bork} ]).
 %% [bork,bork,bork]
 %%
@@ -851,6 +849,8 @@ extrema([First | _] = List)
 %% [sunday,sunday,sunday,monster,monster,truck,truck,'MADNESS']'''
 %%
 %% @since Version 462
+
+-spec key_duplicate(KeyList::list({non_neg_integer(),any()})) -> [any()].
 
 key_duplicate(KeyList) ->
 
@@ -860,8 +860,6 @@ key_duplicate(KeyList) ->
 
 
 
-%% @spec rotate_list(Distance::integer(), ListData::list()) -> list()
-%%
 %% @doc Rotates the front `Distance' elements of a list to the back, in order.  Negative distances rotate the back towards the front.  Distances over the length of
 %% the list wrap in modulus.  ```1> sc:rotate_list(2, [1,2,3,4,5,6,7,8]).
 %% [3,4,5,6,7,8,1,2]
@@ -876,6 +874,8 @@ key_duplicate(KeyList) ->
 %% [1,2,3,4,5,6,7,8]'''
 %%
 %% @since Version 463
+
+-spec rotate_list(Distance::integer(), ListData::list()) -> list().
 
 rotate_list(_, []) ->
 
@@ -931,8 +931,6 @@ rotate_list(By, List) ->
 
 
 
-%% @spec index_of_first(Item, List) -> integer()|undefined
-%%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Returns the index of the first instance of `Item' in the `List', or `undefined' if `Item' is not present.  ```1> sc:index_of_first(c, [a,b,c,d,e]).
 %% 3
 %%
@@ -940,6 +938,8 @@ rotate_list(By, List) ->
 %% undefined'''
 %%
 %% @since Version 463
+
+-spec index_of_first(Item::any(), List::list()) -> integer() | undefined.
 
 index_of_first(Item, List) ->
 
@@ -973,8 +973,6 @@ index_of_first(Item, [_OtherItem|ListRem], Pos) ->
 
 
 
-%% @spec rotate_to_first(Item, List) -> list()
-%%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Rotates the list to the first instance of Item.  ```1> sc:rotate_to_first(c, [a,b,c,d,e]).
 %% [c,d,e,a,b]
 %%
@@ -982,6 +980,8 @@ index_of_first(Item, [_OtherItem|ListRem], Pos) ->
 %% no_such_element'''
 %%
 %% @since Version 464
+
+-spec rotate_to_first(Item::any(), List::list()) -> list().
 
 rotate_to_first(Item, List) ->
 
@@ -999,8 +999,6 @@ rotate_to_first(Item, List) ->
 
 
 
-%% @spec rotate_to_last(Item, List) -> list()
-%%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Rotates the list so that the first instance of Item becomes the last element in the list.  ```1> sc:rotate_to_last(c, [a,b,c,d,e]).
 %% [d,e,a,b,c]
 %%
@@ -1008,6 +1006,8 @@ rotate_to_first(Item, List) ->
 %% no_such_element'''
 %%
 %% @since Version 464
+
+-spec rotate_to_last(Item::any(), List::list()) -> list().
 
 rotate_to_last(Item, List) ->
 
@@ -1025,8 +1025,6 @@ rotate_to_last(Item, List) ->
 
 
 
-%% @spec flag_sets(Flags::list()) -> list_of_lists()
-%%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Returns every interpretation of the list as a set of boolean flags, including all-off and all-on. ```1> sc:flag_sets([1,2,3,4]).
 %% [ [], [4], [3], [3,4], [2], [2,4], [2,3], [2,3,4], [1], [1,4], [1,3], [1,3,4], [1,2], [1,2,4], [1,2,3], [1,2,3,4] ]
 %%
@@ -1055,6 +1053,8 @@ rotate_to_last(Item, List) ->
 %%  [magic,technology,evil,alien]]   % Granny Goodness'''
 %%
 %% @since Version 465
+
+-spec flag_sets(Flags::list()) -> list_of_lists().
 
 flag_sets([]) ->
 

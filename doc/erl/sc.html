@@ -13,7 +13,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of the erlang portion of the scutil library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> 2.5.810
+<p><b>Version:</b> 2.5.811
 </p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
@@ -98,7 +98,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 
 <h3 class="typedecl"><a name="type-coord2_list">coord2_list()</a></h3>
 <p><tt>coord2_list() = [<a href="#type-coord2">coord2()</a>]</tt></p>
-<p>  All members of a <code><a href="#type-coord2list">coord2list()</a></code> must be <code><a href="#type-coord2">coord2()</a></code>s.</p>
+<p>  All members of a <code><a href="#type-coord2_list">coord2_list()</a></code> must be <code><a href="#type-coord2">coord2()</a></code>s.</p>
 
 <h3 class="typedecl"><a name="type-coord3">coord3()</a></h3>
 <p><tt>coord3() = {number(), number(), number()}</tt></p>
@@ -106,11 +106,11 @@ presenting the actual volume of functionality present here.  We can get the cove
 
 <h3 class="typedecl"><a name="type-coord3_list">coord3_list()</a></h3>
 <p><tt>coord3_list() = [<a href="#type-coord3">coord3()</a>]</tt></p>
-<p>  All members of a <code><a href="#type-coord3list">coord3list()</a></code> must be <code><a href="#type-coord3">coord3()</a></code>s.</p>
+<p>  All members of a <code><a href="#type-coord3_list">coord3_list()</a></code> must be <code><a href="#type-coord3">coord3()</a></code>s.</p>
 
 <h3 class="typedecl"><a name="type-coord_list">coord_list()</a></h3>
 <p><tt>coord_list() = [{}]</tt></p>
-<p>  All members of a <code><a href="#type-coordlist">coordlist()</a></code> must be <code><a href="#type-coord">coord()</a></code>s.  All member coordinates must be of the same size, though this type does not define what that size is.  If your function requires a specific count of members, name it, as in a <code><a href="#type-coord2list">coord2list()</a></code> or <code><a href="#type-coord3list">coord3list()</a></code>.</p>
+<p>  All members of a <code><a href="#type-coord_list">coord_list()</a></code> must be <code><a href="#type-coord">coord()</a></code>s.  All member coordinates must be of the same size, though this type does not define what that size is.  If your function requires a specific count of members, name it, as in a <code><a href="#type-coord2_list">coord2_list()</a></code> or <code><a href="#type-coord3_list">coord3_list()</a></code>.</p>
 
 <h3 class="typedecl"><a name="type-filter_function">filter_function()</a></h3>
 <p><tt>filter_function() = function()</tt></p>
@@ -1382,7 +1382,7 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="extrema-1">extrema/1</a></h3>
 <div class="spec">
-<p><tt>extrema(List::<a href="#type-non_empty_list">non_empty_list()</a>) -&gt; {Low::any(), Hi::any()}</tt><br></p>
+<p><tt>extrema(List::list()) -&gt; {Low::any(), Hi::any()}</tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Returns the lowest and highest values in a list of one or more member in the form <code>{Lo,Hi}</code>.  Undefined over the empty list.  Mixed-type safe; sorts according to type order rules.  <pre>  1&gt; sc:extrema([1,2,3,4]).
   {1,4}
  
@@ -1792,7 +1792,7 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="index_of_first-2">index_of_first/2</a></h3>
 <div class="spec">
-<p><tt>index_of_first(Item, List) -&gt; integer() | undefined</tt><br></p>
+<p><tt>index_of_first(Item::any(), List::list()) -&gt; integer() | undefined</tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.  <pre>  1&gt; sc:index_of_first(c, [a,b,c,d,e]).
   3
  
@@ -1958,7 +1958,7 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="key_duplicate-1">key_duplicate/1</a></h3>
 <div class="spec">
-<p><tt>key_duplicate(CvList::list()) -&gt; [any()]</tt><br></p>
+<p><tt>key_duplicate(KeyList::[{non_neg_integer(), any()}]) -&gt; [any()]</tt><br></p>
 </div><p>Iterates a list of <code>{Count,Term}</code>, producing a list of <code>[Term,Term,...]</code>.  <pre>  1&gt; sc:key_duplicate([ {3,bork} ]).
   [bork,bork,bork]
  
@@ -2940,7 +2940,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="rotate_to_first-2">rotate_to_first/2</a></h3>
 <div class="spec">
-<p><tt>rotate_to_first(Item, List) -&gt; list()</tt><br></p>
+<p><tt>rotate_to_first(Item::any(), List::list()) -&gt; list()</tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Rotates the list to the first instance of Item.  <pre>  1&gt; sc:rotate_to_first(c, [a,b,c,d,e]).
   [c,d,e,a,b]
  
@@ -2951,7 +2951,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="rotate_to_last-2">rotate_to_last/2</a></h3>
 <div class="spec">
-<p><tt>rotate_to_last(Item, List) -&gt; list()</tt><br></p>
+<p><tt>rotate_to_last(Item::any(), List::list()) -&gt; list()</tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Rotates the list so that the first instance of Item becomes the last element in the list.  <pre>  1&gt; sc:rotate_to_last(c, [a,b,c,d,e]).
   [d,e,a,b,c]
  
@@ -3680,6 +3680,6 @@ via Naive Bayes Likelihood.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Jan 8 2012, 21:49:12.</i></p>
+<p><i>Generated by EDoc, Jan 8 2012, 21:59:17.</i></p>
 </body>
 </html>
