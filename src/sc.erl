@@ -2500,7 +2500,7 @@ moments(List, Moments)
 %%
 %% @since Version 492
 
--spec central_moment(List::list(), N::integer()) -> float()
+-spec central_moment(List::list(), N::integer()) -> float().
 
 central_moment(List, N)
 
@@ -2613,7 +2613,7 @@ kurtosis(List) ->
 %%
 %% @todo add an argument presort to this and other functions to skip the sorting pass
 
--spec histograph(List::list()) -> weight_list()
+-spec histograph(List::list()) -> weight_list().
 
 histograph([]) ->
 
@@ -2660,8 +2660,6 @@ histo_count( [New|Tail], Current, Count, Work) ->
 
 
 
-%% @spec mode(List::numericlist()) -> any()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the mode (most common) value(s) of a list, as a list.  If there are more than one value tied for most common, all tied will be returned.  This function is safe for mixed-type lists, and does not perform deep traversal (that is, the mode of `[ [2,2] ]' is `[2,2]', not `2'). ```sc:mode([1,2,1,3,1,4]).
 %% [1]
 %%
@@ -2675,6 +2673,8 @@ histo_count( [New|Tail], Current, Count, Work) ->
 %% @see median/1
 %%
 %% @since Version 497
+
+-spec mode(List::numeric_list()) -> any().
 
 mode([]) ->
 
