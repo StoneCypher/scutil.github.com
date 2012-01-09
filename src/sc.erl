@@ -2333,8 +2333,6 @@ median(List)
 
 
 
-%% @spec parity(Num::integer()) -> even | odd
-%%
 %% @equiv even_or_odd(Num)
 %%
 %% @doc Documentary convenience function (synonymous with even_or_odd/1) that returns the atoms `even' or `odd' for any integer. ```1> sc:parity(3).
@@ -2344,6 +2342,8 @@ median(List)
 %%
 %% @since Version 648
 
+-spec parity(Num::integer()) -> even | odd.
+
 parity(Num) ->
 
     even_or_odd(Num).
@@ -2352,12 +2352,12 @@ parity(Num) ->
 
 
 
-%% @spec even_or_odd(Num::integer()) -> even | odd
-%%
 %% @doc Documentary convenience function (synonymous with parity/1) that returns the atoms `even' or `odd' for any integer. ```1> sc:even_or_odd(3).
 %% odd'''
 %%
 %% @since Version 489
+
+-spec even_or_odd(Num::integer()) -> even | odd.
 
 even_or_odd(Num)
 
@@ -2380,8 +2380,6 @@ even_or_odd(Num)
 
 
 
-%% @spec standard_deviation(Values::numericlist(), Kind::population|sample) -> float()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Measures the standard deviation of the values in the list.  ```1> sc:standard_deviation([1,2,3,4,5],population).
 %% 1.4142135623730951
 %%
@@ -2395,6 +2393,8 @@ even_or_odd(Num)
 %% 0.0'''
 %%
 %% @since Version 490
+
+-spec standard_deviation(Values::numeric_list(), Kind::population|sample) -> float().
 
 standard_deviation(Values, population)
 
@@ -2418,8 +2418,6 @@ standard_deviation(Values, sample)
 
 
 
-%% @spec moment(List::list(), N::number()) -> float()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the Nth moment of a list.  The Nth moment of a list is the arithmetic mean of the list items, each taken to the Nth power.  Fractional Ns are well defined
 %% and have obscure uses, though most will only ever use this with integer values of N; this function is valid for both.  Not to be confused with {@link central_moment/2}.  {@section Thanks}
 %% to Kraln and Chile for straightening me out on moments and central moments.  ```1> sc:moment([1,1,1], 2).
@@ -2440,6 +2438,8 @@ standard_deviation(Values, sample)
 %% Thanks to Chile and Kraln for straightening me out on moments and central moments
 %%
 %% @since Version 491
+
+-spec moment(List::numeric_list(), N::number()) -> float().
 
 moment(List, N)
 
@@ -2482,8 +2482,6 @@ moments(List, Moments)
 
 
 
-%% @spec central_moment(List::list(), N::integer()) -> float()
-%%
 %% @doc <span style="color:red"><b><i>BUGGY</i></b></span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the Nth cetral moment of a list.  The Nth central moment of a list is the arithmetic mean of (the list items each minus the mean of the list, each
 %% taken to the Nth power).  In a sense, this is the "normalized" moment.  Fractional Ns are not defined.  Not to be confused with {@link moment/2}.  {@section Thanks} to Kraln and
 %% Chile for straightening me out on moments and central moments.  ```1> sc:central_moment([1,1,1], 2).
@@ -2501,6 +2499,8 @@ moments(List, Moments)
 %% Thanks to Chile and Kraln for straightening me out on moments and central moments
 %%
 %% @since Version 492
+
+-spec central_moment(List::list(), N::integer()) -> float()
 
 central_moment(List, N)
 
@@ -2564,7 +2564,7 @@ skewness(List) ->
 %%
 %% @doc <span style="color:red"><b><i>BUGGY</i></b></span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
 %%
-%% Wrong! todo comeback
+%% Wrong! ##todo comeback
 
 kurtosis(List) ->
 
@@ -2582,8 +2582,6 @@ kurtosis(List) ->
 
 
 
-%% @spec histograph(List::list()) -> weightlist()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes a histograph count of the items in the list.  Mixed type lists are safe.  Input lists do not need to be sorted.  The histograph is shallow - that is, the histograph of `[ [1,2], [1,2], [2,2] ]' is `[ {[1,2],2}, {[2,2],1} ]', not `[ {1,2}, {2,4} ]'. ```1> sc:histograph([1,2,a,2,b,1,b,1,b,2,a,2,2,1]).
 %% [{1,4},{2,5},{a,2},{b,3}]
 %%
@@ -2614,6 +2612,8 @@ kurtosis(List) ->
 %% @since Version 496
 %%
 %% @todo add an argument presort to this and other functions to skip the sorting pass
+
+-spec histograph(List::list()) -> weight_list()
 
 histograph([]) ->
 
