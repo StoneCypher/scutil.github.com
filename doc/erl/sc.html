@@ -13,7 +13,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of the erlang portion of the scutil library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> 2.5.816
+<p><b>Version:</b> 2.5.817
 </p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
@@ -183,6 +183,10 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="typedecl"><a name="type-pos_numeric_list">pos_numeric_list()</a></h3>
 <p><tt>pos_numeric_list() = [number()]</tt></p>
 <p>  All members of a numeric list must be number()s.  Should enforce positive-ness but don't know how without losing floats.</p>
+
+<h3 class="typedecl"><a name="type-positive_integer_or_list">positive_integer_or_list()</a></h3>
+<p><tt>positive_integer_or_list() = pos_integer() | list()</tt></p>
+<p>  Positive integer or list.</p>
 
 <h3 class="typedecl"><a name="type-ranking">ranking()</a></h3>
 <p><tt>ranking(T) = {Ranking::number(), Value::T}</tt></p>
@@ -1044,7 +1048,7 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="cross_product-2">cross_product/2</a></h3>
 <div class="spec">
-<p><tt>cross_product(VX::<a href="#type-three_vector">three_vector()</a>, VY::<a href="#type-three_vector">three_vector()</a>) -&gt; <a href="#type-three_vector">three_vector()</a></tt><br></p>
+<p><tt>cross_product(VX::<a href="#type-three_vector">three_vector</a>(T), VY::<a href="#type-three_vector">three_vector</a>(T)) -&gt; <a href="#type-three_vector">three_vector</a>(T)</tt><br></p>
 </div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the cross product of two vectors (<span style="color:red">Incomplete</span> represented as <code><a href="#type-three_vector">three_vector()</a></code>s - no support yet for seven). <pre>  1&gt; sc:dot_product([1,1,1],[2,2,2]).
   6
  
@@ -1601,7 +1605,7 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="grid_scatter-2">grid_scatter/2</a></h3>
 <div class="spec">
-<p><tt>grid_scatter(Count::integer(), Size::<a href="#type-gridsize">gridsize()</a>) -&gt; <a href="#type-coordlist">coordlist()</a></tt><br></p>
+<p><tt>grid_scatter(Count::integer(), Size::<a href="#type-grid_size">grid_size()</a>) -&gt; <a href="#type-coord_list">coord_list()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return a Count-length list of non-repeating coordinates in a grid of specified size; useful for feature generation.
  </p>
 <p><b>Introduced in:</b> Version 599</p>
@@ -1647,7 +1651,7 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="hex_to_int-1">hex_to_int/1</a></h3>
 <div class="spec">
-<p><tt>hex_to_int(HexChar::<a href="#type-hexstring">hexstring()</a> | <a href="#type-hexchar">hexchar()</a>) -&gt; integer()</tt><br></p>
+<p><tt>hex_to_int(Hex::<a href="#type-hexstring">hexstring()</a> | <a href="#type-hexchar">hexchar()</a>) -&gt; integer()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a hexstring() or hexchar() into its numeric value. <pre>  1&gt; sc:hex_to_int("c0ffEE").
   12648430
  
@@ -1943,7 +1947,7 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="kendall_correlation-1">kendall_correlation/1</a></h3>
 <div class="spec">
-<p><tt>kendall_correlation(TupleList::<a href="#type-coordlist">coordlist()</a>) -&gt; {tau, Correlation::number()}</tt><br></p>
+<p><tt>kendall_correlation(TupleList::<a href="#type-coord_list">coord_list()</a>) -&gt; {tau, Correlation::number()}</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Kendall Tau Rank Correlation Coefficient of a list of coordinate tuples. <pre>  1&gt; sc:kendall([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
   {tau,1.0}
  
@@ -2619,7 +2623,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="pearson_correlation-1">pearson_correlation/1</a></h3>
 <div class="spec">
-<p><tt>pearson_correlation(TupleList::<a href="#type-coordlist">coordlist()</a>) -&gt; {r, Correlation::number()}</tt><br></p>
+<p><tt>pearson_correlation(TupleList::<a href="#type-coord_list">coord_list()</a>) -&gt; {r, Correlation::number()}</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Pearson Correlation Coefficient of a list of coordinate tuples. <pre>  1&gt; sc_correlate:pearson([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
   {r,1.0}
  
@@ -2713,7 +2717,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="qsp_average-2">qsp_average/2</a></h3>
 <div class="spec">
-<p><tt>qsp_average(W::<a href="#type-numericlist">numericlist()</a>, InputVecs::<a href="#type-vectorlist">vectorlist()</a>) -&gt; float()</tt><br></p>
+<p><tt>qsp_average(W::<a href="#type-numeric_list">numeric_list()</a>, InputVecs::<a href="#type-vector_list">vector_list()</a>) -&gt; float()</tt><br></p>
 </div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the quadratic scalar product average of a vector <code>W</code> and a list of vectors <code>X</code>.  The QSP Average
   is the arithmetic mean of the result set Y, where Y is generated as the square of the magnitude of the dot product
   of W and each individual vector in X. @see http://www.inf.fu-berlin.de/inst/ag-ki/rojas_home/documents/1996/NeuralNetworks/K5.pdf
@@ -2777,7 +2781,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="random_from-3">random_from/3</a></h3>
 <div class="spec">
-<p><tt>random_from(N::integer(), List::list(), WantRemainder::<a href="#type-want_remainder">want_remainder()</a>) -&gt; list()</tt><br></p>
+<p><tt>random_from(N::integer(), List::list(), X3::remainder | no_remainder) -&gt; list()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take N non-repeating random elements from a list in undefined order.  If the atom <code>remainder</code> is passed in as the third argument, the unused portion of the source list will be returned as the second member of a 2ary tuple with the results; the default is no_remainder, which only returns the result set.  Mixed type input lists are perfectly safe, and membership for random selection is shallow (ie, <code>[ [1,2], [3,4] ]</code> as an input list would only generate outputs of lists, never integers.)<pre>  1&gt; sc:random_from([monday,tuesday,wednesday,thursday,friday]).
   friday
  
@@ -2806,7 +2810,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="random_from_weighted-1">random_from_weighted/1</a></h3>
 <div class="spec">
-<p><tt>random_from_weighted(InputList::<a href="#type-weightlist">weightlist()</a>) -&gt; any()</tt><br></p>
+<p><tt>random_from_weighted(InputList::<a href="#type-weight_list">weight_list()</a>) -&gt; any()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take a random single item from a list with weighted probabilities.  Probabilities may be any numeric type, and may be any non-negative value (items with zero probability will be omitted).  Input is a <code>weightlist()</code>, which is a list in the form <code>[{Item,Probability}, {I2,P2}, ...]</code>. There is no requirement to normalize probabilities to any range, though probabilities normalized to ranges will still work as expected. <pre>  1&gt; sc:from([ {quad,4}, {double,2}, {single,1} ]).
   quad
  
@@ -3040,7 +3044,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="send_receive_masked-3">send_receive_masked/3</a></h3>
 <div class="spec">
-<p><tt>send_receive_masked(Mask::any(), ToWhom::pid() | atom(), What::any()) -&gt; {Mask, any()}</tt><br></p>
+<p><tt>send_receive_masked(Mask::any(), ToWhom::pid() | atom(), What::any()) -&gt; {Mask::any(), any()}</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Blocking) First send a message to an entity.  Then pop the first message queue item matching the mask as a 2-tuple, and return it as <code>{Mask,X}</code>; block.  <pre>  1&gt; sc:send_receive(self(), message).
   {item,message}</pre>
  </p>
@@ -3056,7 +3060,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="set_counter_value-2">set_counter_value/2</a></h3>
 <div class="spec">
-<p><tt>set_counter_value(Name::any(), To::number()) -&gt; 0</tt><br></p>
+<p><tt>set_counter_value(Name::any(), To::number()) -&gt; To::number</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Sets a counter's value to a specific value. <pre>  1&gt; sc:counter_at(hello).
   0
  
@@ -3125,7 +3129,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="simple_ranking-1">simple_ranking/1</a></h3>
 <div class="spec">
-<p><tt>simple_ranking(Values::<a href="#type-numericlist">numericlist()</a>) -&gt; <a href="#type-rankinglist">rankinglist()</a></tt><br></p>
+<p><tt>simple_ranking(Values::<a href="#type-numeric_list">numeric_list()</a>) -&gt; <a href="#type-ranking_list">ranking_list()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a ranked ordering of the list without tie rankings.  <pre>  1&gt; sc_rank:simple([10,90,20,80,30,70,40,60,50]).
   [{1,90}, {2,80}, {3,70}, {4,60}, {5,50}, {6,40}, {7,30}, {8,20}, {9,10}]
  
@@ -3144,7 +3148,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="spearman_correlation-1">spearman_correlation/1</a></h3>
 <div class="spec">
-<p><tt>spearman_correlation(TupleList::<a href="#type-coordlist">coordlist()</a>) -&gt; {rsquared, Correlation::number()}</tt><br></p>
+<p><tt>spearman_correlation(TupleList::<a href="#type-coord_list">coord_list()</a>) -&gt; {rsquared, Correlation::number()}</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Spearman's Rank Correlation Coefficient of a list of coordinate tuples. <pre>  1&gt; sc:spearman([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
   {rsquared,1.0}
  
@@ -3188,7 +3192,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="srand-0">srand/0</a></h3>
 <div class="spec">
-<p><tt>srand() -&gt; {ok, {seeded, Seed}}</tt><br></p>
+<p><tt>srand() -&gt; {ok, {seeded, {integer(), integer(), integer()}}}</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want to know what seed was used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) <pre>  1&gt; sc:srand().
   {ok,{seeded,{1227,902172,685000}}}
  
@@ -3199,7 +3203,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="srand-3">srand/3</a></h3>
 <div class="spec">
-<p><tt>srand(A::integer(), B::integer(), C::integer()) -&gt; {ok, {seeded, Seed}}</tt><br></p>
+<p><tt>srand(A::integer(), B::integer(), C::integer()) -&gt; {ok, {seeded, {integer(), integer(), integer()}}}</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want set what seed is used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) <pre>  1&gt; sc:srand(1,2,3).
   {ok,{seeded,{1,2,3}}}
  
@@ -3225,7 +3229,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="standard_card_backs-1">standard_card_backs/1</a></h3>
 <div class="spec">
-<p><tt>standard_card_backs(Count::<a href="#type-positive_integer">positive_integer()</a>) -&gt; list()</tt><br></p>
+<p><tt>standard_card_backs(Count::pos_integer()) -&gt; list()</tt><br></p>
 </div><p><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the front of the list of colors which are used, in order, as the standard back colors of a series of decks for <a href="#multi_deck-2"><code>multi_deck/2</code></a>.  Each color is presented as an atom.  If you request more colors than are in the list, the list <code>[1,2...Count]</code> is provided instead.  <pre>  1&gt; sc:standard_card_backs(5).
   [ red, blue, green, black, purple ]
  
@@ -3392,7 +3396,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="tied_ordered_ranking-1">tied_ordered_ranking/1</a></h3>
 <div class="spec">
-<p><tt>tied_ordered_ranking(Values::<a href="#type-numericlist">numericlist()</a>) -&gt; <a href="#type-rankinglist">rankinglist()</a></tt><br></p>
+<p><tt>tied_ordered_ranking(Values::<a href="#type-numeric_list">numeric_list()</a>) -&gt; <a href="#type-ranking_list">ranking_list()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a tied ranked ordering of the list, ordered according to the input ordering rather than the sorted ordering.  As with <a href="#tied-1"><code>tied/1</code></a>, all rankings are floats, and ties are represented as the centers of ranges. <pre>  1&gt; sc:ordered([10,90,20,80,30,70,40,60,50]).
   [{9.0,10}, {1.0,90}, {8.0,20}, {2.0,80}, {7.0,30}, {3.0,70}, {6.0,40}, {4.0,60}, {5.0,50}]
  
@@ -3403,7 +3407,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="tied_ranking-1">tied_ranking/1</a></h3>
 <div class="spec">
-<p><tt>tied_ranking(Values::<a href="#type-numericlist">numericlist()</a>) -&gt; <a href="#type-rankinglist">rankinglist()</a></tt><br></p>
+<p><tt>tied_ranking(Values::<a href="#type-numeric_list">numeric_list()</a>) -&gt; <a href="#type-ranking_list">ranking_list()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a ranked ordering of the list with tie rankings.  As such, for uniformity, all rankings are floats.  Ties are represented as the centers of ranges. <pre>  1&gt; sc:tied([10,90,20,80,30,70,40,60,50]).
   [{1.0,90}, {2.0,80}, {3.0,70}, {4.0,60}, {5.0,50}, {6.0,40}, {7.0,30}, {8.0,20}, {9.0,10}]
  
@@ -3432,7 +3436,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="to_lines-1">to_lines/1</a></h3>
 <div class="spec">
-<p><tt>to_lines(Text::string()) -&gt; <a href="#type-stringlist">stringlist()</a></tt><br></p>
+<p><tt>to_lines(Text::string()) -&gt; <a href="#type-string_list">string_list()</a></tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Cuts a string according to any of the three newline conventions (even mixed), and discards empty strings.  Mostly convenience and documentary. <pre>  1&gt; sc:to_lines("one\rtwo\nthree\r\nfour\r\r\rfive").
   ["one","two","three","four","five"]
  
@@ -3516,14 +3520,14 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="tuple_sum-1">tuple_sum/1</a></h3>
 <div class="spec">
-<p><tt>tuple_sum(T::<a href="#type-relaxed_numeric_tuple">relaxed_numeric_tuple()</a>) -&gt; number()</tt><br></p>
+<p><tt>tuple_sum(T::<a href="#type-numeric_tuple">numeric_tuple()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero. <pre>  1&gt;</pre>
  </p>
 <p><b>Introduced in:</b> Version 609</p>
 
 <h3 class="function"><a name="type_of-1">type_of/1</a></h3>
 <div class="spec">
-<p><tt>type_of(Argument::any()) -&gt; <a href="#type-typelabel">typelabel()</a></tt><br></p>
+<p><tt>type_of(Argument::any()) -&gt; <a href="#type-type_label">type_label()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of <code>is_bitstring()</code> . <pre>  1&gt; sc:type_of(1).
   integer
  
@@ -3696,6 +3700,6 @@ via Naive Bayes Likelihood.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Jan 8 2012, 22:51:06.</i></p>
+<p><i>Generated by EDoc, Jan 8 2012, 23:10:40.</i></p>
 </body>
 </html>

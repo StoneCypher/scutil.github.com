@@ -604,81 +604,83 @@
 
 
 
--type time12()                 :: { 1..12, 1..60, am|pm }.               %% A human readable 12-hour time
--type time24()                 :: { 0..23, 1..60 }.                      %% A human readable 24-hour time
+-type time12()                   :: { 1..12, 1..60, am|pm }.               %% A human readable 12-hour time
+-type time24()                   :: { 0..23, 1..60 }.                      %% A human readable 24-hour time
 
--type time12s()                :: { 1..12, 1..60, 1..60, am|pm }.        %% A human readable 12-hour time, with seconds
--type time24s()                :: { 0..23, 1..60, 1..60 }.               %% A human readable 24-hour time, with seconds
+-type time12s()                  :: { 1..12, 1..60, 1..60, am|pm }.        %% A human readable 12-hour time, with seconds
+-type time24s()                  :: { 0..23, 1..60, 1..60 }.               %% A human readable 24-hour time, with seconds
 
--type list_of_lists()          :: [[]].                                  %% Every member of a `list_of_lists()' is a `list()'.
--type list_of_lists(T)         :: [[ T ]].                               %% Every member of a `list_of_lists(T)' is a `list(T)'.
--type list_of_tuples()         :: [{}].                                  %% Every member of a `list_of_lists()' is a `tuple()'.
--type list_of_tuples(T)        :: [{ T }].                               %% Every member of a `list_of_lists(T)' is a `tuple(T)'.
--type list_of_2ary_tuples()    :: [ {any(),any()} ].
+-type list_of_lists()            :: [[]].                                  %% Every member of a `list_of_lists()' is a `list()'.
+-type list_of_lists(T)           :: [[ T ]].                               %% Every member of a `list_of_lists(T)' is a `list(T)'.
+-type list_of_tuples()           :: [{}].                                  %% Every member of a `list_of_lists()' is a `tuple()'.
+-type list_of_tuples(T)          :: [{ T }].                               %% Every member of a `list_of_lists(T)' is a `tuple(T)'.
+-type list_of_2ary_tuples()      :: [ {any(),any()} ].
 
--type nybble()                 :: 0..15.                                 %% Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.  Synonym of hexchar().
--type hexchar()                :: 0..15.                                 %% Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.  Synonym of nybble().
--type hexstring()              :: [ hexchar() ].                         %% All elements of the list must be of type {@type hexchar()}.
+-type nybble()                   :: 0..15.                                 %% Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.  Synonym of hexchar().
+-type hexchar()                  :: 0..15.                                 %% Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.  Synonym of nybble().
+-type hexstring()                :: [ hexchar() ].                         %% All elements of the list must be of type {@type hexchar()}.
 
--type keylist()                :: [{}].                                  %% All members of keylists are tuples of two-or-greater arity, and the first element is considered their key in the list.  List keys are unique; therefore `[{a,1},{b,1}]' is a keylist, but `[{a,1},{a,1}]' is not.
--type sorted_keylist()         :: keylist().                             %% A sorted keylist is a keylist in the order provided by {@link lists:sort/1}.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.
+-type keylist()                  :: [{}].                                  %% All members of keylists are tuples of two-or-greater arity, and the first element is considered their key in the list.  List keys are unique; therefore `[{a,1},{b,1}]' is a keylist, but `[{a,1},{a,1}]' is not.
+-type sorted_keylist()           :: keylist().                             %% A sorted keylist is a keylist in the order provided by {@link lists:sort/1}.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.
 
--type filter_function()        :: function().                            %% Filter functions are 1ary binary predicates - they accept an argument and return either true or false.
--type sanitizer()              :: [] | filter_function().                %% Sanitizers are used by {@link sanitize_tokens/2} for input sanitization; they define what parts of an input list are valid, and the remainder are removed.  Sanitizers may either be a list of acceptable elements or a filter function.
+-type filter_function()          :: function().                            %% Filter functions are 1ary binary predicates - they accept an argument and return either true or false.
+-type sanitizer()                :: [] | filter_function().                %% Sanitizers are used by {@link sanitize_tokens/2} for input sanitization; they define what parts of an input list are valid, and the remainder are removed.  Sanitizers may either be a list of acceptable elements or a filter function.
 
--type coord()                  :: {}.                                    %% Every member of a {@type coord()} is a {@type number()}.  Represents a coordinate, which may imply a sized cartesian space.  Many functions expect integer coordinates; the type does not require them.  This type does not define member count.  If your function requires a specific count of members, name it, as in a {@type coord2()} or {@type coord3()}.
--type coord_list()             :: [{}].                                  %% All members of a {@type coord_list()} must be {@type coord()}s.  All member coordinates must be of the same size, though this type does not define what that size is.  If your function requires a specific count of members, name it, as in a {@type coord2_list()} or {@type coord3_list()}.
--type coord2()                 :: { number(), number() }.                %% Represents a coordinate, which may imply a sized rectangle.  Many functions expect integer coordinates; the type does not require them.
--type coord2_list()            :: [ coord2() ].                          %% All members of a {@type coord2_list()} must be {@type coord2()}s.
--type coord3()                 :: { number(), number(), number() }.      %% Represents a coordinate, which may imply a sized 3d box region.  Many functions expect integer coordinates; the type does not require them.
--type coord3_list()            :: [ coord3() ].                          %% All members of a {@type coord3_list()} must be {@type coord3()}s.
+-type coord()                    :: {}.                                    %% Every member of a {@type coord()} is a {@type number()}.  Represents a coordinate, which may imply a sized cartesian space.  Many functions expect integer coordinates; the type does not require them.  This type does not define member count.  If your function requires a specific count of members, name it, as in a {@type coord2()} or {@type coord3()}.
+-type coord_list()               :: [{}].                                  %% All members of a {@type coord_list()} must be {@type coord()}s.  All member coordinates must be of the same size, though this type does not define what that size is.  If your function requires a specific count of members, name it, as in a {@type coord2_list()} or {@type coord3_list()}.
+-type coord2()                   :: { number(), number() }.                %% Represents a coordinate, which may imply a sized rectangle.  Many functions expect integer coordinates; the type does not require them.
+-type coord2_list()              :: [ coord2() ].                          %% All members of a {@type coord2_list()} must be {@type coord2()}s.
+-type coord3()                   :: { number(), number(), number() }.      %% Represents a coordinate, which may imply a sized 3d box region.  Many functions expect integer coordinates; the type does not require them.
+-type coord3_list()              :: [ coord3() ].                          %% All members of a {@type coord3_list()} must be {@type coord3()}s.
 
--type three_vector(T)          :: [T] | {T,T,T}.                         %% A three-vector always has three elements, so this can be expressed as the alternation `{A::T(), B::T(), C::T()} | [A::T(), B::T(), C::T()]'.
--type three_vector_list(T)     :: [T].                                   %% A three-vector expressed as a list.
--type three_vector_tuple(T)    :: {T,T,T}.                               %% A three-vector expressed as a tuple.
--type seven_vector(T)          :: [T] | {T,T,T,T,T,T,T}.                 %% A seven-vector always has seven elements, so this can be expressed as the alternation `{A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()} | [A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()]'.
--type seven_vector_list(T)     :: [T].                                   %% A seven-vector expressed as a list.
--type seven_vector_tuple(T)    :: {T,T,T,T,T,T,T}.                       %% A seven-vector expressed as a tuple.
--type three_or_seven_vector(T) :: three_vector(T) | seven_vector(T).     %% A three or a seven-vector.
--type unit_vector()            :: vector().                              %% The hypoteneuse of a unit vector is precisely one unit long.  Unit vectors are also called normalized or magnitude-normalized vectors.
--type vector()                 :: [ number() ] | tuple(number()).        %% Every member element of a vector() is a {@type number()}.
--type vector(T)                :: [ T ] | tuple(T).                      %% Every member element of a vector(T) is a T.
--type vector_list()            :: [ vector() ].                          %% Every member element of a vectorlist() is a {@type vector()}.
--type vector_list(T)           :: [ vector(T) ].                         %% Every member element of a vectorlist(T) is a {@type vector(T)}.
+-type three_vector(T)            :: [T] | {T,T,T}.                         %% A three-vector always has three elements, so this can be expressed as the alternation `{A::T(), B::T(), C::T()} | [A::T(), B::T(), C::T()]'.
+-type three_vector_list(T)       :: [T].                                   %% A three-vector expressed as a list.
+-type three_vector_tuple(T)      :: {T,T,T}.                               %% A three-vector expressed as a tuple.
+-type seven_vector(T)            :: [T] | {T,T,T,T,T,T,T}.                 %% A seven-vector always has seven elements, so this can be expressed as the alternation `{A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()} | [A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()]'.
+-type seven_vector_list(T)       :: [T].                                   %% A seven-vector expressed as a list.
+-type seven_vector_tuple(T)      :: {T,T,T,T,T,T,T}.                       %% A seven-vector expressed as a tuple.
+-type three_or_seven_vector(T)   :: three_vector(T) | seven_vector(T).     %% A three or a seven-vector.
+-type unit_vector()              :: vector().                              %% The hypoteneuse of a unit vector is precisely one unit long.  Unit vectors are also called normalized or magnitude-normalized vectors.
+-type vector()                   :: [ number() ] | tuple(number()).        %% Every member element of a vector() is a {@type number()}.
+-type vector(T)                  :: [ T ] | tuple(T).                      %% Every member element of a vector(T) is a T.
+-type vector_list()              :: [ vector() ].                          %% Every member element of a vectorlist() is a {@type vector()}.
+-type vector_list(T)             :: [ vector(T) ].                         %% Every member element of a vectorlist(T) is a {@type vector(T)}.
 
--type weighted_value()         :: { Value::any(), Weight::number() }.    %% Used by functions like weighted_arithmetic_mean/1 and from_weighted/1, weighted_value()s represent a value with an associated importance or "weight".
--type weighted_value(T)        :: { Value::T, Weight::number() }.        %% Used by functions like weighted_arithmetic_mean/1 and from_weighted/1, weighted_value()s represent a value with an associated importance or "weight".
--type weight_list()            :: [ weighted_value() ].                  %% All members of weightlists must be weighted_value()s.
--type weight_list(T)           :: [ weighted_value(T) ].                 %% All members of weightlists must be weighted_value(T)s.
+-type weighted_value()           :: { Value::any(), Weight::number() }.    %% Used by functions like weighted_arithmetic_mean/1 and from_weighted/1, weighted_value()s represent a value with an associated importance or "weight".
+-type weighted_value(T)          :: { Value::T, Weight::number() }.        %% Used by functions like weighted_arithmetic_mean/1 and from_weighted/1, weighted_value()s represent a value with an associated importance or "weight".
+-type weight_list()              :: [ weighted_value() ].                  %% All members of weightlists must be weighted_value()s.
+-type weight_list(T)             :: [ weighted_value(T) ].                 %% All members of weightlists must be weighted_value(T)s.
 
--type ranking()                :: { Ranking::number(), Value::any() }.   %% Values are usually {@type number()}s, but do not have to be with custom ranking predicates.
--type ranking(T)               :: { Ranking::number(), Value::T }.       %% Values are usually {@type number()}s, but do not have to be with custom ranking predicates.
--type ranking_list()           :: [ ranking() ].                         %% Members of a {@type rankinglist()} must be {@type ranking()}s.
--type ranking_list(T)          :: [ ranking(T) ].                        %% Members of a {@type rankinglist()} must be {@type ranking()}s.
+-type ranking()                  :: { Ranking::number(), Value::any() }.   %% Values are usually {@type number()}s, but do not have to be with custom ranking predicates.
+-type ranking(T)                 :: { Ranking::number(), Value::T }.       %% Values are usually {@type number()}s, but do not have to be with custom ranking predicates.
+-type ranking_list()             :: [ ranking() ].                         %% Members of a {@type rankinglist()} must be {@type ranking()}s.
+-type ranking_list(T)            :: [ ranking(T) ].                        %% Members of a {@type rankinglist()} must be {@type ranking()}s.
 
--type string_list()            :: [[]].                                  %% Every member of a stringlist() is a string().
--type io_list()                :: [ byte() ].                            %% Every list member of an {@type io_list()} must be a {@type byte()}.
--type numeric_list()           :: [ number() ].                          %% All members of a numeric list must be number()s.
--type pos_numeric_list()       :: [ number() ].                          %% All members of a numeric list must be number()s.  Should enforce positive-ness but don't know how without losing floats.
--type numeric_tuple()          :: tuple(number()).                       %% Every member of a {@type numeric_tuple()} must be a {@type number()}.
+-type string_list()              :: [[]].                                  %% Every member of a stringlist() is a string().
+-type io_list()                  :: [ byte() ].                            %% Every list member of an {@type io_list()} must be a {@type byte()}.
+-type numeric_list()             :: [ number() ].                          %% All members of a numeric list must be number()s.
+-type pos_numeric_list()         :: [ number() ].                          %% All members of a numeric list must be number()s.  Should enforce positive-ness but don't know how without losing floats.
+-type numeric_tuple()            :: tuple(number()).                       %% Every member of a {@type numeric_tuple()} must be a {@type number()}.
 
--type list_or_binary()         :: list() | binary().                     %% It's either a {@type list()} or a {@type binary()}.  Duh.
--type io_list_or_binary()      :: io_list() | binary().                  %% It's either an {@type io_list()} or a {@type binary()}.  Duh.
+-type list_or_binary()           :: list() | binary().                     %% It's either a {@type list()} or a {@type binary()}.  Duh.
+-type io_list_or_binary()        :: io_list() | binary().                  %% It's either an {@type io_list()} or a {@type binary()}.  Duh.
 
--type bw_scale()               :: { Unit::atom(), Timescale::atom() }.   %% `bw_scale' - Bandwidth scale - is a units-per-time notation for bandwidth measurement, eg `{megabits,day}'.
--type bw_rate()                :: { Scale::bw_scale(), Rate::float() }.  %% `bw_rate' - Bandwidth rate - is a rate-in-units-per-time notation for bandwidth measurement, eg `{{megabits,day},10.5}'.
+-type bw_scale()                 :: { Unit::atom(), Timescale::atom() }.   %% `bw_scale' - Bandwidth scale - is a units-per-time notation for bandwidth measurement, eg `{megabits,day}'.
+-type bw_rate()                  :: { Scale::bw_scale(), Rate::float() }.  %% `bw_rate' - Bandwidth rate - is a rate-in-units-per-time notation for bandwidth measurement, eg `{{megabits,day},10.5}'.
 
--type grid_size()              :: coord2() | integer().                  %% Coordinates are the width and height of a (1,1) originated grid; as such, coordinates are of the range [1,X] , [1,Y] inclusive, and returned in the form {A,B}.  The integer form implies a square grid.
+-type grid_size()                :: coord2() | integer().                  %% Coordinates are the width and height of a (1,1) originated grid; as such, coordinates are of the range [1,X] , [1,Y] inclusive, and returned in the form {A,B}.  The integer form implies a square grid.
 
--type type_label()             :: integer | float | list | tuple |
-                                  binary | bitstring | boolean |
-                                  function | pid | port | reference |
-                                  atom | unknown.                        %% Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
+-type type_label()               :: integer | float | list | tuple |
+                                    binary | bitstring | boolean |
+                                    function | pid | port | reference |
+                                    atom | unknown.                        %% Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
 
--type function_or_list()       :: function() | list().
--type timestamp()              :: { Megaseconds::non_neg_integer(),
-                                    Seconds::non_neg_integer(),
-                                    MicroSeconds::non_neg_integer() }.   %% Erlang's timestamp type
+-type positive_integer_or_list() :: pos_integer() | list().                %% Positive integer or list.
+
+-type function_or_list()         :: function() | list().
+-type timestamp()                :: { Megaseconds::non_neg_integer(),
+                                      Seconds::non_neg_integer(),
+                                      MicroSeconds::non_neg_integer() }.   %% Erlang's timestamp type
 
 
 
@@ -2740,11 +2742,11 @@ amean_vector_normal(VX) ->
 
 
 
-%% @spec gmean_vector_normal(VX::numeric_list()) -> number()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the geometric mean of the elements of the unit vector for the vector provided.
 %%
 %% @since Version 498
+
+-spec gmean_vector_normal(VX::numeric_list()) -> number().
 
 gmean_vector_normal(VX) ->
 
@@ -2754,11 +2756,11 @@ gmean_vector_normal(VX) ->
 
 
 
-%% @spec hmean_vector_normal(VX::numeric_list()) -> number()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the harmonic mean of the elements of the unit vector for the vector provided.
 %%
 %% @since Version 499
+
+-spec hmean_vector_normal(VX::numeric_list()) -> number().
 
 hmean_vector_normal(VX) ->
 
@@ -5025,7 +5027,7 @@ eval(S, Environ) ->
 %%
 %% @since Version 557
 
--spec kendall_correlation(TupleList::coordlist()) -> { tau, Correlation::number() }.
+-spec kendall_correlation(TupleList::coord_list()) -> { tau, Correlation::number() }.
 
 kendall_correlation(TupleList)
 
@@ -5040,7 +5042,7 @@ kendall_correlation(TupleList)
 
 %% @equiv kendall(lists:zip(List1, List2))
 
-kendall_correlation(List1, _) 
+kendall_correlation(List1, _)
 
     when length(List1) < 2 ->
 
@@ -5108,8 +5110,6 @@ kendall_right_of_item(B, Rem) ->
 
 %% @todo use test data at http://geographyfieldwork.com/SpearmansRank.htm
 %%
-%% @spec spearman_correlation(TupleList::coordlist()) -> { rsquared, Correlation::number() }
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Spearman's Rank Correlation Coefficient of a list of coordinate tuples. ```1> sc:spearman([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
 %% {rsquared,1.0}
 %%
@@ -5127,7 +5127,9 @@ kendall_right_of_item(B, Rem) ->
 %%
 %% @since Version 558
 
-spearman_correlation(TupleList) 
+-spec spearman_correlation(TupleList::coord_list()) -> { rsquared, Correlation::number() }.
+
+spearman_correlation(TupleList)
 
     when is_list(TupleList) ->
 
@@ -5140,7 +5142,7 @@ spearman_correlation(TupleList)
 
 %% @equiv spearman_correlation(lists:zip(List1, List2))
 
-spearman_correlation(List1, _) 
+spearman_correlation(List1, _)
 
     when length(List1) < 2 ->
 
@@ -5150,7 +5152,7 @@ spearman_correlation(List1, _)
 
 
 
-spearman_correlation(List1, List2) 
+spearman_correlation(List1, List2)
 
     when length(List1) /= length(List2) ->
 
@@ -5160,9 +5162,9 @@ spearman_correlation(List1, List2)
 
 
 
-spearman_correlation(List1, List2) 
+spearman_correlation(List1, List2)
 
-    when is_list(List1), 
+    when is_list(List1),
          is_list(List2) ->
 
     {TR1,_} = lists:unzip(simple_ranking(List1)),
@@ -5178,8 +5180,6 @@ spearman_correlation(List1, List2)
 
 
 %% @todo use test data at http://changingminds.org/explanations/research/analysis/pearson.htm
-%%
-%% @spec pearson_correlation(TupleList::coordlist()) -> { r, Correlation::number() }
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Pearson Correlation Coefficient of a list of coordinate tuples. ```1> sc_correlate:pearson([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
 %% {r,1.0}
@@ -5198,7 +5198,9 @@ spearman_correlation(List1, List2)
 %%
 %% @since Version 559
 
-pearson_correlation(TupleList) 
+-spec pearson_correlation(TupleList::coord_list()) -> { r, Correlation::number() }.
+
+pearson_correlation(TupleList)
 
     when is_list(TupleList) ->
 
@@ -5233,7 +5235,7 @@ pearson_correlation(List1, List2)
 
 pearson_correlation(List1, List2)
 
-    when is_list(List1), 
+    when is_list(List1),
          is_list(List2) ->
 
     SumXY = lists:sum([A*B || {A,B} <- lists:zip(List1,List2) ]),   % the sum of the products of each matched pair
@@ -5266,7 +5268,6 @@ pearson_correlation(List1, List2)
 
 
 %% @todo comeback make a simple/2 which takes a sorting predicate
-%% @spec simple_ranking(Values::numericlist()) -> rankinglist()
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a ranked ordering of the list without tie rankings.  ```1> sc_rank:simple([10,90,20,80,30,70,40,60,50]).
 %% [{1,90}, {2,80}, {3,70}, {4,60}, {5,50}, {6,40}, {7,30}, {8,20}, {9,10}]
@@ -5275,6 +5276,8 @@ pearson_correlation(List1, List2)
 %% [{1,10},{2,10},{3,10},{4,10}]'''
 %%
 %% @since Version 560
+
+-spec simple_ranking(Values::numeric_list()) -> ranking_list().
 
 simple_ranking(List)
 
@@ -5288,8 +5291,6 @@ simple_ranking(List)
 
 %% @todo comeback make a tied/2 which takes a sorting predicate
 %%
-%% @spec tied_ranking(Values::numericlist()) -> rankinglist()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a ranked ordering of the list with tie rankings.  As such, for uniformity, all rankings are floats.  Ties are represented as the centers of ranges. ```1> sc:tied([10,90,20,80,30,70,40,60,50]).
 %% [{1.0,90}, {2.0,80}, {3.0,70}, {4.0,60}, {5.0,50}, {6.0,40}, {7.0,30}, {8.0,20}, {9.0,10}]
 %%
@@ -5299,6 +5300,8 @@ simple_ranking(List)
 %% needs significant refactoring; work is being repeated
 %%
 %% @since Version 561
+
+-spec tied_ranking(Values::numeric_list()) -> ranking_list().
 
 tied_ranking(List) ->
 
@@ -5355,8 +5358,6 @@ tied_rank_worker([Item|Remainder], Work, PrevValue) ->
 
 %% @todo comeback make a tied/2 which takes a sorting predicate
 %%
-%% @spec tied_ordered_ranking(Values::numericlist()) -> rankinglist()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a tied ranked ordering of the list, ordered according to the input ordering rather than the sorted ordering.  As with {@link tied/1}, all rankings are floats, and ties are represented as the centers of ranges. ```1> sc:ordered([10,90,20,80,30,70,40,60,50]).
 %% [{9.0,10}, {1.0,90}, {8.0,20}, {2.0,80}, {7.0,30}, {3.0,70}, {6.0,40}, {4.0,60}, {5.0,50}]
 %%
@@ -5364,6 +5365,8 @@ tied_rank_worker([Item|Remainder], Work, PrevValue) ->
 %% [{4.0,100},{2.5,200},{2.5,200},{1.0,300}]'''
 %%
 %% @since Version 562
+
+-spec tied_ordered_ranking(Values::numeric_list()) -> ranking_list().
 
 tied_ordered_ranking(List)
 
@@ -5436,8 +5439,6 @@ halstead_complexity(DistinctOperators, DistinctOperands, TotalOperators, TotalOp
 
 
 
-%% @spec integer_to_radix_list(Number::number(), Radix::tuple()) -> list()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a number to a radix string using a radix list of your specification and any size.  When appropriate, prefer the system provided `erlang:integer_to_list/2'.  Lists are accepted, but converted to tuples before use, so are inefficient.  ```1> sc_convert:integer_to_radix_list(1111, "0123456789abcdef").
 %% "457"
 %%
@@ -5454,6 +5455,8 @@ halstead_complexity(DistinctOperators, DistinctOperands, TotalOperators, TotalOp
 %% [beta,gamma,delta,epsilon,zeta,eta,theta,kappa,lambda,alpha]'''
 %%
 %% @since Version 566
+
+-spec integer_to_radix_list(Number::number(), Radix::tuple()) -> list().
 
 integer_to_radix_list(Number, RadixItems)
 
@@ -5519,8 +5522,6 @@ list_to_term(List) ->
 
 
 
-%% @spec io_list_to_hex_string(Input::io_list()) -> hexstring()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert an io_list() to a hexstring().  ```1> sc:io_list_to_hex_string("a").
 %% "61"
 %%
@@ -5528,6 +5529,8 @@ list_to_term(List) ->
 %% "6130386e3430386e627161"'''
 %%
 %% @since Version 569
+
+-spec io_list_to_hex_string(Input::io_list()) -> hexstring().
 
 io_list_to_hex_string(Input)
 
@@ -5604,8 +5607,6 @@ nybble_to_hex(Nyb)
 
 
 
-%% @spec byte_to_hex(TheByte::byte()) -> hexstring()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a byte() into a hexstring().  The hexstring() result will always be two characters (left padded with zero if necessary). ```1> sc:byte_to_hex(7).
 %% "07"
 %%
@@ -5613,6 +5614,8 @@ nybble_to_hex(Nyb)
 %% "ff"'''
 %%
 %% @since Version 571
+
+-spec byte_to_hex(TheByte::byte()) -> hexstring().
 
 byte_to_hex(TheByte)
 
@@ -5626,8 +5629,6 @@ byte_to_hex(TheByte)
 
 
 
--spec hex_to_int(Hex::hexstring() | hexchar()) -> integer().
-%% @spec hex_to_int(HexChar::hexstring() | hexchar()) -> integer()
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a hexstring() or hexchar() into its numeric value. ```1> sc:hex_to_int("c0ffEE").
 %% 12648430
 %%
@@ -5638,6 +5639,8 @@ byte_to_hex(TheByte)
 %% 256'''
 %%
 %% @since Version 572
+
+-spec hex_to_int(Hex::hexstring() | hexchar()) -> integer().
 
 hex_to_int(Hex) 
 
@@ -5670,7 +5673,7 @@ hex_to_int(Hex)
          Hex =< $F      -> 
          
     Hex - $A + 10;
-    
+
     
 
 
@@ -5688,7 +5691,7 @@ hex_to_int(Hex)
 hex_to_int([], Acc) -> 
 
     Acc;
-    
+
     
     
     
@@ -5701,8 +5704,6 @@ hex_to_int([Digit|Rem], Acc) ->
 
 
 
-%% @spec list_to_number(X::list()) -> number()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Converts a list into a number; integers will be returned if there is no mantissa in the list representation. ```1> sc:list_to_number("2").
 %% 2
 %%
@@ -5713,6 +5714,8 @@ hex_to_int([Digit|Rem], Acc) ->
 %% 2.1'''
 %%
 %% @since Version 574
+
+-spec list_to_number(X::list()) -> number().
 
 list_to_number(X) ->
 
@@ -5732,8 +5735,6 @@ list_to_number(X) ->
 
 %% @todo more distance types - manhattan, malahabanois, etc
 %%
-%% @spec euclidean_distance(Coordinate1::coord(), Coordinate2::coord()) -> number()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the distance between two coordinates in any N-space.  In two dimensions, this is known as the Pythagorean theorem.  The coordinates may be of any positive integer dimensionality (2d, 3d, but no -1d or 2.5d), but both coordinates must be of the same dimensionality.  The coordinates may have real-valued or negative components, but imaginary math is not implemented.  This function tolerates tuple coordinates by converting them to lists; list coordinates are thus slightly faster. ```1> sc:distance([0,0],[1,1]).
 %% 1.4142135623730951
 %%
@@ -5744,6 +5745,8 @@ list_to_number(X) ->
 %% 2.0'''
 %%
 %% @since Version 575
+
+-spec euclidean_distance(Coordinate1::coord(), Coordinate2::coord()) -> number().
 
 euclidean_distance(C1, C2)
 
@@ -5795,12 +5798,12 @@ merge_settings(S1, S2)
 
 
 
-%% @spec send_receive(ToWhom::pid()|atom(), What::any()) -> { item, any() }
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{item,X}'; block.  ```1> sc:send_receive(self(), message).
 %% {item,message}'''
 %%
 %% @since Version 578
+
+-spec send_receive(ToWhom::pid()|atom(), What::any()) -> { item, any() }.
 
 send_receive(ToWhom, What) ->
 
@@ -5814,12 +5817,12 @@ send_receive(ToWhom, What) ->
 
 
 
-%% @spec send_receive(ToWhom::pid()|atom(), What::any(), HowLong::non_neg_integer()|infinity) -> { item, any() } | nothing_there
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block.  ```1> sc:send_receive(self(), message).
 %% {item,message}'''
 %%
 %% @since Version 579
+
+-spec send_receive(ToWhom::pid()|atom(), What::any(), HowLong::non_neg_integer()|infinity) -> { item, any() } | nothing_there.
 
 send_receive(ToWhom, What, HowLong) ->
 
@@ -5835,12 +5838,12 @@ send_receive(ToWhom, What, HowLong) ->
 
 
 
-%% @spec send_receive_masked(Mask::any(), ToWhom::pid()|atom(), What::any()) -> { Mask, any() }
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Blocking) First send a message to an entity.  Then pop the first message queue item matching the mask as a 2-tuple, and return it as `{Mask,X}'; block.  ```1> sc:send_receive(self(), message).
 %% {item,message}'''
 %%
 %% @since Version 580
+
+-spec send_receive_masked(Mask::any(), ToWhom::pid()|atom(), What::any()) -> { Mask::any(), any() }.
 
 send_receive_masked(Mask, ToWhom, What) ->
 
@@ -5854,12 +5857,12 @@ send_receive_masked(Mask, ToWhom, What) ->
 
 
 
-%% @spec send_receive_masked(Mask::any(), ToWhom::pid()|atom(), What::any(), HowLong::non_neg_integer()|infinity) -> { item, any() } | nothing_there
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Non-Blocking) First send a message to an entity.  Then pop the front of the message queue and return it as `{Mask,X}', or return nothing_there for empty queues; do not block.  ```1> sc:send_receive(self(), message).
 %% {item,message}'''
 %%
 %% @since Version 581
+
+-spec send_receive_masked(Mask::any(), ToWhom::pid()|atom(), What::any(), HowLong::non_neg_integer()|infinity) -> { item, any() } | nothing_there.
 
 send_receive_masked(Mask, ToWhom, What, HowLong) ->
 
@@ -5875,8 +5878,6 @@ send_receive_masked(Mask, ToWhom, What, HowLong) ->
 
 
 
-%% @spec receive_one() -> { item, any() } | nothing_there
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Pop the front of the message queue and return it as `{item,X}', or return nothing_there for empty queues; do not block.  ```1> sc:receive_one().
 %% nothing_there
 %%
@@ -5890,6 +5891,8 @@ send_receive_masked(Mask, ToWhom, What, HowLong) ->
 %% nothing_there'''
 %%
 %% @since Version 582
+
+-spec receive_one() -> { item, any() } | nothing_there.
 
 receive_one() ->
 
@@ -5974,8 +5977,6 @@ power_set(L)
 
 
 
-%% @spec shuffle(List::list()) -> list()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return a list with the original list's shallow members in a random order.  Deep lists are not shuffled; `[ [a,b,c], [d,e,f], [g,h,i] ]' will never produce sublist reorderings (`[b,c,a]') or list mixing (`[b,g,e]'), only reordering of the three top level lists.  The output list will always be the same length as the input list.  Repeated items and mixed types in input lists are safe. ```1> sc:shuffle(lists:seq(1,9)).
 %% [8,4,7,9,5,2,6,1,3]
 %%
@@ -5992,6 +5993,8 @@ power_set(L)
 %% <i>Originally found at <a href="http://wiki.trapexit.org/index.php/RandomShuffle">http://wiki.trapexit.org/index.php/RandomShuffle</a>; refactored for clarity, and unnecessary repeat nesting behavior removed.</i>
 %%
 %% @since Version 590
+
+-spec shuffle(List::list()) -> list().
 
 shuffle(List)
 
@@ -6013,8 +6016,6 @@ shuffle(List)
 
 
 
-%% @spec random_from_weighted(InputList::weightlist()) -> any()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take a random single item from a list with weighted probabilities.  Probabilities may be any numeric type, and may be any non-negative value (items with zero probability will be omitted).  Input is a `weightlist()', which is a list in the form `[{Item,Probability}, {I2,P2}, ...]'. There is no requirement to normalize probabilities to any range, though probabilities normalized to ranges will still work as expected. ```1> sc:from([ {quad,4}, {double,2}, {single,1} ]).
 %% quad
 %%
@@ -6026,6 +6027,8 @@ shuffle(List)
 %% @since Version 592
 
 % InputList is [ {Item,Weight}, {Item,Weight}, ... ]
+
+-spec random_from_weighted(InputList::weight_list()) -> any().
 
 random_from_weighted(InputList)
 
@@ -6100,8 +6103,6 @@ random_from(N, List) ->
 
 
 
-%% @spec random_from(N::integer(), List::list(), WantRemainder::want_remainder()) -> list()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take N non-repeating random elements from a list in undefined order.  If the atom `remainder' is passed in as the third argument, the unused portion of the source list will be returned as the second member of a 2ary tuple with the results; the default is no_remainder, which only returns the result set.  Mixed type input lists are perfectly safe, and membership for random selection is shallow (ie, `[ [1,2], [3,4] ]' as an input list would only generate outputs of lists, never integers.)```1> sc:random_from([monday,tuesday,wednesday,thursday,friday]).
 %% friday
 %%
@@ -6128,6 +6129,8 @@ random_from(N, List) ->
 %%
 %% @since Version 593
 
+-spec random_from(N::integer(), List::list(), remainder|no_remainder) -> list().
+
 random_from(N, List, no_remainder) ->
 
     {R,_} = random_from(N,List,remainder), R;
@@ -6144,8 +6147,6 @@ random_from(N, List, remainder) ->
 
 
 
-%% @spec rand(Range::integer()) -> integer()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a pseudorandom integer on the range `[0 - (Range-1)]' inclusive. ```1> sc:rand(100).
 %% 9
 %%
@@ -6159,6 +6160,8 @@ random_from(N, List, remainder) ->
 %% [{0,1028}, {1,979}, {2,934}, {3,970}, {4,1035}, {5,1007}, {6,986}, {7,1012}, {8,1052}, {9,997}]'''
 %%
 %% @since Version 595
+
+-spec rand(Range::integer()) -> integer().
 
 rand(Range) ->
 
@@ -6216,8 +6219,6 @@ random_generator() ->
 
 
 
-%% @spec srand() -> { ok, { seeded, Seed } }
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the clock, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want to know what seed was used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> sc:srand().
 %% {ok,{seeded,{1227,902172,685000}}}
 %%
@@ -6226,6 +6227,8 @@ random_generator() ->
 %%
 %% @since Version 598
 %% @todo migrate to labelled random generators, so that concurrent generators do not necessarily interfere with one another
+
+-spec srand() -> { ok, { seeded, {integer(),integer(),integer()} } }.
 
 srand() ->
 
@@ -6236,7 +6239,6 @@ srand() ->
 
 
 
-%% @spec srand(A::integer(), B::integer(), C::integer()) -> { ok, { seeded, Seed } }
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <i style="color:#888">(Called automatically)</i> Instantiates the random source, destroying a prior source if needed, and seeds the source with the three integer seed you provide, returning the seed used.  Generally speaking, you do not need this function; this is used manually when you want set what seed is used, for purposes of recreating identical pseudorandom sequences.  Otherwise, rand() will call this once on its own.  <em style="color:#a00;font-weight:bold">Because the scutil random system spawns a utility process to maintain random state, this function should be considered to have side effects for purposes of testing.</em> (Indeed, in a sense, this function's entire purpose is to cause a side effect.) ```1> sc:srand(1,2,3).
 %% {ok,{seeded,{1,2,3}}}
 %%
@@ -6248,6 +6250,8 @@ srand() ->
 %%
 %% @since Version 598
 %% @todo migrate to labelled random generators, so that concurrent generators do not necessarily interfere with one another
+
+-spec srand(A::integer(), B::integer(), C::integer()) -> { ok, { seeded, {integer(),integer(),integer()} } }.
 
 srand(A,B,C) ->
 
@@ -6270,13 +6274,13 @@ srand(A,B,C) ->
 
 
 
-%% @spec grid_scatter(Count::integer(), Size::gridsize()) -> coordlist()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return a Count-length list of non-repeating coordinates in a grid of specified size; useful for feature generation.
 %%
 %% @todo @comeback give code examples (edoc was failing here?)
 %%
 %% @since Version 599
+
+-spec grid_scatter(Count::integer(), Size::grid_size()) -> coord_list().
 
 grid_scatter(0, []) ->
 
@@ -6487,11 +6491,11 @@ key_min(Pos, [Cur|Rem], Item) ->
 
 
 
-%% @spec tuple_sum(T::relaxed_numeric_tuple()) -> number()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero. ```1>'''
 %%
 %% @since Version 609
+
+-spec tuple_sum(T::numeric_tuple()) -> number().
 
 tuple_sum(T)
 
@@ -6537,8 +6541,6 @@ tuple_sort(T)
 
 
 
-%% @spec tuple_member(E::any(), T::tuple()) -> true | false
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether E is a member element of tuple T, analogous to `lists::member(E, L)'. ```1> sc:tuple_member(b, {a,b,c}).
 %% true
 %%
@@ -6549,6 +6551,8 @@ tuple_sort(T)
 %% true'''
 %%
 %% @since Version 615
+
+-spec tuple_member(E::any(), T::tuple()) -> true | false.
 
 tuple_member(E, T) ->
 
@@ -6582,11 +6586,11 @@ tuple_member(E, T, I, Sz) ->
 
 
 
-%% @spec record_member(E::any(), R::record()) -> true | false
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <span style="color:red">TODO: Needs Example</span> Checks whether E is a member element of record R, analogous to `lists::member(E, L)'.  This function does not have examples because the shell does not correctly handle records; <span style="color:red">todo: add examples later</span>
 %%
 %% @since Version 616
+
+-spec record_member(E::any(), R::record()) -> true | false.
 
 record_member(E, R) ->
 
@@ -6663,8 +6667,6 @@ start_register_if_not_running(Name, Module, Function, Args) ->
 
 
 
-%% @spec start_register_if_not_running(Node::atom(), Name::atom(), Module::atom(), Function::atom(), Args::list()) -> pid() | ok
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Check whether a process is registered locally, and if not, spawn it with a give function and arguments.  ```1> whereis(test).
 %% undefined
 %%
@@ -6693,6 +6695,8 @@ start_register_if_not_running(Name, Module, Function, Args) ->
 %% <0.731.0>'''
 %%
 %% @since Version 618
+
+-spec start_register_if_not_running(Node::atom(), Name::atom(), Module::atom(), Function::atom(), Args::list()) -> pid() | ok.
 
 start_register_if_not_running(Node, Name, Module, Function, Args)
 
@@ -6728,8 +6732,6 @@ multi_do(C, Module, Func) ->
 
 
 
-%% @spec multi_do(Count::integer(), Module::atom(), Function::atom(), Args::list()) -> list()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take an iteration count, a module name, a function name and an argument list, and repeatedly apply the argument list to the module/function, count times.  This is primarily useful with nondeterministic functions whose result might change despite identical arguments, such as functions with random behavior; for example, this function is invoked to implement stochastic testing in <a href="http://testerl.com/">TestErl</a>. ```1> sc:multi_do(10, scutil, rand, [100]).
 %% [9,94,4,82,77,44,89,19,45,92]
 %%
@@ -6737,6 +6739,8 @@ multi_do(C, Module, Func) ->
 %% [2377,2559,1713,8489,4468,3261,3344,3751,380,2525]'''
 %%
 %% @since Version 620
+
+-spec multi_do(Count::integer(), Module::atom(), Function::atom(), Args::list()) -> list().
 
 multi_do(C, Module, Func, Args) ->
 
@@ -6809,9 +6813,6 @@ implode(Separator, Data)
 
 %% @since Version 622
 
--spec explode(Seperator::list(), Term::list()) -> list(list()).
-%% @spec explode(Seperator::list(), Term::list()) -> list(list()).
-
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Split any list by any other list, typically a string by a substring. The seperator list must not be empty. ```1> sc:explode(",", "1,2,5,10,20").
 %% ["1","2","5","10","20"]
 %%
@@ -6847,6 +6848,8 @@ implode(Separator, Data)
 %%                  {shell,eval_loop,3}]}}'''
 %%
 %% Unit and doc tested.
+
+-spec explode(Seperator::list(), Term::list()) -> list(list()).
 
 explode(Seperator, _Term) when not is_list(Seperator) ->
 
@@ -7152,14 +7155,14 @@ lev_dif(_C1, _C2) -> 1.
 
 
 
-%% @spec sanitize_filename(Filename::string()) -> string()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Sanitize an arbitrary string to be appropriate for Windows and Unix filesystems, and URLs. ```1> sc:sanitize_filename("\h/e~l%lo! w^o@r#l*d.").
 %% "helloworld"'''
 %%
 %% @see sanitize_tokens/2
 %%
 %% @since Version 628
+
+-spec sanitize_filename(Filename::string()) -> string().
 
 sanitize_filename(Filename) ->
 
@@ -7432,8 +7435,6 @@ bin_to_hex_list(Bin)
 
 
 
-%% @spec stretch_hash(State::list_or_binary(), HashFun::function(), ListOfSalts::list()) -> binary()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Stretches a hash with a list of salts.  Some people incorrect refer to this as key strentghening.  The process is a simple key-derivation function: repeat the application of a hash with a different pre-pend salt each time.```1> Res = sc:stretch_hash("abc", fun erlang:md5/1, ["def", "ghi", "jkl", "mno"]).
 %% <<129,166,92,224,108,140,78,205,151,136,77,203,166,229,62,186>>
 %%
@@ -7448,6 +7449,8 @@ bin_to_hex_list(Bin)
 %% Thanks Josh, Davr, Vat.
 %%
 %% @since Version 641
+
+-spec stretch_hash(State::list_or_binary(), HashFun::function(), ListOfSalts::list()) -> binary().
 
 stretch_hash(State, HashFun, [LastSalt])
 
@@ -8266,8 +8269,6 @@ counter_process() ->
 
 
 
-%% @spec set_counter_value(Name::any(), To::number()) -> 0
-
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Sets a counter's value to a specific value. ```1> sc:counter_at(hello).
 %% 0
 %%
@@ -8284,6 +8285,8 @@ counter_process() ->
 %% 0'''
 
 %% @since Version 678
+
+-spec set_counter_value(Name::any(), To::number()) -> To::number.
 
 set_counter_value(Name, To)
 
@@ -8330,8 +8333,6 @@ reset_counter(Name) ->
 
 
 
-%% @spec adjust_counter_by(Name::any(), By::number()) -> number()
-
 %% @doc Adds to a counter's value; if the counter was not already defined, it will become the value in the `By' argument. ```1> sc:counter_at(hello).
 %% 0
 %%
@@ -8342,6 +8343,8 @@ reset_counter(Name) ->
 %% 4'''
 
 %% @since Version 680
+
+-spec adjust_counter_by(Name::any(), By::number()) -> number().
 
 adjust_counter_by(Name, By)
 
@@ -8408,8 +8411,6 @@ dec_counter(Name,By) ->
 
 
 
-%% @spec counter_at(Name::any()) -> number()
-
 %% @doc Checks a counter's value; if the counter was not already defined, it will report zero. ```1> sc:counter_at(hello).
 %% 0
 %%
@@ -8432,6 +8433,8 @@ dec_counter(Name,By) ->
 %% 0'''
 
 %% @since Version 682
+
+-spec counter_at(Name::any()) -> number().
 
 counter_at(Name) ->
 
@@ -8652,8 +8655,6 @@ markhov_chain(N, Depth, Source, Work) ->
 
 
 
-%% @spec to_lines(Text::string()) -> stringlist()
-
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Cuts a string according to any of the three newline conventions (even mixed), and discards empty strings.  Mostly convenience and documentary. ```1> sc:to_lines("one\rtwo\nthree\r\nfour\r\r\rfive").
 %% ["one","two","three","four","five"]
 %%
@@ -8681,6 +8682,8 @@ markhov_chain(N, Depth, Source, Work) ->
 %% Unit and doc tested.
 
 %% @since Version 705
+
+-spec to_lines(Text::string()) -> string_list().
 
 to_lines(Text) ->
 
@@ -8781,8 +8784,6 @@ unit_scale(Waveform) ->
 
 
 
-%% @spec type_of(Argument::any()) -> typelabel()
-
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of `is_bitstring()' . ```1> sc:type_of(1).
 %% integer
 %%
@@ -8790,6 +8791,8 @@ unit_scale(Waveform) ->
 %% tuple'''
 
 %% @since Version 722
+
+-spec type_of(Argument::any()) -> type_label().
 
 type_of(X) when is_integer(X)   -> integer;
 type_of(X) when is_float(X)     -> float;
@@ -8810,8 +8813,6 @@ type_of(_X)                     -> unknown.
 
 
 
-%% @spec cross_product(VX::three_vector(), VY::three_vector()) -> three_vector()
-
 %% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the cross product of two vectors (<span style="color:red">Incomplete</span> represented as {@type three_vector()}s - no support yet for seven). ```1> sc:dot_product([1,1,1],[2,2,2]).
 %% 6
 %%
@@ -8831,6 +8832,8 @@ type_of(_X)                     -> unknown.
 
 %% @todo implement 7-dimensional variation, http://en.wikipedia.org/wiki/Seven-dimensional_cross_product
 
+-spec cross_product(VX::three_vector(T), VY::three_vector(T)) -> three_vector(T).
+
 cross_product( {X1,Y1,Z1}, {X2,Y2,Z2} ) ->
 
     { (Y1*Z2) - (Z1*Y2) , (Z1*X2) - (X1*Z2), (X1*Y2) - (Y1*X2) };
@@ -8848,8 +8851,6 @@ cross_product( [X1,Y1,Z1], [X2,Y2,Z2] ) ->
 
 
 % removed when length(VX) == length(VY) because it's implied by lists:zip
-
-%% @spec dot_product(VX::numeric_list(), VY::numeric_list()) -> number()
 
 %% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the dot product of two vectors (<span style="color:red">Incomplete</span> represented as numeric lists; tuples not yet supported). ```1> sc:dot_product([1,1,1],[2,2,2]).
 %% 6
@@ -8870,6 +8871,8 @@ cross_product( [X1,Y1,Z1], [X2,Y2,Z2] ) ->
 
 %% @todo implement tuple variation
 
+-spec dot_product(VX::numeric_list(), VY::numeric_list()) -> number().
+
 dot_product(VX, VY) ->
 
     lists:sum( [ X*Y || {X,Y} <- lists:zip(VX,VY) ] ).
@@ -8878,12 +8881,12 @@ dot_product(VX, VY) ->
 
 
 
-%% @spec vector_normalize(Vector::vector()) -> unit_vector()
-
 %% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the magnitude of a vector.  A vector's magnitude is the length of its hypoteneuse.  A vector can be seen as the product of its unit vector and its magnitude; as such many people see a vector's magnitude as its scale.  The normal of the zero vector is undefined, in the way that dividing by zero is undefined, and will throw an arithmetic exception. ```1> sc:vector_normalize([0,3,4]).
 %% [0.0,0.6,0.8]'''<span style="color:red">TODO: When tuple comprehensions are introduced to the language, convert this to using them.</span>
 
 %% @since Version 725
+
+-spec vector_normalize(Vector::vector()) -> unit_vector().
 
 vector_normalize(VX) when is_list(VX) ->
 
@@ -8899,8 +8902,6 @@ vector_normalize(VX) when is_tuple(VX) ->
 
 
 
-
-%% @spec qsp_average(W::numericlist(), InputVecs::vectorlist()) -> float()
 
 %% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the quadratic scalar product average of a vector `W' and a list of vectors `X'.  The QSP Average
 %% is the arithmetic mean of the result set Y, where Y is generated as the square of the magnitude of the dot product
@@ -8933,6 +8934,8 @@ vector_normalize(VX) when is_tuple(VX) ->
 
 %% @since Version 726
 
+-spec qsp_average(W::numeric_list(), InputVecs::vector_list()) -> float().
+
 qsp_average(W, InputVecs) ->
 
     GetSqVnDp = fun(Xi) ->
@@ -8946,8 +8949,6 @@ qsp_average(W, InputVecs) ->
 
 
 
-%% @spec has_bit(Number::non_neg_integer(), Bit::non_neg_integer()) -> true | false
-
 %% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of `Num'.  ```1> sc:has_bit(5,0).
 %% true
 %%
@@ -8955,6 +8956,8 @@ qsp_average(W, InputVecs) ->
 %% false'''
 
 %% @since Version 727
+
+-spec has_bit(Number::non_neg_integer(), Bit::non_neg_integer()) -> true | false.
 
 has_bit(Num, Bit)
 
@@ -8970,12 +8973,12 @@ has_bit(Num, Bit)
 
 
 
-%% @spec count_bits(Number::non_neg_integer()) -> non_neg_integer()
-
 %% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Counts the number of bits turned on in a sufficiently sized unsigned two's compliment integer representation of `Num'.  ```1> sc:count_bits(5).
 %% 2'''
 
 %% @since Version 727
+
+-spec count_bits(Number::non_neg_integer()) -> non_neg_integer().
 
 count_bits(Num)
 
@@ -8988,8 +8991,6 @@ count_bits(Num)
 
 
 
-%% @spec standard_card_backs() -> list()
-
 %% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the list of colors which are used, in order, as the standard back colors of a series of decks for {@link multi_deck/2}.  Each color is presented as an atom.  ```1> sc:standard_card_backs().
 %% [ red, blue, green, black, purple, orange, brown, yellow,
 %%   teal, gray, cyan, indigo, pink, white, tan, maroon,
@@ -9000,6 +9001,8 @@ count_bits(Num)
 
 %% @since Version 728
 
+-spec standard_card_backs() -> list().
+
 standard_card_backs() ->
 
     [red, blue, green, black, purple, orange, brown, yellow, teal, gray, cyan, indigo, pink, white, tan, maroon, navy, forest, leaf, sky, brick, emerald, steel, turquoise].
@@ -9008,8 +9011,6 @@ standard_card_backs() ->
 
 
 
-%% @spec standard_card_backs(Count::positive_integer()) -> list()
-
 %% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the front of the list of colors which are used, in order, as the standard back colors of a series of decks for {@link multi_deck/2}.  Each color is presented as an atom.  If you request more colors than are in the list, the list `[1,2...Count]' is provided instead.  ```1> sc:standard_card_backs(5).
 %% [ red, blue, green, black, purple ]
 %%
@@ -9017,6 +9018,8 @@ standard_card_backs() ->
 %% [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]'''
 
 %% @since Version 728
+
+-spec standard_card_backs(Count::pos_integer()) -> list().
 
 standard_card_backs(Count) ->
 
@@ -9037,11 +9040,11 @@ standard_card_backs(Count) ->
 
 
 
-%% @spec multi_deck(Backs::positive_integer_or_list(), DeckGenerator::function_or_list()) -> list()
-
 %% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Makes a number of instances of a deck, and applies a different back to each.  The first parameter may be a {@type positive_integer()}, at which point the color sequence from {@link standard_backs/0} will be used; otherwise, a list may be used, which will be used as the card backs (there is no requirement regarding their type or uniqueness, only that they be presented as a list.)  The second parameter may be a {@type function()}, which will be called to generate a list of cards, or a {@type list} of cards which will be used directly.
 
 %% @since Version 729
+
+-spec multi_deck(Backs::positive_integer_or_list(), DeckGenerator::function_or_list()) -> list().
 
 multi_deck(Backs, DeckGenerator) when is_function(DeckGenerator) ->
 
@@ -9234,8 +9237,6 @@ is_numeric_char(_, _)                                                    -> fals
 
 
 
-%% @spec time_diff(A::timestamp(), B::timestamp()) -> float()
-
 %% @doc Returns the difference, in seconds as a float, between two erlang timestamps as returned by `os:timestamp()'.  Negative differences are returned if the latter timestamp `B' is earlier than the former timestamp `A'.  This is different than `timer:now_diff/2' in that this works in floating point seconds, rather than integer microseconds. `os:timestamp/0' should be used rather than `erlang:now/0' because `erlang:now/0' is massaged time - gaps are smoothed, reversals are prevented, reads are forced monotonic increasing, et cetera (thanks MononcQc,) whereas `os:timestamp/0' is raw.  ```1> A = os:timestamp().
 %% {1232,947675,340000}
 %%
@@ -9249,6 +9250,8 @@ is_numeric_char(_, _)                                                    -> fals
 %% -4.072'''
 
 %% @since Version 742
+
+-spec time_diff(A::timestamp(), B::timestamp()) -> float().
 
 time_diff( {AM,AS,AU}, {BM,BS,BU}) ->
 
@@ -9595,8 +9598,6 @@ ensure_started(App, Opts)
 
 
 
--spec tuple_duplicate(N::non_neg_integer(), Item::any()) -> tuple().
-
 %% @doc Creates a tuple of fixed width, repeating the given element the given number of times.  This is equivalent to `lists:duplicate'.  ```1> sc:tuple_duplicate(3,hi).
 %% {hi,hi,hi}
 %%
@@ -9606,6 +9607,8 @@ ensure_started(App, Opts)
 %% Unit, doc and stochastic (correct length, is tuple, first item is correct) tested.'''
 
 %% @since Version 809
+
+-spec tuple_duplicate(N::non_neg_integer(), Item::any()) -> tuple().
 
 tuple_duplicate(N, Item) when is_integer(N), N >= 0 ->
 
