@@ -14,6 +14,19 @@
 
 
 
+prop_extrema_min_max_are_members() ->
+
+    ?FORALL( L,
+             non_empty(list(proper_types:any())),
+
+             case sc:extrema(L) of {Min,Max} -> {true,true} =:= {lists:member(Min,L),lists:member(Max,L)}; _ -> false end
+
+           ).
+
+
+
+
+
 extrema_test_() ->
 
     { "Extrema tests", [
@@ -25,8 +38,11 @@ extrema_test_() ->
         {"a,b,c",              ?_assert( {a,c}      =:= sc:extrema( [a,b,c]         ) ) },
         {"1,a,{}",             ?_assert( {1,{}}     =:= sc:extrema( [1,a,{}]        ) ) },
         {"1",                  ?_assert( {1,1}      =:= sc:extrema( [1]             ) ) },
+        {"1,2,3,a,b,c",        ?_assert( {1,c}      =:= sc:extrema( [1,2,3,a,b,c]   ) ) },
 
-        {"[] error undefined", ?_assertError(function_clause, sc:extrema([]) ) }
+        {"[] error undefined", ?_assertError(function_clause, sc:extrema([]) ) },
+
+        {"Stochastic: min/max are members", ?_assert( true =:= proper:quickcheck(prop_extrema_min_max_are_members()) ) }
 
     ] }.
 
@@ -36,7 +52,12 @@ extrema_test_() ->
 
 prop_key_duplicate_correct_length() ->
 
-    ?FORALL( {L,I}, {proper_types:non_neg_integer(), proper_types:any()}, abs(L) == length( sc:key_duplicate([ {abs(L),I} ]) ) ).
+    ?FORALL( { L,                              I                  },
+             { proper_types:non_neg_integer(), proper_types:any() },
+
+             abs(L) == length( sc:key_duplicate([ {abs(L),I} ]) )
+
+           ).
 
 
 
@@ -46,9 +67,11 @@ key_duplicate_test_() ->
 
     { "Key duplicate tests", [
 
-        {"[ ]",                        ?_assert( []          =:= sc:key_duplicate([ ])             ) },
-        {"[ {2,a} ]",                  ?_assert( [a,a]       =:= sc:key_duplicate([ {2,a} ])       ) },
-        {"[ {2,a},{3,b} ]",            ?_assert( [a,a,b,b,b] =:= sc:key_duplicate([ {2,a},{3,b} ]) ) },
+        {"[ ]",                                                   ?_assert( []                                                           =:= sc:key_duplicate([ ])                                                ) },
+        {"[ {2,a} ]",                                             ?_assert( [a,a]                                                        =:= sc:key_duplicate([ {2,a} ])                                          ) },
+        {"[ {2,a},{3,b} ]",                                       ?_assert( [a,a,b,b,b]                                                  =:= sc:key_duplicate([ {2,a},{3,b} ])                                    ) },
+        {"[ {3,bork} ]",                                          ?_assert( [bork,bork,bork]                                             =:= sc:key_duplicate([ {3,bork} ])                                       ) },
+        {"[ {3,sunday}, {2,monster}, {2,truck}, {1,'MADNESS'} ]", ?_assert( [sunday,sunday,sunday,monster,monster,truck,truck,'MADNESS'] =:= sc:key_duplicate([ {3,sunday},{2,monster},{2,truck},{1,'MADNESS'} ]) ) },
 
         {"Regression: key empty-list", ?_assert( [ [], [] ]  =:= sc:key_duplicate([ {2, []} ])     ) },
 
@@ -62,9 +85,11 @@ key_duplicate_test_() ->
 
 prop_rotate_list_correct_length() ->
 
-    ?FORALL( {R,L},
-             {int(), list(proper_types:any())},
+    ?FORALL( { R,     L                        },
+             { int(), list(proper_types:any()) },
+
              length(L) == length(sc:rotate_list(R,L))
+
            ).
 
 
@@ -73,9 +98,11 @@ prop_rotate_list_correct_length() ->
 
 prop_rotate_list_same_histo() ->
 
-    ?FORALL( {R,L},
-             {int(), list(proper_types:any())},
+    ?FORALL( { R,     L                        },
+             { int(), list(proper_types:any()) },
+
              sc:histograph(L) == sc:histograph(sc:rotate_list(R,L))
+
            ).
 
 
@@ -367,7 +394,12 @@ explode_test_() ->
 
 prop_ceil_ints_as_floats_identity() ->
 
-    ?FORALL( I, proper_types:integer(), sc:ceiling(I*1.0) =:= I ).
+    ?FORALL( I, 
+             proper_types:integer(), 
+              
+             sc:ceiling(I*1.0) =:= I 
+             
+    ).
 
 
 
@@ -375,7 +407,12 @@ prop_ceil_ints_as_floats_identity() ->
 
 prop_ceil_floats_smaller_within_1() ->
 
-    ?FORALL( R, proper_types:real(), (sc:ceiling(R) - R) < 1 andalso (sc:ceiling(R) - R) >= 0 ).
+    ?FORALL( R, 
+             proper_types:real(), 
+
+             (sc:ceiling(R) - R) < 1 andalso (sc:ceiling(R) - R) >= 0
+
+           ).
 
 
 
@@ -383,7 +420,12 @@ prop_ceil_floats_smaller_within_1() ->
 
 prop_ceil_always_gives_integers() ->
 
-    ?FORALL( N, proper_types:number(), is_integer(sc:ceiling(N)) ).
+    ?FORALL( N,
+             proper_types:number(), 
+             
+             is_integer(sc:ceiling(N)) 
+             
+           ).
 
 
 
@@ -414,7 +456,12 @@ ceil_test_() ->
 
 prop_floor_ints_as_floats_identity() ->
 
-    ?FORALL( I, proper_types:int(), sc:floor(I*1.0) =:= I ).
+    ?FORALL( I, 
+             proper_types:int(), 
+
+             sc:floor(I*1.0) =:= I 
+             
+           ).
 
 
 
@@ -422,7 +469,12 @@ prop_floor_ints_as_floats_identity() ->
 
 prop_floor_floats_larger_within_1() ->
 
-    ?FORALL( R, proper_types:real(), (R - sc:floor(R)) < 1 andalso (R - sc:floor(R)) >= 0 ).
+    ?FORALL( R, 
+             proper_types:real(), 
+             
+             (R - sc:floor(R)) < 1 andalso (R - sc:floor(R)) >= 0 
+             
+           ).
 
 
 
@@ -430,7 +482,12 @@ prop_floor_floats_larger_within_1() ->
 
 prop_floor_always_gives_integers() ->
 
-    ?FORALL( N, proper_types:number(), is_integer(sc:floor(N)) ).
+    ?FORALL( N, 
+             proper_types:number(), 
+             
+             is_integer(sc:floor(N)) 
+             
+           ).
 
 
 
@@ -566,7 +623,12 @@ nybble_to_hex_test_() ->
 
 prop_arithmetic_mean_result_numeric() ->
 
-    ?FORALL( Ln, list(number()), true =:= is_number(sc:arithmetic_mean(Ln)) ).
+    ?FORALL( Ln, 
+             list(number()), 
+             
+             true =:= is_number(sc:arithmetic_mean(Ln)) 
+             
+           ).
 
 
 
@@ -580,7 +642,12 @@ prop_arithmetic_mean_between_eq_extrema_p(L) ->
 
 prop_arithmetic_mean_between_eq_extrema() ->
 
-    ?FORALL( Ln, non_empty(list(number())), true =:= prop_arithmetic_mean_between_eq_extrema_p(Ln) ).
+    ?FORALL( Ln, 
+             non_empty(list(number())), 
+             
+             true =:= prop_arithmetic_mean_between_eq_extrema_p(Ln) 
+             
+           ).
 
 
 
@@ -606,7 +673,12 @@ arithmetic_mean_test_() ->
 
 prop_tuple_duplicate_result_tuple() ->
 
-    ?FORALL( {Sz,Inp}, {proper_types:non_neg_integer(), proper_types:any()}, true =:= is_tuple(sc:tuple_duplicate(Sz,Inp)) ).
+    ?FORALL( { Sz,                             Inp                },
+             { proper_types:non_neg_integer(), proper_types:any() },
+
+             true =:= is_tuple(sc:tuple_duplicate(Sz,Inp))
+
+           ).
 
 
 
@@ -614,7 +686,12 @@ prop_tuple_duplicate_result_tuple() ->
 
 prop_tuple_duplicate_correct_size() ->
 
-    ?FORALL( {Sz,Inp}, {proper_types:non_neg_integer(), proper_types:any()}, Sz =:= size(sc:tuple_duplicate(Sz,Inp)) ).
+    ?FORALL( { Sz,                             Inp                },
+             { proper_types:non_neg_integer(), proper_types:any() },
+
+             Sz =:= size(sc:tuple_duplicate(Sz,Inp))
+
+           ).
 
 
 
@@ -624,7 +701,10 @@ prop_tuple_duplicate_first_item() ->
 
     % this excludes 0-size tuples for obvious reasons
 
-    ?FORALL( {Sz,Inp}, {proper_types:pos_integer(), proper_types:any()}, Inp =:= element(1, sc:tuple_duplicate(Sz,Inp)) ).
+    ?FORALL( { Sz,                         Inp                },
+             { proper_types:pos_integer(), proper_types:any() },
+
+             Inp =:= element(1, sc:tuple_duplicate(Sz,Inp)) ).
 
 
 

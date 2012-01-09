@@ -811,7 +811,7 @@ test([verbose]=_Style) ->
 
 
 
-%% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Returns the lowest and highest values in a list of one or more member in the form `{Lo,Hi}'.  Undefined over the empty list.  Mixed-type safe; sorts according to type order rules.  ```1> sc:extrema([1,2,3,4]).
+%% @doc Returns the lowest and highest values in a list of one or more member in the form `{Lo,Hi}'.  Undefined over the empty list.  Mixed-type safe; sorts according to type order rules.  ```1> sc:extrema([1,2,3,4]).
 %% {1,4}
 %%
 %% 2> sc:extrema([1,2,3,a,b,c]).
@@ -819,6 +819,8 @@ test([verbose]=_Style) ->
 %%
 %% 3> sc:extrema( [] ).
 %% ** exception error: no function clause matching sc:extrema([])'''
+%%
+%% Unit, doc and stochastic (min and max are list members) tested.
 %%
 %% @since Version 460
 
@@ -857,6 +859,8 @@ extrema([First | _] = List)
 %%
 %% 2> sc:key_duplicate([ {3,sunday}, {2,monster}, {2,truck}, {1,'MADNESS'} ]).
 %% [sunday,sunday,sunday,monster,monster,truck,truck,'MADNESS']'''
+%%
+%% Unit, doc and stochastic (correct length) tested.
 %%
 %% @since Version 462
 
@@ -2736,7 +2740,7 @@ mode_front( [], _Freq, Results) ->
 
 amean_vector_normal(VX) ->
 
-    arithmetic_mean(sc_vector:normalize(VX)).
+    arithmetic_mean(sc:vector_normalize(VX)).
 
 
 
@@ -2750,7 +2754,7 @@ amean_vector_normal(VX) ->
 
 gmean_vector_normal(VX) ->
 
-    geometric_mean(sc_vector:normalize(VX)).
+    geometric_mean(sc:vector_normalize(VX)).
 
 
 
@@ -2764,7 +2768,7 @@ gmean_vector_normal(VX) ->
 
 hmean_vector_normal(VX) ->
 
-    harmonic_mean(sc_vector:normalize(VX)).
+    harmonic_mean(sc:vector_normalize(VX)).
 
 
 
@@ -3558,8 +3562,8 @@ centroid(CoordList)
 
     when is_list(CoordList) ->
 
-    [ sc_stats:arithmetic_mean(X) ||
-        X <- sc_lists:zip_n(CoordList, to_list)
+    [ sc:arithmetic_mean(X) ||
+        X <- sc:zip_n(CoordList, to_list)
     ].
 
 
@@ -3574,7 +3578,7 @@ centroid(CoordList)
 
 nearest_to(Centers, Point) ->
 
-    { C, _ } = sc_tuple:keymin(2, [ { Center, sc_distance:euclidean(Center, Point) } || Center <- Centers ]),
+    { C, _ } = sc:keymin(2, [ { Center, sc:euclidean_distance(Center, Point) } || Center <- Centers ]),
     C.
 
 
@@ -3591,7 +3595,7 @@ by_distance_raw(Centers, Points)
 
     when is_list(Centers), is_list(Points) ->
 
-    [ {Key, [NV || {_NC,NV} <- Near]} || {Key, Near} <- sc_lists:key_group(1, [ { nearest_to(Centers, Point), Point } || Point <- Points ]) ].
+    [ {Key, [NV || {_NC,NV} <- Near]} || {Key, Near} <- sc:key_group(1, [ { nearest_to(Centers, Point), Point } || Point <- Points ]) ].
 
 
 
