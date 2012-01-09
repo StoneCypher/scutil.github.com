@@ -774,6 +774,7 @@ geometric_mean_test_() ->
         { "[]",          ?_assert( 0.0                =:= sc:geometric_mean( [] )          ) },
         { "[1,2,3,4,5]", ?_assert( 2.6051710846973517 =:= sc:geometric_mean( [1,2,3,4,5] ) ) },
         { "[2,2,2]",     ?_assert( 2.0                =:= sc:geometric_mean( [2,2,2] )     ) },
+        { "[3]",         ?_assert( 3.0                =:= sc:geometric_mean( [3] )         ) },
         { "[1,10,100]",  ?_assert( 10.000000000000002 =:= sc:geometric_mean( [1,10,100] )  ) },
 
         {"Stochastic: all results between-eq extrema", ?_assert( true =:= proper:quickcheck(prop_geometric_mean_between_eq_extrema()) ) },

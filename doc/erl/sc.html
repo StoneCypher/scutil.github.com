@@ -13,7 +13,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of the erlang portion of the scutil library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> 2.5.819
+<p><b>Version:</b> 2.5.820
 </p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
@@ -397,7 +397,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#function_stats-1">function_stats/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#gen_docs-0">gen_docs/0</a></td><td>(not testworthy) Generates library documentation using the paths appropriate for the author's PC; you almost certainly want <a href="#gen_docs-2"><code>gen_docs/2</code></a> instead.</td></tr>
 <tr><td valign="top"><a href="#gen_docs-2">gen_docs/2</a></td><td>(not testworthy) Generates library documentation from and to the specified paths <code>WhereIsSrc</code> and <code>WhereToPutDocs</code> respectively.</td></tr>
-<tr><td valign="top"><a href="#geometric_mean-1">geometric_mean/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the geometric mean of a list of numbers.</td></tr>
+<tr><td valign="top"><a href="#geometric_mean-1">geometric_mean/1</a></td><td>Take the geometric mean of a list of numbers.</td></tr>
 <tr><td valign="top"><a href="#get_linked_processes-0">get_linked_processes/0</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
 <tr><td valign="top"><a href="#gmean_vector_normal-1">gmean_vector_normal/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the geometric mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#grid_scatter-2">grid_scatter/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return a Count-length list of non-repeating coordinates in a grid of specified size; useful for feature generation.</td></tr>
@@ -732,7 +732,7 @@ via Naive Bayes Likelihood.</td></tr>
   <a href="http://www.wolframalpha.com/input/?i=mean%282%2C2%2C2%2C2%29">Wolfram Alpha confirms result 3</a><br>
   <a href="http://www.wolframalpha.com/input/?i=mean%28-3%2C2%29">Wolfram Alpha confirms result 4</a><br></p>
  
-  Unit, doc and stochastic (result is number(); result between-eq extrema) tested.
+  Unit, doc, spec and stochastic (result is number(); result between-eq extrema) tested.
  </p>
 <p><b>Introduced in:</b> Version 481</p>
 <p><b>See also:</b> <a href="#amean_vector_normal-1">amean_vector_normal/1</a>, <a href="#geometric_mean-1">geometric_mean/1</a>, <a href="#harmonic_mean-1">harmonic_mean/1</a>, <a href="#weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a>.</p>
@@ -1577,22 +1577,28 @@ via Naive Bayes Likelihood.</td></tr>
 <h3 class="function"><a name="geometric_mean-1">geometric_mean/1</a></h3>
 <div class="spec">
 <p><tt>geometric_mean(InputList::<a href="#type-pos_numeric_list">pos_numeric_list()</a>) -&gt; float()</tt><br></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the geometric mean of a list of numbers. <pre>  1&gt; sc:geometric_mean([1,2,3,4,5]).
+</div><p>Take the geometric mean of a list of numbers. <pre>  1&gt; sc:geometric_mean([1,2,3,4,5]).
   2.6051710846973517
  
   2&gt; sc:geometric_mean([2,2,2]).
   2.0
  
-  3&gt; sc:geometric_mean([1,10,100]).
+  3&gt; sc:geometric_mean([3]).
+  3.0
+ 
+  4&gt; sc:geometric_mean([1,10,100]).
   10.000000000000002</pre>
  
   <p><a href="http://www.wolframalpha.com/input/?i=geometric+mean+{1%2C2%2C3%2C4%2C5}">Wolfram Alpha confirms result 1</a><br>
   <a href="http://www.wolframalpha.com/input/?i=geometric+mean+{2%2C2%2C2}">Wolfram Alpha confirms result 2</a><br>
+  <a href="http://www.wolframalpha.com/input/?i=geometric+mean+{3}">Wolfram Alpha confirms result 3</a><br>
   <a href="http://www.wolframalpha.com/input/?i=geometric+mean+{1%2C10%2C100}">Wolfram Alpha confirms result 3</a></p>
  
   <p>The geometric mean is not defined for lists including 0.  This implementation does not handle the geometric mean of lists including negative numbers.</p>
  
   <p>The naive approach <code>geometric_mean(List) -&gt; math:pow(sc:list_product(List), 1/length(List))</code> is not used because it accumulates error very quickly, and is as such unsuited to huge lists.  This is the same as the expected function nth-root(prod, 1/n), but calculated differently for machine reasons.'''</p>
+ 
+  <p>Unit, doc and stochastic (all results are floats, all results between extrema) tested.</p>
  
   Thanks to Forest (anonymous by choice) for help resolving 0-correctness.
  </p>
@@ -1995,7 +2001,7 @@ via Naive Bayes Likelihood.</td></tr>
   2&gt; sc:key_duplicate([ {3,sunday}, {2,monster}, {2,truck}, {1,'MADNESS'} ]).
   [sunday,sunday,sunday,monster,monster,truck,truck,'MADNESS']</pre>
  
-  Unit, doc and stochastic (correct length) tested.
+  Unit, doc, spec and stochastic (correct length) tested.
  </p>
 <p><b>Introduced in:</b> Version 462</p>
 
@@ -3506,7 +3512,7 @@ via Naive Bayes Likelihood.</p>
   2&gt; sc:tuple_duplicate(0,hi).
   {}
  
-  Unit, doc and stochastic (correct length, is tuple, first item is correct) tested.</pre></p>
+  Unit, doc, spec and stochastic (correct length, is tuple, first item is correct) tested.</pre></p>
 <p><b>Introduced in:</b> Version 809</p>
 
 <h3 class="function"><a name="tuple_member-2">tuple_member/2</a></h3>
@@ -3712,6 +3718,6 @@ via Naive Bayes Likelihood.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Jan 8 2012, 23:51:42.</i></p>
+<p><i>Generated by EDoc, Jan 9 2012, 00:51:22.</i></p>
 </body>
 </html>

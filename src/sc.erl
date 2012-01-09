@@ -2118,7 +2118,7 @@ zipf_nearness_walk_strengths([_|Rem]=ZD, Work) ->
 %% <a href="http://www.wolframalpha.com/input/?i=mean%282%2C2%2C2%2C2%29">Wolfram Alpha confirms result 3</a><br/>
 %% <a href="http://www.wolframalpha.com/input/?i=mean%28-3%2C2%29">Wolfram Alpha confirms result 4</a><br/>
 %%
-%% Unit, doc and stochastic (result is number(); result between-eq extrema) tested.
+%% Unit, doc, spec and stochastic (result is number(); result between-eq extrema) tested.
 %%
 %% @see geometric_mean/1
 %% @see harmonic_mean/1
@@ -2147,7 +2147,7 @@ arithmetic_mean(List)
 
 
 
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the geometric mean of a list of numbers. ```1> sc:geometric_mean([1,2,3,4,5]).
+%% @doc Take the geometric mean of a list of numbers. ```1> sc:geometric_mean([1,2,3,4,5]).
 %% 2.6051710846973517
 %%
 %% 2> sc:geometric_mean([2,2,2]).
