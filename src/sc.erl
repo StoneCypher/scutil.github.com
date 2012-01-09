@@ -522,6 +522,11 @@
 
 -export_type([
 
+    grid_size/0,
+    type_label/0,
+    function_or_list/0,
+    timestamp/0,
+
     hexchar/0,
       hexstring/0,
 
@@ -551,6 +556,8 @@
       seven_vector_tuple/1,
       three_or_seven_vector/1,
       unit_vector/0,
+      vector_list/0,
+      vector_list/1,
 
     ranking_list/0,
       ranking_list/1,
@@ -627,8 +634,10 @@
 -type seven_vector_tuple(T)    :: {T,T,T,T,T,T,T}.                       %% A seven-vector expressed as a tuple.
 -type three_or_seven_vector(T) :: three_vector(T) | seven_vector(T).     %% A three or a seven-vector.
 -type unit_vector()            :: vector().                              %% The hypoteneuse of a unit vector is precisely one unit long.  Unit vectors are also called normalized or magnitude-normalized vectors.
--type vector()                 :: [number()] | tuple(number()).          %% Every member element of a vector() is a {@type number()}.
--type vector(T)                :: list(T) | tuple(T).                    %% Every member element of a vector(T) is a T.
+-type vector()                 :: [ number() ] | tuple(number()).        %% Every member element of a vector() is a {@type number()}.
+-type vector(T)                :: [ T ] | tuple(T).                      %% Every member element of a vector(T) is a T.
+-type vector_list()            :: [ vector() ].                          %% Every member element of a vectorlist() is a {@type vector()}.
+-type vector_list(T)           :: [ vector(T) ].                         %% Every member element of a vectorlist(T) is a {@type vector(T)}.
 
 -type weighted_value()         :: { Value::any(), Weight::number() }.    %% Used by functions like weighted_arithmetic_mean/1 and from_weighted/1, weighted_value()s represent a value with an associated importance or "weight".
 -type weighted_value(T)        :: { Value::T, Weight::number() }.        %% Used by functions like weighted_arithmetic_mean/1 and from_weighted/1, weighted_value()s represent a value with an associated importance or "weight".
@@ -651,13 +660,17 @@
 -type bw_scale()               :: { Unit::atom(), Timescale::atom() }.   %% `bw_scale' - Bandwidth scale - is a units-per-time notation for bandwidth measurement, eg `{megabits,day}'.
 -type bw_rate()                :: { Scale::bw_scale(), Rate::float() }.  %% `bw_rate' - Bandwidth rate - is a rate-in-units-per-time notation for bandwidth measurement, eg `{{megabits,day},10.5}'.
 
-%% @type gridsize() = coord2() | integer().  Coordinates are the width and height of a (1,1) originated grid; as such, coordinates are of the range [1,X] , [1,Y] inclusive, and returned in the form {A,B}.  The integer form implies a square grid.
-%% @type numeric_tuple() = tuple().  Every member of a {@type numeric_tuple()} must be a {@type number()}.
-%% @type relaxed_numeric_tuple() = numeric_tuple().  Relaxed numeric tuples are allowed to contain non-numeric elements, which are treated as zero for purposes of computation.
-%% @type typelabel() = [ integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown ].  Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
-%% @type vectorlist() = list().  Every member element of a vectorlist() is a {@type vector()}.
-%% @type function_or_list() = function() | list()
-%% @type timestamp() = {Megaseconds::non_neg_integer(), Seconds::non_neg_integer(), MicroSeconds::non_neg_integer()}.
+-type grid_size()              :: coord2() | integer().                  %% Coordinates are the width and height of a (1,1) originated grid; as such, coordinates are of the range [1,X] , [1,Y] inclusive, and returned in the form {A,B}.  The integer form implies a square grid.
+
+-type type_label()             :: integer | float | list | tuple |
+                                  binary | bitstring | boolean |
+                                  function | pid | port | reference |
+                                  atom | unknown.                        %% Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
+
+-type function_or_list()       :: function() | list().
+-type timestamp()              :: { Megaseconds::non_neg_integer(),
+                                    Seconds::non_neg_integer(),
+                                    MicroSeconds::non_neg_integer() }.   %% Erlang's timestamp type
 
 
 

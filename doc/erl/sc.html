@@ -13,7 +13,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of the erlang portion of the scutil library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> 2.5.809
+<p><b>Version:</b> 2.5.810
 </p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
@@ -120,9 +120,9 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>function_or_list() = function() | list()</tt></p>
 
 
-<h3 class="typedecl"><a name="type-gridsize">gridsize()</a></h3>
-<p><tt>gridsize() = <a href="#type-coord2">coord2()</a> | integer()</tt></p>
-<p>Coordinates are the width and height of a (1,1) originated grid; as such, coordinates are of the range [1,X] , [1,Y] inclusive, and returned in the form {A,B}.  The integer form implies a square grid.</p>
+<h3 class="typedecl"><a name="type-grid_size">grid_size()</a></h3>
+<p><tt>grid_size() = <a href="#type-coord2">coord2()</a> | integer()</tt></p>
+<p>  Coordinates are the width and height of a (1,1) originated grid; as such, coordinates are of the range [1,X] , [1,Y] inclusive, and returned in the form {A,B}.  The integer form implies a square grid.</p>
 
 <h3 class="typedecl"><a name="type-hexchar">hexchar()</a></h3>
 <p><tt>hexchar() = 0..15</tt></p>
@@ -161,8 +161,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p>  All members of a numeric list must be number()s.</p>
 
 <h3 class="typedecl"><a name="type-numeric_tuple">numeric_tuple()</a></h3>
-<p><tt>numeric_tuple() = tuple()</tt></p>
-<p>Every member of a <code><a href="#type-numeric_tuple">numeric_tuple()</a></code> must be a <code>number()</code>.</p>
+<p><tt>numeric_tuple() = {number()}</tt></p>
+<p>  Every member of a <code><a href="#type-numeric_tuple">numeric_tuple()</a></code> must be a <code>number()</code>.</p>
 
 <h3 class="typedecl"><a name="type-nybble">nybble()</a></h3>
 <p><tt>nybble() = 0..15</tt></p>
@@ -183,10 +183,6 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="typedecl"><a name="type-ranking_list">ranking_list()</a></h3>
 <p><tt>ranking_list() = [<a href="#type-ranking">ranking()</a>]</tt></p>
 <p>  Members of a <code><a href="#type-rankinglist">rankinglist()</a></code> must be <code><a href="#type-ranking">ranking()</a></code>s.</p>
-
-<h3 class="typedecl"><a name="type-relaxed_numeric_tuple">relaxed_numeric_tuple()</a></h3>
-<p><tt>relaxed_numeric_tuple() = <a href="#type-numeric_tuple">numeric_tuple()</a></tt></p>
-<p>Relaxed numeric tuples are allowed to contain non-numeric elements, which are treated as zero for purposes of computation.</p>
 
 <h3 class="typedecl"><a name="type-sanitizer">sanitizer()</a></h3>
 <p><tt>sanitizer() = [] | <a href="#type-filter_function">filter_function()</a></tt></p>
@@ -246,11 +242,11 @@ presenting the actual volume of functionality present here.  We can get the cove
 
 <h3 class="typedecl"><a name="type-timestamp">timestamp()</a></h3>
 <p><tt>timestamp() = {Megaseconds::non_neg_integer(), Seconds::non_neg_integer(), MicroSeconds::non_neg_integer()}</tt></p>
+<p>  Erlang's timestamp type</p>
 
-
-<h3 class="typedecl"><a name="type-typelabel">typelabel()</a></h3>
-<p><tt>typelabel() = [integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown]</tt></p>
-<p>Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.</p>
+<h3 class="typedecl"><a name="type-type_label">type_label()</a></h3>
+<p><tt>type_label() = integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown</tt></p>
+<p>  Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.</p>
 
 <h3 class="typedecl"><a name="type-unit_vector">unit_vector()</a></h3>
 <p><tt>unit_vector() = <a href="#type-vector">vector()</a></tt></p>
@@ -264,9 +260,13 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>vector() = [number()] | {number()}</tt></p>
 <p>  Every member element of a vector() is a <code>number()</code>.</p>
 
-<h3 class="typedecl"><a name="type-vectorlist">vectorlist()</a></h3>
-<p><tt>vectorlist() = list()</tt></p>
-<p>Every member element of a vectorlist() is a <code><a href="#type-vector">vector()</a></code>.</p>
+<h3 class="typedecl"><a name="type-vector_list">vector_list()</a></h3>
+<p><tt>vector_list(T) = [<a href="#type-vector">vector</a>(T)]</tt></p>
+<p>  Every member element of a vectorlist(T) is a <code><a href="#type-vector">vector</a>(T)</code>.</p>
+
+<h3 class="typedecl"><a name="type-vector_list">vector_list()</a></h3>
+<p><tt>vector_list() = [<a href="#type-vector">vector()</a>]</tt></p>
+<p>  Every member element of a vectorlist() is a <code><a href="#type-vector">vector()</a></code>.</p>
 
 <h3 class="typedecl"><a name="type-weight_list">weight_list()</a></h3>
 <p><tt>weight_list(T) = [<a href="#type-weighted_value">weighted_value</a>(T)]</tt></p>
@@ -3680,6 +3680,6 @@ via Naive Bayes Likelihood.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Jan 8 2012, 21:41:50.</i></p>
+<p><i>Generated by EDoc, Jan 8 2012, 21:49:12.</i></p>
 </body>
 </html>
