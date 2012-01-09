@@ -620,6 +620,16 @@ prop_tuple_duplicate_correct_size() ->
 
 
 
+prop_tuple_duplicate_first_item() ->
+
+    % this excludes 0-size tuples for obvious reasons
+
+    ?FORALL( {Sz,Inp}, {proper_types:pos_integer(), proper_types:any()}, Inp =:= element(1, sc:tuple_duplicate(Sz,Inp)) ).
+
+
+
+
+
 tuple_duplicate_test_() ->
 
     { "Tuple duplicate tests", [
@@ -629,6 +639,7 @@ tuple_duplicate_test_() ->
 
         {"Stochastic: all results are tuples",                ?_assert( true =:= proper:quickcheck(prop_tuple_duplicate_result_tuple()) ) },
         {"Stochastic: all results have correct member count", ?_assert( true =:= proper:quickcheck(prop_tuple_duplicate_correct_size()) ) },
+        {"Stochastic: first item is correct",                 ?_assert( true =:= proper:quickcheck(prop_tuple_duplicate_first_item()) ) },
 
         {"-1,hi error undefined", ?_assertError(function_clause, sc:tuple_duplicate(-1, hi) ) }
 

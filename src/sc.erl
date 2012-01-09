@@ -523,7 +523,28 @@
 -export_type([
 
     hexchar/0,
-    hexstring/0
+      hexstring/0,
+
+    keylist/0,
+      sorted_keylist/0,
+
+    list_of_lists/0,
+      list_of_lists/1,
+
+    filterfunction/0,
+      sanitizer/0,
+
+    coord/0,
+      coordlist/0,
+      coord2/0,
+      coord2list/0,
+      coord3/0,
+      coord3list/0,
+
+    time12/0,
+      time24/0,
+      time12s/0,
+      time24s/0
 
 ]).
 
@@ -533,6 +554,64 @@
 
 -include_lib("eunit/include/eunit.hrl").
 
+
+
+
+
+
+%% Stray exportable types
+%% ##todo comeback find a way to doc this meaningfully
+
+-type time12()         :: { 1..12, 1..60, am|pm }.             %% A human readable 12-hour time
+-type time24()         :: { 0..23, 1..60 }.                    %% A human readable 24-hour time
+
+-type time12s()        :: { 1..12, 1..60, 1..60, am|pm }.      %% A human readable 12-hour time, with seconds
+-type time24s()        :: { 0..23, 1..60, 1..60 }.             %% A human readable 24-hour time, with seconds
+
+-type list_of_lists()  :: [[]].                                %% Every member of a `list_of_lists()' is a `list()'.
+-type list_of_lists(T) :: [[ T ]].                             %% Every member of a `list_of_lists(T)' is a `list(T)'.
+
+-type nybble()         :: 0..15.                               %% Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.  Synonym of hexchar().
+-type hexchar()        :: 0..15.                               %% Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.  Synonym of nybble().
+-type hexstring()      :: [ hexchar() ].                       %% All elements of the list must be of type {@type hexchar()}.
+
+-type keylist()        :: [{}].                                %% All members of keylists are tuples of two-or-greater arity, and the first element is considered their key in the list.  List keys are unique; therefore `[{a,1},{b,1}]' is a keylist, but `[{a,1},{a,1}]' is not.
+-type sorted_keylist() :: keylist().                           %% A sorted keylist is a keylist in the order provided by {@link lists:sort/1}.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.
+
+-type filterfunction() :: function().                          %% Filter functions are 1ary binary predicates - they accept an argument and return either true or false.
+-type sanitizer()      :: [] | filterfunction().               %% Sanitizers are used by {@link sanitize_tokens/2} for input sanitization; they define what parts of an input list are valid, and the remainder are removed.  Sanitizers may either be a list of acceptable elements or a filter function.
+
+-type coord()          :: {}.                                  %% Every member of a {@type coord()} is a {@type number()}.  Represents a coordinate, which may imply a sized cartesian space.  Many functions expect integer coordinates; the type does not require them.  This type does not define member count.  If your function requires a specific count of members, name it, as in a {@type coord2()} or {@type coord3()}.
+-type coordlist()      :: [{}].                                %% All members of a {@type coordlist()} must be {@type coord()}s.  All member coordinates must be of the same size, though this type does not define what that size is.  If your function requires a specific count of members, name it, as in a {@type coord2list()} or {@type coord3list()}.
+-type coord2()         :: { number(), number() }.              %% Represents a coordinate, which may imply a sized rectangle.  Many functions expect integer coordinates; the type does not require them.
+-type coord2list()     :: [ coord2() ].                        %% All members of a {@type coord2list()} must be {@type coord2()}s.
+-type coord3()         :: { number(), number(), number() }.    %% Represents a coordinate, which may imply a sized 3d box region.  Many functions expect integer coordinates; the type does not require them.
+-type coord3list()     :: [ coord3() ].                        %% All members of a {@type coord3list()} must be {@type coord3()}s.
+
+%% @type bw_scale() = { Unit::atom(),      Timescale::atom() }.  `bw_scale' - Bandwidth scale - is a units-per-time notation for bandwidth measurement, eg `{megabits,day}'.
+%% @type bw_rate()  = { Scale::bw_scale(), Rate::float() }.      `bw_rate' - Bandwidth rate - is a rate-in-units-per-time notation for bandwidth measurement, eg `{{megabits,day},10.5}'.
+%% @type numericlist() = list().  All members of a numeric list must be number()s.
+%% @type ranking() = { Ranking::number(), Value::any() }.  Values are usually {@type number()}s, but do not have to be with custom ranking predicates.
+%% @type rankinglist() = list().  Members of a {@type rankinglist()} must be {@type ranking()}s.
+%% @type io_list() = list().  Every list member of an {@type io_list()} must be a {@type byte()}.
+%% @type weightedvalue() = { Value::any(), Weight::number() }.  Used by functions like weighted_arithmetic_mean/1 and from_weighted/1, weightedvalue()s represent a value with an associated importance or "weight".
+%% @type weightlist() = list().  All members of weightlists must be weightedvalue()s.
+%% @type gridsize() = coord2() | integer().  Coordinates are the width and height of a (1,1) originated grid; as such, coordinates are of the range [1,X] , [1,Y] inclusive, and returned in the form {A,B}.  The integer form implies a square grid.
+%% @type numeric_tuple() = tuple().  Every member of a {@type numeric_tuple()} must be a {@type number()}.
+%% @type relaxed_numeric_tuple() = numeric_tuple().  Relaxed numeric tuples are allowed to contain non-numeric elements, which are treated as zero for purposes of computation.
+%% @type list_or_binary() = list() | binary(). It's either a {@type list()} or a {@type binary()}.  Duh.
+%% @type stringlist() = list().  Every member of a stringlist() is a string().
+%% @type typelabel() = [ integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown ].  Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
+%% @type three_vector() = vector().  A three-vector always has three elements, so this can be expressed as the alternation `{A::number(), B::number(), C::number()} | [A::number(), B::number(), C::number()]'.
+%% @type seven_vector() = vector().  A seven-vector always has seven elements, so this can be expressed as the alternation `{A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()} | [A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()]'.
+%% @type three_or_seven_vector() = three_vector() | seven_vector().
+%% @type unit_vector() = vector().  The hypoteneuse of a unit vector is precisely one unit long.  Unit vectors are also called normalized or magnitude-normalized vectors.
+%% @type vector() = list() | tuple().  Every member element of a vector() is a {@type number()}.
+%% @type vectorlist() = list().  Every member element of a vectorlist() is a {@type vector()}.
+%% @type function_or_list() = function() | list()
+%% @type positive_integer() = integer().  This integer must be greater than zero.
+%% @type positive_integer_or_list() = positive_integer() | list()
+%% @type timestamp() = {Megaseconds::non_neg_integer(), Seconds::non_neg_integer(), MicroSeconds::non_neg_integer()}.
 
 
 
@@ -1231,12 +1310,6 @@ zip_n_foldn(Fun, Acc0, Ls, Ret) ->
         [ lists:foldl(Fun, Acc0, [hd(L) || L <- Ls] ) | Ret ]
     ).
 
-
-
-
-
-%% @type list_of_lists() = list().  Every member of a {@type list_of_lists()} is a {@type list()}.
-%%
 %% @spec combinations(OutputItemSize::positive_integer(), Items::list()) -> list_of_lists()
 %%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Provides a list of every unique combination of input terms, order-ignorant; contrast {@link permute/2}.  Permutations are all unique combinations of a set of tokens; the 2-permutations of `[a,b,c]' for example are `[a,b]', `[a,c]' and `[b,c]'.  Note the absence of other orderings, such as `[b,a]', which are provided by {@link permute/2}.  Combinations are taken of a smaller count of tokens than the main set.  Combinations are not ordered, but this implementation happens to provide answers in the same order as the input list.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> sc:combinations(2, [a,b,c,d]).
@@ -1418,9 +1491,6 @@ shared_keys(TupleList)
 
 
 
-%% @type keylist() = keylist().  All members of keylists are tuples of two-or-greater arity, and the first element is considered their key in the list.  List keys are unique; therefore `[{a,1},{b,1}]' is a keylist, but `[{a,1},{a,1}]' is not.
-%% @type sorted_keylist() = keylist().  A sorted keylist is a keylist in the order provided by {@link lists:sort/1}.  Because of erlang tuple ordering rules and the fact that keylist keys are unique, this means the list will be ordered by key.
-%%
 %% @equiv shared_keys(lists:zip(lists:sort(A), lists:sort(B)))
 %% @spec shared_keys(TupleList::sorted_keylist(), Presorted::presorted) -> sorted_keylist()
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Equivalent to {@link shared_keys/1}, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.
@@ -1542,9 +1612,6 @@ list_product([Head|Tail], Counter) ->
 
 
 
-%% @type filterfunction() = function().  Filter functions are 1ary binary predicates - they accept an argument and return either true or false.
-%% @type sanitizer() = list() | filterfunction().  Sanitizers are used by {@link sanitize_tokens/2} for input sanitization; they define what parts of an input list are valid, and the remainder are removed.  Sanitizers may either be a list of acceptable elements or a filter function.
-%%
 %% @spec sanitize_tokens(InputList::list(), Allowed::sanitizer()) -> list()
 %%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Remove unacceptable elements from an input list, as defined by another list or a filter function.  Common reasons for sanitization include reducing arbitrary or bulk data to key format (such as using an original filename and new size to generate a new filename or database key) and removing malformed items from a list before processing. ```1> sc:sanitize_tokens("ae0z4nb'wc-04bn ze0e 0;4ci ;e0o5rn;", "ace").
@@ -1610,9 +1677,6 @@ bandwidth_calc(Data) ->
 
 
 
-%% @type bw_scale() = { Unit::atom(),      Timescale::atom() }.  `bw_scale' - Bandwidth scale - is a units-per-time notation for bandwidth measurement, eg `{megabits,day}'.
-%% @type bw_rate()  = { Scale::bw_scale(), Rate::float() }.      `bw_rate' - Bandwidth rate - is a rate-in-units-per-time notation for bandwidth measurement, eg `{{megabits,day},10.5}'.
-%%
 %% @spec bandwidth_calc(Data, Scale::bw_scale|all) -> bw_rate()|[bw_rate()]
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates digital line bandwidth over timescales in converted units. ```1>'''
@@ -1952,7 +2016,6 @@ zipf_nearness_walk_strengths([_|Rem]=ZD, Work) ->
 
 
 
-%% @type numericlist() = list().  All members of a numeric list must be number()s.
 %% @spec arithmetic_mean(InputList::numericlist()) -> float()
 %%
 %% @doc Take the arithmetic mean (often called the average) of a list of numbers. ```1> sc:arithmetic_mean([1,2,3,4,5]).
@@ -5131,9 +5194,6 @@ pearson_correlation(List1, List2)
 
 
 
-%% @type ranking() = { Ranking::number(), Value::any() }.  Values are usually {@type number()}s, but do not have to be with custom ranking predicates.
-%% @type rankinglist() = list().  Members of a {@type rankinglist()} must be {@type ranking()}s.
-%%
 %% @todo comeback make a simple/2 which takes a sorting predicate
 %% @spec simple_ranking(Values::numericlist()) -> rankinglist()
 %%
@@ -5388,8 +5448,6 @@ list_to_term(List) ->
 
 
 
-%% @type io_list() = list().  Every list member of an {@type io_list()} must be a {@type byte()}.
-%%
 %% @spec io_list_to_hex_string(Input::io_list()) -> hexstring()
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert an io_list() to a hexstring().  ```1> sc:io_list_to_hex_string("a").
@@ -5439,11 +5497,7 @@ io_list_to_hex_string(_, _) ->
 
 
 
--type nybble() :: 0..15.
-%% @type nybble() = integer().  A nybble must be an integer in the range 0-15, inclusive.
-
 -spec nybble_to_hex(Nyb::nybble()) -> hexchar().
-%% @spec nybble_to_hex(Nyb::nybble()) -> hexchar()
 
 %% @doc Convert a nybble() to a hexchar(). ```1> sc:nybble_to_hex(7).
 %% 55
@@ -5500,13 +5554,6 @@ byte_to_hex(TheByte)
 
 
 
-
-
--type hexchar() :: 0..15.  %% Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.
-%% @type hexchar() = integer().  Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.
-
--type hexstring() :: [hexchar()].  %% All elements of the list must be of type {@type hexchar()}.
-%% @type hexstring() = list().  All elements of the list must be of type {@type hexchar()}.
 
 -spec hex_to_int(Hex::hexstring() | hexchar()) -> integer().
 %% @spec hex_to_int(HexChar::hexstring() | hexchar()) -> integer()
@@ -5895,9 +5942,6 @@ shuffle(List)
 
 
 
-%% @type weightedvalue() = { Value::any(), Weight::number() }.  Used by functions like weighted_arithmetic_mean/1 and from_weighted/1, weightedvalue()s represent a value with an associated importance or "weight".
-%% @type weightlist() = list().  All members of weightlists must be weightedvalue()s.
-%%
 %% @spec random_from_weighted(InputList::weightlist()) -> any()
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take a random single item from a list with weighted probabilities.  Probabilities may be any numeric type, and may be any non-negative value (items with zero probability will be omitted).  Input is a `weightlist()', which is a list in the form `[{Item,Probability}, {I2,P2}, ...]'. There is no requirement to normalize probabilities to any range, though probabilities normalized to ranges will still work as expected. ```1> sc:from([ {quad,4}, {double,2}, {single,1} ]).
@@ -6155,14 +6199,6 @@ srand(A,B,C) ->
 
 
 
-%% @type gridsize() = coord2() | integer().  Coordinates are the width and height of a (1,1) originated grid; as such, coordinates are of the range [1,X] , [1,Y] inclusive, and returned in the form {A,B}.  The integer form implies a square grid.
-%% @type coord() = tuple().  Every member of a {@type coord()} is a {@type number()}.  Represents a coordinate, which may imply a sized cartesian space.  Many functions expect integer coordinates; the type does not require them.  This type does not define member count.  If your function requires a specific count of members, name it, as in a {@type coord2()} or {@type coord3()}.
-%% @type coordlist() = list().  All members of a {@type coordlist()} must be {@type coord()}s.  All member coordinates must be of the same size, though this type does not define what that size is.  If your function requires a specific count of members, name it, as in a {@type coord2list()} or {@type coord3list()}.
-%% @type coord2() = { number(), number() }.  Represents a coordinate, which may imply a sized rectangle.  Many functions expect integer coordinates; the type does not require them.
-%% @type coord2list() = list().  All members of a {@type coord2list()} must be {@type coord2()}s.
-%% @type coord3() = { number(), number(), number() }.  Represents a coordinate, which may imply a sized 3d box region.  Many functions expect integer coordinates; the type does not require them.
-%% @type coord3list() = list().  All members of a {@type coord3list()} must be {@type coord3()}s.
-%%
 %% @spec grid_scatter(Count::integer(), Size::gridsize()) -> coordlist()
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return a Count-length list of non-repeating coordinates in a grid of specified size; useful for feature generation.
@@ -6380,9 +6416,6 @@ key_min(Pos, [Cur|Rem], Item) ->
 
 
 
-%% @type numeric_tuple() = tuple().  Every member of a {@type numeric_tuple()} must be a {@type number()}.
-%% @type relaxed_numeric_tuple() = numeric_tuple().  Relaxed numeric tuples are allowed to contain non-numeric elements, which are treated as zero for purposes of computation.
-%%
 %% @spec tuple_sum(T::relaxed_numeric_tuple()) -> number()
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero. ```1>'''
@@ -7328,8 +7361,6 @@ bin_to_hex_list(Bin)
 
 
 
-%% @type list_or_binary() = list() | binary(). It's either a {@type list()} or a {@type binary()}.  Duh.
-%%
 %% @spec stretch_hash(State::list_or_binary(), HashFun::function(), ListOfSalts::list()) -> binary()
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Stretches a hash with a list of salts.  Some people incorrect refer to this as key strentghening.  The process is a simple key-derivation function: repeat the application of a hash with a different pre-pend salt each time.```1> Res = sc:stretch_hash("abc", fun erlang:md5/1, ["def", "ghi", "jkl", "mno"]).
@@ -8550,8 +8581,6 @@ markhov_chain(N, Depth, Source, Work) ->
 
 
 
-%% @type stringlist() = list().  Every member of a stringlist() is a string().
-
 %% @spec to_lines(Text::string()) -> stringlist()
 
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Cuts a string according to any of the three newline conventions (even mixed), and discards empty strings.  Mostly convenience and documentary. ```1> sc:to_lines("one\rtwo\nthree\r\nfour\r\r\rfive").
@@ -8681,8 +8710,6 @@ unit_scale(Waveform) ->
 
 
 
-%% @type typelabel() = [ integer | float | list | tuple | binary | bitstring | boolean | function | pid | port | reference | atom | unknown ].  Used by type_of(), this is just any single item from the list of erlang's primitive types, or the atom <tt>unknown</tt>.
-
 %% @spec type_of(Argument::any()) -> typelabel()
 
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Fetch the type of the argument.  Valid for any term.  Fails before erlang 12, due to use of `is_bitstring()' . ```1> sc:type_of(1).
@@ -8711,10 +8738,6 @@ type_of(_X)                     -> unknown.
 
 
 
-
-%% @type three_vector() = vector().  A three-vector always has three elements, so this can be expressed as the alternation `{A::number(), B::number(), C::number()} | [A::number(), B::number(), C::number()]'.
-%% @type seven_vector() = vector().  A seven-vector always has seven elements, so this can be expressed as the alternation `{A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()} | [A::number(), B::number(), C::number(), D::number(), E::number(), F::number(), G::number()]'.
-%% @type three_or_seven_vector() = three_vector() | seven_vector().
 
 %% @spec cross_product(VX::three_vector(), VY::three_vector()) -> three_vector()
 
@@ -8784,8 +8807,6 @@ dot_product(VX, VY) ->
 
 
 
-%% @type unit_vector() = vector().  The hypoteneuse of a unit vector is precisely one unit long.  Unit vectors are also called normalized or magnitude-normalized vectors.
-
 %% @spec vector_normalize(Vector::vector()) -> unit_vector()
 
 %% @doc <span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the magnitude of a vector.  A vector's magnitude is the length of its hypoteneuse.  A vector can be seen as the product of its unit vector and its magnitude; as such many people see a vector's magnitude as its scale.  The normal of the zero vector is undefined, in the way that dividing by zero is undefined, and will throw an arithmetic exception. ```1> sc:vector_normalize([0,3,4]).
@@ -8807,9 +8828,6 @@ vector_normalize(VX) when is_tuple(VX) ->
 
 
 
-
-%% @type vector() = list() | tuple().  Every member element of a vector() is a {@type number()}.
-%% @type vectorlist() = list().  Every member element of a vectorlist() is a {@type vector()}.
 
 %% @spec qsp_average(W::numericlist(), InputVecs::vectorlist()) -> float()
 
@@ -8947,11 +8965,6 @@ standard_card_backs(Count) ->
 
 
 
-
-%% @type function_or_list() = function() | list()
-
-%% @type positive_integer() = integer().  This integer must be greater than zero.
-%% @type positive_integer_or_list() = positive_integer() | list()
 
 %% @spec multi_deck(Backs::positive_integer_or_list(), DeckGenerator::function_or_list()) -> list()
 
@@ -9149,8 +9162,6 @@ is_numeric_char(_, _)                                                    -> fals
 
 
 
-
-%% @type timestamp() = {Megaseconds::non_neg_integer(), Seconds::non_neg_integer(), MicroSeconds::non_neg_integer()}.
 
 %% @spec time_diff(A::timestamp(), B::timestamp()) -> float()
 
@@ -9519,7 +9530,9 @@ ensure_started(App, Opts)
 %% {hi,hi,hi}
 %%
 %% 2> sc:tuple_duplicate(0,hi).
-%% {}'''
+%% {}
+%%
+%% Unit, doc and stochastic (correct length, is tuple, first item is correct) tested.'''
 
 %% @since Version 809
 
