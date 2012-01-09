@@ -2726,11 +2726,11 @@ mode_front( [], _Freq, Results) ->
 
 
 
-%% @spec amean_vector_normal(VX::numeric_list()) -> number()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the arithmetic mean of the elements of the unit vector for the vector provided.
 %%
 %% @since Version 497
+
+-spec amean_vector_normal(VX::numeric_list()) -> number().
 
 amean_vector_normal(VX) ->
 
@@ -2798,12 +2798,12 @@ hmean_vector_normal(VX) ->
 
 
 
-%% @spec median_absolute_deviation(List::numericlist()) -> number()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the median absolute deviation of a {@type numericlist()}. ```1> sc:median_absolute_deviation([1,1,2,2,4,6,9]).
 %% 1'''
 %%
 %% @since Version 501
+
+-spec median_absolute_deviation(List::numeric_list()) -> number().
 
 median_absolute_deviation(List)
 
@@ -2816,8 +2816,6 @@ median_absolute_deviation(List)
 
 
 
-%% @spec expected_value(List::mixed_weight_list()) -> number()
-%%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Returns the expected value of infinite selection from a weighted numeric list.  Elements of the list may either be numbers or tuples in the form `{Value,Weight}' (weight may be floating-point).  This means that `[ 1,1,1, 10,10 ]' and `[ {1,3}, {10,2} ]' are the same list. The expected value of an empty list is undefined, and will throw `badarith'. This includes zero-weighted tuple form (example 6.) ```1> sc:expected_value([1,2,3,4,5,6]).
 %% 3.50000
 %%
@@ -2854,6 +2852,8 @@ median_absolute_deviation(List)
 %%
 %% @since Version 502
 
+-spec expected_value(List::weight_list()) -> number().
+
 expected_value(List) ->
 
     expected_value(List, 0, 0).
@@ -2886,8 +2886,6 @@ expected_value( [ UnweightedItem | Remainder], Sum, Range) ->
 
 
 
-%% @spec absolute_difference(A::number(), B::number()) -> number()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the absolute value of the difference between the two arguments.  Offered mostly to make dependant code clearer. ```1> sc:absolute_difference(1.25, 1).
 %% 0.25
 %%
@@ -2908,6 +2906,8 @@ expected_value( [ UnweightedItem | Remainder], Sum, Range) ->
 %%
 %% @since Version 504
 
+-spec absolute_difference(A::number(), B::number()) -> number().
+
 absolute_difference(A,B) ->
 
     abs(A-B).
@@ -2916,8 +2916,6 @@ absolute_difference(A,B) ->
 
 
 
-%% @spec root_mean_square(Values::numericlist()) -> float()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the root mean square of the values in the list.  ```1> sc:root_mean_square([1,2,3,4,5]).
 %% 3.3166247903554
 %%
@@ -2925,6 +2923,8 @@ absolute_difference(A,B) ->
 %% 2.0'''
 %%
 %% @since Version 505
+
+-spec root_mean_square(Values::numeric_list()) -> float().
 
 root_mean_square(List)
 
@@ -2936,11 +2936,11 @@ root_mean_square(List)
 
 
 
-%% @spec root_sum_square(VX::vector()) -> number()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the magnitude (also known as the root sum square) of a vector.
 %%
 %% @since Version 506
+
+-spec root_sum_square(VX::vector()) -> number().
 
 root_sum_square(VX)
 
@@ -2973,8 +2973,6 @@ vector_magnitude(VX) ->
 
 
 
-%% @spec mod(Base::integer(), Range::integer()) -> integer()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the modulus of an integer by another integer.  Luckily, erlang calls what most languages refer to as modulus by its correct name, remainder (c's `%', erlang's `rem').  Modulus is implemented incorrectly in nearly every language, because chip vendors implement remainder and the wrong name stuck.  The difference is in how the operator reacts to a negative `Base': -10 modulo 3 is 2, whereas -10 rem 3 is -1.  Remainder takes the residue of dividing the base by the lowest (nearest negative infinity) integer N adjacent the real valued divisor; modulo returns the highest, which is less CPU efficient but always provides an answer on [0..Range-1]. ```1> sc:mod(10,3).
 %% 1
 %%
@@ -2982,6 +2980,8 @@ vector_magnitude(VX) ->
 %% [2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2]'''
 %%
 %% @since Version 507
+
+-spec mod(Base::integer(), Range::integer()) -> integer().
 
 mod(Base, Range)
 
@@ -3002,8 +3002,6 @@ mod(Base, Range)
 
 
 
-%% @spec square(Input::number()) -> number()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Squares the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions. ```1> sc:square(2).
 %% 4
 %%
@@ -3011,6 +3009,8 @@ mod(Base, Range)
 %% 6.25'''
 %%
 %% @since Version 508
+
+-spec square(Input::number()) -> number().
 
 square(X) ->
 
@@ -3020,8 +3020,6 @@ square(X) ->
 
 
 
-%% @spec cube(Input::number()) -> number()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Cubes the input; convenient in list comprehensions to prevent recalculation, and clear in the fashion of documentary functions. ```1> sc:cube(2).
 %% 8
 %%
@@ -3029,6 +3027,8 @@ square(X) ->
 %% 6.25'''
 %%
 %% @since Version 508
+
+-spec cube(Input::number()) -> number().
 
 cube(X) ->
 
@@ -3138,7 +3138,6 @@ ceil(X) ->
 %% @since Version 510
 
 -spec ceiling(X :: number()) -> integer().
-%% @spec ceiling(X::number()) -> integer()
 
 %% @doc Returns the ceiling (round towards positive infinity) of a float. ```1> sc:ceil(0.5).
 %% 1
@@ -3197,7 +3196,6 @@ ceiling(X) ->
 %% @since Version 511
 
 -spec floor(X :: number()) -> integer().
-%% @spec floor(X::number()) -> integer()
 
 %% @doc Takes the floor (round towards negative infinity) of a number.  This is different than `erlang:trunc/1', which removes the mantissa, in its
 %% handling of negative numbers: trunc diminishes towards zero, not towards negative infinity (note examples 6 and 7 below.) ```1> sc:floor(0.5).
@@ -3347,8 +3345,6 @@ factorize(N, Current, Work, Cap) ->
 
 
 
-%% @spec is_unique_list(List::list()) -> true | false
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns true if the list is unique; false otherwise.  List uniqueness is defined as whether any member of the list compares equally to any other member; deep list inspection is not performed.  Comparison is type-safe. ```2> sc:is_unique_list([1,2,3]).
 %% true
 %%
@@ -3366,6 +3362,8 @@ factorize(N, Current, Work, Cap) ->
 %%
 %% @since Version 514
 
+-spec is_unique_list(List::list()) -> true | false.
+
 is_unique_list(List) ->
 
     length(lists:usort(List)) == length(List).
@@ -3374,8 +3372,6 @@ is_unique_list(List) ->
 
 
 
-%% @spec is_sorted_list(List::list()) -> true | false
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns true if the list is sorted; false otherwise.  List sortedness is typesafe, and defined equivalently to how defined by the language and `lists:sort()'. ```1> sc:is_sorted_list([1,2,3]).
 %% true
 %%
@@ -3391,6 +3387,8 @@ is_unique_list(List) ->
 %% @since Version 514
 
 %% @todo ascending, descending, both forms
+
+-spec is_sorted_list(List::list()) -> true | false.
 
 is_sorted_list([]) ->
 
@@ -3538,8 +3536,6 @@ alarm_trigger(Time, Repeat, Head) ->
 
 
 
-%% @spec centroid(InputList::coord_list()) -> coord()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the coordinate which represents the per-axis arithmetic mean of a set of points.  Convenient in list comprehensions.  To calculate the centroid of `[1,1]', `[2,3]', you gather the X coordinates `[1,2]', then use their mean `1.5'; then do the same for the Y, `[1,3]' to `2'.  The centroid would thus be `[1.5,2]'.  You may pass any number of coordinates to this function, of any axis count, but they must all be the same axis count.  The return value will be a coordinate with the same axis count.  Negative and real values are fine; imaginary math is not implemented. ```1> sc:centroid([[1]]).
 %% [1.0]
 %%
@@ -3553,6 +3549,8 @@ alarm_trigger(Time, Repeat, Head) ->
 %% [2.2,1.8,2.2]'''
 %%
 %% @since Version 516
+
+-spec centroid(InputList::coord_list()) -> coord().
 
 centroid(CoordList)
 
@@ -3629,8 +3627,6 @@ by_distance(Centers, Points)
 
 
 
-%% @spec module_attribute(Module::atom()) -> AttributeList | { error, no_such_module }
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Look up all attributes of a given module.  ```1> sc:module_attribute(sc).
 %% [{author,"John Haugeland <stonecypher@gmail.com>"},
 %%  {bugtracker,"http://crunchyd.com/forum/project.php?projectid=7"},
@@ -3649,6 +3645,8 @@ by_distance(Centers, Points)
 %%
 %% @since Version 520
 
+-spec module_attribute(Module::atom()) -> AttributeList::list() | { error, no_such_module }.
+
 module_attribute(Module) ->
 
     case beam_lib:chunks(Module, [attributes]) of
@@ -3665,8 +3663,6 @@ module_attribute(Module) ->
 
 
 
-%% @spec module_attribute(Module::atom(), Attribute::atom()) -> { value, {Attribute, Value} } | { error, no_such_attribute } | { error, no_such_module }
-%%
 %% @doc <span style="color:red"><b><i>BUGGY</i></b></span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  ```1> sc:module_attribute(scutil, author).
 %% "John Haugeland <stonecypher@gmail.com>"
 %%
@@ -3678,6 +3674,8 @@ module_attribute(Module) ->
 %% Added error handling behavior
 %%
 %% @since Version 520
+
+-spec module_attribute(Module::atom(), Attribute::atom()) -> { value, {Attribute::any(), Value::any()} } | { error, no_such_attribute } | { error, no_such_module }.
 
 module_attribute(Module,Attribute) ->
 
@@ -3726,12 +3724,12 @@ module_feature(Module, Feature) ->
 
 
 
-%% @spec svn_revision(ModuleName::atom()) -> integer()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Scans a module for an attribute svn_revision, parses it in the format expected from the svn:keyword Revision, and returns the version number as an integer.  To use, add a module attribute to your module as follows: `-svn_revision("$+Revision$).', after removing the plus (if the plus wasn't there, the example would get corrupted when I updated the module `;)').  Then set the svn keyword "Revision" on the file, and check it in.  After that, your version is magically updated every time you check in!  `:D'  The sole argument to this function is the name of the module to be scanned, as an atom. ```1> sc:scan_svn_revision(testerl).
 %% 16'''
 %%
 %% @since Version 523
+
+-spec svn_revision(ModuleName::atom()) -> integer().
 
 svn_revision(Module) ->
 
@@ -4755,8 +4753,6 @@ walk_unique_pairings( A, [Rh|Rr], F) ->
 
 
 
-%% @spec count_of(Item::any(), List::list()) -> non_neg_integer()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Counts the number of instances of Item in List.  ```1> TestData = lists:duplicate(40, [healthy, nonsmoker] ) ++
 %%               lists:duplicate(10, [healthy, smoker]    ) ++
 %%               lists:duplicate(7,  [cancer,  nonsmoker] ) ++
@@ -4771,6 +4767,8 @@ walk_unique_pairings( A, [Rh|Rr], F) ->
 %% 40'''
 %%
 %% @since Version 550
+
+-spec count_of(Item::any(), List::list()) -> non_neg_integer().
 
 count_of(Item, List) ->
 
@@ -4811,8 +4809,6 @@ every_member_representation(Memberships) ->
 
 
 
-%% @spec every_member_representation(Memberships::list_of_lists(), AllowAbsence::atom()) -> list_of_lists()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> For a list of memberships, return every possible combination of one representative member from each list.  The parameter `AllowAbsence' controls whether memberships may be unrepresented; if unrepresented memberships are possible, then one possible representation becomes the empty list. ```1> sc:every_member_representation([ [a,b],[1,2,3],[i,ii,iii] ], no_absence).
 %% [[a,1,i], [a,1,ii], [a,1,iii], [a,2,i], [a,2,ii], [a,2,iii], [a,3,i], [a,3,ii], [a,3,iii], [b,1,i], [b,1,ii], [b,1,iii], [b,2,i], [b,2,ii], [b,2,iii], [b,3,i], [b,3,ii], [b,3,iii]]
 %%
@@ -4848,6 +4844,8 @@ every_member_representation(Memberships) ->
 %%  "It was Mr. Green in the the kitchen with the a gun!"]'''
 %%
 %% @since Version 551
+
+-spec every_member_representation(Memberships::list_of_lists(), allow_absence|no_ansence) -> list_of_lists().
 
 every_member_representation([], _) ->
 
@@ -4893,8 +4891,6 @@ every_member_representation( [Membership|RemMemberships], allow_absence) ->
 
 
 
-%% @spec every_flag_representation(Flags::list()) -> list_of_lists()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns every interpretation of the list as a set of boolean flags, including all-off and all-on. ```1> sc:every_flag_representation([1,2,3,4]).
 %% [ [], [4], [3], [3,4], [2], [2,4], [2,3], [2,3,4], [1], [1,4], [1,3], [1,3,4], [1,2], [1,2,4], [1,2,3], [1,2,3,4] ]
 %%
@@ -4920,6 +4916,8 @@ every_member_representation( [Membership|RemMemberships], allow_absence) ->
 %%  [magic,technology,evil,alien]]   % Granny Goodness'''
 %%
 %% @since Version 552
+
+-spec every_flag_representation(Flags::list()) -> list_of_lists().
 
 every_flag_representation([]) ->
 
@@ -5010,8 +5008,6 @@ eval(S, Environ) ->
 
 %% @todo use test data at http://changingminds.org/explanations/research/analysis/kendall.htm
 %%
-%% @spec kendall_correlation(TupleList::coordlist()) -> { tau, Correlation::number() }
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Kendall Tau Rank Correlation Coefficient of a list of coordinate tuples. ```1> sc:kendall([ {1,1}, {2,2}, {3,3}, {4,4}, {5,5} ]).
 %% {tau,1.0}
 %%
@@ -5029,7 +5025,9 @@ eval(S, Environ) ->
 %%
 %% @since Version 557
 
-kendall_correlation(TupleList) 
+-spec kendall_correlation(TupleList::coordlist()) -> { tau, Correlation::number() }.
+
+kendall_correlation(TupleList)
 
     when is_list(TupleList) ->
 

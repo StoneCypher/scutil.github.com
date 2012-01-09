@@ -13,7 +13,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of the erlang portion of the scutil library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> 2.5.815
+<p><b>Version:</b> 2.5.816
 </p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
@@ -1257,7 +1257,7 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="every_member_representation-2">every_member_representation/2</a></h3>
 <div class="spec">
-<p><tt>every_member_representation(Memberships::<a href="#type-list_of_lists">list_of_lists()</a>, AllowAbsence::atom()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt><br></p>
+<p><tt>every_member_representation(Memberships::<a href="#type-list_of_lists">list_of_lists()</a>, X2::allow_absence | no_ansence) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> For a list of memberships, return every possible combination of one representative member from each list.  The parameter <code>AllowAbsence</code> controls whether memberships may be unrepresented; if unrepresented memberships are possible, then one possible representation becomes the empty list. <pre>  1&gt; sc:every_member_representation([ [a,b],[1,2,3],[i,ii,iii] ], no_absence).
   [[a,1,i], [a,1,ii], [a,1,iii], [a,2,i], [a,2,ii], [a,2,iii], [a,3,i], [a,3,ii], [a,3,iii], [b,1,i], [b,1,ii], [b,1,iii], [b,2,i], [b,2,ii], [b,2,iii], [b,3,i], [b,3,ii], [b,3,iii]]
  
@@ -1312,7 +1312,7 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="expected_value-1">expected_value/1</a></h3>
 <div class="spec">
-<p><tt>expected_value(List::<a href="#type-mixed_weight_list">mixed_weight_list()</a>) -&gt; number()</tt><br></p>
+<p><tt>expected_value(List::<a href="#type-weight_list">weight_list()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Returns the expected value of infinite selection from a weighted numeric list.  Elements of the list may either be numbers or tuples in the form <code>{Value,Weight}</code> (weight may be floating-point).  This means that <code>[ 1,1,1, 10,10 ]</code> and <code>[ {1,3}, {10,2} ]</code> are the same list. The expected value of an empty list is undefined, and will throw <code>badarith</code>. This includes zero-weighted tuple form (example 6.) <pre>  1&gt; sc:expected_value([1,2,3,4,5,6]).
   3.50000
  
@@ -2169,7 +2169,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="median_absolute_deviation-1">median_absolute_deviation/1</a></h3>
 <div class="spec">
-<p><tt>median_absolute_deviation(List::<a href="#type-numericlist">numericlist()</a>) -&gt; number()</tt><br></p>
+<p><tt>median_absolute_deviation(List::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the median absolute deviation of a <code><a href="#type-numericlist">numericlist()</a></code>. <pre>  1&gt; sc:median_absolute_deviation([1,1,2,2,4,6,9]).
   1</pre>
  </p>
@@ -2293,7 +2293,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="module_attribute-1">module_attribute/1</a></h3>
 <div class="spec">
-<p><tt>module_attribute(Module::atom()) -&gt; AttributeList | {error, no_such_module}</tt><br></p>
+<p><tt>module_attribute(Module::atom()) -&gt; AttributeList::list() | {error, no_such_module}</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Look up all attributes of a given module.  <pre>  1&gt; sc:module_attribute(sc).
   [{author,"John Haugeland &lt;stonecypher@gmail.com&gt;"},
    {bugtracker,"http://crunchyd.com/forum/project.php?projectid=7"},
@@ -2314,7 +2314,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="module_attribute-2">module_attribute/2</a></h3>
 <div class="spec">
-<p><tt>module_attribute(Module::atom(), Attribute::atom()) -&gt; {value, {Attribute, Value}} | {error, no_such_attribute} | {error, no_such_module}</tt><br></p>
+<p><tt>module_attribute(Module::atom(), Attribute::atom()) -&gt; {value, {Attribute::any(), Value::any()}} | {error, no_such_attribute} | {error, no_such_module}</tt><br></p>
 </div><p><span style="color:red"><b><i>BUGGY</i></b></span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Look up an Erlang module attribute value by title.  Originally found at <a href="http://www.astahost.com/info.php/mastering-erlang-part-3-erlang-concurrent_t6632.html">Mastering Erlang Part 3</a>; subsequently cleaned up and given error reporting.  <pre>  1&gt; sc:module_attribute(scutil, author).
   "John Haugeland &lt;stonecypher@gmail.com&gt;"
  
@@ -2920,7 +2920,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="root_mean_square-1">root_mean_square/1</a></h3>
 <div class="spec">
-<p><tt>root_mean_square(Values::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt><br></p>
+<p><tt>root_mean_square(Values::<a href="#type-numeric_list">numeric_list()</a>) -&gt; float()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the root mean square of the values in the list.  <pre>  1&gt; sc:root_mean_square([1,2,3,4,5]).
   3.3166247903554
  
@@ -3696,6 +3696,6 @@ via Naive Bayes Likelihood.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Jan 8 2012, 22:30:15.</i></p>
+<p><i>Generated by EDoc, Jan 8 2012, 22:51:06.</i></p>
 </body>
 </html>
