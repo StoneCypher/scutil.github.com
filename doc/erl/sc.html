@@ -13,7 +13,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of the erlang portion of the scutil library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> 2.5.811
+<p><b>Version:</b> 2.5.813
 </p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
@@ -144,6 +144,10 @@ presenting the actual volume of functionality present here.  We can get the cove
 <p><tt>keylist() = [{}]</tt></p>
 <p>  All members of keylists are tuples of two-or-greater arity, and the first element is considered their key in the list.  List keys are unique; therefore <code>[{a,1},{b,1}]</code> is a keylist, but <code>[{a,1},{a,1}]</code> is not.</p>
 
+<h3 class="typedecl"><a name="type-list_of_2ary_tuples">list_of_2ary_tuples()</a></h3>
+<p><tt>list_of_2ary_tuples() = [{any(), any()}]</tt></p>
+
+
 <h3 class="typedecl"><a name="type-list_of_lists">list_of_lists()</a></h3>
 <p><tt>list_of_lists(T) = [[T]]</tt></p>
 <p>  Every member of a <code>list_of_lists(T)</code> is a <code>list(T)</code>.</p>
@@ -151,6 +155,14 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="typedecl"><a name="type-list_of_lists">list_of_lists()</a></h3>
 <p><tt>list_of_lists() = [[]]</tt></p>
 <p>  Every member of a <code>list_of_lists()</code> is a <code>list()</code>.</p>
+
+<h3 class="typedecl"><a name="type-list_of_tuples">list_of_tuples()</a></h3>
+<p><tt>list_of_tuples(T) = [{T}]</tt></p>
+<p>  Every member of a <code>list_of_lists(T)</code> is a <code>tuple(T)</code>.</p>
+
+<h3 class="typedecl"><a name="type-list_of_tuples">list_of_tuples()</a></h3>
+<p><tt>list_of_tuples() = [{}]</tt></p>
+<p>  Every member of a <code>list_of_lists()</code> is a <code>tuple()</code>.</p>
 
 <h3 class="typedecl"><a name="type-list_or_binary">list_or_binary()</a></h3>
 <p><tt>list_or_binary() = list() | binary()</tt></p>
@@ -167,6 +179,10 @@ presenting the actual volume of functionality present here.  We can get the cove
 <h3 class="typedecl"><a name="type-nybble">nybble()</a></h3>
 <p><tt>nybble() = 0..15</tt></p>
 <p>  Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.  Synonym of hexchar().</p>
+
+<h3 class="typedecl"><a name="type-pos_numeric_list">pos_numeric_list()</a></h3>
+<p><tt>pos_numeric_list() = [number()]</tt></p>
+<p>  All members of a numeric list must be number()s.  Should enforce positive-ness but don't know how without losing floats.</p>
 
 <h3 class="typedecl"><a name="type-ranking">ranking()</a></h3>
 <p><tt>ranking(T) = {Ranking::number(), Value::T}</tt></p>
@@ -308,7 +324,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#by_distance-2">by_distance/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#by_distance_raw-2">by_distance_raw/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#byte_to_hex-1">byte_to_hex/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a byte() into a hexstring().</td></tr>
-<tr><td valign="top"><a href="#caspers_jones_estimate-1">caspers_jones_estimate/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#caspers_jones_estimate-1">caspers_jones_estimate/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <a href="http://www.drdobbs.com/architecture-and-design/225701139?pgno=1">See</a></td></tr>
 <tr><td valign="top"><a href="#ceil-1">ceil/1</a></td><td>Equivalent to <a href="#ceiling-1"><tt>ceiling(X)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#ceiling-1">ceiling/1</a></td><td>Returns the ceiling (round towards positive infinity) of a float.</td></tr>
@@ -340,8 +356,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#distinct_neighbor_pairs-1">distinct_neighbor_pairs/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#distinct_neighbor_pairs-2">distinct_neighbor_pairs/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#dot_product-2">dot_product/2</a></td><td><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the dot product of two vectors (<span style="color:red">Incomplete</span> represented as numeric lists; tuples not yet supported).</td></tr>
-<tr><td valign="top"><a href="#dstat-2">dstat/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
-<tr><td valign="top"><a href="#dstat_ex-2">dstat_ex/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#dstat-2">dstat/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return descriptive statistics of a numeric list.</td></tr>
+<tr><td valign="top"><a href="#dstat_ex-2">dstat_ex/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return extended descriptive statistics of a numeric list.</td></tr>
 <tr><td valign="top"><a href="#elements-2">elements/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
 <tr><td valign="top"><a href="#elements-3">elements/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#elements-4">elements/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -695,7 +711,7 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="arithmetic_mean-1">arithmetic_mean/1</a></h3>
 <div class="spec">
-<p><tt>arithmetic_mean(InputList::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt><br></p>
+<p><tt>arithmetic_mean(InputList::<a href="#type-numeric_list">numeric_list()</a>) -&gt; float()</tt><br></p>
 </div><p>Take the arithmetic mean (often called the average) of a list of numbers. <pre>  1&gt; sc:arithmetic_mean([1,2,3,4,5]).
   3.0
  
@@ -725,14 +741,14 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="bandwidth_calc-1">bandwidth_calc/1</a></h3>
 <div class="spec">
-<p><tt>bandwidth_calc(Data) -&gt; <a href="#type-list_of_2ary_tuples">list_of_2ary_tuples()</a></tt><br></p>
+<p><tt>bandwidth_calc(Data::any()) -&gt; <a href="#type-list_of_2ary_tuples">list_of_2ary_tuples()</a></tt><br></p>
 </div><p>Equivalent to <a href="#bandwidth_calc-2"><tt>bandwidth_calc(Data, all)</tt></a>.</p>
 
 <p><b>Introduced in:</b> Version 478</p>
 
 <h3 class="function"><a name="bandwidth_calc-2">bandwidth_calc/2</a></h3>
 <div class="spec">
-<p><tt>bandwidth_calc(BitsPerSecond::Data, Scale::bw_scale | all) -&gt; <a href="#type-bw_rate">bw_rate()</a> | [<a href="#type-bw_rate">bw_rate()</a>]</tt><br></p>
+<p><tt>bandwidth_calc(Data::any(), Scale::<a href="#type-bw_scale">bw_scale()</a> | all) -&gt; <a href="#type-bw_rate">bw_rate()</a> | [<a href="#type-bw_rate">bw_rate()</a>]</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates digital line bandwidth over timescales in converted units. <pre>  1&gt;</pre>
   Also knows the shorthand notations <code>{X,meg}</code>, <code>{X,gig}</code> and <code>{X,t}</code> for input only in base-10 only. <pre>  5&gt; sc:bandwidth_calc({10,meg}, {gigabits,day}).
   {{gigabits,day},864.0}</pre>
@@ -810,7 +826,7 @@ via Naive Bayes Likelihood.</td></tr>
 <h3 class="function"><a name="caspers_jones_estimate-1">caspers_jones_estimate/1</a></h3>
 <div class="spec">
 <p><tt>caspers_jones_estimate(FunctionPoints) -&gt; any()</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></p>
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <a href="http://www.drdobbs.com/architecture-and-design/225701139?pgno=1">See</a></p>
 <p><b>Introduced in:</b> Version 478
  </p>
 
@@ -953,7 +969,7 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="combinations-2">combinations/2</a></h3>
 <div class="spec">
-<p><tt>combinations(OutputItemSize::<a href="#type-positive_integer">positive_integer()</a>, Items::list()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt><br></p>
+<p><tt>combinations(OutputItemSize::pos_integer(), Items::list()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Provides a list of every unique combination of input terms, order-ignorant; contrast <a href="#permute-2"><code>permute/2</code></a>.  Permutations are all unique combinations of a set of tokens; the 2-permutations of <code>[a,b,c]</code> for example are <code>[a,b]</code>, <code>[a,c]</code> and <code>[b,c]</code>.  Note the absence of other orderings, such as <code>[b,a]</code>, which are provided by <a href="#permute-2"><code>permute/2</code></a>.  Combinations are taken of a smaller count of tokens than the main set.  Combinations are not ordered, but this implementation happens to provide answers in the same order as the input list.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. <pre>  1&gt; sc:combinations(2, [a,b,c,d]).
   [ [a,b], [a,c], [a,d], [b,c], [b,d], [c,d] ]
  
@@ -1113,14 +1129,14 @@ via Naive Bayes Likelihood.</td></tr>
 <h3 class="function"><a name="dstat-2">dstat/2</a></h3>
 <div class="spec">
 <p><tt>dstat(NumericList, PopulationOrSample) -&gt; any()</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></p>
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return descriptive statistics of a numeric list.  nspired by J dstat from <a href="http://bbot.org/blog/archives/2011/03/17/on_being_surprised_by_a_programming_language/">bbot.org</a>.  J seems to be assuming sample for statistics.  I do not like assumptions.</p>
 <p><b>Introduced in:</b> Version 487
  </p>
 
 <h3 class="function"><a name="dstat_ex-2">dstat_ex/2</a></h3>
 <div class="spec">
 <p><tt>dstat_ex(NumericList, PopulationOrSample) -&gt; any()</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></p>
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return extended descriptive statistics of a numeric list.  nspired by J dstat from <a href="http://bbot.org/blog/archives/2011/03/17/on_being_surprised_by_a_programming_language/">bbot.org</a>.  J seems to be assuming sample for statistics.  I do not like assumptions.</p>
 <p><b>Introduced in:</b> Version 487
  </p>
 
@@ -1554,7 +1570,7 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="geometric_mean-1">geometric_mean/1</a></h3>
 <div class="spec">
-<p><tt>geometric_mean(InputList::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt><br></p>
+<p><tt>geometric_mean(InputList::<a href="#type-numeric_list">numeric_list()</a>) -&gt; float()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the geometric mean of a list of numbers. <pre>  1&gt; sc:geometric_mean([1,2,3,4,5]).
   2.6051710846973517</pre>
  
@@ -1606,7 +1622,7 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="harmonic_mean-1">harmonic_mean/1</a></h3>
 <div class="spec">
-<p><tt>harmonic_mean(InputList::<a href="#type-numericlist">numericlist()</a>) -&gt; float()</tt><br></p>
+<p><tt>harmonic_mean(InputList::<a href="#type-numeric_list">numeric_list()</a>) -&gt; float()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the harmonic mean of a list of numbers. <pre>  1&gt; sc:harmonic_mean([1,2,3,4,5]).
   2.18978102189781</pre>
  
@@ -2079,7 +2095,7 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="list_intersection-3">list_intersection/3</a></h3>
 <div class="spec">
-<p><tt>list_intersection(List1::list(), List2::list(), IsSorted::atom()) -&gt; list()</tt><br></p>
+<p><tt>list_intersection(List1::list(), List2::list(), IsSorted::sorted | unsorted) -&gt; list()</tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Efficiently computes the intersection of two lists.  The third parameter, which is optional and defaults to <code>unsorted</code>, is either the atom <code>sorted</code> or <code>unsorted</code>.  If <code>sorted</code> is used, the function will sort both inputs before proceeding, as it requires sorted lists; as such, if you already know your lists to be sorted, passing <code>unsorted</code> will save some time.  The return list will be reverse sorted. <pre>  1&gt; sc:list_intersection([1,2,3,4,5,2,3,10,15,25,30,40,45,55],[1,3,5,5,5,15,20,30,35,40,50,55]).
   [55,40,30,15,5,3,1]
  
@@ -2090,7 +2106,7 @@ via Naive Bayes Likelihood.</td></tr>
 
 <h3 class="function"><a name="list_product-1">list_product/1</a></h3>
 <div class="spec">
-<p><tt>list_product(A::<a href="#type-numericlist">numericlist()</a>) -&gt; number()</tt><br></p>
+<p><tt>list_product(A::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Takes the product of all numbers in the list.  Offered mostly to make dependant code clearer. <pre>  1&gt; sc:list_product([1,2,5.4]).
   10.8</pre>
  </p>
@@ -2144,7 +2160,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="median-1">median/1</a></h3>
 <div class="spec">
-<p><tt>median(List::<a href="#type-numericlist">numericlist()</a>) -&gt; number()</tt><br></p>
+<p><tt>median(List::<a href="#type-numeric_list">numeric_list()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the median (central) value of a list.  Sorts the input list, then finds and returns the middle value.  <pre>  1&gt; sc:median([1,2,999]).
   2</pre>
  </p>
@@ -2167,7 +2183,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="member_sets-2">member_sets/2</a></h3>
 <div class="spec">
-<p><tt>member_sets(Memberships::<a href="#type-list_of_lists">list_of_lists()</a>, AllowAbsence::atom()) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt><br></p>
+<p><tt>member_sets(Memberships::<a href="#type-list_of_lists">list_of_lists()</a>, AllowAbsence::allow_absence | no_absence) -&gt; <a href="#type-list_of_lists">list_of_lists()</a></tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> For a list of memberships, return every possible combination of one representative member from each list.
   The parameter <code>AllowAbsence</code> controls whether memberships may be unrepresented; if unrepresented memberships are possible, then
   one possible representation becomes the empty list. <pre>  1&gt; sc:member_sets([ [a,b],[1,2,3],[i,ii,iii] ], no_absence).
@@ -2397,7 +2413,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="naive_bayes_likelihood-4">naive_bayes_likelihood/4</a></h3>
 <div class="spec">
-<p><tt>naive_bayes_likelihood(FeatureEvident::non_neg_integer(), FeatureTotal::<a href="#type-positive_integer">positive_integer()</a>, NonFeatureEvident::non_neg_integer(), NonFeatureTotal::<a href="#type-positive_integer">positive_integer()</a>) -&gt; Result::list()</tt><br></p>
+<p><tt>naive_bayes_likelihood(FeatureEvident::non_neg_integer(), FeatureTotal::pos_integer(), NonFeatureEvident::non_neg_integer(), NonFeatureTotal::pos_integer()) -&gt; Result::list()</tt><br></p>
 </div><p>Equivalent to <a href="#naive_bayes_likelihood-5"><tt>naive_bayes_likelihood(FeatureEvident, FeatureTotal,
 		       NonFeatureEvident, NonFeatureTotal, simple)</tt></a>.</p>
 
@@ -2405,7 +2421,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 
 <h3 class="function"><a name="naive_bayes_likelihood-5">naive_bayes_likelihood/5</a></h3>
 <div class="spec">
-<p><tt>naive_bayes_likelihood(FeatureEvident::non_neg_integer(), FeatureTotal::<a href="#type-positive_integer">positive_integer()</a>, NonFeatureEvident::non_neg_integer(), NonFeatureTotal::<a href="#type-positive_integer">positive_integer()</a>, WhetherIsSimple::simple | full) -&gt; Result::list()</tt><br></p>
+<p><tt>naive_bayes_likelihood(FeatureEvident::non_neg_integer(), FeatureTotal::pos_integer(), NonFeatureEvident::non_neg_integer(), NonFeatureTotal::pos_integer(), WhetherIsSimple::simple | full) -&gt; Result::list()</tt><br></p>
 </div><p><p><span style="color:orange;font-style:italic">Stoch untested</span> Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event  
 via Naive Bayes Likelihood.</p>
  
@@ -2635,7 +2651,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="permute-2">permute/2</a></h3>
 <div class="spec">
-<p><tt>permute(List::list(), Depth::<a href="#type-positive_integer">positive_integer()</a>) -&gt; list()</tt><br></p>
+<p><tt>permute(List::list(), Depth::pos_integer()) -&gt; list()</tt><br></p>
 </div><p><span style="color:orange;font-style:italic">Stoch untested</span> Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast <a href="#combinations-2"><code>combinations/2</code></a>.  Permutations are all valid orderings of a set of tokens; the permutations of <code>[a,b]</code> for example are <code>[a,b]</code> and <code>[b,a]</code>.  Depth limitation means the permutations of a smaller count of tokens from the main set; the 2-limited permutations of <code>[a,b,c]</code> for example are <code>[a,b]</code>, <code>[a,c]</code>, <code>[b,a]</code>, <code>[b,c]</code>, <code>[c,a]</code> and <code>[c,b]</code>.  Permutations are not ordered.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. <pre>  1&gt; sc:permute(["dave","kate","pat"]).
   [ { "pat",  "kate", "dave" },
     { "kate", "pat",  "dave" },
@@ -3070,13 +3086,13 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="shared_keys-2">shared_keys/2</a></h3>
 <div class="spec">
-<p><tt>shared_keys(TupleList::<a href="#type-sorted_keylist">sorted_keylist()</a>, Presorted::presorted) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt><br></p>
+<p><tt>shared_keys(TupleList::<a href="#type-sorted_keylist">sorted_keylist()</a>, B::presorted) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt><br></p>
 </div><p>Equivalent to <a href="#shared_keys-1"><tt>shared_keys(lists:zip(lists:sort(A), lists:sort(B)))</tt></a>.</p>
 <p><span style="color:orange;font-style:italic">Stoch untested</span> Equivalent to <a href="#shared_keys-1"><code>shared_keys/1</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</p>
 
 <h3 class="function"><a name="shared_keys-3">shared_keys/3</a></h3>
 <div class="spec">
-<p><tt>shared_keys(A::<a href="#type-sorted_keylist">sorted_keylist()</a>, B::<a href="#type-sorted_keylist">sorted_keylist()</a>, Presorted::presorted) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt><br></p>
+<p><tt>shared_keys(A::<a href="#type-sorted_keylist">sorted_keylist()</a>, B::<a href="#type-sorted_keylist">sorted_keylist()</a>, X3::presorted) -&gt; <a href="#type-sorted_keylist">sorted_keylist()</a></tt><br></p>
 </div><p>Equivalent to <a href="#shared_keys-2"><tt>shared_keys(lists:sort(A), lists:sort(B))</tt></a>.</p>
 <p><span style="color:orange;font-style:italic">Stoch untested</span> Equivalent to <a href="#shared_keys-2"><code>shared_keys/2</code></a>, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.</p>
 
@@ -3592,7 +3608,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a></h3>
 <div class="spec">
-<p><tt>weighted_arithmetic_mean(InputList::<a href="#type-weightlist">weightlist()</a>) -&gt; float()</tt><br></p>
+<p><tt>weighted_arithmetic_mean(InputList::<a href="#type-weight_list">weight_list()</a>) -&gt; float()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the weighted arithmetic mean of the input values. <pre>  1&gt; sc:weighted_arithmetic_mean([ {8,1}, {3,4}, {16,1} ]).
   6.0</pre>
  </p>
@@ -3631,7 +3647,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="zipf_estimate_list-1">zipf_estimate_list/1</a></h3>
 <div class="spec">
-<p><tt>zipf_estimate_list(PosNumericList::<a href="#type-positive_numeric_list">positive_numeric_list()</a>) -&gt; <a href="#type-positive_numeric_list">positive_numeric_list()</a></tt><br></p>
+<p><tt>zipf_estimate_list(PosNumericList::<a href="#type-pos_numeric_list">pos_numeric_list()</a>) -&gt; <a href="#type-pos_numeric_list">pos_numeric_list()</a></tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Estimates the zipf baseline from each number in a numeric list. <pre>  1&gt; sc:zipf_estimate_list([ 120, 60, 40, 30, 24, 20 ]).
   [120, 120, 120, 120, 120, 120]
  
@@ -3645,7 +3661,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="zipf_nearness-1">zipf_nearness/1</a></h3>
 <div class="spec">
-<p><tt>zipf_nearness(PosNumericList::<a href="#type-positive_numeric_list">positive_numeric_list()</a>) -&gt; number()</tt><br></p>
+<p><tt>zipf_nearness(PosNumericList::<a href="#type-pos_numeric_list">pos_numeric_list()</a>) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> todo. <pre>  1&gt; sc:zipf_nearness([ 120, 60, 40, 30, 24, 20 ]).
   [[ {strength,1.0}, {center,120.0} ],
    [ {strength,1.0}, {center,120.0} ],
@@ -3672,7 +3688,7 @@ via Naive Bayes Likelihood.</p>
 
 <h3 class="function"><a name="zipf_position_estimate-2">zipf_position_estimate/2</a></h3>
 <div class="spec">
-<p><tt>zipf_position_estimate(Score::number(), Rank::<a href="#type-positive_integer">positive_integer()</a>) -&gt; number()</tt><br></p>
+<p><tt>zipf_position_estimate(Score::number(), Rank::pos_integer()) -&gt; number()</tt><br></p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Estimates the zipf baseline from a score and a rank position. <pre>  1&gt; sc:zipf_position_estimate(120, 3).
   360</pre>
  </p>
@@ -3680,6 +3696,6 @@ via Naive Bayes Likelihood.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Jan 8 2012, 21:59:17.</i></p>
+<p><i>Generated by EDoc, Jan 8 2012, 22:25:07.</i></p>
 </body>
 </html>

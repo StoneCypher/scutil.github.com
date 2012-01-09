@@ -535,6 +535,9 @@
 
     list_of_lists/0,
       list_of_lists/1,
+      list_of_tuples/0,
+      list_of_tuples/1,
+      list_of_2ary_tuples/0,
 
     filter_function/0,
       sanitizer/0,
@@ -566,6 +569,7 @@
 
     string_list/0,
       numeric_list/0,
+      pos_numeric_list/0,
 
     numeric_tuple/0,
 
@@ -608,6 +612,9 @@
 
 -type list_of_lists()          :: [[]].                                  %% Every member of a `list_of_lists()' is a `list()'.
 -type list_of_lists(T)         :: [[ T ]].                               %% Every member of a `list_of_lists(T)' is a `list(T)'.
+-type list_of_tuples()         :: [{}].                                  %% Every member of a `list_of_lists()' is a `tuple()'.
+-type list_of_tuples(T)        :: [{ T }].                               %% Every member of a `list_of_lists(T)' is a `tuple(T)'.
+-type list_of_2ary_tuples()    :: [ {any(),any()} ].
 
 -type nybble()                 :: 0..15.                                 %% Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.  Synonym of hexchar().
 -type hexchar()                :: 0..15.                                 %% Integer must be in the range $0 - $9, the range $a - $f, or the range $A - $F, all inclusive, for inputs; outputs will always use lower case.  Synonym of nybble().
@@ -652,6 +659,7 @@
 -type string_list()            :: [[]].                                  %% Every member of a stringlist() is a string().
 -type io_list()                :: [ byte() ].                            %% Every list member of an {@type io_list()} must be a {@type byte()}.
 -type numeric_list()           :: [ number() ].                          %% All members of a numeric list must be number()s.
+-type pos_numeric_list()       :: [ number() ].                          %% All members of a numeric list must be number()s.  Should enforce positive-ness but don't know how without losing floats.
 -type numeric_tuple()          :: tuple(number()).                       %% Every member of a {@type numeric_tuple()} must be a {@type number()}.
 
 -type list_or_binary()         :: list() | binary().                     %% It's either a {@type list()} or a {@type binary()}.  Duh.
@@ -1085,8 +1093,6 @@ member_sets(Memberships) ->
 
 
 
-%% @spec member_sets(Memberships::list_of_lists(), AllowAbsence::atom()) -> list_of_lists()
-%%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> For a list of memberships, return every possible combination of one representative member from each list.
 %% The parameter `AllowAbsence' controls whether memberships may be unrepresented; if unrepresented memberships are possible, then
 %% one possible representation becomes the empty list. ```1> sc:member_sets([ [a,b],[1,2,3],[i,ii,iii] ], no_absence).
@@ -1133,6 +1139,8 @@ member_sets(Memberships) ->
 %%  "It was Ms. Scarlett in the kitchen with the lead pipe!"]'''
 %%
 %% @since Version 466
+
+-spec member_sets(Memberships::list_of_lists(), AllowAbsence::allow_absence|no_absence) -> list_of_lists().
 
 member_sets([], _) ->
 
@@ -1196,8 +1204,6 @@ list_intersection(List1, List2) ->
 
 
 
-%% @spec list_intersection(List1::list(), List2::list(), IsSorted::atom()) -> list()
-%%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Efficiently computes the intersection of two lists.  The third parameter, which is optional and defaults to `unsorted', is either the atom `sorted' or `unsorted'.  If `sorted' is used, the function will sort both inputs before proceeding, as it requires sorted lists; as such, if you already know your lists to be sorted, passing `unsorted' will save some time.  The return list will be reverse sorted. ```1> sc:list_intersection([1,2,3,4,5,2,3,10,15,25,30,40,45,55],[1,3,5,5,5,15,20,30,35,40,50,55]).
 %% [55,40,30,15,5,3,1]
 %%
@@ -1205,6 +1211,8 @@ list_intersection(List1, List2) ->
 %% []''' {@section Thanks} to Ayrnieu for catching a defect in the initial implementation.
 %%
 %% @since Version 471
+
+-spec list_intersection(List1::list(), List2::list(), IsSorted::sorted|unsorted) -> list().
 
 list_intersection(List1, List2, unsorted) ->
 
@@ -1260,7 +1268,7 @@ intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work)
 
 
 
-intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work) 
+intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work)
 
     when L1Head > L2Head ->
 
@@ -1270,8 +1278,9 @@ intersect_walk( [L1Head|L1Rem], [L2Head|L2Rem], Work)
 
 
 
-%% @spec (Ls::list()) -> list_of_tuples()
 %% @equiv zip_n(Ls, to_tuple)
+
+-spec zip_n(Ls::list()) -> list_of_tuples().
 
 zip_n(Ls) ->
 
@@ -1281,8 +1290,6 @@ zip_n(Ls) ->
 
 
 
-%% @spec zip_n(Ls::list(), ResultType::atom()) -> list_of_tuples()
-%%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Computes a zip on any sized group of lists, rather than just two or three as offered by the lists module. ```1> sc:zip_n([ [1,2,3], [a,b,c], [i,ii,iii] ]).
 %% [{1,a,i},{2,b,ii},{3,c,iii}]
 %%
@@ -1303,6 +1310,8 @@ zip_n(Ls) ->
 %% {@section Thanks} Thanks to Vladimir Sessikov for contributing this to and thus allowing conscription from <a href="http://www.erlang.org/ml-archive/erlang-questions/200207/msg00066.html">the mailing list</a>.
 %%
 %% @since Version 472
+
+-spec zip_n(Ls::list(), ResultType::atom()) -> list_of_tuples().
 
 zip_n(Ls, to_tuple) ->
 
@@ -1369,8 +1378,10 @@ zip_n_foldn(Fun, Acc0, Ls, Ret) ->
         [ lists:foldl(Fun, Acc0, [hd(L) || L <- Ls] ) | Ret ]
     ).
 
-%% @spec combinations(OutputItemSize::positive_integer(), Items::list()) -> list_of_lists()
-%%
+
+
+
+
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Provides a list of every unique combination of input terms, order-ignorant; contrast {@link permute/2}.  Permutations are all unique combinations of a set of tokens; the 2-permutations of `[a,b,c]' for example are `[a,b]', `[a,c]' and `[b,c]'.  Note the absence of other orderings, such as `[b,a]', which are provided by {@link permute/2}.  Combinations are taken of a smaller count of tokens than the main set.  Combinations are not ordered, but this implementation happens to provide answers in the same order as the input list.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> sc:combinations(2, [a,b,c,d]).
 %% [ [a,b], [a,c], [a,d], [b,c], [b,d], [c,d] ]
 %%
@@ -1386,6 +1397,8 @@ zip_n_foldn(Fun, Acc0, Ls, Ret) ->
 %%   [ smart,  lucky  ] ]''' {@section Thanks} to Alisdair Sullivan for this implementation, which has been slightly but not significantly modified since receipt.
 %%
 %% @since Version 473
+
+-spec combinations(OutputItemSize::pos_integer(), Items::list()) -> list_of_lists().
 
 combinations(1, Items)
 
@@ -1430,8 +1443,6 @@ combinations(N, Items)
 
 
 
-%% @spec expand_labels([{Label::any(),List::list()}]) -> list_of_lists()
-%%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Expands a series of labels over lists to create a cartesian 2-ary tuple expansion.  ```1> sc:expand_labels([{villain,[lex_luthor,sinistar,gargamel]}]).
 %% [{villain,lex_luthor},{villain,sinistar},{villain,gargamel}]
 %%
@@ -1445,8 +1456,10 @@ combinations(N, Items)
 %%
 %% @since Version 474
 
-expand_labels(List) 
- 
+-spec expand_labels( [ {Label::any(), List::list()} ] ) -> list_of_lists().
+
+expand_labels(List)
+
     when is_list(List) ->
 
     lists:flatten( [ expand_label(X) || X <- List ] ).
@@ -1457,7 +1470,7 @@ expand_labels(List)
 
 %% @private
 
-expand_label({Label,List}) 
+expand_label({Label,List})
 
     when is_list(List) ->
 
@@ -1477,8 +1490,6 @@ permute(List) ->
 
 
 
-%% @spec permute(List::list(), Depth::positive_integer()) -> list()
-%%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast {@link combinations/2}.  Permutations are all valid orderings of a set of tokens; the permutations of `[a,b]' for example are `[a,b]' and `[b,a]'.  Depth limitation means the permutations of a smaller count of tokens from the main set; the 2-limited permutations of `[a,b,c]' for example are `[a,b]', `[a,c]', `[b,a]', `[b,c]', `[c,a]' and `[c,b]'.  Permutations are not ordered.  Mixed-type lists are safe; items are shallow evaluated, meaning that sublists within the list are treated as single elements, and will neither be rearranged nor will have elements selected from within them. ```1> sc:permute(["dave","kate","pat"]).
 %% [ { "pat",  "kate", "dave" },
 %%   { "kate", "pat",  "dave" },
@@ -1502,6 +1513,8 @@ permute(List) ->
 %%   { smart,  lucky  } ]'''
 %%
 %% @since Version 474
+
+-spec permute(List::list(), Depth::pos_integer()) -> list().
 
 permute(List, 1)
 
@@ -1529,8 +1542,6 @@ permute(List, Depth)
 
 
 
-%% @spec shared_keys(TupleList::sorted_keylist()) -> sorted_keylist()
-%%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Create sorted list X of 3-ary tuples {K,Ai,Bi} from sorted lists A, B of 2ary {K,Ai}/{K,Bi} tuples, where key K appears in both A and B. ```1> sc:shared_keys([{1,a},{2,a},{3,a}],[{1,b},{3,b},{4,b}]).
 %% [{1,a,b},{3,a,b}]
 %%
@@ -1538,6 +1549,8 @@ permute(List, Depth)
 %% []'''
 %%
 %% @since Version 475
+
+-spec shared_keys(TupleList::sorted_keylist()) -> sorted_keylist().
 
 shared_keys(TupleList)
 
@@ -1551,8 +1564,9 @@ shared_keys(TupleList)
 
 
 %% @equiv shared_keys(lists:zip(lists:sort(A), lists:sort(B)))
-%% @spec shared_keys(TupleList::sorted_keylist(), Presorted::presorted) -> sorted_keylist()
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Equivalent to {@link shared_keys/1}, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.
+
+-spec shared_keys(TupleList::sorted_keylist(), presorted) -> sorted_keylist().
 
 shared_keys(TupleList, presorted)
 
@@ -1579,8 +1593,9 @@ shared_keys(A,B)
 
 
 %% @equiv shared_keys(lists:sort(A),lists:sort(B))
-%% @spec shared_keys(A::sorted_keylist(), B::sorted_keylist(), Presorted::presorted) -> sorted_keylist()
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Equivalent to {@link shared_keys/2}, but skips sorting the lists (and thus requires pre-sorted lists), which may save significant work repetition.
+
+-spec shared_keys(A::sorted_keylist(), B::sorted_keylist(), presorted) -> sorted_keylist().
 
 shared_keys(A,B,presorted)
 
@@ -1592,6 +1607,8 @@ shared_keys(A,B,presorted)
 
 
 
+
+%% @private
 
 both_lists_next_item([], _, Work) ->
 
@@ -1611,6 +1628,8 @@ both_lists_next_item(_, [], Work) ->
 
 
 
+%% @private
+
 both_lists_next_item([ {K,Ai} | Ar], [ {K,Bi} | Br], Work) ->
 
     both_lists_next_item(Ar, Br, [{K,Ai,Bi}]++Work);
@@ -1618,6 +1637,8 @@ both_lists_next_item([ {K,Ai} | Ar], [ {K,Bi} | Br], Work) ->
 
 
 
+
+%% @private
 
 both_lists_next_item(IA, IB, Work) ->
 
@@ -1638,12 +1659,12 @@ both_lists_next_item(IA, IB, Work) ->
 
 
 
-%% @spec list_product(A::numericlist()) -> number()
-%%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Takes the product of all numbers in the list.  Offered mostly to make dependant code clearer. ```1> sc:list_product([1,2,5.4]).
 %% 10.8'''
 %%
 %% @since Version 476
+
+-spec list_product(A::numeric_list()) -> number().
 
 list_product(List)
 
@@ -1671,8 +1692,6 @@ list_product([Head|Tail], Counter) ->
 
 
 
-%% @spec sanitize_tokens(InputList::list(), Allowed::sanitizer()) -> list()
-%%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Remove unacceptable elements from an input list, as defined by another list or a filter function.  Common reasons for sanitization include reducing arbitrary or bulk data to key format (such as using an original filename and new size to generate a new filename or database key) and removing malformed items from a list before processing. ```1> sc:sanitize_tokens("ae0z4nb'wc-04bn ze0e 0;4ci ;e0o5rn;", "ace").
 %% "aeceece"
 %%
@@ -1701,6 +1720,8 @@ list_product([Head|Tail], Counter) ->
 %%
 %% @since Version 477
 
+-spec sanitize_tokens(InputList::list(), Allowed::sanitizer()) -> list().
+
 sanitize_tokens(List, Allowed)
 
     when is_list(List),
@@ -1723,10 +1744,11 @@ sanitize_tokens(List, Allowed)
 
 
 
-%% @spec  bandwidth_calc(Data) -> list_of_2ary_tuples()
 %% @equiv bandwidth_calc(Data,all)
 %%
 %% @since Version 478
+
+-spec bandwidth_calc(Data::any()) -> list_of_2ary_tuples().
 
 bandwidth_calc(Data) ->
 
@@ -1736,8 +1758,6 @@ bandwidth_calc(Data) ->
 
 
 
-%% @spec bandwidth_calc(Data, Scale::bw_scale|all) -> bw_rate()|[bw_rate()]
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates digital line bandwidth over timescales in converted units. ```1>'''
 %% Also knows the shorthand notations `{X,meg}', `{X,gig}' and `{X,t}' for input only in base-10 only. ```5> sc:bandwidth_calc({10,meg}, {gigabits,day}).
 %% {{gigabits,day},864.0}'''
@@ -1745,6 +1765,8 @@ bandwidth_calc(Data) ->
 %% @since Version 478
 %%
 %% @todo That return type specification is wrong.  It needs to self-recurse.  Figure out how to at-spec that later.
+
+-spec bandwidth_calc(Data::any(), Scale::bw_scale()|all) -> bw_rate() | [ bw_rate() ].
 
 bandwidth_calc({bits_per_second, BitsPerSecond}, To) ->
 
@@ -1786,7 +1808,7 @@ bandwidth_calc({MbpS, t}, To) ->
 
 
 
-bandwidth_calc(BitsPerSecond, all) 
+bandwidth_calc(BitsPerSecond, all)
 
     when is_integer(BitsPerSecond) ->
 
@@ -1829,6 +1851,8 @@ bandwidth_calc(BitsPerSecond, {Unit, Timeframe})
 
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
 
+% ##todo comeback
+
 scale_i(X,X)            -> 1;
 
 scale_i(inches, feet)   -> 12;
@@ -1851,11 +1875,9 @@ scale_i(bits, exbibits) -> 1024*1024*1024*1024*1024*1024.
 
 
 
-% http://www.drdobbs.com/architecture-and-design/225701139?pgno=1
-
 %% @since Version 478
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <a href="http://www.drdobbs.com/architecture-and-design/225701139?pgno=1">See</a>
 
 caspers_jones_estimate(FunctionPoints)
 
@@ -1873,11 +1895,11 @@ caspers_jones_estimate(FunctionPoints)
 
 
 
-%% @spec naive_bayes_likelihood(FeatureEvident::non_neg_integer(), FeatureTotal::positive_integer(), NonFeatureEvident::non_neg_integer(), NonFeatureTotal::positive_integer()) -> Result::list()
-%%
 %% @equiv naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatureTotal, simple)
 %%
 %% @since Version 772
+
+-spec naive_bayes_likelihood(FeatureEvident::non_neg_integer(), FeatureTotal::pos_integer(), NonFeatureEvident::non_neg_integer(), NonFeatureTotal::pos_integer()) -> Result::list().
 
 naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatureTotal) ->
 
@@ -1887,8 +1909,6 @@ naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatu
 
 
 
-%% @spec naive_bayes_likelihood(FeatureEvident::non_neg_integer(), FeatureTotal::positive_integer(), NonFeatureEvident::non_neg_integer(), NonFeatureTotal::positive_integer(), WhetherIsSimple::simple|full) -> Result::list()
-%%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the contributing difference probability, feature likelihood and non-feature likelihood of an event
 %% via Naive Bayes Likelihood.
 %%
@@ -1907,6 +1927,8 @@ naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatu
 %% Unit and doc tested.
 %%
 %% @since Version 772
+
+-spec naive_bayes_likelihood(FeatureEvident::non_neg_integer(), FeatureTotal::pos_integer(), NonFeatureEvident::non_neg_integer(), NonFeatureTotal::pos_integer(), WhetherIsSimple::simple|full) -> Result::list().
 
 naive_bayes_likelihood(FeatureEvident, _FeatureTotal, NonFeatureEvident, _NonFeatureTotal, simple)
 
@@ -1950,8 +1972,6 @@ naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatu
 
 
 
-%% @spec range_scale(NumList::numeric_list()) -> number()
-%%
 %% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Get the scale of a same-sign numeric range.  Gives nonsense results for non-numeric lists, or for lists which have both positive and negative members.  For a numeric list [4,5,6,12], the scale of the range 4..12 is 3:1, which is represented as 3.0 . ```1> sc:range_scale([3, 4, 5, 6]).
 %% 2.0
 %%
@@ -1974,6 +1994,8 @@ naive_bayes_likelihood(FeatureEvident, FeatureTotal, NonFeatureEvident, NonFeatu
 %%
 %% @since Version 479
 
+-spec range_scale(NumList::numeric_list()) -> number().
+
 range_scale(Nums)
 
     when is_list(Nums) ->
@@ -1985,12 +2007,12 @@ range_scale(Nums)
 
 
 
-%% @spec zipf_position_estimate(Score::number(), Rank::positive_integer()) -> number()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Estimates the zipf baseline from a score and a rank position. ```1> sc:zipf_position_estimate(120, 3).
 %% 360'''
 %%
 %% @since Version 480
+
+-spec zipf_position_estimate(Score::number(), Rank::pos_integer()) -> number().
 
 zipf_position_estimate(Score, Rank) ->
 
@@ -2000,8 +2022,6 @@ zipf_position_estimate(Score, Rank) ->
 
 
 
-%% @spec zipf_estimate_list(PosNumericList::positive_numeric_list()) -> positive_numeric_list()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Estimates the zipf baseline from each number in a numeric list. ```1> sc:zipf_estimate_list([ 120, 60, 40, 30, 24, 20 ]).
 %% [120, 120, 120, 120, 120, 120]
 %%
@@ -2013,6 +2033,8 @@ zipf_position_estimate(Score, Rank) ->
 %%
 %% @since Version 480
 
+-spec zipf_estimate_list(PosNumericList::pos_numeric_list()) -> pos_numeric_list().
+
 zipf_estimate_list(PosNumericList) ->
 
     [ zipf_position_estimate(Li, I) || {Li,I} <- lists:zip(PosNumericList, lists:seq(1, length(PosNumericList)) ) ].
@@ -2021,8 +2043,6 @@ zipf_estimate_list(PosNumericList) ->
 
 
 
-%% @spec zipf_nearness(PosNumericList::positive_numeric_list()) -> number()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> todo. ```1> sc:zipf_nearness([ 120, 60, 40, 30, 24, 20 ]).
 %% [[ {strength,1.0}, {center,120.0} ],
 %%  [ {strength,1.0}, {center,120.0} ],
@@ -2046,6 +2066,8 @@ zipf_estimate_list(PosNumericList) ->
 %%  [{strength, 1.0},                {center,740.0}]]'''
 %%
 %% @since Version 480
+
+-spec zipf_nearness(PosNumericList::pos_numeric_list()) -> number().
 
 zipf_nearness(PosNumericList) ->
 
@@ -2075,8 +2097,6 @@ zipf_nearness_walk_strengths([_|Rem]=ZD, Work) ->
 
 
 
-%% @spec arithmetic_mean(InputList::numericlist()) -> float()
-%%
 %% @doc Take the arithmetic mean (often called the average) of a list of numbers. ```1> sc:arithmetic_mean([1,2,3,4,5]).
 %% 3.0
 %%
@@ -2102,6 +2122,8 @@ zipf_nearness_walk_strengths([_|Rem]=ZD, Work) ->
 %%
 %% @since Version 481
 
+-spec arithmetic_mean(InputList::numeric_list()) -> float().
+
 arithmetic_mean([]) ->
 
     0.0;
@@ -2120,8 +2142,6 @@ arithmetic_mean(List)
 
 
 
-%% @spec geometric_mean(InputList::numericlist()) -> float()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the geometric mean of a list of numbers. ```1> sc:geometric_mean([1,2,3,4,5]).
 %% 2.6051710846973517'''
 %%
@@ -2138,6 +2158,8 @@ arithmetic_mean(List)
 %% @see gmean_vector_normal/1
 %%
 %% @since Version 482
+
+-spec geometric_mean(InputList::numeric_list()) -> float().
 
 geometric_mean([]) ->
 
@@ -2157,8 +2179,6 @@ geometric_mean(List)
 
 
 
-%% @spec harmonic_mean(InputList::numericlist()) -> float()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the harmonic mean of a list of numbers. ```1> sc:harmonic_mean([1,2,3,4,5]).
 %% 2.18978102189781'''
 %%
@@ -2173,6 +2193,8 @@ geometric_mean(List)
 %% @see hmean_vector_normal/1
 %%
 %% @since Version 483
+
+-spec harmonic_mean(InputList::numeric_list()) -> float().
 
 harmonic_mean([]) ->
 
@@ -2192,8 +2214,6 @@ harmonic_mean(List)
 
 
 
-%% @spec weighted_arithmetic_mean(InputList::weightlist()) -> float()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the weighted arithmetic mean of the input values. ```1> sc:weighted_arithmetic_mean([ {8,1}, {3,4}, {16,1} ]).
 %% 6.0'''
 %%
@@ -2201,6 +2221,8 @@ harmonic_mean(List)
 %% @see amean_vector_normal/1
 %%
 %% @since Version 484
+
+-spec weighted_arithmetic_mean(InputList::weight_list()) -> float().
 
 weighted_arithmetic_mean(List)
 
@@ -2228,14 +2250,11 @@ weighted_arithmetic_mean( [{V,W} | Tail], Num, Denom) ->
 
 
 
-% inspired by J dstat from some blog, http://bbot.org/blog/archives/2011/03/17/on_being_surprised_by_a_programming_language/
-% herp derp
-
-% J seems to be assuming sample for statistics.  I do not like assumptions.
-
 %% @since Version 487
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return descriptive statistics of a numeric list.  nspired by J dstat from <a href="http://bbot.org/blog/archives/2011/03/17/on_being_surprised_by_a_programming_language/">bbot.org</a>.  J seems to be assuming sample for statistics.  I do not like assumptions.
+
+% ##todo comeback code sample
 
 dstat(NumericList, PopulationOrSample) ->
 
@@ -2255,16 +2274,11 @@ dstat(NumericList, PopulationOrSample) ->
 
 
 
-% inspired by J dstat from some blog, http://bbot.org/blog/archives/2011/03/17/on_being_surprised_by_a_programming_language/
-% herp derp
-
-% J seems to be assuming sample for statistics.  I do not like assumptions.
-
-% moar todo comeback
-
 %% @since Version 487
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return extended descriptive statistics of a numeric list.  nspired by J dstat from <a href="http://bbot.org/blog/archives/2011/03/17/on_being_surprised_by_a_programming_language/">bbot.org</a>.  J seems to be assuming sample for statistics.  I do not like assumptions.
+
+% ##todo comeback code sample
 
 dstat_ex(NumericList, PopulationOrSample) ->
 
@@ -2287,8 +2301,6 @@ dstat_ex(NumericList, PopulationOrSample) ->
 
 
 
-%% @spec median(List::numericlist()) -> number()
-%%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the median (central) value of a list.  Sorts the input list, then finds and returns the middle value.  ```1> sc:median([1,2,999]).
 %% 2'''
 %%
@@ -2296,6 +2308,8 @@ dstat_ex(NumericList, PopulationOrSample) ->
 %% @see mode/1
 %%
 %% @since Version 488
+
+-spec median(List::numeric_list()) -> number().
 
 median(List)
 
