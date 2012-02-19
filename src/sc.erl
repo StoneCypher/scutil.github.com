@@ -192,6 +192,9 @@
     now_str_utc24/0,
     segment_size/1,
 
+    unique_send_receive/3,
+      unique_receive_respond/1,
+
     naive_bayes_likelihood/4,
       naive_bayes_likelihood/5,
 
@@ -9679,3 +9682,43 @@ segment_size(List) when is_list(List) ->
 
 
 
+%% @since Version 825
+
+-spec unique_send_receive(ToWhom::pid()|atom(), What::any(), HowLong::non_neg_integer()|infinity) -> { got, Result::any() } | timeout.
+
+unique_send_receive(ToWhom, Query, HowLong) ->
+
+    R = make_ref(),
+    ToWhom ! { match_return, self(), R, Query },
+
+    receive
+
+        { match_returned, R, Response } ->
+            { got, Response }
+
+    after
+
+        HowLong ->
+            timeout
+
+    end.
+
+
+
+
+
+%% @since Version 825
+
+-spec unique_receive_respond(RespondFun::function()) -> responded | nothing_there.
+
+unique_receive_respond(RespondFun) ->
+
+    receive
+
+        { match_return, Sender, R, Query } when is_reference(R) ->
+            Sender ! { match_returned, R, RespondFun(Query) }
+
+    after
+        0 -> nothing_there
+
+    end.
