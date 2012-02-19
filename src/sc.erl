@@ -190,6 +190,7 @@
     has_bit/2,
     count_bits/1,
     now_str_utc24/0,
+    segment_size/1,
 
     naive_bayes_likelihood/4,
       naive_bayes_likelihood/5,
@@ -810,7 +811,7 @@ test([verbose]=_Style) ->
 
 
 
-%% @doc Returns the lowest and highest values in a list of one or more member in the form `{Lo,Hi}'.  Undefined over the empty list.  Mixed-type safe; sorts according to type order rules.  ```1> sc:extrema([1,2,3,4]).
+%% @doc <span style="color: green; font-weight: bold;">Tested</span> Returns the lowest and highest values in a list of one or more member in the form `{Lo,Hi}'.  Undefined over the empty list.  Mixed-type safe; sorts according to type order rules.  ```1> sc:extrema([1,2,3,4]).
 %% {1,4}
 %%
 %% 2> sc:extrema([1,2,3,a,b,c]).
@@ -853,7 +854,7 @@ extrema([First | _] = List)
 
 
 
-%% @doc Iterates a list of `{Count,Term}', producing a list of `[Term,Term,...]'.  ```1> sc:key_duplicate([ {3,bork} ]).
+%% @doc <span style="color: green; font-weight: bold;">Tested</span> Iterates a list of `{Count,Term}', producing a list of `[Term,Term,...]'.  ```1> sc:key_duplicate([ {3,bork} ]).
 %% [bork,bork,bork]
 %%
 %% 2> sc:key_duplicate([ {3,sunday}, {2,monster}, {2,truck}, {1,'MADNESS'} ]).
@@ -873,7 +874,7 @@ key_duplicate(KeyList) ->
 
 
 
-%% @doc Rotates the front `Distance' elements of a list to the back, in order.  Negative distances rotate the back towards the front.  Distances over the length of
+%% @doc <span style="color: green; font-weight: bold;">Tested</span> Rotates the front `Distance' elements of a list to the back, in order.  Negative distances rotate the back towards the front.  Distances over the length of
 %% the list wrap in modulus.  ```1> sc:rotate_list(2, [1,2,3,4,5,6,7,8]).
 %% [3,4,5,6,7,8,1,2]
 %%
@@ -944,7 +945,7 @@ rotate_list(By, List) ->
 
 
 
-%% @doc <span style="color:orange;font-style:italic">Stoch untested</span> Returns the index of the first instance of `Item' in the `List', or `undefined' if `Item' is not present.  ```1> sc:index_of_first(c, [a,b,c,d,e]).
+%% @doc <span style="color: green; font-weight: bold;">Tested</span> Returns the index of the first instance of `Item' in the `List', or `undefined' if `Item' is not present.  ```1> sc:index_of_first(c, [a,b,c,d,e]).
 %% 3
 %%
 %% 2> sc:index_of_first(j, [a,b,c,d,e]).
@@ -2102,7 +2103,7 @@ zipf_nearness_walk_strengths([_|Rem]=ZD, Work) ->
 
 
 
-%% @doc Take the arithmetic mean (often called the average) of a list of numbers. ```1> sc:arithmetic_mean([1,2,3,4,5]).
+%% @doc <span style="color: green; font-weight: bold;">Tested</span> Take the arithmetic mean (often called the average) of a list of numbers. ```1> sc:arithmetic_mean([1,2,3,4,5]).
 %% 3.0
 %%
 %% 2> sc:arithmetic_mean([]).
@@ -2147,7 +2148,7 @@ arithmetic_mean(List)
 
 
 
-%% @doc Take the geometric mean of a list of numbers. ```1> sc:geometric_mean([1,2,3,4,5]).
+%% @doc <span style="color: green; font-weight: bold;">Tested</span> Take the geometric mean of a list of numbers. ```1> sc:geometric_mean([1,2,3,4,5]).
 %% 2.6051710846973517
 %%
 %% 2> sc:geometric_mean([2,2,2]).
@@ -3180,7 +3181,7 @@ ceil(X) ->
 
 -spec ceiling(X :: number()) -> integer().
 
-%% @doc Returns the ceiling (round towards positive infinity) of a float. ```1> sc:ceil(0.5).
+%% @doc <span style="color: green; font-weight: bold;">Tested</span> Returns the ceiling (round towards positive infinity) of a float. ```1> sc:ceil(0.5).
 %% 1
 %%
 %% 2> sc:ceil(0).
@@ -3238,7 +3239,7 @@ ceiling(X) ->
 
 -spec floor(X :: number()) -> integer().
 
-%% @doc Takes the floor (round towards negative infinity) of a number.  This is different than `erlang:trunc/1', which removes the mantissa, in its
+%% @doc <span style="color: green; font-weight: bold;">Tested</span> Takes the floor (round towards negative infinity) of a number.  This is different than `erlang:trunc/1', which removes the mantissa, in its
 %% handling of negative numbers: trunc diminishes towards zero, not towards negative infinity (note examples 6 and 7 below.) ```1> sc:floor(0.5).
 %% 0
 %%
@@ -9637,7 +9638,7 @@ ensure_started(App, Opts)
 
 
 
-%% @doc Creates a tuple of fixed width, repeating the given element the given number of times.  This is equivalent to `lists:duplicate'.  ```1> sc:tuple_duplicate(3,hi).
+%% @doc <span style="color: green; font-weight: bold;">Tested</span> Creates a tuple of fixed width, repeating the given element the given number of times.  This is equivalent to `lists:duplicate'.  ```1> sc:tuple_duplicate(3,hi).
 %% {hi,hi,hi}
 %%
 %% 2> sc:tuple_duplicate(0,hi).
@@ -9652,3 +9653,29 @@ ensure_started(App, Opts)
 tuple_duplicate(N, Item) when is_integer(N), N >= 0 ->
 
     list_to_tuple(lists:duplicate(N, Item)).
+
+
+
+
+
+% 30> sc:segment_size([{"dogs",8},{"cats",11},{"badgers",1},{"forever alone",0}]).
+% { {population,20,3},
+%   [ {"dogs",40.0,8},
+%     {"cats",55.0,11},
+%     {"badgers",5.0,1} ] }
+
+%% @since Version 824
+
+-spec segment_size(List::list(tuple(any(), number()))) -> tuple(tuple(list(), number(), non_neg_integer()), list(tuple(any(), float(), number()))).
+
+segment_size(List) when is_list(List) ->
+
+    Pop     = [ Count || {_Name, Count} <- List, Count > 0 ],
+    PopSize = lists:sum(Pop),
+
+    { {population, PopSize, length(Pop)}, [ {Name, (Count*100)/PopSize, Count} || {Name, Count} <- List, Count > 0 ] }.
+
+
+
+
+

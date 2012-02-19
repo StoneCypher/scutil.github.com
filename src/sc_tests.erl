@@ -135,13 +135,39 @@ rotate_list_test_() ->
 
 
 
+support_prop_index_of_first_correct_position(R,I,L) ->
+
+    Pos     = max(1, R rem (length(L)+1)),       % Insert position is, arbitrarily, our random position modulo the list length, max 1 so that 0 can't happen.  Length+1 to account for the inserted item.
+    Lf      = [ Li || Li <- L, Li =/= I ],       % filter the list for things matching our insert, just in case
+    {Ll,Lr} = lists:split(Pos-1, Lf),            % Split the list in the appropriate place
+
+    sc:index_of_first(I, Ll ++ [I] ++ Lr) == Pos.
+
+
+
+
+prop_index_of_first_correct_position() ->
+
+    ?FORALL( { R,                          I,                  L                        },
+             { proper_types:pos_integer(), proper_types:any(), list(proper_types:any()) },
+
+             support_prop_index_of_first_correct_position(R,I,L) =:= true
+
+           ).
+
+
+
+
+
 index_of_first_test_() ->
 
     { "Index of first tests", [
 
         {"0, [ ]",       ?_assert( undefined =:= sc:index_of_first(0, [ ])       ) },
         {"b, [ a,b,c ]", ?_assert( 2         =:= sc:index_of_first(b, [ a,b,c ]) ) },
-        {"g, [ a,b,c ]", ?_assert( undefined =:= sc:index_of_first(g, [ a,b,c ]) ) }
+        {"g, [ a,b,c ]", ?_assert( undefined =:= sc:index_of_first(g, [ a,b,c ]) ) },
+
+        {"Stochastic: correct position", ?_assert( true =:= proper:quickcheck(prop_index_of_first_correct_position()) ) }
 
     ] }.
 
@@ -425,7 +451,7 @@ prop_ceil_always_gives_integers() ->
     ?FORALL( N,
              proper_types:number(), 
              
-             is_integer(sc:ceiling(N)) 
+             is_integer(sc:ceiling(N))
              
            ).
 

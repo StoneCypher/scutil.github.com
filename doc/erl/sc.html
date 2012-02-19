@@ -13,7 +13,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of the erlang portion of the scutil library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> 2.5.820
+<p><b>Version:</b> 2.5.823
 </p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
@@ -316,7 +316,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#all_neighbor_pairs-1">all_neighbor_pairs/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#all_neighbor_pairs-2">all_neighbor_pairs/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#amean_vector_normal-1">amean_vector_normal/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the arithmetic mean of the elements of the unit vector for the vector provided.</td></tr>
-<tr><td valign="top"><a href="#arithmetic_mean-1">arithmetic_mean/1</a></td><td>Take the arithmetic mean (often called the average) of a list of numbers.</td></tr>
+<tr><td valign="top"><a href="#arithmetic_mean-1">arithmetic_mean/1</a></td><td><span style="color: green; font-weight: bold;">Tested</span> Take the arithmetic mean (often called the average) of a list of numbers.</td></tr>
 <tr><td valign="top"><a href="#ascii_alphanum_list_subset-1">ascii_alphanum_list_subset/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#bandwidth_calc-1">bandwidth_calc/1</a></td><td>Equivalent to <a href="#bandwidth_calc-2"><tt>bandwidth_calc(Data, all)</tt></a>.
 </td></tr>
@@ -331,7 +331,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#caspers_jones_estimate-1">caspers_jones_estimate/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> <a href="http://www.drdobbs.com/architecture-and-design/225701139?pgno=1">See</a></td></tr>
 <tr><td valign="top"><a href="#ceil-1">ceil/1</a></td><td>Equivalent to <a href="#ceiling-1"><tt>ceiling(X)</tt></a>.
 </td></tr>
-<tr><td valign="top"><a href="#ceiling-1">ceiling/1</a></td><td>Returns the ceiling (round towards positive infinity) of a float.</td></tr>
+<tr><td valign="top"><a href="#ceiling-1">ceiling/1</a></td><td><span style="color: green; font-weight: bold;">Tested</span> Returns the ceiling (round towards positive infinity) of a float.</td></tr>
 <tr><td valign="top"><a href="#central_moment-2">central_moment/2</a></td><td><span style="color:red"><b><i>BUGGY</i></b></span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the Nth cetral moment of a list.</td></tr>
 <tr><td valign="top"><a href="#central_moments-1">central_moments/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#central_moments-2">central_moments/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -381,7 +381,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#expected_value-1">expected_value/1</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Returns the expected value of infinite selection from a weighted numeric list.</td></tr>
 <tr><td valign="top"><a href="#explode-2">explode/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Split any list by any other list, typically a string by a substring.</td></tr>
 <tr><td valign="top"><a href="#explode-3">explode/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
-<tr><td valign="top"><a href="#extrema-1">extrema/1</a></td><td>Returns the lowest and highest values in a list of one or more member in the form <code>{Lo,Hi}</code>.</td></tr>
+<tr><td valign="top"><a href="#extrema-1">extrema/1</a></td><td><span style="color: green; font-weight: bold;">Tested</span> Returns the lowest and highest values in a list of one or more member in the form <code>{Lo,Hi}</code>.</td></tr>
 <tr><td valign="top"><a href="#factorial-1">factorial/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#factorize-1">factorize/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Generates a list of the factors of an integer.</td></tr>
 <tr><td valign="top"><a href="#file_to_binary_literal_as_string-1">file_to_binary_literal_as_string/1</a></td><td></td></tr>
@@ -392,12 +392,12 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#fk_readability-3">fk_readability/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a set of text metrics.</td></tr>
 <tr><td valign="top"><a href="#fk_readability-4">fk_readability/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a block of text.</td></tr>
 <tr><td valign="top"><a href="#flag_sets-1">flag_sets/1</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
-<tr><td valign="top"><a href="#floor-1">floor/1</a></td><td>Takes the floor (round towards negative infinity) of a number.</td></tr>
+<tr><td valign="top"><a href="#floor-1">floor/1</a></td><td><span style="color: green; font-weight: bold;">Tested</span> Takes the floor (round towards negative infinity) of a number.</td></tr>
 <tr><td valign="top"><a href="#function_point_count-1">function_point_count/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#function_stats-1">function_stats/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#gen_docs-0">gen_docs/0</a></td><td>(not testworthy) Generates library documentation using the paths appropriate for the author's PC; you almost certainly want <a href="#gen_docs-2"><code>gen_docs/2</code></a> instead.</td></tr>
 <tr><td valign="top"><a href="#gen_docs-2">gen_docs/2</a></td><td>(not testworthy) Generates library documentation from and to the specified paths <code>WhereIsSrc</code> and <code>WhereToPutDocs</code> respectively.</td></tr>
-<tr><td valign="top"><a href="#geometric_mean-1">geometric_mean/1</a></td><td>Take the geometric mean of a list of numbers.</td></tr>
+<tr><td valign="top"><a href="#geometric_mean-1">geometric_mean/1</a></td><td><span style="color: green; font-weight: bold;">Tested</span> Take the geometric mean of a list of numbers.</td></tr>
 <tr><td valign="top"><a href="#get_linked_processes-0">get_linked_processes/0</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
 <tr><td valign="top"><a href="#gmean_vector_normal-1">gmean_vector_normal/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the geometric mean of the elements of the unit vector for the vector provided.</td></tr>
 <tr><td valign="top"><a href="#grid_scatter-2">grid_scatter/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return a Count-length list of non-repeating coordinates in a grid of specified size; useful for feature generation.</td></tr>
@@ -419,7 +419,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 </td></tr>
 <tr><td valign="top"><a href="#inc_counter-2">inc_counter/2</a></td><td>Equivalent to <a href="#adjust_counter_by-2"><tt>adjust_counter_by(Name, By)</tt></a>.
 </td></tr>
-<tr><td valign="top"><a href="#index_of_first-2">index_of_first/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.</td></tr>
+<tr><td valign="top"><a href="#index_of_first-2">index_of_first/2</a></td><td><span style="color: green; font-weight: bold;">Tested</span> Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.</td></tr>
 <tr><td valign="top"><a href="#integer_to_radix_list-2">integer_to_radix_list/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a number to a radix string using a radix list of your specification and any size.</td></tr>
 <tr><td valign="top"><a href="#io_list_to_hex_string-1">io_list_to_hex_string/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert an io_list() to a hexstring().</td></tr>
 <tr><td valign="top"><a href="#is_between-3">is_between/3</a></td><td></td></tr>
@@ -437,7 +437,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#kendall_correlation-2">kendall_correlation/2</a></td><td>Equivalent to <a href="#kendall-1"><tt>kendall(lists:zip(List1, List2))</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#key_cluster-2">key_cluster/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
-<tr><td valign="top"><a href="#key_duplicate-1">key_duplicate/1</a></td><td>Iterates a list of <code>{Count,Term}</code>, producing a list of <code>[Term,Term,...]</code>.</td></tr>
+<tr><td valign="top"><a href="#key_duplicate-1">key_duplicate/1</a></td><td><span style="color: green; font-weight: bold;">Tested</span> Iterates a list of <code>{Count,Term}</code>, producing a list of <code>[Term,Term,...]</code>.</td></tr>
 <tr><td valign="top"><a href="#key_extrema-1">key_extrema/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
 <tr><td valign="top"><a href="#key_extrema-2">key_extrema/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#key_group-2">key_group/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -542,7 +542,7 @@ via Naive Bayes Likelihood.</td></tr>
 <tr><td valign="top"><a href="#reverse_map_filter-3">reverse_map_filter/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#root_mean_square-1">root_mean_square/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the root mean square of the values in the list.</td></tr>
 <tr><td valign="top"><a href="#root_sum_square-1">root_sum_square/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the magnitude (also known as the root sum square) of a vector.</td></tr>
-<tr><td valign="top"><a href="#rotate_list-2">rotate_list/2</a></td><td>Rotates the front <code>Distance</code> elements of a list to the back, in order.</td></tr>
+<tr><td valign="top"><a href="#rotate_list-2">rotate_list/2</a></td><td><span style="color: green; font-weight: bold;">Tested</span> Rotates the front <code>Distance</code> elements of a list to the back, in order.</td></tr>
 <tr><td valign="top"><a href="#rotate_to_first-2">rotate_to_first/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Rotates the list to the first instance of Item.</td></tr>
 <tr><td valign="top"><a href="#rotate_to_last-2">rotate_to_last/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Rotates the list so that the first instance of Item becomes the last element in the list.</td></tr>
 <tr><td valign="top"><a href="#sanitize_filename-1">sanitize_filename/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Sanitize an arbitrary string to be appropriate for Windows and Unix filesystems, and URLs.</td></tr>
@@ -587,7 +587,7 @@ via Naive Bayes Likelihood.</td></tr>
 <tr><td valign="top"><a href="#to_list-1">to_list/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#triangle_index-1">triangle_index/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#triangle_index-2">triangle_index/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
-<tr><td valign="top"><a href="#tuple_duplicate-2">tuple_duplicate/2</a></td><td>Creates a tuple of fixed width, repeating the given element the given number of times.</td></tr>
+<tr><td valign="top"><a href="#tuple_duplicate-2">tuple_duplicate/2</a></td><td><span style="color: green; font-weight: bold;">Tested</span> Creates a tuple of fixed width, repeating the given element the given number of times.</td></tr>
 <tr><td valign="top"><a href="#tuple_member-2">tuple_member/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether E is a member element of tuple T, analogous to <code>lists::member(E, L)</code>.</td></tr>
 <tr><td valign="top"><a href="#tuple_sort-1">tuple_sort/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#tuple_sum-1">tuple_sum/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero.</td></tr>
@@ -716,7 +716,7 @@ via Naive Bayes Likelihood.</td></tr>
 <h3 class="function"><a name="arithmetic_mean-1">arithmetic_mean/1</a></h3>
 <div class="spec">
 <p><tt>arithmetic_mean(InputList::<a href="#type-numeric_list">numeric_list()</a>) -&gt; float()</tt><br></p>
-</div><p>Take the arithmetic mean (often called the average) of a list of numbers. <pre>  1&gt; sc:arithmetic_mean([1,2,3,4,5]).
+</div><p><span style="color: green; font-weight: bold;">Tested</span> Take the arithmetic mean (often called the average) of a list of numbers. <pre>  1&gt; sc:arithmetic_mean([1,2,3,4,5]).
   3.0
  
   2&gt; sc:arithmetic_mean([]).
@@ -844,7 +844,7 @@ via Naive Bayes Likelihood.</td></tr>
 <h3 class="function"><a name="ceiling-1">ceiling/1</a></h3>
 <div class="spec">
 <p><tt>ceiling(X::number()) -&gt; integer()</tt><br></p>
-</div><p>Returns the ceiling (round towards positive infinity) of a float. <pre>  1&gt; sc:ceil(0.5).
+</div><p><span style="color: green; font-weight: bold;">Tested</span> Returns the ceiling (round towards positive infinity) of a float. <pre>  1&gt; sc:ceil(0.5).
   1
  
   2&gt; sc:ceil(0).
@@ -1403,7 +1403,7 @@ via Naive Bayes Likelihood.</td></tr>
 <h3 class="function"><a name="extrema-1">extrema/1</a></h3>
 <div class="spec">
 <p><tt>extrema(List::list()) -&gt; {Low::any(), Hi::any()}</tt><br></p>
-</div><p>Returns the lowest and highest values in a list of one or more member in the form <code>{Lo,Hi}</code>.  Undefined over the empty list.  Mixed-type safe; sorts according to type order rules.  <pre>  1&gt; sc:extrema([1,2,3,4]).
+</div><p><span style="color: green; font-weight: bold;">Tested</span> Returns the lowest and highest values in a list of one or more member in the form <code>{Lo,Hi}</code>.  Undefined over the empty list.  Mixed-type safe; sorts according to type order rules.  <pre>  1&gt; sc:extrema([1,2,3,4]).
   {1,4}
  
   2&gt; sc:extrema([1,2,3,a,b,c]).
@@ -1510,7 +1510,7 @@ via Naive Bayes Likelihood.</td></tr>
 <h3 class="function"><a name="floor-1">floor/1</a></h3>
 <div class="spec">
 <p><tt>floor(X::number()) -&gt; integer()</tt><br></p>
-</div><p>Takes the floor (round towards negative infinity) of a number.  This is different than <code>erlang:trunc/1</code>, which removes the mantissa, in its
+</div><p><span style="color: green; font-weight: bold;">Tested</span> Takes the floor (round towards negative infinity) of a number.  This is different than <code>erlang:trunc/1</code>, which removes the mantissa, in its
   handling of negative numbers: trunc diminishes towards zero, not towards negative infinity (note examples 6 and 7 below.) <pre>  1&gt; sc:floor(0.5).
   0
  
@@ -1577,7 +1577,7 @@ via Naive Bayes Likelihood.</td></tr>
 <h3 class="function"><a name="geometric_mean-1">geometric_mean/1</a></h3>
 <div class="spec">
 <p><tt>geometric_mean(InputList::<a href="#type-pos_numeric_list">pos_numeric_list()</a>) -&gt; float()</tt><br></p>
-</div><p>Take the geometric mean of a list of numbers. <pre>  1&gt; sc:geometric_mean([1,2,3,4,5]).
+</div><p><span style="color: green; font-weight: bold;">Tested</span> Take the geometric mean of a list of numbers. <pre>  1&gt; sc:geometric_mean([1,2,3,4,5]).
   2.6051710846973517
  
   2&gt; sc:geometric_mean([2,2,2]).
@@ -1829,7 +1829,7 @@ via Naive Bayes Likelihood.</td></tr>
 <h3 class="function"><a name="index_of_first-2">index_of_first/2</a></h3>
 <div class="spec">
 <p><tt>index_of_first(Item::any(), List::list()) -&gt; integer() | undefined</tt><br></p>
-</div><p><span style="color:orange;font-style:italic">Stoch untested</span> Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.  <pre>  1&gt; sc:index_of_first(c, [a,b,c,d,e]).
+</div><p><span style="color: green; font-weight: bold;">Tested</span> Returns the index of the first instance of <code>Item</code> in the <code>List</code>, or <code>undefined</code> if <code>Item</code> is not present.  <pre>  1&gt; sc:index_of_first(c, [a,b,c,d,e]).
   3
  
   2&gt; sc:index_of_first(j, [a,b,c,d,e]).
@@ -1995,7 +1995,7 @@ via Naive Bayes Likelihood.</td></tr>
 <h3 class="function"><a name="key_duplicate-1">key_duplicate/1</a></h3>
 <div class="spec">
 <p><tt>key_duplicate(KeyList::[{non_neg_integer(), any()}]) -&gt; [any()]</tt><br></p>
-</div><p>Iterates a list of <code>{Count,Term}</code>, producing a list of <code>[Term,Term,...]</code>.  <pre>  1&gt; sc:key_duplicate([ {3,bork} ]).
+</div><p><span style="color: green; font-weight: bold;">Tested</span> Iterates a list of <code>{Count,Term}</code>, producing a list of <code>[Term,Term,...]</code>.  <pre>  1&gt; sc:key_duplicate([ {3,bork} ]).
   [bork,bork,bork]
  
   2&gt; sc:key_duplicate([ {3,sunday}, {2,monster}, {2,truck}, {1,'MADNESS'} ]).
@@ -2961,7 +2961,7 @@ via Naive Bayes Likelihood.</p>
 <h3 class="function"><a name="rotate_list-2">rotate_list/2</a></h3>
 <div class="spec">
 <p><tt>rotate_list(Distance::integer(), ListData::list()) -&gt; list()</tt><br></p>
-</div><p>Rotates the front <code>Distance</code> elements of a list to the back, in order.  Negative distances rotate the back towards the front.  Distances over the length of
+</div><p><span style="color: green; font-weight: bold;">Tested</span> Rotates the front <code>Distance</code> elements of a list to the back, in order.  Negative distances rotate the back towards the front.  Distances over the length of
   the list wrap in modulus.  <pre>  1&gt; sc:rotate_list(2, [1,2,3,4,5,6,7,8]).
   [3,4,5,6,7,8,1,2]
  
@@ -3506,7 +3506,7 @@ via Naive Bayes Likelihood.</p>
 <h3 class="function"><a name="tuple_duplicate-2">tuple_duplicate/2</a></h3>
 <div class="spec">
 <p><tt>tuple_duplicate(N::non_neg_integer(), Item::any()) -&gt; tuple()</tt><br></p>
-</div><p>Creates a tuple of fixed width, repeating the given element the given number of times.  This is equivalent to <code>lists:duplicate</code>.  <pre>  1&gt; sc:tuple_duplicate(3,hi).
+</div><p><span style="color: green; font-weight: bold;">Tested</span> Creates a tuple of fixed width, repeating the given element the given number of times.  This is equivalent to <code>lists:duplicate</code>.  <pre>  1&gt; sc:tuple_duplicate(3,hi).
   {hi,hi,hi}
  
   2&gt; sc:tuple_duplicate(0,hi).
@@ -3718,6 +3718,6 @@ via Naive Bayes Likelihood.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Jan 9 2012, 00:51:22.</i></p>
+<p><i>Generated by EDoc, Jan 29 2012, 02:55:45.</i></p>
 </body>
 </html>
