@@ -193,6 +193,9 @@
     segment_size/1,
     parallelize/2,
 
+    solarized/0,
+      solarized/1,
+
     key_bucket/1,
       key_bucket/2,
 
@@ -9793,3 +9796,40 @@ parallelize_gather(Results, Remaining, ResultHandle) ->
 % todo enumerate_list -> lists:zip( seq(length), data )
 
 % todo sorted_gather( [ {N, X}, ... ] ) -> [X, ...] for asc N
+
+
+solarized() ->
+
+    [ { base03,  16#002b36 },
+      { base02,  16#073642 },
+      { base01,  16#586e75 },
+      { base00,  16#657b83 },
+      { base0,   16#839496 },
+      { base1,   16#93a1a1 },
+      { base2,   16#eee8d5 },
+      { base3,   16#fdf6e3 },
+      { yellow,  16#b58900 },
+      { orange,  16#cb4b16 },
+      { red,     16#dc322f },
+      { magenta, 16#d33682 },
+      { violet,  16#6c71c4 },
+      { blue,    16#268bd2 },
+      { cyan,    16#2aa198 },
+      { green,   16#859900 } ].
+
+solarized(base03) ->  16#002b36;
+solarized(base02) ->  16#073642;
+solarized(base01) ->  16#586e75;
+solarized(base00) ->  16#657b83;
+solarized(base0) ->   16#839496;
+solarized(base1) ->   16#93a1a1;
+solarized(base2) ->   16#eee8d5;
+solarized(base3) ->   16#fdf6e3;
+solarized(yellow) ->  16#b58900;
+solarized(orange) ->  16#cb4b16;
+solarized(red) ->     16#dc322f;
+solarized(magenta) -> 16#d33682;
+solarized(violet) ->  16#6c71c4;
+solarized(blue) ->    16#268bd2;
+solarized(cyan) ->    16#2aa198;
+solarized(green) ->   16#859900.
