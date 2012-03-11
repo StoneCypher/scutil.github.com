@@ -31,18 +31,19 @@ extrema_test_() ->
 
     { "Extrema tests", [
 
-        {"8,6,7,5,3,0,9",      ?_assert( {0,9}      =:= sc:extrema( [8,6,7,5,3,0,9] ) ) },
-        {"1,2,3,4",            ?_assert( {1,4}      =:= sc:extrema( [1,2,3,4]       ) ) },
-        {"-1,-2,-3",           ?_assert( {-3,-1}    =:= sc:extrema( [-1,-2,-3]      ) ) },
-        {"-1.1,0,1.1",         ?_assert( {-1.1,1.1} =:= sc:extrema( [-1.1,1.1]      ) ) },
-        {"a,b,c",              ?_assert( {a,c}      =:= sc:extrema( [a,b,c]         ) ) },
-        {"1,a,{}",             ?_assert( {1,{}}     =:= sc:extrema( [1,a,{}]        ) ) },
-        {"1",                  ?_assert( {1,1}      =:= sc:extrema( [1]             ) ) },
-        {"1,2,3,a,b,c",        ?_assert( {1,c}      =:= sc:extrema( [1,2,3,a,b,c]   ) ) },
+        {"8,6,7,5,3,0,9",                           ?_assert( {0,9}      =:= sc:extrema( [8,6,7,5,3,0,9] ) ) },
+        {"1,2,3,4",                                 ?_assert( {1,4}      =:= sc:extrema( [1,2,3,4]       ) ) },
+        {"-1,-2,-3",                                ?_assert( {-3,-1}    =:= sc:extrema( [-1,-2,-3]      ) ) },
+        {"-1.1,0,1.1",                              ?_assert( {-1.1,1.1} =:= sc:extrema( [-1.1,1.1]      ) ) },
+        {"a,b,c",                                   ?_assert( {a,c}      =:= sc:extrema( [a,b,c]         ) ) },
+        {"1,a,{}",                                  ?_assert( {1,{}}     =:= sc:extrema( [1,a,{}]        ) ) },
+        {"1",                                       ?_assert( {1,1}      =:= sc:extrema( [1]             ) ) },
+        {"1,2,3,a,b,c",                             ?_assert( {1,c}      =:= sc:extrema( [1,2,3,a,b,c]   ) ) },
 
-        {"[] error undefined", ?_assertError(function_clause, sc:extrema([]) ) },
+        {"[] error undefined",                      ?_assertError(function_clause, sc:extrema([]) ) },
 
-        {"Stochastic: min/max are members", ?_assert( true =:= proper:quickcheck(prop_extrema_min_max_are_members()) ) }
+        {"Stochastic: min/max are members",         ?_assert( true =:= proper:quickcheck(prop_extrema_min_max_are_members()) ) }
+        {"Stochastic error: not a list type error", ?_assertError(function_clause, sc:extrema([]) ) },
 
     ] }.
 

@@ -191,6 +191,10 @@
     count_bits/1,
     now_str_utc24/0,
     segment_size/1,
+    parallelize/2,
+
+    key_bucket/1,
+      key_bucket/2,
 
     unique_send_receive/3,
       unique_receive_respond/1,
@@ -9722,3 +9726,70 @@ unique_receive_respond(RespondFun) ->
         0 -> nothing_there
 
     end.
+
+
+
+
+
+%% @since Version 826
+
+key_bucket(List) ->
+
+    key_bucket(1, List).
+
+
+
+
+
+%% @since Version 826
+
+key_bucket(Index, List) ->
+
+    [ {K, [ Val || { _Key, Val } <- Vals ]} || { K, Vals } <- key_cluster(Index, List) ].
+
+
+
+
+
+%% @since Version 827
+
+parallelize(Fun, DataSets) ->
+
+    ResultHandle = make_ref(),
+    HomeBase     = self(),
+    Len          = length(DataSets),
+
+    [ spawn( fun() -> HomeBase ! { ResultHandle, Id, Fun(DataSet) } end ) || { Id, DataSet } <- lists:zip( lists:seq(1,Len), DataSets ) ],
+
+    parallelize_gather([], Len, ResultHandle).
+
+
+
+
+
+%% @since Version 827
+
+parallelize_gather(Results, 0, _ResultHandle) ->
+
+    [ Datum || { _Key, Datum } <- lists:keysort(1, Results) ];
+
+
+
+
+
+parallelize_gather(Results, Remaining, ResultHandle) ->
+
+    receive
+
+        { ResultHandle, Id, Result } ->
+            parallelize_gather( [{ Id, Result }] ++ Results, Remaining - 1, ResultHandle )
+
+    end.
+
+
+
+
+
+% todo enumerate_list -> lists:zip( seq(length), data )
+
+% todo sorted_gather( [ {N, X}, ... ] ) -> [X, ...] for asc N
