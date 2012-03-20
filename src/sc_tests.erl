@@ -14,6 +14,26 @@
 
 
 
+%%      { "Documentation assertions", [
+%%      ] },
+%%
+%%      { "Manual value assertions", [
+%%      ] },
+%%
+%%      { "Stochastic property assertions", [
+%%      ] },
+%%
+%%      { "Error state assertions", [
+%%      ] },
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
+
+
+
+
+
+
+
 prop_extrema_min_max_are_members() ->
 
     ?FORALL( L,
@@ -42,8 +62,8 @@ extrema_test_() ->
 
         {"[] error undefined",                      ?_assertError(function_clause, sc:extrema([]) ) },
 
-        {"Stochastic: min/max are members",         ?_assert( true =:= proper:quickcheck(prop_extrema_min_max_are_members()) ) }
-        {"Stochastic error: not a list type error", ?_assertError(function_clause, sc:extrema([]) ) },
+        {"Stochastic: min/max are members",         ?_assert( true =:= proper:quickcheck(prop_extrema_min_max_are_members()) ) },
+        {"Stochastic error: not a list type error", ?_assertError(function_clause, sc:extrema([]) ) }
 
     ] }.
 
@@ -424,10 +444,10 @@ explode_test_() ->
 prop_ceil_ints_as_floats_identity() ->
 
     ?FORALL( I,
-             proper_types:integer(), 
-              
-             sc:ceiling(I*1.0) =:= I 
-             
+             proper_types:integer(),
+
+             sc:ceiling(I*1.0) =:= I
+
     ).
 
 
@@ -436,8 +456,8 @@ prop_ceil_ints_as_floats_identity() ->
 
 prop_ceil_floats_smaller_within_1() ->
 
-    ?FORALL( R, 
-             proper_types:real(), 
+    ?FORALL( R,
+             proper_types:real(),
 
              (sc:ceiling(R) - R) < 1 andalso (sc:ceiling(R) - R) >= 0
 
@@ -450,10 +470,10 @@ prop_ceil_floats_smaller_within_1() ->
 prop_ceil_always_gives_integers() ->
 
     ?FORALL( N,
-             proper_types:number(), 
-             
+             proper_types:number(),
+
              is_integer(sc:ceiling(N))
-             
+
            ).
 
 
@@ -464,18 +484,51 @@ ceil_test_() ->
 
     { "Ceil/Ceiling tests", [
 
-        {"0.5",  ?_assert(  1 =:= sc:ceil(0.5)  ) },
-        {"0",    ?_assert(  0 =:= sc:ceil(0)    ) },
-        {"0.0",  ?_assert(  0 =:= sc:ceil(0.0)  ) },
-        {"1.0",  ?_assert(  1 =:= sc:ceil(1.0)  ) },
-        {"-1.0", ?_assert( -1 =:= sc:ceil(-1.0) ) },
-        {"-1.5", ?_assert( -1 =:= sc:ceil(-1.5) ) },
-        {"-1",   ?_assert( -1 =:= sc:ceil(-1)   ) },
-        {"1",    ?_assert(  1 =:= sc:ceil(1)    ) },
+%%      { "Documentation assertions", [
+%%      ] },
+%%
+%%      { "Manual value assertions", [
+%%      ] },
+%%
+%%      { "Stochastic property assertions", [
+%%      ] },
+%%
+%%      { "Error state assertions", [
+%%      ] },
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
 
-        {"Stochastic: all integers-as-floats are identity", ?_assert( true =:= proper:quickcheck(prop_ceil_ints_as_floats_identity()) ) },
-        {"Stochastic: all floats are smaller within 1",     ?_assert( true =:= proper:quickcheck(prop_ceil_floats_smaller_within_1()) ) },
-        {"Stochastic: all numbers give integer results",    ?_assert( true =:= proper:quickcheck(prop_ceil_always_gives_integers())   ) }
+
+
+
+%%      { "Documentation assertions", [
+%%      ] },
+%%
+        { "Manual value assertions", [
+
+            {"0.5",  ?_assert(  1 =:= sc:ceil(0.5)  ) },
+            {"0",    ?_assert(  0 =:= sc:ceil(0)    ) },
+            {"0.0",  ?_assert(  0 =:= sc:ceil(0.0)  ) },
+            {"1.0",  ?_assert(  1 =:= sc:ceil(1.0)  ) },
+            {"-1.0", ?_assert( -1 =:= sc:ceil(-1.0) ) },
+            {"-1.5", ?_assert( -1 =:= sc:ceil(-1.5) ) },
+            {"-1",   ?_assert( -1 =:= sc:ceil(-1)   ) },
+            {"1",    ?_assert(  1 =:= sc:ceil(1)    ) }
+
+        ] },
+%%
+        { "Stochastic property assertions", [
+
+            {"All integers-as-floats are identity", ?_assert( true =:= proper:quickcheck(prop_ceil_ints_as_floats_identity()) ) },
+            {"All floats are smaller within 1",     ?_assert( true =:= proper:quickcheck(prop_ceil_floats_smaller_within_1()) ) },
+            {"All numbers give integer results",    ?_assert( true =:= proper:quickcheck(prop_ceil_always_gives_integers())   ) }
+
+        ] }
+%%
+%%      { "Error state assertions", [
+%%      ] },
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
 
     ] }.
 
@@ -485,11 +538,11 @@ ceil_test_() ->
 
 prop_floor_ints_as_floats_identity() ->
 
-    ?FORALL( I, 
-             proper_types:int(), 
+    ?FORALL( I,
+             proper_types:int(),
 
-             sc:floor(I*1.0) =:= I 
-             
+             sc:floor(I*1.0) =:= I
+
            ).
 
 
@@ -498,11 +551,11 @@ prop_floor_ints_as_floats_identity() ->
 
 prop_floor_floats_larger_within_1() ->
 
-    ?FORALL( R, 
+    ?FORALL( R,
              proper_types:real(),
-             
-             (R - sc:floor(R)) < 1 andalso (R - sc:floor(R)) >= 0 
-             
+
+             (R - sc:floor(R)) < 1 andalso (R - sc:floor(R)) >= 0
+
            ).
 
 
@@ -511,11 +564,11 @@ prop_floor_floats_larger_within_1() ->
 
 prop_floor_always_gives_integers() ->
 
-    ?FORALL( N, 
-             proper_types:number(), 
-             
-             is_integer(sc:floor(N)) 
-             
+    ?FORALL( N,
+             proper_types:number(),
+
+             is_integer(sc:floor(N))
+
            ).
 
 
@@ -526,18 +579,34 @@ floor_test_() ->
 
     { "Floor tests", [
 
-        {"0.5",  ?_assert(  0 =:= sc:floor(0.5)  ) },
-        {"0",    ?_assert(  0 =:= sc:floor(0)    ) },
-        {"0.0",  ?_assert(  0 =:= sc:floor(0.0)  ) },
-        {"1.0",  ?_assert(  1 =:= sc:floor(1.0)  ) },
-        {"-1.0", ?_assert( -1 =:= sc:floor(-1.0) ) },
-        {"-1.5", ?_assert( -2 =:= sc:floor(-1.5) ) },
-        {"-1",   ?_assert( -1 =:= sc:floor(-1)   ) },
-        {"1",    ?_assert(  1 =:= sc:floor(1)    ) },
+%%      { "Documentation assertions", [
+%%      ] },
+%%
+        { "Manual value assertions", [
 
-        {"Stochastic: all integers-as-floats are identity", ?_assert( true =:= proper:quickcheck(prop_floor_ints_as_floats_identity()) ) },
-        {"Stochastic: all floats are larger within 1",      ?_assert( true =:= proper:quickcheck(prop_floor_floats_larger_within_1())  ) },
-        {"Stochastic: all numbers give integer results",    ?_assert( true =:= proper:quickcheck(prop_floor_always_gives_integers())   ) }
+            {"0.5",  ?_assert(  0 =:= sc:floor(0.5)  ) },
+            {"0",    ?_assert(  0 =:= sc:floor(0)    ) },
+            {"0.0",  ?_assert(  0 =:= sc:floor(0.0)  ) },
+            {"1.0",  ?_assert(  1 =:= sc:floor(1.0)  ) },
+            {"-1.0", ?_assert( -1 =:= sc:floor(-1.0) ) },
+            {"-1.5", ?_assert( -2 =:= sc:floor(-1.5) ) },
+            {"-1",   ?_assert( -1 =:= sc:floor(-1)   ) },
+            {"1",    ?_assert(  1 =:= sc:floor(1)    ) }
+
+        ] },
+%%
+        { "Stochastic property assertions", [
+
+            {"All integers-as-floats are identity", ?_assert( true =:= proper:quickcheck(prop_floor_ints_as_floats_identity()) ) },
+            {"All floats are larger within 1",      ?_assert( true =:= proper:quickcheck(prop_floor_floats_larger_within_1())  ) },
+            {"All numbers give integer results",    ?_assert( true =:= proper:quickcheck(prop_floor_always_gives_integers())   ) }
+
+        ] }
+%%
+%%      { "Error state assertions", [
+%%      ] },
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
 
     ] }.
 
@@ -549,22 +618,37 @@ to_lines_test_() ->
 
     { "To lines tests", [
 
-        { "Doc ex 1 - Readable",          ?_assert( ["one","two","three","four","five"] =:= sc:to_lines("one\rtwo\nthree\r\nfour\r\r\rfive") ) },
+        { "Documentation assertions", [
 
-        { "Doc ex 4 - Single DOS-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\nb") ) },
-        {            "Double DOS-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\n\r\nb") ) },
+            { "Example 1  - Readable",          ?_assert( ["one","two","three","four","five"] =:= sc:to_lines("one\rtwo\nthree\r\nfour\r\r\rfive") ) },
 
-        { "Doc ex 2 - Single unix-style", ?_assert( ["a","b"] =:= sc:to_lines("a\nb") ) },
-        { "Doc ex 3 - Double unix-style", ?_assert( ["a","b"] =:= sc:to_lines("a\n\nb") ) },
+            { "Example 4a - Single DOS-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\nb") ) },
+            { "Example 4b - Double DOS-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\n\r\nb") ) },
 
-        { "Doc ex 5 - Single mac-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\rb") ) },
-        {            "Double mac-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\rb") ) },
+            { "Example 2  - Single unix-style", ?_assert( ["a","b"] =:= sc:to_lines("a\nb") ) },
+            { "Example 3  - Double unix-style", ?_assert( ["a","b"] =:= sc:to_lines("a\n\nb") ) },
 
-        {            "Backwards",         ?_assert( ["a","b"] =:= sc:to_lines("a\n\rb") ) },
+            { "Example 5a - Single mac-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\rb") ) },
+            { "Example 5b - Double mac-style",  ?_assert( ["a","b"] =:= sc:to_lines("a\r\rb") ) },
 
-        { "Doc ex 6 - Long stack",        ?_assert( ["a","b","c","d","e"] =:= sc:to_lines("a\rb\nc\r\nd\n\r\r\ne") ) },
-        { "Doc ex 7 - Empty string",      ?_assert( []                    =:= sc:to_lines("") ) },
-        { "Doc ex 8 - Just rseqs",        ?_assert( []                    =:= sc:to_lines("\r\n\r\r\n\n\r") ) }
+            { "Example 5c - Backwards",         ?_assert( ["a","b"] =:= sc:to_lines("a\n\rb") ) },
+
+            { "Example 6  - Long stack",        ?_assert( ["a","b","c","d","e"] =:= sc:to_lines("a\rb\nc\r\nd\n\r\r\ne") ) },
+            { "Example 7  - Empty string",      ?_assert( []                    =:= sc:to_lines("") ) },
+            { "Example 8  - Just rseqs",        ?_assert( []                    =:= sc:to_lines("\r\n\r\r\n\n\r") ) }
+
+        ] }
+%%
+%%      { "Manual value assertions", [
+%%      ] },
+%%
+%%      { "Stochastic property assertions", [
+%%      ] },
+%%
+%%      { "Error state assertions", [
+%%      ] },
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
 
     ] }.
 
@@ -578,9 +662,24 @@ naive_bayes_likelihood_test_() ->
 
     { "Naive bayes likelihood tests", [
 
-        { "Doc ex 1 - implicit", ?_assert( 0.9230769230769231 =:= sc:naive_bayes_likelihood(48, 60, 4, 40)         ) },
-        { "Doc ex 2 - simple",   ?_assert( 0.9230769230769231 =:= sc:naive_bayes_likelihood(48, 60, 4, 40, simple) ) },
-        { "Doc ex 3 - full",     ?_assert( LongForm           =:= sc:naive_bayes_likelihood(48, 60, 4, 40, full)   ) }
+        { "Documentation assertions", [
+
+          { "Example 1 - implicit", ?_assert( 0.9230769230769231 =:= sc:naive_bayes_likelihood(48, 60, 4, 40)         ) },
+          { "Example 2 - simple",   ?_assert( 0.9230769230769231 =:= sc:naive_bayes_likelihood(48, 60, 4, 40, simple) ) },
+          { "Example 3 - full",     ?_assert( LongForm           =:= sc:naive_bayes_likelihood(48, 60, 4, 40, full)   ) }
+
+        ] }
+%%
+%%      { "Manual value assertions", [
+%%      ] },
+%%
+%%      { "Stochastic property assertions", [
+%%      ] },
+%%
+%%      { "Error state assertions", [
+%%      ] },
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
 
     ] }.
 
@@ -592,12 +691,29 @@ range_scale_test_() ->
 
     { "Range scale tests", [
 
-        { "Doc ex 1 - range",     ?_assert( 2.0  =:= sc:range_scale([3, 4, 5, 6])         ) },
-        { "Doc ex 2 - bookends",  ?_assert( 2.0  =:= sc:range_scale([3, 6])               ) },
-        { "Doc ex 3 - backwards", ?_assert( 2.0  =:= sc:range_scale([6, 5, 3])            ) },
-        { "Doc ex 4 - float",     ?_assert( 2.5  =:= sc:range_scale([3, 4, 5, 6, 7, 7.5]) ) },
-        { "Doc ex 5 - irregular", ?_assert( 33.0 =:= sc:range_scale([3, 10, 12, 99])      ) },
-        { "Doc ex 6 - repeat",    ?_assert( 1.0  =:= sc:range_scale([3, 3, 3])            ) }
+        { "Documentation assertions", [
+
+            { "Doc ex 1 - range",     ?_assert( 2.0  =:= sc:range_scale([3, 4, 5, 6])         ) },
+            { "Doc ex 2 - bookends",  ?_assert( 2.0  =:= sc:range_scale([3, 6])               ) },
+            { "Doc ex 3 - backwards", ?_assert( 2.0  =:= sc:range_scale([6, 5, 3])            ) },
+            { "Doc ex 4 - float",     ?_assert( 2.5  =:= sc:range_scale([3, 4, 5, 6, 7, 7.5]) ) },
+            { "Doc ex 5 - irregular", ?_assert( 33.0 =:= sc:range_scale([3, 10, 12, 99])      ) },
+            { "Doc ex 6 - repeat",    ?_assert( 1.0  =:= sc:range_scale([3, 3, 3])            ) }
+
+        ] }
+
+%%      { "Manual value assertions", [
+%%      ] },
+%%
+%%      { "Stochastic property assertions", [
+%%      ] },
+%%
+%%      { "Error state assertions", [
+%%      ] },
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
+
+% todo comeback add [1], [], stoch(list(number))
 
     ] }.
 
@@ -609,13 +725,29 @@ expected_value_test_() ->
 
     { "Range scale tests", [
 
-        { "Doc ex 1 - 1..6=3.5",                     ?_assert( 3.5                 =:= sc:expected_value([1,2,3,4,5,6])         ) },
-        { "Doc ex 2 - 5x1,1x10=2.5",                 ?_assert( 2.5                 =:= sc:expected_value([ {1,5}, {10,1} ])     ) },
-        { "Doc ex 3 - 1,1,1,1,1;1x10=2.5",           ?_assert( 2.5                 =:= sc:expected_value([ 1,1,1,1,1, {10,1} ]) ) },
-        { "Doc ex 4 - 8x1,7x-1=0.66",                ?_assert( 0.06666666666666667 =:= sc:expected_value([ {1,8}, {-1,7} ])     ) },
+        { "Documentation assertions", [
 
-        { "Doc assertion - [] throws",               ?_assertError( badarith, sc:expected_value([]) ) },
-        { "Doc assertion - [ {1,0}, {2,0} ] throws", ?_assertError( badarith, sc:expected_value([]) ) }
+            { "Doc ex 1 - 1..6=3.5",                     ?_assert( 3.5                 =:= sc:expected_value([1,2,3,4,5,6])         ) },
+            { "Doc ex 2 - 5x1,1x10=2.5",                 ?_assert( 2.5                 =:= sc:expected_value([ {1,5}, {10,1} ])     ) },
+            { "Doc ex 3 - 1,1,1,1,1;1x10=2.5",           ?_assert( 2.5                 =:= sc:expected_value([ 1,1,1,1,1, {10,1} ]) ) },
+            { "Doc ex 4 - 8x1,7x-1=0.66",                ?_assert( 0.06666666666666667 =:= sc:expected_value([ {1,8}, {-1,7} ])     ) }
+
+        ] },
+
+%%      { "Manual value assertions", [
+%%      ] },
+
+%%      { "Stochastic property assertions", [
+%%      ] },
+
+        { "Error state assertions", [
+
+            { "Doc assertion - [] throws",               ?_assertError( badarith, sc:expected_value([]) ) },
+            { "Doc assertion - [ {1,0}, {2,0} ] throws", ?_assertError( badarith, sc:expected_value([]) ) }
+
+        ] }
+
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
 
     ] }.
 
@@ -625,7 +757,21 @@ expected_value_test_() ->
 
 nybble_to_hex_test_() ->
 
-    { "Nybble to hex tests", [
+    { "Nybble to hex tests - exhaustive", [
+
+%%      { "Documentation assertions", [
+%%      ] },
+%%
+%%      { "Manual value assertions", [
+%%      ] },
+%%
+%%      { "Stochastic property assertions", [
+%%      ] },
+%%
+%%      { "Error state assertions", [
+%%      ] },
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
 
         { "0n", ?_assert( $0 =:= sc:nybble_to_hex(0)  ) },
         { "1n", ?_assert( $1 =:= sc:nybble_to_hex(1)  ) },
@@ -686,15 +832,30 @@ arithmetic_mean_test_() ->
 
     { "Arithmetic mean tests", [
 
-        { "Doc ex 1 - 1..5=3.0",  ?_assert(  3.0 =:= sc:arithmetic_mean([1,2,3,4,5]) ) },
-        { "Doc ex 1 - []=0.0",    ?_assert(  0.0 =:= sc:arithmetic_mean([])          ) },
-        { "Doc ex 1 - 4x2=2.0",   ?_assert(  2.0 =:= sc:arithmetic_mean([2,2,2,2])   ) },
-        { "Doc ex 1 - -3,2=-0.5", ?_assert( -0.5 =:= sc:arithmetic_mean([-3,2])      ) },
+        { "Documentation assertions", [
 
-        {"Spec test",                                  ?_assert( true =:= proper:check_spec({sc,arithmetic_mean,1}) ) },
+            { "Doc ex 1 - 1..5=3.0",  ?_assert(  3.0 =:= sc:arithmetic_mean([1,2,3,4,5]) ) },
+            { "Doc ex 2 - []=0.0",    ?_assert(  0.0 =:= sc:arithmetic_mean([])          ) },
+            { "Doc ex 3 - 4x2=2.0",   ?_assert(  2.0 =:= sc:arithmetic_mean([2,2,2,2])   ) },
+            { "Doc ex 4 - -3,2=-0.5", ?_assert( -0.5 =:= sc:arithmetic_mean([-3,2])      ) }
 
-        {"Stochastic: all results are numbers",        ?_assert( true =:= proper:quickcheck(prop_arithmetic_mean_result_numeric())     ) },
-        {"Stochastic: all results between-eq extrema", ?_assert( true =:= proper:quickcheck(prop_arithmetic_mean_between_eq_extrema()) ) }
+        ] },
+
+%%      { "Manual value assertions", [
+%%      ] },
+
+        { "Stochastic property assertions", [
+
+            {"Stochastic: all results are numbers",        ?_assert( true =:= proper:quickcheck(prop_arithmetic_mean_result_numeric())     ) },
+            {"Stochastic: all results between-eq extrema", ?_assert( true =:= proper:quickcheck(prop_arithmetic_mean_between_eq_extrema()) ) }
+
+        ] },
+
+%%      { "Error state assertions", [
+%%      ] },
+
+        {"Spec test",                                  ?_assert( true =:= proper:check_spec({sc,arithmetic_mean,1}) ) }
+
 
     ] }.
 
@@ -745,16 +906,31 @@ tuple_duplicate_test_() ->
 
     { "Tuple duplicate tests", [
 
-        {"3,hi", ?_assert( {hi,hi,hi} =:= sc:tuple_duplicate(3, hi) ) },
-        {"0,hi", ?_assert( {}         =:= sc:tuple_duplicate(0, hi) ) },
+%%      { "Documentation assertions", [
+%%      ] },
 
-        {"Stochastic: all results are tuples",                ?_assert( true =:= proper:quickcheck(prop_tuple_duplicate_result_tuple()) ) },
-        {"Stochastic: all results have correct member count", ?_assert( true =:= proper:quickcheck(prop_tuple_duplicate_correct_size()) ) },
-        {"Stochastic: first item is correct",                 ?_assert( true =:= proper:quickcheck(prop_tuple_duplicate_first_item()) ) },
+        { "Manual value assertions", [
 
-        {"Spec test",                                         ?_assert( true =:= proper:check_spec({sc,tuple_duplicate,2}) ) },
+            {"3,hi", ?_assert( {hi,hi,hi} =:= sc:tuple_duplicate(3, hi) ) },
+            {"0,hi", ?_assert( {}         =:= sc:tuple_duplicate(0, hi) ) }
 
-        {"-1,hi error undefined", ?_assertError(function_clause, sc:tuple_duplicate(-1, hi) ) }
+        ] },
+
+        { "Stochastic property assertions", [
+
+            {"Stochastic: all results are tuples",                ?_assert( true =:= proper:quickcheck(prop_tuple_duplicate_result_tuple()) ) },
+            {"Stochastic: all results have correct member count", ?_assert( true =:= proper:quickcheck(prop_tuple_duplicate_correct_size()) ) },
+            {"Stochastic: first item is correct",                 ?_assert( true =:= proper:quickcheck(prop_tuple_duplicate_first_item()) ) }
+
+        ] },
+
+        { "Error state assertions", [
+
+            {"-1,hi error undefined", ?_assertError(function_clause, sc:tuple_duplicate(-1, hi) ) }
+
+        ] },
+
+        {"Spec test", ?_assert( true =:= proper:check_spec({sc,tuple_duplicate,2}) ) }
 
     ] }.
 
@@ -798,13 +974,115 @@ geometric_mean_test_() ->
 
     { "Geometric mean tests", [
 
-        { "[]",          ?_assert( 0.0                =:= sc:geometric_mean( [] )          ) },
-        { "[1,2,3,4,5]", ?_assert( 2.6051710846973517 =:= sc:geometric_mean( [1,2,3,4,5] ) ) },
-        { "[2,2,2]",     ?_assert( 2.0                =:= sc:geometric_mean( [2,2,2] )     ) },
-        { "[3]",         ?_assert( 3.0                =:= sc:geometric_mean( [3] )         ) },
-        { "[1,10,100]",  ?_assert( 10.000000000000002 =:= sc:geometric_mean( [1,10,100] )  ) },
+%%      { "Documentation assertions", [
+%%      ] },
+%%
+%%      { "Error state assertions", [
+%%      ] },
 
-        {"Stochastic: all results between-eq extrema", ?_assert( true =:= proper:quickcheck(prop_geometric_mean_between_eq_extrema()) ) },
-        {"Stochastic: all results are floats",         ?_assert( true =:= proper:quickcheck(prop_tuple_duplicate_result_tuple())      ) }
+        { "Manual value assertions", [
+
+            { "[]",          ?_assert( 0.0                =:= sc:geometric_mean( [] )          ) },
+            { "[1,2,3,4,5]", ?_assert( 2.6051710846973517 =:= sc:geometric_mean( [1,2,3,4,5] ) ) },
+            { "[2,2,2]",     ?_assert( 2.0                =:= sc:geometric_mean( [2,2,2] )     ) },
+            { "[3]",         ?_assert( 3.0                =:= sc:geometric_mean( [3] )         ) },
+            { "[1,10,100]",  ?_assert( 10.000000000000002 =:= sc:geometric_mean( [1,10,100] )  ) }
+
+        ] },
+
+        { "Stochastic property assertions", [
+
+            {"All results between-eq extrema", ?_assert( true =:= proper:quickcheck(prop_geometric_mean_between_eq_extrema()) ) },
+            {"All results are floats",         ?_assert( true =:= proper:quickcheck(prop_tuple_duplicate_result_tuple())      ) }
+
+        ] }
+
+%%      { "Stochastic property assertions", [
+%%      ] },
+%%
+%%      { "Error state assertions", [
+%%      ] },
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
+
+    ] }.
+
+
+
+
+
+has_debug_info_test_() ->
+
+    { "Debug info tests", [
+
+%%      { "Documentation assertions", [
+%%      ] },
+%%
+        { "Manual value assertions", [
+
+            { "Checking that sc was compiled c(Path,[debug_info])", ?_assert( true =:= sc:has_debug_info(sc) ) }
+
+        ] }
+%%
+%%      { "Stochastic property assertions", [
+%%      ] },
+%%
+%%      { "Error state assertions", [
+%%      ] },
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
+
+    ] ++ [
+
+        { "Every loaded module must have a boolean result",
+
+            [
+                { atom_to_list(ModuleName), ?_assert( true =:= is_boolean(sc:has_debug_info(ModuleName)) ) }
+            ||
+                { ModuleName, _BinPath } <- code:all_loaded()
+            ]
+
+        }
+
+    ] }.
+
+
+
+
+
+solarized_test_() ->
+
+    { "Solarized tests", [
+
+
+%%      { "Documentation assertions", [
+%%      ] },
+
+        { "Manual value assertions", [
+
+            { "Yellow value is 16#b58900", ?_assert( 16#b58900 =:= sc:solarized(yellow)   ) },
+            { "Palette length is 16",      ?_assert( 16        =:= length(sc:solarized()) ) }
+
+        ] }
+
+%%      { "Stochastic property assertions", [
+%%      ] },
+%%
+%%      { "Error state assertions", [
+%%      ] },
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
+
+    ] ++ [
+
+        { "Every color has a list-matching integer result",
+
+            [
+                { atom_to_list(ColorName), ?_assert( {true,true} =:= { is_integer(sc:solarized(ColorName)), sc:solarized(ColorName) == Color } ) }
+            ||
+                { ColorName, Color } <- sc:solarized()
+            ]
+
+        }
 
     ] }.

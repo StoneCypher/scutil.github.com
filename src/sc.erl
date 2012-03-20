@@ -192,6 +192,7 @@
     now_str_utc24/0,
     segment_size/1,
     parallelize/2,
+    has_debug_info/1,
 
     solarized/0,
       solarized/1,
@@ -9797,6 +9798,9 @@ parallelize_gather(Results, Remaining, ResultHandle) ->
 
 % todo sorted_gather( [ {N, X}, ... ] ) -> [X, ...] for asc N
 
+%% @doc <span style="color: green; font-weight: bold;">Tested</span> Returns the Solarized palette.  ```1>
+
+%% Since Version 828
 
 solarized() ->
 
@@ -9817,6 +9821,19 @@ solarized() ->
       { cyan,    16#2aa198 },
       { green,   16#859900 } ].
 
+
+
+
+
+%% Since Version 828
+
+%% @doc <span style="color: green; font-weight: bold;">Tested</span> Returns members of the Solarized palette.  ```1> sc:solarized(yellow).
+%% 11897088
+%%
+%% 2> io:format("#~.16b~n", [sc:solarized(yellow)]).
+%% #b58900
+
+
 solarized(base03) ->  16#002b36;
 solarized(base02) ->  16#073642;
 solarized(base01) ->  16#586e75;
@@ -9833,3 +9850,18 @@ solarized(violet) ->  16#6c71c4;
 solarized(blue) ->    16#268bd2;
 solarized(cyan) ->    16#2aa198;
 solarized(green) ->   16#859900.
+
+
+
+
+
+
+%% @since Version 829
+
+has_debug_info(ModuleName) ->
+
+    lists:member(debug_info, 
+        proplists:get_value(options, 
+            proplists:get_value(compile, erlang:get_module_info(ModuleName))
+        )
+    ).
