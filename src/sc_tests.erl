@@ -332,11 +332,29 @@ expand_labels_test_() ->
 
     { "Expand labels test", [
 
-        {"[]",                    ?_assert( []                        =:= sc:expand_labels([])                    ) },
-        {"[{1,[a,b]}]",           ?_assert( [{1,a},{1,b}]             =:= sc:expand_labels([{1,[a,b]}])           ) },
-        {"[{1,[a,b]},{2,[c,d]}]", ?_assert( [{1,a},{1,b},{2,c},{2,d}] =:= sc:expand_labels([{1,[a,b]},{2,[c,d]}]) ) },
-        { "Doc ex 1 - Villains",  ?_assert( Villains                  =:= sc:expand_labels(VLabel)                ) },
-        { "Doc ex 2 - Heroes",    ?_assert( HandV                     =:= sc:expand_labels(HVLabel)               ) }
+        { "Documentation assertions", [
+
+            { "Example 1 - Villains",  ?_assert( Villains                  =:= sc:expand_labels(VLabel)                ) },
+            { "Example 2 - Heroes",    ?_assert( HandV                     =:= sc:expand_labels(HVLabel)               ) }
+
+        ] },
+
+        { "Manual value assertions", [
+
+            {"[]",                    ?_assert( []                        =:= sc:expand_labels([])                    ) },
+            {"[{1,[a,b]}]",           ?_assert( [{1,a},{1,b}]             =:= sc:expand_labels([{1,[a,b]}])           ) },
+            {"[{1,[a,b]},{2,[c,d]}]", ?_assert( [{1,a},{1,b},{2,c},{2,d}] =:= sc:expand_labels([{1,[a,b]},{2,[c,d]}]) ) }
+
+        ] }
+%%
+%%      { "Stochastic property assertions", [
+%%      ] },
+%%
+%%      { "Error state assertions", [
+%%      ] },
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
+
 
     ] }.
 
@@ -348,9 +366,24 @@ permute_test_() ->
 
     { "Permute tests", [
 
-        {"[1,2,3]",   ?_assert([[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]] =:= sc:permute([1,2,3])   )},
-        {"[1,2,3],2", ?_assert([[1,2],[1,3],[2,1],[2,3],[3,1],[3,2]]             =:= sc:permute([1,2,3],2) )},
-        {"[]",        ?_assert([]                                                =:= sc:permute([])        )}
+%%      { "Documentation assertions", [
+%%      ] },
+%%
+        { "Manual value assertions", [
+
+            {"[1,2,3]",   ?_assert([[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]] =:= sc:permute([1,2,3])   )},
+            {"[1,2,3],2", ?_assert([[1,2],[1,3],[2,1],[2,3],[3,1],[3,2]]             =:= sc:permute([1,2,3],2) )},
+            {"[]",        ?_assert([]                                                =:= sc:permute([])        )}
+
+        ] }
+%%
+%%      { "Stochastic property assertions", [
+%%      ] },
+%%
+%%      { "Error state assertions", [
+%%      ] },
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
 
     ] }.
 
@@ -362,9 +395,24 @@ shared_keys_test_() ->
 
     { "Shared keys tests", [
 
-        {"[],[]",                                   ?_assert([]                =:= sc:shared_keys([],[])                                   )},
-        {"[{1,a},{2,a},{3,a}],[{1,b},{3,b},{4,b}]", ?_assert([{1,a,b},{3,a,b}] =:= sc:shared_keys([{1,a},{2,a},{3,a}],[{1,b},{3,b},{4,b}]) )},
-        {"[{1,a},{2,a}],[{3,b},{4,b}]",             ?_assert([]                =:= sc:shared_keys([{1,a},{2,a}],[{3,b},{4,b}])             )}
+%%      { "Documentation assertions", [
+%%      ] },
+%%
+        { "Manual value assertions", [
+
+            {"[],[]",                                   ?_assert([]                =:= sc:shared_keys([],[])                                   )},
+            {"[{1,a},{2,a},{3,a}],[{1,b},{3,b},{4,b}]", ?_assert([{1,a,b},{3,a,b}] =:= sc:shared_keys([{1,a},{2,a},{3,a}],[{1,b},{3,b},{4,b}]) )},
+            {"[{1,a},{2,a}],[{3,b},{4,b}]",             ?_assert([]                =:= sc:shared_keys([{1,a},{2,a}],[{3,b},{4,b}])             )}
+
+        ] }
+%%
+%%      { "Stochastic property assertions", [
+%%      ] },
+%%
+%%      { "Error state assertions", [
+%%      ] },
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
 
     ] }.
 
@@ -376,10 +424,25 @@ list_product_test_() ->
 
     { "List product tests", [
 
-        {"[1,2,3]",   ?_assert(6    =:= sc:list_product([1,2,3]))},
-        {"[1,2,5.4]", ?_assert(10.8 =:= sc:list_product([1,2,5.4]))},
-        {"[1]",       ?_assert(1    =:= sc:list_product([1]))},
-        {"[]",        ?_assert(1    =:= sc:list_product([]))}
+%%      { "Documentation assertions", [
+%%      ] },
+%%
+        { "Manual value assertions", [
+
+            {"[1,2,3]",   ?_assert(6    =:= sc:list_product([1,2,3]))},
+            {"[1,2,5.4]", ?_assert(10.8 =:= sc:list_product([1,2,5.4]))},
+            {"[1]",       ?_assert(1    =:= sc:list_product([1]))},
+            {"[]",        ?_assert(1    =:= sc:list_product([]))}
+
+        ] }
+%%
+%%      { "Stochastic property assertions", [
+%%      ] },
+%%
+%%      { "Error state assertions", [
+%%      ] },
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
 
     ] }.
 
@@ -391,11 +454,26 @@ even_or_odd_test_() ->
 
     { "Even or odd tests", [
 
-        {"-2", ?_assert(even =:= sc:even_or_odd(-2))},
-        {"-1", ?_assert(odd  =:= sc:even_or_odd(-1))},
-        {"0",  ?_assert(even =:= sc:even_or_odd(0) )},
-        {"1",  ?_assert(odd  =:= sc:even_or_odd(1) )},
-        {"2",  ?_assert(even =:= sc:even_or_odd(2) )}
+%%      { "Documentation assertions", [
+%%      ] },
+%%
+        { "Manual value assertions", [
+
+            {"-2", ?_assert(even =:= sc:even_or_odd(-2))},
+            {"-1", ?_assert(odd  =:= sc:even_or_odd(-1))},
+            {"0",  ?_assert(even =:= sc:even_or_odd(0) )},
+            {"1",  ?_assert(odd  =:= sc:even_or_odd(1) )},
+            {"2",  ?_assert(even =:= sc:even_or_odd(2) )}
+
+        ] }
+%%
+%%      { "Stochastic property assertions", [
+%%      ] },
+%%
+%%      { "Error state assertions", [
+%%      ] },
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
 
     ] }.
 
@@ -407,10 +485,25 @@ implode_test_() ->
 
     { "Implode tests", [
 
-        {"a,b,c",    ?_assert("a,b,c"    =:= sc:implode(",", ["a",  "b",  "c" ]))},
-        {"ab,cd,ef", ?_assert("ab,cd,ef" =:= sc:implode(",", ["ab", "cd", "ef"]))},
-        {",,",       ?_assert(",,"       =:= sc:implode(",", ["",   "",   ""  ]))},
-        {"",         ?_assert(""         =:= sc:implode("",  ["",   "",   ""  ]))}
+%%      { "Documentation assertions", [
+%%      ] },
+%%
+        { "Manual value assertions", [
+
+            {"a,b,c",    ?_assert("a,b,c"    =:= sc:implode(",", ["a",  "b",  "c" ]))},
+            {"ab,cd,ef", ?_assert("ab,cd,ef" =:= sc:implode(",", ["ab", "cd", "ef"]))},
+            {",,",       ?_assert(",,"       =:= sc:implode(",", ["",   "",   ""  ]))},
+            {"",         ?_assert(""         =:= sc:implode("",  ["",   "",   ""  ]))}
+
+        ] }
+%%
+%%      { "Stochastic property assertions", [
+%%      ] },
+%%
+%%      { "Error state assertions", [
+%%      ] },
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
 
     ] }.
 
@@ -422,18 +515,35 @@ explode_test_() ->
 
     { "Explode tests", [
 
-        {"a,b,c",    ?_assert(["a",  "b",  "c" ] =:= sc:explode(",", "a,b,c"))},
-        {"ab,cd,ef", ?_assert(["ab", "cd", "ef"] =:= sc:explode(",", "ab,cd,ef"))},
+        { "Documentation assertions", [
 
-        {"Doc ex 1 - num comma",            ?_assert(["1","2","5","10","20"]                   =:= sc:explode(",", "1,2,5,10,20"))},
-        {"Doc ex 2 - name space",           ?_assert(["John","Jacob","Jingleheimer","Schmidt"] =:= sc:explode(" ", "John Jacob Jingleheimer Schmidt"))},
-        {"Doc ex 3 - dir semi,space",       ?_assert(["North","East","South","West"]           =:= sc:explode("; ", "North; East; South; West"))},
-        {"Doc ex 4 - no such delim",        ?_assert(["I am the monarch of the sea"]           =:= sc:explode("No such delimiter", "I am the monarch of the sea"))},
-        {"Doc ex 5 - comma gaps",           ?_assert(["", "", ""]                              =:= sc:explode(",", ",,"))},
-        {"Doc ex 6 - atoms",                ?_assert([[alpha],[gamma,delta],[epsilon]]         =:= sc:explode([beta], [alpha, beta, gamma, delta, beta, epsilon]))},
+            {"Example 1 - num comma",            ?_assert(["1","2","5","10","20"]                   =:= sc:explode(",", "1,2,5,10,20"))},
+            {"Example 2 - name space",           ?_assert(["John","Jacob","Jingleheimer","Schmidt"] =:= sc:explode(" ", "John Jacob Jingleheimer Schmidt"))},
+            {"Example 3 - dir semi,space",       ?_assert(["North","East","South","West"]           =:= sc:explode("; ", "North; East; South; West"))},
+            {"Example 4 - no such delim",        ?_assert(["I am the monarch of the sea"]           =:= sc:explode("No such delimiter", "I am the monarch of the sea"))},
+            {"Example 5 - comma gaps",           ?_assert(["", "", ""]                              =:= sc:explode(",", ",,"))},
+            {"Example 6 - atoms",                ?_assert([[alpha],[gamma,delta],[epsilon]]         =:= sc:explode([beta], [alpha, beta, gamma, delta, beta, epsilon]))}
 
-        {"Doc ex 7 - [] delim throws",      ?_assertError( badarg, sc:explode([], [alpha, beta, gamma, delta, beta, epsilon])   ) },
-        {"Doc ex 8 - nonlist delim throws", ?_assertError( badarg, sc:explode(beta, [alpha, beta, gamma, delta, beta, epsilon]) ) }
+        ] },
+
+        { "Manual value assertions", [
+
+            {"a,b,c",    ?_assert(["a",  "b",  "c" ] =:= sc:explode(",", "a,b,c"))},
+            {"ab,cd,ef", ?_assert(["ab", "cd", "ef"] =:= sc:explode(",", "ab,cd,ef"))}
+
+        ] },
+%%
+%%      { "Stochastic property assertions", [
+%%      ] },
+%%
+        { "Error state assertions", [
+
+            {"Example 7 - [] delim throws",      ?_assertError( badarg, sc:explode([], [alpha, beta, gamma, delta, beta, epsilon])   ) },
+            {"Example 8 - nonlist delim throws", ?_assertError( badarg, sc:explode(beta, [alpha, beta, gamma, delta, beta, epsilon]) ) }
+
+        ] }
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
 
     ] }.
 
@@ -483,23 +593,6 @@ prop_ceil_always_gives_integers() ->
 ceil_test_() ->
 
     { "Ceil/Ceiling tests", [
-
-%%      { "Documentation assertions", [
-%%      ] },
-%%
-%%      { "Manual value assertions", [
-%%      ] },
-%%
-%%      { "Stochastic property assertions", [
-%%      ] },
-%%
-%%      { "Error state assertions", [
-%%      ] },
-%%
-%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
-
-
-
 
 %%      { "Documentation assertions", [
 %%      ] },
@@ -693,12 +786,12 @@ range_scale_test_() ->
 
         { "Documentation assertions", [
 
-            { "Doc ex 1 - range",     ?_assert( 2.0  =:= sc:range_scale([3, 4, 5, 6])         ) },
-            { "Doc ex 2 - bookends",  ?_assert( 2.0  =:= sc:range_scale([3, 6])               ) },
-            { "Doc ex 3 - backwards", ?_assert( 2.0  =:= sc:range_scale([6, 5, 3])            ) },
-            { "Doc ex 4 - float",     ?_assert( 2.5  =:= sc:range_scale([3, 4, 5, 6, 7, 7.5]) ) },
-            { "Doc ex 5 - irregular", ?_assert( 33.0 =:= sc:range_scale([3, 10, 12, 99])      ) },
-            { "Doc ex 6 - repeat",    ?_assert( 1.0  =:= sc:range_scale([3, 3, 3])            ) }
+            { "Example 1 - range",     ?_assert( 2.0  =:= sc:range_scale([3, 4, 5, 6])         ) },
+            { "Example 2 - bookends",  ?_assert( 2.0  =:= sc:range_scale([3, 6])               ) },
+            { "Example 3 - backwards", ?_assert( 2.0  =:= sc:range_scale([6, 5, 3])            ) },
+            { "Example 4 - float",     ?_assert( 2.5  =:= sc:range_scale([3, 4, 5, 6, 7, 7.5]) ) },
+            { "Example 5 - irregular", ?_assert( 33.0 =:= sc:range_scale([3, 10, 12, 99])      ) },
+            { "Example 6 - repeat",    ?_assert( 1.0  =:= sc:range_scale([3, 3, 3])            ) }
 
         ] }
 
@@ -727,10 +820,10 @@ expected_value_test_() ->
 
         { "Documentation assertions", [
 
-            { "Doc ex 1 - 1..6=3.5",                     ?_assert( 3.5                 =:= sc:expected_value([1,2,3,4,5,6])         ) },
-            { "Doc ex 2 - 5x1,1x10=2.5",                 ?_assert( 2.5                 =:= sc:expected_value([ {1,5}, {10,1} ])     ) },
-            { "Doc ex 3 - 1,1,1,1,1;1x10=2.5",           ?_assert( 2.5                 =:= sc:expected_value([ 1,1,1,1,1, {10,1} ]) ) },
-            { "Doc ex 4 - 8x1,7x-1=0.66",                ?_assert( 0.06666666666666667 =:= sc:expected_value([ {1,8}, {-1,7} ])     ) }
+            { "Example 1 - 1..6=3.5",                     ?_assert( 3.5                 =:= sc:expected_value([1,2,3,4,5,6])         ) },
+            { "Example 2 - 5x1,1x10=2.5",                 ?_assert( 2.5                 =:= sc:expected_value([ {1,5}, {10,1} ])     ) },
+            { "Example 3 - 1,1,1,1,1;1x10=2.5",           ?_assert( 2.5                 =:= sc:expected_value([ 1,1,1,1,1, {10,1} ]) ) },
+            { "Example 4 - 8x1,7x-1=0.66",                ?_assert( 0.06666666666666667 =:= sc:expected_value([ {1,8}, {-1,7} ])     ) }
 
         ] },
 
@@ -834,10 +927,10 @@ arithmetic_mean_test_() ->
 
         { "Documentation assertions", [
 
-            { "Doc ex 1 - 1..5=3.0",  ?_assert(  3.0 =:= sc:arithmetic_mean([1,2,3,4,5]) ) },
-            { "Doc ex 2 - []=0.0",    ?_assert(  0.0 =:= sc:arithmetic_mean([])          ) },
-            { "Doc ex 3 - 4x2=2.0",   ?_assert(  2.0 =:= sc:arithmetic_mean([2,2,2,2])   ) },
-            { "Doc ex 4 - -3,2=-0.5", ?_assert( -0.5 =:= sc:arithmetic_mean([-3,2])      ) }
+            { "Example 1 - 1..5=3.0",  ?_assert(  3.0 =:= sc:arithmetic_mean([1,2,3,4,5]) ) },
+            { "Example 2 - []=0.0",    ?_assert(  0.0 =:= sc:arithmetic_mean([])          ) },
+            { "Example 3 - 4x2=2.0",   ?_assert(  2.0 =:= sc:arithmetic_mean([2,2,2,2])   ) },
+            { "Example 4 - -3,2=-0.5", ?_assert( -0.5 =:= sc:arithmetic_mean([-3,2])      ) }
 
         ] },
 

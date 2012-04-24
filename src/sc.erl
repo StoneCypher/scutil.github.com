@@ -193,6 +193,7 @@
     segment_size/1,
     parallelize/2,
     has_debug_info/1,
+    ad_rate/5,
 
     solarized/0,
       solarized/1,
@@ -9763,7 +9764,7 @@ parallelize(Fun, DataSets) ->
     HomeBase     = self(),
     Len          = length(DataSets),
 
-    [ spawn( fun() -> HomeBase ! { ResultHandle, Id, Fun(DataSet) } end ) || { Id, DataSet } <- lists:zip( lists:seq(1,Len), DataSets ) ],
+    [ spawn( fun() -> HomeBase ! { ResultHandle, Id, apply(Fun,DataSet) } end ) || { Id, DataSet } <- lists:zip( lists:seq(1,Len), DataSets ) ],
 
     parallelize_gather([], Len, ResultHandle).
 
@@ -9798,7 +9799,7 @@ parallelize_gather(Results, Remaining, ResultHandle) ->
 
 % todo sorted_gather( [ {N, X}, ... ] ) -> [X, ...] for asc N
 
-%% @doc <span style="color: green; font-weight: bold;">Tested</span> Returns the Solarized palette.  ```1>
+%% @doc <span style="color: green; font-weight: bold;">Tested</span> Returns the Solarized palette.  ```1>'''
 
 %% Since Version 828
 
@@ -9831,7 +9832,7 @@ solarized() ->
 %% 11897088
 %%
 %% 2> io:format("#~.16b~n", [sc:solarized(yellow)]).
-%% #b58900
+%% #b58900'''
 
 
 solarized(base03) ->  16#002b36;
@@ -9860,8 +9861,23 @@ solarized(green) ->   16#859900.
 
 has_debug_info(ModuleName) ->
 
-    lists:member(debug_info, 
-        proplists:get_value(options, 
+    lists:member(debug_info,
+        proplists:get_value(options,
             proplists:get_value(compile, erlang:get_module_info(ModuleName))
         )
     ).
+
+
+
+
+
+%% @since Version 831
+
+ad_rate(Searches, CPC, CTR, Conversion, RPC) when is_number(Searches), is_number(CPC), is_number(CTR), is_number(Conversion) ->
+
+    Clicks    = Searches * CTR,
+    Price     = Clicks * CPC,
+    Customers = Clicks * Conversion,
+    Net       = Customers * RPC,
+
+    [ { price, Price }, { net, Net }, { profit, Net - Price } ].

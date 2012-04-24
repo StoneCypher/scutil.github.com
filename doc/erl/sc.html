@@ -13,7 +13,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of the erlang portion of the scutil library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> 2.5.823
+<p><b>Version:</b> 2.5.830
 </p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
@@ -405,6 +405,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#halstead_complexity-5">halstead_complexity/5</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#harmonic_mean-1">harmonic_mean/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the harmonic mean of a list of numbers.</td></tr>
 <tr><td valign="top"><a href="#has_bit-2">has_bit/2</a></td><td><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of <code>Num</code>.</td></tr>
+<tr><td valign="top"><a href="#has_debug_info-1">has_debug_info/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#hex_to_int-1">hex_to_int/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a hexstring() or hexchar() into its numeric value.</td></tr>
 <tr><td valign="top"><a href="#histograph-1">histograph/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes a histograph count of the items in the list.</td></tr>
 <tr><td valign="top"><a href="#hmac-3">hmac/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Shorthands for algorithms so you don't need to know block sizes.</td></tr>
@@ -436,6 +437,8 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#kendall_correlation-1">kendall_correlation/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Kendall Tau Rank Correlation Coefficient of a list of coordinate tuples.</td></tr>
 <tr><td valign="top"><a href="#kendall_correlation-2">kendall_correlation/2</a></td><td>Equivalent to <a href="#kendall-1"><tt>kendall(lists:zip(List1, List2))</tt></a>.
 </td></tr>
+<tr><td valign="top"><a href="#key_bucket-1">key_bucket/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#key_bucket-2">key_bucket/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#key_cluster-2">key_cluster/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#key_duplicate-1">key_duplicate/1</a></td><td><span style="color: green; font-weight: bold;">Tested</span> Iterates a list of <code>{Count,Term}</code>, producing a list of <code>[Term,Term,...]</code>.</td></tr>
 <tr><td valign="top"><a href="#key_extrema-1">key_extrema/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
@@ -512,6 +515,7 @@ via Naive Bayes Likelihood.</td></tr>
 <tr><td valign="top"><a href="#paper_3d_render-2">paper_3d_render/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#paper_3d_render-3">paper_3d_render/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#paper_3d_render-4">paper_3d_render/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#parallelize-2">parallelize/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#parity-1">parity/1</a></td><td>Documentary convenience function (synonymous with even_or_odd/1) that returns the atoms <code>even</code> or <code>odd</code> for any integer.</td></tr>
 <tr><td valign="top"><a href="#partition_by_residue-2">partition_by_residue/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#pearson_correlation-1">pearson_correlation/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Pearson Correlation Coefficient of a list of coordinate tuples.</td></tr>
@@ -548,6 +552,7 @@ via Naive Bayes Likelihood.</td></tr>
 <tr><td valign="top"><a href="#sanitize_filename-1">sanitize_filename/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Sanitize an arbitrary string to be appropriate for Windows and Unix filesystems, and URLs.</td></tr>
 <tr><td valign="top"><a href="#sanitize_tokens-2">sanitize_tokens/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Remove unacceptable elements from an input list, as defined by another list or a filter function.</td></tr>
 <tr><td valign="top"><a href="#second_difference-1">second_difference/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#segment_size-1">segment_size/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#send_receive-2">send_receive/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Blocking) First send a message to an entity.</td></tr>
 <tr><td valign="top"><a href="#send_receive-3">send_receive/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Non-Blocking) First send a message to an entity.</td></tr>
 <tr><td valign="top"><a href="#send_receive_masked-3">send_receive_masked/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Blocking) First send a message to an entity.</td></tr>
@@ -560,6 +565,8 @@ via Naive Bayes Likelihood.</td></tr>
 <tr><td valign="top"><a href="#shuffle-1">shuffle/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return a list with the original list's shallow members in a random order.</td></tr>
 <tr><td valign="top"><a href="#simple_ranking-1">simple_ranking/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a ranked ordering of the list without tie rankings.</td></tr>
 <tr><td valign="top"><a href="#skewness-1">skewness/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#solarized-0">solarized/0</a></td><td><span style="color: green; font-weight: bold;">Tested</span> Returns the Solarized palette.</td></tr>
+<tr><td valign="top"><a href="#solarized-1">solarized/1</a></td><td><span style="color: green; font-weight: bold;">Tested</span> Returns members of the Solarized palette.</td></tr>
 <tr><td valign="top"><a href="#spearman_correlation-1">spearman_correlation/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Compute the Spearman's Rank Correlation Coefficient of a list of coordinate tuples.</td></tr>
 <tr><td valign="top"><a href="#spearman_correlation-2">spearman_correlation/2</a></td><td>Equivalent to <a href="#spearman_correlation-1"><tt>spearman_correlation(lists:zip(List1, List2))</tt></a>.
 </td></tr>
@@ -598,6 +605,8 @@ via Naive Bayes Likelihood.</td></tr>
 <tr><td valign="top"><a href="#union-2">union/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#union-3">union/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#union-4">union/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#unique_receive_respond-1">unique_receive_respond/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#unique_send_receive-3">unique_send_receive/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#unit_scale-1">unit_scale/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#vector_magnitude-1">vector_magnitude/1</a></td><td>Equivalent to <a href="#root_sum_square-1"><tt>root_sum_square(VX)</tt></a>.
 </td></tr>
@@ -1665,6 +1674,12 @@ via Naive Bayes Likelihood.</td></tr>
   false</pre></p>
 <p><b>Introduced in:</b> Version 727</p>
 
+<h3 class="function"><a name="has_debug_info-1">has_debug_info/1</a></h3>
+<div class="spec">
+<p><tt>has_debug_info(ModuleName) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 829</p>
+
 <h3 class="function"><a name="hex_to_int-1">hex_to_int/1</a></h3>
 <div class="spec">
 <p><tt>hex_to_int(Hex::<a href="#type-hexstring">hexstring()</a> | <a href="#type-hexchar">hexchar()</a>) -&gt; integer()</tt><br></p>
@@ -1986,6 +2001,18 @@ via Naive Bayes Likelihood.</td></tr>
 <p><tt>kendall_correlation(List1, List2) -&gt; any()</tt></p>
 </div><p>Equivalent to <a href="#kendall-1"><tt>kendall(lists:zip(List1, List2))</tt></a>.</p>
 
+
+<h3 class="function"><a name="key_bucket-1">key_bucket/1</a></h3>
+<div class="spec">
+<p><tt>key_bucket(List) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 826</p>
+
+<h3 class="function"><a name="key_bucket-2">key_bucket/2</a></h3>
+<div class="spec">
+<p><tt>key_bucket(Index, List) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 826</p>
 
 <h3 class="function"><a name="key_cluster-2">key_cluster/2</a></h3>
 <div class="spec">
@@ -2621,6 +2648,12 @@ via Naive Bayes Likelihood.</p>
 <p><b>Introduced in:</b> Version 634
  </p>
 
+<h3 class="function"><a name="parallelize-2">parallelize/2</a></h3>
+<div class="spec">
+<p><tt>parallelize(Fun, DataSets) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 827</p>
+
 <h3 class="function"><a name="parity-1">parity/1</a></h3>
 <div class="spec">
 <p><tt>parity(Num::integer()) -&gt; even | odd</tt><br></p>
@@ -3044,6 +3077,12 @@ via Naive Bayes Likelihood.</p>
 <p><b>Introduced in:</b> Version 547
  </p>
 
+<h3 class="function"><a name="segment_size-1">segment_size/1</a></h3>
+<div class="spec">
+<p><tt>segment_size(List::[{any(), number()}]) -&gt; {{list(), number(), non_neg_integer()}, [{any(), float(), number()}]}</tt><br></p>
+</div>
+<p><b>Introduced in:</b> Version 824</p>
+
 <h3 class="function"><a name="send_receive-2">send_receive/2</a></h3>
 <div class="spec">
 <p><tt>send_receive(ToWhom::pid() | atom(), What::any()) -&gt; {item, any()}</tt><br></p>
@@ -3163,6 +3202,20 @@ via Naive Bayes Likelihood.</p>
 <p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></p>
 <p><b>Introduced in:</b> Version 493
  </p>
+
+<h3 class="function"><a name="solarized-0">solarized/0</a></h3>
+<div class="spec">
+<p><tt>solarized() -&gt; any()</tt></p>
+</div><p><span style="color: green; font-weight: bold;">Tested</span> Returns the Solarized palette.  <pre>  1&gt;</pre></p>
+
+<h3 class="function"><a name="solarized-1">solarized/1</a></h3>
+<div class="spec">
+<p><tt>solarized(X1) -&gt; any()</tt></p>
+</div><p><span style="color: green; font-weight: bold;">Tested</span> Returns members of the Solarized palette.  <pre>  1&gt; sc:solarized(yellow).
+  11897088
+ 
+  2&gt; io:format("#~.16b~n", [sc:solarized(yellow)]).
+  #b58900</pre></p>
 
 <h3 class="function"><a name="spearman_correlation-1">spearman_correlation/1</a></h3>
 <div class="spec">
@@ -3601,6 +3654,18 @@ via Naive Bayes Likelihood.</p>
 <p><b>Introduced in:</b> Version 586
  </p>
 
+<h3 class="function"><a name="unique_receive_respond-1">unique_receive_respond/1</a></h3>
+<div class="spec">
+<p><tt>unique_receive_respond(RespondFun::function()) -&gt; responded | nothing_there</tt><br></p>
+</div>
+<p><b>Introduced in:</b> Version 825</p>
+
+<h3 class="function"><a name="unique_send_receive-3">unique_send_receive/3</a></h3>
+<div class="spec">
+<p><tt>unique_send_receive(ToWhom::pid() | atom(), What::any(), HowLong::non_neg_integer() | infinity) -&gt; {got, Result::any()} | timeout</tt><br></p>
+</div>
+<p><b>Introduced in:</b> Version 825</p>
+
 <h3 class="function"><a name="unit_scale-1">unit_scale/1</a></h3>
 <div class="spec">
 <p><tt>unit_scale(Waveform) -&gt; any()</tt></p>
@@ -3718,6 +3783,6 @@ via Naive Bayes Likelihood.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Jan 29 2012, 02:55:45.</i></p>
+<p><i>Generated by EDoc, Mar 19 2012, 22:04:46.</i></p>
 </body>
 </html>
