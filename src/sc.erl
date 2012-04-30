@@ -9903,3 +9903,39 @@ grab_first([X|_]) ->
 grab_first(T) when is_tuple(T) ->
 
     element(1, T).
+
+    
+
+
+
+%% @since Version 833
+
+ww(Lim, Terms) ->
+
+    ww(Lim, Terms, "", []).
+
+
+
+
+
+ww(_Lim, [], CL, Acc) ->
+
+    lists:reverse([CL] ++ Acc);
+
+
+
+
+
+ww(Lim, [Next|Terms]=Whole, CL, Acc) ->
+
+    NL = length(CL) + length(Next) + 1,
+
+    case NL > Lim of
+
+        true ->
+            ww(Lim, Whole, "", [CL]++Acc);
+
+        false ->
+            ww(Lim, Terms, case CL of "" -> Next; Exist -> Exist ++ " " ++ Next end, Acc)
+
+    end.
