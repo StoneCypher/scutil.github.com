@@ -194,6 +194,10 @@
     parallelize/2,
     has_debug_info/1,
     ad_rate/5,
+    grab_first/1,
+
+    ww/2,
+%      word_wrap/3,
 
     solarized/0,
       solarized/1,
@@ -9881,3 +9885,21 @@ ad_rate(Searches, CPC, CTR, Conversion, RPC) when is_number(Searches), is_number
     Net       = Customers * RPC,
 
     [ { price, Price }, { net, Net }, { profit, Net - Price } ].
+
+
+
+
+
+%% @since Version 832
+
+grab_first([X|_]) -> 
+
+    X;
+
+
+
+
+
+grab_first(T) when is_tuple(T) ->
+
+    element(1, T).
