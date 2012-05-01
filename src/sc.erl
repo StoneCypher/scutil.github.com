@@ -196,6 +196,9 @@
     ad_rate/5,
     grab_first/1,
 
+    pred_rate/1,
+      truth_density/1,
+
     ww/2,
 %      word_wrap/3,
 
@@ -207,6 +210,7 @@
 
     unique_send_receive/3,
       unique_receive_respond/1,
+      unique_receive_respond/2,
 
     naive_bayes_likelihood/4,
       naive_bayes_likelihood/5,
@@ -9726,13 +9730,21 @@ unique_send_receive(ToWhom, Query, HowLong) ->
 
 unique_receive_respond(RespondFun) ->
 
+    unique_receive_respond(RespondFun, 0).
+
+
+
+
+
+unique_receive_respond(RespondFun, Timeout) ->
+
     receive
 
         { match_return, Sender, R, Query } when is_reference(R) ->
             Sender ! { match_returned, R, RespondFun(Query) }
 
     after
-        0 -> nothing_there
+        Timeout -> nothing_there
 
     end.
 
@@ -9904,7 +9916,7 @@ grab_first(T) when is_tuple(T) ->
 
     element(1, T).
 
-    
+
 
 
 
@@ -9939,3 +9951,87 @@ ww(Lim, [Next|Terms]=Whole, CL, Acc) ->
             ww(Lim, Terms, case CL of "" -> Next; Exist -> Exist ++ " " ++ Next end, Acc)
 
     end.
+
+
+
+
+
+% predicate rate - [true,true,false,true,false] yields 0.6, and non-bool yields error
+
+%% @doc The predicate rate of a list - counts a list of boolean values, and returns their rate of true values.  Also called `truth_density/1', pred_rate
+%% returns the fraction of the list which is true, or 1.0 if they're all true.  The function caps at 1.0 for asymptopes (pure-true lists.)  ```1> sc:pred_rate( [true,false] ).
+%% 0.5
+%%
+%% 2> sc:pred_rate( [false,false,false] ).
+%% 0.0
+%%
+%% 3> sc:pred_rate( [true,true,true] ).
+%% 1.0
+%%
+%% 4> sc:pred_rate( [] ).
+%% undefined
+%%
+%% 5> sc:pred_rate( [ true,true,true,true, false,false,false ] ).
+%% 0.5714285714285714'''
+
+%% @since Version 834
+
+-spec pred_rate( [boolean()] ) -> number().
+
+pred_rate(L) when is_list(L) ->
+
+    pred_rate(L, 0, 0).
+
+
+
+
+
+pred_rate([], 0, 0) ->
+
+    undefined;    % the predicate rate of the empty list is undefined
+
+
+
+
+
+pred_rate([], _For, 0) ->
+
+    1.0;          % hand-set any against-0 empty count to 1.0 to prevent divide by zero at the asymptope
+
+
+
+
+
+pred_rate([], For, Against) ->
+
+    For / (For + Against);
+
+
+
+
+
+pred_rate([true|Lr], For, Against) ->
+
+    pred_rate(Lr, For+1, Against);
+
+
+
+
+
+pred_rate([false|Lr], For, Against) ->
+
+    pred_rate(Lr, For, Against+1).
+
+
+
+
+
+%% @since Version 834
+
+%% @equiv pred_rate(L)
+
+-spec truth_density( [boolean()] ) -> number().
+
+truth_density(L) ->
+
+    pred_rate(L).

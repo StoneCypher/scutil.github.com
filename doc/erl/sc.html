@@ -13,7 +13,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of the erlang portion of the scutil library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> 2.5.830
+<p><b>Version:</b> 2.5.833
 </p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
@@ -309,6 +309,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#abstract_attributes-1">abstract_attributes/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#abstract_function-2">abstract_function/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#abstract_functions-1">abstract_functions/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#ad_rate-5">ad_rate/5</a></td><td></td></tr>
 <tr><td valign="top"><a href="#additive_factorial-1">additive_factorial/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#adjust_counter_by-2">adjust_counter_by/2</a></td><td>Adds to a counter's value; if the counter was not already defined, it will become the value in the <code>By</code> argument.</td></tr>
 <tr><td valign="top"><a href="#alarm_set-3">alarm_set/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -400,6 +401,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#geometric_mean-1">geometric_mean/1</a></td><td><span style="color: green; font-weight: bold;">Tested</span> Take the geometric mean of a list of numbers.</td></tr>
 <tr><td valign="top"><a href="#get_linked_processes-0">get_linked_processes/0</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
 <tr><td valign="top"><a href="#gmean_vector_normal-1">gmean_vector_normal/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the geometric mean of the elements of the unit vector for the vector provided.</td></tr>
+<tr><td valign="top"><a href="#grab_first-1">grab_first/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#grid_scatter-2">grid_scatter/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return a Count-length list of non-repeating coordinates in a grid of specified size; useful for feature generation.</td></tr>
 <tr><td valign="top"><a href="#halstead_complexity-4">halstead_complexity/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#halstead_complexity-5">halstead_complexity/5</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -525,6 +527,7 @@ via Naive Bayes Likelihood.</td></tr>
 </td></tr>
 <tr><td valign="top"><a href="#permute-2">permute/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Calculate either the full or the depth-limited permutations of a list, order sensitive; contrast <a href="#combinations-2"><code>combinations/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#power_set-1">power_set/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#pred_rate-1">pred_rate/1</a></td><td>The predicate rate of a list - counts a list of boolean values, and returns their rate of true values.</td></tr>
 <tr><td valign="top"><a href="#probability_all-1">probability_all/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculates the likelihood that all items in a list of probabilities expressed on the real interval will occur.</td></tr>
 <tr><td valign="top"><a href="#probability_any-1">probability_any/1</a></td><td><span style="color:red;font-style:italic">Incomplete Todo Comeback</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#qsp_average-2">qsp_average/2</a></td><td><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the quadratic scalar product average of a vector <code>W</code> and a list of vectors <code>X</code>.</td></tr>
@@ -594,6 +597,8 @@ via Naive Bayes Likelihood.</td></tr>
 <tr><td valign="top"><a href="#to_list-1">to_list/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#triangle_index-1">triangle_index/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#triangle_index-2">triangle_index/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#truth_density-1">truth_density/1</a></td><td>Equivalent to <a href="#pred_rate-1"><tt>pred_rate(L)</tt></a>.
+</td></tr>
 <tr><td valign="top"><a href="#tuple_duplicate-2">tuple_duplicate/2</a></td><td><span style="color: green; font-weight: bold;">Tested</span> Creates a tuple of fixed width, repeating the given element the given number of times.</td></tr>
 <tr><td valign="top"><a href="#tuple_member-2">tuple_member/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether E is a member element of tuple T, analogous to <code>lists::member(E, L)</code>.</td></tr>
 <tr><td valign="top"><a href="#tuple_sort-1">tuple_sort/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -606,6 +611,7 @@ via Naive Bayes Likelihood.</td></tr>
 <tr><td valign="top"><a href="#union-3">union/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#union-4">union/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#unique_receive_respond-1">unique_receive_respond/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#unique_receive_respond-2">unique_receive_respond/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#unique_send_receive-3">unique_send_receive/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#unit_scale-1">unit_scale/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#vector_magnitude-1">vector_magnitude/1</a></td><td>Equivalent to <a href="#root_sum_square-1"><tt>root_sum_square(VX)</tt></a>.
@@ -613,6 +619,7 @@ via Naive Bayes Likelihood.</td></tr>
 <tr><td valign="top"><a href="#vector_normalize-1">vector_normalize/1</a></td><td><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the magnitude of a vector.</td></tr>
 <tr><td valign="top"><a href="#walk_unique_pairings-2">walk_unique_pairings/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
 <tr><td valign="top"><a href="#weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the weighted arithmetic mean of the input values.</td></tr>
+<tr><td valign="top"><a href="#ww-2">ww/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#zip_n-1">zip_n/1</a></td><td>Equivalent to <a href="#zip_n-2"><tt>zip_n(Ls, to_tuple)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#zip_n-2">zip_n/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Computes a zip on any sized group of lists, rather than just two or three as offered by the lists module.</td></tr>
@@ -666,6 +673,12 @@ via Naive Bayes Likelihood.</td></tr>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></p>
 <p><b>Introduced in:</b> version 531
  </p>
+
+<h3 class="function"><a name="ad_rate-5">ad_rate/5</a></h3>
+<div class="spec">
+<p><tt>ad_rate(Searches, CPC, CTR, Conversion, RPC) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 831</p>
 
 <h3 class="function"><a name="additive_factorial-1">additive_factorial/1</a></h3>
 <div class="spec">
@@ -1627,6 +1640,12 @@ via Naive Bayes Likelihood.</td></tr>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the geometric mean of the elements of the unit vector for the vector provided.
  </p>
 <p><b>Introduced in:</b> Version 498</p>
+
+<h3 class="function"><a name="grab_first-1">grab_first/1</a></h3>
+<div class="spec">
+<p><tt>grab_first(T) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 832</p>
 
 <h3 class="function"><a name="grid_scatter-2">grid_scatter/2</a></h3>
 <div class="spec">
@@ -2738,6 +2757,26 @@ via Naive Bayes Likelihood.</p>
 <p><b>Introduced in:</b> Version 589
  </p>
 
+<h3 class="function"><a name="pred_rate-1">pred_rate/1</a></h3>
+<div class="spec">
+<p><tt>pred_rate(L::[boolean()]) -&gt; number()</tt><br></p>
+</div><p>The predicate rate of a list - counts a list of boolean values, and returns their rate of true values.  Also called <code>truth_density/1</code>, pred_rate
+  returns the fraction of the list which is true, or 1.0 if they're all true.  The function caps at 1.0 for asymptopes (pure-true lists.)  <pre>  1&gt; sc:pred_rate( [true,false] ).
+  0.5
+ 
+  2&gt; sc:pred_rate( [false,false,false] ).
+  0.0
+ 
+  3&gt; sc:pred_rate( [true,true,true] ).
+  1.0
+ 
+  4&gt; sc:pred_rate( [] ).
+  undefined
+ 
+  5&gt; sc:pred_rate( [ true,true,true,true, false,false,false ] ).
+  0.5714285714285714</pre></p>
+<p><b>Introduced in:</b> Version 834</p>
+
 <h3 class="function"><a name="probability_all-1">probability_all/1</a></h3>
 <div class="spec">
 <p><tt>probability_all(ListOfProbabilities) -&gt; any()</tt></p>
@@ -3556,6 +3595,13 @@ via Naive Bayes Likelihood.</p>
 <p><b>Introduced in:</b> Version 632
  </p>
 
+<h3 class="function"><a name="truth_density-1">truth_density/1</a></h3>
+<div class="spec">
+<p><tt>truth_density(L::[boolean()]) -&gt; number()</tt><br></p>
+</div><p>Equivalent to <a href="#pred_rate-1"><tt>pred_rate(L)</tt></a>.</p>
+
+<p><b>Introduced in:</b> Version 834</p>
+
 <h3 class="function"><a name="tuple_duplicate-2">tuple_duplicate/2</a></h3>
 <div class="spec">
 <p><tt>tuple_duplicate(N::non_neg_integer(), Item::any()) -&gt; tuple()</tt><br></p>
@@ -3660,6 +3706,11 @@ via Naive Bayes Likelihood.</p>
 </div>
 <p><b>Introduced in:</b> Version 825</p>
 
+<h3 class="function"><a name="unique_receive_respond-2">unique_receive_respond/2</a></h3>
+<div class="spec">
+<p><tt>unique_receive_respond(RespondFun, Timeout) -&gt; any()</tt></p>
+</div>
+
 <h3 class="function"><a name="unique_send_receive-3">unique_send_receive/3</a></h3>
 <div class="spec">
 <p><tt>unique_send_receive(ToWhom::pid() | atom(), What::any(), HowLong::non_neg_integer() | infinity) -&gt; {got, Result::any()} | timeout</tt><br></p>
@@ -3701,6 +3752,12 @@ via Naive Bayes Likelihood.</p>
  </p>
 <p><b>Introduced in:</b> Version 484</p>
 <p><b>See also:</b> <a href="#amean_vector_normal-1">amean_vector_normal/1</a>, <a href="#arithmetic_mean-1">arithmetic_mean/1</a>.</p>
+
+<h3 class="function"><a name="ww-2">ww/2</a></h3>
+<div class="spec">
+<p><tt>ww(Lim, Terms) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 833</p>
 
 <h3 class="function"><a name="zip_n-1">zip_n/1</a></h3>
 <div class="spec">
@@ -3783,6 +3840,6 @@ via Naive Bayes Likelihood.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Mar 19 2012, 22:04:46.</i></p>
+<p><i>Generated by EDoc, May 1 2012, 19:21:54.</i></p>
 </body>
 </html>
