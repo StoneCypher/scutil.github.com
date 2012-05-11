@@ -196,6 +196,14 @@
     ad_rate/5,
     grab_first/1,
 
+    wang_carpet/2,
+      wang_carpet/3,
+      wang_such_that/2,
+      wang_such_that/3,
+      wang_row/1,
+      wang_row/2,
+      ms_wang/0,
+
     pred_rate/1,
       truth_density/1,
 
@@ -7132,7 +7140,7 @@ map_scanline(F,L,A) ->
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>, by fredrik svensson and adam lindberg, from http://www.merriampark.com/lderlang.htm
 
-levenshtein(Same, Same) 
+levenshtein(Same, Same)
 
     when is_list(Same) ->
 
@@ -7140,7 +7148,9 @@ levenshtein(Same, Same)
 
 
 
-levenshtein(String, []) 
+
+
+levenshtein(String, [])
 
     when is_list(String) ->
 
@@ -7148,7 +7158,9 @@ levenshtein(String, [])
 
 
 
-levenshtein( [], String) 
+
+
+levenshtein( [], String)
 
     when is_list(String) ->
 
@@ -7156,9 +7168,11 @@ levenshtein( [], String)
 
 
 
-levenshtein(Source, Target) 
 
-    when is_list(Source), 
+
+levenshtein(Source, Target)
+
+    when is_list(Source),
          is_list(Target) ->
 
     levenshtein_rec(Source, Target, lists:seq(0, length(Target)), 1).
@@ -7177,6 +7191,8 @@ levenshtein_rec( [SrcHead|SrcTail], Target, DistList, Step) ->
 
 
 
+
+
 levenshtein_rec( [], _, DistList, _) ->
 
     lists:last(DistList).
@@ -7189,12 +7205,14 @@ levenshtein_rec( [], _, DistList, _) ->
 %%
 %% @private
 
-levenshtein_distlist([TargetHead|TargetTail], [DLH|DLT], SourceChar, NewDistList, LastDist) 
+levenshtein_distlist([TargetHead|TargetTail], [DLH|DLT], SourceChar, NewDistList, LastDist)
 
     when length(DLT) > 0 ->
 
     Min = lists:min( [LastDist + 1, hd(DLT) + 1, DLH + lev_dif(TargetHead, SourceChar)] ),
     levenshtein_distlist(TargetTail, DLT, SourceChar, NewDistList ++ [Min], Min);
+
+
 
 
 
@@ -7280,7 +7298,7 @@ circles_contact({sc_circle, AX, AY, AR}, {sc_circle, BX, BY, BR}) ->
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
 
-wglsh(List) 
+wglsh(List)
 
     when is_list(List) ->
 
@@ -7681,6 +7699,7 @@ hmac("sha1", Key, Data) ->
 hmac("sha-1", Key, Data) ->
 
     hmac_sha1(Key, Data).
+
 
 
 
@@ -10035,3 +10054,158 @@ pred_rate([false|Lr], For, Against) ->
 truth_density(L) ->
 
     pred_rate(L).
+
+
+
+
+
+%% @since Version 835
+
+ms_wang() ->
+
+    [ {r,y,g,b}, {g,b,g,b}, {r,y,r,y}, {g,b,r,y}, {r,b,g,y}, {g,y,g,y}, {r,b,r,b}, {g,y,r,b} ].
+
+
+
+
+
+%% @since Version 835
+
+wang_row(Width) ->
+
+    wang_row(Width, top_row, 1, '_', []).
+
+
+
+
+
+%% @since Version 835
+
+wang_row(Width, PriorRow) ->
+
+    wang_row(Width, PriorRow, 1, '_', []).
+
+
+
+
+
+%% @since Version 835
+
+wang_row(0, top_row, _At, _Prev, Work) ->
+
+    list_to_tuple(lists:reverse(Work));
+
+
+
+
+
+wang_row(Remaining, top_row, At, Prev, Work) ->
+
+    N = wang_such_that(case Prev of '_' -> '_'; {_,R,_,_} -> R end, '_'),
+
+    wang_row(Remaining-1, top_row, At+1, N, [N] ++ Work);
+
+
+
+
+
+wang_row(0, _OldTopRow, _At, _Prev, Work) ->
+
+    list_to_tuple(lists:reverse(Work));
+
+
+
+
+
+wang_row(Remaining, OldTopRow, At, Prev, Work) ->
+
+    T = element(At, OldTopRow),
+    N = wang_such_that(case Prev of '_' -> '_'; {_,R,_,_} -> R end, case T of '_' -> '_'; {_,_,B,_} -> B end),
+
+    wang_row(Remaining-1, OldTopRow, At+1, N, [N] ++ Work).
+
+
+
+
+
+%% @since Version 835
+
+wang_such_that(Left, Top) ->
+
+    wang_such_that(Left, Top, ms_wang()).
+
+
+
+
+
+%% @since Version 835
+
+wang_such_that('_', '_', Tiles) ->
+
+    sc:random_from(Tiles);
+
+
+
+
+
+wang_such_that('_', Top, Tiles) ->
+
+    sc:random_from([ Satisfied || { T,_R,_B,_L}=Satisfied <- Tiles, T =:= Top  ]);
+
+
+
+
+
+wang_such_that(Left, '_', Tiles) ->
+
+    sc:random_from([ Satisfied || {_T,_R,_B, L}=Satisfied <- Tiles, L =:= Left  ]);
+
+
+
+
+
+wang_such_that(Left, Top, Tiles) ->
+
+    sc:random_from([ Satisfied || { T,_R,_B, L}=Satisfied <- Tiles, T =:= Top, L =:= Left  ]).
+
+
+
+
+
+%% @since Version 835
+
+-spec wang_carpet( integer(), integer() ) -> tuple( tuple( integer() ) ).
+
+wang_carpet(X, Y) ->
+
+    wang_carpet(X,Y, []).
+
+
+
+
+
+%% @since Version 835
+
+wang_carpet(X, Y, Tiles) ->
+
+    wang_carpet(X, Y, Tiles, top_row, []).
+
+
+
+
+
+%% @since Version 835
+
+wang_carpet(_Width, 0, _Tiles, _LastRow, Work) ->
+
+    list_to_tuple(lists:reverse(Work));
+
+
+
+
+
+wang_carpet(Width, RowsLeft, Tiles, LastRow, Work) ->
+
+    NewRow = wang_row(Width, LastRow),
+
+    wang_carpet(Width, RowsLeft-1, Tiles, NewRow, [NewRow] ++ Work).
