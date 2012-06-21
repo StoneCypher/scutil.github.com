@@ -196,6 +196,12 @@
     ad_rate/5,
     grab_first/1,
 
+    unixtime/0,
+      unixtime_daybase/0,
+      unixtime_daybase/1,
+      unixday/0,
+      unixday/1,
+
     wang_carpet/2,
       wang_carpet/3,
       wang_such_that/2,
@@ -348,6 +354,9 @@
       srand/3,
 
     rand/1,
+
+    frand/0,
+      frand_between/2,
 
     random_from/1,
       random_from/2,
@@ -2349,6 +2358,8 @@ dstat(NumericList, PopulationOrSample) ->
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return extended descriptive statistics of a numeric list.  nspired by J dstat from <a href="http://bbot.org/blog/archives/2011/03/17/on_being_surprised_by_a_programming_language/">bbot.org</a>.  J seems to be assuming sample for statistics.  I do not like assumptions.
 
 % ##todo comeback code sample
+
+% ##todo comeback add variance, percentiles.  histogram?  might be dangerous.
 
 dstat_ex(NumericList, PopulationOrSample) ->
 
@@ -6300,8 +6311,7 @@ random_generator() ->
 
 srand() ->
 
-    {A,B,C} = erlang:now(),
-    srand(A,B,C).
+    erlang:apply(random,seed,tuple_to_list(erlang:now())).
 
 
 
@@ -10209,3 +10219,81 @@ wang_carpet(Width, RowsLeft, Tiles, LastRow, Work) ->
     NewRow = wang_row(Width, LastRow),
 
     wang_carpet(Width, RowsLeft-1, Tiles, NewRow, [NewRow] ++ Work).
+
+
+
+
+
+
+%% @since Version 836
+
+unixtime() ->
+
+    erlang:universaltime_to_posixtime(erlang:universaltime()).
+
+
+
+
+
+
+%% @since Version 836
+
+unixday() ->
+
+    sc:floor(unixtime() / 86400).
+
+
+
+
+
+
+%% @since Version 836
+
+unixday(FromTime) ->
+
+    sc:floor(FromTime / 86400).
+
+
+
+
+
+%% @since Version 836
+
+unixtime_daybase() ->
+
+    sc:floor(unixtime() / 86400) * 86400.
+
+
+
+
+
+%% @since Version 836
+
+unixtime_daybase(FromTime) ->
+
+    sc:floor(FromTime / 86400) * 86400.
+
+
+
+
+
+%% @since Version 837
+
+frand() ->
+
+    case get(random_seed) of
+        undefined -> srand();
+        _Defined  -> ok
+    end,
+
+    random:uniform().
+
+
+
+
+
+%% @since Version 837
+
+frand_between(X,Y) when X < Y ->
+
+    X + ((Y-X) * frand()).
