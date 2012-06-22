@@ -195,6 +195,7 @@
     has_debug_info/1,
     ad_rate/5,
     grab_first/1,
+    funnel/2,
 
     unixtime/0,
       unixtime_daybase/0,
@@ -354,6 +355,7 @@
       srand/3,
 
     rand/1,
+      is_rand_seeded/0,
 
     frand/0,
       frand_between/2,
@@ -6226,7 +6228,7 @@ random_from(N, List, remainder) ->
 
 
 
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a pseudorandom integer on the range `[0 - (Range-1)]' inclusive. ```1> sc:rand(100).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a pseudorandom integer on the range `[0 - (Range-1)]' inclusive.  Primarily just an auto-seeding wrapper. ```1> sc:rand(100).
 %% 9
 %%
 %% 2> [ sc:rand(100) || X <- lists:seq(1,10) ].
@@ -6244,53 +6246,14 @@ random_from(N, List, remainder) ->
 
 rand(Range) ->
 
-    case whereis(scutil_rand_source) of
+    case is_rand_seeded() of
 
-        undefined ->
+        false ->
             srand(),
             rand(Range);
 
-        _ ->
-
-            scutil_rand_source ! [ self(), Range ],
-            receive
-                RandVal ->
-                    RandVal - 1
-            end
-
-    end.
-
-
-
-
-
-%% @private
-
-random_generator(SeedA, SeedB, SeedC) ->
-
-    random:seed(SeedA, SeedB, SeedC),
-    random_generator().
-
-
-
-
-
-%% @private
-
-random_generator() ->
-
-    receive
-
-        terminate ->
-            { ok, terminated };
-
-        [Return, Range] ->
-            Val = random:uniform(Range),
-            Return ! Val,
-            random_generator();
-
-        _  ->
-            random_generator()
+        true ->
+            sc:floor(Range * random:uniform())
 
     end.
 
@@ -6311,7 +6274,9 @@ random_generator() ->
 
 srand() ->
 
-    erlang:apply(random,seed,tuple_to_list(erlang:now())).
+    NewSeed = tuple_to_list(erlang:now()),
+    erlang:apply(random,seed,NewSeed),
+    { ok, { seeded, NewSeed }}.
 
 
 
@@ -6333,19 +6298,7 @@ srand() ->
 
 srand(A,B,C) ->
 
-    RandomGeneratorPid = spawn(fun() -> random_generator(A,B,C) end),
-
-    case whereis(scutil_rand_source) of
-
-        undefined ->
-            ok;
-
-        _Defined ->
-            unregister(scutil_rand_source)  % todo fixme leak : this should notify the old rand_source that it is being discarded
-
-    end,
-
-    register(scutil_rand_source, RandomGeneratorPid),
+    random:seed(A,B,C),
     { ok, { seeded, {A,B,C} } }.
 
 
@@ -10281,9 +10234,9 @@ unixtime_daybase(FromTime) ->
 
 frand() ->
 
-    case get(random_seed) of
-        undefined -> srand();
-        _Defined  -> ok
+    case is_rand_seeded() of
+        true  -> srand();
+        false -> ok
     end,
 
     random:uniform().
@@ -10297,3 +10250,46 @@ frand() ->
 frand_between(X,Y) when X < Y ->
 
     X + ((Y-X) * frand()).
+
+
+
+
+
+%% @since Version 837
+
+is_rand_seeded() ->
+
+    case get(random_seed) of
+
+        {A,B,C} when is_integer(A), is_integer(B), is_integer(C) -> true;
+        _Defined                                                 -> false
+
+    end.
+
+
+
+
+
+%% @since Version 838
+
+funnel(Base, Percents) ->
+
+    funnel([Base], Base, Percents).
+
+
+
+
+
+funnel(Work, _Last, []) ->
+
+    lists:reverse( Work );
+
+
+
+
+
+funnel(Work, Last, [NextPct | Pcts]) ->
+
+    Step = Last * NextPct,
+
+    funnel([Step]++Work, Step, Pcts).
