@@ -196,6 +196,8 @@
     ad_rate/5,
     grab_first/1,
     funnel/2,
+    list_cross_multiply/1,
+    outcomes/2,
 
     unixtime/0,
       unixtime_daybase/0,
@@ -9341,9 +9343,9 @@ benchmark(BareLambda) ->
 
 benchmark(Fun, Args) ->
 
-    Start  = now(),
+    Start  = os:timestamp(),
     Result = apply(Fun, Args),
-    End    = now(),
+    End    = os:timestamp(),
 
     { time_diff(Start,End), Result }.
 
@@ -9353,9 +9355,9 @@ benchmark(Fun, Args) ->
 
 benchmark(Module, Func, Args) ->
 
-    Start  = now(),
+    Start  = os:timestamp(),
     Result = apply(Module, Func, Args),
-    End    = now(),
+    End    = os:timestamp(),
 
     { time_diff(Start,End), Result }.
 
@@ -10293,3 +10295,24 @@ funnel(Work, Last, [NextPct | Pcts]) ->
     Step = Last * NextPct,
 
     funnel([Step]++Work, Step, Pcts).
+
+
+
+
+
+%% @since Version 839
+
+list_cross_multiply(L) -> 
+
+    [ sc:list_product(tuple_to_list(Li)) || Li  <- sc:zip_n(L) ].
+
+
+
+
+
+
+%% @since Version 840
+
+outcomes(Opts, Scorer) -> 
+
+    sc:histograph([ Scorer(Poss) || Poss <- sc:every_member_representation(Opts) ]).
