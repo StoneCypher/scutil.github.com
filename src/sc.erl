@@ -10338,3 +10338,15 @@ histo_2d(Data) ->
 logb(Base, Value) ->
 
     math:log(Value) / math:log(Base).
+
+
+
+
+
+%% @since Version 842
+
+bucket(Position, [First|_] = ListOfLists) when is_list(First) ->
+
+    {Cats,_} = lists:unzip(sc:histograph([ lists:nth(Position, Col) || Col <- ListOfLists ])),
+
+    [ { Cat, [ Row || Row <- ListOfLists, lists:nth(Position, Row) =:= Cat ] } || Cat <- Cats ].
