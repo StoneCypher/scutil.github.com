@@ -504,6 +504,7 @@
       central_moments/2,
 
     histograph/1,
+      histo_2d/1,
 
     skewness/1,
       kurtosis/1,
@@ -10313,6 +10314,16 @@ list_cross_multiply(L) ->
 
 %% @since Version 840
 
-outcomes(Opts, Scorer) -> 
+outcomes(Opts, Scorer) ->
 
     sc:histograph([ Scorer(Poss) || Poss <- sc:every_member_representation(Opts) ]).
+
+
+
+
+
+%% @since Version 840
+
+histo_2d(Data) ->
+
+    [ sc:histograph(tuple_to_list(Cols)) || Cols <- sc:zip_n(Data) ].
