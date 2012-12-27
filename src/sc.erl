@@ -198,6 +198,7 @@
     funnel/2,
     list_cross_multiply/1,
     outcomes/2,
+    logb/2,
 
     unixtime/0,
       unixtime_daybase/0,
@@ -10327,3 +10328,13 @@ outcomes(Opts, Scorer) ->
 histo_2d(Data) ->
 
     [ sc:histograph(tuple_to_list(Cols)) || Cols <- sc:zip_n(Data) ].
+
+
+
+
+
+%% @since Version 841
+
+logb(Base, Value) ->
+
+    math:log(Value) / math:log(Base).
