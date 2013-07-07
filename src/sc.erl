@@ -223,6 +223,8 @@
     solarized/0,
       solarized/1,
 
+    bucket/2,
+
     key_bucket/1,
       key_bucket/2,
 
@@ -9132,7 +9134,7 @@ columns(RowCount, List) ->
 
 columns( [], Output, Unrotate) ->
 
-    .sc.list:rotate(
+    sc:rotate_list(
         Unrotate,
         [ lists:reverse(Column) ||
             Column <- Output
@@ -9236,7 +9238,7 @@ columnate(List, Options) ->
 
     Aligned = [ [ DoAlign(Item, Width) || Item <- Col]  || {Width, Col} <- lists:zip(MinWidths, Columns) ],
 
-    Format = implode( lists:duplicate(Margin, $ ), [ "~" ++ integer_to_list(Width) ++ "s" || Width <- MinWidths ] ),
+    Format = implode( lists:duplicate(Margin, $ ), [ "~" ++ integer_to_list(Width) ++ "s" || Width <- MinWidths ] ),                                    %"% (sorry, bad highlighter; grumble mumble SUBLIME)
 
     columnate_each_row(Aligned, Format, []).
 
