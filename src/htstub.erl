@@ -1,4 +1,46 @@
 
+%%%%%%%%%%%
+%%
+%%  @doc HtStub - web development in Erlang as trivial as it <i>could</i> be
+%%
+%%  This is the 2013 rewrite of the original library.
+%%  
+%%  <h2>Quick Start</h2>
+%%
+%%  Step One 
+%%    Compile the util lib and server lib
+%%      1> c("/wherever/sc.erl").
+%%      {ok,sc}
+%%      2> c("/wherever/htstub.erl").
+%%      {ok,htstub}
+%%
+%%  Step Two
+%%    Good to go, try it out
+%%      3> htstub:serve(fun(_) -> "<html><body><p>Hello, world from htstub!</p></body></html>" end).
+%%      &lt;0.2050.0>
+%%
+%%  Step Three
+%%    Pull up your web browser and go to <a href="http://127.0.0.1/" target="_blank">127.0.0.1</a>.
+
+
+
+
+
+%% @author John Haugeland <stonecypher@gmail.com>
+%% @copyright 2013 - current John Haugeland, All Rights Reserved
+%% @since September July 5, 2013
+
+%% @todo distinguish -opaque types from -types (opaque are not meant to be understood by the outside world, merely tracked, eg handles)
+
+%% @todo module attributes and documentation attributes for license name, license url
+%% @todo Every documentation example should be enforced as a unit test, to keep the docs up to date
+%% @todo Automate the version back into the docs
+%% @todo Automate the version into the .app.src
+
+
+
+
+
 -module(htstub).
 
 -include_lib("eunit/include/eunit.hrl").

@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Module htstub</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module htstub</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>HtStub - web development in Erlang as trivial as it /could/ be.
+<p>Copyright © 2013 - current John Haugeland, All Rights Reserved</p>
+
+<p><b>Version:</b> 2.6.842
+</p>
+<p><b>Introduced in:</b> September 14, 2007</p>
+<p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
+
+<h2><a name="description">Description</a></h2><p>HtStub - web development in Erlang as trivial as it /could/ be</p>
+ 
+   <p>This is the 2013 rewrite of the original library.</p>
+ 
+   <h2>Quick Start</h2>
+ 
+   <p>Step One     
+Compile the util lib and server lib       
+1&gt; c("/wherever/sc.erl").       
+{ok,sc}       
+2&gt; c("/wherever/htstub.erl").       
+{ok,htstub}</p>
+ 
+   <p>Step Two
+     Good to go, try it out
+       3&gt; htstub:serve(fun(_) -&gt; "<html><body><p>Hello, world from htstub!</p></body></html>" end).
+       &lt;0.2050.0&gt;</p>
+ 
+   Step Three
+     Pull up your web browser and go to <a href="http://127.0.0.1/" target="_blank">127.0.0.1</a>.
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#default_options-0">default_options/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#get_boot_options-1">get_boot_options/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#lib_version-0">lib_version/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#listen_on-4">listen_on/4</a></td><td></td></tr>
+<tr><td valign="top"><a href="#loop_upgrade-1">loop_upgrade/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#parse_uri-1">parse_uri/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#quiet-1">quiet/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#rest-1">rest/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#running_version-1">running_version/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#start-0">start/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#start-1">start/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#start-2">start/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#stop-1">stop/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#stop_listening_on-4">stop_listening_on/4</a></td><td>(not tested) .</td></tr>
+<tr><td valign="top"><a href="#test-0">test/0</a></td><td>(not testworthy) Runs the test suite in terse form.</td></tr>
+<tr><td valign="top"><a href="#verbose-1">verbose/1</a></td><td></td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="default_options-0">default_options/0</a></h3>
+<div class="spec">
+<p><tt>default_options() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="get_boot_options-1">get_boot_options/1</a></h3>
+<div class="spec">
+<p><tt>get_boot_options(ServerPid) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="lib_version-0">lib_version/0</a></h3>
+<div class="spec">
+<p><tt>lib_version() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="listen_on-4">listen_on/4</a></h3>
+<div class="spec">
+<p><tt>listen_on(StubPid, Address, AddressType, Port) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="loop_upgrade-1">loop_upgrade/1</a></h3>
+<div class="spec">
+<p><tt>loop_upgrade(Verbose) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="parse_uri-1">parse_uri/1</a></h3>
+<div class="spec">
+<p><tt>parse_uri(Uri) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="quiet-1">quiet/1</a></h3>
+<div class="spec">
+<p><tt>quiet(StubPid) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="rest-1">rest/1</a></h3>
+<div class="spec">
+<p><tt>rest(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="running_version-1">running_version/1</a></h3>
+<div class="spec">
+<p><tt>running_version(ServerPid) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="start-0">start/0</a></h3>
+<div class="spec">
+<p><tt>start() -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="start-1">start/1</a></h3>
+<div class="spec">
+<p><tt>start(Handler) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="start-2">start/2</a></h3>
+<div class="spec">
+<p><tt>start(Handler, Options) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="stop-1">stop/1</a></h3>
+<div class="spec">
+<p><tt>stop(StubPid) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="stop_listening_on-4">stop_listening_on/4</a></h3>
+<div class="spec">
+<p><tt>stop_listening_on(_StubPid, Address, AddressType, Port) -&gt; stopped_listening | {no_such_stop_listen, Address, AddressType, Port} | timeout</tt><br></p>
+</div><p>(not tested) . <pre></pre>
+ </p>
+<p><b>Introduced in:</b> 2.0.3</p>
+
+<h3 class="function"><a name="test-0">test/0</a></h3>
+<div class="spec">
+<p><tt>test() -&gt; ok | error</tt><br></p>
+</div><p>(not testworthy) Runs the test suite in terse form. <pre>   c("wherever/htstub.erl").
+  {ok,htstub}
+ 
+  2&gt; c("wherever/htstub_tests.erl").
+  {ok,htstub_tests}
+ 
+  3&gt; htstub:test().
+    All 9 tests passed.
+  ok</pre>
+ </p>
+<p><b>Introduced in:</b> 2.0.3</p>
+
+<h3 class="function"><a name="verbose-1">verbose/1</a></h3>
+<div class="spec">
+<p><tt>verbose(StubPid) -&gt; any()</tt></p>
+</div>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Jul 7 2013, 19:48:19.</i></p>
+</body>
+</html>
