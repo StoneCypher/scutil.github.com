@@ -741,7 +741,7 @@
 
 gen_docs() ->
 
-    gen_docs("/projects/github/scutil.github.com", "/projects/github/scutil.github.com/doc/erl").
+    gen_docs("/projects/scutil.github.com", "/projects/scutil.github.com/doc/erl").
 
 
 
@@ -763,7 +763,7 @@ gen_docs(WhereIsBase, WhereToPutDocs) ->
     {ok,CVer}      = file:read_file(WhereIsBase ++ "/version.counter"),
     CurrentVersion = << CMaj/binary, <<".">>/binary, CMin/binary, <<".">>/binary, CVer/binary >>,
 
-    DocTargets = ["sc", "sc_tests"],
+    DocTargets = ["sc", "sc_tests", "htstub", "htstub_tests"],
 
     filelib:ensure_dir(WhereToPutDocs),
     edoc:files([WhereIsSrc++"/"++DocFile++".erl" || DocFile <- DocTargets ], [{dir, WhereToPutDocs}, {new,true}]),

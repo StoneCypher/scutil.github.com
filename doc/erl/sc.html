@@ -13,7 +13,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of the erlang portion of the scutil library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> 2.5.833
+<p><b>Version:</b> 2.6.842
 </p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
@@ -326,6 +326,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#benchmark-2">benchmark/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#benchmark-3">benchmark/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#bin_to_hex_list-1">bin_to_hex_list/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#bucket-2">bucket/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#by_distance-2">by_distance/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#by_distance_raw-2">by_distance_raw/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#byte_to_hex-1">byte_to_hex/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a byte() into a hexstring().</td></tr>
@@ -394,8 +395,11 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#fk_readability-4">fk_readability/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a block of text.</td></tr>
 <tr><td valign="top"><a href="#flag_sets-1">flag_sets/1</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
 <tr><td valign="top"><a href="#floor-1">floor/1</a></td><td><span style="color: green; font-weight: bold;">Tested</span> Takes the floor (round towards negative infinity) of a number.</td></tr>
+<tr><td valign="top"><a href="#frand-0">frand/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#frand_between-2">frand_between/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#function_point_count-1">function_point_count/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#function_stats-1">function_stats/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#funnel-2">funnel/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#gen_docs-0">gen_docs/0</a></td><td>(not testworthy) Generates library documentation using the paths appropriate for the author's PC; you almost certainly want <a href="#gen_docs-2"><code>gen_docs/2</code></a> instead.</td></tr>
 <tr><td valign="top"><a href="#gen_docs-2">gen_docs/2</a></td><td>(not testworthy) Generates library documentation from and to the specified paths <code>WhereIsSrc</code> and <code>WhereToPutDocs</code> respectively.</td></tr>
 <tr><td valign="top"><a href="#geometric_mean-1">geometric_mean/1</a></td><td><span style="color: green; font-weight: bold;">Tested</span> Take the geometric mean of a list of numbers.</td></tr>
@@ -409,6 +413,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#has_bit-2">has_bit/2</a></td><td><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether a given bit is on in a sufficiently sized unsigned two's compliment integer representation of <code>Num</code>.</td></tr>
 <tr><td valign="top"><a href="#has_debug_info-1">has_debug_info/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#hex_to_int-1">hex_to_int/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a hexstring() or hexchar() into its numeric value.</td></tr>
+<tr><td valign="top"><a href="#histo_2d-1">histo_2d/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#histograph-1">histograph/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes a histograph count of the items in the list.</td></tr>
 <tr><td valign="top"><a href="#hmac-3">hmac/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Shorthands for algorithms so you don't need to know block sizes.</td></tr>
 <tr><td valign="top"><a href="#hmac-4">hmac/4</a></td><td><span style="color:orange;font-style:italic">Semi-Untested</span> An implementation of <a href="http://tools.ietf.org/html/rfc2104/">RFC 2104</a>, HMAC generic hash extension for any hash function and any key size.</td></tr>
@@ -432,6 +437,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#is_numeric_string-1">is_numeric_string/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#is_numeric_string-2">is_numeric_string/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#is_postfix-2">is_postfix/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
+<tr><td valign="top"><a href="#is_rand_seeded-0">is_rand_seeded/0</a></td><td></td></tr>
 <tr><td valign="top"><a href="#is_repeated_list-1">is_repeated_list/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#is_sorted_list-1">is_sorted_list/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns true if the list is sorted; false otherwise.</td></tr>
 <tr><td valign="top"><a href="#is_unique_list-1">is_unique_list/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns true if the list is unique; false otherwise.</td></tr>
@@ -456,12 +462,14 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#last_while_pos-2">last_while_pos/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the last element of the initial sequence where all items pass the predicate function.</td></tr>
 <tr><td valign="top"><a href="#last_while_pos-3">last_while_pos/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#levenshtein-2">levenshtein/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>, by fredrik svensson and adam lindberg, from http://www.merriampark.com/lderlang.htm.</td></tr>
+<tr><td valign="top"><a href="#list_cross_multiply-1">list_cross_multiply/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#list_intersection-2">list_intersection/2</a></td><td>Equivalent to <a href="#list_intersection-3"><tt>list_intersection(List1, List2, unsorted)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#list_intersection-3">list_intersection/3</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Efficiently computes the intersection of two lists.</td></tr>
 <tr><td valign="top"><a href="#list_product-1">list_product/1</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Takes the product of all numbers in the list.</td></tr>
 <tr><td valign="top"><a href="#list_to_number-1">list_to_number/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Converts a list into a number; integers will be returned if there is no mantissa in the list representation.</td></tr>
 <tr><td valign="top"><a href="#list_to_term-1">list_to_term/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Like binary_to_term, but not so much for binaries.</td></tr>
+<tr><td valign="top"><a href="#logb-2">logb/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#map_scanline-2">map_scanline/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Parses a string on all three newline types, discarding any empty lines; applies F as a functor to each line,  
 and returns the tuple of the remainder and then a list of all results from the functor(s) issued.</td></tr>
 <tr><td valign="top"><a href="#map_scanline-3">map_scanline/3</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Third argument passes argument list as secondary argument to the functor; useful for passing ancillary state.</td></tr>
@@ -486,6 +494,7 @@ and returns the tuple of the remainder and then a list of all results from the f
 <tr><td valign="top"><a href="#moments-1">moments/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#moments-2">moments/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#months_as_short_atoms-0">months_as_short_atoms/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#ms_wang-0">ms_wang/0</a></td><td></td></tr>
 <tr><td valign="top"><a href="#multi_deck-2">multi_deck/2</a></td><td><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Makes a number of instances of a deck, and applies a different back to each.</td></tr>
 <tr><td valign="top"><a href="#multi_do-3">multi_do/3</a></td><td>Equivalent to <a href="#multi_do-4"><tt>multi_do(C, M, F, [])</tt></a>.
 </td></tr>
@@ -512,6 +521,7 @@ via Naive Bayes Likelihood.</td></tr>
 <tr><td valign="top"><a href="#null_postpad_bin_to-2">null_postpad_bin_to/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#nybble_to_hex-1">nybble_to_hex/1</a></td><td>Convert a nybble() to a hexchar().</td></tr>
 <tr><td valign="top"><a href="#out_of_range-3">out_of_range/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#outcomes-2">outcomes/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#paper_3d_basic_depth-4">paper_3d_basic_depth/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#paper_3d_render-1">paper_3d_render/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#paper_3d_render-2">paper_3d_render/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -614,10 +624,21 @@ via Naive Bayes Likelihood.</td></tr>
 <tr><td valign="top"><a href="#unique_receive_respond-2">unique_receive_respond/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#unique_send_receive-3">unique_send_receive/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#unit_scale-1">unit_scale/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#unixday-0">unixday/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#unixday-1">unixday/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#unixtime-0">unixtime/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#unixtime_daybase-0">unixtime_daybase/0</a></td><td></td></tr>
+<tr><td valign="top"><a href="#unixtime_daybase-1">unixtime_daybase/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#vector_magnitude-1">vector_magnitude/1</a></td><td>Equivalent to <a href="#root_sum_square-1"><tt>root_sum_square(VX)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#vector_normalize-1">vector_normalize/1</a></td><td><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the magnitude of a vector.</td></tr>
 <tr><td valign="top"><a href="#walk_unique_pairings-2">walk_unique_pairings/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>.</td></tr>
+<tr><td valign="top"><a href="#wang_carpet-2">wang_carpet/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#wang_carpet-3">wang_carpet/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#wang_row-1">wang_row/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#wang_row-2">wang_row/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#wang_such_that-2">wang_such_that/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#wang_such_that-3">wang_such_that/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Take the weighted arithmetic mean of the input values.</td></tr>
 <tr><td valign="top"><a href="#ww-2">ww/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#zip_n-1">zip_n/1</a></td><td>Equivalent to <a href="#zip_n-2"><tt>zip_n(Ls, to_tuple)</tt></a>.
@@ -823,6 +844,12 @@ via Naive Bayes Likelihood.</td></tr>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></p>
 <p><b>Introduced in:</b> Version 640
  </p>
+
+<h3 class="function"><a name="bucket-2">bucket/2</a></h3>
+<div class="spec">
+<p><tt>bucket(Position, ListOfLists) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 842</p>
 
 <h3 class="function"><a name="by_distance-2">by_distance/2</a></h3>
 <div class="spec">
@@ -1563,6 +1590,18 @@ via Naive Bayes Likelihood.</td></tr>
   Unit, doc and stochastic property (int as float identity; float always larger within 1; all results integers) tested.</p>
 <p><b>Introduced in:</b> Version 511</p>
 
+<h3 class="function"><a name="frand-0">frand/0</a></h3>
+<div class="spec">
+<p><tt>frand() -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 837</p>
+
+<h3 class="function"><a name="frand_between-2">frand_between/2</a></h3>
+<div class="spec">
+<p><tt>frand_between(X, Y) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 837</p>
+
 <h3 class="function"><a name="function_point_count-1">function_point_count/1</a></h3>
 <div class="spec">
 <p><tt>function_point_count(Module) -&gt; any()</tt></p>
@@ -1576,6 +1615,12 @@ via Naive Bayes Likelihood.</td></tr>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></p>
 <p><b>Introduced in:</b> Version 524
  </p>
+
+<h3 class="function"><a name="funnel-2">funnel/2</a></h3>
+<div class="spec">
+<p><tt>funnel(Base, Percents) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 838</p>
 
 <h3 class="function"><a name="gen_docs-0">gen_docs/0</a></h3>
 <div class="spec">
@@ -1712,6 +1757,12 @@ via Naive Bayes Likelihood.</td></tr>
   256</pre>
  </p>
 <p><b>Introduced in:</b> Version 572</p>
+
+<h3 class="function"><a name="histo_2d-1">histo_2d/1</a></h3>
+<div class="spec">
+<p><tt>histo_2d(Data) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 840</p>
 
 <h3 class="function"><a name="histograph-1">histograph/1</a></h3>
 <div class="spec">
@@ -1946,6 +1997,12 @@ via Naive Bayes Likelihood.</td></tr>
 <p><b>Introduced in:</b> Version 543
  </p>
 
+<h3 class="function"><a name="is_rand_seeded-0">is_rand_seeded/0</a></h3>
+<div class="spec">
+<p><tt>is_rand_seeded() -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 837</p>
+
 <h3 class="function"><a name="is_repeated_list-1">is_repeated_list/1</a></h3>
 <div class="spec">
 <p><tt>is_repeated_list(Rem) -&gt; any()</tt></p>
@@ -2155,6 +2212,12 @@ via Naive Bayes Likelihood.</td></tr>
 <p><b>Introduced in:</b> Version 626
  </p>
 
+<h3 class="function"><a name="list_cross_multiply-1">list_cross_multiply/1</a></h3>
+<div class="spec">
+<p><tt>list_cross_multiply(L) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 839</p>
+
 <h3 class="function"><a name="list_intersection-2">list_intersection/2</a></h3>
 <div class="spec">
 <p><tt>list_intersection(List1, List2) -&gt; any()</tt></p>
@@ -2200,6 +2263,12 @@ via Naive Bayes Likelihood.</td></tr>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Like binary_to_term, but not so much for binaries.  Thanks, dizzyd (modified for error reporting)</p>
 <p><b>Introduced in:</b> Version 568
  </p>
+
+<h3 class="function"><a name="logb-2">logb/2</a></h3>
+<div class="spec">
+<p><tt>logb(Base, Value) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 841</p>
 
 <h3 class="function"><a name="map_scanline-2">map_scanline/2</a></h3>
 <div class="spec">
@@ -2455,6 +2524,12 @@ and returns the tuple of the remainder and then a list of all results from the f
 </div>
 <p><b>Introduced in:</b> Version 665</p>
 
+<h3 class="function"><a name="ms_wang-0">ms_wang/0</a></h3>
+<div class="spec">
+<p><tt>ms_wang() -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 835</p>
+
 <h3 class="function"><a name="multi_deck-2">multi_deck/2</a></h3>
 <div class="spec">
 <p><tt>multi_deck(Backs::<a href="#type-positive_integer_or_list">positive_integer_or_list()</a>, DeckGenerator::<a href="#type-function_or_list">function_or_list()</a>) -&gt; list()</tt><br></p>
@@ -2631,6 +2706,12 @@ via Naive Bayes Likelihood.</p>
 <p><tt>out_of_range(List, Lo, Hi) -&gt; any()</tt></p>
 </div>
 <p><b>Introduced in:</b> Version 650</p>
+
+<h3 class="function"><a name="outcomes-2">outcomes/2</a></h3>
+<div class="spec">
+<p><tt>outcomes(Opts, Scorer) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 840</p>
 
 <h3 class="function"><a name="paper_3d_basic_depth-4">paper_3d_basic_depth/4</a></h3>
 <div class="spec">
@@ -2841,7 +2922,7 @@ via Naive Bayes Likelihood.</p>
 <h3 class="function"><a name="rand-1">rand/1</a></h3>
 <div class="spec">
 <p><tt>rand(Range::integer()) -&gt; integer()</tt><br></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a pseudorandom integer on the range <code>[0 - (Range-1)]</code> inclusive. <pre>  1&gt; sc:rand(100).
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a pseudorandom integer on the range <code>[0 - (Range-1)]</code> inclusive.  Primarily just an auto-seeding wrapper. <pre>  1&gt; sc:rand(100).
   9
  
   2&gt; [ sc:rand(100) || X &lt;- lists:seq(1,10) ].
@@ -3723,6 +3804,36 @@ via Naive Bayes Likelihood.</p>
 </div>
 <p><b>Introduced in:</b> Version 720</p>
 
+<h3 class="function"><a name="unixday-0">unixday/0</a></h3>
+<div class="spec">
+<p><tt>unixday() -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 836</p>
+
+<h3 class="function"><a name="unixday-1">unixday/1</a></h3>
+<div class="spec">
+<p><tt>unixday(FromTime) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 836</p>
+
+<h3 class="function"><a name="unixtime-0">unixtime/0</a></h3>
+<div class="spec">
+<p><tt>unixtime() -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 836</p>
+
+<h3 class="function"><a name="unixtime_daybase-0">unixtime_daybase/0</a></h3>
+<div class="spec">
+<p><tt>unixtime_daybase() -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 836</p>
+
+<h3 class="function"><a name="unixtime_daybase-1">unixtime_daybase/1</a></h3>
+<div class="spec">
+<p><tt>unixtime_daybase(FromTime) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 836</p>
+
 <h3 class="function"><a name="vector_magnitude-1">vector_magnitude/1</a></h3>
 <div class="spec">
 <p><tt>vector_magnitude(VX) -&gt; any()</tt></p>
@@ -3743,6 +3854,42 @@ via Naive Bayes Likelihood.</p>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
  </p>
 <p><b>Introduced in:</b> Version 547</p>
+
+<h3 class="function"><a name="wang_carpet-2">wang_carpet/2</a></h3>
+<div class="spec">
+<p><tt>wang_carpet(X::integer(), Y::integer()) -&gt; {{integer()}}</tt><br></p>
+</div>
+<p><b>Introduced in:</b> Version 835</p>
+
+<h3 class="function"><a name="wang_carpet-3">wang_carpet/3</a></h3>
+<div class="spec">
+<p><tt>wang_carpet(X, Y, Tiles) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 835</p>
+
+<h3 class="function"><a name="wang_row-1">wang_row/1</a></h3>
+<div class="spec">
+<p><tt>wang_row(Width) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 835</p>
+
+<h3 class="function"><a name="wang_row-2">wang_row/2</a></h3>
+<div class="spec">
+<p><tt>wang_row(Width, PriorRow) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 835</p>
+
+<h3 class="function"><a name="wang_such_that-2">wang_such_that/2</a></h3>
+<div class="spec">
+<p><tt>wang_such_that(Left, Top) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 835</p>
+
+<h3 class="function"><a name="wang_such_that-3">wang_such_that/3</a></h3>
+<div class="spec">
+<p><tt>wang_such_that(Left, Top, Tiles) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 835</p>
 
 <h3 class="function"><a name="weighted_arithmetic_mean-1">weighted_arithmetic_mean/1</a></h3>
 <div class="spec">
@@ -3840,6 +3987,6 @@ via Naive Bayes Likelihood.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, May 1 2012, 19:21:54.</i></p>
+<p><i>Generated by EDoc, Jul 7 2013, 20:07:20.</i></p>
 </body>
 </html>

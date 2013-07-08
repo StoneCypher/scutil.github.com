@@ -60,6 +60,10 @@
     listen_on/4,
     stop_listening_on/4,
 
+    serve/0,
+      serve/1,
+      serve/2,
+
     start/0,
       start/1,
       start/2,
@@ -71,16 +75,20 @@
 
     default_options/0,
 
+    int_to_status/1,
+
     rest/1,
 
     parse_uri/1,
+
+    standard_datestring/0,
 
 
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Private exports, do not use
 
-    loop_upgrade/1
+    loop_upgrade/2
 
 ]).
 
@@ -188,21 +196,28 @@ mwrite(true,    Msg, Args) ->
 
 
 
-loop_upgrade(Verbose) ->
+loop_upgrade(Verbose, Handler) ->
 
     mwrite(Verbose, "upgrading: htstub core loop ~p now version ~p~n~n", [self(), lib_version()]),
-    loop(Verbose).
+    loop(Verbose, Handler).
 
 
 
 
 
-listener_loop(LSock) ->
+server_listener_loop(ListeningSocket, Handler) ->
 
-    receive
+    case gen_tcp:accept(ListeningSocket) of
 
-        terminate ->
-            ok
+        { ok, ConnectedSocket } ->
+            spawn(?MODULE, handle_socket, [ConnectedSocket, Handler]),
+            server_listener_loop(ListeningSocket, Handler);
+
+        { error, closed } ->
+            ok;
+
+        { error, _E } ->
+            server_listener_loop(ListeningSocket, Handler)
 
     end.
 
@@ -210,46 +225,46 @@ listener_loop(LSock) ->
 
 
 
-new_listener_loop(Address, AddressType, Port) ->
+new_listener_loop(Address, AddressType, Port, Handler) ->
 
     { ok, LSock } = gen_tcp:listen(Port, [binary, {ip, Address}, {packet, raw}, AddressType]),
-    listener_loop(LSock).
+    server_listener_loop(LSock, Handler).
 
 
 
 
 
-spawn_link_new_listener(Address, AddressType, Port) ->
+spawn_link_new_listener(Address, AddressType, Port, Handler) ->
 
-    spawn_link(fun() -> new_listener_loop(Address, AddressType, Port) end).
-
-
+    spawn_link(fun() -> new_listener_loop(Address, AddressType, Port, Handler) end).
 
 
 
-loop(Verbose) ->
+
+
+loop(Verbose, Handler) ->
 
     receive
 
         { 'EXIT', FromPid, Reason } ->
             mwrite(Verbose, "TRAPPED AN EXIT: htstub core loop ~p trapped from ~p~n  ~p~n~n", [self(), FromPid, Reason]),
-            loop(Verbose);
+            loop(Verbose, Handler);
 
         { ReqPid, get_running_version } ->
             ReqPid ! { now_running, lib_version() },
-            loop(Verbose);
+            loop(Verbose, Handler);
 
         { ReqPid, get_boot_options } ->
             mwrite(Verbose, "listing options: htstub core loop ~p~n~n", [self()]),
             ReqPid ! { boot_options, get(boot_options) },
-            loop(Verbose);
+            loop(Verbose, Handler);
 
         { ReqPid, listen_on, Address, AddressType, Port } ->
-            NewPid = spawn_link_new_listener(Address, AddressType, Port),
+            NewPid = spawn_link_new_listener(Address, AddressType, Port, Handler),
             mwrite(Verbose, "spawning: htstub new listener ~w for ~w ~w ~w~n~n", [NewPid, Address, AddressType, Port]),
             ReqPid ! { now_listening_on, NewPid },
             put({listening_on, Address, AddressType, Port}, NewPid),
-            loop(Verbose);
+            loop(Verbose, Handler);
 
         { ReqPid, stop_listening_on, Address, AddressType, Port } ->
             case get({listening_on, Address, AddressType, Port}) of
@@ -264,7 +279,7 @@ loop(Verbose) ->
                     Pid ! terminate
 
             end,
-            loop(Verbose);
+            loop(Verbose, Handler);
 
         terminate ->
             mwrite(Verbose, "terminating: htstub core loop ~p~n~n", [self()]),
@@ -272,19 +287,19 @@ loop(Verbose) ->
 
         upgrade ->
             mwrite(Verbose, "upgrading: htstub core loop ~p from version ~p ~n", [self(), lib_version()]),
-            htstub:loop_upgrade(Verbose);
+            htstub:loop_upgrade(Verbose, Handler);
 
         verbose ->
             mwrite(verbose, "set to verbose: htstub core loop ~p~n~n", [self()]),
-            loop(verbose);
+            loop(verbose, Handler);
 
         quiet ->
             mwrite(verbose, "set to quiet: htstub core loop ~p received misunderstood message~n  ~p~n~n", [self()]),
-            loop(quiet);
+            loop(quiet, Handler);
 
         Other ->
             mwrite(Verbose, "warning: htstub core loop ~p received misunderstood message~n  ~p~n~n", [self(), Other]),
-            loop(Verbose)
+            loop(Verbose, Handler)
 
     end.
 
@@ -292,7 +307,7 @@ loop(Verbose) ->
 
 
 
-lib_version() -> "2.0.3".
+lib_version() -> 5.
 
 
 
@@ -352,6 +367,18 @@ default_handler(_Request) ->
 
 
 
+%% @doc Serve is just a synonym for start.
+serve()    -> start().
+
+%% @doc Serve is just a synonym for start.
+serve(X)   -> start(X).
+
+%% @doc Serve is just a synonym for start.
+serve(X,Y) -> start(X,Y).
+
+
+
+
 
 start() -> 
 
@@ -390,7 +417,8 @@ bootstrap_loop(Options) ->
     process_flag(trap_exit, true),
     put(boot_options, Options),
 
-    loop(proplists:get_value(verbose, Options, false)).
+    loop(Options#htstub_config.verbose, Options#htstub_config.handler).
+%   loop(proplists:get_value(verbose, Options, false)).
 
 
 
@@ -459,6 +487,69 @@ stop_listening_on(StubPid, Address, AddressType, Port) ->
 rest(_) -> 
 
     todo.
+
+
+
+
+
+int_to_status(100) -> "100 Continue";
+int_to_status(101) -> "101 Switching Protocols";
+
+int_to_status(200) -> "200 OK";
+int_to_status(201) -> "201 Created";
+int_to_status(202) -> "202 Accepted";
+int_to_status(203) -> "203 Non-Authoritative Information";
+int_to_status(204) -> "204 No Content";
+int_to_status(205) -> "205 Reset Content";
+int_to_status(206) -> "206 Partial Content";
+
+int_to_status(300) -> "300 Multiple Choices";
+int_to_status(301) -> "301 Moved Permanently";
+int_to_status(302) -> "302 Found";
+int_to_status(303) -> "303 See Other";
+int_to_status(304) -> "304 Not Modified";
+int_to_status(305) -> "305 Use Proxy";
+int_to_status(306) -> "306 (Unused)";
+int_to_status(307) -> "307 Temporary Redirect";
+
+int_to_status(400) -> "400 Bad Request";
+int_to_status(401) -> "401 Unauthorized";
+int_to_status(402) -> "402 Payment Required";
+int_to_status(403) -> "403 Forbidden";
+int_to_status(404) -> "404 Not Found";
+int_to_status(405) -> "405 Method Not Allowed";
+int_to_status(406) -> "406 Not Acceptable";
+int_to_status(407) -> "407 Proxy Authentication Required";
+int_to_status(408) -> "408 Request Timeout";
+int_to_status(409) -> "409 Conflict";
+int_to_status(410) -> "410 Gone";
+int_to_status(411) -> "411 Length Required";
+int_to_status(412) -> "412 Precondition Failed";
+int_to_status(413) -> "413 Request Entity Too Large";
+int_to_status(414) -> "414 Request-URI Too Long";
+int_to_status(415) -> "415 Unsupported Media Type";
+int_to_status(416) -> "416 Requested Range Not Satisfiable";
+int_to_status(417) -> "417 Expectation Failed";
+
+int_to_status(500) -> "500 Internal Server Error";
+int_to_status(501) -> "501 Not Implemented";
+int_to_status(502) -> "502 Bad Gateway";
+int_to_status(503) -> "503 Service Unavailable";
+int_to_status(504) -> "504 Gateway Timeout";
+int_to_status(505) -> "505 HTTP Version Not Supported".
+
+
+
+
+
+standard_datestring() ->
+
+    { {Y,M,D}, {H,Mn,S} } = erlang:universaltime(),
+
+    MonthLabel = element(M, {"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"}),
+    Day = element(calendar:day_of_the_week(Y,M,D), {"Mon","Tue","Wed","Thu","Fri","Sat","Sun"}),
+
+    lists:flatten(io_lib:format("~s, ~b ~s ~b ~2.10.0b:~2.10.0b:~2.10.0b GMT",[Day,D,MonthLabel,Y,H,Mn,S])).
 
 
 
