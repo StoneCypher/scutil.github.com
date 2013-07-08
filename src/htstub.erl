@@ -28,7 +28,7 @@
 %%    <dt>Step One - Compile the util lib and server lib</dt>
 %%    <dd>Assuming "wherever" is the directory in which you've placed the source:<pre>
 %%1> c("/wherever/sc.erl").
-%%{ok,sc}
+%%{ok,sc}<br/>
 %%2> c("/wherever/htstub.erl").
 %%{ok,htstub}
 %%    </pre></dd>
@@ -36,15 +36,32 @@
 %%
 %%  <dl>
 %%    <dt>Step Two - Good to go, try it out</dt>
-%%    <dd>Assuming you aren't already running a webserver on this machine:<pre>
-%%3> htstub:serve(fun(_) -> "&lt;!doctype html>&lt;html>&lt;body>&lt;p>Hello, world from htstub!&lt;/p>&lt;/body>&lt;/html>" end).
-%%&lt;0.2050.0>
+%%    <dd><pre>
+%%3> Handle = htstub:serve().
+%%&lt;0.50.0>
 %%    </pre></dd>
 %%  </dl>
 %%
 %%  <dl>
 %%    <dt>Step Three - Aaaaand test</dt>
 %%    <dd>Pull up your web browser and go to <a href="http://127.0.0.1/" target="_blank">127.0.0.1</a>.</dd>
+%%  </dl>
+%%
+%%  <dl>
+%%    <dt>Step Four - One with your code?</dt>
+%%    <dd><pre>
+%%3> htstub:stop(Handle).
+%%terminate<br/>
+%%4> MyServer = fun(_) -> "&lt;!doctype html>&lt;html>Y helo thar&lt;/html>" end.
+%%#Fun&lt;erl_eval.6.17052888><br/>
+%%5> htstub:serve(MyServer).
+%%&lt;0.76.0>
+%%    </pre></dd>
+%%  </dl>
+%%
+%%  <dl>
+%%    <dt>Step Five - Aaaaand test</dt>
+%%    <dd>Pull up your web browser and go to <a href="http://127.0.0.1/" target="_blank">127.0.0.1</a>.  ... again.</dd>
 %%  </dl>
 
 
@@ -87,26 +104,24 @@
 
     serve/0,
       serve/1,
-      serve/2,
 
     start/0,
       start/1,
-      start/2,
 
     stop/1,
 
     verbose/1,
     quiet/1,
 
-    default_options/0,
-
     int_to_status/1,
-
-    rest/1,
 
     parse_uri/1,
 
+    rest/1,
+
     standard_datestring/0,
+    config_from_plist/1,
+    default_handler/1,
 
 
 
@@ -186,6 +201,8 @@ parse_uri(Uri) ->
     [QFront, Fragment] = sc:explode("#", NoQmQuery, 2),
     QueryTerms         = FixQueries(QFront),
 
+
+
     OurParse      = #htstub_uri{ 
                         scheme       = Scheme, 
                         user         = Username, 
@@ -221,10 +238,229 @@ mwrite(true,    Msg, Args) ->
 
 
 
+return_result(ConnectedSocket, Response) when is_list(Response) ->
+
+    return_result(ConnectedSocket, {200, Response});
+
+
+
+
+
+return_result(ConnectedSocket, {Status, Response}) when is_integer(Status), is_list(Response) ->
+
+    return_result(ConnectedSocket, {Status, [{"Date",standard_datestring()},{"Content-Type","text/html"},{"Content-Length",integer_to_list(length(Response))}], Response});
+
+
+
+
+
+return_result(ConnectedSocket, {Status, Headers, Response}) ->
+
+    gen_tcp:send(ConnectedSocket, package_result(Status, Headers, Response)).
+
+
+
+
+
+package_result(Status, Headers, Response) ->
+
+    "HTTP/1.1 " ++ int_to_status(Status) ++
+    lists:flatten([ "\r\n" ++ Field ++ ": " ++ Value || {Field,Value} <- Headers ]) ++
+    "\r\n" ++ "\r\n" ++
+    Response.
+
+
+
+
+
 loop_upgrade(Verbose, Handler) ->
 
     mwrite(Verbose, "upgrading: htstub core loop ~p now version ~p~n~n", [self(), lib_version()]),
     loop(Verbose, Handler).
+
+
+
+
+
+block_on_parse_http(ConnectedSocket) ->
+
+    { Method, Path, Protocol, Rem } = block_on_http_request(ConnectedSocket, [], []),
+    { BodyRem, ProcessedHeaders }   = block_on_http_headers(ConnectedSocket, Rem, [], Path, Protocol, Method),
+    parse_body(ConnectedSocket, BodyRem, Path, Protocol, Method, ProcessedHeaders).
+
+
+
+
+
+parse_body(ConnectedSocket, Body, Path, Protocol, Method, PHeaders) ->
+
+    FinalBodyLength = list_to_integer(proplists:get_value("Content-Length", PHeaders, "0")),
+    parse_body(ConnectedSocket, Body, Path, Protocol, Method, PHeaders, length(Body), FinalBodyLength).
+
+
+
+
+
+parse_body(ConnectedSocket, Body, Path, Protocol, Method, PHeaders, CurrentLength, BodyLength) when CurrentLength < BodyLength ->
+
+    {ok,NewRecv} = gen_tcp:recv(ConnectedSocket, 0),
+    parse_body(ConnectedSocket, Body ++ NewRecv, Path, Protocol, Method, PHeaders, CurrentLength+length(NewRecv), BodyLength);
+
+
+
+
+
+parse_body(_ConnectedSocket,_Body,_Path,_Protocol,_Method,_PHeaders, CurrentLength, BodyLength) when CurrentLength > BodyLength ->
+
+    { error, body_length_longer_than_expected };
+
+
+
+
+
+parse_body(_ConnectedSocket, Body, Path, Protocol, Method, PHeaders, BodyLength, BodyLength) ->
+
+    body_reformat(Body, Path, Protocol, Method, PHeaders, BodyLength).
+
+
+
+
+
+body_reformat(Body, Path, Protocol, Method, PHeaders, BodyLength) ->
+
+    { Site, Port } = case proplists:get_value("Host", PHeaders) of
+
+        undefined -> { "http://127.0.0.1/", 80 };
+
+        Defined ->
+
+            case sc:explode(":", Defined) of
+
+                [ ISite, IPort ] ->
+                    { ISite, list_to_integer(IPort) };
+
+                [ ISite ] ->
+                    { ISite, 80 }
+
+            end
+    end,
+
+    "HTTP/" ++ PVer  = Protocol,
+    [LMajor, LMinor] = sc:explode(".",PVer),  % todo harden
+
+    ["/" ++ Resource, Args] = case sc:explode("?", Path) of
+
+        [Rs, ArgL] ->
+            [Rs, [ list_to_tuple([ htstub:url_decode(I) || I <- sc:explode("=", Arg)]) || Arg <- sc:explode("&", ArgL) ]];
+
+        [Rs] ->
+            [Rs, []]
+
+    end,
+
+    { ok, { {Site,Port,{http,list_to_integer(LMajor),list_to_integer(LMinor),Method}}, PHeaders, {Resource,Args,{BodyLength,Body}} } }.
+
+
+
+
+
+block_on_http_headers(ConnectedSocket, [], PendingWork, Path, Protocol, Method) ->
+
+    case gen_tcp:recv(ConnectedSocket, 0) of
+
+        { ok, Data } ->
+            block_on_http_headers(ConnectedSocket, Data, PendingWork, Path, Protocol, Method);
+
+        { error, E } ->
+            { error, E }
+
+    end;
+
+
+
+
+
+block_on_http_headers(ConnectedSocket, Rem, PendingWork, Path, Protocol, Method) ->
+
+    Unified = PendingWork ++ Rem,
+
+    case sc:explode("\r\n\r\n", Unified, 2) of
+
+        [ Headers, BodyRem ] ->
+            ProcessedHeaders = [ list_to_tuple(sc:explode(": ",H)) || H <- sc:explode("\r\n", Headers) ],
+            { BodyRem, ProcessedHeaders };
+
+        [ NotYet ] ->
+            block_on_http_headers(ConnectedSocket, [], NotYet, Path, Protocol, Method)
+
+    end.
+
+
+
+
+
+
+block_on_http_request(ConnectedSocket, [], PendingWork) ->
+
+    case gen_tcp:recv(ConnectedSocket, 0) of
+
+        { ok, Data } ->
+            block_on_http_request(ConnectedSocket, Data, PendingWork);
+
+        { error, E } ->
+            { error, E }
+
+    end;
+
+
+
+
+
+block_on_http_request(ConnectedSocket, NewWork, PendingWork) ->
+
+    case sc:explode("\r\n", PendingWork ++ NewWork, 2) of
+
+        [ReqLine, Rem] ->
+
+            case sc:explode(" ", ReqLine) of
+
+                [ Method, Path, Protocol ] ->
+                    { Method, Path, Protocol, Rem };
+
+                Other ->
+                    { error, { malformed_request_line, ReqLine, Other }}
+
+            end;
+
+        [NotYet] ->
+            block_on_http_request(ConnectedSocket, [], NotYet)
+
+    end.
+
+
+
+
+
+handle_new_socket(ConnectedSocket, Handler) ->
+
+    case block_on_parse_http(ConnectedSocket) of
+
+        { ok, {Req, Headers, Args} } ->
+            return_result(ConnectedSocket, Handler({Req, Headers, Args})),
+
+            % todo debug this
+            % it's not entirely clear why I need to do this, but if i don't, the socket can close before send() pushes its data
+            % possibly related to the timeout options i used to set >:(
+            receive after 10 -> ok end,
+
+            gen_tcp:close(ConnectedSocket),
+            ok;
+
+        { error, _E } ->
+            gen_tcp:close(ConnectedSocket),
+            ok
+
+    end.
 
 
 
@@ -235,7 +471,7 @@ server_listener_loop(ListeningSocket, Handler) ->
     case gen_tcp:accept(ListeningSocket) of
 
         { ok, ConnectedSocket } ->
-            spawn(?MODULE, handle_socket, [ConnectedSocket, Handler]),
+            spawn(fun() -> handle_new_socket(ConnectedSocket, Handler) end),
             server_listener_loop(ListeningSocket, Handler);
 
         { error, closed } ->
@@ -252,7 +488,7 @@ server_listener_loop(ListeningSocket, Handler) ->
 
 new_listener_loop(Address, AddressType, Port, Handler) ->
 
-    { ok, LSock } = gen_tcp:listen(Port, [binary, {ip, Address}, {packet, raw}, AddressType]),
+    { ok, LSock } = gen_tcp:listen(Port, [list, {active, false}, {ip, Address}, {packet, raw}, AddressType]),
     server_listener_loop(LSock, Handler).
 
 
@@ -273,6 +509,10 @@ loop(Verbose, Handler) ->
 
         { 'EXIT', FromPid, Reason } ->
             mwrite(Verbose, "TRAPPED AN EXIT: htstub core loop ~p trapped from ~p~n  ~p~n~n", [self(), FromPid, Reason]),
+            loop(Verbose, Handler);
+
+        { now_listening_on, _NewPid } ->
+            % from auto-listen; discard
             loop(Verbose, Handler);
 
         { ReqPid, get_running_version } ->
@@ -332,7 +572,7 @@ loop(Verbose, Handler) ->
 
 
 
-lib_version() -> 5.
+lib_version() -> 6.
 
 
 
@@ -371,23 +611,11 @@ get_boot_options(ServerPid) ->
 
 
 
-default_options() ->
 
-    [ { start_immediate, true            },
-      { port,            80              }, 
-      { ip,              {0,0,0,0}       },
-      { addrtype,        inet            },   % inet for ipv4, inet6 for ipv6 with 4 fallback 
-      { server_name,     "htstub server" },
-      { verbose,         quiet           }
-    ].
+default_handler(Request) ->
 
+    lists:flatten(io_lib:format("<!doctype html><html><head><style type=\"text/css\">p{margin:0;padding:0;}p+p{margin-top:1em;}body{padding:1em;margin:0;font-size:150%;font-family:helvetica,arial,sans-serif;background-color:#cdf;color:#060;}.sig{position:fixed;bottom:1em;right:1em;color:#333;}</style></head><body><p>This is a default page.</p><p>Your webserver is working.</p><div class=\"sig\">Served by <a href=\"http://htstub.com/\">htstub</a>, a micro-webserver for <a href=\"http://erlang.org/\">Erlang</a>.</div><pre>~n~p~n</pre></body></html>", [Request])).
 
-
-
-
-default_handler(_Request) ->
-
-    "<!doctype html><html><head></head><body><p>This is <a href=\"http://htstub.com/\">htstub</a>, a micro-webserver for <a href=\"http://erlang.org/\">Erlang</a>.</p></body></html>".
 
 
 
@@ -398,30 +626,35 @@ serve()    -> start().
 %% @doc Serve is just a synonym for start.
 serve(X)   -> start(X).
 
-%% @doc Serve is just a synonym for start.
-serve(X,Y) -> start(X,Y).
-
 
 
 
 
 start() -> 
 
-    start(fun default_handler/1, default_options()).
+    start(fun default_handler/1).
 
 
 
 
 
-start(Handler) -> 
+start(Handler) when is_function(Handler) -> 
 
-    start(Handler, default_options()).
-
-
+    start(#htstub_config{handler=Handler});
 
 
 
-start(Handler, Options) -> 
+
+
+start(PropListOptions) when is_list(PropListOptions) -> 
+
+    start(config_from_plist(PropListOptions));
+
+
+
+
+
+start(Options) -> 
 
     spawn(fun() -> bootstrap_loop(Options) end).
 
@@ -439,10 +672,22 @@ stop(StubPid) ->
 
 bootstrap_loop(Options) ->
 
+    Verbose = Options#htstub_config.verbose,
+    mwrite(Verbose, "\\ Entering htstub bootstrap loop as ~w~n", [self()]),
+
+    if Options#htstub_config.start_immediate == true -> 
+        mwrite(Verbose, " - Starting immediate~n", []),
+        listen_on(self(), Options#htstub_config.ip, Options#htstub_config.addrtype, Options#htstub_config.port) 
+    end,
+
+    Handler = Options#htstub_config.handler,
+    mwrite(Verbose, " - Setting handler to ~w~n", [Handler]),
+
     process_flag(trap_exit, true),
     put(boot_options, Options),
 
-    loop(Options#htstub_config.verbose, Options#htstub_config.handler).
+    mwrite(Verbose, " - Bootstrapped! Loop begins.~n~n", []),
+    loop(Verbose, Handler).
 %   loop(proplists:get_value(verbose, Options, false)).
 
 
@@ -575,6 +820,67 @@ standard_datestring() ->
     Day = element(calendar:day_of_the_week(Y,M,D), {"Mon","Tue","Wed","Thu","Fri","Sat","Sun"}),
 
     lists:flatten(io_lib:format("~s, ~b ~s ~b ~2.10.0b:~2.10.0b:~2.10.0b GMT",[Day,D,MonthLabel,Y,H,Mn,S])).
+
+
+
+
+
+config_from_plist(PList) ->
+
+    config_from_plist(#htstub_config{}, PList).
+
+
+
+
+
+config_from_plist(Config, []) ->
+
+    Config;
+
+
+
+
+
+config_from_plist(Config, PList) ->
+
+    [ PItem | PRem ] = PList,
+
+    NewConfig = case PItem of
+
+        { start_immediate, NSI } ->
+            config_from_plist(Config#htstub_config{ start_immediate=NSI }, PRem);
+
+        { ip, NIP } ->
+            config_from_plist(Config#htstub_config{ ip=NIP }, PRem);
+
+        { addrtype, NAT } ->
+            config_from_plist(Config#htstub_config{ addrtype=NAT }, PRem);
+
+        { port, NPT } ->
+            config_from_plist(Config#htstub_config{ port=NPT }, PRem);
+
+        quiet ->
+            config_from_plist(Config#htstub_config{ verbose=quiet }, PRem);
+
+        verbose ->
+            config_from_plist(Config#htstub_config{ verbose=verbose }, PRem);
+
+        { verbose, NVB } ->
+            config_from_plist(Config#htstub_config{ verbose=NVB }, PRem);
+
+        { server_name, NSN } ->
+            config_from_plist(Config#htstub_config{ server_name=NSN }, PRem);
+
+        { handler, NHN } ->
+            config_from_plist(Config#htstub_config{ handler=NHN }, PRem);
+
+        { middleware, NMW } ->
+            config_from_plist(Config#htstub_config{ middleware=NMW }, PRem);
+
+        Other ->
+            { error, { unrecognized_config, Other }}
+
+    end.
 
 
 

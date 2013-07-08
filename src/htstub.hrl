@@ -19,12 +19,25 @@
 
 -record(htstub_config, {
 
-    start_immediate = true            :: true | false,
-    ip              = {0,0,0,0}       :: inet:ipaddress(),
-    addrtype        = inet            :: inet:address_family(),
-    port            = 80              :: pos_integer(),
-    verbose         = quiet           :: verbose | quiet,
-    server_name     = "htstub server" :: string(),
-    handler                           :: function()
+    start_immediate = true                         :: true | false,
+    ip              = {0,0,0,0}                    :: inet:ipaddress(),
+    addrtype        = inet                         :: inet:address_family(),
+    port            = 80                           :: pos_integer(),
+    verbose         = quiet                        :: verbose | quiet,
+    server_name     = "htstub server"              :: string(),
+    handler         = fun htstub:default_handler/1 :: function(),
+    middleware      = []                           :: list()
+
+}).
+
+
+
+
+
+-record(htstub_request, {
+
+    request   = true,
+    headers   = {0,0,0,0} :: list(),
+    arguments = inet      :: list()
 
 }).

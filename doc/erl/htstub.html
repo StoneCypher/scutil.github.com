@@ -26,7 +26,7 @@
      <dt>Step One - Compile the util lib and server lib</dt>
      <dd>Assuming "wherever" is the directory in which you've placed the source:<pre>
  1&gt; c("/wherever/sc.erl").
- {ok,sc}
+ {ok,sc}<br>
  2&gt; c("/wherever/htstub.erl").
  {ok,htstub}
      </pre></dd>
@@ -34,9 +34,9 @@
  
    <dl>
      <dt>Step Two - Good to go, try it out</dt>
-     <dd>Assuming you aren't already running a webserver on this machine:<pre>
- 3&gt; htstub:serve(fun(_) -&gt; "&lt;!doctype html&gt;&lt;html&gt;&lt;body&gt;&lt;p&gt;Hello, world from htstub!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;" end).
- &lt;0.2050.0&gt;
+     <dd><pre>
+ 3&gt; Handle = htstub:serve().
+ &lt;0.50.0&gt;
      </pre></dd>
    </dl>
  
@@ -44,8 +44,26 @@
      <dt>Step Three - Aaaaand test</dt>
      <dd>Pull up your web browser and go to <a href="http://127.0.0.1/" target="_blank">127.0.0.1</a>.</dd>
    </dl>
+ 
+   <dl>
+     <dt>Step Four - One with your code?</dt>
+     <dd><pre>
+ 3&gt; htstub:stop(Handle).
+ terminate<br>
+ 4&gt; MyServer = fun(_) -&gt; "&lt;!doctype html&gt;&lt;html&gt;Y helo thar&lt;/html&gt;" end.
+ #Fun&lt;erl_eval.6.17052888&gt;<br>
+ 5&gt; htstub:serve(MyServer).
+ &lt;0.76.0&gt;
+     </pre></dd>
+   </dl>
+ 
+   <dl>
+     <dt>Step Five - Aaaaand test</dt>
+     <dd>Pull up your web browser and go to <a href="http://127.0.0.1/" target="_blank">127.0.0.1</a>.  ... again.</dd>
+   </dl>
 <h2><a name="index">Function Index</a></h2>
-<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#default_options-0">default_options/0</a></td><td></td></tr>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#config_from_plist-1">config_from_plist/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#default_handler-1">default_handler/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#get_boot_options-1">get_boot_options/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#int_to_status-1">int_to_status/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#lib_version-0">lib_version/0</a></td><td></td></tr>
@@ -57,11 +75,9 @@
 <tr><td valign="top"><a href="#running_version-1">running_version/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#serve-0">serve/0</a></td><td>Serve is just a synonym for start.</td></tr>
 <tr><td valign="top"><a href="#serve-1">serve/1</a></td><td>Serve is just a synonym for start.</td></tr>
-<tr><td valign="top"><a href="#serve-2">serve/2</a></td><td>Serve is just a synonym for start.</td></tr>
 <tr><td valign="top"><a href="#standard_datestring-0">standard_datestring/0</a></td><td></td></tr>
 <tr><td valign="top"><a href="#start-0">start/0</a></td><td></td></tr>
 <tr><td valign="top"><a href="#start-1">start/1</a></td><td></td></tr>
-<tr><td valign="top"><a href="#start-2">start/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#stop-1">stop/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#stop_listening_on-4">stop_listening_on/4</a></td><td>(not tested) .</td></tr>
 <tr><td valign="top"><a href="#test-0">test/0</a></td><td>(not testworthy) Runs the test suite in terse form.</td></tr>
@@ -70,9 +86,14 @@
 
 <h2><a name="functions">Function Details</a></h2>
 
-<h3 class="function"><a name="default_options-0">default_options/0</a></h3>
+<h3 class="function"><a name="config_from_plist-1">config_from_plist/1</a></h3>
 <div class="spec">
-<p><tt>default_options() -&gt; any()</tt></p>
+<p><tt>config_from_plist(PList) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="default_handler-1">default_handler/1</a></h3>
+<div class="spec">
+<p><tt>default_handler(Request) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="get_boot_options-1">get_boot_options/1</a></h3>
@@ -130,11 +151,6 @@
 <p><tt>serve(X) -&gt; any()</tt></p>
 </div><p>Serve is just a synonym for start.</p>
 
-<h3 class="function"><a name="serve-2">serve/2</a></h3>
-<div class="spec">
-<p><tt>serve(X, Y) -&gt; any()</tt></p>
-</div><p>Serve is just a synonym for start.</p>
-
 <h3 class="function"><a name="standard_datestring-0">standard_datestring/0</a></h3>
 <div class="spec">
 <p><tt>standard_datestring() -&gt; any()</tt></p>
@@ -148,11 +164,6 @@
 <h3 class="function"><a name="start-1">start/1</a></h3>
 <div class="spec">
 <p><tt>start(Handler) -&gt; any()</tt></p>
-</div>
-
-<h3 class="function"><a name="start-2">start/2</a></h3>
-<div class="spec">
-<p><tt>start(Handler, Options) -&gt; any()</tt></p>
 </div>
 
 <h3 class="function"><a name="stop-1">stop/1</a></h3>
@@ -189,6 +200,6 @@
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Jul 7 2013, 21:06:14.</i></p>
+<p><i>Generated by EDoc, Jul 7 2013, 23:10:46.</i></p>
 </body>
 </html>
