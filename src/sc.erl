@@ -747,6 +747,22 @@ gen_docs() ->
 
 
 
+%% @doc (not testworthy) Generates library documentation using the default lib paths.  Target library should be specified <strong>without</strong> the trailing slash.  ```1> sc:gen_docs("/projects/scutil").
+%% ok'''
+%% @end
+%%
+%% @since 843
+
+-spec gen_docs(Tgt) -> ok | { 'EXIT', any() }.
+
+gen_docs(Tgt) ->
+
+    gen_docs(Tgt, Tgt ++ "/doc/erl").
+
+
+
+
+
 %% @doc (not testworthy) Generates library documentation from and to the specified paths `WhereIsSrc' and `WhereToPutDocs' respectively.  Do not use trailing slashes.  Windows paths are okay; remember to double your
 %% backslashes, as backslashes in strings need to be quoted.  ```1> sc:gen_docs("/projects/scutil", "/projects/scutil/erl/src/docs").
 %% ok'''

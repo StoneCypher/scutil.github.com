@@ -1,4 +1,21 @@
 
+%  reading the source?
+%  -------------------
+%
+%  go to a console, and assuming you put your files
+%  in a root level directory called "/wherever" ,
+%  which is also where you want your docs, type:
+%
+%  c("/wherever/sc.erl").
+%  c("/wherever/htstub.erl").
+%  sc:gen_docs("/wherever").
+%
+%  bang: you now have readable html documentation in /wherever/doc/erl.
+
+
+
+
+
 %%%%%%%%%%%
 %%
 %%  @doc HtStub - web development in Erlang as trivial as it <i>could</i> be
@@ -7,20 +24,28 @@
 %%  
 %%  <h2>Quick Start</h2>
 %%
-%%  Step One 
-%%    Compile the util lib and server lib
-%%      1> c("/wherever/sc.erl").
-%%      {ok,sc}
-%%      2> c("/wherever/htstub.erl").
-%%      {ok,htstub}
+%%  <dl>
+%%    <dt>Step One - Compile the util lib and server lib</dt>
+%%    <dd>Assuming "wherever" is the directory in which you've placed the source:<pre>
+%%1> c("/wherever/sc.erl").
+%%{ok,sc}
+%%2> c("/wherever/htstub.erl").
+%%{ok,htstub}
+%%    </pre></dd>
+%%  </dl>
 %%
-%%  Step Two
-%%    Good to go, try it out
-%%      3> htstub:serve(fun(_) -> "<html><body><p>Hello, world from htstub!</p></body></html>" end).
-%%      &lt;0.2050.0>
+%%  <dl>
+%%    <dt>Step Two - Good to go, try it out</dt>
+%%    <dd>Assuming you aren't already running a webserver on this machine:<pre>
+%%3> htstub:serve(fun(_) -> "&lt;!doctype html>&lt;html>&lt;body>&lt;p>Hello, world from htstub!&lt;/p>&lt;/body>&lt;/html>" end).
+%%&lt;0.2050.0>
+%%    </pre></dd>
+%%  </dl>
 %%
-%%  Step Three
-%%    Pull up your web browser and go to <a href="http://127.0.0.1/" target="_blank">127.0.0.1</a>.
+%%  <dl>
+%%    <dt>Step Three - Aaaaand test</dt>
+%%    <dd>Pull up your web browser and go to <a href="http://127.0.0.1/" target="_blank">127.0.0.1</a>.</dd>
+%%  </dl>
 
 
 
