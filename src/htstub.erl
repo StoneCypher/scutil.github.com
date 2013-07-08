@@ -31,6 +31,8 @@
 
     rest/1,
 
+    parse_uri/1,
+
 
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -39,6 +41,89 @@
     loop_upgrade/1
 
 ]).
+
+
+
+
+
+-include("htstub.hrl").
+
+
+
+
+
+% http://blog.lunatech.com/2009/02/03/what-every-web-developer-must-know-about-url-encoding
+% http://doriantaylor.com/policy/http-url-path-parameter-syntax
+
+parse_uri(Uri) ->
+
+    { ok, {Scheme, UserInfo, Host, Port, Path, Query} } = http_uri:parse(Uri),
+
+
+
+    % first let's fix the username and password up
+
+    [Username, Password] = case sc:explode(":", UserInfo, 2) of
+
+        [[]]    -> [undefined, undefined];
+        [U]     -> [        U, undefined];
+        [[],[]] -> [undefined, undefined];
+        [ U,[]] -> [        U, undefined];
+        [[], P] -> [undefined,         P];
+        [ U, P] -> [        U,         P]
+
+    end,
+
+
+
+    PPP = fun(PP) -> % parse path params
+
+        [
+            case sc:explode("=",P,2) of
+                [Key] -> 
+                    {Key};
+                [Key,RawVal] ->
+                    {Key,sc:explode(",",RawVal)}
+            end
+        ||
+            P <- PP
+        ]
+
+    end,
+
+    [FixedPath, Params] = case sc:explode(";", Path) of
+        [[]]  -> [ "", []     ];     
+        [T]   -> [  T, []     ];                  % first unique rule is T for paTh, R for paRams
+        [T|R] -> [  T, PPP(R) ]
+    end,
+
+
+
+    FixQueries = fun(QueryFront) ->
+        { Single, Multi } = lists:partition(
+            fun({X}) -> true; (_) -> false end,
+            [ list_to_tuple(sc:explode("=",Param)) || Param <- sc:explode(";", QueryFront) ]
+        ),
+        Single ++ sc:key_bucket(Multi)
+    end,
+
+    "?" ++ NoQmQuery   = Query,
+    [QFront, Fragment] = sc:explode("#", NoQmQuery, 2),
+    QueryTerms         = FixQueries(QFront),
+
+    OurParse      = #htstub_uri{ 
+                        scheme       = Scheme, 
+                        user         = Username, 
+                        password     = Password, 
+                        host         = Host, 
+                        port         = Port, 
+                        path         = FixedPath, 
+                        path_params  = Params,
+                        query_params = QueryTerms,
+                        fragment     = Fragment
+                     },
+
+    OurParse.
 
 
 
@@ -70,7 +155,7 @@ loop_upgrade(Verbose) ->
 
 
 
-listener_loop(Address, AddressType, Port) ->
+listener_loop(LSock) ->
 
     receive
 
@@ -85,9 +170,8 @@ listener_loop(Address, AddressType, Port) ->
 
 new_listener_loop(Address, AddressType, Port) ->
 
-%   { ok, LSock } = gen_tcp:listen(Port, [binary, {ip, Address}, {packet, raw}, AddressType])
-
-    listener_loop(Address, AddressType, Port).
+    { ok, LSock } = gen_tcp:listen(Port, [binary, {ip, Address}, {packet, raw}, AddressType]),
+    listener_loop(LSock).
 
 
 
@@ -128,14 +212,14 @@ loop(Verbose) ->
         { ReqPid, stop_listening_on, Address, AddressType, Port } ->
             case get({listening_on, Address, AddressType, Port}) of
 
-            	undefined ->
+                undefined ->
                     ReqPid ! { no_such_stop_listen, Address, AddressType, Port },
-            	    mwrite(Verbose, "!!! error: htstub requested halt listener ~w ~w ~w; no such listener~n~n", [Address, AddressType, Port]);
+                    mwrite(Verbose, "!!! error: htstub requested halt listener ~w ~w ~w; no such listener~n~n", [Address, AddressType, Port]);
 
-            	Pid when is_pid(Pid) ->
-            	    ReqPid ! { stopped_listening_on, Address, AddressType, Port },
-            	    mwrite(Verbose, "stopping: htstub halt listener ~w for ~w ~w ~w", [Pid, Address, AddressType, Port]),
-            	    Pid ! terminate
+                Pid when is_pid(Pid) ->
+                    ReqPid ! { stopped_listening_on, Address, AddressType, Port },
+                    mwrite(Verbose, "stopping: htstub halt listener ~w for ~w ~w ~w", [Pid, Address, AddressType, Port]),
+                    Pid ! terminate
 
             end,
             loop(Verbose);
@@ -166,7 +250,7 @@ loop(Verbose) ->
 
 
 
-lib_version() -> "2.0.2".
+lib_version() -> "2.0.3".
 
 
 
@@ -177,11 +261,11 @@ running_version(ServerPid) ->
     ServerPid ! { self(), get_running_version },
     receive
     
-    	{ now_running, V } ->
-    	    V
+        { now_running, V } ->
+            V
     
-    	after 1000 ->
-    		timeout
+        after 1000 ->
+            timeout
     
     end.
 
@@ -194,11 +278,11 @@ get_boot_options(ServerPid) ->
     ServerPid ! { self(), get_boot_options },
     receive
     
-    	{ boot_options, B } ->
-    	    B
+        { boot_options, B } ->
+            B
     
-    	after 1000 ->
-    		timeout
+        after 1000 ->
+            timeout
     
     end.
 
@@ -306,7 +390,7 @@ listen_on(StubPid, Address, AddressType, Port) ->
 %%
 %% @since 2.0.3
 
--spec stop_listening_on(StubPid, Address, AddressType, Port) -> 
+-spec stop_listening_on(_StubPid, Address, AddressType, Port) -> 
     stopped_listening                                   |
     { no_such_stop_listen, Address, AddressType, Port } | 
     timeout.
