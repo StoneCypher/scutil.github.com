@@ -197,9 +197,22 @@ parse_uri(Uri) ->
         Single ++ sc:key_bucket(Multi)
     end,
 
-    "?" ++ NoQmQuery   = Query,
-    [QFront, Fragment] = sc:explode("#", NoQmQuery, 2),
-    QueryTerms         = FixQueries(QFront),
+    NoQmQuery = case Query of "" -> ""; Q -> "?" ++ NQ = Q, NQ end,
+
+    [QFront, Fragment] = case sc:explode("#", NoQmQuery, 2) of
+
+        [] ->
+            [[],      undefined];
+
+        [IQFront] ->
+            [IQFront, undefined];
+
+        [IQFront, IFragment] ->
+            [IQFront, IFragment]
+
+    end,
+
+    QueryTerms = FixQueries(QFront),
 
 
 
@@ -328,37 +341,35 @@ parse_body(_ConnectedSocket, Body, Path, Protocol, Method, PHeaders, BodyLength,
 
 body_reformat(Body, Path, Protocol, Method, PHeaders, BodyLength) ->
 
+    io:format("~nxxxxxxxxxxxxxxxxx~nbody_reformat~n  ~p~nxxxxxxxxxxxxxxxxx", [PHeaders]),
+    io:format("~n------------------------~nbody_reformat~n  ~p~n------------------------", [[Body, Path, Protocol, Method, PHeaders, BodyLength]]),
+
     { Site, Port } = case proplists:get_value("Host", PHeaders) of
 
-        undefined -> { "http://127.0.0.1/", 80 };
+        undefined -> { "http://127.0.a.1/", 80 };
 
         Defined ->
 
             case sc:explode(":", Defined) of
 
                 [ ISite, IPort ] ->
-                    { ISite, list_to_integer(IPort) };
+                    { ISite, IPort };
 
                 [ ISite ] ->
-                    { ISite, 80 }
+                    { ISite, "" }
 
             end
     end,
 
     "HTTP/" ++ PVer  = Protocol,
-    [LMajor, LMinor] = sc:explode(".",PVer),  % todo harden
+    [LMajor, LMinor] = sc:explode(".", PVer),  % todo harden
 
-    ["/" ++ Resource, Args] = case sc:explode("?", Path) of
+    PPath = "http://" ++ Site ++ if Port == "" -> ""; true -> ":" ++ Port end ++ Path,
 
-        [Rs, ArgL] ->
-            [Rs, [ list_to_tuple([ htstub:url_decode(I) || I <- sc:explode("=", Arg)]) || Arg <- sc:explode("&", ArgL) ]];
+    { ok, #htstub_request{ request=PPath, parsed=parse_uri(PPath), method=Method, pheaders=PHeaders, body=Body, body_length=BodyLength } }.
 
-        [Rs] ->
-            [Rs, []]
-
-    end,
-
-    { ok, { {Site,Port,{http,list_to_integer(LMajor),list_to_integer(LMinor),Method}}, PHeaders, {Resource,Args,{BodyLength,Body}} } }.
+    % todo this shouldn't just assume http; it could be https, spdy, etc
+%   { ok, { {Site,Port,{http,list_to_integer(LMajor),list_to_integer(LMinor),Method}}, PHeaders, {Resource,Args,{BodyLength,Body}} } }.
 
 
 
@@ -445,8 +456,8 @@ handle_new_socket(ConnectedSocket, Handler) ->
 
     case block_on_parse_http(ConnectedSocket) of
 
-        { ok, {Req, Headers, Args} } ->
-            return_result(ConnectedSocket, Handler({Req, Headers, Args})),
+        { ok, Parsed } ->
+            return_result(ConnectedSocket, Handler(Parsed)),
 
             % todo debug this
             % it's not entirely clear why I need to do this, but if i don't, the socket can close before send() pushes its data
@@ -614,7 +625,7 @@ get_boot_options(ServerPid) ->
 
 default_handler(Request) ->
 
-    lists:flatten(io_lib:format("<!doctype html><html><head><style type=\"text/css\">p{margin:0;padding:0;}p+p{margin-top:1em;}body{padding:1em;margin:0;font-size:150%;font-family:helvetica,arial,sans-serif;background-color:#cdf;color:#060;}.sig{position:fixed;bottom:1em;right:1em;color:#333;}</style></head><body><p>This is a default page.</p><p>Your webserver is working.</p><div class=\"sig\">Served by <a href=\"http://htstub.com/\">htstub</a>, a micro-webserver for <a href=\"http://erlang.org/\">Erlang</a>.</div><pre>~n~p~n</pre></body></html>", [Request])).
+    lists:flatten(io_lib:format("<!doctype html><html><head><style type=\"text/css\">p{margin:0;padding:0;}p+p{margin-top:1em;}body{padding:1em;margin:0;font-size:150%;font-family:helvetica,arial,sans-serif;background-color:#cdf;color:#060;}.sig{position:fixed;bottom:1em;right:1em;color:#333;}</style></head><body><p>This is a default page.</p><p>Your webserver is working.</p><div class=\"sig\">Served by <a href=\"http://htstub.com/\">htstub</a>, a micro-webserver for <a href=\"http://erlang.org/\">Erlang</a> made by <a href=\"http://fullof.bs/\">John Haugeland</a>.</div><pre>~n~p~n</pre></body></html>", [Request])).
 
 
 

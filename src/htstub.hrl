@@ -36,8 +36,11 @@
 
 -record(htstub_request, {
 
-    request   = true,
-    headers   = {0,0,0,0} :: list(),
-    arguments = inet      :: list()
+    request     :: string(),
+    parsed      :: #htstub_uri{},
+    method      :: head | get | post | put | delete | trace | options | connect,
+    pheaders    :: list(),
+    body        :: binary(),
+    body_length :: non_neg_integer()
 
 }).

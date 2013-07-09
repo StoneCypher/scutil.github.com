@@ -56,20 +56,38 @@ expected_harder_parse() ->
 
 
 
+expected_easy_parse() -> 
+    
+    #htstub_uri{ 
+        scheme       = http, 
+        user         = undefined, 
+        password     = undefined, 
+        host         = "foo.com", 
+        port         = 80, 
+        path         = "/",
+        path_params  = [],
+        query_params = [],
+        fragment     = ""
+     }.
+
+
+
+
+
 parse_url_test_() ->
 
     HardUrl       = "https://bob:bobby@www.lunatech.com:8080/file;p=1?q=2#third",
     ExpectedParse = { ok, {https,"bob:bobby","www.lunatech.com",8080,"/file;p=1","?q=2#third"} },
-    OurParse      = expected_hard_parse(),
 
     HarderUrl     = "https://bob:bobby@www.lunatech.com:8080/file;p=1,2,3;q=1;r;saa;taa=1,2,;u?q=2,3;r;waa=1,2;q=4#third",
-    OurerParse    = expected_harder_parse(),
+    SimpleUrl     = "http://foo.com/",
 
     { "URL parsing tests", [
 
-        { "stdlib still parses wrongly",   ?_assert( ExpectedParse =:= http_uri:parse(HardUrl) ) },
-        { "we parse correctly",            ?_assert( OurParse      =:= htstub:parse_uri(HardUrl) ) },
-        { "we parse harder correctly too", ?_assert( OurerParse    =:= htstub:parse_uri(HarderUrl) ) }
+        { "stdlib still parses wrongly",   ?_assert( ExpectedParse           =:= http_uri:parse(HardUrl)     ) },
+        { "we parse correctly",            ?_assert( expected_hard_parse()   =:= htstub:parse_uri(HardUrl)   ) },
+        { "we parse harder correctly too", ?_assert( expected_harder_parse() =:= htstub:parse_uri(HarderUrl) ) },
+        { "we parse simple correctly",     ?_assert( expected_easy_parse()   =:= htstub:parse_uri(SimpleUrl) ) }
 
     ] }.
 
