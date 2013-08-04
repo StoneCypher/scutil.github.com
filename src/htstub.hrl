@@ -37,6 +37,7 @@
 -record(htstub_request, {
 
     request     :: string(),
+    http_ver    :: {non_neg_integer(),non_neg_integer()},
     parsed      :: #htstub_uri{},
     method      :: head | get | post | put | delete | trace | options | connect,
     pheaders    :: list(),

@@ -191,7 +191,7 @@ parse_uri(Uri) ->
 
     FixQueries = fun(QueryFront) ->
         { Single, Multi } = lists:partition(
-            fun({X}) -> true; (_) -> false end,
+            fun({_X}) -> true; (_) -> false end,
             [ list_to_tuple(sc:explode("=",Param)) || Param <- sc:explode(";", QueryFront) ]
         ),
         Single ++ sc:key_bucket(Multi)
@@ -341,8 +341,8 @@ parse_body(_ConnectedSocket, Body, Path, Protocol, Method, PHeaders, BodyLength,
 
 body_reformat(Body, Path, Protocol, Method, PHeaders, BodyLength) ->
 
-    io:format("~nxxxxxxxxxxxxxxxxx~nbody_reformat~n  ~p~nxxxxxxxxxxxxxxxxx", [PHeaders]),
-    io:format("~n------------------------~nbody_reformat~n  ~p~n------------------------", [[Body, Path, Protocol, Method, PHeaders, BodyLength]]),
+%   io:format("~nxxxxxxxxxxxxxxxxx~nbody_reformat~n  ~p~nxxxxxxxxxxxxxxxxx", [PHeaders]),
+%   io:format("~n------------------------~nbody_reformat~n  ~p~n------------------------", [[Body, Path, Protocol, Method, PHeaders, BodyLength]]),
 
     { Site, Port } = case proplists:get_value("Host", PHeaders) of
 
@@ -361,12 +361,21 @@ body_reformat(Body, Path, Protocol, Method, PHeaders, BodyLength) ->
             end
     end,
 
-    "HTTP/" ++ PVer  = Protocol,
-    [LMajor, LMinor] = sc:explode(".", PVer),  % todo harden
+    "HTTP/" ++ PVer   = Protocol,
+    [LMajor,  LMinor] = sc:explode(".", PVer),  % todo harden
 
     PPath = "http://" ++ Site ++ if Port == "" -> ""; true -> ":" ++ Port end ++ Path,
 
-    { ok, #htstub_request{ request=PPath, parsed=parse_uri(PPath), method=Method, pheaders=PHeaders, body=Body, body_length=BodyLength } }.
+    { ok, #htstub_request{ 
+            request=PPath, 
+            http_ver={list_to_integer(LMajor),list_to_integer(LMinor)},
+            parsed=parse_uri(PPath), 
+            method=Method, 
+            pheaders=PHeaders, 
+            body=Body, 
+            body_length=BodyLength 
+          } 
+    }.
 
     % todo this shouldn't just assume http; it could be https, spdy, etc
 %   { ok, { {Site,Port,{http,list_to_integer(LMajor),list_to_integer(LMinor),Method}}, PHeaders, {Resource,Args,{BodyLength,Body}} } }.
@@ -856,7 +865,7 @@ config_from_plist(Config, PList) ->
 
     [ PItem | PRem ] = PList,
 
-    NewConfig = case PItem of
+    case PItem of
 
         { start_immediate, NSI } ->
             config_from_plist(Config#htstub_config{ start_immediate=NSI }, PRem);
