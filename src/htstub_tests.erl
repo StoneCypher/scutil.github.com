@@ -24,14 +24,14 @@ expected_hard_parse() ->
 
     #htstub_uri{ 
         scheme       = https, 
-        user         = "bob", 
-        password     = "bobby", 
-        host         = "www.lunatech.com", 
+        user         = <<"bob">>, 
+        password     = <<"bobby">>, 
+        host         = <<"www.lunatech.com">>, 
         port         = 8080, 
-        path         = "/file",
-        path_params  = [{"p",["1"]}],
-        query_params = [{"q",["2"]}],
-        fragment     = "third"
+        path         = <<"/file">>,
+        path_params  = [{<<"p">>,[<<"1">>]}],
+        query_params = [{<<"q">>,[<<"2">>]}],
+        fragment     = <<"third">>
      }.
 
 
@@ -42,11 +42,11 @@ expected_harder_parse() ->
     
     #htstub_uri{ 
         scheme       = https, 
-        user         = "bob", 
-        password     = "bobby", 
-        host         = "www.lunatech.com", 
+        user         = <<"bob">>, 
+        password     = <<"bobby">>, 
+        host         = <<"www.lunatech.com">>, 
         port         = 8080, 
-        path         = "/file",
+        path         = <<"/file">>,
         path_params  = [{"p",["1","2","3"]},{"q",["1"]},{"r"},{"saa"},{"taa",["1","2",""]},{"u"}],
         query_params = [{"r"},{"q",["2,3","4"]},{"waa",["1,2"]}],
         fragment     = "third"
@@ -62,12 +62,12 @@ expected_easy_parse() ->
         scheme       = http, 
         user         = undefined, 
         password     = undefined, 
-        host         = "foo.com", 
+        host         = <<"foo.com">>, 
         port         = 80, 
-        path         = "/",
+        path         = <<"/">>,
         path_params  = [],
         query_params = [],
-        fragment     = ""
+        fragment     = undefined
      }.
 
 

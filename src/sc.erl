@@ -557,6 +557,7 @@
       test/1,
 
     gen_docs/0,
+      gen_docs/1,
       gen_docs/2
 
 ]).
@@ -753,7 +754,7 @@ gen_docs() ->
 %%
 %% @since 843
 
--spec gen_docs(Tgt) -> ok | { 'EXIT', any() }.
+-spec gen_docs(_Tgt) -> ok | { 'EXIT', any() }.
 
 gen_docs(Tgt) ->
 
@@ -6904,6 +6905,17 @@ implode(Separator, Data)
 
 -spec explode(Seperator::list(), Term::list()) -> list(list()).
 
+% comeback todo whargarbl this is horrible and has to go
+
+explode(Separator, Term) when is_binary(Term) ->
+
+    [ list_to_binary(Res) || Res <- explode(binary_to_list(Separator), binary_to_list(Term))];
+
+
+
+
+
+
 explode(Seperator, _Term) when not is_list(Seperator) ->
 
     error(badarg);
@@ -6941,6 +6953,21 @@ explode(Separator, Term) ->
 %% @since Version 622
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+
+
+
+
+
+% comeback todo whargarbl this is horrible and has to go
+
+explode(Separator, Term, Max) when is_binary(Term) ->
+
+    [ list_to_binary(Res) || Res <- explode(binary_to_list(Separator), binary_to_list(Term), Max)];
+
+
+
+
+
 
 explode(Separator, Term, Max) ->
 
@@ -7016,6 +7043,16 @@ explode(Separator, Remainder, Pass, Out, Max, Cur) -> % check cap
 %% @since Version 624
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+
+% comeback todo whargarbl replace this; this is awful
+
+starts_with(BR, BL) when is_binary(BR), is_binary(BL) ->
+
+    starts_with(binary_to_list(BR), binary_to_list(BL));
+
+
+
+
 
 starts_with(Remain, []) ->
 

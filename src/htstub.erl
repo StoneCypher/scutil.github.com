@@ -145,6 +145,18 @@
 % http://blog.lunatech.com/2009/02/03/what-every-web-developer-must-know-about-url-encoding
 % http://doriantaylor.com/policy/http-url-path-parameter-syntax
 
+% comeback todo whargarbl this is naaaaaasty
+
+parse_uri(Uri) when is_binary(Uri) ->
+
+    parse_uri(binary_to_list(Uri));
+
+%    [[ list_to_binary(Chunks) || Chunks <- parse_uri(binary_to_list(Uri)) ]];
+
+
+
+
+
 parse_uri(Uri) ->
 
     { ok, {Scheme, UserInfo, Host, Port, Path, Query} } = http_uri:parse(Uri),
@@ -155,12 +167,12 @@ parse_uri(Uri) ->
 
     [Username, Password] = case sc:explode(":", UserInfo, 2) of
 
-        [[]]    -> [undefined, undefined];
-        [U]     -> [        U, undefined];
-        [[],[]] -> [undefined, undefined];
-        [ U,[]] -> [        U, undefined];
-        [[], P] -> [undefined,         P];
-        [ U, P] -> [        U,         P]
+        [[]]    -> [undefined,         undefined];
+        [U]     -> [list_to_binary(U), undefined];
+        [[],[]] -> [undefined,         undefined];
+        [ U,[]] -> [list_to_binary(U), undefined];
+        [[], P] -> [undefined,         list_to_binary(P)];
+        [ U, P] -> [list_to_binary(U), list_to_binary(P)]
 
     end,
 
@@ -190,9 +202,10 @@ parse_uri(Uri) ->
 
 
     FixQueries = fun(QueryFront) ->
+        io:format("QueryFront: ~p~n", [QueryFront]),
         { Single, Multi } = lists:partition(
             fun({_X}) -> true; (_) -> false end,
-            [ list_to_tuple(sc:explode("=",Param)) || Param <- sc:explode(";", QueryFront) ]
+            [ list_to_tuple(sc:explode("=",Param)) || Param <- sc:explode(";", QueryFront), Param =/= [] ]
         ),
         Single ++ sc:key_bucket(Multi)
     end,
@@ -216,15 +229,30 @@ parse_uri(Uri) ->
 
 
 
+
+    % todo fixme comeback ugh whargarbl
+
+    BinQT = [
+        case QT of
+            {Str}      -> {list_to_binary(Str)};
+            {Str,List} -> {list_to_binary(Str), [list_to_binary(L) || L <- List]}
+        end
+    ||
+        QT <- QueryTerms
+    ],
+
+
+
+
     OurParse      = #htstub_uri{ 
                         scheme       = Scheme, 
                         user         = Username, 
                         password     = Password, 
-                        host         = Host, 
+                        host         = list_to_binary(Host),
                         port         = Port, 
-                        path         = FixedPath, 
+                        path         = list_to_binary(FixedPath),
                         path_params  = Params,
-                        query_params = QueryTerms,
+                        query_params = BinQT,
                         fragment     = Fragment
                      },
 
@@ -308,7 +336,7 @@ block_on_parse_http(ConnectedSocket) ->
 parse_body(ConnectedSocket, Body, Path, Protocol, Method, PHeaders) ->
 
     FinalBodyLength = list_to_integer(proplists:get_value("Content-Length", PHeaders, "0")),
-    parse_body(ConnectedSocket, Body, Path, Protocol, Method, PHeaders, length(Body), FinalBodyLength).
+    parse_body(ConnectedSocket, Body, Path, Protocol, Method, PHeaders, size(Body), FinalBodyLength).
 
 
 
@@ -346,11 +374,11 @@ body_reformat(Body, Path, Protocol, Method, PHeaders, BodyLength) ->
 
     { Site, Port } = case proplists:get_value("Host", PHeaders) of
 
-        undefined -> { "http://127.0.a.1/", 80 };
+        undefined -> { <<"127.0.0.1">>, 80 };
 
         Defined ->
 
-            case sc:explode(":", Defined) of
+            case sc:explode(<<":">>, Defined) of
 
                 [ ISite, IPort ] ->
                     { ISite, IPort };
@@ -361,14 +389,24 @@ body_reformat(Body, Path, Protocol, Method, PHeaders, BodyLength) ->
             end
     end,
 
-    "HTTP/" ++ PVer   = Protocol,
-    [LMajor,  LMinor] = sc:explode(".", PVer),  % todo harden
+    <<"HTTP/", PVer/binary>> = Protocol,
 
-    PPath = "http://" ++ Site ++ if Port == "" -> ""; true -> ":" ++ Port end ++ Path,
+    [LMajor,  LMinor] = sc:explode(<<".">>, PVer),  % todo harden
+
+%   io:format("LM: ~p, lm: ~p~nSite: ~p, Port: ~p, Path ~p~n~n", [LMajor, LMinor, Site, Port, Path]),
+
+    PPath = << 
+               <<"http://">>/binary, 
+               Site/binary, 
+               (if Port == <<"">> -> <<"">>; true -> << <<":">>/binary, (integer_to_binary(Port))/binary>> end)/binary, 
+               Path/binary
+            >>,
+
+%   io:format("PPath: ~p~n~n", [PPath]),
 
     { ok, #htstub_request{ 
             request=PPath, 
-            http_ver={list_to_integer(LMajor),list_to_integer(LMinor)},
+            http_ver={binary_to_integer(LMajor),binary_to_integer(LMinor)},
             parsed=parse_uri(PPath), 
             method=Method, 
             pheaders=PHeaders, 
@@ -404,10 +442,10 @@ block_on_http_headers(ConnectedSocket, Rem, PendingWork, Path, Protocol, Method)
 
     Unified = PendingWork ++ Rem,
 
-    case sc:explode("\r\n\r\n", Unified, 2) of
+    case sc:explode(<<"\r\n\r\n">>, Unified, 2) of
 
         [ Headers, BodyRem ] ->
-            ProcessedHeaders = [ list_to_tuple(sc:explode(": ",H)) || H <- sc:explode("\r\n", Headers) ],
+            ProcessedHeaders = [ list_to_tuple(sc:explode(<<": ">>,H)) || H <- sc:explode(<<"\r\n">>, Headers) ],
             { BodyRem, ProcessedHeaders };
 
         [ NotYet ] ->
@@ -438,11 +476,13 @@ block_on_http_request(ConnectedSocket, [], PendingWork) ->
 
 block_on_http_request(ConnectedSocket, NewWork, PendingWork) ->
 
-    case sc:explode("\r\n", PendingWork ++ NewWork, 2) of
+%   io:format("~p~n~p~n~n",[NewWork,PendingWork]),
+
+    case sc:explode(<<"\r\n">>, PendingWork ++ NewWork, 2) of
 
         [ReqLine, Rem] ->
 
-            case sc:explode(" ", ReqLine) of
+            case sc:explode(<<" ">>, ReqLine) of
 
                 [ Method, Path, Protocol ] ->
                     { Method, Path, Protocol, Rem };
@@ -508,7 +548,7 @@ server_listener_loop(ListeningSocket, Handler) ->
 
 new_listener_loop(Address, AddressType, Port, Handler) ->
 
-    { ok, LSock } = gen_tcp:listen(Port, [list, {active, false}, {ip, Address}, {packet, raw}, AddressType]),
+    { ok, LSock } = gen_tcp:listen(Port, [binary, {active, false}, {ip, Address}, {packet, raw}, AddressType]),
     server_listener_loop(LSock, Handler).
 
 
