@@ -151,8 +151,6 @@ parse_uri(Uri) when is_binary(Uri) ->
 
     parse_uri(binary_to_list(Uri));
 
-%    [[ list_to_binary(Chunks) || Chunks <- parse_uri(binary_to_list(Uri)) ]];
-
 
 
 
@@ -181,11 +179,11 @@ parse_uri(Uri) ->
     PPP = fun(PP) -> % parse path params
 
         [
-            case sc:explode("=",P,2) of
+            case sc:explode(<<"=">>,list_to_binary(P),2) of
                 [Key] -> 
                     {Key};
                 [Key,RawVal] ->
-                    {Key,sc:explode(",",RawVal)}
+                    {Key,sc:explode(<<",">>,RawVal)}
             end
         ||
             P <- PP
@@ -221,7 +219,7 @@ parse_uri(Uri) ->
             [IQFront, undefined];
 
         [IQFront, IFragment] ->
-            [IQFront, IFragment]
+            [IQFront, list_to_binary(IFragment)]
 
     end,
 
