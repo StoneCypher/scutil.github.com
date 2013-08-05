@@ -814,9 +814,9 @@ stop_listening_on(StubPid, Address, AddressType, Port) ->
 
 
 
-rest(_) -> 
+rest(RestishHandler) -> 
 
-    todo.
+    fun(Result) -> RestishHandler(Result#htstub_request.method, Result#htstub_request.parsed#htstub_uri.path, Result) end.
 
 
 
