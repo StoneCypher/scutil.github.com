@@ -814,9 +814,40 @@ stop_listening_on(StubPid, Address, AddressType, Port) ->
 
 
 
-rest(RestishHandler) -> 
+nice_method(<<"GET">>)     -> get;
+nice_method(<<"PUT">>)     -> get;
+nice_method(<<"POST">>)    -> get;
+nice_method(<<"TRACE">>)   -> get;
+nice_method(<<"OPTIONS">>) -> get;
+nice_method(<<"HEAD">>)    -> get;
+nice_method(<<"DELETE">>)  -> get;
+nice_method(<<"CONNECT">>) -> get;
 
-    fun(Result) -> RestishHandler(Result#htstub_request.method, Result#htstub_request.parsed#htstub_uri.path, Result) end.
+nice_method(Other)         -> Other.
+
+
+
+
+
+restify(RestishHandler) -> 
+
+    fun(Result) -> RestishHandler(nice_method(Result#htstub_request.method), Result#htstub_request.parsed#htstub_uri.path, Result) end.
+
+
+
+
+
+rest(RestHandler) when is_function(RestHandler) -> 
+
+    serve(restify(RestHandler));
+
+
+
+
+
+rest(Config) when is_record(Config, htstub_config) -> 
+
+    serve(Config#htstub_config{handler=restify(Config#htstub_config.handler)}).
 
 
 
