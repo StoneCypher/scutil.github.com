@@ -28,41 +28,113 @@
 %%    <dt>Step One - Compile the util lib and server lib</dt>
 %%    <dd>Assuming "wherever" is the directory in which you've placed the source:<pre>
 %%1> c("/wherever/sc.erl").
-%%{ok,sc}<br/>
+%%{ok,sc}
+%%
 %%2> c("/wherever/htstub.erl").
 %%{ok,htstub}
 %%    </pre></dd>
 %%  </dl>
 %%
 %%  <dl>
-%%    <dt>Step Two - Good to go, try it out</dt>
+%%    <dt>Step Two - Good to go, try it out (on a high port; see "gotchas" below)</dt>
 %%    <dd><pre>
-%%3> Handle = htstub:serve().
+%%3> Handle = htstub:serve( [ {port,23888} ] ).
 %%&lt;0.50.0>
 %%    </pre></dd>
 %%  </dl>
 %%
 %%  <dl>
 %%    <dt>Step Three - Aaaaand test</dt>
-%%    <dd>Pull up your web browser and go to <a href="http://127.0.0.1/" target="_blank">127.0.0.1</a>.</dd>
+%%    <dd>Pull up your web browser and go to <a href="http://127.0.0.1:23888/" target="_blank">http://127.0.0.1:23888/</a>.</dd>
 %%  </dl>
 %%
 %%  <dl>
 %%    <dt>Step Four - One with your code?</dt>
 %%    <dd><pre>
 %%3> htstub:stop(Handle).
-%%terminate<br/>
+%%terminate
+%%
 %%4> MyServer = fun(_) -> "&lt;!doctype html>&lt;html>Y helo thar&lt;/html>" end.
-%%#Fun&lt;erl_eval.6.17052888><br/>
-%%5> htstub:serve(MyServer).
+%%#Fun&lt;erl_eval.6.17052888>
+%%
+%%5> htstub:serve([{handler,MyServer}, {port,3153}]).
 %%&lt;0.76.0>
 %%    </pre></dd>
 %%  </dl>
 %%
 %%  <dl>
 %%    <dt>Step Five - Aaaaand test</dt>
-%%    <dd>Pull up your web browser and go to <a href="http://127.0.0.1/" target="_blank">127.0.0.1</a>.  ... again.</dd>
+%%    <dd>Pull up your web browser and go to <a href="http://127.0.0.1:3153/" target="_blank">127.0.0.1:3153</a>.</dd>
 %%  </dl>
+%%
+%%  <dl>
+%%    <dt>Step Six - Already set Erlang up for low ports?</dt>
+%%    <dd>Cool, then it's even simpler.<pre>
+%%1> LowServer = fun(_) -> "&lt;html>&lt;body>Low port WOOOO&lt;/body>&lt;/html>" end.
+%%#Fun&lt;erl_eval.6.17052888>
+%%
+%%2> htstub:serve(LowServer).
+%%&lt;0.380.0>
+%%</pre></dd>
+%%  </dl>
+%%
+%%  <dl>
+%%    <dt>Step Seven - Aaaaand test</dt>
+%%    <dd>Try <a href="http://localhost/" target="_blank">http://localhost/</a> this time, just for variety.</dd>
+%%  </dl>
+%%
+%%  <h2>Ridiculous minimalism</h2>
+%%
+%%  <p>The code below is a complete, compiled, live from RAM webserver.</p>
+%%
+%%  <pre>htstub:serve(   fun(_) -> "&lt;html>&lt;body>Well hello there&lt;/body>&lt;/html>" end   ).</pre>
+%%
+%%  <h2>Gotchas</h2>
+%%  <p>
+%%    On most Unix systems, you need to jump through some hoops to open a "low port" (a port below 1024.)  Those hoops
+%%    vary system to system, but often involve supervisor escalation, running from a special user with eid, proxying through
+%%    iptables, authbind, setcap and capabilities(7), setuid to start as root [sigh], socat, systemd, inetd/xinetd, kernel
+%%    modules (!), proxying through apache modules (!!), and other such nonsense.  As usual, Solaris had a reasonable 
+%%    response (a config file whitelisting permissions) which nobody remembers.  FreeBSD can get rid of this with the sysctl 
+%%    parameters <tt>net.inet.ip.portrange.reservedlow</tt> and <tt>net.inet.ip.portrange.reservedhigh</tt>.  Helpfully, the 
+%%    default web port is 80, so hosting a webserver on the standard port falls afoul of this.  <i>Windows doesn't care, so 
+%%    Windows devs can happily ignore this</i> (and plan 9 devs and etc.)
+%%  </p>
+%%
+%%  <p>
+%%    Also sometimes people just have a webserver running already, and obviously two different things can't accept connections
+%%    from the same port.
+%%  </p>
+%%
+%%  <p>
+%%    Here's <a href="http://www.staldal.nu/tech/2007/10/31/why-can-only-root-listen-to-ports-below-1024/">an explanation</a>
+%%    of the Unix side of this.  You can skip it if you don't care.
+%%  </p>
+%%
+%%  <p>
+%%    You will see this with any Erlang daemon - indeed a daemon in any language - and the answer won't vary by what app 
+%%    is being run inside.  The error looks like this:
+%%  </p>
+%%
+%%  <pre>
+%%1> Server = fun(_) -> "&lt;html>&lt;body>Sup World?&lt;/body>&lt;/html>" end.
+%%#Fun&lt;erl_eval.6.17052888>
+%%
+%%2> htstub:serve(Server).
+%%&lt;0.35.0>
+%%
+%%3>
+%%=ERROR REPORT==== 6-Aug-2013::22:55:23 ===
+%%Error in process &lt;0.37.0> with exit value: {{badmatch,{error,eacces}},[{htstub,new_listener_loop,4,[{file,"src/htstub.erl"},{line,551}]}]}</pre>
+%%
+%%  <p>
+%%    So when you're getting started, just start with a high port, so you can do this operating system part later, when you aren't 
+%%    busy figuring this whole thing out from the ground up.
+%%  </p>
+%%
+%%  <p><tt>htstub:serve([{handler, Server}, {port, 8080}]).</tt></p>
+%%
+%%  <p>(Thanks <a href="https://github.com/Machinshin">Vat</a>)</p>
 
 
 
@@ -110,6 +182,8 @@
 
     stop/1,
 
+    default_handler/1,
+
     verbose/1,
     quiet/1,
 
@@ -120,8 +194,6 @@
     rest/1,
 
     standard_datestring/0,
-    config_from_plist/1,
-    default_handler/1,
 
 
 
@@ -200,7 +272,6 @@ parse_uri(Uri) ->
 
 
     FixQueries = fun(QueryFront) ->
-        io:format("QueryFront: ~p~n", [QueryFront]),
         { Single, Multi } = lists:partition(
             fun({_X}) -> true; (_) -> false end,
             [ list_to_tuple(sc:explode("=",Param)) || Param <- sc:explode(";", QueryFront), Param =/= [] ]
