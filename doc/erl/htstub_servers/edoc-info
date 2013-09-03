@@ -1,2 +1,2 @@
 {packages,[]}.
-{modules,[hello_world]}.
+{modules,[hello_world,restaurant]}.

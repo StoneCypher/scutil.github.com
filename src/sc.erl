@@ -781,7 +781,7 @@ gen_docs(WhereIsBase, WhereToPutDocs) ->
     CurrentVersion = << CMaj/binary, <<".">>/binary, CMin/binary, <<".">>/binary, CVer/binary >>,
 
     DocTargets = ["sc", "sc_tests", "htstub", "htstub_tests"],
-    SrvTargets = ["hello_world"],
+    SrvTargets = ["hello_world", "restaurant"],
 
     filelib:ensure_dir(WhereToPutDocs),
     edoc:files([WhereIsSrc++"/"++DocFile++".erl"                || DocFile <- DocTargets ], [{new,true}, {dir, WhereToPutDocs}]),
