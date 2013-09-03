@@ -10,4 +10,4 @@ echo "Updating $majorver.$minorver.$ver to $next (git $gver)"
 `git tag -a $gver -m 'Version $gver'`
 echo Created `git describe --tags --long`
 git commit -m "$1"
-git push
+git push origin `git rev-parse --abbrev-ref HEAD`
