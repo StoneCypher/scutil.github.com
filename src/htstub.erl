@@ -89,6 +89,12 @@
 %%
 %%  <pre>htstub:serve(   fun(_) -> "&lt;html>&lt;body>Well hello there&lt;/body>&lt;/html>" end   ).</pre>
 %%
+%%  <h2>Serving a module</h2>
+%%
+%%  <p>... turns out to be straightforward.</p>
+%%
+%%  <pre>htstub:serve(   fun modulename:functionname/1   ).</pre>
+%%
 %%  <h2>Gotchas</h2>
 %%  <p>
 %%    On most Unix systems, you need to jump through some hoops to open a "low port" (a port below 1024.)  Those hoops
