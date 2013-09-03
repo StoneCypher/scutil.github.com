@@ -85,15 +85,19 @@
 %%    <dd>Try <a href="http://localhost/" target="_blank">http://localhost/</a> this time, just for variety.</dd>
 %%  </dl>
 %%
+%%  <h2>Ridiculous minimalism</h2>
+%%
+%%  <p>The code below is a complete, compiled, live from RAM webserver.</p>
+%%
 %%  <h2>Serving a module</h2>
 %%
 %%  <p>... turns out to be straightforward.</p>
 %%
 %%  <pre>htstub:serve(   fun modulename:functionname/1   ).</pre>
 %%
-%%  <h2>Ridiculous minimalism</h2>
+%%  <h2>Example Servers</h2>
 %%
-%%  <p>The code below is a complete, compiled, live from RAM webserver.</p>
+%%  There is a <a href="htstub_servers/index.html" target="_top">growing list</a> of example webservers.
 %%
 %%  <pre>htstub:serve(   fun(_) -> "&lt;html>&lt;body>Well hello there&lt;/body>&lt;/html>" end   ).</pre>
 %%

@@ -1,4 +1,6 @@
 
+%% @doc test
+
 -module(restaurant).
 
 
