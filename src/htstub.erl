@@ -356,6 +356,14 @@ return_result(ConnectedSocket, Response) when is_list(Response) ->
 
 
 
+return_result(ConnectedSocket, Response) when is_binary(Response) ->
+
+    return_result(ConnectedSocket, {200, binary_to_list(Response)});
+
+
+
+
+
 return_result(ConnectedSocket, {Status, Response}) when is_integer(Status), is_list(Response) ->
 
     return_result(ConnectedSocket, {Status, [{"Date",standard_datestring()},{"Content-Type","text/html"},{"Content-Length",integer_to_list(length(Response))}], Response});
@@ -467,7 +475,7 @@ body_reformat(Body, Path, Protocol, Method, PHeaders, BodyLength) ->
     PPath = << 
                <<"http://">>/binary, 
                Site/binary, 
-               (if Port == <<"">> -> <<"">>; true -> << <<":">>/binary, (integer_to_binary(Port))/binary>> end)/binary, 
+               (if Port == <<"">> -> <<"">>; true -> << <<":">>/binary, (list_to_binary(integer_to_list(Port)))/binary>> end)/binary, 
                Path/binary
             >>,
 
@@ -475,7 +483,7 @@ body_reformat(Body, Path, Protocol, Method, PHeaders, BodyLength) ->
 
     { ok, #htstub_request{ 
             request=PPath, 
-            http_ver={binary_to_integer(LMajor),binary_to_integer(LMinor)},
+            http_ver={list_to_integer(binary_to_list(LMajor)),list_to_integer(binary_to_list(LMinor))},
             parsed=parse_uri(PPath), 
             method=Method, 
             pheaders=PHeaders, 
