@@ -48,6 +48,8 @@
 %%    <dd>Pull up your web browser and go to <a href="http://127.0.0.1:23888/" target="_blank">http://127.0.0.1:23888/</a>.</dd>
 %%  </dl>
 %%
+%%  <h2>More Examples</h2>
+%%
 %%  <dl>
 %%    <dt>Step Four - One with your code?</dt>
 %%    <dd><pre>
@@ -83,17 +85,17 @@
 %%    <dd>Try <a href="http://localhost/" target="_blank">http://localhost/</a> this time, just for variety.</dd>
 %%  </dl>
 %%
-%%  <h2>Ridiculous minimalism</h2>
-%%
-%%  <p>The code below is a complete, compiled, live from RAM webserver.</p>
-%%
-%%  <pre>htstub:serve(   fun(_) -> "&lt;html>&lt;body>Well hello there&lt;/body>&lt;/html>" end   ).</pre>
-%%
 %%  <h2>Serving a module</h2>
 %%
 %%  <p>... turns out to be straightforward.</p>
 %%
 %%  <pre>htstub:serve(   fun modulename:functionname/1   ).</pre>
+%%
+%%  <h2>Ridiculous minimalism</h2>
+%%
+%%  <p>The code below is a complete, compiled, live from RAM webserver.</p>
+%%
+%%  <pre>htstub:serve(   fun(_) -> "&lt;html>&lt;body>Well hello there&lt;/body>&lt;/html>" end   ).</pre>
 %%
 %%  <h2>Gotchas</h2>
 %%  <p>

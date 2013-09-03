@@ -781,9 +781,11 @@ gen_docs(WhereIsBase, WhereToPutDocs) ->
     CurrentVersion = << CMaj/binary, <<".">>/binary, CMin/binary, <<".">>/binary, CVer/binary >>,
 
     DocTargets = ["sc", "sc_tests", "htstub", "htstub_tests"],
+    SrvTargets = ["hello_world"],
 
     filelib:ensure_dir(WhereToPutDocs),
-    edoc:files([WhereIsSrc++"/"++DocFile++".erl" || DocFile <- DocTargets ], [{dir, WhereToPutDocs}, {new,true}]),
+    edoc:files([WhereIsSrc++"/"++DocFile++".erl"                || DocFile <- DocTargets ], [{new,true}, {dir, WhereToPutDocs}]),
+    edoc:files([WhereIsSrc++"/htstub_servers/"++DocFile++".erl" || DocFile <- SrvTargets ], [{new,true}, {dir, WhereToPutDocs++"/htstub_servers"}]),
 
     VerFix = fun(Tgt) ->
       { ok, OldTextBin } = file:read_file(Tgt),

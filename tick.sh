@@ -9,5 +9,5 @@ echo "Updating $majorver.$minorver.$ver to $next (git $gver)"
 
 `git tag -a $gver -m 'Version $gver'`
 echo Created `git describe --tags --long`
-git commit -a -m "$1"
+git commit -m "$1"
 git push
