@@ -356,9 +356,6 @@ mwrite(verbose, Msg, Args) ->
 mwrite(true,    Msg, Args) ->
     mwrite(verbose, Msg, Args).
 
-mself(Verbose, Name) ->
-    mwrite(Verbose, "~s: ~p~n", [Name, self()]).
-
 
 
 
@@ -613,7 +610,7 @@ server_listener_loop(ListeningSocket, Handler) ->
     case gen_tcp:accept(ListeningSocket) of
 
         { ok, ConnectedSocket } ->
-            spawn(fun() -> mself(true,"server_listener_loop"), handle_new_socket(ConnectedSocket, Handler) end),
+            spawn(fun() -> handle_new_socket(ConnectedSocket, Handler) end),
             server_listener_loop(ListeningSocket, Handler);
 
         { error, closed } ->
