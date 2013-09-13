@@ -356,6 +356,9 @@ mwrite(verbose, Msg, Args) ->
 mwrite(true,    Msg, Args) ->
     mwrite(verbose, Msg, Args).
 
+mself(Verbose, Name) ->
+    mwrite(Verbose, "~s: ~p~n", [Name, self()]).
+
 
 
 
@@ -458,9 +461,6 @@ parse_body(_ConnectedSocket, Body, Path, Protocol, Method, PHeaders, BodyLength,
 
 body_reformat(Body, Path, Protocol, Method, PHeaders, BodyLength) ->
 
-%   io:format("~nxxxxxxxxxxxxxxxxx~nbody_reformat~n  ~p~nxxxxxxxxxxxxxxxxx", [PHeaders]),
-%   io:format("~n------------------------~nbody_reformat~n  ~p~n------------------------", [[Body, Path, Protocol, Method, PHeaders, BodyLength]]),
-
     { Site, Port } = case proplists:get_value("Host", PHeaders) of
 
         undefined -> { <<"127.0.0.1">>, 80 };
@@ -482,16 +482,12 @@ body_reformat(Body, Path, Protocol, Method, PHeaders, BodyLength) ->
 
     [LMajor,  LMinor] = sc:explode(<<".">>, PVer),  % todo harden
 
-%   io:format("LM: ~p, lm: ~p~nSite: ~p, Port: ~p, Path ~p~n~n", [LMajor, LMinor, Site, Port, Path]),
-
     PPath = << 
                <<"http://">>/binary, 
                Site/binary, 
                (if Port == <<"">> -> <<"">>; true -> << <<":">>/binary, (list_to_binary(integer_to_list(Port)))/binary>> end)/binary, 
                Path/binary
             >>,
-
-%   io:format("PPath: ~p~n~n", [PPath]),
 
     { ok, #htstub_request{ 
             request=PPath, 
@@ -505,7 +501,6 @@ body_reformat(Body, Path, Protocol, Method, PHeaders, BodyLength) ->
     }.
 
     % todo this shouldn't just assume http; it could be https, spdy, etc
-%   { ok, { {Site,Port,{http,list_to_integer(LMajor),list_to_integer(LMinor),Method}}, PHeaders, {Resource,Args,{BodyLength,Body}} } }.
 
 
 
@@ -565,8 +560,6 @@ block_on_http_request(ConnectedSocket, [], PendingWork) ->
 
 block_on_http_request(ConnectedSocket, NewWork, PendingWork) ->
 
-%   io:format("~p~n~p~n~n",[NewWork,PendingWork]),
-
     case sc:explode(<<"\r\n">>, PendingWork ++ NewWork, 2) of
 
         [ReqLine, Rem] ->
@@ -620,7 +613,7 @@ server_listener_loop(ListeningSocket, Handler) ->
     case gen_tcp:accept(ListeningSocket) of
 
         { ok, ConnectedSocket } ->
-            spawn(fun() -> handle_new_socket(ConnectedSocket, Handler) end),
+            spawn(fun() -> mself(true,"server_listener_loop"), handle_new_socket(ConnectedSocket, Handler) end),
             server_listener_loop(ListeningSocket, Handler);
 
         { error, closed } ->
@@ -653,6 +646,8 @@ spawn_link_new_listener(Address, AddressType, Port, Handler) ->
 
 
 loop(Verbose, Handler) ->
+
+    mwrite(Verbose, "looping~n", []),
 
     receive
 
@@ -697,7 +692,7 @@ loop(Verbose, Handler) ->
 
         terminate ->
             mwrite(Verbose, "terminating: htstub core loop ~p~n~n", [self()]),
-            ok;
+            exit(terminate);
 
         upgrade ->
             mwrite(Verbose, "upgrading: htstub core loop ~p from version ~p ~n", [self(), lib_version()]),
@@ -835,9 +830,8 @@ bootstrap_loop(Options) ->
     process_flag(trap_exit, true),
     put(boot_options, Options),
 
-    mwrite(Verbose, " - Bootstrapped! Loop begins.~n~n", []),
+    mwrite(Verbose, " - Bootstrapped! Loop begins as ~p.~n~n", [self()]),
     loop(Verbose, Handler).
-%   loop(proplists:get_value(verbose, Options, false)).
 
 
 
