@@ -183,9 +183,6 @@
     running_version/1,
     get_boot_options/1,
 
-    listen_on/4,
-    stop_listening_on/4,
-
     serve/0,
       serve/1,
       serve/2,
@@ -636,8 +633,9 @@ new_listener_loop(Address, AddressType, Port, Handler, HostRef, Host) ->
 spawn_link_new_listener(Address, AddressType, Port, Handler) ->
 
     LinkRef = make_ref(),
+    Host    = self(),
 
-    Pid = spawn_link(fun() -> new_listener_loop(Address, AddressType, Port, Handler, LinkRef, self()) end),
+    Pid = spawn_link(fun() -> new_listener_loop(Address, AddressType, Port, Handler, LinkRef, Host) end),
 
     receive
 
@@ -645,7 +643,10 @@ spawn_link_new_listener(Address, AddressType, Port, Handler) ->
             Pid;
 
         { LinkRef, {error, E} } ->
-            { error, E }
+            { error, E };
+
+        Other ->
+            { error, {misunderstood_message, Other}}
 
     end.
 
@@ -674,28 +675,6 @@ loop(Verbose, Handler) ->
         { ReqPid, get_boot_options } ->
             mwrite(Verbose, "listing options: htstub core loop ~p~n~n", [self()]),
             ReqPid ! { boot_options, get(boot_options) },
-            loop(Verbose, Handler);
-
-        { ReqPid, listen_on, Address, AddressType, Port } ->
-            NewPid = spawn_link_new_listener(Address, AddressType, Port, Handler),
-            mwrite(Verbose, "spawning: htstub new listener ~w for ~w ~w ~w~n~n", [NewPid, Address, AddressType, Port]),
-            ReqPid ! { now_listening_on, NewPid },
-            put({listening_on, Address, AddressType, Port}, NewPid),
-            loop(Verbose, Handler);
-
-        { ReqPid, stop_listening_on, Address, AddressType, Port } ->
-            case get({listening_on, Address, AddressType, Port}) of
-
-                undefined ->
-                    ReqPid ! { no_such_stop_listen, Address, AddressType, Port },
-                    mwrite(Verbose, "!!! error: htstub requested halt listener ~w ~w ~w; no such listener~n~n", [Address, AddressType, Port]);
-
-                Pid when is_pid(Pid) ->
-                    ReqPid ! { stopped_listening_on, Address, AddressType, Port },
-                    mwrite(Verbose, "stopping: htstub halt listener ~w for ~w ~w ~w", [Pid, Address, AddressType, Port]),
-                    Pid ! terminate
-
-            end,
             loop(Verbose, Handler);
 
         { Ref, Source, terminate } ->
@@ -840,13 +819,15 @@ bootstrap_loop(Options) ->
     Verbose = Options#htstub_config.verbose,
 
     mwrite(Verbose, "\\ Entering htstub bootstrap loop as ~w~n", [self()]),
-    listen_on(self(), Options#htstub_config.ip, Options#htstub_config.addrtype, Options#htstub_config.port),
+
+    process_flag(trap_exit, true),
+    put(boot_options, Options),
 
     Handler = Options#htstub_config.handler,
     mwrite(Verbose, " - Setting handler to ~w~n", [Handler]),
 
-    process_flag(trap_exit, true),
-    put(boot_options, Options),
+    NewPid = spawn_link_new_listener(Options#htstub_config.ip, Options#htstub_config.addrtype, Options#htstub_config.port, Handler),
+    mwrite(Verbose, " - spawning: htstub new listener ~w for ~w ~w ~w~n~n", [NewPid, Options#htstub_config.ip, Options#htstub_config.addrtype, Options#htstub_config.port]),
 
     mwrite(Verbose, " - Bootstrapped! Loop begins as ~p.~n~n", [self()]),
     loop(Verbose, Handler).
@@ -869,47 +850,6 @@ quiet(StubPid) ->
     StubPid ! quiet,
     ok.
 
-
-
-
-
-listen_on(StubPid, Address, AddressType, Port) ->
-
-    StubPid ! { self(), listen_on, Address, AddressType, Port },
-    receive
-        { now_listening_on, NewPid } ->
-            { now_listening_on, NewPid }
-    after 1000 ->
-        timeout
-    end.
-
-
-
-
-
-%% @doc (not tested) . ``` '''
-%%
-%% @since 2.0.3
-
--spec stop_listening_on(_StubPid, Address, AddressType, Port) -> 
-    stopped_listening                                   |
-    { no_such_stop_listen, Address, AddressType, Port } | 
-    timeout.
-
-stop_listening_on(StubPid, Address, AddressType, Port) ->
-
-    StubPid ! { self(), stop_listening_on, Address, AddressType, Port },
-    receive
-
-        { no_such_stop_listen, Address, AddressType, Port } ->
-            { no_such_stop_listen, Address, AddressType, Port };
-
-        { stopped_listening_on, Address, AddressType, Port } ->
-            stopped_listening
-
-    after 1000 ->
-        timeout
-    end.
 
 
 

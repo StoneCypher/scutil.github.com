@@ -109,7 +109,7 @@ rest_test_() ->
 
 serve_test_() ->
 
-    Basic       = htstub:serve([{handler, fun(_) -> "Works" end}, {port,8999}]),
+    Basic       = htstub:serve(fun(_) -> "Serve test" end, 8999),
     BasicReturn = sc:htget("http://localhost:8999"),
 
     htstub:halt(Basic),
@@ -117,6 +117,26 @@ serve_test_() ->
     { "serve() tests", [
 
         { "Serve on 8999",  ?_assert( is_pid( Basic ) ) },
-        { "Correct result", ?_assert( BasicReturn == {200, "Works"} ) }
+        { "Correct result", ?_assert( BasicReturn == {200, "Serve test"} ) }
+
+    ] }.
+
+
+
+
+
+halt_test_() ->
+
+    Basic = htstub:serve(fun(_) -> "Halt test" end, 8999),
+    sc:htget("http://localhost:8999"),  % todo comeback whargarbl known bug: won't halt before first use
+
+    htstub:halt(Basic),
+
+    RunningAtEnd = is_process_alive(Basic),
+
+    { "halt() tests", [
+
+        { "Setup on 8999",  ?_assert( is_pid( Basic ) ) },
+        { "Correct result", ?_assert( false == RunningAtEnd ) }
 
     ] }.
