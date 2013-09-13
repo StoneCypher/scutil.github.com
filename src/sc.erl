@@ -369,6 +369,8 @@
       random_from/2,
       random_from/3,
 
+    rand_between/2,
+
     random_from_weighted/1,
 
     grid_scatter/2,
@@ -558,7 +560,9 @@
 
     gen_docs/0,
       gen_docs/1,
-      gen_docs/2
+      gen_docs/2,
+
+    htget/1
 
 ]).
 
@@ -780,7 +784,7 @@ gen_docs(WhereIsBase, WhereToPutDocs) ->
     {ok,CVer}      = file:read_file(WhereIsBase ++ "/version.counter"),
     CurrentVersion = << CMaj/binary, <<".">>/binary, CMin/binary, <<".">>/binary, CVer/binary >>,
 
-    DocTargets = ["sc", "sc_tests", "htstub", "htstub_tests"],
+    DocTargets = ["sc", "sc_tests", "htstub", "htstub_tests", "htstub_adaptors", "htstub_adaptors_tests"],
     SrvTargets = ["hello_world", "restaurant"],
 
     filelib:ensure_dir(WhereToPutDocs),
@@ -9823,7 +9827,15 @@ parallelize(Fun, DataSets) ->
     HomeBase     = self(),
     Len          = length(DataSets),
 
-    [ spawn( fun() -> HomeBase ! { ResultHandle, Id, apply(Fun,DataSet) } end ) || { Id, DataSet } <- lists:zip( lists:seq(1,Len), DataSets ) ],
+    [ 
+        spawn( 
+            fun() -> 
+                HomeBase ! { ResultHandle, Id, apply(Fun,[DataSet]) } 
+            end 
+        ) 
+    || 
+        { Id, DataSet } <- lists:zip( lists:seq(1,Len), DataSets ) 
+    ],
 
     parallelize_gather([], Len, ResultHandle).
 
@@ -10407,3 +10419,30 @@ bucket(Position, [First|_] = ListOfLists) when is_list(First) ->
     {Cats,_} = lists:unzip(sc:histograph([ lists:nth(Position, Col) || Col <- ListOfLists ])),
 
     [ { Cat, [ Row || Row <- ListOfLists, lists:nth(Position, Row) =:= Cat ] } || Cat <- Cats ].
+
+
+
+
+
+%% @since Version 844
+
+rand_between(Lo, Hi) when is_number(Lo), is_number(Hi), Lo =< Hi ->
+
+    rand(Hi - Lo) + Lo.
+
+
+
+
+
+%% @since Version 844
+
+htget(Thing) ->
+
+    inets:start(),
+
+    case httpc:request(Thing) of
+        
+        {ok,{{_,RCode,_},_,Ret}} -> {RCode, Ret};
+        Other                    -> {error, Other}
+
+    end.
