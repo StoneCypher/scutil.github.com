@@ -623,9 +623,10 @@ server_listener_loop(ListeningSocket, Handler) ->
 
 
 
-new_listener_loop(Address, AddressType, Port, Handler) ->
+new_listener_loop(Address, AddressType, Port, Handler, HostRef, Host) ->
 
     { ok, LSock } = gen_tcp:listen(Port, [binary, {active, false}, {ip, Address}, {packet, raw}, AddressType]),
+    Host ! { HostRef, now_listening },
     server_listener_loop(LSock, Handler).
 
 
@@ -634,7 +635,19 @@ new_listener_loop(Address, AddressType, Port, Handler) ->
 
 spawn_link_new_listener(Address, AddressType, Port, Handler) ->
 
-    spawn_link(fun() -> new_listener_loop(Address, AddressType, Port, Handler) end).
+    LinkRef = make_ref(),
+
+    Pid = spawn_link(fun() -> new_listener_loop(Address, AddressType, Port, Handler, LinkRef, self()) end),
+
+    receive
+
+        { LinkRef, now_listening } ->
+            Pid;
+
+        { LinkRef, {error, E} } ->
+            { error, E }
+
+    end.
 
 
 
@@ -642,7 +655,7 @@ spawn_link_new_listener(Address, AddressType, Port, Handler) ->
 
 loop(Verbose, Handler) ->
 
-    mwrite(Verbose, "looping~n", []),
+    mwrite(Verbose, "looping as ~w~n", [self()]),
 
     receive
 
@@ -685,8 +698,9 @@ loop(Verbose, Handler) ->
             end,
             loop(Verbose, Handler);
 
-        terminate ->
+        { Ref, Source, terminate } ->
             mwrite(Verbose, "terminating: htstub core loop ~p~n~n", [self()]),
+            Source ! { Ref, terminated },
             exit(terminate);
 
         upgrade ->
@@ -801,7 +815,21 @@ serve(Handler, Port) when is_function(Handler), is_integer(Port), Port >= 0 ->
 
 halt(StubPid) ->
 
-    StubPid ! terminate.
+    Ref = make_ref(),
+    StubPid ! { Ref, self(), terminate },
+
+    io:format("~w ! { ~w, ~w, terminate }~n~n", [StubPid, Ref, self()]),
+
+    receive
+
+        { Ref, terminated } ->
+            terminated
+
+    after 5000 ->
+
+        timeout
+
+    end.
 
 
 
