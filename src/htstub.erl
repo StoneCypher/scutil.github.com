@@ -53,7 +53,7 @@
 %%  <dl>
 %%    <dt>Step Four - One with your code?</dt>
 %%    <dd><pre>
-%%3> htstub:stop(Handle).
+%%3> htstub:halt(Handle).
 %%terminate
 %%
 %%4> MyServer = fun(_) -> "&lt;!doctype html>&lt;html>Y helo thar&lt;/html>" end.
@@ -188,11 +188,9 @@
 
     serve/0,
       serve/1,
+      serve/2,
 
-    start/0,
-      start/1,
-
-    stop/1,
+    halt/1,
 
     default_handler/1,
 
@@ -761,41 +759,31 @@ default_handler(Request) ->
 
 
 
-%% @doc Serve is just a synonym for start.
-serve()    -> start().
+serve() -> 
 
-%% @doc Serve is just a synonym for start.
-serve(X)   -> start(X).
+    serve(fun default_handler/1).
 
 
 
 
 
-start() -> 
+serve(Handler) when is_function(Handler) -> 
 
-    start(fun default_handler/1).
-
-
-
-
-
-start(Handler) when is_function(Handler) -> 
-
-    start(#htstub_config{handler=Handler});
+    serve(#htstub_config{handler=Handler});
 
 
 
 
 
-start(PropListOptions) when is_list(PropListOptions) -> 
+serve(PropListOptions) when is_list(PropListOptions) -> 
 
-    start(config_from_plist(PropListOptions));
-
-
+    serve(config_from_plist(PropListOptions));
 
 
 
-start(Options) -> 
+
+
+serve(Options) -> 
 
     spawn(fun() -> bootstrap_loop(Options) end).
 
@@ -803,7 +791,15 @@ start(Options) ->
 
 
 
-stop(StubPid) ->
+serve(Handler, Port) when is_function(Handler), is_integer(Port), Port >= 0 -> 
+
+    serve(#htstub_config{handler=Handler, port=Port}).
+
+
+
+
+
+halt(StubPid) ->
 
     StubPid ! terminate.
 
@@ -814,12 +810,9 @@ stop(StubPid) ->
 bootstrap_loop(Options) ->
 
     Verbose = Options#htstub_config.verbose,
-    mwrite(Verbose, "\\ Entering htstub bootstrap loop as ~w~n", [self()]),
 
-    if Options#htstub_config.start_immediate == true -> 
-        mwrite(Verbose, " - Starting immediate~n", []),
-        listen_on(self(), Options#htstub_config.ip, Options#htstub_config.addrtype, Options#htstub_config.port) 
-    end,
+    mwrite(Verbose, "\\ Entering htstub bootstrap loop as ~w~n", [self()]),
+    listen_on(self(), Options#htstub_config.ip, Options#htstub_config.addrtype, Options#htstub_config.port),
 
     Handler = Options#htstub_config.handler,
     mwrite(Verbose, " - Setting handler to ~w~n", [Handler]),
@@ -1017,9 +1010,6 @@ config_from_plist(Config, PList) ->
     [ PItem | PRem ] = PList,
 
     case PItem of
-
-        { start_immediate, NSI } ->
-            config_from_plist(Config#htstub_config{ start_immediate=NSI }, PRem);
 
         { ip, NIP } ->
             config_from_plist(Config#htstub_config{ ip=NIP }, PRem);

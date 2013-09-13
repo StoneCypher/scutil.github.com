@@ -19,7 +19,6 @@
 
 -record(htstub_config, {
 
-    start_immediate = true                         :: true | false,
     ip              = {0,0,0,0}                    :: inet:ipaddress(),
     addrtype        = inet                         :: inet:address_family(),
     port            = 80                           :: pos_integer(),

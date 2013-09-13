@@ -102,3 +102,21 @@ rest_test_() ->
 %       { "Forced fail, not implemented", ?_assert( false =:= true ) }
 
     ] }.
+
+
+
+
+
+serve_test_() ->
+
+    Basic       = htstub:serve([{handler, fun(_) -> "Works" end}, {port,8999}]),
+    BasicReturn = sc:htget("http://localhost:8999"),
+
+    htstub:halt(Basic),
+
+    { "serve() tests", [
+
+        { "Serve on 8999",  ?_assert( is_pid( Basic ) ) },
+        { "Correct result", ?_assert( BasicReturn == {200, "Works"} ) }
+
+    ] }.
