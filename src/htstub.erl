@@ -236,7 +236,14 @@ parse_uri(Uri) when is_binary(Uri) ->
 
 parse_uri(Uri) ->
 
-    { ok, {Scheme, UserInfo, Host, Port, Path, Query} } = http_uri:parse(Uri),
+    % the return notation in http_uri changes between r14 and r15.  sigh.
+    { ok, {Scheme, UserInfo, Host, Port, Path, Query} } = case http_uri:parse(Uri) of
+    
+        { error, X } -> { error, X };
+        { ok,    X } -> { ok,    X };  % r15 or later
+        X            -> { ok, X }      % r14 or earlier :\
+
+    end,
 
 
 
