@@ -241,7 +241,7 @@ parse_uri(Uri) ->
     
         { error, X } -> { error, X };
         { ok,    X } -> { ok,    X };  % r15 or later
-        X            -> { ok, X }      % r14 or earlier :\
+        X            -> { ok,    X }   % r14 or earlier :\
 
     end,
 
