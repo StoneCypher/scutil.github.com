@@ -863,13 +863,13 @@ quiet(StubPid) ->
 
 
 nice_method(<<"GET">>)     -> get;
-nice_method(<<"PUT">>)     -> get;
-nice_method(<<"POST">>)    -> get;
-nice_method(<<"TRACE">>)   -> get;
-nice_method(<<"OPTIONS">>) -> get;
-nice_method(<<"HEAD">>)    -> get;
-nice_method(<<"DELETE">>)  -> get;
-nice_method(<<"CONNECT">>) -> get;
+nice_method(<<"PUT">>)     -> put;
+nice_method(<<"POST">>)    -> post;
+nice_method(<<"TRACE">>)   -> trace;
+nice_method(<<"OPTIONS">>) -> options;
+nice_method(<<"HEAD">>)    -> head;
+nice_method(<<"DELETE">>)  -> delete;
+nice_method(<<"CONNECT">>) -> connect;
 
 nice_method(Other)         -> Other.
 
