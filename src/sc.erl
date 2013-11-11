@@ -562,7 +562,9 @@
       gen_docs/1,
       gen_docs/2,
 
-    htget/1
+    htget/1,
+
+    fmt/2
 
 ]).
 
@@ -10449,3 +10451,11 @@ htget(Thing) ->
 
 
 %% todo htpost
+
+
+
+
+
+fmt(Str, Args) ->
+
+    lists:flatten(io_lib:format(Str, Args)).
