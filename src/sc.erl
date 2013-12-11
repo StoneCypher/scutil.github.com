@@ -198,7 +198,9 @@
     funnel/2,
     list_cross_multiply/1,
     outcomes/2,
-    logb/2,
+
+    log2/1,
+      logb/2,
 
     unixtime/0,
       unixtime_daybase/0,
@@ -10456,6 +10458,18 @@ htget(Thing) ->
 
 
 
+%% @since Version 845
+
 fmt(Str, Args) ->
 
     lists:flatten(io_lib:format(Str, Args)).
+
+
+
+
+
+%% @since Version 846
+
+log2(Value) ->
+
+    math:log(Value) / math:log(2).
