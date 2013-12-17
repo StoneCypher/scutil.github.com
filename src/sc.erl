@@ -10480,8 +10480,9 @@ log2(Value) ->
 
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Computes a Schwartzian Transform (the perl idiom in Erlang.)  
 %% 
-%% The Schwartz Transform is an efficiency trick
-%% for when you want to sort by a computed function: compute per-row in a tuple, sort on the computed index, then
+%% The <a href="http://en.wikipedia.org/wiki/Schwartzian_transform">Schwartz Transform</a> (some people say 
+%% <a href="http://en.wikipedia.org/wiki/Schwartzian_transform">Schwartzian Transform</a>; hate them) is an efficiency 
+%% trick for when you want to sort by a computed function: compute per-row in a tuple, sort on the computed index, then
 %% strip out of the tuple.  This avoids lg-n recomputations on a traditional sort using a functional key.  (Admittedly,
 %% it's kind of blindingly obvious in a pattern matching language with keysort, but for someone who doesn't know the
 %% Perl idiomatic name for this, finding an implementation can help when converting code.  Also it's quite useful.) 
