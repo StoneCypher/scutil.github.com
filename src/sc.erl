@@ -10486,7 +10486,10 @@ log2(Value) ->
 %% it's kind of blindingly obvious in a pattern matching language with keysort, but for someone who doesn't know the
 %% Perl idiomatic name for this, finding an implementation can help when converting code.  Also it's quite useful.) 
 %% Lisp people call this `decorate-sort-undecorate', and it kind of smells like memoization, so you can probably hear a
-%% Haskeller squee-ing in the background. ```1> BySum = fun(X) -> lists:sum(X) end.               
+%% Haskeller squee-ing in the background. 
+%%
+%% Basically, when it's really expensive to compute the thing you're sorting on from the actual list data, use this to
+%% wrap the work, as a speed thing. ```1> BySum = fun(X) -> lists:sum(X) end.               
 %% #Fun<erl_eval.6.17052888>
 %% 
 %% 2> BySum([1,2,3,4]).
@@ -10525,6 +10528,8 @@ log2(Value) ->
 %% [ [1], [0,1], [1,2], [0,1,2], [1,1,1], [1,2,3,4], [1,1,1,1,1,1] ]'''
 
 %% @since Version 847
+
+-spec schwartz(CompF::function(), List::list()) -> list().
 
 schwartz(CompF, List) -> 
 
