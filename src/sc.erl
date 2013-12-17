@@ -198,6 +198,7 @@
     funnel/2,
     list_cross_multiply/1,
     outcomes/2,
+    schwartz/2,
 
     log2/1,
       logb/2,
@@ -788,12 +789,10 @@ gen_docs(WhereIsBase, WhereToPutDocs) ->
     {ok,CVer}      = file:read_file(WhereIsBase ++ "/version.counter"),
     CurrentVersion = << CMaj/binary, <<".">>/binary, CMin/binary, <<".">>/binary, CVer/binary >>,
 
-    DocTargets = ["sc", "sc_tests", "htstub", "htstub_tests", "htstub_adaptors", "htstub_adaptors_tests"],
-    SrvTargets = ["hello_world", "restaurant"],
+    DocTargets = ["sc", "sc_tests"],
 
     filelib:ensure_dir(WhereToPutDocs),
     edoc:files([WhereIsSrc++"/"++DocFile++".erl"                || DocFile <- DocTargets ], [{new,true}, {dir, WhereToPutDocs}]),
-    edoc:files([WhereIsSrc++"/htstub_servers/"++DocFile++".erl" || DocFile <- SrvTargets ], [{new,true}, {dir, WhereToPutDocs++"/htstub_servers"}]),
 
     VerFix = fun(Tgt) ->
       { ok, OldTextBin } = file:read_file(Tgt),
@@ -2366,7 +2365,7 @@ weighted_arithmetic_mean( [{V,W} | Tail], Num, Denom) ->
 
 %% @since Version 487
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return descriptive statistics of a numeric list.  nspired by J dstat from <a href="http://bbot.org/blog/archives/2011/03/17/on_being_surprised_by_a_programming_language/">bbot.org</a>.  J seems to be assuming sample for statistics.  I do not like assumptions.
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return descriptive statistics of a numeric list.  Inspired by J dstat from <a href="http://bbot.org/blog/archives/2011/03/17/on_being_surprised_by_a_programming_language/">bbot.org</a>.  J seems to be assuming sample for statistics.  I do not like assumptions.
 
 % ##todo comeback code sample
 
@@ -10473,3 +10472,60 @@ fmt(Str, Args) ->
 log2(Value) ->
 
     math:log(Value) / math:log(2).
+
+
+
+
+
+
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Computes a Schwartzian Transform (the perl idiom in Erlang.)  
+%% 
+%% The Schwartz Transform is an efficiency trick
+%% for when you want to sort by a computed function: compute per-row in a tuple, sort on the computed index, then
+%% strip out of the tuple.  This avoids lg-n recomputations on a traditional sort using a functional key.  (Admittedly,
+%% it's kind of blindingly obvious in a pattern matching language with keysort, but for someone who doesn't know the
+%% Perl idiomatic name for this, finding an implementation can help when converting code.  Also it's quite useful.) 
+%% Lisp people call this `decorate-sort-undecorate', and it kind of smells like memoization, so you can probably hear a
+%% Haskeller squee-ing in the background. ```1> BySum = fun(X) -> lists:sum(X) end.               
+%% #Fun<erl_eval.6.17052888>
+%% 
+%% 2> BySum([1,2,3,4]).
+%% 10
+%% 
+%% 3> ByProduct = fun(X) -> sc:list_product(X) end.
+%% #Fun<erl_eval.6.17052888>
+%% 
+%% 4> ByProduct([1,2,3,4]).                        
+%% 24
+%% 
+%% 5> ByLength = fun(X) -> length(X) end.                      
+%% #Fun<erl_eval.6.17052888>
+%% 
+%% 6> ByLength([1,2,3,4]).
+%% 4
+%% 
+%% 7> Tests = [ 
+%% 7>   [0,1],  
+%% 7>   [0,1,2],
+%% 7>   [1],
+%% 7>   [1,2],
+%% 7>   [1,2,3,4],
+%% 7>   [1,1,1],
+%% 7>   [1,1,1,1,1,1]
+%% 7> ].
+%% [ [0,1], [0,1,2], [1], [1,2], [1,2,3,4], [1,1,1], [1,1,1,1,1,1] ]
+%% 
+%% 8> sc:schwartz(BySum, Tests).
+%% [ [0,1], [1], [0,1,2], [1,2], [1,1,1], [1,1,1,1,1,1], [1,2,3,4] ]
+%% 
+%% 9> sc:schwartz(ByProduct, Tests).
+%% [ [0,1], [0,1,2], [1], [1,1,1], [1,1,1,1,1,1], [1,2], [1,2,3,4] ]
+%%
+%% 10> sc:schwartz(ByLength, Tests). 
+%% [ [1], [0,1], [1,2], [0,1,2], [1,1,1], [1,2,3,4], [1,1,1,1,1,1] ]'''
+
+%% @since Version 847
+
+schwartz(CompF, List) -> 
+
+    [ OrigLi || {_, OrigLi} <- lists:keysort(1, [ { CompF(Li), Li } || Li <- List ])].
