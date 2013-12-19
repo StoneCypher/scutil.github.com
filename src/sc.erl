@@ -199,6 +199,7 @@
     list_cross_multiply/1,
     outcomes/2,
     schwartz/2,
+    un_ok/1,
 
     log2/1,
       logb/2,
@@ -10543,3 +10544,16 @@ probability_any([], Cur) ->
 
 probability_any([This|Rem], Cur) ->
     probability_any(Rem, Cur + ((1 - Cur) * This)).
+
+
+
+
+%% @doc Utility function to strip `{ok, _}' tuple.  ```1> un_ok({ok, 3}).
+%% 3'''
+
+%% @since Version 849
+
+un_ok(X) ->
+
+    { ok, V } = X,    % not putting this as a pattern match in the signature
+    V.                % because badmatch is a more scrutable error than no func
