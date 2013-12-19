@@ -7808,28 +7808,6 @@ probability_all(ListOfProbabilities)
 
 
 
-%% @since Version 652
-%%
-%% @doc <span style="color:red;font-style:italic">Incomplete Todo Comeback</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
-
-probability_any(ListOfProbabilities) 
-
-    when is_list(ListOfProbabilities) ->
-
-    case out_of_range(ListOfProbabilities, 0, 1) of
-
-        [] ->
-            todo;
-
-        _AnythingElse ->
-            { error, "All members of the list of probabilities must be numbers on the interval [0,1] inclusive." }
-
-    end.
-
-
-
-
-
 %% @since Version 649
 
 in_range(List, Lo, Hi) ->
@@ -10490,7 +10468,9 @@ log2(Value) ->
 %% Haskeller squee-ing in the background. 
 %%
 %% Basically, when it's really expensive to compute the thing you're sorting on from the actual list data, use this to
-%% wrap the work, as a speed thing. ```1> BySum = fun(X) -> lists:sum(X) end.               
+%% wrap the work, as a speed thing.
+%%
+%% This gives you a surprisingly large number of Spaceballs reference opportunities, by saying "use the schwartz." ```1> BySum = fun(X) -> lists:sum(X) end.               
 %% #Fun<erl_eval.6.17052888>
 %% 
 %% 2> BySum([1,2,3,4]).
@@ -10535,3 +10515,31 @@ log2(Value) ->
 schwartz(CompF, List) -> 
 
     [ OrigLi || {_, OrigLi} <- lists:keysort(1, [ { CompF(Li), Li } || Li <- List ])].
+
+
+
+
+
+%% @doc <span style="color:red;font-style:italic">Incomplete Todo Comeback</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+
+%% @since Version 848
+
+probability_any(ListOfProbabilities)
+
+    when is_list(ListOfProbabilities) ->
+
+    case out_of_range(ListOfProbabilities, 0, 1) of
+
+        [] ->
+            probability_any(ListOfProbabilities, 0.0);
+
+        _AnythingElse ->
+            { error, "All members of the list of probabilities must be numbers on the interval [0,1] inclusive." }
+
+    end.
+
+probability_any([], Cur) ->
+    Cur;
+
+probability_any([This|Rem], Cur) ->
+    probability_any(Rem, Cur + ((1 - Cur) * This)).
