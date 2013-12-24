@@ -515,6 +515,8 @@
     histograph/1,
       histo_2d/1,
 
+    histo_sample/2,
+
     skewness/1,
       kurtosis/1,
 
@@ -6114,9 +6116,6 @@ shuffle(List)
 
     when is_list(List) ->
 
-    {A1,A2,A3} = now(),
-    random:seed(A1, A2, A3),
-
     WeightedAndShuffled = lists:map(
         fun(Item) -> { random:uniform(), Item } end,
         List
@@ -10557,3 +10556,15 @@ un_ok(X) ->
 
     { ok, V } = X,    % not putting this as a pattern match in the signature
     V.                % because badmatch is a more scrutable error than no func
+
+
+
+
+
+%% @doc Takes a historaph sample. ```1> '''
+
+%% @since Version 850
+
+histo_sample(Count, Sampler) ->
+
+    sc:histograph([ Sampler() || _I <- lists:seq(1,Count) ]).
