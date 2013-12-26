@@ -200,6 +200,7 @@
     outcomes/2,
     schwartz/2,
     un_ok/1,
+    trim/1,
 
     log2/1,
       logb/2,
@@ -10568,3 +10569,36 @@ un_ok(X) ->
 histo_sample(Count, Sampler) ->
 
     sc:histograph([ Sampler() || _I <- lists:seq(1,Count) ]).
+
+
+
+
+
+%% @doc Trims whitespace from both sides of a string; equiv to PHP `trim()'.
+%%
+%% Takes away nul #0, tab `\t' #9, newline `\n' #10, vertical tab `\v' #11, carriage return `\r' #13, and space ` ' #32.
+%%
+%% THIS FUNCTION IS NOT EFFICIENT. ```1> trim(" hello, world\n\n").
+%% "hello, world"'''
+
+%% @since Version 851
+
+trim(String)
+
+    when is_list(String) ->
+
+    string:strip(
+      string:strip(
+        string:strip(
+          string:strip(
+            string:strip(
+              string:strip(
+
+                String
+
+              , both, 32)
+            , both, 13)
+          , both, 11)
+        , both, 10)
+      , both, 9)
+    , both, 0).
