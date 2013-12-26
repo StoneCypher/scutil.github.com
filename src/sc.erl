@@ -200,7 +200,9 @@
     outcomes/2,
     schwartz/2,
     un_ok/1,
+
     trim/1,
+      trim_cursor/1,
 
     log2/1,
       logb/2,
@@ -10602,3 +10604,32 @@ trim(String)
         , both, 10)
       , both, 9)
     , both, 0).
+
+
+
+
+
+%% @doc Trims cursor control (cr/nl/tab/vtab) from both sides of a string.
+%%
+%% Takes away tab `\t' #9, newline `\n' #10, vertical tab `\v' #11, and carriage return `\r' #13.
+%%
+%% THIS FUNCTION IS NOT EFFICIENT. ```1> trim(" hello, world\n\n").
+%% "hello, world"'''
+
+%% @since Version 851
+
+trim_cursor(String)
+
+    when is_list(String) ->
+
+    string:strip(
+      string:strip(
+        string:strip(
+          string:strip(
+
+            String
+
+          , both, 13)
+        , both, 11)
+      , both, 10)
+    , both, 9).
