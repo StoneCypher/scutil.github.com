@@ -200,6 +200,8 @@
     outcomes/2,
     schwartz/2,
     un_ok/1,
+    head/1,
+    farey_sequence/1,
 
     trim/1,
       trim_cursor/1,
@@ -10633,3 +10635,63 @@ trim_cursor(String)
         , both, 11)
       , both, 10)
     , both, 9).
+
+
+
+
+
+%% @since Version 852
+
+head([Head|_RemList]) ->
+
+    Head.
+
+
+
+
+%% @doc Render the Farey Sequence as a list of tuples.  
+%%
+%% Converted from Wikipedia's ```def farey( n, asc=True ):
+%%     """Python function to print the nth Farey sequence, either ascending or descending."""
+%%     if asc: 
+%%         a, b, c, d = 0, 1,  1  , n     # (*)
+%%     else:
+%%         a, b, c, d = 1, 1, n-1 , n     # (*)
+%%     print "%d/%d" % (a,b)
+%%     while (asc and c <= n) or (not asc and a > 0):
+%%         k = int((n + b)/d)
+%%         a, b, c, d = c, d, k*c - a, k*d - b
+%%         print "%d/%d" % (a,b)'''
+%%
+%% @since Version 853
+
+farey_sequence(N) ->
+
+    farey_sequence(N, [{0,1}], ascending, 0, 1, 1, N).
+
+
+
+
+
+farey_sequence(Depth, Work, ascending, _ThisNum, _ThisDenom, NextNum, _NextDenom) 
+
+    when NextNum > Depth ->
+
+    lists:reverse(Work);
+
+
+
+
+
+farey_sequence(Depth, Work, ascending, ThisNum, ThisDenom, NextNum, NextDenom) ->
+
+    K            = trunc((Depth + ThisDenom)/NextDenom),
+
+    NewThisNum   = NextNum, 
+    NewThisDenom = NextDenom,
+    NewNextNum   = (K*NextNum   - ThisNum),
+    NewNextDenom = (K*NextDenom - ThisDenom),
+
+    NewWork      = [{NewThisNum, NewThisDenom}] ++ Work,
+
+    farey_sequence(Depth, NewWork, ascending, NewThisNum, NewThisDenom, NewNextNum, NewNextDenom).
