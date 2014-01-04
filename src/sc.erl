@@ -203,6 +203,9 @@
     head/1,
     farey_sequence/1,
 
+    hn_score/3,
+    general_hn_score/7,
+
     trim/1,
       trim_cursor/1,
 
@@ -10695,3 +10698,45 @@ farey_sequence(Depth, Work, ascending, ThisNum, ThisDenom, NextNum, NextDenom) -
     NewWork      = [{NewThisNum, NewThisDenom}] ++ Work,
 
     farey_sequence(Depth, NewWork, ascending, NewThisNum, NewThisDenom, NewNextNum, NewNextDenom).
+
+
+
+
+
+%% @doc Calculates one Hacker News ranking entry, for ordering by age and score.  Follows
+%% the algorithm claimed in http://www.righto.com/2013/11/how-hacker-news-ranking-really-works.html .
+%%
+%% This really just wraps the constants of the HN version in a call to the general version.
+%%
+%% It is not at all clear how penalties are stacked, so I just summed them.  Many will think that 
+%% wrong.
+%%
+%% @since Version 854
+
+hn_score(Votes, AgeInHours, Penalties) 
+
+    when is_list(Penalties) ->
+
+    hn_score(Votes, AgeInHours, lists:sum(Penalties));
+
+
+
+
+
+hn_score(Votes, AgeInHours, Penalty) ->
+
+    general_hn_score(Votes, AgeInHours, 1 - Penalty, -1, 2, 0.8, 1.8).
+
+
+
+
+
+%% @doc Calculates one Hacker News style ranking entry with coefficients removed, for ordering by 
+%% age and score.  Follows the algorithm claimed in 
+%% http://www.righto.com/2013/11/how-hacker-news-ranking-really-works.html .
+%%
+%% @since Version 854
+
+general_hn_score(Votes, Age, Penalty, VoteOffset, AgeOffset, VoteDecay, Gravity) ->
+
+    (math:pow(Votes + VoteOffset, VoteDecay) / math:pow(Age + AgeOffset, Gravity)) * Penalty.
