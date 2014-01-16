@@ -10740,3 +10740,7 @@ hn_score(Votes, AgeInHours, Penalty) ->
 general_hn_score(Votes, Age, Penalty, VoteOffset, AgeOffset, VoteDecay, Gravity) ->
 
     (math:pow(Votes + VoteOffset, VoteDecay) / math:pow(Age + AgeOffset, Gravity)) * Penalty.
+
+
+
+
