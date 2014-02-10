@@ -1179,3 +1179,15 @@ solarized_test_() ->
         }
 
     ] }.
+
+
+
+
+
+rand_between_test_() ->
+
+    { "Rand between tests", [
+
+        { "Covers correct range", ?_assert( [1,2,3,4,5] =:= [ K || {K,_} <- sc:histograph([ sc:rand_between(1,5) || _I <- lists:seq(1,10000) ]) ] ) }
+
+    ] }.

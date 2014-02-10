@@ -10332,7 +10332,7 @@ bucket(Position, [First|_] = ListOfLists) when is_list(First) ->
 
 rand_between(Lo, Hi) when is_number(Lo), is_number(Hi), Lo =< Hi ->
 
-    rand(Hi - Lo) + Lo.
+    rand(Hi - Lo + 1) + Lo.
 
 
 
