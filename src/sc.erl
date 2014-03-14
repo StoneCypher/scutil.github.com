@@ -2261,7 +2261,7 @@ arithmetic_mean(List)
 
 geometric_mean([]) ->
 
-    0.0;
+    1.0;
 
 
 
