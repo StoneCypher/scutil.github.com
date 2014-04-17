@@ -889,6 +889,47 @@ nybble_to_hex_test_() ->
 
 
 
+nybble_to_hex_upper_test_() ->
+
+    { "Nybble to hex tests - exhaustive", [
+
+%%      { "Documentation assertions", [
+%%      ] },
+%%
+%%      { "Manual value assertions", [
+%%      ] },
+%%
+%%      { "Stochastic property assertions", [
+%%      ] },
+%%
+%%      { "Error state assertions", [
+%%      ] },
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
+
+        { "0n", ?_assert( $0 =:= sc:nybble_to_hex_upper(0)  ) },
+        { "1n", ?_assert( $1 =:= sc:nybble_to_hex_upper(1)  ) },
+        { "2n", ?_assert( $2 =:= sc:nybble_to_hex_upper(2)  ) },
+        { "3n", ?_assert( $3 =:= sc:nybble_to_hex_upper(3)  ) },
+        { "4n", ?_assert( $4 =:= sc:nybble_to_hex_upper(4)  ) },
+        { "5n", ?_assert( $5 =:= sc:nybble_to_hex_upper(5)  ) },
+        { "6n", ?_assert( $6 =:= sc:nybble_to_hex_upper(6)  ) },
+        { "7n", ?_assert( $7 =:= sc:nybble_to_hex_upper(7)  ) },
+        { "8n", ?_assert( $8 =:= sc:nybble_to_hex_upper(8)  ) },
+        { "9n", ?_assert( $9 =:= sc:nybble_to_hex_upper(9)  ) },
+        { "An", ?_assert( $A =:= sc:nybble_to_hex_upper(10) ) },
+        { "Bn", ?_assert( $B =:= sc:nybble_to_hex_upper(11) ) },
+        { "Cn", ?_assert( $C =:= sc:nybble_to_hex_upper(12) ) },
+        { "Dn", ?_assert( $D =:= sc:nybble_to_hex_upper(13) ) },
+        { "En", ?_assert( $E =:= sc:nybble_to_hex_upper(14) ) },
+        { "Fn", ?_assert( $F =:= sc:nybble_to_hex_upper(15) ) }
+
+    ] }.
+
+
+
+
+
 prop_arithmetic_mean_result_numeric() ->
 
     ?FORALL( Ln,

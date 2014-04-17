@@ -401,6 +401,8 @@
     io_list_to_hex_string/1,
       nybble_to_hex/1,
       byte_to_hex/1,
+      nybble_to_hex_upper/1,
+      byte_to_hex_upper/1,
       hex_to_int/1,
 
     halstead_complexity/4,
@@ -5744,6 +5746,64 @@ byte_to_hex(TheByte)
          TheByte =< 255     ->
 
     [ nybble_to_hex(TheByte bsr 4), nybble_to_hex(TheByte band 15) ].
+
+
+
+
+
+-spec nybble_to_hex_upper(Nyb::nybble()) -> hexchar().
+
+%% @doc Convert a nybble() to a hexchar() in uppercase. ```1> sc:nybble_to_hex_upper(7).
+%% 55
+%%
+%% 2> sc:nybble_to_hex_upper(15).
+%% 70'''
+%%
+%% Exhaustively unit tested.
+
+%% @since Version 855
+
+nybble_to_hex_upper(Nyb) 
+
+    when is_integer(Nyb), 
+         Nyb >= 0,  
+         Nyb < 10       ->
+
+    $0 + Nyb;
+
+
+
+
+
+nybble_to_hex_upper(Nyb)
+
+    when is_integer(Nyb),
+         Nyb >= 10,
+         Nyb < 16       ->
+
+    $A + Nyb - 10.
+
+
+
+
+
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a byte() into a hexstring().  The hexstring() result will always be two characters (left padded with zero if necessary). ```1> sc:byte_to_hex_upper(7).
+%% "07"
+%%
+%% 2> sc:byte_to_hex_upper(255).
+%% "FF"'''
+%%
+%% @since Version 855
+
+-spec byte_to_hex_upper(TheByte::byte()) -> hexstring().
+
+byte_to_hex_upper(TheByte)
+
+    when is_integer(TheByte),
+         TheByte >= 0,
+         TheByte =< 255     ->
+
+    [ nybble_to_hex_upper(TheByte bsr 4), nybble_to_hex_upper(TheByte band 15) ].
 
 
 
