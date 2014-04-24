@@ -13,7 +13,7 @@
 <ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>This is the 2011 revamp of the erlang portion of the scutil library.
 <p>Copyright © 2007 - current John Haugeland, All Rights Reserved</p>
 
-<p><b>Version:</b> 2.6.849
+<p><b>Version:</b> 2.6.850
 </p>
 <p><b>Introduced in:</b> September 14, 2007</p>
 <p><b>Authors:</b> John Haugeland (<a href="mailto:stonecypher@gmail.com"><tt>stonecypher@gmail.com</tt></a>).</p>
@@ -395,6 +395,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#fk_readability-4">fk_readability/4</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Calculate the Flesch-Kincaid readability score of a block of text.</td></tr>
 <tr><td valign="top"><a href="#flag_sets-1">flag_sets/1</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Returns every interpretation of the list as a set of boolean flags, including all-off and all-on.</td></tr>
 <tr><td valign="top"><a href="#floor-1">floor/1</a></td><td><span style="color: green; font-weight: bold;">Tested</span> Takes the floor (round towards negative infinity) of a number.</td></tr>
+<tr><td valign="top"><a href="#fmt-2">fmt/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#frand-0">frand/0</a></td><td></td></tr>
 <tr><td valign="top"><a href="#frand_between-2">frand_between/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#function_point_count-1">function_point_count/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
@@ -422,6 +423,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#hmac_md5-2">hmac_md5/2</a></td><td><span style="color:red;font-style:italic">Obsolete - legacy support only - do not use in new code</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> HMAC wrapper built around MD5 as the core hash, frequently known as <code>hmac-md5</code> or <code>md5-hmac</code>.</td></tr>
 <tr><td valign="top"><a href="#hmac_sha1-2">hmac_sha1/2</a></td><td>Should be obsolete, but Erlang's standard library does not include SHA-2, and neither does <code>scutil</code> (yet) - <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> HMAC wrapper built around SHA1-160 (the only SHA-1) as the core hash, frequently known as <code>hmac-sha1</code>, <code>hmac-sha</code> or <code>sha1-hmac</code>.</td></tr>
 <tr><td valign="top"><a href="#hmean_vector_normal-1">hmean_vector_normal/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the harmonic mean of the elements of the unit vector for the vector provided.</td></tr>
+<tr><td valign="top"><a href="#htget-1">htget/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#implode-2">implode/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Append strings with separating string inbetween - contrast <a href="#explode-2"><code>explode/2</code></a>.</td></tr>
 <tr><td valign="top"><a href="#in_range-3">in_range/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#inc_counter-1">inc_counter/1</a></td><td>Equivalent to <a href="#adjust_counter_by-2"><tt>adjust_counter_by(Name, 1)</tt></a>.
@@ -470,6 +472,7 @@ presenting the actual volume of functionality present here.  We can get the cove
 <tr><td valign="top"><a href="#list_product-1">list_product/1</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Takes the product of all numbers in the list.</td></tr>
 <tr><td valign="top"><a href="#list_to_number-1">list_to_number/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Converts a list into a number; integers will be returned if there is no mantissa in the list representation.</td></tr>
 <tr><td valign="top"><a href="#list_to_term-1">list_to_term/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Like binary_to_term, but not so much for binaries.</td></tr>
+<tr><td valign="top"><a href="#log2-1">log2/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#logb-2">logb/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#map_scanline-2">map_scanline/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Parses a string on all three newline types, discarding any empty lines; applies F as a functor to each line,  
 and returns the tuple of the remainder and then a list of all results from the functor(s) issued.</td></tr>
@@ -543,6 +546,7 @@ via Naive Bayes Likelihood.</td></tr>
 <tr><td valign="top"><a href="#probability_any-1">probability_any/1</a></td><td><span style="color:red;font-style:italic">Incomplete Todo Comeback</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#qsp_average-2">qsp_average/2</a></td><td><span style="color:red">Incomplete</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the quadratic scalar product average of a vector <code>W</code> and a list of vectors <code>X</code>.</td></tr>
 <tr><td valign="top"><a href="#rand-1">rand/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a pseudorandom integer on the range <code>[0 - (Range-1)]</code> inclusive.</td></tr>
+<tr><td valign="top"><a href="#rand_between-2">rand_between/2</a></td><td></td></tr>
 <tr><td valign="top"><a href="#random_from-1">random_from/1</a></td><td>Equivalent to <a href="#from-3"><tt>from(1, List, no_remainder)</tt></a>.
 </td></tr>
 <tr><td valign="top"><a href="#random_from-2">random_from/2</a></td><td>Equivalent to <a href="#from-3"><tt>from(N, List, no_remainder)</tt></a>.
@@ -565,6 +569,7 @@ via Naive Bayes Likelihood.</td></tr>
 <tr><td valign="top"><a href="#rotate_to_last-2">rotate_to_last/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Rotates the list so that the first instance of Item becomes the last element in the list.</td></tr>
 <tr><td valign="top"><a href="#sanitize_filename-1">sanitize_filename/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Sanitize an arbitrary string to be appropriate for Windows and Unix filesystems, and URLs.</td></tr>
 <tr><td valign="top"><a href="#sanitize_tokens-2">sanitize_tokens/2</a></td><td><span style="color:orange;font-style:italic">Stoch untested</span> Remove unacceptable elements from an input list, as defined by another list or a filter function.</td></tr>
+<tr><td valign="top"><a href="#schwartz-2">schwartz/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Computes a Schwartzian Transform (the perl idiom in Erlang.).</td></tr>
 <tr><td valign="top"><a href="#second_difference-1">second_difference/1</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span></td></tr>
 <tr><td valign="top"><a href="#segment_size-1">segment_size/1</a></td><td></td></tr>
 <tr><td valign="top"><a href="#send_receive-2">send_receive/2</a></td><td><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> (Blocking) First send a message to an entity.</td></tr>
@@ -1183,7 +1188,7 @@ via Naive Bayes Likelihood.</td></tr>
 <h3 class="function"><a name="dstat-2">dstat/2</a></h3>
 <div class="spec">
 <p><tt>dstat(NumericList, PopulationOrSample) -&gt; any()</tt></p>
-</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return descriptive statistics of a numeric list.  nspired by J dstat from <a href="http://bbot.org/blog/archives/2011/03/17/on_being_surprised_by_a_programming_language/">bbot.org</a>.  J seems to be assuming sample for statistics.  I do not like assumptions.</p>
+</div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return descriptive statistics of a numeric list.  Inspired by J dstat from <a href="http://bbot.org/blog/archives/2011/03/17/on_being_surprised_by_a_programming_language/">bbot.org</a>.  J seems to be assuming sample for statistics.  I do not like assumptions.</p>
 <p><b>Introduced in:</b> Version 487
  </p>
 
@@ -1591,6 +1596,12 @@ via Naive Bayes Likelihood.</td></tr>
   Unit, doc and stochastic property (int as float identity; float always larger within 1; all results integers) tested.</p>
 <p><b>Introduced in:</b> Version 511</p>
 
+<h3 class="function"><a name="fmt-2">fmt/2</a></h3>
+<div class="spec">
+<p><tt>fmt(Str, Args) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 845</p>
+
 <h3 class="function"><a name="frand-0">frand/0</a></h3>
 <div class="spec">
 <p><tt>frand() -&gt; any()</tt></p>
@@ -1876,6 +1887,12 @@ via Naive Bayes Likelihood.</td></tr>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the harmonic mean of the elements of the unit vector for the vector provided.
  </p>
 <p><b>Introduced in:</b> Version 499</p>
+
+<h3 class="function"><a name="htget-1">htget/1</a></h3>
+<div class="spec">
+<p><tt>htget(Thing) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 844</p>
 
 <h3 class="function"><a name="implode-2">implode/2</a></h3>
 <div class="spec">
@@ -2271,6 +2288,12 @@ via Naive Bayes Likelihood.</td></tr>
 </div><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Like binary_to_term, but not so much for binaries.  Thanks, dizzyd (modified for error reporting)</p>
 <p><b>Introduced in:</b> Version 568
  </p>
+
+<h3 class="function"><a name="log2-1">log2/1</a></h3>
+<div class="spec">
+<p><tt>log2(Value) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 846</p>
 
 <h3 class="function"><a name="logb-2">logb/2</a></h3>
 <div class="spec">
@@ -2944,6 +2967,12 @@ via Naive Bayes Likelihood.</p>
  </p>
 <p><b>Introduced in:</b> Version 595</p>
 
+<h3 class="function"><a name="rand_between-2">rand_between/2</a></h3>
+<div class="spec">
+<p><tt>rand_between(Lo, Hi) -&gt; any()</tt></p>
+</div>
+<p><b>Introduced in:</b> Version 844</p>
+
 <h3 class="function"><a name="random_from-1">random_from/1</a></h3>
 <div class="spec">
 <p><tt>random_from(List) -&gt; any()</tt></p>
@@ -3197,6 +3226,62 @@ via Naive Bayes Likelihood.</p>
  </p>
 <p><b>Introduced in:</b> Version 477</p>
 <p><b>See also:</b> <a href="#sanitize_filename-1">sanitize_filename/1</a>.</p>
+
+<h3 class="function"><a name="schwartz-2">schwartz/2</a></h3>
+<div class="spec">
+<p><tt>schwartz(CompF::function(), List::list()) -&gt; list()</tt><br></p>
+</div><p><p><span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Computes a Schwartzian Transform (the perl idiom in Erlang.)</p>
+ 
+  <p>The <a href="http://en.wikipedia.org/wiki/Schwartzian_transform">Schwartz Transform</a> (some people say
+  <a href="http://en.wikipedia.org/wiki/Schwartzian_transform">Schwartzian Transform</a>; hate them) is an efficiency
+  trick for when you want to sort by a computed function: compute per-row in a tuple, sort on the computed index, then
+  strip out of the tuple.  This avoids lg-n recomputations on a traditional sort using a functional key.  (Admittedly,
+  it's kind of blindingly obvious in a pattern matching language with keysort, but for someone who doesn't know the
+  Perl idiomatic name for this, finding an implementation can help when converting code.  Also it's quite useful.)
+  Lisp people call this <code>decorate-sort-undecorate</code>, and it kind of smells like memoization, so you can probably hear a  
+Haskeller squee-ing in the background.</p>
+ 
+  <p>Basically, when it's really expensive to compute the thing you're sorting on from the actual list data, use this to  
+wrap the work, as a speed thing.</p>
+ 
+  This gives you a surprisingly large number of Spaceballs reference opportunities, by saying "use the schwartz." <pre>  1&gt; BySum = fun(X) -&gt; lists:sum(X) end.
+  #Fun&lt;erl_eval.6.17052888&gt;
+ 
+  2&gt; BySum([1,2,3,4]).
+  10
+ 
+  3&gt; ByProduct = fun(X) -&gt; sc:list_product(X) end.
+  #Fun&lt;erl_eval.6.17052888&gt;
+ 
+  4&gt; ByProduct([1,2,3,4]).
+  24
+ 
+  5&gt; ByLength = fun(X) -&gt; length(X) end.
+  #Fun&lt;erl_eval.6.17052888&gt;
+ 
+  6&gt; ByLength([1,2,3,4]).
+  4
+ 
+  7&gt; Tests = [
+  7&gt;   [0,1],
+  7&gt;   [0,1,2],
+  7&gt;   [1],
+  7&gt;   [1,2],
+  7&gt;   [1,2,3,4],
+  7&gt;   [1,1,1],
+  7&gt;   [1,1,1,1,1,1]
+  7&gt; ].
+  [ [0,1], [0,1,2], [1], [1,2], [1,2,3,4], [1,1,1], [1,1,1,1,1,1] ]
+ 
+  8&gt; sc:schwartz(BySum, Tests).
+  [ [0,1], [1], [0,1,2], [1,2], [1,1,1], [1,1,1,1,1,1], [1,2,3,4] ]
+ 
+  9&gt; sc:schwartz(ByProduct, Tests).
+  [ [0,1], [0,1,2], [1], [1,1,1], [1,1,1,1,1,1], [1,2], [1,2,3,4] ]
+ 
+  10&gt; sc:schwartz(ByLength, Tests).
+  [ [1], [0,1], [1,2], [0,1,2], [1,1,1], [1,2,3,4], [1,1,1,1,1,1] ]</pre></p>
+<p><b>Introduced in:</b> Version 847</p>
 
 <h3 class="function"><a name="second_difference-1">second_difference/1</a></h3>
 <div class="spec">
@@ -3995,6 +4080,6 @@ via Naive Bayes Likelihood.</p>
 <hr>
 
 <div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<p><i>Generated by EDoc, Sep 3 2013, 02:41:13.</i></p>
+<p><i>Generated by EDoc, Dec 16 2013, 19:15:49.</i></p>
 </body>
 </html>

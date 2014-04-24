@@ -195,10 +195,21 @@
     has_debug_info/1,
     ad_rate/5,
     grab_first/1,
-    funnel/2,
     list_cross_multiply/1,
     outcomes/2,
-    logb/2,
+    schwartz/2,
+    un_ok/1,
+    head/1,
+    farey_sequence/1,
+
+    hn_score/3,
+    general_hn_score/7,
+
+    trim/1,
+      trim_cursor/1,
+
+    log2/1,
+      logb/2,
 
     unixtime/0,
       unixtime_daybase/0,
@@ -273,9 +284,6 @@
     fk_readability/3,
       labelled_fk_readability/1,
       fk_readability/4,
-
-    unfunnel/2,
-      unfunnel/3,
 
     is_between/3,
       is_between/4,
@@ -393,6 +401,8 @@
     io_list_to_hex_string/1,
       nybble_to_hex/1,
       byte_to_hex/1,
+      nybble_to_hex_upper/1,
+      byte_to_hex_upper/1,
       hex_to_int/1,
 
     halstead_complexity/4,
@@ -510,6 +520,8 @@
 
     histograph/1,
       histo_2d/1,
+
+    histo_sample/2,
 
     skewness/1,
       kurtosis/1,
@@ -786,12 +798,10 @@ gen_docs(WhereIsBase, WhereToPutDocs) ->
     {ok,CVer}      = file:read_file(WhereIsBase ++ "/version.counter"),
     CurrentVersion = << CMaj/binary, <<".">>/binary, CMin/binary, <<".">>/binary, CVer/binary >>,
 
-    DocTargets = ["sc", "sc_tests", "htstub", "htstub_tests", "htstub_adaptors", "htstub_adaptors_tests"],
-    SrvTargets = ["hello_world", "restaurant"],
+    DocTargets = ["sc", "sc_tests"],
 
     filelib:ensure_dir(WhereToPutDocs),
     edoc:files([WhereIsSrc++"/"++DocFile++".erl"                || DocFile <- DocTargets ], [{new,true}, {dir, WhereToPutDocs}]),
-    edoc:files([WhereIsSrc++"/htstub_servers/"++DocFile++".erl" || DocFile <- SrvTargets ], [{new,true}, {dir, WhereToPutDocs++"/htstub_servers"}]),
 
     VerFix = fun(Tgt) ->
       { ok, OldTextBin } = file:read_file(Tgt),
@@ -2253,7 +2263,7 @@ arithmetic_mean(List)
 
 geometric_mean([]) ->
 
-    0.0;
+    1.0;
 
 
 
@@ -2364,7 +2374,7 @@ weighted_arithmetic_mean( [{V,W} | Tail], Num, Denom) ->
 
 %% @since Version 487
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return descriptive statistics of a numeric list.  nspired by J dstat from <a href="http://bbot.org/blog/archives/2011/03/17/on_being_surprised_by_a_programming_language/">bbot.org</a>.  J seems to be assuming sample for statistics.  I do not like assumptions.
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Return descriptive statistics of a numeric list.  Inspired by J dstat from <a href="http://bbot.org/blog/archives/2011/03/17/on_being_surprised_by_a_programming_language/">bbot.org</a>.  J seems to be assuming sample for statistics.  I do not like assumptions.
 
 % ##todo comeback code sample
 
@@ -5741,6 +5751,64 @@ byte_to_hex(TheByte)
 
 
 
+-spec nybble_to_hex_upper(Nyb::nybble()) -> hexchar().
+
+%% @doc Convert a nybble() to a hexchar() in uppercase. ```1> sc:nybble_to_hex_upper(7).
+%% 55
+%%
+%% 2> sc:nybble_to_hex_upper(15).
+%% 70'''
+%%
+%% Exhaustively unit tested.
+
+%% @since Version 855
+
+nybble_to_hex_upper(Nyb) 
+
+    when is_integer(Nyb), 
+         Nyb >= 0,  
+         Nyb < 10       ->
+
+    $0 + Nyb;
+
+
+
+
+
+nybble_to_hex_upper(Nyb)
+
+    when is_integer(Nyb),
+         Nyb >= 10,
+         Nyb < 16       ->
+
+    $A + Nyb - 10.
+
+
+
+
+
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a byte() into a hexstring().  The hexstring() result will always be two characters (left padded with zero if necessary). ```1> sc:byte_to_hex_upper(7).
+%% "07"
+%%
+%% 2> sc:byte_to_hex_upper(255).
+%% "FF"'''
+%%
+%% @since Version 855
+
+-spec byte_to_hex_upper(TheByte::byte()) -> hexstring().
+
+byte_to_hex_upper(TheByte)
+
+    when is_integer(TheByte),
+         TheByte >= 0,
+         TheByte =< 255     ->
+
+    [ nybble_to_hex_upper(TheByte bsr 4), nybble_to_hex_upper(TheByte band 15) ].
+
+
+
+
+
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Convert a hexstring() or hexchar() into its numeric value. ```1> sc:hex_to_int("c0ffEE").
 %% 12648430
 %%
@@ -6111,9 +6179,6 @@ power_set(L)
 shuffle(List)
 
     when is_list(List) ->
-
-    {A1,A2,A3} = now(),
-    random:seed(A1, A2, A3),
 
     WeightedAndShuffled = lists:map(
         fun(Item) -> { random:uniform(), Item } end,
@@ -7807,28 +7872,6 @@ probability_all(ListOfProbabilities)
 
 
 
-%% @since Version 652
-%%
-%% @doc <span style="color:red;font-style:italic">Incomplete Todo Comeback</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
-
-probability_any(ListOfProbabilities) 
-
-    when is_list(ListOfProbabilities) ->
-
-    case out_of_range(ListOfProbabilities, 0, 1) of
-
-        [] ->
-            todo;
-
-        _AnythingElse ->
-            { error, "All members of the list of probabilities must be numbers on the interval [0,1] inclusive." }
-
-    end.
-
-
-
-
-
 %% @since Version 649
 
 in_range(List, Lo, Hi) ->
@@ -8622,59 +8665,6 @@ is_between(_, _, _, inclusive)                     -> false.
 %      {X-1, Y}     % W
 %    ];
 
-
-
-
-
-
-%% @since Version 691
-
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Reverse a marketing funnel, to go from goal needed to input needed.  ```1> % Using the data from http://www.forentrepreneurs.com/lessons-from-leaders/jboss-example/
-%% 1> sc:unfunnel(300, [{1/4,"Web activity scoring"}, {1/3,"Telemarketing"}, {1/4,"Inside Sales"}]).
-%% [ { 14400, "Input Needed" },
-%%   { 3600,  "Web activity scoring", 0.25 },
-%%   { 1200,  "Telemarketing",        0.3333333333333333 },
-%%   { 300,   "Inside Sales",         0.25 },
-%%   { 300,   "Result" } ]'''
-
-unfunnel(Tgt, ProbPropList) ->
-
-    unfunnel(Tgt, ProbPropList, ceil).
-
-
-
-
-
-unfunnel(Tgt, ProbPropList, MaybeCeil)
-
-    when is_number(Tgt),
-         is_list(ProbPropList) ->
-
-    unfunnel(Tgt, [ { Tgt, "Result" } ], lists:reverse(ProbPropList), MaybeCeil).
-
-
-
-
-
-unfunnel(Counter, Output, [], _WhoCaresIfCeil) ->
-
-    [{Counter, "Input Needed"}]++Output;
-
-
-
-
-
-unfunnel(Counter, Output, [{Scale,Label} | RemWork], no_ceil) ->
-
-    unfunnel(Counter/Scale, [{Counter, Label, Scale}]++Output, RemWork, no_ceil);
-
-
-
-
-
-unfunnel(Counter, Output, [{Scale,Label} | RemWork], ceil) ->
-
-    unfunnel(sc:ceil(Counter/Scale), [{Counter, Label, Scale}]++Output, RemWork, ceil).
 
 
 
@@ -10345,34 +10335,6 @@ is_rand_seeded() ->
 
 
 
-%% @since Version 838
-
-funnel(Base, Percents) ->
-
-    funnel([Base], Base, Percents).
-
-
-
-
-
-funnel(Work, _Last, []) ->
-
-    lists:reverse( Work );
-
-
-
-
-
-funnel(Work, Last, [NextPct | Pcts]) ->
-
-    Step = Last * NextPct,
-
-    funnel([Step]++Work, Step, Pcts).
-
-
-
-
-
 %% @since Version 839
 
 list_cross_multiply(L) -> 
@@ -10430,7 +10392,7 @@ bucket(Position, [First|_] = ListOfLists) when is_list(First) ->
 
 rand_between(Lo, Hi) when is_number(Lo), is_number(Hi), Lo =< Hi ->
 
-    rand(Hi - Lo) + Lo.
+    rand(Hi - Lo + 1) + Lo.
 
 
 
@@ -10456,6 +10418,304 @@ htget(Thing) ->
 
 
 
+%% @since Version 845
+
 fmt(Str, Args) ->
 
     lists:flatten(io_lib:format(Str, Args)).
+
+
+
+
+
+%% @since Version 846
+
+log2(Value) ->
+
+    math:log(Value) / math:log(2).
+
+
+
+
+
+
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Computes a Schwartzian Transform (the perl idiom in Erlang.)  
+%% 
+%% The <a href="http://en.wikipedia.org/wiki/Schwartzian_transform">Schwartz Transform</a> (some people say 
+%% <a href="http://en.wikipedia.org/wiki/Schwartzian_transform">Schwartzian Transform</a>; hate them) is an efficiency 
+%% trick for when you want to sort by a computed function: compute per-row in a tuple, sort on the computed index, then
+%% strip out of the tuple.  This avoids lg-n recomputations on a traditional sort using a functional key.  (Admittedly,
+%% it's kind of blindingly obvious in a pattern matching language with keysort, but for someone who doesn't know the
+%% Perl idiomatic name for this, finding an implementation can help when converting code.  Also it's quite useful.) 
+%% Lisp people call this `decorate-sort-undecorate', and it kind of smells like memoization, so you can probably hear a
+%% Haskeller squee-ing in the background. 
+%%
+%% Basically, when it's really expensive to compute the thing you're sorting on from the actual list data, use this to
+%% wrap the work, as a speed thing.
+%%
+%% This gives you a surprisingly large number of Spaceballs reference opportunities, by saying "use the schwartz." ```1> BySum = fun(X) -> lists:sum(X) end.               
+%% #Fun<erl_eval.6.17052888>
+%% 
+%% 2> BySum([1,2,3,4]).
+%% 10
+%% 
+%% 3> ByProduct = fun(X) -> sc:list_product(X) end.
+%% #Fun<erl_eval.6.17052888>
+%% 
+%% 4> ByProduct([1,2,3,4]).                        
+%% 24
+%% 
+%% 5> ByLength = fun(X) -> length(X) end.                      
+%% #Fun<erl_eval.6.17052888>
+%% 
+%% 6> ByLength([1,2,3,4]).
+%% 4
+%% 
+%% 7> Tests = [ 
+%% 7>   [0,1],  
+%% 7>   [0,1,2],
+%% 7>   [1],
+%% 7>   [1,2],
+%% 7>   [1,2,3,4],
+%% 7>   [1,1,1],
+%% 7>   [1,1,1,1,1,1]
+%% 7> ].
+%% [ [0,1], [0,1,2], [1], [1,2], [1,2,3,4], [1,1,1], [1,1,1,1,1,1] ]
+%% 
+%% 8> sc:schwartz(BySum, Tests).
+%% [ [0,1], [1], [0,1,2], [1,2], [1,1,1], [1,1,1,1,1,1], [1,2,3,4] ]
+%% 
+%% 9> sc:schwartz(ByProduct, Tests).
+%% [ [0,1], [0,1,2], [1], [1,1,1], [1,1,1,1,1,1], [1,2], [1,2,3,4] ]
+%%
+%% 10> sc:schwartz(ByLength, Tests). 
+%% [ [1], [0,1], [1,2], [0,1,2], [1,1,1], [1,2,3,4], [1,1,1,1,1,1] ]'''
+
+%% @since Version 847
+
+-spec schwartz(CompF::function(), List::list()) -> list().
+
+schwartz(CompF, List) -> 
+
+    [ OrigLi || {_, OrigLi} <- lists:keysort(1, [ { CompF(Li), Li } || Li <- List ])].
+
+
+
+
+
+%% @doc <span style="color:red;font-style:italic">Incomplete Todo Comeback</span> <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+
+%% @since Version 848
+
+probability_any(ListOfProbabilities)
+
+    when is_list(ListOfProbabilities) ->
+
+    case out_of_range(ListOfProbabilities, 0, 1) of
+
+        [] ->
+            probability_any(ListOfProbabilities, 0.0);
+
+        _AnythingElse ->
+            { error, "All members of the list of probabilities must be numbers on the interval [0,1] inclusive." }
+
+    end.
+
+probability_any([], Cur) ->
+    Cur;
+
+probability_any([This|Rem], Cur) ->
+    probability_any(Rem, Cur + ((1 - Cur) * This)).
+
+
+
+
+%% @doc Utility function to strip `{ok, _}' tuple.  ```1> un_ok({ok, 3}).
+%% 3'''
+
+%% @since Version 849
+
+un_ok(X) ->
+
+    { ok, V } = X,    % not putting this as a pattern match in the signature
+    V.                % because badmatch is a more scrutable error than no func
+
+
+
+
+
+%% @doc Takes a historaph sample. ```1> '''
+
+%% @since Version 850
+
+histo_sample(Count, Sampler) ->
+
+    sc:histograph([ Sampler() || _I <- lists:seq(1,Count) ]).
+
+
+
+
+
+%% @doc Trims whitespace from both sides of a string; equiv to PHP `trim()'.
+%%
+%% Takes away nul #0, tab `\t' #9, newline `\n' #10, vertical tab `\v' #11, carriage return `\r' #13, and space ` ' #32.
+%%
+%% THIS FUNCTION IS NOT EFFICIENT. ```1> trim(" hello, world\n\n").
+%% "hello, world"'''
+
+%% @since Version 851
+
+trim(String)
+
+    when is_list(String) ->
+
+    string:strip(
+      string:strip(
+        string:strip(
+          string:strip(
+            string:strip(
+              string:strip(
+
+                String
+
+              , both, 32)
+            , both, 13)
+          , both, 11)
+        , both, 10)
+      , both, 9)
+    , both, 0).
+
+
+
+
+
+%% @doc Trims cursor control (cr/nl/tab/vtab) from both sides of a string.
+%%
+%% Takes away tab `\t' #9, newline `\n' #10, vertical tab `\v' #11, and carriage return `\r' #13.
+%%
+%% THIS FUNCTION IS NOT EFFICIENT. ```1> trim(" hello, world\n\n").
+%% "hello, world"'''
+
+%% @since Version 851
+
+trim_cursor(String)
+
+    when is_list(String) ->
+
+    string:strip(
+      string:strip(
+        string:strip(
+          string:strip(
+
+            String
+
+          , both, 13)
+        , both, 11)
+      , both, 10)
+    , both, 9).
+
+
+
+
+
+%% @since Version 852
+
+head([Head|_RemList]) ->
+
+    Head.
+
+
+
+
+%% @doc Render the Farey Sequence as a list of tuples.  
+%%
+%% Converted from Wikipedia's ```def farey( n, asc=True ):
+%%     """Python function to print the nth Farey sequence, either ascending or descending."""
+%%     if asc: 
+%%         a, b, c, d = 0, 1,  1  , n     # (*)
+%%     else:
+%%         a, b, c, d = 1, 1, n-1 , n     # (*)
+%%     print "%d/%d" % (a,b)
+%%     while (asc and c <= n) or (not asc and a > 0):
+%%         k = int((n + b)/d)
+%%         a, b, c, d = c, d, k*c - a, k*d - b
+%%         print "%d/%d" % (a,b)'''
+%%
+%% @since Version 853
+
+farey_sequence(N) ->
+
+    farey_sequence(N, [{0,1}], ascending, 0, 1, 1, N).
+
+
+
+
+
+farey_sequence(Depth, Work, ascending, _ThisNum, _ThisDenom, NextNum, _NextDenom) 
+
+    when NextNum > Depth ->
+
+    lists:reverse(Work);
+
+
+
+
+
+farey_sequence(Depth, Work, ascending, ThisNum, ThisDenom, NextNum, NextDenom) ->
+
+    K            = trunc((Depth + ThisDenom)/NextDenom),
+
+    NewThisNum   = NextNum, 
+    NewThisDenom = NextDenom,
+    NewNextNum   = (K*NextNum   - ThisNum),
+    NewNextDenom = (K*NextDenom - ThisDenom),
+
+    NewWork      = [{NewThisNum, NewThisDenom}] ++ Work,
+
+    farey_sequence(Depth, NewWork, ascending, NewThisNum, NewThisDenom, NewNextNum, NewNextDenom).
+
+
+
+
+
+%% @doc Calculates one Hacker News ranking entry, for ordering by age and score.  Follows
+%% the algorithm claimed in http://www.righto.com/2013/11/how-hacker-news-ranking-really-works.html .
+%%
+%% This really just wraps the constants of the HN version in a call to the general version.
+%%
+%% It is not at all clear how penalties are stacked, so I just summed them.  Many will think that 
+%% wrong.
+%%
+%% @since Version 854
+
+hn_score(Votes, AgeInHours, Penalties) 
+
+    when is_list(Penalties) ->
+
+    hn_score(Votes, AgeInHours, lists:sum(Penalties));
+
+
+
+
+
+hn_score(Votes, AgeInHours, Penalty) ->
+
+    general_hn_score(Votes, AgeInHours, 1 - Penalty, -1, 2, 0.8, 1.8).
+
+
+
+
+
+%% @doc Calculates one Hacker News style ranking entry with coefficients removed, for ordering by 
+%% age and score.  Follows the algorithm claimed in 
+%% http://www.righto.com/2013/11/how-hacker-news-ranking-really-works.html .
+%%
+%% @since Version 854
+
+general_hn_score(Votes, Age, Penalty, VoteOffset, AgeOffset, VoteDecay, Gravity) ->
+
+    (math:pow(Votes + VoteOffset, VoteDecay) / math:pow(Age + AgeOffset, Gravity)) * Penalty.
+
+
+
+

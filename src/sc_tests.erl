@@ -889,6 +889,47 @@ nybble_to_hex_test_() ->
 
 
 
+nybble_to_hex_upper_test_() ->
+
+    { "Nybble to hex tests - exhaustive", [
+
+%%      { "Documentation assertions", [
+%%      ] },
+%%
+%%      { "Manual value assertions", [
+%%      ] },
+%%
+%%      { "Stochastic property assertions", [
+%%      ] },
+%%
+%%      { "Error state assertions", [
+%%      ] },
+%%
+%%      {"Spec test", ?_assert( true =:= proper:check_spec({sc, foo, 2}) ) }
+
+        { "0n", ?_assert( $0 =:= sc:nybble_to_hex_upper(0)  ) },
+        { "1n", ?_assert( $1 =:= sc:nybble_to_hex_upper(1)  ) },
+        { "2n", ?_assert( $2 =:= sc:nybble_to_hex_upper(2)  ) },
+        { "3n", ?_assert( $3 =:= sc:nybble_to_hex_upper(3)  ) },
+        { "4n", ?_assert( $4 =:= sc:nybble_to_hex_upper(4)  ) },
+        { "5n", ?_assert( $5 =:= sc:nybble_to_hex_upper(5)  ) },
+        { "6n", ?_assert( $6 =:= sc:nybble_to_hex_upper(6)  ) },
+        { "7n", ?_assert( $7 =:= sc:nybble_to_hex_upper(7)  ) },
+        { "8n", ?_assert( $8 =:= sc:nybble_to_hex_upper(8)  ) },
+        { "9n", ?_assert( $9 =:= sc:nybble_to_hex_upper(9)  ) },
+        { "An", ?_assert( $A =:= sc:nybble_to_hex_upper(10) ) },
+        { "Bn", ?_assert( $B =:= sc:nybble_to_hex_upper(11) ) },
+        { "Cn", ?_assert( $C =:= sc:nybble_to_hex_upper(12) ) },
+        { "Dn", ?_assert( $D =:= sc:nybble_to_hex_upper(13) ) },
+        { "En", ?_assert( $E =:= sc:nybble_to_hex_upper(14) ) },
+        { "Fn", ?_assert( $F =:= sc:nybble_to_hex_upper(15) ) }
+
+    ] }.
+
+
+
+
+
 prop_arithmetic_mean_result_numeric() ->
 
     ?FORALL( Ln,
@@ -1075,7 +1116,7 @@ geometric_mean_test_() ->
 
         { "Manual value assertions", [
 
-            { "[]",          ?_assert( 0.0                =:= sc:geometric_mean( [] )          ) },
+            { "[]",          ?_assert( 1.0                =:= sc:geometric_mean( [] )          ) },
             { "[1,2,3,4,5]", ?_assert( 2.6051710846973517 =:= sc:geometric_mean( [1,2,3,4,5] ) ) },
             { "[2,2,2]",     ?_assert( 2.0                =:= sc:geometric_mean( [2,2,2] )     ) },
             { "[3]",         ?_assert( 3.0                =:= sc:geometric_mean( [3] )         ) },
@@ -1177,5 +1218,17 @@ solarized_test_() ->
             ]
 
         }
+
+    ] }.
+
+
+
+
+
+rand_between_test_() ->
+
+    { "Rand between tests", [
+
+        { "Covers correct range", ?_assert( [1,2,3,4,5] =:= [ K || {K,_} <- sc:histograph([ sc:rand_between(1,5) || _I <- lists:seq(1,10000) ]) ] ) }
 
     ] }.
