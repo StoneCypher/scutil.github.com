@@ -1,0 +1,7 @@
+ebin/*
+*.beam
+deps/*
+rel/crap_json
+.concrete/DEV_MODE
+deps.plt
+.eunit
