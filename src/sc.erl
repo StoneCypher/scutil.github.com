@@ -3224,7 +3224,21 @@ factorial(X, Counter)
 
 %% @since Version 639
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Computes the additive factorial of a number. ```507> sc:additive_factorial(1).
+%% 1
+%%
+%% 508> sc:additive_factorial(2).
+%% 3
+%%
+%% 509> sc:additive_factorial(3).
+%% 6
+%%
+%% 510> sc:additive_factorial(4).
+%% 10
+%%
+%% 511> [ sc:additive_factorial(X) || X <- lists:seq(1,20) ].
+%% [1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78, 91, 105,
+%%  120, 136, 153, 171, 190,210]'''
 
 additive_factorial(X) ->
 
