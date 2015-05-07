@@ -1909,7 +1909,7 @@ bandwidth_calc(BitsPerSecond, all)
 
 
 
-bandwidth_calc(BitsPerSecond, {Unit, Timeframe}) 
+bandwidth_calc(BitsPerSecond, {Unit, Timeframe})
 
     when is_integer(BitsPerSecond) ->
 
@@ -3166,7 +3166,22 @@ cube(X) ->
 
 %% @since Version 509
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Computes the factorial of a number. ```1> sc:factorial(2).
+%% 2
+%%
+%% 2> sc:factorial(3).
+%% 6
+%%
+%% 3> sc:factorial(4).
+%% 24
+%%
+%% 4> [ sc:factorial(X) || X <- lists:seq(1,20) ].
+%% [1, 2, 6, 24, 120, 720, 5040, 40320, 362880,
+%%  3628800, 39916800, 479001600, 6227020800,
+%%  87178291200, 1307674368000, 20922789888000,
+%%  355687428096000, 6402373705728000,
+%%  121645100408832000, 2432902008176640000]'''
+
 
 factorial(X) ->
 
@@ -4637,7 +4652,7 @@ reverse_map([Item|Rem], Work, Fun) ->
 
 elements(Config, Requested)
 
-    when is_list(Config), 
+    when is_list(Config),
          is_list(Requested) ->
 
     elements_worker([], Config, Requested, 1).
@@ -4650,8 +4665,8 @@ elements(Config, Requested)
 
 elements(Config, Requested, KeyIdx)
 
-    when is_list(Config), 
-         is_list(Requested), 
+    when is_list(Config),
+         is_list(Requested),
          is_integer(KeyIdx) ->
 
     elements_worker([], Config, Requested, KeyIdx);
@@ -4664,7 +4679,7 @@ elements(Config, Requested, KeyIdx)
 
 elements(Config, Requested, strip)
 
-    when is_list(Config), 
+    when is_list(Config),
          is_list(Requested) ->
 
     elements_worker([], Config, Requested, 1, strip).
@@ -4677,8 +4692,8 @@ elements(Config, Requested, strip)
 
 elements(Config, Requested, KeyIdx, strip)
 
-    when is_list(Config), 
-         is_list(Requested), 
+    when is_list(Config),
+         is_list(Requested),
          is_integer(KeyIdx) ->
 
     elements_worker([], Config, Requested, KeyIdx, strip).
@@ -5174,7 +5189,7 @@ kendall_correlation(List1, _)
 
 
 
-kendall_correlation(List1, List2) 
+kendall_correlation(List1, List2)
 
     when length(List1) /= length(List2) ->
 
@@ -5184,9 +5199,9 @@ kendall_correlation(List1, List2)
 
 
 
-kendall_correlation(List1, List2) 
+kendall_correlation(List1, List2)
 
-    when is_list(List1), 
+    when is_list(List1),
          is_list(List2) ->
 
     {RA,_} = lists:unzip(tied_ordered_ranking(List1)),
@@ -5335,7 +5350,7 @@ pearson_correlation(TupleList)
 
 %% @equiv pearson(lists:zip(List1, List2))
 
-pearson_correlation(List1, _) 
+pearson_correlation(List1, _)
 
     when length(List1) < 2 ->
 
@@ -5345,7 +5360,7 @@ pearson_correlation(List1, _)
 
 
 
-pearson_correlation(List1, List2) 
+pearson_correlation(List1, List2)
 
     when length(List1) /= length(List2) ->
 
@@ -5672,10 +5687,10 @@ io_list_to_hex_string([], Work) ->
 
 
 
-io_list_to_hex_string([Item|Remainder], Work) 
+io_list_to_hex_string([Item|Remainder], Work)
 
-    when is_integer(Item), 
-         Item >= 0, 
+    when is_integer(Item),
+         Item >= 0,
          Item =< 255     ->
 
     [A,B] = byte_to_hex(Item),
@@ -5705,10 +5720,10 @@ io_list_to_hex_string(_, _) ->
 
 %% @since Version 570
 
-nybble_to_hex(Nyb) 
+nybble_to_hex(Nyb)
 
-    when is_integer(Nyb), 
-         Nyb >= 0,  
+    when is_integer(Nyb),
+         Nyb >= 0,
          Nyb < 10       ->
 
     $0 + Nyb;
@@ -5763,10 +5778,10 @@ byte_to_hex(TheByte)
 
 %% @since Version 855
 
-nybble_to_hex_upper(Nyb) 
+nybble_to_hex_upper(Nyb)
 
-    when is_integer(Nyb), 
-         Nyb >= 0,  
+    when is_integer(Nyb),
+         Nyb >= 0,
          Nyb < 10       ->
 
     $0 + Nyb;
@@ -5822,43 +5837,43 @@ byte_to_hex_upper(TheByte)
 
 -spec hex_to_int(Hex::hexstring() | hexchar()) -> integer().
 
-hex_to_int(Hex) 
+hex_to_int(Hex)
 
-    when is_integer(Hex), 
-         Hex >= $0, 
-         Hex =< $9      -> 
-         
+    when is_integer(Hex),
+         Hex >= $0,
+         Hex =< $9      ->
+
     Hex - $0;
-    
-    
 
 
 
-hex_to_int(Hex) 
 
-    when is_integer(Hex), 
-         Hex >= $a, 
-         Hex =< $f      -> 
-         
+
+hex_to_int(Hex)
+
+    when is_integer(Hex),
+         Hex >= $a,
+         Hex =< $f      ->
+
     Hex - $a + 10;
-    
-    
-    
-    
 
-hex_to_int(Hex) 
 
-    when is_integer(Hex), 
-         Hex >= $A, 
-         Hex =< $F      -> 
-         
+
+
+
+hex_to_int(Hex)
+
+    when is_integer(Hex),
+         Hex >= $A,
+         Hex =< $F      ->
+
     Hex - $A + 10;
 
-    
 
 
 
-hex_to_int(Hex) 
+
+hex_to_int(Hex)
 
     when is_list(Hex) ->
 
@@ -5868,15 +5883,15 @@ hex_to_int(Hex)
 
 
 
-hex_to_int([], Acc) -> 
+hex_to_int([], Acc) ->
 
     Acc;
 
-    
-    
-    
 
-hex_to_int([Digit|Rem], Acc) -> 
+
+
+
+hex_to_int([Digit|Rem], Acc) ->
 
     hex_to_int(Rem, (Acc bsl 4) + hex_to_int(Digit)).
 
@@ -7484,7 +7499,7 @@ triangle_index(LX, LY)
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
 
-paper_3d_basic_depth(X, Z, SliderPos, DepthConstant) 
+paper_3d_basic_depth(X, Z, SliderPos, DepthConstant)
 
     when Z > 0 ->
 
@@ -7854,7 +7869,7 @@ hmac_sha1(Key, Data) ->
 %% Thanks for the idea, Forest.
 
 
-probability_all(ListOfProbabilities) 
+probability_all(ListOfProbabilities)
 
     when is_list(ListOfProbabilities) ->
 
@@ -8306,7 +8321,7 @@ months_as_short_atoms() ->
 % % todo comeback figure out a way to do this
 % % @ flow {module_is_loaded, {lists,member}}
 
-module_is_loaded(ModuleName) 
+module_is_loaded(ModuleName)
 
     when is_atom(ModuleName) ->
 
@@ -9819,14 +9834,14 @@ parallelize(Fun, DataSets) ->
     HomeBase     = self(),
     Len          = length(DataSets),
 
-    [ 
-        spawn( 
-            fun() -> 
-                HomeBase ! { ResultHandle, Id, apply(Fun,[DataSet]) } 
-            end 
-        ) 
-    || 
-        { Id, DataSet } <- lists:zip( lists:seq(1,Len), DataSets ) 
+    [
+        spawn(
+            fun() ->
+                HomeBase ! { ResultHandle, Id, apply(Fun,[DataSet]) }
+            end
+        )
+    ||
+        { Id, DataSet } <- lists:zip( lists:seq(1,Len), DataSets )
     ],
 
     parallelize_gather([], Len, ResultHandle).
@@ -9951,7 +9966,7 @@ ad_rate(Searches, CPC, CTR, Conversion, RPC) when is_number(Searches), is_number
 
 %% @since Version 832
 
-grab_first([X|_]) -> 
+grab_first([X|_]) ->
 
     X;
 
@@ -10337,7 +10352,7 @@ is_rand_seeded() ->
 
 %% @since Version 839
 
-list_cross_multiply(L) -> 
+list_cross_multiply(L) ->
 
     [ sc:list_product(tuple_to_list(Li)) || Li  <- sc:zip_n(L) ].
 
@@ -10405,7 +10420,7 @@ htget(Thing) ->
     inets:start(),
 
     case httpc:request(Thing) of
-        
+
         {ok,{{_,RCode,_},_,Ret}} -> {RCode, Ret};
         Other                    -> {error, Other}
 
@@ -10439,40 +10454,40 @@ log2(Value) ->
 
 
 
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Computes a Schwartzian Transform (the perl idiom in Erlang.)  
-%% 
-%% The <a href="http://en.wikipedia.org/wiki/Schwartzian_transform">Schwartz Transform</a> (some people say 
-%% <a href="http://en.wikipedia.org/wiki/Schwartzian_transform">Schwartzian Transform</a>; hate them) is an efficiency 
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Computes a Schwartzian Transform (the perl idiom in Erlang.)
+%%
+%% The <a href="http://en.wikipedia.org/wiki/Schwartzian_transform">Schwartz Transform</a> (some people say
+%% <a href="http://en.wikipedia.org/wiki/Schwartzian_transform">Schwartzian Transform</a>; hate them) is an efficiency
 %% trick for when you want to sort by a computed function: compute per-row in a tuple, sort on the computed index, then
 %% strip out of the tuple.  This avoids lg-n recomputations on a traditional sort using a functional key.  (Admittedly,
 %% it's kind of blindingly obvious in a pattern matching language with keysort, but for someone who doesn't know the
-%% Perl idiomatic name for this, finding an implementation can help when converting code.  Also it's quite useful.) 
+%% Perl idiomatic name for this, finding an implementation can help when converting code.  Also it's quite useful.)
 %% Lisp people call this `decorate-sort-undecorate', and it kind of smells like memoization, so you can probably hear a
-%% Haskeller squee-ing in the background. 
+%% Haskeller squee-ing in the background.
 %%
 %% Basically, when it's really expensive to compute the thing you're sorting on from the actual list data, use this to
 %% wrap the work, as a speed thing.
 %%
-%% This gives you a surprisingly large number of Spaceballs reference opportunities, by saying "use the schwartz." ```1> BySum = fun(X) -> lists:sum(X) end.               
+%% This gives you a surprisingly large number of Spaceballs reference opportunities, by saying "use the schwartz." ```1> BySum = fun(X) -> lists:sum(X) end.
 %% #Fun<erl_eval.6.17052888>
-%% 
+%%
 %% 2> BySum([1,2,3,4]).
 %% 10
-%% 
+%%
 %% 3> ByProduct = fun(X) -> sc:list_product(X) end.
 %% #Fun<erl_eval.6.17052888>
-%% 
-%% 4> ByProduct([1,2,3,4]).                        
+%%
+%% 4> ByProduct([1,2,3,4]).
 %% 24
-%% 
-%% 5> ByLength = fun(X) -> length(X) end.                      
+%%
+%% 5> ByLength = fun(X) -> length(X) end.
 %% #Fun<erl_eval.6.17052888>
-%% 
+%%
 %% 6> ByLength([1,2,3,4]).
 %% 4
-%% 
-%% 7> Tests = [ 
-%% 7>   [0,1],  
+%%
+%% 7> Tests = [
+%% 7>   [0,1],
 %% 7>   [0,1,2],
 %% 7>   [1],
 %% 7>   [1,2],
@@ -10481,21 +10496,21 @@ log2(Value) ->
 %% 7>   [1,1,1,1,1,1]
 %% 7> ].
 %% [ [0,1], [0,1,2], [1], [1,2], [1,2,3,4], [1,1,1], [1,1,1,1,1,1] ]
-%% 
+%%
 %% 8> sc:schwartz(BySum, Tests).
 %% [ [0,1], [1], [0,1,2], [1,2], [1,1,1], [1,1,1,1,1,1], [1,2,3,4] ]
-%% 
+%%
 %% 9> sc:schwartz(ByProduct, Tests).
 %% [ [0,1], [0,1,2], [1], [1,1,1], [1,1,1,1,1,1], [1,2], [1,2,3,4] ]
 %%
-%% 10> sc:schwartz(ByLength, Tests). 
+%% 10> sc:schwartz(ByLength, Tests).
 %% [ [1], [0,1], [1,2], [0,1,2], [1,1,1], [1,2,3,4], [1,1,1,1,1,1] ]'''
 
 %% @since Version 847
 
 -spec schwartz(CompF::function(), List::list()) -> list().
 
-schwartz(CompF, List) -> 
+schwartz(CompF, List) ->
 
     [ OrigLi || {_, OrigLi} <- lists:keysort(1, [ { CompF(Li), Li } || Li <- List ])].
 
@@ -10627,11 +10642,11 @@ head([Head|_RemList]) ->
 
 
 
-%% @doc Render the Farey Sequence as a list of tuples.  
+%% @doc Render the Farey Sequence as a list of tuples.
 %%
 %% Converted from Wikipedia's ```def farey( n, asc=True ):
 %%     """Python function to print the nth Farey sequence, either ascending or descending."""
-%%     if asc: 
+%%     if asc:
 %%         a, b, c, d = 0, 1,  1  , n     # (*)
 %%     else:
 %%         a, b, c, d = 1, 1, n-1 , n     # (*)
@@ -10651,7 +10666,7 @@ farey_sequence(N) ->
 
 
 
-farey_sequence(Depth, Work, ascending, _ThisNum, _ThisDenom, NextNum, _NextDenom) 
+farey_sequence(Depth, Work, ascending, _ThisNum, _ThisDenom, NextNum, _NextDenom)
 
     when NextNum > Depth ->
 
@@ -10665,7 +10680,7 @@ farey_sequence(Depth, Work, ascending, ThisNum, ThisDenom, NextNum, NextDenom) -
 
     K            = trunc((Depth + ThisDenom)/NextDenom),
 
-    NewThisNum   = NextNum, 
+    NewThisNum   = NextNum,
     NewThisDenom = NextDenom,
     NewNextNum   = (K*NextNum   - ThisNum),
     NewNextDenom = (K*NextDenom - ThisDenom),
@@ -10683,12 +10698,12 @@ farey_sequence(Depth, Work, ascending, ThisNum, ThisDenom, NextNum, NextDenom) -
 %%
 %% This really just wraps the constants of the HN version in a call to the general version.
 %%
-%% It is not at all clear how penalties are stacked, so I just summed them.  Many will think that 
+%% It is not at all clear how penalties are stacked, so I just summed them.  Many will think that
 %% wrong.
 %%
 %% @since Version 854
 
-hn_score(Votes, AgeInHours, Penalties) 
+hn_score(Votes, AgeInHours, Penalties)
 
     when is_list(Penalties) ->
 
@@ -10706,8 +10721,8 @@ hn_score(Votes, AgeInHours, Penalty) ->
 
 
 
-%% @doc Calculates one Hacker News style ranking entry with coefficients removed, for ordering by 
-%% age and score.  Follows the algorithm claimed in 
+%% @doc Calculates one Hacker News style ranking entry with coefficients removed, for ordering by
+%% age and score.  Follows the algorithm claimed in
 %% http://www.righto.com/2013/11/how-hacker-news-ranking-really-works.html .
 %%
 %% @since Version 854
