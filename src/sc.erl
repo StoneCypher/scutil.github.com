@@ -3893,7 +3893,7 @@ svn_revision(Module) ->
 
 %% @since Version 524
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Gives the count of entrypoints, function labels, and function points in a module.
 
 function_stats(Module) ->
 
