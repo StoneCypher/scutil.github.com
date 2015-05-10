@@ -3162,8 +3162,6 @@ cube(X) ->
 
 
 
-% comeback todo documentation
-
 %% @since Version 509
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Computes the factorial of a number. ```1> sc:factorial(2).
@@ -3219,8 +3217,6 @@ factorial(X, Counter)
 
 
 
-
-% comeback todo documentation
 
 %% @since Version 639
 %%
@@ -3343,8 +3339,6 @@ ceiling(X) ->
 
 
 
-
-% todo comeback docs; point out this isn't erlang:floor because of negative number behavior
 
 %% @since Version 511
 
