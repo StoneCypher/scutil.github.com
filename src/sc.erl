@@ -4111,7 +4111,16 @@ module_atoms(Module) ->
 
 %% since Version 534
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the clustering of an indexed key into a list, for bucketing (similar to a histogram.)
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the clustering of an indexed key into a list, for bucketing (similar to a histogram.) ```524> sc:key_cluster(1,[]).
+%% []
+%%
+%% 525> sc:key_cluster(1, [{monster,kobold}, {player,joe}, {monster,snake}, {player, tim}]).
+%% [ {monster, [{monster,kobold}, {monster,snake}]},
+%%   {player,  [{player,joe}, {player,tim}]}]
+%%
+%% 526> sc:key_cluster(2, [{central,alive},{west,alive},{east,alive},{europe,outage},{asia,outage}]).
+%% [{alive,  [{central,alive}, {west,alive}, {east,alive}]},
+%%  {outage, [{europe,outage}, {asia,outage}]}]'''
 
 key_cluster(_Index, []) ->
 
