@@ -4111,7 +4111,7 @@ module_atoms(Module) ->
 
 %% since Version 534
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the clustering of an indexed key into a list, for bucketing (similar to a histogram.)
 
 key_cluster(_Index, []) ->
 
