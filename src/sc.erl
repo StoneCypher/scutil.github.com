@@ -4111,14 +4111,14 @@ module_atoms(Module) ->
 
 %% since Version 534
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the clustering of an indexed key into a list, for bucketing (similar to a histogram.) ```524> sc:key_cluster(1,[]).
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Takes the clustering of an indexed key into a list, for bucketing (similar to a histogram.) ```1> sc:key_cluster(1,[]).
 %% []
 %%
-%% 525> sc:key_cluster(1, [{monster,kobold}, {player,joe}, {monster,snake}, {player, tim}]).
+%% 2> sc:key_cluster(1, [{monster,kobold}, {player,joe}, {monster,snake}, {player, tim}]).
 %% [ {monster, [{monster,kobold}, {monster,snake}]},
 %%   {player,  [{player,joe}, {player,tim}]}]
 %%
-%% 526> sc:key_cluster(2, [{central,alive},{west,alive},{east,alive},{europe,outage},{asia,outage}]).
+%% 3> sc:key_cluster(2, [{central,alive},{west,alive},{east,alive},{europe,outage},{asia,outage}]).
 %% [{alive,  [{central,alive}, {west,alive}, {east,alive}]},
 %%  {outage, [{europe,outage}, {asia,outage}]}]'''
 
@@ -4129,9 +4129,6 @@ key_cluster(_Index, []) ->
 
 
 
-
-% 177> sc:key_cluster(1,[{1,a},{1,aa},{2,a}]).
-% [{1,[{1,a},{1,aa}]},{2,[{2,a}]}]
 
 key_cluster(Index, List) ->
 
@@ -4195,7 +4192,18 @@ distinct_neighbor_pairs(List) ->
 
 %% @since Version 535
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns every pair of items in a list as a tuple; throws on odd-lengthed lists. ```1> sc:distinct_neighbor_pairs([1,2,3,4,5,6]).
+%% [{1,2}, {3,4}, {5,6}]
+%%
+%% 2> sc:distinct_neighbor_pairs([1,2,3,4,5,6,1,2]).
+%% [{1,2}, {3,4}, {5,6}, {1,2}]
+%%
+%% 3> sc:distinct_neighbor_pairs([1,2,3,4,5,6,1]).
+%% ** exception error: no function clause matching
+%%                     sc:distinct_neighbor_pairs([1],
+%%                                                [{5,6},{3,4},{1,2}],
+%%                                                make_tuples) (/projects/scutil.github.com/src/sc.erl, line 4199)'''
+
 
 distinct_neighbor_pairs(List, MakeType) ->
 
