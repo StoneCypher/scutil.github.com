@@ -4393,6 +4393,8 @@ last_while_pos(N, [Head|Tail], Pred, Last) ->
 
 
 
+% whargarbl is this the same as key_cluster?
+
 %% @since Version 538
 %%
 %% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
