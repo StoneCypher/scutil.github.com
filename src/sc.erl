@@ -4564,7 +4564,20 @@ split_at(N, BN, [Item|Rem], Current, Work) ->
 
 %% @since Version 543
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Checks whether the first argument is a list postfix of the second argument, complementary to lists:prefix/2. ```1> sc:is_postfix([4,5,6], [1,2,3,4,5,6]).
+%% true
+%%
+%% 2> sc:is_postfix([4,5], [1,2,3,4,5,6]).
+%% false
+%%
+%% 3> sc:is_postfix([5,6], [1,2,3,4,5,6]).
+%% true
+%%
+%% 4> sc:is_postfix("house", "Brick house").
+%% true
+%%
+%% 5> sc:is_postfix([], []).
+%% true'''
 
 is_postfix(Postfix, String) ->
 
