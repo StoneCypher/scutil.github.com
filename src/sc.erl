@@ -4513,9 +4513,22 @@ first_pos(N, [Head|Tail], Pred, Default) ->
 
 
 
-%% @since Version 541 TODO
+%% @since Version 541
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns a list of lists, where the sublists are of size up to the length specified. ```1> sc:split_at(1, [1,2,3]).
+%% [[1],[2],[3]]
+%%
+%% 2> sc:split_at(2, [1,2,3,4,5,6,7,8]).
+%% [[1,2],[3,4],[5,6],[7,8]]
+%%
+%% 3> sc:split_at(3, [1,2,3,4,5,6,7,8]).
+%% [[1,2,3],[4,5,6],[7,8]]
+%%
+%% 4> sc:split_at(4, [1,2,3,4,5,6,7,8]).
+%% [[1,2,3,4],[5,6,7,8]]
+%%
+%% 5> sc:split_at(5, [1,2,3,4,5,6,7,8]).
+%% [[1,2,3,4,5],[6,7,8]]'''
 
 split_at(N, List) ->
 
