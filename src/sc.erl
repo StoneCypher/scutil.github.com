@@ -6629,7 +6629,11 @@ key_max(Pos, [Cur|Rem], Item) ->
 
 %% @since Version 607
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the tuple from a list of tuples whose nth indexed item has the minimal value for the column. ```544> sc:key_min(1, [{1,100}, {2,50}, {1,90}, {2,60}]).
+%% {1,100}
+%%
+%% 2> sc:key_min(2, [{1,100}, {2,50}, {1,90}, {2,60}]).
+%% {2,50}'''
 %%
 %% @equiv key_min(1, List)
 
