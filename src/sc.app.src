@@ -2,7 +2,9 @@
   sc,
   [ {description,  "ScUtil"},
     {applications, [proper]},
-    {modules,      [sc, sc_proper, sc_tests]},
+    {registered,   []},
+    {env,          []},
+    {modules,      [kernel, stdlib, sc, sc_proper, sc_tests]},
     {vsn,          "2.5.777"}
   ]
 }.
