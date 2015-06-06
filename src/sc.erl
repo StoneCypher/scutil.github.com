@@ -6694,7 +6694,14 @@ key_min(Pos, [Cur|Rem], Item) ->
 
 
 
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the sum of the numeric elements of a tuple, treating non-numeric elements as zero. ```1>'''
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Returns the sum of the numeric elements of a tuple. ```1> sc:tuple_sum({1,2,3}).
+%% 6
+%%
+%% 2> sc:tuple_sum({}).
+%% 0
+%%
+%% 3> sc:tuple_sum({1,2.2,3}).
+%% 6.2'''
 %%
 %% @since Version 609
 
