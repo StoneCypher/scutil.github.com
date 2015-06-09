@@ -6739,7 +6739,14 @@ tuple_sum( T, Which, Max, Work) ->
 
 %% @since 610
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Sorts the elements of a tuple.  ```1> sc:tuple_sort({}).
+%% {}
+%%
+%% 2> sc:tuple_sort({1,3,2}).
+%% {1,2,3}
+%%
+%% 3> sc:tuple_sort({1,2,5,three,4}).
+%% {1,2,4,5,three}'''
 
 tuple_sort(T)
 
