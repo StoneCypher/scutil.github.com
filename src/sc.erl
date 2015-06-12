@@ -7662,7 +7662,7 @@ terminate_loop() ->
 
 %% @since Version 637
 %%
-%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span>
+%% @doc <span style="color:red;font-style:italic">Untested</span> <span style="color:orange;font-style:italic">Stoch untested</span> Trivial io:format wrapper for a single term.
 
 show(X) ->
 
