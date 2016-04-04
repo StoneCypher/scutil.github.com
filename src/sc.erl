@@ -10502,6 +10502,26 @@ htget(Thing) ->
     end.
 
 
+
+
+
+%% @since Version 844
+
+htget(Thing, Headers) ->
+
+    inets:start(),
+
+    case httpc:request(Thing) of
+
+        {ok,{{_,RCode,_},_,Ret}} -> {RCode, Ret};
+        Other                    -> {error, Other}
+
+    end.
+
+
+
+
+
 %% todo htpost
 
 
