@@ -705,8 +705,8 @@
 -type seven_vector_tuple(T)      :: {T,T,T,T,T,T,T}.                       %% A seven-vector expressed as a tuple.
 -type three_or_seven_vector(T)   :: three_vector(T) | seven_vector(T).     %% A three or a seven-vector.
 -type unit_vector()              :: vector().                              %% The hypoteneuse of a unit vector is precisely one unit long.  Unit vectors are also called normalized or magnitude-normalized vectors.
--type vector()                   :: [ number() ] | tuple(number()).        %% Every member element of a vector() is a {@type number()}.
--type vector(T)                  :: [ T ] | tuple(T).                      %% Every member element of a vector(T) is a T.
+-type vector()                   :: [ number() ] | { number() }.           %% Every member element of a vector() is a {@type number()}.
+-type vector(T)                  :: [ T ] | { T }.                         %% Every member element of a vector(T) is a T.
 -type vector_list()              :: [ vector() ].                          %% Every member element of a vectorlist() is a {@type vector()}.
 -type vector_list(T)             :: [ vector(T) ].                         %% Every member element of a vectorlist(T) is a {@type vector(T)}.
 
@@ -724,7 +724,7 @@
 -type io_list()                  :: [ byte() ].                            %% Every list member of an {@type io_list()} must be a {@type byte()}.
 -type numeric_list()             :: [ number() ].                          %% All members of a numeric list must be number()s.
 -type pos_numeric_list()         :: [ number() ].                          %% All members of a numeric list must be number()s.  Should enforce positive-ness but don't know how without losing floats.
--type numeric_tuple()            :: tuple(number()).                       %% Every member of a {@type numeric_tuple()} must be a {@type number()}.
+-type numeric_tuple()            :: { number() }.                          %% Every member of a {@type numeric_tuple()} must be a {@type number()}.
 
 -type list_or_binary()           :: list() | binary().                     %% It's either a {@type list()} or a {@type binary()}.  Duh.
 -type io_list_or_binary()        :: io_list() | binary().                  %% It's either an {@type io_list()} or a {@type binary()}.  Duh.
@@ -6438,7 +6438,7 @@ rand(Range) ->
 
 srand() ->
 
-    NewSeed = tuple_to_list(erlang:now()),
+    NewSeed = tuple_to_list(erlang:timestamp()),
     erlang:apply(random,seed,NewSeed),
     { ok, { seeded, NewSeed }}.
 
@@ -6807,7 +6807,7 @@ tuple_member(E, T, I, Sz) ->
 %%
 %% @since Version 616
 
--spec record_member(E::any(), R::record()) -> true | false.
+-spec record_member(E::any(), R::any()) -> true | false.
 
 record_member(E, R) ->
 
@@ -9514,7 +9514,7 @@ benchmark(Module, Func, Args) ->
 
 now_str_utc24() ->
 
-    { {Y,M,D}, {H,MM,S} }     = calendar:now_to_universal_time(now()),
+    { {Y,M,D}, {H,MM,S} }     = calendar:now_to_universal_time(erlang:timestamp()),
     [Ys, Ms, Ds, Hs, MMs, Ss] = [ integer_to_list(X) || X <- [ Y, M, D, H, MM, S ] ],
 
     Ys++"/"++Ms++"/"++Ds++" "++Hs++":"++MMs++":"++Ss++" UTC24".
@@ -9815,7 +9815,7 @@ tuple_duplicate(N, Item) when is_integer(N), N >= 0 ->
 
 %% @since Version 824
 
--spec segment_size(List::list(tuple(any(), number()))) -> tuple(tuple(list(), number(), non_neg_integer()), list(tuple(any(), float(), number()))).
+-spec segment_size(List::list({any(), number()})) -> {{list(), number(), non_neg_integer()}, [{any(), float(), number()}]}.
 
 segment_size(List) when is_list(List) ->
 
@@ -10292,7 +10292,7 @@ wang_such_that(Left, Top, Tiles) ->
 
 %% @since Version 835
 
--spec wang_carpet( integer(), integer() ) -> tuple( tuple( integer() ) ).
+-spec wang_carpet( integer(), integer() ) -> { { integer() } }.
 
 wang_carpet(X, Y) ->
 
